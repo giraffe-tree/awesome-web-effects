@@ -38,7 +38,7 @@
       #empty { padding: 72px 0; color: var(--muted); font-size: 18px; }
       .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
       .card { overflow: hidden; border: 1px solid var(--line); border-radius: 22px; background: rgba(255,255,255,.42); }
-      .card img { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; background: #d8d5ce; }
+      .card img { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: contain; background: #d8d5ce; }
       .copy { padding: 22px; }
       .kind { color: var(--accent); font: 700 11px/1.2 ui-monospace, monospace; letter-spacing: .1em; text-transform: uppercase; }
       h2 { margin: 10px 0 8px; font-size: 26px; letter-spacing: -.035em; }
@@ -64,7 +64,17 @@
     </main>
     <footer>Curated for learning and comparison. All project media belongs to its original author.</footer>
     <script>
-      const interactions = [];
+      const interactions = [
+        {
+          name: 'MediaPipe',
+          pattern: 'Gesture Recognition · 手势识别',
+          url: 'https://github.com/google-ai-edge/mediapipe',
+          gif: './gifs/mediapipe-gesture.gif',
+          stars: '36,106',
+          score: 9,
+          description: '用普通摄像头识别手部关键点和手势，把身体动作变成实时输入。'
+        }
+      ];
 
       const grid = document.querySelector('#grid');
       const empty = document.querySelector('#empty');

@@ -25,7 +25,15 @@
 
 ## Interaction Atlas
 
-正在整理调研结果。
+### Gesture Recognition · 手势识别
+
+#### [MediaPipe](https://github.com/google-ai-edge/mediapipe) · ★ 36,106 · 9/10
+
+通过普通摄像头实时识别手部关键点与手势，把捏合、握拳、指向等身体动作变成无需触屏的输入。MediaPipe 提供跨平台视觉管线；这里使用其官方 samples 中的 Android Gesture Recognizer 展示“手势—分类—置信度”的即时反馈。
+
+![MediaPipe gesture recognition demo](demo/gifs/mediapipe-gesture.gif)
+
+*Stars 核验：2026-07-15 · [演示素材来源](https://github.com/google-ai-edge/mediapipe-samples)*
 
 ## Backup
 
@@ -40,4 +48,3 @@
 ## Demo
 
 打开 [`demo/index.html`](demo/index.html) 可以用卡片形式浏览同一份交互图鉴。
-

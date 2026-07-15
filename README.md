@@ -65,6 +65,16 @@
 
 *Stars 核验：2026-07-15 · [原始演示素材](https://github.com/aframevr/aframe)*
 
+### XR Direct Manipulation · XR 直接操纵
+
+#### [XR Interaction Toolkit Examples](https://github.com/Unity-Technologies/XR-Interaction-Toolkit-Examples) · ★ 1,299 · 7/10
+
+Unity 官方示例把“抓取、移动、倾倒、激活”等现实动作映射到虚拟物体，并同时提供近距离手部操作与远距离射线操作。与进入 3D 空间本身相比，这里关注的是用户如何像拿真实物体一样操作数字对象。
+
+![Unity XR grab interaction demo](demo/gifs/unity-xr-grab.gif)
+
+*Stars 核验：2026-07-15 · [原始演示素材](https://github.com/Unity-Technologies/XR-Interaction-Toolkit-Examples/blob/main/Documentation/Images/Station-02-grab-interactables-01.gif)*
+
 ## Backup
 
 低于 100 stars、但交互思路可行且有演示证据的实验性项目会放在这里。

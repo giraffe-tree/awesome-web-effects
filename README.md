@@ -1,257 +1,284 @@
 # Awesome Web Effects
 
-一个用短 GIF 浏览开源 **Web 页面视觉效果** 的图鉴。新版不再覆盖所有人机交互方式，只研究效果如何出现在网页里：滚动、页面转场、布局变化、指针响应、3D、Canvas / WebGL、SVG 与媒体展示。
+[中文文档](README.zh-CN.md) · [Live demo](https://giraffe-tree.github.io/awesome-interaction/)
 
-> 项目名会跳转到原 GitHub 仓库；每个条目最终都包含效果说明、stars 快照、简单评分、GIF 与素材来源。
+A deduplicated, code-first atlas of open-source visual effects for the web. It contains **120 projects across 10 categories**, including **101 additions** beyond the original 20. Every project has a copyable minimal example in the demo; English is the default interface and documentation language.
 
-## 这次聚焦什么
+## What changed
 
-| 方向 | 关注的问题 | 典型效果 |
-| --- | --- | --- |
-| Scroll | 滚动如何成为动画时间轴 | 惯性滚动、滚动擦洗、滚动叙事、进入动效 |
-| Transition | 页面和布局如何连续变化 | 页面转场、共享布局、筛选重排、触摸轮播 |
-| Pointer | 指针如何直接改变画面 | 视差、倾斜、跟随光标、悬停扭曲、拖拽揭示 |
-| Canvas / WebGL | 实时图形如何成为页面主体 | 3D 场景、流体、粒子、Shader 转场 |
-| Vector / Media | 内容本身如何动起来 | SVG 描边、矢量动画、灯箱缩放 |
+- Added 101 verified GitHub projects without counting the original 20.
+- Deduplicated twice: first by repository, then by the visible-effect signature: **trigger + visual change + time relationship + page layer**.
+- Preferred maintained projects with strong ecosystems and clear official examples. 14 useful older implementations are explicitly marked **Legacy**; no archived repository is included.
+- Kept 19 project-specific GIF previews. Code-first entries use labeled abstract placeholders instead of unrelated footage.
+- Compressed the GIF set from **27.28 MiB to 15.81 MiB** (42.03% smaller) without changing 720×450 dimensions, frame counts, frame rates, or durations.
+- Added a static GitHub Pages workflow for the live demo.
 
-不再收录：语音输入、脑机接口、终端 UI、XR、Agent 协议、设备控制、数据分析工作流等与“页面视觉效果”不直接相关的项目。
+## Selection rules
 
-## 收录标准
+1. The result must be visible in a normal web page: motion, transition, drawing, 2D/3D rendering, pointer response, or media presentation.
+2. A repository must be public and verifiable. Stars are a snapshot from **2026-07-16**, not a live counter.
+3. Similar libraries remain only when their best-known visible result or integration model is materially different.
+4. Newer, maintained, well-documented choices win a duplicate comparison. Older but unarchived projects may remain only when their interaction pattern is still distinctive, and are marked Legacy.
+5. A minimal example should expose the smallest useful API call, not reproduce an entire starter application.
 
-1. **必须在网页中看见效果**：仓库需提供官方动态演示、在线 demo，或足够清晰的最小复现方式。
-2. **按视觉结果去重**：使用“触发方式 + 视觉变化 + 时间关系 + 页面层级”作为去重签名。实现技术不同但最终效果基本相同，只保留一个代表。
-3. **重复时优先 stars 最高者**：同类项目先比较 stars；若高 stars 项目没有可见 demo，则保留能完整展示效果的候选。
-4. **主列表门槛为 100 stars**：低于 100 stars 但效果独特、可运行且演示清楚的项目进入 Backup。
-5. **GIF 必须真的展示变化**：不使用 Logo、静态截图或宣传封面冒充效果。优先截取官方动态素材；没有合适官方 GIF 时，提供统一尺寸的编辑演示并明确标注。
-6. **stars 是快照**：本轮统一核验于 2026-07-15，数量会随时间变化。
+## Categories
 
-### 简单评分（10 分）
-
-| 维度 | 分值 | 判断方式 |
+| Category | Projects | Visible result |
 | --- | ---: | --- |
-| 视觉辨识度 | 0–3 | 是否一眼能看出效果，以及变化是否适合页面表达 |
-| 社区采用 | 0–3 | 100+ / 1k+ / 10k+ stars 分别为 1–3 分 |
-| 活跃度 | 0–2 | 24 个月内更新 1 分；12 个月内更新 2 分 |
-| 演示完整度 | 0–2 | 有动态素材 1 分；另有在线或可运行 demo 2 分 |
-
-## Web Effect Atlas
-
-### Scroll · 滚动
-
-#### 01 · [Lenis](https://github.com/darkroomengineering/lenis) — 惯性平滑滚动
-
-**★ 14,370 · 10/10 · Official capture**
-
-把滚轮和触摸位移变成带惯性、阻尼和插值的连续运动，让长页面滚动更有重量，同时保持页面结构与原生滚动语义。
-
-![Lenis 惯性平滑滚动](demo/gifs/lenis.gif)
-
-*Inertial Smooth Scroll · 更新：2026-06-30 · [GIF 来源](https://assets.darkroom.engineering/lenis/banner.gif)*
-
-#### 02 · [GSAP](https://github.com/greensock/GSAP) — 滚动擦洗时间线
-
-**★ 26,595 · 10/10 · Editorial demo**
-
-把页面滚动进度直接绑定到动画时间轴，可实现 pin、scrub、snap 与多段编排；用户前后滚动时，画面也可逆地前进或倒放。
-
-![GSAP 滚动擦洗时间线](demo/gifs/gsap-scrolltrigger.gif)
-
-*Scroll-scrubbed Timeline · 更新：2026-04-13 · [效果参考](https://gsap.com/scrolltrigger/)*
-
-#### 03 · [Scrollama](https://github.com/russellsamora/scrollama) — 固定画布滚动叙事
-
-**★ 5,985 · 8/10 · Official capture**
-
-文字步骤向上经过视口时，固定图形切换状态。滚动既控制阅读节奏，也成为数据叙事的离散时间轴。
-
-![Scrollama 固定画布滚动叙事](demo/gifs/scrollama.gif)
-
-*Pinned Scrollytelling · 更新：2025-11-13 · [GIF 来源](https://pudding.cool/process/how-to-implement-scrollytelling/)*
-
-#### 04 · [AOS](https://github.com/michalsnik/aos) — 进入视口动效
-
-**★ 28,069 · 7/10 · Editorial demo**
-
-元素进入视口时执行淡入、位移、缩放或翻转，用极小配置给内容建立逐段出现的阅读节奏。
-
-![AOS 进入视口动效](demo/gifs/aos.gif)
-
-*Viewport Reveal · 更新：2024-03-26 · [效果参考](https://michalsnik.github.io/aos/)*
-
-### Transition · 转场与布局
-
-#### 05 · [Barba.js](https://github.com/barbajs/barba) — 无刷新页面转场
-
-**★ 12,948 · 9/10 · Editorial demo**
-
-在旧页面离场与新页面进场之间插入可编排过渡，保留外壳并替换内容，消除传统导航时的白屏和断裂感。
-
-![Barba.js 无刷新页面转场](demo/gifs/barba.gif)
-
-*Seamless Page Transition · 更新：2024-12-02 · [效果参考](https://barba.js.org/)*
-
-#### 06 · [Motion](https://github.com/motiondivision/motion) — 共享布局变形
-
-**★ 32,818 · 10/10 · Editorial demo**
-
-同一元素在网格、列表、弹层等布局间切换时，以 spring 连续插值位置、尺寸和圆角，让状态变化看起来像同一个对象在移动。
-
-![Motion 共享布局变形](demo/gifs/motion.gif)
-
-*Shared Layout Morph · 更新：2026-07-01 · [效果参考](https://motion.dev/docs)*
-
-#### 07 · [Isotope](https://github.com/metafizzy/isotope) — 筛选网格重排
-
-**★ 11,103 · 7/10 · Editorial demo**
-
-筛选或排序后，保留项目平滑移动到新位置，被移除项目缩小离场；用户始终能追踪内容从旧布局到新布局的关系。
-
-![Isotope 筛选网格重排](demo/gifs/isotope.gif)
-
-*Filtered Grid Reflow · 更新：2021-09-24 · [效果参考](https://isotope.metafizzy.co/)*
-
-#### 08 · [Swiper](https://github.com/nolimits4web/swiper) — 惯性触摸轮播
-
-**★ 41,870 · 9/10 · Editorial demo**
-
-拖动或滑动卡片后保留速度并吸附到下一项，可组合 coverflow、层叠和缩放，形成移动端熟悉的直接操纵反馈。
-
-![Swiper 惯性触摸轮播](demo/gifs/swiper.gif)
-
-*Momentum Touch Carousel · 更新：2026-07-13 · [效果参考](https://swiperjs.com/demos)*
-
-### Pointer · 指针响应
-
-#### 09 · [Parallax.js](https://github.com/wagerfield/parallax) — 指针景深视差
-
-**★ 16,583 · 7/10 · Editorial demo**
-
-根据指针或设备方向让前景、中景和背景以不同速度移动，用二维图层制造可立即感知的空间深度。
-
-![Parallax.js 指针景深视差](demo/gifs/parallax.gif)
-
-*Pointer Depth Parallax · 更新：2024-04-06 · [效果参考](http://wagerfield.github.io/parallax/)*
-
-#### 10 · [vanilla-tilt.js](https://github.com/micku7zu/vanilla-tilt.js) — 透视倾斜与高光
-
-**★ 4,019 · 6/10 · Editorial demo**
-
-卡片朝指针方向进行 3D 透视旋转，并叠加随角度移动的高光，适合商品、封面和强调型卡片。
-
-![vanilla-tilt.js 透视倾斜与高光](demo/gifs/vanilla-tilt.gif)
-
-*Perspective Tilt & Glare · 更新：2024-03-01 · [效果参考](https://micku7zu.github.io/vanilla-tilt.js/)*
-
-#### 11 · [mouse-follower](https://github.com/Cuberto/mouse-follower) — 情境化跟随光标
-
-**★ 818 · 6/10 · Official capture**
-
-光标不只指向位置，还会在不同元素上改变尺寸、颜色、文字、图片或视频内容，成为随上下文变化的提示层。
-
-![mouse-follower 情境化跟随光标](demo/gifs/mouse-follower.gif)
-
-*Contextual Cursor · 更新：2023-10-23 · [GIF 来源](https://user-images.githubusercontent.com/11841379/162477170-5dd33ecd-0e72-4fe4-9053-53d7b5557637.gif)*
-
-#### 12 · [hover-effect](https://github.com/robin-dela/hover-effect) — 位移贴图悬停扭曲
-
-**★ 1,874 · 7/10 · Official capture**
-
-用 WebGL 位移贴图在两张图片之间制造液化、褶皱或噪声式过渡，让普通缩略图在悬停时出现具有材质感的变化。
-
-![hover-effect 位移贴图悬停扭曲](demo/gifs/hover-effect.gif)
-
-*Displacement Image Hover · 更新：2023-06-27 · [GIF 来源](https://github.com/robin-dela/hover-effect/blob/master/gifs/alex_brown.gif)*
-
-#### 13 · [img-comparison-slider](https://github.com/sneas/img-comparison-slider) — 拖拽前后对比
-
-**★ 864 · 7/10 · Official capture**
-
-用户拖动分隔手柄，直接控制两张重叠图片的可见比例；特别适合展示修复、设计改版和处理前后的差异。
-
-![img-comparison-slider 拖拽前后对比](demo/gifs/img-comparison-slider.gif)
-
-*Drag-to-Reveal Comparison · 更新：2026-05-25 · [GIF 来源](https://github.com/sneas/img-comparison-slider/blob/master/docs/example.gif)*
-
-### Canvas / WebGL · 实时图形
-
-#### 14 · [react-three-fiber](https://github.com/pmndrs/react-three-fiber) — 交互式 3D 场景
-
-**★ 31,432 · 10/10 · Official capture**
-
-用声明式组件组织 Three.js 场景、灯光、材质和交互，把可旋转、可点击、可响应状态的实时 3D 内容嵌入普通网页。
-
-![react-three-fiber 交互式 3D 场景](demo/gifs/react-three-fiber.gif)
-
-*Interactive 3D Scene · 更新：2026-07-08 · [GIF 来源](https://github.com/pmndrs/react-three-fiber/blob/master/docs/basic-app.gif)*
-
-#### 15 · [WebGL Fluid Simulation](https://github.com/PavelDoGreat/WebGL-Fluid-Simulation) — 指针驱动流体
-
-**★ 16,488 · 9/10 · Editorial demo**
-
-指针移动向 GPU 流体模拟注入速度和颜色，拖出会扩散、旋转和混合的光迹，使整块背景成为连续响应的画布。
-
-![WebGL Fluid Simulation 指针驱动流体](demo/gifs/webgl-fluid.gif)
-
-*Cursor-driven Fluid · 更新：2024-11-12 · [效果参考](https://paveldogreat.github.io/WebGL-Fluid-Simulation/)*
-
-#### 16 · [tsParticles](https://github.com/tsparticles/tsparticles) — 响应式粒子场
-
-**★ 8,922 · 9/10 · Official capture**
-
-大量粒子在 Canvas 中漂浮、连线、碰撞或被指针吸引和排斥，可作为背景环境，也可触发烟花、雪花与 confetti。
-
-![tsParticles 响应式粒子场](demo/gifs/tsparticles.gif)
-
-*Reactive Particle Field · 更新：2026-07-14 · [GIF 来源](https://github.com/tsparticles/tsparticles/blob/main/demo/vanilla/public/images/gifs/connect.gif)*
-
-#### 17 · [GL Transitions](https://github.com/gl-transitions/gl-transitions) — Shader 媒体转场
-
-**★ 2,115 · 9/10 · Editorial demo**
-
-用可复用的 GLSL 片段着色器在图片或视频之间做波纹、溶解、扭曲和几何擦除，比普通淡入淡出拥有更强的材质特征。
-
-![GL Transitions Shader 媒体转场](demo/gifs/gl-transitions.gif)
-
-*Shader Media Transition · 更新：2026-06-22 · [效果参考](https://gl-transitions.com/)*
-
-### Vector / Media · 矢量与媒体
-
-#### 18 · [Vivus](https://github.com/maxwellito/vivus) — SVG 描边绘制
-
-**★ 15,480 · 7/10 · Editorial demo**
-
-逐步改变 SVG path 的描边偏移，让图标、字标或插画像被一笔一笔画出；动画仍保持矢量的清晰与可缩放。
-
-![Vivus SVG 描边绘制](demo/gifs/vivus.gif)
-
-*SVG Line Drawing · 更新：2022-07-06 · [效果参考](https://github.com/maxwellito/vivus#principles)*
-
-#### 19 · [lottie-web](https://github.com/airbnb/lottie-web) — 矢量插画动画
-
-**★ 32,013 · 9/10 · Official capture**
-
-把 After Effects 导出的 JSON 动画渲染为 SVG、Canvas 或 HTML，使图标和插画保持轻量、清晰，并可由页面状态精确控制。
-
-![lottie-web 矢量插画动画](demo/gifs/lottie-web.gif)
-
-*Vector Illustration Motion · 更新：2025-09-01 · [GIF 来源](https://github.com/airbnb/lottie-web/blob/master/gifs/Example1.gif)*
-
-#### 20 · [PhotoSwipe](https://github.com/dimsemenov/PhotoSwipe) — 缩略图灯箱缩放
-
-**★ 25,215 · 9/10 · Editorial demo**
-
-缩略图从原位置连续放大到沉浸式灯箱，并支持拖拽、缩放和切换；关闭时再回到来源位置，保持空间关系。
-
-![PhotoSwipe 缩略图灯箱缩放](demo/gifs/photoswipe.gif)
-
-*Thumbnail-to-Lightbox Zoom · 更新：2025-12-04 · [效果参考](https://photoswipe.com/getting-started/)*
-
-## Backup
-
-本轮没有低于 100 stars 且必须保留的独特效果候选；后续发现符合“效果独特 + 可运行 + 动态演示清楚”的项目时，会加入这里而不降低主列表门槛。
-
-## GIF 说明
-
-- **Official capture**：来自项目仓库、官方文档或官方 demo 的动态素材，统一裁切为 720 × 450、6 秒。
-- **Editorial demo**：依据项目所代表的效果制作的最小视觉复现，用于让不同效果在相同画幅中可比较；它不冒充项目原 UI。
-- 素材仅用于研究、索引和比较，版权归原作者所有。
+| [Animation engines](#animation) | 12 | Timelines, springs, tweens, class animation, and framework-native motion. |
+| [Scroll & reveal](#scroll) | 12 | Smooth scrolling, scroll-linked scenes, reveals, parallax, and snap navigation. |
+| [Page & layout](#transition) | 12 | Page transitions, FLIP motion, filtering, packing, and animated reflow. |
+| [Navigation & overlays](#carousel) | 12 | Carousel, lightbox, menus, tours, notifications, drag overlays, and spatial navigation. |
+| [Pointer & hover](#pointer) | 12 | Tilt, depth, custom cursors, magnetic motion, and image distortion. |
+| [Text & SVG](#vector) | 12 | Typing, text splitting, vector drawing, handwriting, and SVG morphing. |
+| [Canvas & 2D](#canvas) | 12 | Scene graphs, creative coding, physics, drawing tools, and 2D renderers. |
+| [3D & WebGL](#webgl) | 12 | 3D engines, declarative renderers, shader layers, and post-processing. |
+| [Background & particles](#background) | 12 | Fluid, particles, gradients, confetti, meshes, ribbons, and fireworks. |
+| [Media & image](#media) | 12 | Comparison, pan-and-zoom, cropping, filters, lens zoom, and shader transitions. |
+
+## Project catalog
+
+<a id="animation"></a>
+
+### Animation engines
+
+Timelines, springs, tweens, class animation, and framework-native motion.
+
+| Project | Visible effect | Stars | Status | Minimal code |
+| --- | --- | ---: | --- | --- |
+| [GSAP](https://github.com/greensock/GSAP) | Scroll-scrubbed master timeline | 26,600 | Original | [Open](https://giraffe-tree.github.io/awesome-interaction/#gsap-scrolltrigger) |
+| [Motion](https://github.com/motiondivision/motion) | Shared-layout spring morph | 32,819 | Original | [Open](https://giraffe-tree.github.io/awesome-interaction/#motion) |
+| [Anime.js](https://github.com/juliangarnier/anime) | Staggered transform choreography | 71,056 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#juliangarnier-anime) |
+| [Tween.js](https://github.com/tweenjs/tween.js) | Render-agnostic value tween | 10,129 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#tweenjs-tween-js) |
+| [Mo.js](https://github.com/mojs/mojs) | Motion-graphics burst | 18,728 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#mojs-mojs) |
+| [Theatre.js](https://github.com/theatre-js/theatre) | Visually authored keyframe sequence | 12,541 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#theatre-js-theatre) |
+| [Popmotion](https://github.com/Popmotion/popmotion) | Functional value pipeline | 20,167 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#popmotion-popmotion) |
+| [React Spring](https://github.com/pmndrs/react-spring) | Hook-driven spring motion | 29,127 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#pmndrs-react-spring) |
+| [KUTE.js](https://github.com/thednp/kute.js) | Compact SVG shape tween | 2,639 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#thednp-kute-js) |
+| [VueUse Motion](https://github.com/vueuse/motion) | Vue directive motion state | 2,753 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#vueuse-motion) |
+| [Animate.css](https://github.com/animate-css/animate.css) | CSS class entrance animation | 82,667 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#animate-css-animate-css) |
+| [Rive Web](https://github.com/rive-app/rive-wasm) | Interactive vector state machine | 954 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#rive-app-rive-wasm) |
+
+<a id="scroll"></a>
+
+### Scroll & reveal
+
+Smooth scrolling, scroll-linked scenes, reveals, parallax, and snap navigation.
+
+| Project | Visible effect | Stars | Status | Minimal code |
+| --- | --- | ---: | --- | --- |
+| [Lenis](https://github.com/darkroomengineering/lenis) | Native-friendly inertial scrolling | 14,373 | Original | [Open](https://giraffe-tree.github.io/awesome-interaction/#lenis) |
+| [Scrollama](https://github.com/russellsamora/scrollama) | Step-based scrollytelling | 5,985 | Original | [Open](https://giraffe-tree.github.io/awesome-interaction/#scrollama) |
+| [AOS](https://github.com/michalsnik/aos) | Data-attribute viewport reveal | 28,069 | Original | [Open](https://giraffe-tree.github.io/awesome-interaction/#aos) |
+| [Locomotive Scroll](https://github.com/locomotivemtl/locomotive-scroll) | Data-driven scroll transforms | 8,825 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#locomotivemtl-locomotive-scroll) |
+| [Smooth Scrollbar](https://github.com/dolphin-wood/smooth-scrollbar) | Inertial custom scroll container | 3,354 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#dolphin-wood-smooth-scrollbar) |
+| [r3f-scroll-rig](https://github.com/14islands/r3f-scroll-rig) | DOM-to-3D scroll synchronization | 954 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#14islands-r3f-scroll-rig) |
+| [scroll-into-view-if-needed](https://github.com/scroll-into-view/scroll-into-view-if-needed) | Conditional focus-to-target scroll | 1,449 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#scroll-into-view-scroll-into-view-if-needed) |
+| [SimpleBar](https://github.com/Grsmto/simplebar) | Styled native scrollbar surface | 6,411 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#grsmto-simplebar) |
+| [TanStack Virtual](https://github.com/TanStack/virtual) | Windowed million-row scrolling | 7,004 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#tanstack-virtual) |
+| [Infinite Scroll](https://github.com/metafizzy/infinite-scroll) | Append-at-threshold continuous feed | 7,483 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#metafizzy-infinite-scroll) |
+| [fullPage.js](https://github.com/alvarotrigo/fullPage.js) | Full-screen section snapping | 35,422 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#alvarotrigo-fullpage-js) |
+| [multiScroll.js](https://github.com/alvarotrigo/multiscroll.js) | Counter-moving split-screen panels | 1,572 | Legacy | [Open](https://giraffe-tree.github.io/awesome-interaction/#alvarotrigo-multiscroll-js) |
+
+<a id="transition"></a>
+
+### Page & layout
+
+Page transitions, FLIP motion, filtering, packing, and animated reflow.
+
+| Project | Visible effect | Stars | Status | Minimal code |
+| --- | --- | ---: | --- | --- |
+| [Swup](https://github.com/swup/swup) | Progressively enhanced page swap | 5,198 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#swup-swup) |
+| [Isotope](https://github.com/metafizzy/isotope) | Filterable grid reflow | 11,103 | Legacy | [Open](https://giraffe-tree.github.io/awesome-interaction/#isotope) |
+| [AutoAnimate](https://github.com/FormKit/auto-animate) | One-call DOM reflow animation | 13,875 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#formkit-auto-animate) |
+| [React Flip Toolkit](https://github.com/aholachek/react-flip-toolkit) | FLIP shared-element transition | 4,189 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#aholachek-react-flip-toolkit) |
+| [Muuri](https://github.com/haltu/muuri) | Draggable packed grid | 10,949 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#haltu-muuri) |
+| [Masonry](https://github.com/desandro/masonry) | Column-based masonry layout | 16,710 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#desandro-masonry) |
+| [Packery](https://github.com/metafizzy/packery) | Gap-filling bin-pack layout | 4,316 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#metafizzy-packery) |
+| [React Transition Group](https://github.com/reactjs/react-transition-group) | Component enter-exit state machine | 10,234 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#reactjs-react-transition-group) |
+| [Vaul](https://github.com/emilkowalski/vaul) | Velocity-aware swipe drawer | 8,479 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#emilkowalski-vaul) |
+| [GridStack](https://github.com/gridstack/gridstack.js) | Drag-resize dashboard collision reflow | 8,994 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#gridstack-gridstack-js) |
+| [Split.js](https://github.com/nathancahill/split) | Draggable split-pane resize | 6,277 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#nathancahill-split) |
+| [next-view-transitions](https://github.com/shuding/next-view-transitions) | Native cross-route shared-element morph | 2,385 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#shuding-next-view-transitions) |
+
+<a id="carousel"></a>
+
+### Navigation & overlays
+
+Carousel, lightbox, menus, tours, notifications, drag overlays, and spatial navigation.
+
+| Project | Visible effect | Stars | Status | Minimal code |
+| --- | --- | ---: | --- | --- |
+| [Swiper](https://github.com/nolimits4web/swiper) | Momentum touch carousel | 41,869 | Original | [Open](https://giraffe-tree.github.io/awesome-interaction/#swiper) |
+| [PhotoSwipe](https://github.com/dimsemenov/PhotoSwipe) | Thumbnail-to-lightbox zoom | 25,215 | Original | [Open](https://giraffe-tree.github.io/awesome-interaction/#photoswipe) |
+| [mmenu.js](https://github.com/FrDH/mmenu-js) | Nested off-canvas navigation panels | 2,574 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#frdh-mmenu-js) |
+| [Driver.js](https://github.com/nilbuild/driver.js) | Spotlight tour with focus handoff | 26,283 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#nilbuild-driver-js) |
+| [SweetAlert2](https://github.com/sweetalert2/sweetalert2) | Animated accessible modal alert | 18,099 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#sweetalert2-sweetalert2) |
+| [cmdk](https://github.com/dip/cmdk) | Filtered command-palette overlay | 12,799 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#dip-cmdk) |
+| [react-hot-toast](https://github.com/timolins/react-hot-toast) | Stacking dismissible toast queue | 10,956 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#timolins-react-hot-toast) |
+| [Floating UI](https://github.com/floating-ui/floating-ui) | Anchored popover flip and shift | 32,665 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#floating-ui-floating-ui) |
+| [React Menu](https://github.com/szhsin/react-menu) | Nested menu and submenu transition | 1,218 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#szhsin-react-menu) |
+| [dnd kit](https://github.com/clauderic/dnd-kit) | Drag overlay and drop preview | 17,408 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#clauderic-dnd-kit) |
+| [use-gesture](https://github.com/pmndrs/use-gesture) | Bound spring drag and pinch | 9,620 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#pmndrs-use-gesture) |
+| [reveal.js](https://github.com/hakimel/reveal.js) | Spatial slide-deck navigation | 71,936 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#hakimel-reveal-js) |
+
+<a id="pointer"></a>
+
+### Pointer & hover
+
+Tilt, depth, custom cursors, magnetic motion, and image distortion.
+
+| Project | Visible effect | Stars | Status | Minimal code |
+| --- | --- | ---: | --- | --- |
+| [Parallax.js](https://github.com/wagerfield/parallax) | Pointer-driven layer depth | 16,583 | Original | [Open](https://giraffe-tree.github.io/awesome-interaction/#parallax) |
+| [vanilla-tilt.js](https://github.com/micku7zu/vanilla-tilt.js) | Perspective tilt and glare | 4,019 | Original | [Open](https://giraffe-tree.github.io/awesome-interaction/#vanilla-tilt) |
+| [mouse-follower](https://github.com/Cuberto/mouse-follower) | Context-aware custom cursor | 818 | Original | [Open](https://giraffe-tree.github.io/awesome-interaction/#mouse-follower) |
+| [hover-effect](https://github.com/robin-dela/hover-effect) | Displacement-map image hover | 1,874 | Original | [Open](https://giraffe-tree.github.io/awesome-interaction/#hover-effect) |
+| [Hover.css](https://github.com/IanLunn/Hover) | Reusable CSS hover vocabulary | 29,395 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#ianlunn-hover) |
+| [cursor-effects](https://github.com/tholman/cursor-effects) | Trailing cursor particles | 4,013 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#tholman-cursor-effects) |
+| [fake3d](https://github.com/akella/fake3d) | Depth-map portrait parallax | 545 | Legacy | [Open](https://giraffe-tree.github.io/awesome-interaction/#akella-fake3d) |
+| [Magnetic Buttons](https://github.com/codrops/MagneticButtons) | Pointer-attracted button motion | 485 | Legacy | [Open](https://giraffe-tree.github.io/awesome-interaction/#codrops-magneticbuttons) |
+| [Direction-Aware Hover](https://github.com/codrops/DirectionAwareHoverEffect) | Approach-direction overlay entrance | 393 | Legacy | [Open](https://giraffe-tree.github.io/awesome-interaction/#codrops-directionawarehovereffect) |
+| [Gooey Text Hover](https://github.com/codrops/GooeyTextHoverEffect) | SVG-filter gooey text hover | 155 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#codrops-gooeytexthovereffect) |
+| [Interactive Points](https://github.com/codrops/InteractivePoints) | Hotspot-revealed image regions | 302 | Legacy | [Open](https://giraffe-tree.github.io/awesome-interaction/#codrops-interactivepoints) |
+| [Stack Motion Hover](https://github.com/codrops/StackMotionHoverEffects) | Expanding colored card stack | 499 | Legacy | [Open](https://giraffe-tree.github.io/awesome-interaction/#codrops-stackmotionhovereffects) |
+
+<a id="vector"></a>
+
+### Text & SVG
+
+Typing, text splitting, vector drawing, handwriting, and SVG morphing.
+
+| Project | Visible effect | Stars | Status | Minimal code |
+| --- | --- | ---: | --- | --- |
+| [Vivus](https://github.com/maxwellito/vivus) | SVG stroke drawing | 15,479 | Legacy | [Open](https://giraffe-tree.github.io/awesome-interaction/#vivus) |
+| [lottie-web](https://github.com/airbnb/lottie-web) | After Effects vector playback | 32,014 | Original | [Open](https://giraffe-tree.github.io/awesome-interaction/#lottie-web) |
+| [Typed.js](https://github.com/mattboldt/typed.js) | Looping typewriter sequence | 16,283 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#mattboldt-typed-js) |
+| [Splitting](https://github.com/shshaw/Splitting) | Text-to-character CSS variables | 1,755 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#shshaw-splitting) |
+| [Blotter](https://github.com/bradley/Blotter) | Shader-processed typography | 3,076 | Legacy | [Open](https://giraffe-tree.github.io/awesome-interaction/#bradley-blotter) |
+| [use-scramble](https://github.com/tol-is/use-scramble) | Randomized decode text reveal | 143 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#tol-is-use-scramble) |
+| [SVG.js](https://github.com/svgdotjs/svg.js) | Fluent SVG scene animation | 11,802 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#svgdotjs-svg-js) |
+| [Rough.js](https://github.com/rough-stuff/rough) | Hand-drawn vector rendering | 21,074 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#rough-stuff-rough) |
+| [Vara](https://github.com/akzhy/Vara) | Handwritten path lettering | 289 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#akzhy-vara) |
+| [smart-ticker](https://github.com/tombcato/smart-ticker) | Character-diff text transition | 165 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#tombcato-smart-ticker) |
+| [Flip](https://github.com/pqina/flip) | Mechanical split-flap character change | 1,018 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#pqina-flip) |
+| [Flubber](https://github.com/veltman/flubber) | Topology-safe SVG shape morph | 6,923 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#veltman-flubber) |
+
+<a id="canvas"></a>
+
+### Canvas & 2D
+
+Scene graphs, creative coding, physics, drawing tools, and 2D renderers.
+
+| Project | Visible effect | Stars | Status | Minimal code |
+| --- | --- | ---: | --- | --- |
+| [PixiJS](https://github.com/pixijs/pixijs) | GPU-accelerated 2D scene graph | 47,790 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#pixijs-pixijs) |
+| [p5.js](https://github.com/processing/p5.js) | Sketch-style creative coding loop | 23,797 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#processing-p5-js) |
+| [Paper.js](https://github.com/paperjs/paper.js) | Vector geometry on Canvas | 15,061 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#paperjs-paper-js) |
+| [Fabric.js](https://github.com/fabricjs/fabric.js) | Interactive object canvas | 31,321 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#fabricjs-fabric-js) |
+| [Konva](https://github.com/konvajs/konva) | Layered draggable Canvas nodes | 14,619 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#konvajs-konva) |
+| [Two.js](https://github.com/jonobr1/two.js) | Renderer-agnostic 2D primitives | 8,643 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#jonobr1-two-js) |
+| [EaselJS](https://github.com/CreateJS/EaselJS) | Display-list Canvas animation | 8,169 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#createjs-easeljs) |
+| [Phaser](https://github.com/phaserjs/phaser) | Browser game scene lifecycle | 39,960 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#phaserjs-phaser) |
+| [Matter.js](https://github.com/liabru/matter-js) | Rigid-body web physics | 18,321 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#liabru-matter-js) |
+| [Pts](https://github.com/williamngan/pts) | Point-based generative geometry | 5,336 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#williamngan-pts) |
+| [Zdog](https://github.com/metafizzy/zdog) | Pseudo-3D flat illustration | 10,634 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#metafizzy-zdog) |
+| [tldraw](https://github.com/tldraw/tldraw) | Infinite collaborative drawing surface | 48,780 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#tldraw-tldraw) |
+
+<a id="webgl"></a>
+
+### 3D & WebGL
+
+3D engines, declarative renderers, shader layers, and post-processing.
+
+| Project | Visible effect | Stars | Status | Minimal code |
+| --- | --- | ---: | --- | --- |
+| [react-three-fiber](https://github.com/pmndrs/react-three-fiber) | Declarative React 3D scene | 31,433 | Original | [Open](https://giraffe-tree.github.io/awesome-interaction/#react-three-fiber) |
+| [three.js](https://github.com/mrdoob/three.js) | General-purpose WebGL scene graph | 113,755 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#mrdoob-three-js) |
+| [Babylon.js](https://github.com/BabylonJS/Babylon.js) | Batteries-included 3D engine | 25,806 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#babylonjs-babylon-js) |
+| [PlayCanvas Engine](https://github.com/playcanvas/engine) | Entity-component 3D runtime | 16,245 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#playcanvas-engine) |
+| [OGL](https://github.com/oframe/ogl) | Minimal WebGL abstraction | 4,582 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#oframe-ogl) |
+| [regl](https://github.com/regl-project/regl) | Functional WebGL draw commands | 5,557 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#regl-project-regl) |
+| [Curtains.js](https://github.com/martinlaxenaire/curtainsjs) | DOM-synced shader planes | 1,823 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#martinlaxenaire-curtainsjs) |
+| [<model-viewer>](https://github.com/google/model-viewer) | Accessible interactive 3D product view | 8,161 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#google-model-viewer) |
+| [A-Frame](https://github.com/aframevr/aframe) | Declarative HTML 3D scene | 17,586 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#aframevr-aframe) |
+| [TresJS](https://github.com/Tresjs/tres) | Vue declarative Three.js | 3,625 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#tresjs-tres) |
+| [Threlte](https://github.com/threlte/threlte) | Svelte declarative Three.js | 3,300 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#threlte-threlte) |
+| [postprocessing](https://github.com/pmndrs/postprocessing) | Merged real-time bloom pass | 2,811 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#pmndrs-postprocessing) |
+
+<a id="background"></a>
+
+### Background & particles
+
+Fluid, particles, gradients, confetti, meshes, ribbons, and fireworks.
+
+| Project | Visible effect | Stars | Status | Minimal code |
+| --- | --- | ---: | --- | --- |
+| [WebGL Fluid Simulation](https://github.com/PavelDoGreat/WebGL-Fluid-Simulation) | Pointer-injected GPU fluid | 16,493 | Original | [Open](https://giraffe-tree.github.io/awesome-interaction/#webgl-fluid) |
+| [tsParticles](https://github.com/tsparticles/tsparticles) | Configurable reactive particle field | 8,920 | Original | [Open](https://giraffe-tree.github.io/awesome-interaction/#tsparticles) |
+| [Vanta](https://github.com/tengbao/vanta) | Drop-in animated WebGL background | 6,608 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#tengbao-vanta) |
+| [canvas-confetti](https://github.com/catdad/canvas-confetti) | Event-triggered confetti burst | 12,648 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#catdad-canvas-confetti) |
+| [Granim.js](https://github.com/sarcadass/granim.js) | Animated gradient state transitions | 5,304 | Legacy | [Open](https://giraffe-tree.github.io/awesome-interaction/#sarcadass-granim-js) |
+| [Trianglify](https://github.com/qrohlf/trianglify) | Procedural low-poly mesh | 10,089 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#qrohlf-trianglify) |
+| [Fireworks.js](https://github.com/crashmax-dev/fireworks-js) | Interactive fireworks field | 1,380 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#crashmax-dev-fireworks-js) |
+| [ribbon.js](https://github.com/hustcc/ribbon.js) | Procedural ribbon trail | 237 | Legacy | [Open](https://giraffe-tree.github.io/awesome-interaction/#hustcc-ribbon-js) |
+| [Flat Surface Shader](https://github.com/wagerfield/flat-surface-shader) | Lit low-poly surface | 2,469 | Legacy | [Open](https://giraffe-tree.github.io/awesome-interaction/#wagerfield-flat-surface-shader) |
+| [CSS Doodle](https://github.com/css-doodle/css-doodle) | Generated CSS grid pattern animation | 6,020 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#css-doodle-css-doodle) |
+| [shader-web-background](https://github.com/xemantic/shader-web-background) | Full-page fragment shader backdrop | 280 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#xemantic-shader-web-background) |
+| [Particle Life](https://github.com/hunar4321/particle-life) | Emergent attraction-repulsion swarm | 3,343 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#hunar4321-particle-life) |
+
+<a id="media"></a>
+
+### Media & image
+
+Comparison, pan-and-zoom, cropping, filters, lens zoom, and shader transitions.
+
+| Project | Visible effect | Stars | Status | Minimal code |
+| --- | --- | ---: | --- | --- |
+| [img-comparison-slider](https://github.com/sneas/img-comparison-slider) | Drag-to-reveal image comparison | 864 | Original | [Open](https://giraffe-tree.github.io/awesome-interaction/#img-comparison-slider) |
+| [GL Transitions](https://github.com/gl-transitions/gl-transitions) | Reusable GLSL media transition | 2,115 | Original | [Open](https://giraffe-tree.github.io/awesome-interaction/#gl-transitions) |
+| [medium-zoom](https://github.com/francoischalifour/medium-zoom) | Inline image focus zoom | 3,936 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#francoischalifour-medium-zoom) |
+| [Panzoom](https://github.com/timmywil/panzoom) | Pointer pan and pinch zoom | 2,440 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#timmywil-panzoom) |
+| [OpenSeadragon](https://github.com/openseadragon/openseadragon) | Deep-zoom tiled imagery | 3,479 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#openseadragon-openseadragon) |
+| [Cropper.js](https://github.com/fengyuanchen/cropperjs) | Interactive image crop transform | 13,857 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#fengyuanchen-cropperjs) |
+| [Drift](https://github.com/strawdynamics/drift) | E-commerce lens magnification | 1,562 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#strawdynamics-drift) |
+| [CamanJS](https://github.com/meltingice/CamanJS) | Chainable Canvas photo filters | 3,571 | Legacy | [Open](https://giraffe-tree.github.io/awesome-interaction/#meltingice-camanjs) |
+| [glfx.js](https://github.com/evanw/glfx.js) | GPU image filter canvas | 3,449 | Legacy | [Open](https://giraffe-tree.github.io/awesome-interaction/#evanw-glfx-js) |
+| [FilePond](https://github.com/pqina/filepond) | Drop-upload image preview transition | 16,382 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#pqina-filepond) |
+| [TUI Image Editor](https://github.com/nhn/tui.image-editor) | Full image-editing canvas workspace | 7,660 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#nhn-tui-image-editor) |
+| [Media Chrome](https://github.com/muxinc/media-chrome) | Responsive custom media controls | 2,710 | New | [Open](https://giraffe-tree.github.io/awesome-interaction/#muxinc-media-chrome) |
+
+## Demo
+
+The demo is dependency-free static HTML, CSS, JavaScript modules, and GIF assets. It supports search, category filtering, sorting, English/Chinese UI, direct project anchors, and copyable code.
+
+```bash
+python3 -m http.server 4173 --directory demo
+```
+
+Open [http://localhost:4173](http://localhost:4173). A local HTTP server is required because the catalog is loaded as an ES module.
+
+## GIF optimization
+
+Run the reproducible optimizer from original source GIFs:
+
+```bash
+./scripts/optimize-gifs.sh
+```
+
+It uses an adaptive 128-color palette, Bayer dithering, and difference-rectangle encoding. A candidate only replaces the source when it is smaller, and dimensions, duration, frame rate, and frame count are validated. Palette reduction is perceptual compression, so keep original source material outside the optimized output when future re-encoding is expected.
+
+## GitHub Pages
+
+Yes—this project can run on GitHub Pages because the demo is fully static and uses only relative paths. The included workflow publishes `demo/` on pushes to `main` and supports manual runs. Before the first deployment, set **Settings → Pages → Source** to **GitHub Actions**. See [the deployment notes](docs/GITHUB_PAGES.md).
+
+Expected project URL: [https://giraffe-tree.github.io/awesome-interaction/](https://giraffe-tree.github.io/awesome-interaction/)
+
+## Maintaining the catalog
+
+- Edit `demo/data/projects.js`, the single source of truth.
+- Run `node scripts/build-docs.mjs` to regenerate both README files.
+- Run `node scripts/validate.mjs` before committing.
+- Preserve the distinction between a real project GIF and a code-first placeholder.
+
+GIFs and project names are used for research, indexing, and comparison. Rights remain with their respective authors.

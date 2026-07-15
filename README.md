@@ -35,6 +35,16 @@
 
 *Stars 核验：2026-07-15 · [演示素材来源](https://github.com/google-ai-edge/mediapipe-samples)*
 
+### Full-body Pose · 全身姿态
+
+#### [OpenPose](https://github.com/CMU-Perceptual-Computing-Lab/openpose) · ★ 34,284 · 8/10
+
+把摄像头中的多人身体、手部、面部和足部关键点实时映射为骨骼，让站立、转身、抬手和舞蹈等完整身体动作成为控制信号。它代表的是“以身体为控制器”，与只分类单个手势的 MediaPipe 条目不同。
+
+![OpenPose full-body pose demo](demo/gifs/openpose.gif)
+
+*Stars 核验：2026-07-15 · [原始演示素材](https://github.com/CMU-Perceptual-Computing-Lab/openpose/blob/master/.github/media/pose_face_hands.gif)*
+
 ## Backup
 
 低于 100 stars、但交互思路可行且有演示证据的实验性项目会放在这里。

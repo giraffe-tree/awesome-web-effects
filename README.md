@@ -55,6 +55,16 @@
 
 *Stars 核验：2026-07-15 · [原始演示素材](https://github.com/justadudewhohacks/face-api.js)*
 
+### Immersive WebXR · 沉浸式空间
+
+#### [A-Frame](https://github.com/aframevr/aframe) · ★ 17,586 · 9/10
+
+用 HTML 式声明构建可在浏览器和头显中进入的 3D 场景，用户通过头部朝向、空间移动和控制器与环境交互。它把网页从二维页面扩展成可进入、可环顾的空间界面。
+
+![A-Frame immersive WebXR demo](demo/gifs/aframe.gif)
+
+*Stars 核验：2026-07-15 · [原始演示素材](https://github.com/aframevr/aframe)*
+
 ## Backup
 
 低于 100 stars、但交互思路可行且有演示证据的实验性项目会放在这里。

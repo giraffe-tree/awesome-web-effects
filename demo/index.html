@@ -48,7 +48,15 @@
       .stats { display: flex; justify-content: space-between; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); font: 600 12px/1.2 ui-monospace, monospace; }
 
       footer { padding: 28px 0 42px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
-      @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } header { padding-top: 48px; } }
+      @media (max-width: 760px) {
+        body { overflow-x: hidden; }
+        header, main, footer { width: min(350px, calc(100% - 40px)); margin-left: 20px; margin-right: auto; }
+        header { padding-top: 48px; }
+        h1 { max-width: 330px; font-size: 48px; overflow-wrap: anywhere; }
+        .lede { max-width: 330px; }
+        .grid { grid-template-columns: minmax(0, 1fr); }
+        .copy { padding: 20px; }
+      }
     </style>
   </head>
   <body>

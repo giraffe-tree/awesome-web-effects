@@ -45,6 +45,16 @@
 
 *Stars 核验：2026-07-15 · [原始演示素材](https://github.com/CMU-Perceptual-Computing-Lab/openpose/blob/master/.github/media/pose_face_hands.gif)*
 
+### Facial State · 面部状态
+
+#### [face-api.js](https://github.com/justadudewhohacks/face-api.js) · ★ 17,904 · 7/10
+
+在浏览器中同时进行人脸检测、关键点、身份特征、年龄、性别和表情估计，使微笑、惊讶或注意状态能够改变界面反馈。这个模式的核心不是点击，而是系统持续感知用户的面部状态。
+
+![face-api.js facial state demo](demo/gifs/face-api.gif)
+
+*Stars 核验：2026-07-15 · [原始演示素材](https://github.com/justadudewhohacks/face-api.js)*
+
 ## Backup
 
 低于 100 stars、但交互思路可行且有演示证据的实验性项目会放在这里。

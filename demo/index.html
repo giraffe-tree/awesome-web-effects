@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="A visual atlas of open-source interaction patterns." />
+    <title>Awesome Interaction</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --paper: #f4f0e8;
+        --ink: #171915;
+        --muted: #656960;
+        --line: rgba(23, 25, 21, 0.16);
+        --accent: #ff5f37;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 10% 0%, rgba(255, 95, 55, 0.16), transparent 28rem),
+          var(--paper);
+        font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      header, main, footer { width: min(1180px, calc(100% - 40px)); margin-inline: auto; }
+      header { padding: 76px 0 42px; border-bottom: 1px solid var(--line); }
+      .eyebrow { margin: 0 0 14px; color: var(--accent); font: 700 12px/1.2 ui-monospace, monospace; letter-spacing: .14em; text-transform: uppercase; }
+      h1 { max-width: 850px; margin: 0; font-size: clamp(48px, 9vw, 112px); line-height: .88; letter-spacing: -.07em; }
+      .lede { max-width: 700px; margin: 28px 0 0; color: var(--muted); font-size: clamp(17px, 2vw, 22px); line-height: 1.55; }
+      .meta { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 28px; }
+      .meta span { padding: 8px 12px; border: 1px solid var(--line); border-radius: 999px; font: 600 12px/1 ui-monospace, monospace; }
+
+      main { padding: 44px 0 80px; }
+      #empty { padding: 72px 0; color: var(--muted); font-size: 18px; }
+      .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+      .card { overflow: hidden; border: 1px solid var(--line); border-radius: 22px; background: rgba(255,255,255,.42); }
+      .card img { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; background: #d8d5ce; }
+      .copy { padding: 22px; }
+      .kind { color: var(--accent); font: 700 11px/1.2 ui-monospace, monospace; letter-spacing: .1em; text-transform: uppercase; }
+      h2 { margin: 10px 0 8px; font-size: 26px; letter-spacing: -.035em; }
+      h2 a { color: inherit; text-decoration: none; }
+      h2 a:hover { color: var(--accent); }
+      .description { min-height: 3em; margin: 0; color: var(--muted); line-height: 1.5; }
+      .stats { display: flex; justify-content: space-between; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); font: 600 12px/1.2 ui-monospace, monospace; }
+
+      footer { padding: 28px 0 42px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
+      @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } header { padding-top: 48px; } }
+    </style>
+  </head>
+  <body>
+    <header>
+      <p class="eyebrow">Open-source interaction atlas</p>
+      <h1>Awesome Interaction</h1>
+      <p class="lede">不同的输入，不同的反馈，不同的人机关系。用短 GIF 快速浏览值得研究的开源交互方式。</p>
+      <div class="meta"><span id="count">0 patterns</span><span>stars ≥ 100</span><span>visual evidence required</span></div>
+    </header>
+    <main>
+      <div id="empty">调研进行中，交互卡片即将加入。</div>
+      <section class="grid" id="grid" aria-live="polite"></section>
+    </main>
+    <footer>Curated for learning and comparison. All project media belongs to its original author.</footer>
+    <script>
+      const interactions = [];
+
+      const grid = document.querySelector('#grid');
+      const empty = document.querySelector('#empty');
+      document.querySelector('#count').textContent = `${interactions.length} patterns`;
+      if (interactions.length) empty.hidden = true;
+
+      for (const item of interactions) {
+        const article = document.createElement('article');
+        article.className = 'card';
+        article.innerHTML = `
+          <img src="${item.gif}" alt="${item.name} interaction preview" loading="lazy" />
+          <div class="copy">
+            <div class="kind">${item.pattern}</div>
+            <h2><a href="${item.url}" target="_blank" rel="noreferrer">${item.name} ↗</a></h2>
+            <p class="description">${item.description}</p>
+            <div class="stats"><span>★ ${item.stars}</span><span>${item.score}/10</span></div>
+          </div>`;
+        grid.append(article);
+      }
+    </script>
+  </body>
+</html>

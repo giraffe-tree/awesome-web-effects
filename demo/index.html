@@ -3,312 +3,416 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="A visual atlas of open-source interaction patterns." />
-    <title>Awesome Interaction</title>
+    <meta name="description" content="A GIF-driven atlas of open-source effects for the web." />
+    <meta name="theme-color" content="#0c0d0b" />
+    <title>Awesome Web Effects</title>
     <style>
       :root {
         color-scheme: dark;
-        --paper: #f4f0e8;
-        --ink: #171915;
-        --muted: #656960;
-        --line: rgba(23, 25, 21, 0.16);
-        --accent: #ff5f37;
+        --bg: #0c0d0b;
+        --panel: #141512;
+        --paper: #efede4;
+        --ink: #10110f;
+        --muted: #9b9d94;
+        --line: rgba(239, 237, 228, 0.17);
+        --acid: #b7ff56;
+        --coral: #ff694e;
+        --violet: #8a70ff;
+        --pointer-x: 72%;
+        --pointer-y: 12%;
       }
 
       * { box-sizing: border-box; }
-
+      html { scroll-behavior: smooth; }
       body {
         margin: 0;
-        color: var(--ink);
-        background:
-          radial-gradient(circle at 10% 0%, rgba(255, 95, 55, 0.16), transparent 28rem),
-          var(--paper);
-        font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: var(--paper);
+        background: var(--bg);
+        font-family: Inter, "Helvetica Neue", Helvetica, Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
       }
+      button, input, select { font: inherit; }
+      a { color: inherit; }
+      ::selection { color: var(--ink); background: var(--acid); }
 
-      header, main, footer { width: min(1180px, calc(100% - 40px)); margin-inline: auto; }
-      header { padding: 76px 0 42px; border-bottom: 1px solid var(--line); }
-      .eyebrow { margin: 0 0 14px; color: var(--accent); font: 700 12px/1.2 ui-monospace, monospace; letter-spacing: .14em; text-transform: uppercase; }
-      h1 { max-width: 850px; margin: 0; font-size: clamp(48px, 9vw, 112px); line-height: .88; letter-spacing: -.07em; }
-      .lede { max-width: 700px; margin: 28px 0 0; color: var(--muted); font-size: clamp(17px, 2vw, 22px); line-height: 1.55; }
-      .meta { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 28px; }
-      .meta span { padding: 8px 12px; border: 1px solid var(--line); border-radius: 999px; font: 600 12px/1 ui-monospace, monospace; }
+      .shell { width: min(1460px, calc(100% - 48px)); margin-inline: auto; }
+      .site-nav {
+        position: relative;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 72px;
+        border-bottom: 1px solid var(--line);
+      }
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+        font: 800 13px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: 0.12em;
+      }
+      .brand-mark {
+        display: grid;
+        place-items: center;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        color: var(--ink);
+        background: var(--acid);
+        letter-spacing: -0.08em;
+      }
+      .nav-link {
+        padding: 10px 14px;
+        border: 1px solid var(--line);
+        border-radius: 99px;
+        color: var(--paper);
+        text-decoration: none;
+        font: 700 12px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        transition: color .2s ease, background .2s ease, border-color .2s ease;
+      }
+      .nav-link:hover, .nav-link:focus-visible { color: var(--ink); background: var(--acid); border-color: var(--acid); outline: none; }
 
-      main { padding: 44px 0 80px; }
-      #empty { padding: 72px 0; color: var(--muted); font-size: 18px; }
-      .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
-      .card { overflow: hidden; border: 1px solid var(--line); border-radius: 22px; background: rgba(255,255,255,.42); }
-      .card img { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: contain; background: #d8d5ce; }
-      .copy { padding: 22px; }
-      .kind { color: var(--accent); font: 700 11px/1.2 ui-monospace, monospace; letter-spacing: .1em; text-transform: uppercase; }
-      h2 { margin: 10px 0 8px; font-size: 26px; letter-spacing: -.035em; }
-      h2 a { color: inherit; text-decoration: none; }
-      h2 a:hover { color: var(--accent); }
-      .description { min-height: 3em; margin: 0; color: var(--muted); line-height: 1.5; }
-      .stats { display: flex; justify-content: space-between; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); font: 600 12px/1.2 ui-monospace, monospace; }
+      .hero {
+        position: relative;
+        isolation: isolate;
+        min-height: 690px;
+        overflow: hidden;
+        border-bottom: 1px solid var(--line);
+        background:
+          radial-gradient(540px circle at var(--pointer-x) var(--pointer-y), rgba(183,255,86,.16), transparent 64%),
+          linear-gradient(var(--line) 1px, transparent 1px),
+          linear-gradient(90deg, var(--line) 1px, transparent 1px);
+        background-size: auto, 72px 72px, 72px 72px;
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        top: 124px;
+        right: clamp(-160px, -8vw, -40px);
+        width: clamp(330px, 42vw, 660px);
+        aspect-ratio: 1;
+        border: 1px solid rgba(183,255,86,.65);
+        border-radius: 50%;
+        box-shadow: inset 0 0 0 46px rgba(183,255,86,.03), inset 0 0 0 47px rgba(183,255,86,.2);
+        transform: translate3d(calc((var(--pointer-x) - 50%) * .04), calc((var(--pointer-y) - 50%) * .04), 0);
+      }
+      .hero-copy { position: relative; z-index: 1; padding: clamp(86px, 11vw, 150px) 0 72px; }
+      .eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 0 0 24px;
+        color: var(--acid);
+        font: 800 12px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .16em;
+        text-transform: uppercase;
+      }
+      .eyebrow::before { content: ""; width: 42px; height: 2px; background: currentColor; }
+      h1 {
+        max-width: 1040px;
+        margin: 0;
+        font-size: clamp(76px, 13vw, 192px);
+        line-height: .78;
+        letter-spacing: -.085em;
+        text-transform: uppercase;
+      }
+      h1 span { display: block; margin-left: clamp(42px, 10vw, 170px); color: transparent; -webkit-text-stroke: 1.5px var(--paper); }
+      .lede {
+        max-width: 650px;
+        margin: 54px 0 0;
+        color: #c3c5bc;
+        font-size: clamp(18px, 2vw, 25px);
+        line-height: 1.5;
+        letter-spacing: -.02em;
+      }
+      .hero-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 34px; }
+      .hero-meta span { padding: 9px 12px; border: 1px solid var(--line); border-radius: 99px; font: 700 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace; text-transform: uppercase; }
+      .hero-meta span:first-child { color: var(--ink); background: var(--acid); border-color: var(--acid); }
 
-      footer { padding: 28px 0 42px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
-      @media (max-width: 760px) {
-        body { overflow-x: hidden; }
-        header, main, footer { width: min(350px, calc(100% - 40px)); margin-left: 20px; margin-right: auto; }
-        header { padding-top: 48px; }
-        h1 { max-width: 330px; font-size: 48px; overflow-wrap: anywhere; }
-        .lede { max-width: 330px; }
-        .grid { grid-template-columns: minmax(0, 1fr); }
-        .copy { padding: 20px; }
+      .ticker { overflow: hidden; border-bottom: 1px solid var(--line); background: var(--acid); color: var(--ink); }
+      .ticker-track { display: flex; width: max-content; padding: 14px 0; animation: ticker 28s linear infinite; }
+      .ticker span { display: flex; align-items: center; gap: 22px; padding-right: 22px; font: 900 13px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .08em; text-transform: uppercase; }
+      .ticker span::after { content: "✳"; }
+      @keyframes ticker { to { transform: translateX(-50%); } }
+
+      main { padding: 72px 0 120px; }
+      .intro-grid { display: grid; grid-template-columns: .75fr 1.25fr; gap: 64px; align-items: end; padding-bottom: 52px; }
+      .section-index { color: var(--acid); font: 800 12px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .12em; text-transform: uppercase; }
+      .intro-grid h2 { max-width: 880px; margin: 0; font-size: clamp(38px, 5.3vw, 76px); line-height: .96; letter-spacing: -.055em; }
+
+      .controls {
+        position: sticky;
+        top: 0;
+        z-index: 8;
+        display: grid;
+        grid-template-columns: minmax(220px, 1fr) auto auto;
+        gap: 12px;
+        padding: 16px 0;
+        background: rgba(12,13,11,.92);
+        border-top: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+        backdrop-filter: blur(16px);
+      }
+      .search-wrap { position: relative; }
+      .search-wrap::before { content: "⌕"; position: absolute; left: 16px; top: 50%; color: var(--muted); font-size: 22px; transform: translateY(-55%); }
+      .search, .sort {
+        width: 100%;
+        height: 44px;
+        border: 1px solid var(--line);
+        border-radius: 99px;
+        color: var(--paper);
+        background: var(--panel);
+        outline: none;
+      }
+      .search { padding: 0 18px 0 44px; }
+      .sort { min-width: 165px; padding: 0 38px 0 16px; }
+      .search:focus, .sort:focus { border-color: var(--acid); }
+      .filters { display: flex; gap: 8px; }
+      .filter {
+        height: 44px;
+        padding: 0 16px;
+        border: 1px solid var(--line);
+        border-radius: 99px;
+        color: var(--muted);
+        background: transparent;
+        cursor: pointer;
+        font: 800 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        text-transform: uppercase;
+      }
+      .filter:hover, .filter:focus-visible { color: var(--paper); border-color: rgba(239,237,228,.5); outline: none; }
+      .filter[aria-pressed="true"] { color: var(--ink); background: var(--acid); border-color: var(--acid); }
+
+      .result-meta { display: flex; justify-content: space-between; gap: 20px; padding: 24px 0; color: var(--muted); font: 700 11px/1.3 ui-monospace, SFMono-Regular, Menlo, monospace; text-transform: uppercase; }
+      .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px 22px; }
+      .card {
+        min-width: 0;
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity .55s ease, transform .55s cubic-bezier(.2,.75,.2,1);
+      }
+      .card.is-visible { opacity: 1; transform: translateY(0); }
+      .media-link { display: block; perspective: 1000px; text-decoration: none; }
+      .media {
+        position: relative;
+        overflow: hidden;
+        aspect-ratio: 16 / 10;
+        border-radius: 4px;
+        background: #181916;
+        transform-style: preserve-3d;
+        transition: transform .18s ease-out;
+      }
+      .media::after { content: ""; position: absolute; inset: 0; border: 1px solid rgba(255,255,255,.16); pointer-events: none; }
+      .media img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .7s cubic-bezier(.2,.75,.2,1); }
+      .card:hover .media img { transform: scale(1.025); }
+      .badge { position: absolute; top: 14px; left: 14px; padding: 8px 10px; color: var(--ink); background: var(--paper); border-radius: 99px; font: 900 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace; text-transform: uppercase; }
+      .badge.editorial { background: var(--violet); color: white; }
+      .visit { position: absolute; right: 14px; bottom: 14px; display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; color: var(--ink); background: var(--acid); font-size: 20px; transform: translateY(64px); transition: transform .35s cubic-bezier(.2,.8,.2,1); }
+      .card:hover .visit, .media-link:focus-visible .visit { transform: translateY(0); }
+      .media-link:focus-visible { outline: 2px solid var(--acid); outline-offset: 5px; }
+      .card-head { display: grid; grid-template-columns: 1fr auto; gap: 18px; padding: 19px 0 12px; border-bottom: 1px solid var(--line); }
+      .kind { margin: 0 0 7px; color: var(--acid); font: 800 10px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .12em; text-transform: uppercase; }
+      .card h3 { margin: 0; font-size: clamp(25px, 2.5vw, 38px); line-height: 1; letter-spacing: -.045em; }
+      .card h3 a { text-decoration: none; }
+      .card h3 a:hover, .card h3 a:focus-visible { color: var(--acid); outline: none; }
+      .number { color: #55574f; font: 800 22px/1 ui-monospace, SFMono-Regular, Menlo, monospace; }
+      .description { min-height: 3.2em; margin: 15px 0 0; color: #afb1a8; line-height: 1.58; }
+      .stats { display: flex; gap: 16px; margin-top: 16px; color: #dadbd4; font: 700 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace; text-transform: uppercase; }
+      .stats span + span::before { content: "/"; margin-right: 16px; color: #55574f; }
+      .empty { grid-column: 1 / -1; padding: 90px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 22px; }
+
+      footer { border-top: 1px solid var(--line); }
+      .footer-inner { display: grid; grid-template-columns: 1fr auto; gap: 28px; align-items: end; padding: 48px 0 64px; }
+      .footer-title { margin: 0; font-size: clamp(34px, 5vw, 72px); line-height: .95; letter-spacing: -.055em; }
+      .footer-note { max-width: 390px; margin: 18px 0 0; color: var(--muted); line-height: 1.55; }
+      .back-top { display: grid; place-items: center; width: 54px; height: 54px; border: 1px solid var(--line); border-radius: 50%; text-decoration: none; font-size: 20px; }
+      .back-top:hover, .back-top:focus-visible { color: var(--ink); background: var(--acid); border-color: var(--acid); outline: none; }
+
+      @media (max-width: 1120px) {
+        .controls { grid-template-columns: 1fr auto; }
+        .filters { grid-column: 1 / -1; overflow-x: auto; padding-bottom: 2px; }
+        .filter { flex: 0 0 auto; }
+      }
+      @media (max-width: 780px) {
+        .shell { width: min(100% - 28px, 620px); }
+        .site-nav { height: 62px; }
+        .brand-text { display: none; }
+        .hero { min-height: 630px; background-size: auto, 52px 52px, 52px 52px; }
+        .hero-copy { padding-top: 92px; }
+        h1 { font-size: clamp(68px, 22vw, 116px); }
+        h1 span { margin-left: 0; }
+        .lede { margin-top: 38px; font-size: 18px; }
+        .intro-grid { grid-template-columns: 1fr; gap: 18px; padding-bottom: 38px; }
+        .controls { grid-template-columns: 1fr; }
+        .sort { min-width: 0; }
+        .filters { grid-column: auto; }
+        .grid { grid-template-columns: minmax(0, 1fr); gap: 44px; }
+        .description { min-height: 0; }
+        .footer-inner { grid-template-columns: 1fr; }
+        .back-top { justify-self: end; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        .ticker-track { animation: none; }
+        .card, .media, .media img, .visit { transition-duration: .01ms !important; }
       }
     </style>
   </head>
-  <body>
-    <header>
-      <p class="eyebrow">Open-source interaction atlas</p>
-      <h1>Awesome Interaction</h1>
-      <p class="lede">不同的输入，不同的反馈，不同的人机关系。用短 GIF 快速浏览值得研究的开源交互方式。</p>
-      <div class="meta"><span id="count">0 patterns</span><span>primary ≥ 100★</span><span>backup &lt; 100★</span></div>
+  <body id="top">
+    <nav class="site-nav shell" aria-label="主导航">
+      <a class="brand" href="#top"><span class="brand-mark">AW</span><span class="brand-text">Awesome Web Effects</span></a>
+      <a class="nav-link" href="https://github.com/giraffe-tree/awesome-interaction" target="_blank" rel="noreferrer">GitHub ↗</a>
+    </nav>
+
+    <header class="hero" id="hero">
+      <div class="hero-copy shell">
+        <p class="eyebrow">Open-source visual effect atlas</p>
+        <h1>Web <span>Effects</span></h1>
+        <p class="lede">不再泛谈所有交互，只看网页如何动起来。20 个开源项目，20 种能被看见、比较和复现的页面效果。</p>
+        <div class="hero-meta"><span id="hero-count">0 effects</span><span>GIF first</span><span>Stars ≥ 100</span><span>Snapshot 2026.07.15</span></div>
+      </div>
     </header>
-    <main>
-      <div id="empty">调研进行中，交互卡片即将加入。</div>
+
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker-track">
+        <span>Scroll</span><span>Transition</span><span>Pointer</span><span>WebGL</span><span>Vector</span><span>Media</span>
+        <span>Scroll</span><span>Transition</span><span>Pointer</span><span>WebGL</span><span>Vector</span><span>Media</span>
+      </div>
+    </div>
+
+    <main class="shell">
+      <section class="intro-grid" aria-labelledby="atlas-title">
+        <p class="section-index">01 / Effect atlas</p>
+        <h2 id="atlas-title">按视觉结果分类，而不是按框架名称堆清单。</h2>
+      </section>
+
+      <section class="controls" aria-label="筛选效果">
+        <label class="search-wrap"><span hidden>搜索项目或效果</span><input class="search" id="search" type="search" placeholder="搜索效果、项目或关键词…" autocomplete="off" /></label>
+        <select class="sort" id="sort" aria-label="排序方式">
+          <option value="curated">策展顺序</option>
+          <option value="stars">Stars 从高到低</option>
+          <option value="score">评分从高到低</option>
+        </select>
+        <div class="filters" id="filters" aria-label="效果分类"></div>
+      </section>
+
+      <div class="result-meta"><span id="result-count">0 results</span><span>Hover cards · Open project ↗</span></div>
       <section class="grid" id="grid" aria-live="polite"></section>
     </main>
-    <footer>Curated for learning and comparison. All project media belongs to its original author.</footer>
+
+    <footer>
+      <div class="footer-inner shell">
+        <div><p class="footer-title">Study the motion.<br />Build the feeling.</p><p class="footer-note">GIF 仅用于研究、索引和比较。Official capture 来自原项目公开素材；Editorial demo 是对效果的统一画幅复现。</p></div>
+        <a class="back-top" href="#top" aria-label="回到顶部">↑</a>
+      </div>
+    </footer>
+
+    <script>window.WEB_EFFECTS = window.WEB_EFFECTS || [];</script>
+    <!-- Effect data scripts are added one project at a time. -->
     <script>
-      const interactions = [
-        {
-          name: 'MediaPipe',
-          pattern: 'Gesture Recognition · 手势识别',
-          url: 'https://github.com/google-ai-edge/mediapipe',
-          gif: './gifs/mediapipe-gesture.gif',
-          stars: '36,106',
-          score: 9,
-          description: '用普通摄像头识别手部关键点和手势，把身体动作变成实时输入。'
-        },
-        {
-          name: 'OpenPose',
-          pattern: 'Full-body Pose · 全身姿态',
-          url: 'https://github.com/CMU-Perceptual-Computing-Lab/openpose',
-          gif: './gifs/openpose.gif',
-          stars: '34,284',
-          score: 8,
-          description: '实时估计多人身体、手、脸和脚部骨骼，用完整身体动作控制系统。'
-        },
-        {
-          name: 'face-api.js',
-          pattern: 'Facial State · 面部状态',
-          url: 'https://github.com/justadudewhohacks/face-api.js',
-          gif: './gifs/face-api.gif',
-          stars: '17,904',
-          score: 7,
-          description: '在浏览器中估计人脸关键点和表情，让界面持续响应用户面部状态。'
-        },
-        {
-          name: 'A-Frame',
-          pattern: 'Immersive WebXR · 沉浸式空间',
-          url: 'https://github.com/aframevr/aframe',
-          gif: './gifs/aframe.gif',
-          stars: '17,586',
-          score: 9,
-          description: '把网页变成可进入和环顾的 3D 空间，用头部朝向、移动和控制器操作。'
-        },
-        {
-          name: 'XR Interaction Toolkit Examples',
-          pattern: 'XR Direct Manipulation · XR 直接操纵',
-          url: 'https://github.com/Unity-Technologies/XR-Interaction-Toolkit-Examples',
-          gif: './gifs/unity-xr-grab.gif',
-          stars: '1,299',
-          score: 7,
-          description: '用抓取、移动和倾倒等现实动作直接操纵虚拟对象，并获得空间反馈。'
-        },
-        {
-          name: 'MCP Apps',
-          pattern: 'Embedded AI App · 对话内嵌应用',
-          url: 'https://github.com/modelcontextprotocol/ext-apps',
-          gif: './gifs/mcp-apps.gif',
-          stars: '2,573',
-          score: 7,
-          description: '让工具在 AI 对话中返回可持续操作的应用，并把用户操作和状态送回 Agent。'
-        },
-        {
-          name: 'A2UI',
-          pattern: 'Declarative Generative UI · 声明式生成界面',
-          url: 'https://github.com/a2ui-project/a2ui',
-          gif: './gifs/a2ui.gif',
-          stars: '15,745',
-          score: 9,
-          description: 'Agent 输出可增量更新的组件树，由宿主安全渲染成随任务变化的原生界面。'
-        },
-        {
-          name: 'AG-UI',
-          pattern: 'Agent–User Shared State · 双向协作状态',
-          url: 'https://github.com/ag-ui-protocol/ag-ui',
-          gif: './gifs/ag-ui.gif',
-          stars: '14,741',
-          score: 9,
-          description: '用双向事件同步流式输出、工具、界面状态和人工修改，让人随时介入 Agent。'
-        },
-        {
-          name: 'browser-use',
-          pattern: 'GUI Delegation · 图形界面代操作',
-          url: 'https://github.com/browser-use/browser-use',
-          gif: './gifs/browser-use.gif',
-          stars: '104,776',
-          score: 10,
-          description: '人表达目标，Agent 观察并操作现有网页；用户监督轨迹，必要时再接管。'
-        },
-        {
-          name: 'screenshot-to-code',
-          pattern: 'Visual Reference as Input · 视觉参考输入',
-          url: 'https://github.com/abi/screenshot-to-code',
-          gif: './gifs/screenshot-to-code.gif',
-          stars: '73,280',
-          score: 10,
-          description: '直接上传截图或视频帧生成可编辑界面，用“指给系统看”代替冗长描述。'
-        },
-        {
-          name: 'OpenUI',
-          pattern: 'Prompt-to-Live-UI · 自然语言生成实时界面',
-          url: 'https://github.com/wandb/openui',
-          gif: './gifs/openui.gif',
-          stars: '22,468',
-          score: 9,
-          description: '说出界面意图后立即看到实时预览，并通过连续自然语言修改当前 UI。'
-        },
-        {
-          name: 'assistant-ui',
-          pattern: 'Composable AI Conversation · 可组合 AI 对话',
-          url: 'https://github.com/assistant-ui/assistant-ui',
-          gif: './gifs/assistant-ui.gif',
-          stars: '11,090',
-          score: 9,
-          description: '把消息、工具结果、附件与人工批准组合成专用控件，而不只显示文本气泡。'
-        },
-        {
-          name: 'tldraw',
-          pattern: 'Cross-device Co-editing · 跨设备实时共编',
-          url: 'https://github.com/tldraw/tldraw',
-          gif: './gifs/tldraw.gif',
-          stars: '48,772',
-          score: 9,
-          description: '把桌面、手机与多人的操作实时同步到同一画布，直接看见远端修改和共同结果。'
-        },
-        {
-          name: 'whisper.cpp',
-          pattern: 'Continuous Speech Input · 连续语音输入',
-          url: 'https://github.com/ggml-org/whisper.cpp',
-          gif: './gifs/whisper.gif',
-          stars: '51,810',
-          score: 10,
-          description: '在本地设备把连续说话实时转为文字，让口述成为长内容和免手输入入口。'
-        },
-        {
-          name: 'lazygit',
-          pattern: 'Keyboard-first TUI · 键盘优先终端界面',
-          url: 'https://github.com/jesseduffield/lazygit',
-          gif: './gifs/lazygit.gif',
-          stars: '80,377',
-          score: 10,
-          description: '用固定快捷键、焦点与多面板上下文完成高密度工作流，熟练后几乎零等待。'
-        },
-        {
-          name: 'React Spectrum',
-          pattern: 'Screen Reader Semantics · 屏幕阅读器语义',
-          url: 'https://github.com/adobe/react-spectrum',
-          gif: './gifs/react-spectrum.gif',
-          stars: '15,666',
-          score: 9,
-          description: '用语义、状态和焦点顺序给屏幕阅读器提供与视觉界面等价的操作路径。'
-        },
-        {
-          name: 'rPPG-Toolbox',
-          pattern: 'Implicit Physiological Input · 隐式生理输入',
-          url: 'https://github.com/ubicomplab/rPPG-Toolbox',
-          gif: './gifs/rppg.gif',
-          stars: '1,142',
-          score: 7,
-          description: '从面部视频估计脉搏和呼吸，让系统在无明确命令时感知用户身体状态。'
-        },
-        {
-          name: 'brain-bits',
-          pattern: 'Brain–Computer Spelling · 脑机拼写',
-          url: 'https://github.com/dashersw/brain-bits',
-          gif: './gifs/brain-bits.gif',
-          stars: '185',
-          score: 4,
-          description: '检测 P300 脑电信号选择闪烁字符，在无需手部或语音时完成拼写。'
-        },
-        {
-          name: 'Scrollama',
-          pattern: 'Scrollytelling · 滚动叙事',
-          url: 'https://github.com/russellsamora/scrollama',
-          gif: './gifs/scrollama.gif',
-          stars: '5,986',
-          score: 8,
-          description: '让滚动位置持续驱动固定图形的状态，把阅读距离同时变成叙事时间轴。'
-        },
-        {
-          name: 'Falcon',
-          pattern: 'Brushing & Linking · 联动刷选',
-          url: 'https://github.com/vega/falcon',
-          gif: './gifs/falcon.gif',
-          stars: '973',
-          score: 6,
-          description: '在一个视图刷选范围，其他图表同步过滤和高亮，用协调反馈探索变量关系。'
-        },
-        {
-          name: 'JupyterLab',
-          pattern: 'Programmable Document · 可编程文档',
-          url: 'https://github.com/jupyterlab/jupyterlab',
-          gif: './gifs/jupyterlab.gif',
-          stars: '15,230',
-          score: 9,
-          description: '把叙述、代码、控件和原地输出放进同一文档，在阅读中直接修改与运行。'
-        },
-        {
-          name: 'QtScrcpy',
-          pattern: 'One-to-many Device Control · 一对多设备控制',
-          url: 'https://github.com/barry-ran/QtScrcpy',
-          gif: './gifs/qtscrcpy.gif',
-          stars: '30,509',
-          score: 9,
-          description: '把一份桌面输入广播到多台设备，并排观察每台设备的实时反馈。'
-        },
-        {
-          name: 'fzf',
-          pattern: 'Fuzzy Command Palette · 模糊命令面板',
-          url: 'https://github.com/junegunn/fzf',
-          gif: './gifs/fzf.gif',
-          stars: '81,737',
-          score: 10,
-          description: '输入记得住的字符持续缩小候选并即时预览，把召回、筛选和执行压成一步。'
-        },
-        {
-          name: 'Haptics Studio',
-          pattern: 'Backup · Haptic Timeline Authoring · 触觉时间线创作',
-          url: 'https://github.com/facebook/haptics-studio',
-          gif: './gifs/haptics-studio.gif',
-          stars: '46',
-          score: 5,
-          description: '在时间线上编排触觉强度和强调点，通过设备预览身体反馈并继续调整。'
+      (() => {
+        const effects = window.WEB_EFFECTS;
+        const grid = document.querySelector('#grid');
+        const filters = document.querySelector('#filters');
+        const search = document.querySelector('#search');
+        const sort = document.querySelector('#sort');
+        const resultCount = document.querySelector('#result-count');
+        const heroCount = document.querySelector('#hero-count');
+        const categoryLabels = { all: '全部', scroll: 'Scroll', transition: 'Transition', pointer: 'Pointer', canvas: 'Canvas / WebGL', vector: 'Vector', media: 'Media' };
+        let activeCategory = 'all';
+
+        heroCount.textContent = `${effects.length} effects`;
+
+        const categories = ['all', ...new Set(effects.map(item => item.category))];
+        for (const category of categories) {
+          const button = document.createElement('button');
+          button.className = 'filter';
+          button.type = 'button';
+          button.dataset.category = category;
+          button.setAttribute('aria-pressed', category === 'all' ? 'true' : 'false');
+          button.textContent = categoryLabels[category] || category;
+          button.addEventListener('click', () => {
+            activeCategory = category;
+            filters.querySelectorAll('.filter').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+            render();
+          });
+          filters.append(button);
         }
-      ];
 
-      const grid = document.querySelector('#grid');
-      const empty = document.querySelector('#empty');
-      document.querySelector('#count').textContent = `${interactions.length} patterns`;
-      if (interactions.length) empty.hidden = true;
+        const observer = new IntersectionObserver(entries => {
+          entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('is-visible'); });
+        }, { threshold: .08 });
 
-      for (const item of interactions) {
-        const article = document.createElement('article');
-        article.className = 'card';
-        article.innerHTML = `
-          <img src="${item.gif}" alt="${item.name} interaction preview" loading="lazy" />
-          <div class="copy">
-            <div class="kind">${item.pattern}</div>
-            <h2><a href="${item.url}" target="_blank" rel="noreferrer">${item.name} ↗</a></h2>
-            <p class="description">${item.description}</p>
-            <div class="stats"><span>★ ${item.stars}</span><span>${item.score}/10</span></div>
-          </div>`;
-        grid.append(article);
-      }
+        function render() {
+          const query = search.value.trim().toLowerCase();
+          let visible = effects.filter(item => {
+            const categoryMatch = activeCategory === 'all' || item.category === activeCategory;
+            const haystack = `${item.name} ${item.effect} ${item.effectZh} ${item.description} ${item.tags.join(' ')}`.toLowerCase();
+            return categoryMatch && (!query || haystack.includes(query));
+          });
+
+          if (sort.value === 'stars') visible = [...visible].sort((a, b) => b.stars - a.stars);
+          if (sort.value === 'score') visible = [...visible].sort((a, b) => b.score - a.score || b.stars - a.stars);
+
+          grid.replaceChildren();
+          resultCount.textContent = `${visible.length} / ${effects.length} results`;
+          if (!visible.length) {
+            const empty = document.createElement('p');
+            empty.className = 'empty';
+            empty.textContent = effects.length ? '没有匹配的效果，试试更短的关键词。' : '新版效果条目正在逐项加入。';
+            grid.append(empty);
+            return;
+          }
+
+          visible.forEach((item, index) => {
+            const article = document.createElement('article');
+            article.className = 'card';
+            const sourceLabel = item.sourceType === 'official' ? 'Official capture' : 'Editorial demo';
+            article.innerHTML = `
+              <a class="media-link" href="${item.url}" target="_blank" rel="noreferrer" aria-label="打开 ${item.name} GitHub 仓库">
+                <div class="media">
+                  <img src="./gifs/${item.slug}.gif" alt="${item.name}：${item.effectZh}效果预览" loading="lazy" decoding="async" />
+                  <span class="badge ${item.sourceType}">${sourceLabel}</span>
+                  <span class="visit" aria-hidden="true">↗</span>
+                </div>
+              </a>
+              <div class="card-head">
+                <div><p class="kind">${categoryLabels[item.category]} · ${item.effectZh}</p><h3><a href="${item.url}" target="_blank" rel="noreferrer">${item.name} ↗</a></h3></div>
+                <span class="number">${String(item.order).padStart(2, '0')}</span>
+              </div>
+              <p class="description">${item.description}</p>
+              <div class="stats"><span>★ ${item.stars.toLocaleString('en-US')}</span><span>${item.score}/10</span><span>${item.effect}</span></div>`;
+
+            const media = article.querySelector('.media');
+            if (matchMedia('(hover: hover) and (prefers-reduced-motion: no-preference)').matches) {
+              article.addEventListener('pointermove', event => {
+                const rect = media.getBoundingClientRect();
+                const x = (event.clientX - rect.left) / rect.width - .5;
+                const y = (event.clientY - rect.top) / rect.height - .5;
+                media.style.transform = `rotateX(${-y * 3.5}deg) rotateY(${x * 4.5}deg)`;
+              });
+              article.addEventListener('pointerleave', () => { media.style.transform = ''; });
+            }
+            grid.append(article);
+            observer.observe(article);
+          });
+        }
+
+        search.addEventListener('input', render);
+        sort.addEventListener('change', render);
+        render();
+
+        const hero = document.querySelector('#hero');
+        if (matchMedia('(pointer: fine) and (prefers-reduced-motion: no-preference)').matches) {
+          hero.addEventListener('pointermove', event => {
+            const rect = hero.getBoundingClientRect();
+            hero.style.setProperty('--pointer-x', `${((event.clientX - rect.left) / rect.width) * 100}%`);
+            hero.style.setProperty('--pointer-y', `${((event.clientY - rect.top) / rect.height) * 100}%`);
+          });
+        }
+      })();
     </script>
   </body>
 </html>

@@ -3,308 +3,361 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="An effect-first, bilingual atlas of open-source web interactions." />
-    <meta name="theme-color" content="#0c0d0b" />
+    <meta name="description" content="Find a web interaction effect, copy the minimal code, or hand its implementation prompt to Codex or Claude Code." />
+    <meta name="theme-color" content="#f5f5f7" />
     <link rel="icon" href="data:," />
-    <title>Awesome Web Effects</title>
+    <title>Awesome Web Effects — Effect-first interaction atlas</title>
     <style>
       :root {
-        color-scheme: dark;
-        --bg: #0c0d0b;
-        --panel: #151613;
-        --paper: #efede4;
-        --ink: #10110f;
-        --muted: #a8aaa1;
-        --line: rgba(239, 237, 228, 0.17);
-        --acid: #b7ff56;
-        --violet: #8a70ff;
-        --coral: #ff694e;
-        --pointer-x: 72%;
-        --pointer-y: 12%;
+        color-scheme: light;
+        --bg: #f5f5f7;
+        --surface: #ffffff;
+        --surface-soft: #fbfbfd;
+        --ink: #1d1d1f;
+        --muted: #6e6e73;
+        --quiet: #86868b;
+        --line: rgba(0, 0, 0, .09);
+        --blue: #0071e3;
+        --blue-hover: #0077ed;
+        --green: #28a745;
+        --shadow: 0 18px 50px rgba(0, 0, 0, .07);
       }
 
       * { box-sizing: border-box; }
       html { scroll-behavior: smooth; }
       body {
         margin: 0;
-        color: var(--paper);
+        color: var(--ink);
         background: var(--bg);
-        font-family: Inter, "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
         -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
       }
       button, input, select { font: inherit; }
-      button, summary { -webkit-tap-highlight-color: transparent; }
+      button { -webkit-tap-highlight-color: transparent; }
       a { color: inherit; }
-      ::selection { color: var(--ink); background: var(--acid); }
-      :focus-visible { outline: 2px solid var(--acid); outline-offset: 3px; }
-      .shell { width: min(1460px, calc(100% - 48px)); margin-inline: auto; }
+      ::selection { color: white; background: var(--blue); }
+      :focus-visible { outline: 3px solid rgba(0, 113, 227, .45); outline-offset: 3px; }
+      .shell { width: min(1280px, calc(100% - 48px)); margin-inline: auto; }
       .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 
       .site-nav {
-        position: relative;
-        z-index: 10;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        height: 72px;
-        border-bottom: 1px solid var(--line);
+        position: sticky;
+        top: 0;
+        z-index: 30;
+        height: 48px;
+        background: rgba(250, 250, 252, .82);
+        border-bottom: 1px solid rgba(0, 0, 0, .06);
+        backdrop-filter: saturate(180%) blur(20px);
       }
-      .brand { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; font: 800 13px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .12em; }
-      .brand-mark { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; color: var(--ink); background: var(--acid); letter-spacing: -.08em; }
-      .nav-actions { display: flex; align-items: center; gap: 8px; }
-      .pill {
-        min-height: 44px;
-        padding: 0 15px;
-        border: 1px solid var(--line);
-        border-radius: 99px;
-        color: var(--paper);
-        background: transparent;
-        text-decoration: none;
-        cursor: pointer;
-        font: 800 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
-      }
-      .pill:hover { color: var(--ink); background: var(--acid); border-color: var(--acid); }
+      .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 100%; }
+      .brand { display: inline-flex; align-items: center; gap: 9px; text-decoration: none; font-size: 13px; font-weight: 650; letter-spacing: -.01em; }
+      .brand-mark { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 9px; color: white; background: linear-gradient(145deg, #131313, #48484a); font-size: 10px; letter-spacing: -.06em; }
+      .nav-actions { display: flex; align-items: center; gap: 18px; }
+      .nav-link, .nav-button { border: 0; color: #3a3a3c; background: transparent; font-size: 12px; text-decoration: none; cursor: pointer; }
+      .nav-link:hover, .nav-button:hover { color: var(--blue); }
 
       .hero {
         position: relative;
         isolation: isolate;
-        min-height: 590px;
         overflow: hidden;
-        border-bottom: 1px solid var(--line);
+        min-height: 720px;
+        padding: 118px 0 92px;
+        text-align: center;
         background:
-          radial-gradient(540px circle at var(--pointer-x) var(--pointer-y), rgba(183,255,86,.16), transparent 64%),
-          linear-gradient(var(--line) 1px, transparent 1px),
-          linear-gradient(90deg, var(--line) 1px, transparent 1px);
-        background-size: auto, 72px 72px, 72px 72px;
+          radial-gradient(circle at 50% 12%, rgba(111, 167, 255, .22), transparent 28%),
+          radial-gradient(circle at 22% 65%, rgba(190, 154, 255, .16), transparent 26%),
+          linear-gradient(180deg, #fbfbfd 0%, #f5f5f7 78%);
       }
-      .hero::before { content: ""; position: absolute; z-index: -1; top: 110px; right: clamp(-160px, -8vw, -40px); width: clamp(330px, 42vw, 660px); aspect-ratio: 1; border: 1px solid rgba(183,255,86,.65); border-radius: 50%; box-shadow: inset 0 0 0 46px rgba(183,255,86,.03), inset 0 0 0 47px rgba(183,255,86,.2); }
-      .hero-copy { position: relative; z-index: 1; padding: clamp(76px, 9vw, 124px) 0 68px; }
-      .eyebrow { display: flex; align-items: center; gap: 12px; margin: 0 0 24px; color: var(--acid); font: 800 12px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .16em; text-transform: uppercase; }
-      .eyebrow::before { content: ""; width: 42px; height: 2px; background: currentColor; }
-      h1 { max-width: 1180px; margin: 0; font-size: clamp(62px, 10.5vw, 154px); line-height: .82; letter-spacing: -.085em; text-transform: uppercase; }
-      h1 span { display: block; margin-left: clamp(28px, 8vw, 130px); color: transparent; -webkit-text-stroke: 1.5px var(--paper); }
-      .lede { max-width: 760px; margin: 42px 0 0; color: #c3c5bc; font-size: clamp(18px, 2vw, 24px); line-height: 1.5; letter-spacing: -.02em; }
-      .hero-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
-      .hero-meta span { padding: 9px 12px; border: 1px solid var(--line); border-radius: 99px; font: 700 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace; text-transform: uppercase; }
-      .hero-meta span:first-child { color: var(--ink); background: var(--acid); border-color: var(--acid); }
+      .hero-orb { position: absolute; z-index: -1; left: 50%; top: 70px; width: min(720px, 78vw); aspect-ratio: 1.9; transform: translateX(-50%); border-radius: 50%; background: radial-gradient(circle at 50% 35%, rgba(255,255,255,.98), rgba(0,113,227,.12) 38%, rgba(175,82,222,.08) 62%, transparent 72%); filter: blur(2px); animation: breathe 8s ease-in-out infinite alternate; }
+      @keyframes breathe { to { transform: translateX(-50%) scale(1.055); opacity: .78; } }
+      .hero-kicker { margin: 0 0 20px; color: var(--blue); font-size: 17px; font-weight: 650; letter-spacing: -.015em; }
+      h1 { max-width: 980px; margin: 0 auto; font-size: clamp(58px, 8.4vw, 116px); line-height: .91; letter-spacing: -.072em; text-wrap: balance; }
+      .hero-copy { max-width: 760px; margin: 32px auto 0; color: var(--muted); font-size: clamp(20px, 2.2vw, 28px); line-height: 1.35; letter-spacing: -.032em; text-wrap: balance; }
+      .hero-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 14px; margin-top: 36px; }
+      .primary-action, .secondary-action { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 23px; border-radius: 99px; font-size: 16px; text-decoration: none; }
+      .primary-action { color: white; background: var(--blue); }
+      .primary-action:hover { background: var(--blue-hover); }
+      .secondary-action { color: var(--blue); border: 1px solid var(--blue); }
+      .secondary-action:hover { color: white; background: var(--blue); }
+      .hero-metrics { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 48px; }
+      .metric { min-width: 142px; padding: 14px 18px; border: 1px solid rgba(0,0,0,.06); border-radius: 18px; background: rgba(255,255,255,.72); box-shadow: 0 8px 30px rgba(0,0,0,.035); backdrop-filter: blur(12px); }
+      .metric strong { display: block; font-size: 22px; letter-spacing: -.04em; }
+      .metric span { display: block; margin-top: 3px; color: var(--quiet); font-size: 11px; text-transform: uppercase; letter-spacing: .06em; }
 
-      main { padding: 64px 0 120px; }
-      .intro-grid { display: grid; grid-template-columns: .6fr 1.4fr; gap: 64px; align-items: end; padding-bottom: 44px; }
-      .section-index { color: var(--acid); font: 800 12px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .12em; text-transform: uppercase; }
-      .intro-grid h2 { max-width: 980px; margin: 0; font-size: clamp(38px, 5vw, 72px); line-height: .98; letter-spacing: -.055em; }
+      .features { padding: 18px 0 110px; }
+      .feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+      .feature-card { position: relative; min-height: 330px; overflow: hidden; padding: 34px; border-radius: 30px; background: var(--surface); box-shadow: var(--shadow); }
+      .feature-card h2 { max-width: 310px; margin: 0; font-size: clamp(30px, 3vw, 44px); line-height: 1.02; letter-spacing: -.05em; }
+      .feature-card p { max-width: 340px; margin: 14px 0 0; color: var(--muted); font-size: 16px; line-height: 1.45; letter-spacing: -.018em; }
+      .feature-visual { position: absolute; left: 34px; right: 34px; bottom: 30px; height: 104px; border-radius: 20px; background: #f5f5f7; }
+      .visual-gif { display: grid; place-items: center; background: linear-gradient(135deg, #eaf4ff, #f2eaff); }
+      .visual-gif::before, .visual-gif::after { content: ""; position: absolute; width: 58px; height: 58px; border-radius: 50%; background: #0071e3; opacity: .82; animation: preview-shift 2.4s ease-in-out infinite alternate; }
+      .visual-gif::after { width: 34px; height: 34px; background: #af52de; animation-direction: alternate-reverse; }
+      @keyframes preview-shift { to { transform: translateX(54px) scale(.72); } }
+      .visual-code { padding: 20px; color: #d6f5d6; background: #1d1d1f; font: 11px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; }
+      .visual-code span { display: block; width: var(--w); height: 6px; margin-bottom: 9px; border-radius: 9px; background: currentColor; opacity: var(--o, .55); }
+      .visual-prompt { display: flex; align-items: center; gap: 12px; padding: 18px; }
+      .prompt-dot { flex: 0 0 auto; width: 34px; height: 34px; border-radius: 10px; background: linear-gradient(145deg, #0071e3, #5856d6); }
+      .prompt-lines { flex: 1; }
+      .prompt-lines span { display: block; width: var(--w); height: 7px; margin: 7px 0; border-radius: 99px; background: #c7c7cc; }
+
+      .catalog-section { padding: 104px 0 130px; border-radius: 52px 52px 0 0; background: var(--surface-soft); }
+      .catalog-intro { display: grid; grid-template-columns: .72fr 1.28fr; gap: 70px; align-items: end; padding-bottom: 42px; }
+      .section-label { margin: 0; color: var(--blue); font-size: 15px; font-weight: 650; }
+      .catalog-intro h2 { max-width: 800px; margin: 0; font-size: clamp(46px, 6vw, 82px); line-height: .96; letter-spacing: -.065em; text-wrap: balance; }
 
       .controls {
         position: sticky;
-        top: 0;
-        z-index: 8;
+        top: 48px;
+        z-index: 20;
         display: grid;
-        grid-template-columns: minmax(220px, 1fr) auto;
+        grid-template-columns: minmax(240px, 1fr) auto;
         gap: 12px;
-        padding: 16px 0;
-        background: rgba(12,13,11,.95);
-        border-top: 1px solid var(--line);
-        border-bottom: 1px solid var(--line);
-        backdrop-filter: blur(16px);
+        padding: 14px 0;
+        background: rgba(251, 251, 253, .9);
+        backdrop-filter: saturate(180%) blur(18px);
       }
       .search-wrap { position: relative; }
-      .search-wrap::before { content: "⌕"; position: absolute; left: 16px; top: 50%; color: var(--muted); font-size: 22px; transform: translateY(-55%); }
-      .search, .sort { width: 100%; height: 44px; border: 1px solid var(--line); border-radius: 99px; color: var(--paper); background: var(--panel); outline: none; }
-      .search { padding: 0 18px 0 44px; }
-      .sort { min-width: 210px; padding: 0 38px 0 16px; }
-      .search:focus, .sort:focus { border-color: var(--acid); box-shadow: 0 0 0 1px var(--acid); }
-      .filters { grid-column: 1 / -1; display: flex; gap: 8px; overflow-x: auto; scrollbar-width: thin; padding-bottom: 2px; }
-      .filter { flex: 0 0 auto; min-height: 44px; padding: 0 14px; border: 1px solid var(--line); border-radius: 99px; color: var(--muted); background: transparent; cursor: pointer; font: 800 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace; text-transform: uppercase; }
-      .filter:hover { color: var(--paper); border-color: rgba(239,237,228,.5); }
-      .filter[aria-pressed="true"] { color: var(--ink); background: var(--acid); border-color: var(--acid); }
-      .result-meta { display: flex; justify-content: space-between; gap: 20px; padding: 24px 0; color: var(--muted); font: 700 11px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; text-transform: uppercase; }
+      .search-wrap::before { content: "⌕"; position: absolute; left: 17px; top: 50%; color: var(--quiet); font-size: 21px; transform: translateY(-56%); }
+      .search, .sort { width: 100%; height: 46px; border: 1px solid var(--line); border-radius: 15px; color: var(--ink); background: rgba(255,255,255,.92); outline: none; }
+      .search { padding: 0 18px 0 45px; }
+      .sort { min-width: 226px; padding: 0 38px 0 15px; }
+      .search:focus, .sort:focus { border-color: rgba(0,113,227,.5); box-shadow: 0 0 0 3px rgba(0,113,227,.12); }
+      .filters { grid-column: 1 / -1; display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
+      .filters::-webkit-scrollbar { display: none; }
+      .filter { flex: 0 0 auto; min-height: 38px; padding: 0 14px; border: 0; border-radius: 99px; color: var(--muted); background: #ebebef; cursor: pointer; font-size: 12px; font-weight: 600; }
+      .filter:hover { color: var(--ink); background: #e3e3e8; }
+      .filter[aria-pressed="true"] { color: white; background: var(--ink); }
+      .result-meta { display: flex; justify-content: space-between; gap: 20px; padding: 22px 4px 16px; color: var(--quiet); font-size: 12px; }
 
-      .catalog { border-bottom: 1px solid var(--line); }
-      .catalog-head, .effect-summary {
-        display: grid;
-        grid-template-columns: 56px minmax(260px, 1.45fr) 164px minmax(210px, .9fr) 128px;
-        gap: 18px;
-        align-items: center;
-      }
-      .catalog-head { min-height: 46px; padding: 0 16px; border-top: 1px solid var(--line); color: #73766c; font: 800 9px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .1em; text-transform: uppercase; }
-      .effect-row { scroll-margin-top: 148px; border-top: 1px solid var(--line); }
-      .effect-row:target { box-shadow: inset 3px 0 0 var(--acid); }
-      .effect-summary { min-height: 126px; padding: 16px; cursor: pointer; list-style: none; transition: background .2s ease; }
-      .effect-summary::-webkit-details-marker { display: none; }
-      .effect-summary:hover { background: rgba(255,255,255,.025); }
-      .effect-row[open] > .effect-summary { background: rgba(183,255,86,.045); }
-      .row-number { align-self: start; padding-top: 5px; color: #5d5f56; font: 800 16px/1 ui-monospace, SFMono-Regular, Menlo, monospace; }
-      .effect-cell { min-width: 0; }
-      .category-label { margin: 0 0 10px; color: var(--accent); font: 800 9px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .1em; text-transform: uppercase; }
-      .effect-cell h3 { margin: 0; font-size: clamp(23px, 2vw, 32px); line-height: 1.02; letter-spacing: -.045em; text-wrap: balance; }
-      .effect-key { display: block; margin-top: 10px; color: #7f8179; font: 700 9px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; overflow-wrap: anywhere; }
-      .row-preview { position: relative; width: 144px; aspect-ratio: 16 / 9; overflow: hidden; border: 1px solid var(--line); border-radius: 3px; background: #171814; }
+      .catalog { overflow: hidden; border: 1px solid var(--line); border-radius: 28px; background: var(--surface); box-shadow: 0 20px 60px rgba(0,0,0,.045); }
+      .catalog-head, .effect-main { display: grid; grid-template-columns: 42px 152px minmax(260px, 1.35fr) minmax(170px, .72fr) 184px; gap: 18px; align-items: center; }
+      .catalog-head { min-height: 48px; padding: 0 22px; color: var(--quiet); background: #fafafa; border-bottom: 1px solid var(--line); font-size: 10px; font-weight: 650; letter-spacing: .06em; text-transform: uppercase; }
+      .effect-row { scroll-margin-top: 154px; border-bottom: 1px solid var(--line); }
+      .effect-row:last-child { border-bottom: 0; }
+      .effect-row:target { box-shadow: inset 4px 0 0 var(--blue); }
+      .effect-main { min-height: 126px; padding: 18px 22px; transition: background .18s ease; }
+      .effect-main:hover { background: #fafafa; }
+      .row-number { align-self: start; padding-top: 5px; color: #aeaeb2; font: 600 12px/1 ui-monospace, SFMono-Regular, Menlo, monospace; }
+      .row-preview { position: relative; width: 144px; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 15px; background: #ececf0; }
       .row-preview img { display: block; width: 100%; height: 100%; object-fit: cover; }
-      .preview-fallback { position: absolute; inset: 0; display: grid; place-items: center; color: #8d9086; background: radial-gradient(circle at 22% 20%, color-mix(in srgb, var(--accent) 28%, transparent), transparent 44%); font: 800 9px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .08em; text-transform: uppercase; }
-      .source-cell { min-width: 0; }
-      .source-label { display: block; margin-bottom: 7px; color: #73766c; font: 800 9px/1 ui-monospace, SFMono-Regular, Menlo, monospace; text-transform: uppercase; }
-      .source-name { display: block; font-size: 18px; font-weight: 800; line-height: 1.1; letter-spacing: -.025em; overflow-wrap: anywhere; }
-      .source-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 9px; color: #b9bbb3; font: 700 9px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; text-transform: uppercase; }
-      .legacy-tag { color: var(--coral); }
-      .inspect { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 44px; padding: 0 13px; border: 1px solid var(--line); border-radius: 99px; color: var(--paper); font: 800 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace; text-transform: uppercase; }
-      .inspect::after { content: "+"; color: var(--acid); font-size: 18px; }
-      .effect-row[open] .inspect::after { content: "−"; }
+      .paused-preview { position: absolute; inset: 0; display: grid; place-items: center; color: var(--quiet); background: #ececf0; font-size: 10px; font-weight: 650; }
+      .preview-kind { position: absolute; left: 7px; bottom: 7px; padding: 4px 6px; border-radius: 7px; color: white; background: rgba(0,0,0,.58); backdrop-filter: blur(8px); font-size: 8px; font-weight: 650; text-transform: uppercase; letter-spacing: .04em; }
+      .effect-cell, .source-cell { min-width: 0; }
+      .category-label { display: flex; align-items: center; gap: 7px; margin: 0 0 7px; color: var(--blue); font-size: 10px; font-weight: 650; letter-spacing: .05em; text-transform: uppercase; }
+      .category-label::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--category-color); }
+      .effect-cell h3 { margin: 0; font-size: clamp(21px, 2vw, 29px); line-height: 1.04; letter-spacing: -.04em; text-wrap: balance; }
+      .effect-key { display: block; margin-top: 8px; color: #aeaeb2; font: 10px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; overflow-wrap: anywhere; }
+      .source-label { display: block; margin-bottom: 5px; color: var(--quiet); font-size: 9px; font-weight: 650; text-transform: uppercase; letter-spacing: .05em; }
+      .source-name { display: block; color: var(--ink); font-size: 16px; font-weight: 650; line-height: 1.2; text-decoration: none; overflow-wrap: anywhere; }
+      .source-name:hover { color: var(--blue); }
+      .source-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 7px; color: var(--quiet); font-size: 10px; }
+      .legacy-tag { color: #d70015; }
+      .row-actions { display: grid; grid-template-columns: 1fr; gap: 8px; }
+      .action-button { display: inline-flex; align-items: center; justify-content: center; min-height: 40px; padding: 0 13px; border: 0; border-radius: 99px; cursor: pointer; font-size: 12px; font-weight: 600; }
+      .prompt-button { color: white; background: var(--blue); }
+      .prompt-button:hover { background: var(--blue-hover); }
+      .code-button { color: var(--blue); background: #eaf3fc; }
+      .code-button:hover { background: #dcecfb; }
 
-      .detail-panel { padding: 0 16px 22px 90px; }
-      .detail-intro { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; padding: 18px 0; border-top: 1px solid var(--line); }
-      .detail-intro p { max-width: 700px; margin: 0; color: #b8bab1; line-height: 1.55; }
-      .permalink { flex: 0 0 auto; color: var(--acid); font: 800 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace; text-decoration: none; text-transform: uppercase; }
+      .detail-panel { padding: 0 22px 24px 234px; background: #fafafa; }
+      .detail-panel[hidden] { display: none; }
+      .detail-top { display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: center; padding: 22px 0; border-top: 1px solid var(--line); }
+      .detail-top p { max-width: 760px; margin: 0; color: var(--muted); font-size: 14px; line-height: 1.55; }
+      .permalink { color: var(--blue); font-size: 12px; text-decoration: none; white-space: nowrap; }
       .implementations { display: grid; gap: 12px; }
-      .implementation { display: grid; grid-template-columns: minmax(190px, .55fr) minmax(0, 1.45fr); border: 1px solid var(--line); background: #11120f; }
-      .implementation-meta { padding: 18px; border-right: 1px solid var(--line); }
-      .recommendation { display: inline-flex; padding: 6px 8px; border-radius: 99px; color: var(--ink); background: var(--acid); font: 900 8px/1 ui-monospace, SFMono-Regular, Menlo, monospace; text-transform: uppercase; }
-      .implementation h4 { margin: 16px 0 6px; font-size: 22px; letter-spacing: -.035em; }
-      .repo-link { color: #b8bab1; font: 700 10px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; overflow-wrap: anywhere; }
-      .repo-link:hover { color: var(--acid); }
-      .code-wrap { position: relative; min-width: 0; }
-      pre { min-height: 126px; margin: 0; padding: 20px 72px 20px 18px; overflow: auto; color: #d7ffc0; font: 12px/1.58 ui-monospace, SFMono-Regular, Menlo, monospace; tab-size: 2; }
-      .copy { position: absolute; top: 12px; right: 12px; min-height: 36px; padding: 0 11px; border: 1px solid var(--line); border-radius: 99px; color: var(--muted); background: #1b1c18; cursor: pointer; font: 800 9px/1 ui-monospace, SFMono-Regular, Menlo, monospace; text-transform: uppercase; }
-      .copy:hover { color: var(--ink); background: var(--acid); border-color: var(--acid); }
-      .empty { padding: 90px 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 22px; }
+      .implementation { display: grid; grid-template-columns: minmax(190px, .52fr) minmax(0, 1.48fr); overflow: hidden; border: 1px solid var(--line); border-radius: 18px; background: white; }
+      .implementation-meta { padding: 20px; border-right: 1px solid var(--line); }
+      .recommendation { display: inline-flex; padding: 5px 8px; border-radius: 99px; color: #137333; background: #e6f4ea; font-size: 9px; font-weight: 700; text-transform: uppercase; }
+      .implementation h4 { margin: 14px 0 6px; font-size: 21px; letter-spacing: -.035em; }
+      .repo-link { color: var(--blue); font: 10px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; overflow-wrap: anywhere; }
+      .origin-link { display: inline-block; margin-top: 10px; color: var(--muted); font-size: 10px; }
+      .code-wrap { position: relative; min-width: 0; color: #f5f5f7; background: #1d1d1f; }
+      pre { min-height: 150px; margin: 0; padding: 22px 82px 22px 20px; overflow: auto; color: #d9f6d9; font: 12px/1.62 ui-monospace, SFMono-Regular, Menlo, monospace; tab-size: 2; }
+      .copy-code { position: absolute; top: 13px; right: 13px; min-height: 34px; padding: 0 11px; border: 1px solid rgba(255,255,255,.18); border-radius: 99px; color: white; background: rgba(255,255,255,.1); cursor: pointer; font-size: 10px; }
+      .copy-code:hover { background: rgba(255,255,255,.18); }
+      .empty { margin: 0; padding: 90px 28px; color: var(--muted); font-size: 20px; }
 
-      footer { border-top: 1px solid var(--line); }
-      .footer-inner { display: flex; justify-content: space-between; gap: 28px; align-items: end; padding: 46px 0 60px; }
-      .footer-title { margin: 0; font-size: clamp(34px, 5vw, 68px); line-height: .95; letter-spacing: -.055em; }
-      .footer-note { max-width: 600px; margin: 16px 0 0; color: var(--muted); line-height: 1.55; }
+      footer { padding: 58px 0; color: var(--muted); background: #f5f5f7; }
+      .footer-inner { display: flex; justify-content: space-between; gap: 28px; align-items: center; }
+      .footer-copy { margin: 0; font-size: 12px; line-height: 1.5; }
+      .footer-link { color: var(--blue); font-size: 12px; text-decoration: none; }
 
-      [data-category="animation"] { --accent: #b7ff56; }
-      [data-category="scroll"] { --accent: #5de2ff; }
-      [data-category="transition"] { --accent: #8a70ff; }
-      [data-category="carousel"] { --accent: #ffcf56; }
-      [data-category="pointer"] { --accent: #ff694e; }
-      [data-category="vector"] { --accent: #ff81d5; }
-      [data-category="canvas"] { --accent: #62e89b; }
-      [data-category="webgl"] { --accent: #4da2ff; }
-      [data-category="background"] { --accent: #d67bff; }
-      [data-category="media"] { --accent: #ff946b; }
+      [data-category="animation"] { --category-color: #0071e3; }
+      [data-category="scroll"] { --category-color: #00a7d1; }
+      [data-category="transition"] { --category-color: #5856d6; }
+      [data-category="carousel"] { --category-color: #ff9500; }
+      [data-category="pointer"] { --category-color: #ff3b30; }
+      [data-category="vector"] { --category-color: #af52de; }
+      [data-category="canvas"] { --category-color: #28a745; }
+      [data-category="webgl"] { --category-color: #0a84ff; }
+      [data-category="background"] { --category-color: #bf5af2; }
+      [data-category="media"] { --category-color: #ff6b35; }
 
-      @media (max-width: 1060px) {
-        .catalog-head, .effect-summary { grid-template-columns: 52px minmax(240px, 1.35fr) minmax(190px, .8fr) 118px; }
-        .catalog-head span:nth-child(3), .row-preview { display: none; }
+      @media (max-width: 1080px) {
+        .catalog-head, .effect-main { grid-template-columns: 38px 118px minmax(230px, 1.2fr) minmax(155px, .7fr) 164px; gap: 14px; }
+        .row-preview { width: 112px; border-radius: 12px; }
+        .detail-panel { padding-left: 192px; }
       }
-      @media (max-width: 720px) {
-        .shell { width: min(calc(100% - 28px), 620px); }
-        .site-nav { height: 62px; }
+      @media (max-width: 820px) {
+        .feature-grid { grid-template-columns: 1fr; }
+        .feature-card { min-height: 300px; }
+        .catalog-intro { grid-template-columns: 1fr; gap: 18px; }
+        .catalog-head { display: none; }
+        .effect-main { grid-template-columns: 34px 116px minmax(0, 1fr); gap: 12px; }
+        .row-number { grid-row: 1 / span 2; }
+        .row-preview { grid-row: 1 / span 2; }
+        .effect-cell { grid-column: 3; }
+        .source-cell { grid-column: 3; }
+        .row-actions { grid-column: 2 / -1; grid-template-columns: 1fr 1fr; }
+        .detail-panel { padding-left: 56px; }
+      }
+      @media (max-width: 620px) {
+        .shell { width: min(calc(100% - 28px), 560px); }
         .brand-text { display: none; }
-        .hero { min-height: 570px; background-size: auto, 52px 52px, 52px 52px; }
-        .hero-copy { padding-top: 76px; }
-        h1 { font-size: clamp(58px, 20vw, 98px); }
-        h1 span { margin-left: 0; }
-        .lede { margin-top: 34px; font-size: 18px; }
-        main { padding-top: 50px; }
-        .intro-grid { grid-template-columns: 1fr; gap: 18px; padding-bottom: 34px; }
+        .nav-actions { gap: 12px; }
+        .hero { min-height: 680px; padding-top: 98px; }
+        h1 { font-size: clamp(54px, 16vw, 78px); }
+        .hero-copy { font-size: 20px; }
+        .metric { min-width: calc(50% - 8px); }
+        .features { padding-bottom: 78px; }
+        .feature-card { padding: 28px; border-radius: 24px; }
+        .catalog-section { padding-top: 78px; border-radius: 34px 34px 0 0; }
         .controls { grid-template-columns: 1fr; }
         .sort { min-width: 0; }
         .filters { grid-column: auto; }
         .result-meta { display: block; }
-        .result-meta span + span { display: block; margin-top: 8px; }
-        .catalog-head { display: none; }
-        .effect-summary { grid-template-columns: 38px minmax(0, 1fr); gap: 10px 12px; min-height: 0; padding: 18px 10px; }
-        .row-number { grid-row: 1 / span 3; }
-        .effect-cell { grid-column: 2; }
-        .source-cell { grid-column: 2; padding-top: 4px; }
-        .inspect { grid-column: 2; width: min(170px, 100%); margin-top: 4px; }
-        .effect-key { display: none; }
-        .detail-panel { padding: 0 10px 18px 48px; }
-        .detail-intro { display: block; }
-        .permalink { display: inline-block; margin-top: 14px; }
+        .result-meta span + span { display: block; margin-top: 6px; }
+        .catalog { border-radius: 22px; }
+        .effect-main { grid-template-columns: 30px minmax(0, 1fr); padding: 18px 14px; }
+        .row-number { grid-row: 1 / span 4; }
+        .row-preview { grid-column: 2; grid-row: auto; width: 100%; max-width: 280px; }
+        .effect-cell, .source-cell, .row-actions { grid-column: 2; }
+        .effect-cell h3 { font-size: 24px; }
+        .row-actions { grid-template-columns: 1fr; }
+        .detail-panel { padding: 0 14px 18px 44px; }
+        .detail-top { grid-template-columns: 1fr; gap: 10px; }
         .implementation { grid-template-columns: 1fr; }
         .implementation-meta { border-right: 0; border-bottom: 1px solid var(--line); }
-        pre { padding-right: 18px; padding-top: 58px; }
+        pre { padding-top: 60px; padding-right: 18px; }
         .footer-inner { display: block; }
+        .footer-link { display: inline-block; margin-top: 16px; }
       }
       @media (prefers-reduced-motion: reduce) {
         html { scroll-behavior: auto; }
-        .effect-summary { transition: none; }
-        .row-preview img { visibility: hidden; }
-        .row-preview::after { content: "Preview paused"; position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); font: 800 9px/1 ui-monospace, SFMono-Regular, Menlo, monospace; text-transform: uppercase; }
+        .hero-orb, .visual-gif::before, .visual-gif::after { animation: none; }
+        .effect-main { transition: none; }
       }
     </style>
   </head>
   <body id="top">
-    <nav class="site-nav shell" aria-label="Primary navigation">
-      <a class="brand" href="#top"><span class="brand-mark">AW</span><span class="brand-text">Awesome Web Effects</span></a>
-      <div class="nav-actions">
-        <button class="pill" id="language" type="button" aria-label="Switch language">中文</button>
-        <a class="pill" id="github-link" href="https://github.com/giraffe-tree/awesome-interaction" target="_blank" rel="noreferrer">GitHub ↗</a>
+    <nav class="site-nav" aria-label="Primary navigation">
+      <div class="nav-inner shell">
+        <a class="brand" href="#top"><span class="brand-mark">AW</span><span class="brand-text">Awesome Web Effects</span></a>
+        <div class="nav-actions">
+          <a class="nav-link" href="#catalog" id="nav-catalog">Catalog</a>
+          <button class="nav-button" id="language" type="button" aria-label="Switch language">中文</button>
+          <a class="nav-link" href="https://github.com/giraffe-tree/awesome-interaction" target="_blank" rel="noreferrer">GitHub ↗</a>
+        </div>
       </div>
     </nav>
 
-    <header class="hero" id="hero">
-      <div class="hero-copy shell">
-        <p class="eyebrow" id="eyebrow">Effect-first interaction atlas</p>
-        <h1>Find the <span>Effect</span></h1>
-        <p class="lede" id="lede">Start with the interaction you want. Then compare the recommended open-source implementation and copy its smallest useful example.</p>
-        <div class="hero-meta"><span id="effect-count">0 effects</span><span id="source-count">0 source projects</span><span id="category-count">0 categories</span><span>Snapshot 2026.07.16</span></div>
+    <header class="hero">
+      <div class="hero-orb" aria-hidden="true"></div>
+      <div class="shell">
+        <p class="hero-kicker" id="hero-kicker">The effect-first interaction atlas</p>
+        <h1 id="hero-title">Find the effect.<br />Ship the feeling.</h1>
+        <p class="hero-copy" id="hero-copy">Every interaction comes with a visual preview, minimal code, and a ready-to-copy prompt for Codex or Claude Code.</p>
+        <div class="hero-actions">
+          <a class="primary-action" href="#catalog" id="browse-action">Browse effects</a>
+          <a class="secondary-action" href="https://github.com/giraffe-tree/awesome-interaction" target="_blank" rel="noreferrer" id="repo-action">View repository</a>
+        </div>
+        <div class="hero-metrics">
+          <div class="metric"><strong id="effect-count">0</strong><span id="effect-label">Effects</span></div>
+          <div class="metric"><strong id="source-count">0</strong><span id="source-label">Source projects</span></div>
+          <div class="metric"><strong id="gif-count">0</strong><span id="gif-label">GIF previews</span></div>
+          <div class="metric"><strong id="prompt-count">0</strong><span id="prompt-label">Agent prompts</span></div>
+        </div>
       </div>
     </header>
 
-    <main class="shell">
-      <section class="intro-grid" aria-labelledby="atlas-title">
-        <p class="section-index" id="section-index">01 / Effect catalog</p>
-        <h2 id="atlas-title">One interaction effect per row. Projects are implementation sources, not the index.</h2>
-      </section>
+    <section class="features shell" aria-label="Catalog coverage">
+      <div class="feature-grid">
+        <article class="feature-card"><h2 id="feature-visual-title">See it before you build it.</h2><p id="feature-visual-copy">Every row has a compact visual reference, with generated concepts clearly separated from project footage.</p><div class="feature-visual visual-gif" aria-hidden="true"></div></article>
+        <article class="feature-card"><h2 id="feature-code-title">Start from working code.</h2><p id="feature-code-copy">Open any effect to copy the smallest useful implementation for its recommended source.</p><div class="feature-visual visual-code" aria-hidden="true"><span style="--w:44%;--o:.8"></span><span style="--w:86%"></span><span style="--w:68%;--o:.35"></span><span style="--w:76%"></span></div></article>
+        <article class="feature-card"><h2 id="feature-prompt-title">Hand it to your coding agent.</h2><p id="feature-prompt-copy">One click copies a scoped prompt with accessibility, responsive, cleanup, and reduced-motion requirements.</p><div class="feature-visual visual-prompt" aria-hidden="true"><span class="prompt-dot"></span><div class="prompt-lines"><span style="--w:88%"></span><span style="--w:72%"></span><span style="--w:54%"></span></div></div></article>
+      </div>
+    </section>
 
-      <section class="controls" id="catalog-controls" aria-label="Filter effects">
-        <label class="search-wrap"><span class="sr-only" id="search-label">Search effects</span><input class="search" id="search" type="search" placeholder="Search effect, source project, or keyword…" autocomplete="off" /></label>
-        <select class="sort" id="sort" aria-label="Sort effects">
-          <option value="curated">Curated effect order</option>
-          <option value="name">Effect: A–Z</option>
-          <option value="stars">Recommended source stars</option>
-          <option value="sources">Most implementations</option>
-        </select>
-        <div class="filters" id="filters" aria-label="Effect categories"></div>
-      </section>
+    <main class="catalog-section" id="catalog">
+      <div class="shell">
+        <section class="catalog-intro" aria-labelledby="catalog-title">
+          <p class="section-label" id="section-label">Interaction catalog</p>
+          <h2 id="catalog-title">Choose the behavior first. Choose the tool second.</h2>
+        </section>
 
-      <div class="result-meta"><span id="result-count" role="status" aria-live="polite">0 effects</span><span id="result-note">Effect key · Preview · Recommended source · Minimal code</span></div>
-      <section class="catalog" id="catalog" aria-labelledby="atlas-title">
-        <div class="catalog-head" aria-hidden="true"><span>#</span><span id="head-effect">Effect</span><span id="head-preview">Preview</span><span id="head-source">Recommended source</span><span id="head-action">Inspect</span></div>
-        <div id="effect-list"></div>
-      </section>
+        <section class="controls" id="catalog-controls" aria-label="Filter effects">
+          <label class="search-wrap"><span class="sr-only" id="search-label">Search effects</span><input class="search" id="search" type="search" placeholder="Search effect, source project, or keyword…" autocomplete="off" /></label>
+          <select class="sort" id="sort" aria-label="Sort effects">
+            <option value="curated">Curated effect order</option>
+            <option value="name">Effect: A–Z</option>
+            <option value="stars">Recommended source stars</option>
+            <option value="sources">Most implementations</option>
+          </select>
+          <div class="filters" id="filters" aria-label="Effect categories"></div>
+        </section>
+
+        <div class="result-meta"><span id="result-count" role="status" aria-live="polite">0 effects</span><span id="result-note">GIF · Effect key · Source · Copy prompt · Code</span></div>
+        <section class="catalog" aria-labelledby="catalog-title">
+          <div class="catalog-head" aria-hidden="true"><span>#</span><span id="head-preview">Preview</span><span id="head-effect">Effect</span><span id="head-source">Recommended source</span><span id="head-action">Actions</span></div>
+          <div id="effect-list"></div>
+        </section>
+      </div>
     </main>
 
     <footer>
-      <div class="footer-inner shell">
-        <div><p class="footer-title">Choose the feeling.<br />Then choose the tool.</p><p class="footer-note" id="footer-note">A project may power many distinct effects, and an effect may have multiple implementations. The catalog keeps those relationships explicit.</p></div>
-        <a class="pill" href="#top" id="back-top">Back to top ↑</a>
-      </div>
+      <div class="footer-inner shell"><p class="footer-copy" id="footer-copy">Effect-first, bilingual, and built for implementation. Project names and previews remain the property of their respective authors.</p><a class="footer-link" href="#top" id="back-top">Back to top ↑</a></div>
     </footer>
+    <span class="sr-only" id="copy-status" role="status" aria-live="polite"></span>
 
     <script type="module">
       import { categories, effects, projects } from './data/effects.js';
 
       const copy = {
         en: {
-          language: '中文', languageLabel: 'Switch to Chinese',
-          eyebrow: 'Effect-first interaction atlas',
-          lede: 'Start with the interaction you want. Then compare the recommended open-source implementation and copy its smallest useful example.',
-          section: '01 / Effect catalog', title: 'One interaction effect per row. Projects are implementation sources, not the index.',
+          language: '中文', languageLabel: 'Switch to Chinese', navCatalog: 'Catalog',
+          kicker: 'The effect-first interaction atlas', title: 'Find the effect.<br />Ship the feeling.',
+          hero: 'Every interaction comes with a visual preview, minimal code, and a ready-to-copy prompt for Codex or Claude Code.', browse: 'Browse effects', repo: 'View repository',
+          effects: 'Effects', sources: 'Source projects', gifs: 'GIF previews', prompts: 'Agent prompts',
+          visualTitle: 'See it before you build it.', visualCopy: 'Every row has a compact visual reference, with generated concepts clearly separated from project footage.',
+          codeTitle: 'Start from working code.', codeCopy: 'Open any effect to copy the smallest useful implementation for its recommended source.',
+          promptTitle: 'Hand it to your coding agent.', promptCopy: 'One click copies a scoped prompt with accessibility, responsive, cleanup, and reduced-motion requirements.',
+          section: 'Interaction catalog', catalogTitle: 'Choose the behavior first. Choose the tool second.',
           search: 'Search effect, source project, or keyword…', searchLabel: 'Search effects', filterLabel: 'Effect categories', sortLabel: 'Sort effects',
-          curated: 'Curated effect order', stars: 'Recommended source stars', name: 'Effect: A–Z', sourcesSort: 'Most implementations',
-          all: 'All', effects: 'effects', sources: 'source projects', categories: 'categories', inspect: 'Inspect',
-          copy: 'Copy', copied: 'Copied', copyFailed: 'Select code', empty: 'No matching effects. Try a shorter keyword.',
-          note: 'Effect key · Preview · Recommended source · Minimal code', preview: 'Preview', codeFirst: 'Code-first', legacy: 'Legacy', recommended: 'Recommended',
-          headEffect: 'Effect', headPreview: 'Preview', headSource: 'Recommended source', headAction: 'Inspect',
-          definition: 'Effect definition', implementation: 'implementation', implementations: 'implementations', permalink: 'Effect link', repositoryLabel: 'on GitHub (opens in a new tab)',
-          footer: 'A project may power many distinct effects, and an effect may have multiple implementations. The catalog keeps those relationships explicit.', back: 'Back to top ↑'
+          curated: 'Curated effect order', stars: 'Recommended source stars', name: 'Effect: A–Z', sourcesSort: 'Most implementations', all: 'All',
+          resultEffects: 'effects', resultSources: 'source projects', note: 'GIF · Effect key · Source · Copy prompt · Code', empty: 'No matching effects. Try a shorter keyword.',
+          previewOfficial: 'Official', previewEditorial: 'Concept', previewPaused: 'Preview paused', headPreview: 'Preview', headEffect: 'Effect', headSource: 'Recommended source', headAction: 'Actions',
+          recommended: 'Recommended', legacy: 'Legacy', implementations: 'implementations', implementation: 'implementation', copyPrompt: 'Copy agent prompt', promptCopied: 'Prompt copied',
+          showCode: 'View minimal code', hideCode: 'Hide code', copyCode: 'Copy', codeCopied: 'Copied', copyFailed: 'Select text', definition: 'Effect', permalink: 'Effect link',
+          repositoryLabel: 'on GitHub (opens in a new tab)', previewSource: 'Preview source ↗', footer: 'Effect-first, bilingual, and built for implementation. Project names and previews remain the property of their respective authors.', back: 'Back to top ↑'
         },
         zh: {
-          language: 'EN', languageLabel: 'Switch to English',
-          eyebrow: '以效果为先的交互图鉴',
-          lede: '先找到想要的交互效果，再比较推荐的开源实现，并复制最小而有用的代码示例。',
-          section: '01 / 效果目录', title: '每种交互效果一行；项目只是实现来源，不再是目录索引。',
-          search: '搜索效果、来源项目或关键词…', searchLabel: '搜索交互效果', filterLabel: '效果分类', sortLabel: '效果排序',
-          curated: '效果策展顺序', stars: '推荐来源 Stars', name: '效果名称 A–Z', sourcesSort: '实现来源最多',
-          all: '全部', effects: '种效果', sources: '个来源项目', categories: '个分类', inspect: '查看详情',
-          copy: '复制', copied: '已复制', copyFailed: '请选中代码', empty: '没有匹配的效果，请尝试更短的关键词。',
-          note: '效果 Key · 预览 · 推荐来源 · 最小代码', preview: '效果预览', codeFirst: '代码优先', legacy: '经典旧版', recommended: '推荐实现',
-          headEffect: '交互效果', headPreview: '预览', headSource: '推荐来源', headAction: '详情',
-          definition: '效果定义', implementation: '个实现来源', implementations: '个实现来源', permalink: '效果链接', repositoryLabel: 'GitHub 仓库（在新标签页打开）',
-          footer: '一个项目可以实现多种不同效果，一种效果也可以拥有多个项目实现；目录会明确保留这些关系。', back: '回到顶部 ↑'
+          language: 'EN', languageLabel: '切换到英文', navCatalog: '效果目录',
+          kicker: '以效果为先的交互图鉴', title: '先找到效果。<br />再实现体验。',
+          hero: '每种交互都有视觉预览、最小代码，以及可直接交给 Codex 或 Claude Code 的实现 Prompt。', browse: '浏览效果', repo: '查看仓库',
+          effects: '种效果', sources: '来源项目', gifs: 'GIF 预览', prompts: 'Agent Prompt',
+          visualTitle: '动手之前，先看见效果。', visualCopy: '每一行都有紧凑的视觉参考，并明确区分项目实拍与生成的概念预览。',
+          codeTitle: '从可用的最小代码开始。', codeCopy: '展开任意效果，即可复制推荐来源最小而有用的实现。',
+          promptTitle: '把任务直接交给编程 Agent。', promptCopy: '一键复制包含无障碍、响应式、清理和减少动态要求的完整 Prompt。',
+          section: '交互效果目录', catalogTitle: '先选交互行为，再选实现工具。',
+          search: '搜索效果、来源项目或关键词…', searchLabel: '搜索效果', filterLabel: '效果分类', sortLabel: '效果排序',
+          curated: '效果策展顺序', stars: '推荐来源 Stars', name: '效果名称 A–Z', sourcesSort: '实现来源最多', all: '全部',
+          resultEffects: '种效果', resultSources: '个来源项目', note: 'GIF · 效果 Key · 来源 · 复制 Prompt · 代码', empty: '没有匹配的效果，请尝试更短的关键词。',
+          previewOfficial: '官方素材', previewEditorial: '概念重制', previewPaused: '已减少动态', headPreview: '预览', headEffect: '效果', headSource: '推荐来源', headAction: '操作',
+          recommended: '推荐实现', legacy: '经典旧版', implementations: '个实现', implementation: '个实现', copyPrompt: '复制 Agent Prompt', promptCopied: 'Prompt 已复制',
+          showCode: '查看最小代码', hideCode: '收起代码', copyCode: '复制', codeCopied: '已复制', copyFailed: '请选中文本', definition: '效果', permalink: '效果链接',
+          repositoryLabel: 'GitHub 仓库（在新标签页打开）', previewSource: '预览来源 ↗', footer: '以效果为先，提供双语内容，并面向真实实现。项目名称与预览素材权利归各自作者所有。', back: '回到顶部 ↑'
         }
       };
 
@@ -315,6 +368,7 @@
       const search = document.querySelector('#search');
       const sort = document.querySelector('#sort');
       const resultCount = document.querySelector('#result-count');
+      const copyStatus = document.querySelector('#copy-status');
       let language = localStorage.getItem('awesome-effects-language') === 'zh' ? 'zh' : 'en';
       let activeCategory = 'all';
 
@@ -323,6 +377,27 @@
       const effectName = effect => language === 'zh' ? effect.nameZh : effect.name;
       const recommendedSource = effect => effect.sources.find(source => source.recommended) || effect.sources[0];
 
+      async function copyText(button, text, successText, defaultText) {
+        try {
+          await navigator.clipboard.writeText(text);
+          button.textContent = successText;
+          copyStatus.textContent = successText;
+        } catch {
+          const textarea = document.createElement('textarea');
+          textarea.value = text;
+          textarea.setAttribute('readonly', '');
+          textarea.style.position = 'fixed';
+          textarea.style.opacity = '0';
+          document.body.append(textarea);
+          textarea.select();
+          const copied = document.execCommand('copy');
+          textarea.remove();
+          button.textContent = copied ? successText : copy[language].copyFailed;
+          copyStatus.textContent = copied ? successText : copy[language].copyFailed;
+        }
+        setTimeout(() => { button.textContent = defaultText; }, 1400);
+      }
+
       function setLanguage(nextLanguage) {
         language = nextLanguage;
         localStorage.setItem('awesome-effects-language', language);
@@ -330,20 +405,35 @@
         document.documentElement.lang = language === 'zh' ? 'zh-CN' : 'en';
         document.querySelector('#language').textContent = t.language;
         document.querySelector('#language').setAttribute('aria-label', t.languageLabel);
-        document.querySelector('#eyebrow').textContent = t.eyebrow;
-        document.querySelector('#lede').textContent = t.lede;
-        document.querySelector('#section-index').textContent = t.section;
-        document.querySelector('#atlas-title').textContent = t.title;
+        document.querySelector('#nav-catalog').textContent = t.navCatalog;
+        document.querySelector('#hero-kicker').textContent = t.kicker;
+        document.querySelector('#hero-title').innerHTML = t.title;
+        document.querySelector('#hero-copy').textContent = t.hero;
+        document.querySelector('#browse-action').textContent = t.browse;
+        document.querySelector('#repo-action').textContent = t.repo;
+        document.querySelector('#effect-count').textContent = effects.length;
+        document.querySelector('#source-count').textContent = projects.length;
+        document.querySelector('#gif-count').textContent = effects.flatMap(effect => effect.sources).filter(source => source.preview).length;
+        document.querySelector('#prompt-count').textContent = effects.filter(effect => effect.prompt).length;
+        document.querySelector('#effect-label').textContent = t.effects;
+        document.querySelector('#source-label').textContent = t.sources;
+        document.querySelector('#gif-label').textContent = t.gifs;
+        document.querySelector('#prompt-label').textContent = t.prompts;
+        document.querySelector('#feature-visual-title').textContent = t.visualTitle;
+        document.querySelector('#feature-visual-copy').textContent = t.visualCopy;
+        document.querySelector('#feature-code-title').textContent = t.codeTitle;
+        document.querySelector('#feature-code-copy').textContent = t.codeCopy;
+        document.querySelector('#feature-prompt-title').textContent = t.promptTitle;
+        document.querySelector('#feature-prompt-copy').textContent = t.promptCopy;
+        document.querySelector('#section-label').textContent = t.section;
+        document.querySelector('#catalog-title').textContent = t.catalogTitle;
         document.querySelector('#result-note').textContent = t.note;
-        document.querySelector('#footer-note').textContent = t.footer;
-        document.querySelector('#back-top').textContent = t.back;
-        document.querySelector('#effect-count').textContent = `${effects.length} ${t.effects}`;
-        document.querySelector('#source-count').textContent = `${projects.length} ${t.sources}`;
-        document.querySelector('#category-count').textContent = `${categories.length} ${t.categories}`;
-        document.querySelector('#head-effect').textContent = t.headEffect;
         document.querySelector('#head-preview').textContent = t.headPreview;
+        document.querySelector('#head-effect').textContent = t.headEffect;
         document.querySelector('#head-source').textContent = t.headSource;
         document.querySelector('#head-action').textContent = t.headAction;
+        document.querySelector('#footer-copy').textContent = t.footer;
+        document.querySelector('#back-top').textContent = t.back;
         document.querySelector('#search-label').textContent = t.searchLabel;
         document.querySelector('#catalog-controls').setAttribute('aria-label', t.filterLabel);
         filters.setAttribute('aria-label', t.filterLabel);
@@ -371,26 +461,16 @@
         });
       }
 
-      async function copyCode(button, snippet) {
-        const t = copy[language];
-        try {
-          await navigator.clipboard.writeText(snippet);
-          button.textContent = t.copied;
-        } catch {
-          const selection = window.getSelection();
-          const range = document.createRange();
-          range.selectNodeContents(button.closest('.code-wrap').querySelector('code'));
-          selection.removeAllRanges();
-          selection.addRange(range);
-          button.textContent = t.copyFailed;
-        }
-        setTimeout(() => { button.textContent = t.copy; }, 1400);
-      }
-
       function openHashTarget() {
         const id = decodeURIComponent(location.hash.slice(1));
         const target = id && document.getElementById(id);
-        if (target?.classList.contains('effect-row')) target.open = true;
+        if (target?.classList.contains('effect-row')) {
+          const panel = target.querySelector('.detail-panel');
+          const toggle = target.querySelector('.code-button');
+          panel.hidden = false;
+          toggle.setAttribute('aria-expanded', 'true');
+          toggle.textContent = copy[language].hideCode;
+        }
       }
 
       function render() {
@@ -398,10 +478,7 @@
         const query = search.value.trim().toLowerCase();
         let visible = effects.filter(effect => {
           const category = categoryById.get(effect.category);
-          const sourceText = effect.sources.map(source => {
-            const project = projectById.get(source.projectId);
-            return `${project.name} ${project.repo}`;
-          }).join(' ');
+          const sourceText = effect.sources.map(source => { const project = projectById.get(source.projectId); return `${project.name} ${project.repo}`; }).join(' ');
           const haystack = `${effect.id} ${effect.name} ${effect.nameZh} ${category.label} ${category.labelZh} ${sourceText}`.toLowerCase();
           return (activeCategory === 'all' || effect.category === activeCategory) && (!query || haystack.includes(query));
         });
@@ -410,55 +487,33 @@
         if (sort.value === 'sources') visible = [...visible].sort((a, b) => b.sources.length - a.sources.length || a.order - b.order);
 
         const visibleProjectIds = new Set(visible.flatMap(effect => effect.sources.map(source => source.projectId)));
-        resultCount.textContent = `${visible.length} / ${effects.length} ${t.effects} · ${visibleProjectIds.size} ${t.sources}`;
+        resultCount.textContent = `${visible.length} / ${effects.length} ${t.resultEffects} · ${visibleProjectIds.size} ${t.resultSources}`;
         list.replaceChildren();
-        if (!visible.length) {
-          const empty = document.createElement('p');
-          empty.className = 'empty';
-          empty.textContent = t.empty;
-          list.append(empty);
-          return;
-        }
+        if (!visible.length) { const empty = document.createElement('p'); empty.className = 'empty'; empty.textContent = t.empty; list.append(empty); return; }
 
         visible.forEach(effect => {
           const category = categoryById.get(effect.category);
           const primary = recommendedSource(effect);
           const primaryProject = projectById.get(primary.projectId);
-          const row = document.createElement('details');
+          const previewMedia = matchMedia('(prefers-reduced-motion: reduce)').matches
+            ? `<span class="paused-preview">${t.previewPaused}</span>`
+            : `<img src="./gifs/${escapeHTML(primary.preview)}.gif" alt="${escapeHTML(effectName(effect))}" loading="lazy" decoding="async" />`;
+          const row = document.createElement('article');
           row.className = 'effect-row';
           row.id = effect.id;
           row.dataset.category = effect.category;
-          const preview = primary.preview
-            ? `<div class="row-preview"><img src="./gifs/${escapeHTML(primary.preview)}.gif" alt="${escapeHTML(effectName(effect))}" loading="lazy" decoding="async" /></div>`
-            : `<div class="row-preview"><span class="preview-fallback">${t.codeFirst}</span></div>`;
           const implementations = effect.sources.map(source => {
             const project = projectById.get(source.projectId);
-            return `<section class="implementation">
-              <div class="implementation-meta">
-                ${source.recommended ? `<span class="recommendation">${t.recommended}</span>` : ''}
-                <h4>${escapeHTML(project.name)}</h4>
-                <a class="repo-link" href="${escapeHTML(project.url)}" target="_blank" rel="noreferrer" aria-label="${escapeHTML(project.name)} ${t.repositoryLabel}">${escapeHTML(project.repo)} ↗</a>
-                <div class="source-meta"><span>★ ${project.stars.toLocaleString('en-US')}</span>${project.legacy ? `<span class="legacy-tag">${t.legacy}</span>` : ''}</div>
-              </div>
-              <div class="code-wrap"><pre><code>${escapeHTML(source.snippet)}</code></pre><button class="copy" type="button">${t.copy}</button></div>
-            </section>`;
+            return `<section class="implementation"><div class="implementation-meta">${source.recommended ? `<span class="recommendation">${t.recommended}</span>` : ''}<h4>${escapeHTML(project.name)}</h4><a class="repo-link" href="${escapeHTML(project.url)}" target="_blank" rel="noreferrer" aria-label="${escapeHTML(project.name)} ${t.repositoryLabel}">${escapeHTML(project.repo)} ↗</a>${source.originUrl ? `<a class="origin-link" href="${escapeHTML(source.originUrl)}" target="_blank" rel="noreferrer">${t.previewSource}</a>` : ''}<div class="source-meta"><span>★ ${project.stars.toLocaleString('en-US')}</span>${project.legacy ? `<span class="legacy-tag">${t.legacy}</span>` : ''}</div></div><div class="code-wrap"><pre><code>${escapeHTML(source.snippet)}</code></pre><button class="copy-code" type="button">${t.copyCode}</button></div></section>`;
           }).join('');
-          row.innerHTML = `
-            <summary class="effect-summary">
-              <span class="row-number">${String(effect.order).padStart(3, '0')}</span>
-              <div class="effect-cell"><p class="category-label">${escapeHTML(labelFor(category))}</p><h3>${escapeHTML(effectName(effect))}</h3><span class="effect-key">effect:${escapeHTML(effect.id)}</span></div>
-              ${preview}
-              <div class="source-cell"><span class="source-label">${t.recommended}</span><span class="source-name">${escapeHTML(primaryProject.name)}</span><span class="source-meta"><span>★ ${primaryProject.stars.toLocaleString('en-US')}</span><span>${effect.sources.length} ${effect.sources.length === 1 ? t.implementation : t.implementations}</span>${primaryProject.legacy ? `<span class="legacy-tag">${t.legacy}</span>` : ''}</span></div>
-              <span class="inspect">${t.inspect}</span>
-            </summary>
-            <div class="detail-panel">
-              <div class="detail-intro"><p><strong>${t.definition}:</strong> ${escapeHTML(effectName(effect))}.</p><a class="permalink" href="#${escapeHTML(effect.id)}"># ${t.permalink}</a></div>
-              <div class="implementations">${implementations}</div>
-            </div>`;
-          row.querySelectorAll('.copy').forEach((button, index) => button.addEventListener('click', event => {
-            event.preventDefault();
-            copyCode(button, effect.sources[index].snippet);
-          }));
+          row.innerHTML = `<div class="effect-main"><span class="row-number">${String(effect.order).padStart(3, '0')}</span><div class="row-preview">${previewMedia}<span class="preview-kind">${primary.previewKind === 'official-capture' ? t.previewOfficial : t.previewEditorial}</span></div><div class="effect-cell"><p class="category-label">${escapeHTML(labelFor(category))}</p><h3>${escapeHTML(effectName(effect))}</h3><span class="effect-key">effect:${escapeHTML(effect.id)}</span></div><div class="source-cell"><span class="source-label">${t.recommended}</span><a class="source-name" href="${escapeHTML(primaryProject.url)}" target="_blank" rel="noreferrer">${escapeHTML(primaryProject.name)} ↗</a><span class="source-meta"><span>★ ${primaryProject.stars.toLocaleString('en-US')}</span><span>${effect.sources.length} ${effect.sources.length === 1 ? t.implementation : t.implementations}</span>${primaryProject.legacy ? `<span class="legacy-tag">${t.legacy}</span>` : ''}</span></div><div class="row-actions"><button class="action-button prompt-button" type="button">${t.copyPrompt}</button><button class="action-button code-button" type="button" aria-expanded="false" aria-controls="detail-${escapeHTML(effect.id)}">${t.showCode}</button></div></div><div class="detail-panel" id="detail-${escapeHTML(effect.id)}" hidden><div class="detail-top"><p><strong>${t.definition}:</strong> ${escapeHTML(effectName(effect))}. ${effect.sources.length} ${effect.sources.length === 1 ? t.implementation : t.implementations}.</p><a class="permalink" href="#${escapeHTML(effect.id)}"># ${t.permalink}</a></div><div class="implementations">${implementations}</div></div>`;
+
+          const promptButton = row.querySelector('.prompt-button');
+          promptButton.addEventListener('click', () => copyText(promptButton, effect.prompt, t.promptCopied, t.copyPrompt));
+          const codeButton = row.querySelector('.code-button');
+          const panel = row.querySelector('.detail-panel');
+          codeButton.addEventListener('click', () => { const nextOpen = panel.hidden; panel.hidden = !nextOpen; codeButton.setAttribute('aria-expanded', String(nextOpen)); codeButton.textContent = nextOpen ? t.hideCode : t.showCode; });
+          row.querySelectorAll('.copy-code').forEach((button, index) => button.addEventListener('click', () => copyText(button, effect.sources[index].snippet, t.codeCopied, t.copyCode)));
           list.append(row);
         });
         openHashTarget();
@@ -469,15 +524,6 @@
       sort.addEventListener('change', render);
       window.addEventListener('hashchange', openHashTarget);
       setLanguage(language);
-
-      const hero = document.querySelector('#hero');
-      if (matchMedia('(pointer: fine) and (prefers-reduced-motion: no-preference)').matches) {
-        hero.addEventListener('pointermove', event => {
-          const rect = hero.getBoundingClientRect();
-          hero.style.setProperty('--pointer-x', `${((event.clientX - rect.left) / rect.width) * 100}%`);
-          hero.style.setProperty('--pointer-y', `${((event.clientY - rect.top) / rect.height) * 100}%`);
-        });
-      }
     </script>
   </body>
 </html>

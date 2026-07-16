@@ -1,3 +1,5 @@
+import { additionalEffectSeeds } from './additional-effects.js';
+
 export const snapshotDate = '2026-07-16';
 
 export const categories = [
@@ -17,6 +19,74 @@ const code = (...lines) => lines.join('\n');
 const slugify = value => value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const projectRegistry = new Map();
 
+const previewOrigins = {
+  aos: ['editorial-recreation', 'https://michalsnik.github.io/aos/'],
+  'gl-transitions': ['editorial-recreation', 'https://gl-transitions.com/'],
+  'gsap-scrolltrigger': ['editorial-recreation', 'https://gsap.com/scrolltrigger/'],
+  'hover-effect': ['official-capture', 'https://github.com/robin-dela/hover-effect/blob/master/gifs/alex_brown.gif'],
+  'img-comparison-slider': ['official-capture', 'https://github.com/sneas/img-comparison-slider/blob/master/docs/example.gif'],
+  isotope: ['editorial-recreation', 'https://isotope.metafizzy.co/'],
+  lenis: ['official-capture', 'https://assets.darkroom.engineering/lenis/banner.gif'],
+  'lottie-web': ['official-capture', 'https://github.com/airbnb/lottie-web/blob/master/gifs/Example1.gif'],
+  motion: ['editorial-recreation', 'https://motion.dev/docs'],
+  'mouse-follower': ['official-capture', 'https://user-images.githubusercontent.com/11841379/162477170-5dd33ecd-0e72-4fe4-9053-53d7b5557637.gif'],
+  parallax: ['editorial-recreation', 'http://wagerfield.github.io/parallax/'],
+  photoswipe: ['editorial-recreation', 'https://photoswipe.com/getting-started/'],
+  'react-three-fiber': ['official-capture', 'https://github.com/pmndrs/react-three-fiber/blob/master/docs/basic-app.gif'],
+  scrollama: ['official-capture', 'https://pudding.cool/process/how-to-implement-scrollytelling/'],
+  swiper: ['editorial-recreation', 'https://swiperjs.com/demos'],
+  tsparticles: ['official-capture', 'https://github.com/tsparticles/tsparticles/blob/main/demo/vanilla/public/images/gifs/connect.gif'],
+  'vanilla-tilt': ['editorial-recreation', 'https://micku7zu.github.io/vanilla-tilt.js/'],
+  vivus: ['editorial-recreation', 'https://github.com/maxwellito/vivus#principles'],
+  'webgl-fluid': ['editorial-recreation', 'https://paveldogreat.github.io/WebGL-Fluid-Simulation/']
+};
+
+const inferBehavior = (name, category) => {
+  const value = name.toLowerCase();
+  const trigger = category === 'scroll' || /scroll|viewport|scrollytelling/.test(value) ? 'scroll'
+    : /hover|pointer|cursor|tilt|drag|swipe|pinch|magnetic|hotspot/.test(value) ? 'pointer or touch'
+      : /modal|toast|drawer|menu|command|lightbox|upload|crop|comparison/.test(value) ? 'user action'
+        : /entrance|reveal|drawing|typewriter|playback|decode/.test(value) ? 'mount or viewport entry'
+          : 'state change or animation frame';
+  const timing = /scrub|scroll|parallax/.test(value) ? 'continuous progress-linked'
+    : /spring|physics|inertia|momentum/.test(value) ? 'spring or physics-based'
+      : /stagger|sequence|timeline/.test(value) ? 'sequenced'
+        : /loop|field|background|particle|fluid|firework/.test(value) ? 'continuous loop'
+          : 'eased transition';
+  const layer = category === 'background' ? 'background'
+    : category === 'carousel' || /modal|toast|drawer|menu|popover|lightbox/.test(value) ? 'overlay or navigation'
+      : category === 'canvas' ? 'canvas or 2D surface'
+        : category === 'webgl' ? '3D or WebGL surface'
+          : category === 'media' ? 'media surface'
+            : 'content';
+  return { trigger, response: name, timing, layer };
+};
+
+const buildPrompt = ({ name, nameZh, category, behavior, project, snippet }) => `Implement the "${name}" (${nameZh}) web interaction effect in the current project.
+
+Use ${project.name} (${project.repo}) as the recommended implementation unless the existing stack makes a dependency-free equivalent more appropriate. Recreate this specific ${category} interaction, not a generic animation.
+
+Interaction contract:
+- Trigger: ${behavior.trigger}
+- Visual response: ${behavior.response}
+- Timing relationship: ${behavior.timing}
+- Page layer: ${behavior.layer}
+
+Requirements:
+- Integrate with the existing design system and component structure.
+- Support keyboard and touch input whenever the interaction is actionable.
+- Respect prefers-reduced-motion with a clear non-animated fallback.
+- Avoid layout shift, scroll traps, inaccessible focus behavior, and unnecessary dependencies.
+- Keep the implementation responsive and clean up listeners, timers, and animation instances.
+
+Start from this minimal API shape:
+
+\`\`\`js
+${snippet}
+\`\`\`
+
+Return the working code, the files changed, and a short explanation of how to tune timing, easing, distance, and reduced-motion behavior.`;
+
 const registerProject = (name, repo, stars, options) => {
   const registryKey = repo.toLowerCase();
   if (!projectRegistry.has(registryKey)) {
@@ -26,7 +96,7 @@ const registerProject = (name, repo, stars, options) => {
       repo,
       url: `https://github.com/${repo}`,
       stars,
-      addedIn: options.isNew === false ? 'baseline' : '2026-expansion',
+      addedIn: options.addedIn || (options.isNew === false ? 'baseline' : '2026-expansion'),
       legacy: options.legacy ?? false
     });
   }
@@ -35,22 +105,31 @@ const registerProject = (name, repo, stars, options) => {
 
 const effect = (projectName, repo, category, name, nameZh, stars, snippet, options = {}) => {
   const source = registerProject(projectName, repo, stars, options);
+  const id = options.id || slugify(name);
+  const behavior = options.behavior || inferBehavior(name, category);
+  const origin = options.preview ? previewOrigins[options.preview] : null;
   return {
-    id: options.id || slugify(name),
+    id,
     category,
     name,
     nameZh,
-    addedIn: options.isNew === false ? 'baseline' : '2026-expansion',
+    addedIn: options.addedIn || (options.isNew === false ? 'baseline' : '2026-expansion'),
+    research: options.research || null,
+    behavior,
+    prompt: buildPrompt({ name, nameZh, category, behavior, project: source, snippet }),
     sources: [{
       projectId: source.id,
       recommended: true,
       snippet,
-      preview: options.preview || null
+      preview: options.preview || `generated/${id}`,
+      previewKind: origin?.[0] || 'editorial-recreation',
+      originUrl: origin?.[1] || null,
+      previewRecipe: options.preview ? null : id
     }]
   };
 };
 
-export const effects = [
+const coreEffects = [
   // Animation engines
   effect('GSAP', 'greensock/GSAP', 'animation', 'Scroll-scrubbed master timeline', '滚动擦洗主时间线', 26600, code("import { gsap } from 'gsap';", "import { ScrollTrigger } from 'gsap/ScrollTrigger';", "gsap.registerPlugin(ScrollTrigger);", "const timeline = gsap.timeline({ scrollTrigger: { trigger: '.scene', scrub: true } });", "timeline.to('.card', { x: 80 }).to('.card', { rotate: 6 });"), { preview: 'gsap-scrolltrigger', isNew: false }),
   effect('GSAP', 'greensock/GSAP', 'scroll', 'Pinned horizontal scroll scene', '固定式横向滚动场景', 26600, code("import { gsap } from 'gsap';", "import { ScrollTrigger } from 'gsap/ScrollTrigger';", "gsap.registerPlugin(ScrollTrigger);", "gsap.to('.track', { xPercent: -75, ease: 'none', scrollTrigger: { trigger: '.gallery', pin: true, scrub: 1, end: '+=2400' } });"), { isNew: false }),
@@ -191,6 +270,27 @@ export const effects = [
   effect('FilePond', 'pqina/filepond', 'media', 'Drop-upload image preview transition', '拖拽上传图片预览转场', 16382, code("import * as FilePond from 'filepond';", "import 'filepond/dist/filepond.min.css';", "FilePond.create(document.querySelector('input[type=file]'), { allowReorder: true });")),
   effect('TUI Image Editor', 'nhn/tui.image-editor', 'media', 'Full image-editing canvas workspace', '完整图像编辑画布工作区', 7660, code("import ImageEditor from 'tui-image-editor';", "const editor = new ImageEditor('#editor', { cssMaxWidth: 900, cssMaxHeight: 600 });", "await editor.loadImageFromURL('photo.jpg', 'Photo');")),
   effect('Media Chrome', 'muxinc/media-chrome', 'media', 'Responsive custom media controls', '响应式自定义媒体控制条', 2710, code("import 'media-chrome';", "// <media-controller><video slot=\"media\" src=\"clip.mp4\"></video><media-control-bar><media-play-button></media-play-button><media-time-range></media-time-range></media-control-bar></media-controller>"))
-].map((item, index) => ({ ...item, order: index + 1 }));
+];
+
+const researchedEffects = additionalEffectSeeds.map(item => effect(
+  item.projectName,
+  item.repo,
+  item.category,
+  item.name,
+  item.nameZh,
+  item.stars,
+  item.snippet,
+  {
+    addedIn: '2026-effect-expansion',
+    research: {
+      sourceUrl: item.sourceUrl,
+      difference: item.difference,
+      verifiedAt: snapshotDate
+    }
+  }
+));
+
+export const effects = [...coreEffects, ...researchedEffects]
+  .map((item, index) => ({ ...item, order: index + 1 }));
 
 export const projects = [...projectRegistry.values()];

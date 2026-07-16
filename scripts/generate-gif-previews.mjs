@@ -1,0 +1,323 @@
+#!/usr/bin/env node
+
+import { mkdir, stat } from 'node:fs/promises';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { once } from 'node:events';
+import { spawn } from 'node:child_process';
+import { effects } from '../demo/data/effects.js';
+
+const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const outputRoot = resolve(root, 'demo', 'gifs');
+const force = process.argv.includes('--force');
+const width = 320;
+const height = 180;
+const fps = 12;
+const frameCount = 24;
+
+const palettes = {
+  animation: [[246, 247, 249], [0, 113, 227], [111, 73, 255]],
+  scroll: [[244, 248, 250], [0, 153, 204], [46, 204, 113]],
+  transition: [[248, 246, 252], [94, 92, 230], [255, 69, 96]],
+  carousel: [[250, 248, 242], [255, 149, 0], [0, 113, 227]],
+  pointer: [[250, 246, 244], [255, 59, 48], [255, 149, 0]],
+  vector: [[250, 245, 250], [191, 54, 170], [0, 113, 227]],
+  canvas: [[243, 249, 246], [36, 138, 61], [0, 113, 227]],
+  webgl: [[242, 246, 252], [0, 102, 204], [94, 92, 230]],
+  background: [[248, 244, 252], [175, 82, 222], [0, 199, 190]],
+  media: [[250, 246, 242], [255, 110, 64], [0, 113, 227]]
+};
+
+const hash = value => [...value].reduce((total, character) => ((total * 31) + character.charCodeAt(0)) >>> 0, 2166136261);
+const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+const mix = (a, b, amount) => a.map((value, index) => Math.round(value + (b[index] - value) * amount));
+const wave = (time, offset = 0) => (Math.sin((time + offset) * Math.PI * 2) + 1) / 2;
+const ease = value => value < .5 ? 2 * value * value : 1 - ((-2 * value + 2) ** 2) / 2;
+
+function pixel(frame, x, y, color, alpha = 1) {
+  x = Math.round(x); y = Math.round(y);
+  if (x < 0 || y < 0 || x >= width || y >= height) return;
+  const index = (y * width + x) * 3;
+  frame[index] = Math.round(frame[index] * (1 - alpha) + color[0] * alpha);
+  frame[index + 1] = Math.round(frame[index + 1] * (1 - alpha) + color[1] * alpha);
+  frame[index + 2] = Math.round(frame[index + 2] * (1 - alpha) + color[2] * alpha);
+}
+
+function rect(frame, x, y, w, h, color, alpha = 1) {
+  const left = clamp(Math.floor(x), 0, width);
+  const top = clamp(Math.floor(y), 0, height);
+  const right = clamp(Math.ceil(x + w), 0, width);
+  const bottom = clamp(Math.ceil(y + h), 0, height);
+  for (let py = top; py < bottom; py += 1) for (let px = left; px < right; px += 1) pixel(frame, px, py, color, alpha);
+}
+
+function circle(frame, cx, cy, radius, color, alpha = 1) {
+  const r2 = radius * radius;
+  for (let y = Math.floor(cy - radius); y <= Math.ceil(cy + radius); y += 1) {
+    for (let x = Math.floor(cx - radius); x <= Math.ceil(cx + radius); x += 1) {
+      if (((x - cx) ** 2) + ((y - cy) ** 2) <= r2) pixel(frame, x, y, color, alpha);
+    }
+  }
+}
+
+function line(frame, x1, y1, x2, y2, color, thickness = 2, alpha = 1) {
+  const steps = Math.max(1, Math.ceil(Math.hypot(x2 - x1, y2 - y1)));
+  for (let step = 0; step <= steps; step += 1) {
+    const amount = step / steps;
+    circle(frame, x1 + (x2 - x1) * amount, y1 + (y2 - y1) * amount, thickness, color, alpha);
+  }
+}
+
+function baseFrame(background, accent) {
+  const frame = Buffer.alloc(width * height * 3);
+  for (let y = 0; y < height; y += 1) {
+    const rowColor = mix(background, [255, 255, 255], y / height * .12);
+    for (let x = 0; x < width; x += 1) {
+      const glow = Math.max(0, 1 - Math.hypot(x - width * .82, y - height * .18) / 150) * .08;
+      const color = mix(rowColor, accent, glow);
+      const index = (y * width + x) * 3;
+      frame[index] = color[0]; frame[index + 1] = color[1]; frame[index + 2] = color[2];
+    }
+  }
+  return frame;
+}
+
+function cards(frame, time, accent, secondary, mode) {
+  if (mode === 0) {
+    const x = 24 + ease(wave(time)) * 190;
+    rect(frame, x, 57, 82, 66, [255, 255, 255]); rect(frame, x, 57, 8, 66, accent); circle(frame, x + 24, 82, 8, secondary);
+  } else if (mode === 1) {
+    for (let index = 0; index < 5; index += 1) {
+      const amount = clamp(time * 1.8 - index * .12, 0, 1);
+      rect(frame, 38 + index * 52, 80 - ease(amount) * 34, 40, 40, index % 2 ? secondary : accent, .9);
+    }
+  } else if (mode === 2) {
+    const amount = wave(time);
+    circle(frame, 160, 90, 18 + amount * 30, accent, 1 - amount * .25);
+    rect(frame, 135 - amount * 16, 65 - amount * 10, 50 + amount * 32, 50 + amount * 20, secondary, amount * .55);
+  } else if (mode === 3) {
+    for (let index = 0; index < 14; index += 1) {
+      const angle = index / 14 * Math.PI * 2;
+      const radius = 14 + ease(clamp(time * 2, 0, 1)) * 58;
+      circle(frame, 160 + Math.cos(angle) * radius, 90 + Math.sin(angle) * radius, 4 + index % 3, index % 2 ? accent : secondary);
+    }
+  } else if (mode === 4) {
+    const y = 38 + Math.abs(Math.sin(time * Math.PI * 2)) * 80;
+    circle(frame, 160, y, 20, accent); rect(frame, 80, 132, 160, 6, secondary, .45);
+  } else {
+    for (let index = 0; index < 4; index += 1) {
+      const progress = clamp(time * 1.6 - index * .16, 0, 1);
+      rect(frame, 42, 42 + index * 27, 220 * ease(progress), 12, index % 2 ? secondary : accent, .85);
+    }
+  }
+}
+
+function scrollScene(frame, time, accent, secondary, mode) {
+  if (mode === 0) {
+    for (let index = 0; index < 4; index += 1) rect(frame, 35 + index * 76 - time * 180, 48 + (index % 2) * 22, 64, 84, index % 2 ? secondary : accent, .78);
+  } else if (mode === 1) {
+    for (let index = 0; index < 5; index += 1) rect(frame, 48, 22 + index * 46 - time * 90, 224, 34, [255, 255, 255]);
+    rect(frame, 278, 18 + time * 118, 5, 34, accent);
+  } else if (mode === 2) {
+    circle(frame, 78 + time * 52, 72, 40, secondary, .35); circle(frame, 210 + time * 92, 110, 54, accent, .3); rect(frame, 86, 73, 148, 58, [255, 255, 255], .85);
+  } else if (mode === 3) {
+    for (let index = 0; index < 3; index += 1) { const reveal = clamp(time * 2 - index * .22, 0, 1); rect(frame, 42 + index * 84, 116 - reveal * 54, 64, 50, index % 2 ? secondary : accent, reveal); }
+  } else if (mode === 4) {
+    for (let index = 0; index < 7; index += 1) rect(frame, 56, 18 + ((index * 34 - time * 92 + 210) % 238) - 30, 208, 25, index % 2 ? [255, 255, 255] : mix(accent, [255, 255, 255], .65));
+  } else {
+    for (let index = 0; index < 3; index += 1) rect(frame, 36, 24 + index * 52, 230, 42, index === Math.floor(time * 3) % 3 ? accent : [255, 255, 255], index === Math.floor(time * 3) % 3 ? .85 : 1);
+  }
+}
+
+function transitionScene(frame, time, accent, secondary, mode) {
+  if (mode === 0) {
+    rect(frame, 26, 28, 268, 124, [255, 255, 255]); rect(frame, 26, 28, 268 * ease(time), 124, accent, .86);
+  } else if (mode === 1 || mode === 5) {
+    for (let index = 0; index < 6; index += 1) {
+      const column = index % 3; const row = Math.floor(index / 3);
+      const shift = wave(time, index * .08) * 22;
+      rect(frame, 42 + column * 82 + (mode === 5 && index % 2 ? 34 * time : 0), 42 + row * 62 + (index % 2 ? shift : -shift), 58, 42, index % 2 ? secondary : accent, .82);
+    }
+  } else if (mode === 2) {
+    const amount = ease(wave(time)); rect(frame, 54 + amount * 94, 48 - amount * 18, 66 + amount * 72, 70 + amount * 36, accent, .82);
+  } else if (mode === 3) {
+    rect(frame, 0, 0, width, height, [20, 25, 35], time * .35); rect(frame, width - ease(time) * 210, 0, 210, height, [255, 255, 255]); rect(frame, width - ease(time) * 188, 30, 150, 12, accent);
+  } else {
+    rect(frame, 30, 42, 260 * wave(time), 96, accent, .7); rect(frame, 30 + 260 * wave(time), 42, 260 * (1 - wave(time)), 96, secondary, .65);
+  }
+}
+
+function overlayScene(frame, time, accent, secondary, mode) {
+  if (mode === 0) {
+    for (let index = -1; index < 5; index += 1) { const x = 52 + (index - time * 1.4) * 72; rect(frame, x, 48 + Math.abs(index - 1) * 8, 58, 84, index === 1 ? accent : [255, 255, 255], index === 1 ? .9 : .75); }
+  } else if (mode === 1) {
+    rect(frame, 0, 0, width, height, [15, 18, 24], .25 + time * .35); rect(frame, 82, 98 - ease(time) * 62, 156, 78, [255, 255, 255]); circle(frame, 160, 74 - ease(time) * 24, 14, accent);
+  } else if (mode === 2) {
+    rect(frame, 66, 26, 188, 128, [255, 255, 255]); for (let index = 0; index < 4; index += 1) rect(frame, 82, 48 + index * 23, 156, 15, index === Math.floor(time * 4) % 4 ? accent : mix(secondary, [255, 255, 255], .75));
+  } else if (mode === 3) {
+    for (let index = 0; index < 3; index += 1) rect(frame, 162 + index * 8, 126 - index * 34 - ease(clamp(time * 2 - index * .18, 0, 1)) * 26, 118, 26, index % 2 ? secondary : accent, .9);
+  } else if (mode === 4) {
+    rect(frame, 62, 64, 92, 48, accent, .8); rect(frame, 174, 72, 88, 36, [255, 255, 255]); circle(frame, 152 + Math.sin(time * Math.PI * 2) * 22, 88, 8, secondary);
+  } else {
+    const x = 48 + ease(wave(time)) * 170; rect(frame, x, 58, 92, 64, accent, .82); rect(frame, 36, 132, 248, 5, secondary, .4);
+  }
+}
+
+function pointerScene(frame, time, accent, secondary, mode) {
+  const cx = 48 + time * 224; const cy = 90 + Math.sin(time * Math.PI * 2) * 42;
+  if (mode === 0) for (let index = 0; index < 12; index += 1) circle(frame, cx - index * 12, cy - Math.sin((time - index / 30) * Math.PI * 2) * 4, 8 - index * .45, mix(accent, secondary, index / 12), 1 - index / 14);
+  else if (mode === 1) { rect(frame, 82 + (cx - 160) * .08, 42 + (cy - 90) * .08, 156, 96, [255, 255, 255]); line(frame, 84, 44, 236, 136, accent, 3, .6); circle(frame, cx, cy, 6, secondary); }
+  else if (mode === 2) { const bx = 104 + (cx - 160) * .16; const by = 67 + (cy - 90) * .16; rect(frame, bx, by, 112, 46, accent, .9); circle(frame, cx, cy, 5, secondary); }
+  else if (mode === 3) { rect(frame, 58, 38, 204, 104, secondary, .3); rect(frame, 58, 38, clamp(cx - 58, 0, 204), 104, accent, .78); circle(frame, cx, cy, 5, [255, 255, 255]); }
+  else if (mode === 4) { rect(frame, 48, 35, 224, 110, [255, 255, 255]); for (let index = 0; index < 5; index += 1) circle(frame, 78 + index * 42, 64 + (index % 2) * 48, 7 + (Math.abs(cx - (78 + index * 42)) < 30 ? 8 : 0), index % 2 ? accent : secondary); }
+  else { for (let index = 0; index < 12; index += 1) line(frame, 30 + index * 24, 48, 30 + index * 24 + Math.sin(time * Math.PI * 2 + index) * 18, 132, index % 2 ? accent : secondary, 2, .7); circle(frame, cx, cy, 5, [20, 24, 32]); }
+}
+
+function vectorScene(frame, time, accent, secondary, mode) {
+  if (mode === 0 || mode === 4) {
+    let previous = [38, 118]; const progress = ease(time);
+    for (let index = 1; index <= 80 * progress; index += 1) { const x = 38 + index * 3; const y = 96 + Math.sin(index / 9) * 38; line(frame, previous[0], previous[1], x, y, index % 2 ? accent : secondary, mode === 4 ? 2 : 3); previous = [x, y]; }
+  } else if (mode === 1) {
+    for (let index = 0; index < 9; index += 1) rect(frame, 44 + index * 25, 72, 16, 38 + (index % 3) * 12, index < Math.floor(time * 10) ? accent : [220, 223, 228]);
+  } else if (mode === 2 || mode === 5) {
+    for (let index = 0; index < 8; index += 1) { const flip = wave(time, index * .11); rect(frame, 48 + index * 29, 64, 21, 48 * Math.max(.12, Math.abs(flip - .5) * 2), index % 2 ? secondary : accent, .86); }
+  } else if (mode === 3) {
+    const amount = wave(time); circle(frame, 160, 90, 28 + amount * 24, accent, .7); rect(frame, 126 + amount * 16, 56 + amount * 12, 68 - amount * 32, 68 - amount * 24, secondary, .55);
+  }
+}
+
+function canvasScene(frame, time, accent, secondary, mode, seed) {
+  if (mode === 0 || mode === 4) {
+    for (let index = 0; index < 26; index += 1) { const angle = (seed % 17 + index * 13) * .37; const x = 160 + Math.sin(angle + time * 4) * (28 + index * 3.2); const y = 90 + Math.cos(angle * 1.3 + time * 3) * (18 + index * 1.8); circle(frame, x, y, 2 + index % 4, index % 2 ? accent : secondary, .75); }
+  } else if (mode === 1) {
+    for (let index = 0; index < 7; index += 1) { const y = 34 + Math.abs(Math.sin(time * Math.PI * 2 + index)) * 104; circle(frame, 48 + index * 38, y, 9 + index % 3, index % 2 ? accent : secondary, .85); }
+    rect(frame, 30, 148, 260, 5, [130, 135, 145], .4);
+  } else if (mode === 2) {
+    let previous = [38, 92]; for (let index = 1; index < 80; index += 1) { const x = 38 + index * 3; const y = 90 + Math.sin(index / 7 + time * 7) * 34; line(frame, previous[0], previous[1], x, y, mix(accent, secondary, index / 80), 3); previous = [x, y]; }
+  } else if (mode === 3) {
+    for (let index = 0; index < 5; index += 1) { const x = 54 + index * 48 + Math.sin(time * 6 + index) * 14; const y = 54 + (index % 2) * 50; rect(frame, x, y, 38, 32, index % 2 ? secondary : accent, .82); }
+  } else {
+    const offset = time * 42; for (let x = -40; x < width + 40; x += 24) line(frame, x + offset % 24, 0, x + offset % 24, height, accent, 1, .2); for (let y = -40; y < height + 40; y += 24) line(frame, 0, y + offset % 24, width, y + offset % 24, secondary, 1, .2); circle(frame, 160, 90, 18, accent, .85);
+  }
+}
+
+function webglScene(frame, time, accent, secondary, mode) {
+  if (mode === 0 || mode === 4) {
+    const angle = time * Math.PI * 2; const points = [[-1,-1], [1,-1], [1,1], [-1,1]].map(([x,y]) => [160 + (x * Math.cos(angle) - y * Math.sin(angle)) * 34, 90 + (x * Math.sin(angle) + y * Math.cos(angle)) * 34]);
+    const back = points.map(([x,y]) => [x + 22, y - 18]);
+    for (let index = 0; index < 4; index += 1) { line(frame, points[index][0], points[index][1], points[(index + 1) % 4][0], points[(index + 1) % 4][1], accent, 2); line(frame, back[index][0], back[index][1], back[(index + 1) % 4][0], back[(index + 1) % 4][1], secondary, 2); line(frame, points[index][0], points[index][1], back[index][0], back[index][1], mix(accent, secondary, .5), 2); }
+  } else if (mode === 1) {
+    for (let index = 0; index < 40; index += 1) { const longitude = index * 2.4 + time * 5; const latitude = Math.sin(index * 1.7) * 1.2; circle(frame, 160 + Math.cos(longitude) * Math.cos(latitude) * 64, 90 + Math.sin(latitude) * 48, 3, index % 2 ? accent : secondary, .8); }
+  } else if (mode === 2 || mode === 5) {
+    for (let row = 0; row < 8; row += 1) { let previous = [24, 30 + row * 18]; for (let x = 25; x < 296; x += 6) { const y = 30 + row * 18 + Math.sin(x / 22 + time * 7 + row) * 9; line(frame, previous[0], previous[1], x, y, row % 2 ? accent : secondary, 1, .55); previous = [x, y]; } }
+  } else {
+    for (let radius = 48; radius > 10; radius -= 8) circle(frame, 160, 90, radius, radius % 16 ? secondary : accent, .06);
+    circle(frame, 160, 90, 26 + wave(time) * 16, accent, .88);
+  }
+}
+
+function backgroundScene(frame, time, accent, secondary, mode, seed) {
+  if (mode === 0 || mode === 3) {
+    for (let index = 0; index < 5; index += 1) circle(frame, 58 + index * 58 + Math.sin(time * 5 + index) * 24, 46 + (index % 2) * 68 + Math.cos(time * 4 + index) * 22, 34 + index % 3 * 9, index % 2 ? accent : secondary, .24);
+  } else if (mode === 1) {
+    const points = Array.from({ length: 18 }, (_, index) => [28 + ((seed + index * 67) % 264), 22 + ((seed * 3 + index * 41) % 136)]);
+    points.forEach((point, index) => { const x = point[0] + Math.sin(time * 5 + index) * 9; const y = point[1] + Math.cos(time * 4 + index) * 7; circle(frame, x, y, 3, index % 2 ? accent : secondary); if (index) line(frame, x, y, points[index - 1][0], points[index - 1][1], accent, 1, .12); });
+  } else if (mode === 2) {
+    for (let index = 0; index < 32; index += 1) { const x = (seed + index * 83) % width; const y = ((index * 29 + time * 210) % 230) - 20; rect(frame, x, y, 4 + index % 7, 8 + index % 10, index % 2 ? accent : secondary, .85); }
+  } else if (mode === 4) {
+    for (let y = 18; y < height; y += 24) for (let x = 12; x < width; x += 28) { const shift = Math.sin(time * 4 + x + y) * 7; line(frame, x, y, x + 22, y + shift, (x + y) % 3 ? accent : secondary, 1, .35); }
+  } else {
+    for (let burst = 0; burst < 3; burst += 1) { const progress = (time * 1.6 + burst * .32) % 1; const cx = 76 + burst * 84; const cy = 58 + (burst % 2) * 34; for (let ray = 0; ray < 12; ray += 1) { const angle = ray / 12 * Math.PI * 2; line(frame, cx + Math.cos(angle) * progress * 12, cy + Math.sin(angle) * progress * 12, cx + Math.cos(angle) * progress * 56, cy + Math.sin(angle) * progress * 56, burst % 2 ? accent : secondary, 2, 1 - progress); } }
+  }
+}
+
+function mediaScene(frame, time, accent, secondary, mode) {
+  rect(frame, 36, 24, 248, 132, [255, 255, 255]);
+  if (mode === 0) { rect(frame, 36, 24, 248 * time, 132, accent, .72); rect(frame, 34 + 248 * time, 20, 4, 140, secondary); }
+  else if (mode === 1) { const scale = 1 + wave(time) * .8; rect(frame, 160 - 86 * scale, 90 - 48 * scale, 172 * scale, 96 * scale, accent, .35); circle(frame, 160, 90, 22 * scale, secondary, .55); }
+  else if (mode === 2) { const x = 56 - time * 72; for (let index = 0; index < 5; index += 1) rect(frame, x + index * 74, 42 + (index % 2) * 28, 62, 74, index % 2 ? accent : secondary, .45); }
+  else if (mode === 3) { rect(frame, 80, 45, 160, 90, accent, .24); const inset = 10 + wave(time) * 26; line(frame, 80 + inset, 45 + inset, 240 - inset, 45 + inset, secondary, 2); line(frame, 240 - inset, 45 + inset, 240 - inset, 135 - inset, secondary, 2); line(frame, 240 - inset, 135 - inset, 80 + inset, 135 - inset, secondary, 2); line(frame, 80 + inset, 135 - inset, 80 + inset, 45 + inset, secondary, 2); }
+  else if (mode === 4) { rect(frame, 36, 24, 248, 132, mix(accent, secondary, wave(time)), .58); for (let index = 0; index < 4; index += 1) circle(frame, 90 + index * 48, 90, 18, index % 2 ? accent : secondary, .45); }
+  else { circle(frame, 160, 90, 26, accent, .85); line(frame, 152, 76, 178, 90, [255,255,255], 3); line(frame, 178, 90, 152, 104, [255,255,255], 3); rect(frame, 68, 138, 184, 5, secondary, .25); rect(frame, 68, 138, 184 * time, 5, secondary, .9); }
+}
+
+const modeRules = {
+  animation: [[/stagger/, 1], [/morph|shape/, 2], [/burst/, 3], [/spring|bounce/, 4], [/timeline|sequence|keyframe/, 5]],
+  scroll: [[/horizontal/, 0], [/scrollbar|container/, 1], [/parallax|3d/, 2], [/reveal|viewport/, 3], [/infinite|million|virtual|append/, 4], [/snap|section|split/, 5]],
+  transition: [[/page|route/, 0], [/grid|masonry|pack|reflow/, 1], [/shared|flip|morph/, 2], [/drawer/, 3], [/split|resize/, 4], [/filter|enter|exit/, 5]],
+  carousel: [[/carousel|slide|deck/, 0], [/modal|lightbox|alert/, 1], [/command|menu/, 2], [/toast|notification/, 3], [/popover|tour|spotlight/, 4], [/drag|drop|pinch/, 5]],
+  pointer: [[/cursor|trail|particle/, 0], [/tilt|depth|parallax|glare/, 1], [/magnetic|attracted|button/, 2], [/hover|overlay|card/, 3], [/hotspot|region|point/, 4], [/distortion|gooey|displacement/, 5]],
+  vector: [[/draw|stroke|path/, 0], [/type|split|character css/, 1], [/flip|ticker|mechanical/, 2], [/morph|shape/, 3], [/hand|rough|letter/, 4], [/scramble|decode|random/, 5]],
+  canvas: [[/generative|particle|sprite/, 0], [/physics|game|rigid/, 1], [/draw|sketch/, 2], [/object|node|drag|layer/, 3], [/geometry|primitive|illustration/, 4], [/infinite|grid|surface/, 5]],
+  webgl: [[/mesh|object|react|vue|svelte/, 0], [/particle|sphere/, 1], [/shader|plane|functional|minimal/, 2], [/bloom|post/, 3], [/product|model|orbit|camera/, 4], [/scene|webgl|3d/, 5]],
+  background: [[/fluid|gradient|vanta/, 0], [/particle|swarm|link/, 1], [/confetti/, 2], [/gradient|backdrop/, 3], [/mesh|poly|grid|surface/, 4], [/firework|ribbon|trail/, 5]],
+  media: [[/comparison|reveal/, 0], [/zoom|magnif|lens/, 1], [/pan|deep/, 2], [/crop/, 3], [/filter|editor/, 4], [/media|control|upload|preview/, 5]]
+};
+
+function modeFor(effect, seed) {
+  const name = effect.name.toLowerCase();
+  return modeRules[effect.category]?.find(([pattern]) => pattern.test(name))?.[1] ?? seed % 6;
+}
+
+function drawFingerprint(frame, seed, accent, secondary) {
+  const colors = [[190, 192, 198], accent, secondary, [35, 36, 40]];
+  for (let index = 0; index < 16; index += 1) {
+    const state = (seed >>> ((index % 16) * 2)) & 3;
+    rect(frame, 12 + index * 7, 168, 4, 4, colors[state], .78);
+  }
+}
+
+function renderFrame(effect, frameIndex) {
+  const [background, accent, secondary] = palettes[effect.category] || palettes.animation;
+  const seed = hash(effect.id);
+  const mode = modeFor(effect, seed);
+  const time = frameIndex / (frameCount - 1);
+  const frame = baseFrame(background, accent);
+  if (effect.category === 'animation') cards(frame, time, accent, secondary, mode);
+  else if (effect.category === 'scroll') scrollScene(frame, time, accent, secondary, mode);
+  else if (effect.category === 'transition') transitionScene(frame, time, accent, secondary, mode);
+  else if (effect.category === 'carousel') overlayScene(frame, time, accent, secondary, mode);
+  else if (effect.category === 'pointer') pointerScene(frame, time, accent, secondary, mode);
+  else if (effect.category === 'vector') vectorScene(frame, time, accent, secondary, mode);
+  else if (effect.category === 'canvas') canvasScene(frame, time, accent, secondary, mode, seed);
+  else if (effect.category === 'webgl') webglScene(frame, time, accent, secondary, mode);
+  else if (effect.category === 'background') backgroundScene(frame, time, accent, secondary, mode, seed);
+  else mediaScene(frame, time, accent, secondary, mode);
+  drawFingerprint(frame, seed, accent, secondary);
+  return frame;
+}
+
+async function encode(effect, outputPath) {
+  await mkdir(dirname(outputPath), { recursive: true });
+  const ffmpeg = spawn('ffmpeg', [
+    '-hide_banner', '-loglevel', 'error',
+    '-f', 'rawvideo', '-pixel_format', 'rgb24', '-video_size', `${width}x${height}`, '-framerate', String(fps), '-i', '-',
+    '-filter_complex', 'split[s0][s1];[s0]palettegen=max_colors=64:stats_mode=diff[p];[s1][p]paletteuse=dither=bayer:bayer_scale=4:diff_mode=rectangle',
+    '-loop', '0', '-y', outputPath
+  ], { stdio: ['pipe', 'ignore', 'pipe'] });
+  let stderr = '';
+  ffmpeg.stderr.on('data', chunk => { stderr += chunk; });
+  for (let frameIndex = 0; frameIndex < frameCount; frameIndex += 1) {
+    if (!ffmpeg.stdin.write(renderFrame(effect, frameIndex))) await once(ffmpeg.stdin, 'drain');
+  }
+  ffmpeg.stdin.end();
+  const [exitCode] = await once(ffmpeg, 'close');
+  if (exitCode !== 0) throw new Error(`${effect.id}: ffmpeg failed (${exitCode}) ${stderr}`);
+}
+
+const generated = [];
+const skipped = [];
+for (const effect of effects) {
+  for (const source of effect.sources.filter(item => item.previewRecipe)) {
+    const outputPath = resolve(outputRoot, `${source.preview}.gif`);
+    try {
+      if (!force && (await stat(outputPath)).size > 0) { skipped.push(outputPath); continue; }
+    } catch {}
+    await encode(effect, outputPath);
+    generated.push(outputPath);
+    if (generated.length % 20 === 0) console.log(`Generated ${generated.length} previews…`);
+  }
+}
+
+const totalBytes = (await Promise.all(generated.map(async path => (await stat(path)).size))).reduce((sum, size) => sum + size, 0);
+console.log(`Generated ${generated.length} concept GIFs (${(totalBytes / 1024 / 1024).toFixed(2)} MiB); skipped ${skipped.length} existing files.`);

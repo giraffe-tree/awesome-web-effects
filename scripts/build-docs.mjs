@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { writeFile } from 'node:fs/promises';
+import { stat, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 import { categories, effects, projects, snapshotDate } from '../demo/data/effects.js';
@@ -10,9 +10,17 @@ const liveDemo = 'https://giraffe-tree.github.io/awesome-interaction/';
 const projectById = new Map(projects.map(project => [project.id, project]));
 const newProjectCount = projects.filter(project => project.addedIn === '2026-expansion').length;
 const baselineEffectCount = effects.filter(effect => effect.addedIn === 'baseline').length;
-const previewCount = effects.flatMap(effect => effect.sources).filter(source => source.preview).length;
+const researchEffectCount = effects.filter(effect => effect.addedIn === '2026-effect-expansion').length;
+const sources = effects.flatMap(effect => effect.sources);
+const previewCount = sources.filter(source => source.preview).length;
+const officialPreviewCount = sources.filter(source => source.previewKind === 'official-capture').length;
+const conceptPreviewCount = sources.filter(source => source.previewKind === 'editorial-recreation').length;
+const promptCount = effects.filter(effect => effect.prompt).length;
 const legacyProjectCount = projects.filter(project => project.legacy).length;
 const multiEffectProjectCount = projects.filter(project => effects.filter(effect => effect.sources.some(source => source.projectId === project.id)).length > 1).length;
+const previewPaths = [...new Set(sources.map(source => resolve(root, 'demo', 'gifs', `${source.preview}.gif`)))];
+const previewBytes = (await Promise.all(previewPaths.map(path => stat(path)))).reduce((sum, item) => sum + item.size, 0);
+const previewMiB = (previewBytes / 1024 / 1024).toFixed(2);
 const formatStars = value => value.toLocaleString('en-US');
 const recommendedSource = effect => effect.sources.find(source => source.recommended) || effect.sources[0];
 
@@ -37,13 +45,13 @@ function effectTables(language) {
       const project = projectById.get(source.projectId);
       const status = project.legacy ? (isZh ? '经典旧版' : 'Legacy') : (isZh ? '当前推荐' : 'Recommended');
       const name = isZh ? effect.nameZh : effect.name;
-      return `| [${name}](${liveDemo}#${effect.id}) | [${project.name}](${project.url}) | ${formatStars(project.stars)} | ${effect.sources.length} | ${status} | [${isZh ? '打开' : 'Open'}](${liveDemo}#${effect.id}) |`;
+      return `| [${name}](${liveDemo}#${effect.id}) | [${project.name}](${project.url}) | ${formatStars(project.stars)} | ${effect.sources.length} | ${status} | [${isZh ? '代码 + 提示词' : 'Code + prompt'}](${liveDemo}#${effect.id}) |`;
     });
     const heading = isZh ? category.labelZh : category.label;
     const description = isZh ? category.descriptionZh : category.description;
     const headers = isZh
-      ? '| 效果 | 推荐来源 | Stars | 实现数 | 状态 | 最小代码 |\n| --- | --- | ---: | ---: | --- | --- |'
-      : '| Effect | Recommended source | Stars | Implementations | Status | Minimal code |\n| --- | --- | ---: | ---: | --- | --- |';
+      ? '| 效果 | 推荐来源 | Stars | 实现数 | 状态 | 实现 |\n| --- | --- | ---: | ---: | --- | --- |'
+      : '| Effect | Recommended source | Stars | Implementations | Status | Implementation |\n| --- | --- | ---: | ---: | --- | --- |';
     return `<a id="${category.id}"></a>\n\n### ${heading}\n\n${description}\n\n${headers}\n${rows.join('\n')}`;
   }).join('\n\n');
 }
@@ -52,23 +60,25 @@ const english = `# Awesome Web Effects
 
 [中文文档](README.zh-CN.md) · [Live demo](${liveDemo})
 
-An **effect-first**, code-first atlas of open-source interactions for the web. It catalogs **${effects.length} distinct effects across ${categories.length} categories**, backed by **${projects.length} source projects**. Each effect is one row with a stable semantic key, a recommended implementation, and copyable minimal code. English is the default interface and documentation language.
+An **effect-first** atlas of open-source interactions for the web. It catalogs **${effects.length} distinct effects across ${categories.length} categories**, backed by **${projects.length} source projects**. Each effect is one row with a stable semantic key, a GIF preview, copyable minimal code, and a one-click implementation prompt for Codex or Claude Code. English is the default interface and documentation language.
 
 ## Effect-first model
 
 - **Effect is the catalog key.** Anchors, search results, rows, categories, and code examples begin with the visible interaction—not the repository.
-- **Projects are implementation sources.** One project may power several distinct effects; ${multiEffectProjectCount} source project currently demonstrates this relation in the seed catalog.
+- **Projects are implementation sources.** One project may power several distinct effects; ${multiEffectProjectCount} source projects currently demonstrate this relation in the catalog.
 - **An effect may have multiple implementations.** Each source relation owns its own minimal snippet and GIF preview, so alternatives can be compared without duplicating the effect row.
 - **Deduplication happens at the visible-effect level.** Candidates are compared by trigger, visual change, time relationship, and page layer; the newer, maintained, better-documented implementation becomes the recommended source.
 
 ## Catalog snapshot
 
 - ${effects.length} effect rows, including ${baselineEffectCount} baseline effects.
+- ${researchEffectCount} independently researched effects were added in the latest effect-level expansion.
 - ${projects.length} unique GitHub source projects; ${newProjectCount} were added during the 2026 expansion.
-- ${previewCount} source-specific GIF previews; all other rows are explicitly code-first.
+- ${previewCount} source-specific GIF previews: ${officialPreviewCount} official captures and ${conceptPreviewCount} labeled editorial recreations.
+- ${promptCount} one-click implementation prompts, one for every effect.
 - ${legacyProjectCount} useful older sources are marked **Legacy**; no archived repository is included.
 - Stars are a snapshot from **${snapshotDate}**, not a live counter.
-- The optimized GIF set remains **15.81 MiB**, down from 27.28 MiB (42.03% smaller).
+- The referenced, optimized GIF set is **${previewMiB} MiB**; each preview is 320×180, at most three seconds, and below 1 MiB.
 
 ## Selection rules
 
@@ -88,7 +98,7 @@ ${effectTables('en')}
 
 ## Demo
 
-The demo is dependency-free static HTML, CSS, JavaScript modules, and GIF assets. It supports effect search, category filtering, effect-first sorting, English/Chinese UI, stable effect anchors, expandable source details, and copyable minimal code.
+The demo is dependency-free static HTML, CSS, JavaScript modules, and GIF assets. It supports effect search, category filtering, effect-first sorting, English/Chinese UI, stable effect anchors, visible mobile previews, expandable source details, copyable minimal code, and one-click prompts for coding agents.
 
 \`\`\`bash
 python3 -m http.server 4173 --directory demo
@@ -98,13 +108,14 @@ Open [http://localhost:4173](http://localhost:4173). A local HTTP server is requ
 
 ## GIF optimization
 
-Run the reproducible optimizer from original source GIFs:
+Generate missing editorial preview concepts, then normalize imported source GIFs:
 
 \`\`\`bash
-./scripts/optimize-gifs.sh
+node scripts/generate-gif-previews.mjs
+node scripts/normalize-gif-previews.mjs
 \`\`\`
 
-It uses an adaptive 128-color palette, Bayer dithering, and difference-rectangle encoding. A candidate only replaces the source when it is smaller, and dimensions, duration, frame rate, and frame count are validated.
+Both scripts use deterministic rendering or bounded FFmpeg compression. The validator checks unique content hashes, dimensions, duration, frame count, decodability, and the per-file size budget.
 
 ## GitHub Pages
 
@@ -114,7 +125,7 @@ Expected project URL: [${liveDemo}](${liveDemo})
 
 ## Maintaining the catalog
 
-- Edit \`demo/data/effects.js\`, the single source of truth.
+- Edit \`demo/data/effects.js\` for the core catalog and \`demo/data/additional-effects.js\` for researched expansion records.
 - Keep \`effect.id\` semantic and stable; never derive it from a repository name.
 - Reusing a project across effects is valid. Add alternative implementations to an effect's \`sources\` array.
 - Keep snippets and previews on the source relation, not on the project or effect root.
@@ -128,7 +139,7 @@ const chinese = `# Awesome Web Effects
 
 [English (default)](README.md) · [在线 Demo](${liveDemo})
 
-一个**以效果为先**、代码优先的开源 Web 交互图鉴。当前收录 **${categories.length} 类 ${effects.length} 种不同效果**，背后有 **${projects.length} 个来源项目**。每种效果独占一行，拥有稳定语义 Key、推荐实现和可复制的最小代码。英文是默认界面与默认文档语言，同时提供完整中文文档与中文界面。
+一个**以效果为先**的开源 Web 交互图鉴。当前收录 **${categories.length} 类 ${effects.length} 种不同效果**，背后有 **${projects.length} 个来源项目**。每种效果独占一行，拥有稳定语义 Key、GIF 预览、可复制的最小代码，以及可一键交给 Codex 或 Claude Code 的实现提示词。英文是默认界面与默认文档语言，同时提供完整中文文档与中文界面。
 
 ## 效果优先模型
 
@@ -140,11 +151,13 @@ const chinese = `# Awesome Web Effects
 ## 目录快照
 
 - ${effects.length} 行效果，其中 ${baselineEffectCount} 种为基线效果。
+- 最近一次效果级扩展独立调研并新增 ${researchEffectCount} 种效果。
 - ${projects.length} 个唯一 GitHub 来源项目；2026 扩展阶段新增 ${newProjectCount} 个。
-- ${previewCount} 个与具体来源对应的 GIF；其余行明确标记为代码优先。
+- ${previewCount} 个与具体来源对应的 GIF：${officialPreviewCount} 个官方捕获，${conceptPreviewCount} 个明确标注的编辑重现。
+- ${promptCount} 份一键实现提示词，每种效果都有一份。
 - ${legacyProjectCount} 个较旧但仍有参考价值的来源标记为“经典旧版”；不包含已归档仓库。
 - Stars 是 **${snapshotDate}** 的快照，不是实时计数器。
-- GIF 优化后总计仍为 **15.81 MiB**，相较 27.28 MiB 减少 42.03%。
+- 被目录引用的 GIF 优化后总计 **${previewMiB} MiB**；每个预览均为 320×180、最长三秒且小于 1 MiB。
 
 ## 收录与去重规则
 
@@ -164,7 +177,7 @@ ${effectTables('zh')}
 
 ## Demo
 
-Demo 只使用静态 HTML、CSS、JavaScript 模块和 GIF，无第三方运行依赖。它支持效果搜索、分类筛选、效果优先排序、中英文切换、稳定效果锚点、展开来源详情和代码复制。
+Demo 只使用静态 HTML、CSS、JavaScript 模块和 GIF，无第三方运行依赖。它支持效果搜索、分类筛选、效果优先排序、中英文切换、稳定效果锚点、移动端可见预览、展开来源详情、代码复制和 Agent 提示词一键复制。
 
 \`\`\`bash
 python3 -m http.server 4173 --directory demo
@@ -174,13 +187,14 @@ python3 -m http.server 4173 --directory demo
 
 ## GIF 压缩
 
-从原始 GIF 运行可复现的压缩脚本：
+生成缺失的编辑预览，再规范化导入的来源 GIF：
 
 \`\`\`bash
-./scripts/optimize-gifs.sh
+node scripts/generate-gif-previews.mjs
+node scripts/normalize-gif-previews.mjs
 \`\`\`
 
-脚本使用自适应 128 色调色板、Bayer 抖动与差异矩形编码。只有候选文件更小时才替换源文件，并强制核验尺寸、时长、帧率与帧数。
+两个脚本使用确定性渲染或有边界的 FFmpeg 压缩；验证器会检查内容哈希唯一性、尺寸、时长、帧数、可解码性和单文件大小预算。
 
 ## GitHub Pages
 
@@ -190,7 +204,7 @@ Demo 完全静态且只使用相对路径。仓库内工作流会在推送到 \`
 
 ## 维护目录
 
-- 修改唯一数据源 \`demo/data/effects.js\`。
+- 核心目录修改 \`demo/data/effects.js\`，独立调研的扩展记录修改 \`demo/data/additional-effects.js\`。
 - \`effect.id\` 必须语义化且保持稳定，禁止从仓库名派生。
 - 同一项目可被多个效果复用；替代实现加入效果的 \`sources\` 数组。
 - 代码与预览必须放在来源关系上，不能放到项目或效果根节点。

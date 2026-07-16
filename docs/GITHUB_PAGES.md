@@ -25,7 +25,7 @@ Before pushing, serve the same directory locally instead of opening the HTML thr
 python3 -m http.server 8000 --directory demo
 ```
 
-Then open <http://localhost:8000/> and check that the project cards, filters, scripts, and GIF previews load. After deployment, confirm the same behavior at the production URL and check the browser console and network panel for missing files.
+Then open <http://localhost:8000/> and check that the effect rows, source details, filters, scripts, and GIF previews load. After deployment, confirm the same behavior at the production URL and check the browser console and network panel for missing files.
 
 ## Operational limits
 

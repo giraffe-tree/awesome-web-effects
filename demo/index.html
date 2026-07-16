@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="A bilingual, code-first atlas of open-source visual effects for the web." />
+    <meta name="description" content="An effect-first, bilingual atlas of open-source web interactions." />
     <meta name="theme-color" content="#0c0d0b" />
     <link rel="icon" href="data:," />
     <title>Awesome Web Effects</title>
@@ -36,7 +36,9 @@
       button, summary { -webkit-tap-highlight-color: transparent; }
       a { color: inherit; }
       ::selection { color: var(--ink); background: var(--acid); }
+      :focus-visible { outline: 2px solid var(--acid); outline-offset: 3px; }
       .shell { width: min(1460px, calc(100% - 48px)); margin-inline: auto; }
+      .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 
       .site-nav {
         position: relative;
@@ -51,8 +53,8 @@
       .brand-mark { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; color: var(--ink); background: var(--acid); letter-spacing: -.08em; }
       .nav-actions { display: flex; align-items: center; gap: 8px; }
       .pill {
-        min-height: 40px;
-        padding: 0 14px;
+        min-height: 44px;
+        padding: 0 15px;
         border: 1px solid var(--line);
         border-radius: 99px;
         color: var(--paper);
@@ -61,12 +63,12 @@
         cursor: pointer;
         font: 800 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
       }
-      .pill:hover, .pill:focus-visible { color: var(--ink); background: var(--acid); border-color: var(--acid); outline: none; }
+      .pill:hover { color: var(--ink); background: var(--acid); border-color: var(--acid); }
 
       .hero {
         position: relative;
         isolation: isolate;
-        min-height: 650px;
+        min-height: 590px;
         overflow: hidden;
         border-bottom: 1px solid var(--line);
         background:
@@ -76,20 +78,20 @@
         background-size: auto, 72px 72px, 72px 72px;
       }
       .hero::before { content: ""; position: absolute; z-index: -1; top: 110px; right: clamp(-160px, -8vw, -40px); width: clamp(330px, 42vw, 660px); aspect-ratio: 1; border: 1px solid rgba(183,255,86,.65); border-radius: 50%; box-shadow: inset 0 0 0 46px rgba(183,255,86,.03), inset 0 0 0 47px rgba(183,255,86,.2); }
-      .hero-copy { position: relative; z-index: 1; padding: clamp(82px, 10vw, 138px) 0 72px; }
+      .hero-copy { position: relative; z-index: 1; padding: clamp(76px, 9vw, 124px) 0 68px; }
       .eyebrow { display: flex; align-items: center; gap: 12px; margin: 0 0 24px; color: var(--acid); font: 800 12px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .16em; text-transform: uppercase; }
       .eyebrow::before { content: ""; width: 42px; height: 2px; background: currentColor; }
-      h1 { max-width: 1100px; margin: 0; font-size: clamp(68px, 12vw, 178px); line-height: .8; letter-spacing: -.085em; text-transform: uppercase; }
-      h1 span { display: block; margin-left: clamp(36px, 9vw, 150px); color: transparent; -webkit-text-stroke: 1.5px var(--paper); }
-      .lede { max-width: 700px; margin: 50px 0 0; color: #c3c5bc; font-size: clamp(18px, 2vw, 24px); line-height: 1.5; letter-spacing: -.02em; }
-      .hero-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
+      h1 { max-width: 1180px; margin: 0; font-size: clamp(62px, 10.5vw, 154px); line-height: .82; letter-spacing: -.085em; text-transform: uppercase; }
+      h1 span { display: block; margin-left: clamp(28px, 8vw, 130px); color: transparent; -webkit-text-stroke: 1.5px var(--paper); }
+      .lede { max-width: 760px; margin: 42px 0 0; color: #c3c5bc; font-size: clamp(18px, 2vw, 24px); line-height: 1.5; letter-spacing: -.02em; }
+      .hero-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
       .hero-meta span { padding: 9px 12px; border: 1px solid var(--line); border-radius: 99px; font: 700 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace; text-transform: uppercase; }
       .hero-meta span:first-child { color: var(--ink); background: var(--acid); border-color: var(--acid); }
 
       main { padding: 64px 0 120px; }
-      .intro-grid { display: grid; grid-template-columns: .65fr 1.35fr; gap: 64px; align-items: end; padding-bottom: 44px; }
+      .intro-grid { display: grid; grid-template-columns: .6fr 1.4fr; gap: 64px; align-items: end; padding-bottom: 44px; }
       .section-index { color: var(--acid); font: 800 12px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .12em; text-transform: uppercase; }
-      .intro-grid h2 { max-width: 920px; margin: 0; font-size: clamp(38px, 5vw, 72px); line-height: .98; letter-spacing: -.055em; }
+      .intro-grid h2 { max-width: 980px; margin: 0; font-size: clamp(38px, 5vw, 72px); line-height: .98; letter-spacing: -.055em; }
 
       .controls {
         position: sticky;
@@ -99,7 +101,7 @@
         grid-template-columns: minmax(220px, 1fr) auto;
         gap: 12px;
         padding: 16px 0;
-        background: rgba(12,13,11,.94);
+        background: rgba(12,13,11,.95);
         border-top: 1px solid var(--line);
         border-bottom: 1px solid var(--line);
         backdrop-filter: blur(16px);
@@ -108,54 +110,66 @@
       .search-wrap::before { content: "⌕"; position: absolute; left: 16px; top: 50%; color: var(--muted); font-size: 22px; transform: translateY(-55%); }
       .search, .sort { width: 100%; height: 44px; border: 1px solid var(--line); border-radius: 99px; color: var(--paper); background: var(--panel); outline: none; }
       .search { padding: 0 18px 0 44px; }
-      .sort { min-width: 188px; padding: 0 38px 0 16px; }
-      .search:focus, .sort:focus { border-color: var(--acid); }
+      .sort { min-width: 210px; padding: 0 38px 0 16px; }
+      .search:focus, .sort:focus { border-color: var(--acid); box-shadow: 0 0 0 1px var(--acid); }
       .filters { grid-column: 1 / -1; display: flex; gap: 8px; overflow-x: auto; scrollbar-width: thin; padding-bottom: 2px; }
-      .filter { flex: 0 0 auto; height: 40px; padding: 0 14px; border: 1px solid var(--line); border-radius: 99px; color: var(--muted); background: transparent; cursor: pointer; font: 800 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace; text-transform: uppercase; }
-      .filter:hover, .filter:focus-visible { color: var(--paper); border-color: rgba(239,237,228,.5); outline: none; }
+      .filter { flex: 0 0 auto; min-height: 44px; padding: 0 14px; border: 1px solid var(--line); border-radius: 99px; color: var(--muted); background: transparent; cursor: pointer; font: 800 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace; text-transform: uppercase; }
+      .filter:hover { color: var(--paper); border-color: rgba(239,237,228,.5); }
       .filter[aria-pressed="true"] { color: var(--ink); background: var(--acid); border-color: var(--acid); }
-      .result-meta { display: flex; justify-content: space-between; gap: 20px; padding: 24px 0; color: var(--muted); font: 700 11px/1.3 ui-monospace, SFMono-Regular, Menlo, monospace; text-transform: uppercase; }
+      .result-meta { display: flex; justify-content: space-between; gap: 20px; padding: 24px 0; color: var(--muted); font: 700 11px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; text-transform: uppercase; }
 
-      .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 42px 20px; }
-      .card { min-width: 0; scroll-margin-top: 150px; }
-      .card:target { outline: 2px solid var(--acid); outline-offset: 10px; }
-      .media-link { display: block; text-decoration: none; }
-      .media { position: relative; overflow: hidden; aspect-ratio: 16 / 10; border-radius: 4px; background: #181916; }
-      .media::after { content: ""; position: absolute; inset: 0; border: 1px solid rgba(255,255,255,.16); pointer-events: none; }
-      .media img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .65s cubic-bezier(.2,.75,.2,1); }
-      .card:hover .media img { transform: scale(1.025); }
-      .poster { position: absolute; inset: 0; display: grid; place-items: center; overflow: hidden; background: radial-gradient(circle at 25% 20%, color-mix(in srgb, var(--accent) 42%, transparent), transparent 32%), linear-gradient(135deg, #1b1c18, #0d0e0c); }
-      .poster::before, .poster::after { content: ""; position: absolute; width: 54%; aspect-ratio: 1; border: 1px solid color-mix(in srgb, var(--accent) 75%, white); transform: rotate(18deg); animation: drift 7s ease-in-out infinite alternate; }
-      .poster::after { width: 28%; border-radius: 50%; transform: translate(68%, -48%); animation-direction: alternate-reverse; }
-      .poster-code { position: relative; z-index: 1; max-width: 78%; color: var(--paper); font: 900 clamp(20px, 2.4vw, 34px)/.95 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: -.06em; text-align: center; text-transform: uppercase; text-wrap: balance; }
-      @keyframes drift { to { transform: translate(18%, 10%) rotate(48deg) scale(.82); } }
-      .badge { position: absolute; top: 12px; left: 12px; z-index: 2; padding: 7px 9px; color: var(--ink); background: var(--paper); border-radius: 99px; font: 900 9px/1 ui-monospace, SFMono-Regular, Menlo, monospace; text-transform: uppercase; }
-      .badge.new { left: auto; right: 12px; color: white; background: var(--violet); }
-      .badge.legacy { left: auto; right: 12px; color: white; background: var(--coral); }
-      .visit { position: absolute; right: 12px; bottom: 12px; z-index: 2; display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; color: var(--ink); background: var(--acid); font-size: 18px; }
-      .card-head { display: grid; grid-template-columns: 1fr auto; gap: 16px; padding: 17px 0 11px; border-bottom: 1px solid var(--line); }
-      .kind { margin: 0 0 7px; color: var(--accent); font: 800 9px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .1em; text-transform: uppercase; }
-      .card h3 { margin: 0; font-size: clamp(24px, 2.2vw, 34px); line-height: 1; letter-spacing: -.045em; overflow-wrap: anywhere; }
-      .card h3 a { text-decoration: none; }
-      .card h3 a:hover, .card h3 a:focus-visible { color: var(--accent); outline: none; }
-      .number { color: #5d5f56; font: 800 18px/1 ui-monospace, SFMono-Regular, Menlo, monospace; }
-      .description { min-height: 2.9em; margin: 13px 0 0; color: #b8bab1; line-height: 1.48; }
-      .stats { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 13px; color: #dadbd4; font: 700 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace; text-transform: uppercase; }
-      .stats span + span::before { content: "/"; margin-right: 12px; color: #55574f; }
-      .code-example { margin-top: 14px; border: 1px solid var(--line); border-radius: 4px; background: #11120f; }
-      .code-example summary { display: flex; align-items: center; justify-content: space-between; min-height: 42px; padding: 0 12px; cursor: pointer; color: var(--paper); font: 800 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace; text-transform: uppercase; list-style: none; }
-      .code-example summary::-webkit-details-marker { display: none; }
-      .code-example summary::after { content: "+"; color: var(--acid); font-size: 18px; }
-      .code-example[open] summary::after { content: "−"; }
-      .code-wrap { position: relative; border-top: 1px solid var(--line); }
-      pre { min-height: 132px; margin: 0; padding: 16px 58px 16px 14px; overflow: auto; color: #d7ffc0; font: 12px/1.55 ui-monospace, SFMono-Regular, Menlo, monospace; tab-size: 2; }
-      .copy { position: absolute; top: 10px; right: 10px; padding: 7px 9px; border: 1px solid var(--line); border-radius: 99px; color: var(--muted); background: #1b1c18; cursor: pointer; font: 800 9px/1 ui-monospace, SFMono-Regular, Menlo, monospace; text-transform: uppercase; }
-      .copy:hover, .copy:focus-visible { color: var(--ink); background: var(--acid); border-color: var(--acid); outline: none; }
-      .empty { grid-column: 1 / -1; padding: 90px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 22px; }
+      .catalog { border-bottom: 1px solid var(--line); }
+      .catalog-head, .effect-summary {
+        display: grid;
+        grid-template-columns: 56px minmax(260px, 1.45fr) 164px minmax(210px, .9fr) 128px;
+        gap: 18px;
+        align-items: center;
+      }
+      .catalog-head { min-height: 46px; padding: 0 16px; border-top: 1px solid var(--line); color: #73766c; font: 800 9px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .1em; text-transform: uppercase; }
+      .effect-row { scroll-margin-top: 148px; border-top: 1px solid var(--line); }
+      .effect-row:target { box-shadow: inset 3px 0 0 var(--acid); }
+      .effect-summary { min-height: 126px; padding: 16px; cursor: pointer; list-style: none; transition: background .2s ease; }
+      .effect-summary::-webkit-details-marker { display: none; }
+      .effect-summary:hover { background: rgba(255,255,255,.025); }
+      .effect-row[open] > .effect-summary { background: rgba(183,255,86,.045); }
+      .row-number { align-self: start; padding-top: 5px; color: #5d5f56; font: 800 16px/1 ui-monospace, SFMono-Regular, Menlo, monospace; }
+      .effect-cell { min-width: 0; }
+      .category-label { margin: 0 0 10px; color: var(--accent); font: 800 9px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .1em; text-transform: uppercase; }
+      .effect-cell h3 { margin: 0; font-size: clamp(23px, 2vw, 32px); line-height: 1.02; letter-spacing: -.045em; text-wrap: balance; }
+      .effect-key { display: block; margin-top: 10px; color: #7f8179; font: 700 9px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; overflow-wrap: anywhere; }
+      .row-preview { position: relative; width: 144px; aspect-ratio: 16 / 9; overflow: hidden; border: 1px solid var(--line); border-radius: 3px; background: #171814; }
+      .row-preview img { display: block; width: 100%; height: 100%; object-fit: cover; }
+      .preview-fallback { position: absolute; inset: 0; display: grid; place-items: center; color: #8d9086; background: radial-gradient(circle at 22% 20%, color-mix(in srgb, var(--accent) 28%, transparent), transparent 44%); font: 800 9px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .08em; text-transform: uppercase; }
+      .source-cell { min-width: 0; }
+      .source-label { display: block; margin-bottom: 7px; color: #73766c; font: 800 9px/1 ui-monospace, SFMono-Regular, Menlo, monospace; text-transform: uppercase; }
+      .source-name { display: block; font-size: 18px; font-weight: 800; line-height: 1.1; letter-spacing: -.025em; overflow-wrap: anywhere; }
+      .source-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 9px; color: #b9bbb3; font: 700 9px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; text-transform: uppercase; }
+      .legacy-tag { color: var(--coral); }
+      .inspect { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 44px; padding: 0 13px; border: 1px solid var(--line); border-radius: 99px; color: var(--paper); font: 800 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace; text-transform: uppercase; }
+      .inspect::after { content: "+"; color: var(--acid); font-size: 18px; }
+      .effect-row[open] .inspect::after { content: "−"; }
+
+      .detail-panel { padding: 0 16px 22px 90px; }
+      .detail-intro { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; padding: 18px 0; border-top: 1px solid var(--line); }
+      .detail-intro p { max-width: 700px; margin: 0; color: #b8bab1; line-height: 1.55; }
+      .permalink { flex: 0 0 auto; color: var(--acid); font: 800 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace; text-decoration: none; text-transform: uppercase; }
+      .implementations { display: grid; gap: 12px; }
+      .implementation { display: grid; grid-template-columns: minmax(190px, .55fr) minmax(0, 1.45fr); border: 1px solid var(--line); background: #11120f; }
+      .implementation-meta { padding: 18px; border-right: 1px solid var(--line); }
+      .recommendation { display: inline-flex; padding: 6px 8px; border-radius: 99px; color: var(--ink); background: var(--acid); font: 900 8px/1 ui-monospace, SFMono-Regular, Menlo, monospace; text-transform: uppercase; }
+      .implementation h4 { margin: 16px 0 6px; font-size: 22px; letter-spacing: -.035em; }
+      .repo-link { color: #b8bab1; font: 700 10px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; overflow-wrap: anywhere; }
+      .repo-link:hover { color: var(--acid); }
+      .code-wrap { position: relative; min-width: 0; }
+      pre { min-height: 126px; margin: 0; padding: 20px 72px 20px 18px; overflow: auto; color: #d7ffc0; font: 12px/1.58 ui-monospace, SFMono-Regular, Menlo, monospace; tab-size: 2; }
+      .copy { position: absolute; top: 12px; right: 12px; min-height: 36px; padding: 0 11px; border: 1px solid var(--line); border-radius: 99px; color: var(--muted); background: #1b1c18; cursor: pointer; font: 800 9px/1 ui-monospace, SFMono-Regular, Menlo, monospace; text-transform: uppercase; }
+      .copy:hover { color: var(--ink); background: var(--acid); border-color: var(--acid); }
+      .empty { padding: 90px 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 22px; }
+
       footer { border-top: 1px solid var(--line); }
       .footer-inner { display: flex; justify-content: space-between; gap: 28px; align-items: end; padding: 46px 0 60px; }
       .footer-title { margin: 0; font-size: clamp(34px, 5vw, 68px); line-height: .95; letter-spacing: -.055em; }
-      .footer-note { max-width: 560px; margin: 16px 0 0; color: var(--muted); line-height: 1.55; }
+      .footer-note { max-width: 600px; margin: 16px 0 0; color: var(--muted); line-height: 1.55; }
 
       [data-category="animation"] { --accent: #b7ff56; }
       [data-category="scroll"] { --accent: #5de2ff; }
@@ -168,28 +182,46 @@
       [data-category="background"] { --accent: #d67bff; }
       [data-category="media"] { --accent: #ff946b; }
 
-      @media (max-width: 1120px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+      @media (max-width: 1060px) {
+        .catalog-head, .effect-summary { grid-template-columns: 52px minmax(240px, 1.35fr) minmax(190px, .8fr) 118px; }
+        .catalog-head span:nth-child(3), .row-preview { display: none; }
+      }
       @media (max-width: 720px) {
         .shell { width: min(calc(100% - 28px), 620px); }
         .site-nav { height: 62px; }
         .brand-text { display: none; }
-        .hero { min-height: 600px; background-size: auto, 52px 52px, 52px 52px; }
-        .hero-copy { padding-top: 82px; }
-        h1 { font-size: clamp(62px, 21vw, 106px); }
+        .hero { min-height: 570px; background-size: auto, 52px 52px, 52px 52px; }
+        .hero-copy { padding-top: 76px; }
+        h1 { font-size: clamp(58px, 20vw, 98px); }
         h1 span { margin-left: 0; }
-        .lede { margin-top: 36px; font-size: 18px; }
+        .lede { margin-top: 34px; font-size: 18px; }
+        main { padding-top: 50px; }
         .intro-grid { grid-template-columns: 1fr; gap: 18px; padding-bottom: 34px; }
         .controls { grid-template-columns: 1fr; }
         .sort { min-width: 0; }
         .filters { grid-column: auto; }
-        .grid { grid-template-columns: minmax(0, 1fr); }
-        .description { min-height: 0; }
+        .result-meta { display: block; }
+        .result-meta span + span { display: block; margin-top: 8px; }
+        .catalog-head { display: none; }
+        .effect-summary { grid-template-columns: 38px minmax(0, 1fr); gap: 10px 12px; min-height: 0; padding: 18px 10px; }
+        .row-number { grid-row: 1 / span 3; }
+        .effect-cell { grid-column: 2; }
+        .source-cell { grid-column: 2; padding-top: 4px; }
+        .inspect { grid-column: 2; width: min(170px, 100%); margin-top: 4px; }
+        .effect-key { display: none; }
+        .detail-panel { padding: 0 10px 18px 48px; }
+        .detail-intro { display: block; }
+        .permalink { display: inline-block; margin-top: 14px; }
+        .implementation { grid-template-columns: 1fr; }
+        .implementation-meta { border-right: 0; border-bottom: 1px solid var(--line); }
+        pre { padding-right: 18px; padding-top: 58px; }
         .footer-inner { display: block; }
       }
       @media (prefers-reduced-motion: reduce) {
         html { scroll-behavior: auto; }
-        .poster::before, .poster::after { animation: none; }
-        .media img { transition-duration: .01ms !important; }
+        .effect-summary { transition: none; }
+        .row-preview img { visibility: hidden; }
+        .row-preview::after { content: "Preview paused"; position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); font: 800 9px/1 ui-monospace, SFMono-Regular, Menlo, monospace; text-transform: uppercase; }
       }
     </style>
   </head>
@@ -198,73 +230,87 @@
       <a class="brand" href="#top"><span class="brand-mark">AW</span><span class="brand-text">Awesome Web Effects</span></a>
       <div class="nav-actions">
         <button class="pill" id="language" type="button" aria-label="Switch language">中文</button>
-        <a class="pill" href="https://github.com/giraffe-tree/awesome-interaction" target="_blank" rel="noreferrer">GitHub ↗</a>
+        <a class="pill" id="github-link" href="https://github.com/giraffe-tree/awesome-interaction" target="_blank" rel="noreferrer">GitHub ↗</a>
       </div>
     </nav>
 
     <header class="hero" id="hero">
       <div class="hero-copy shell">
-        <p class="eyebrow" id="eyebrow">Open-source visual effect atlas</p>
-        <h1>Web <span>Effects</span></h1>
-        <p class="lede" id="lede">A deduplicated catalog of modern web motion, with a copyable minimal example for every project.</p>
-        <div class="hero-meta"><span id="hero-count">0 projects</span><span id="new-count">0 new</span><span id="category-count">0 categories</span><span>Snapshot 2026.07.16</span></div>
+        <p class="eyebrow" id="eyebrow">Effect-first interaction atlas</p>
+        <h1>Find the <span>Effect</span></h1>
+        <p class="lede" id="lede">Start with the interaction you want. Then compare the recommended open-source implementation and copy its smallest useful example.</p>
+        <div class="hero-meta"><span id="effect-count">0 effects</span><span id="source-count">0 source projects</span><span id="category-count">0 categories</span><span>Snapshot 2026.07.16</span></div>
       </div>
     </header>
 
     <main class="shell">
       <section class="intro-grid" aria-labelledby="atlas-title">
-        <p class="section-index" id="section-index">01 / Code-first atlas</p>
-        <h2 id="atlas-title">Compare the visible result. Open the smallest useful example.</h2>
+        <p class="section-index" id="section-index">01 / Effect catalog</p>
+        <h2 id="atlas-title">One interaction effect per row. Projects are implementation sources, not the index.</h2>
       </section>
 
-      <section class="controls" aria-label="Filter projects">
-        <label class="search-wrap"><span hidden>Search projects</span><input class="search" id="search" type="search" placeholder="Search effect, project, or keyword…" autocomplete="off" /></label>
-        <select class="sort" id="sort" aria-label="Sort projects">
-          <option value="curated">Curated order</option>
-          <option value="stars">Stars: high to low</option>
-          <option value="name">Name: A–Z</option>
+      <section class="controls" id="catalog-controls" aria-label="Filter effects">
+        <label class="search-wrap"><span class="sr-only" id="search-label">Search effects</span><input class="search" id="search" type="search" placeholder="Search effect, source project, or keyword…" autocomplete="off" /></label>
+        <select class="sort" id="sort" aria-label="Sort effects">
+          <option value="curated">Curated effect order</option>
+          <option value="name">Effect: A–Z</option>
+          <option value="stars">Recommended source stars</option>
+          <option value="sources">Most implementations</option>
         </select>
-        <div class="filters" id="filters" aria-label="Project categories"></div>
+        <div class="filters" id="filters" aria-label="Effect categories"></div>
       </section>
 
-      <div class="result-meta"><span id="result-count">0 results</span><span id="result-note">Repository ↗ · Minimal code inside each card</span></div>
-      <section class="grid" id="grid" aria-live="polite"></section>
+      <div class="result-meta"><span id="result-count" role="status" aria-live="polite">0 effects</span><span id="result-note">Effect key · Preview · Recommended source · Minimal code</span></div>
+      <section class="catalog" id="catalog" aria-labelledby="atlas-title">
+        <div class="catalog-head" aria-hidden="true"><span>#</span><span id="head-effect">Effect</span><span id="head-preview">Preview</span><span id="head-source">Recommended source</span><span id="head-action">Inspect</span></div>
+        <div id="effect-list"></div>
+      </section>
     </main>
 
     <footer>
       <div class="footer-inner shell">
-        <div><p class="footer-title">Study the motion.<br />Build the feeling.</p><p class="footer-note" id="footer-note">GIFs are used only where a project-specific preview exists. Code-first placeholders are intentionally not presented as real project output.</p></div>
+        <div><p class="footer-title">Choose the feeling.<br />Then choose the tool.</p><p class="footer-note" id="footer-note">A project may power many distinct effects, and an effect may have multiple implementations. The catalog keeps those relationships explicit.</p></div>
         <a class="pill" href="#top" id="back-top">Back to top ↑</a>
       </div>
     </footer>
 
     <script type="module">
-      import { categories, projects } from './data/projects.js';
+      import { categories, effects, projects } from './data/effects.js';
 
       const copy = {
         en: {
-          language: '中文', eyebrow: 'Open-source visual effect atlas',
-          lede: 'A deduplicated catalog of modern web motion, with a copyable minimal example for every project.',
-          section: '01 / Code-first atlas', title: 'Compare the visible result. Open the smallest useful example.',
-          search: 'Search effect, project, or keyword…', curated: 'Curated order', stars: 'Stars: high to low', name: 'Name: A–Z',
-          all: 'All', results: 'results', project: 'projects', new: 'new', categories: 'categories', minimal: 'Minimal code',
-          copy: 'Copy', copied: 'Copied', empty: 'No matching projects. Try a shorter keyword.', note: 'Repository ↗ · Minimal code inside each card',
-          preview: 'GIF preview', codeFirst: 'Code-first', legacy: 'Legacy', newBadge: 'New',
-          footer: 'GIFs are used only where a project-specific preview exists. Code-first placeholders are intentionally not presented as real project output.', back: 'Back to top ↑'
+          language: '中文', languageLabel: 'Switch to Chinese',
+          eyebrow: 'Effect-first interaction atlas',
+          lede: 'Start with the interaction you want. Then compare the recommended open-source implementation and copy its smallest useful example.',
+          section: '01 / Effect catalog', title: 'One interaction effect per row. Projects are implementation sources, not the index.',
+          search: 'Search effect, source project, or keyword…', searchLabel: 'Search effects', filterLabel: 'Effect categories', sortLabel: 'Sort effects',
+          curated: 'Curated effect order', stars: 'Recommended source stars', name: 'Effect: A–Z', sourcesSort: 'Most implementations',
+          all: 'All', effects: 'effects', sources: 'source projects', categories: 'categories', inspect: 'Inspect',
+          copy: 'Copy', copied: 'Copied', copyFailed: 'Select code', empty: 'No matching effects. Try a shorter keyword.',
+          note: 'Effect key · Preview · Recommended source · Minimal code', preview: 'Preview', codeFirst: 'Code-first', legacy: 'Legacy', recommended: 'Recommended',
+          headEffect: 'Effect', headPreview: 'Preview', headSource: 'Recommended source', headAction: 'Inspect',
+          definition: 'Effect definition', implementation: 'implementation', implementations: 'implementations', permalink: 'Effect link', repositoryLabel: 'on GitHub (opens in a new tab)',
+          footer: 'A project may power many distinct effects, and an effect may have multiple implementations. The catalog keeps those relationships explicit.', back: 'Back to top ↑'
         },
         zh: {
-          language: 'EN', eyebrow: '开源网页视觉效果图鉴',
-          lede: '经过仓库与视觉结果双重去重的现代 Web 动效目录，每个项目都提供可复制的最小代码示例。',
-          section: '01 / 代码优先图鉴', title: '比较看得见的效果，打开最小而有用的示例。',
-          search: '搜索效果、项目或关键词…', curated: '策展顺序', stars: 'Stars 从高到低', name: '名称 A–Z',
-          all: '全部', results: '个结果', project: '个项目', new: '个新增', categories: '个分类', minimal: '最小代码',
-          copy: '复制', copied: '已复制', empty: '没有匹配的项目，请尝试更短的关键词。', note: '仓库 ↗ · 每张卡片内含最小代码',
-          preview: 'GIF 预览', codeFirst: '代码优先', legacy: '经典旧版', newBadge: '新增',
-          footer: '仅在存在项目专属预览时展示 GIF；代码占位图不会冒充项目的真实效果。', back: '回到顶部 ↑'
+          language: 'EN', languageLabel: 'Switch to English',
+          eyebrow: '以效果为先的交互图鉴',
+          lede: '先找到想要的交互效果，再比较推荐的开源实现，并复制最小而有用的代码示例。',
+          section: '01 / 效果目录', title: '每种交互效果一行；项目只是实现来源，不再是目录索引。',
+          search: '搜索效果、来源项目或关键词…', searchLabel: '搜索交互效果', filterLabel: '效果分类', sortLabel: '效果排序',
+          curated: '效果策展顺序', stars: '推荐来源 Stars', name: '效果名称 A–Z', sourcesSort: '实现来源最多',
+          all: '全部', effects: '种效果', sources: '个来源项目', categories: '个分类', inspect: '查看详情',
+          copy: '复制', copied: '已复制', copyFailed: '请选中代码', empty: '没有匹配的效果，请尝试更短的关键词。',
+          note: '效果 Key · 预览 · 推荐来源 · 最小代码', preview: '效果预览', codeFirst: '代码优先', legacy: '经典旧版', recommended: '推荐实现',
+          headEffect: '交互效果', headPreview: '预览', headSource: '推荐来源', headAction: '详情',
+          definition: '效果定义', implementation: '个实现来源', implementations: '个实现来源', permalink: '效果链接', repositoryLabel: 'GitHub 仓库（在新标签页打开）',
+          footer: '一个项目可以实现多种不同效果，一种效果也可以拥有多个项目实现；目录会明确保留这些关系。', back: '回到顶部 ↑'
         }
       };
 
-      const grid = document.querySelector('#grid');
+      const projectById = new Map(projects.map(project => [project.id, project]));
+      const categoryById = new Map(categories.map(category => [category.id, category]));
+      const list = document.querySelector('#effect-list');
       const filters = document.querySelector('#filters');
       const search = document.querySelector('#search');
       const sort = document.querySelector('#sort');
@@ -273,12 +319,9 @@
       let activeCategory = 'all';
 
       const escapeHTML = value => String(value).replace(/[&<>"]/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[character]);
-      const categoryById = new Map(categories.map(category => [category.id, category]));
       const labelFor = category => language === 'zh' ? category.labelZh : category.label;
-
-      document.querySelector('#hero-count').textContent = `${projects.length} ${copy.en.project}`;
-      document.querySelector('#new-count').textContent = `${projects.filter(project => project.isNew).length} ${copy.en.new}`;
-      document.querySelector('#category-count').textContent = `${categories.length} ${copy.en.categories}`;
+      const effectName = effect => language === 'zh' ? effect.nameZh : effect.name;
+      const recommendedSource = effect => effect.sources.find(source => source.recommended) || effect.sources[0];
 
       function setLanguage(nextLanguage) {
         language = nextLanguage;
@@ -286,6 +329,7 @@
         const t = copy[language];
         document.documentElement.lang = language === 'zh' ? 'zh-CN' : 'en';
         document.querySelector('#language').textContent = t.language;
+        document.querySelector('#language').setAttribute('aria-label', t.languageLabel);
         document.querySelector('#eyebrow').textContent = t.eyebrow;
         document.querySelector('#lede').textContent = t.lede;
         document.querySelector('#section-index').textContent = t.section;
@@ -293,13 +337,22 @@
         document.querySelector('#result-note').textContent = t.note;
         document.querySelector('#footer-note').textContent = t.footer;
         document.querySelector('#back-top').textContent = t.back;
-        document.querySelector('#hero-count').textContent = `${projects.length} ${t.project}`;
-        document.querySelector('#new-count').textContent = `${projects.filter(project => project.isNew).length} ${t.new}`;
+        document.querySelector('#effect-count').textContent = `${effects.length} ${t.effects}`;
+        document.querySelector('#source-count').textContent = `${projects.length} ${t.sources}`;
         document.querySelector('#category-count').textContent = `${categories.length} ${t.categories}`;
+        document.querySelector('#head-effect').textContent = t.headEffect;
+        document.querySelector('#head-preview').textContent = t.headPreview;
+        document.querySelector('#head-source').textContent = t.headSource;
+        document.querySelector('#head-action').textContent = t.headAction;
+        document.querySelector('#search-label').textContent = t.searchLabel;
+        document.querySelector('#catalog-controls').setAttribute('aria-label', t.filterLabel);
+        filters.setAttribute('aria-label', t.filterLabel);
         search.placeholder = t.search;
+        sort.setAttribute('aria-label', t.sortLabel);
         sort.options[0].textContent = t.curated;
-        sort.options[1].textContent = t.stars;
-        sort.options[2].textContent = t.name;
+        sort.options[1].textContent = t.name;
+        sort.options[2].textContent = t.stars;
+        sort.options[3].textContent = t.sourcesSort;
         buildFilters();
         render();
       }
@@ -318,66 +371,103 @@
         });
       }
 
+      async function copyCode(button, snippet) {
+        const t = copy[language];
+        try {
+          await navigator.clipboard.writeText(snippet);
+          button.textContent = t.copied;
+        } catch {
+          const selection = window.getSelection();
+          const range = document.createRange();
+          range.selectNodeContents(button.closest('.code-wrap').querySelector('code'));
+          selection.removeAllRanges();
+          selection.addRange(range);
+          button.textContent = t.copyFailed;
+        }
+        setTimeout(() => { button.textContent = t.copy; }, 1400);
+      }
+
+      function openHashTarget() {
+        const id = decodeURIComponent(location.hash.slice(1));
+        const target = id && document.getElementById(id);
+        if (target?.classList.contains('effect-row')) target.open = true;
+      }
+
       function render() {
         const t = copy[language];
         const query = search.value.trim().toLowerCase();
-        let visible = projects.filter(project => {
-          const category = categoryById.get(project.category);
-          const haystack = `${project.name} ${project.repo} ${project.effect} ${project.effectZh} ${category.label} ${category.labelZh}`.toLowerCase();
-          return (activeCategory === 'all' || project.category === activeCategory) && (!query || haystack.includes(query));
+        let visible = effects.filter(effect => {
+          const category = categoryById.get(effect.category);
+          const sourceText = effect.sources.map(source => {
+            const project = projectById.get(source.projectId);
+            return `${project.name} ${project.repo}`;
+          }).join(' ');
+          const haystack = `${effect.id} ${effect.name} ${effect.nameZh} ${category.label} ${category.labelZh} ${sourceText}`.toLowerCase();
+          return (activeCategory === 'all' || effect.category === activeCategory) && (!query || haystack.includes(query));
         });
-        if (sort.value === 'stars') visible = [...visible].sort((a, b) => b.stars - a.stars);
-        if (sort.value === 'name') visible = [...visible].sort((a, b) => a.name.localeCompare(b.name));
+        if (sort.value === 'stars') visible = [...visible].sort((a, b) => projectById.get(recommendedSource(b).projectId).stars - projectById.get(recommendedSource(a).projectId).stars);
+        if (sort.value === 'name') visible = [...visible].sort((a, b) => effectName(a).localeCompare(effectName(b), language === 'zh' ? 'zh-CN' : 'en'));
+        if (sort.value === 'sources') visible = [...visible].sort((a, b) => b.sources.length - a.sources.length || a.order - b.order);
 
-        grid.replaceChildren();
-        resultCount.textContent = language === 'zh' ? `${visible.length} / ${projects.length} ${t.results}` : `${visible.length} / ${projects.length} ${t.results}`;
+        const visibleProjectIds = new Set(visible.flatMap(effect => effect.sources.map(source => source.projectId)));
+        resultCount.textContent = `${visible.length} / ${effects.length} ${t.effects} · ${visibleProjectIds.size} ${t.sources}`;
+        list.replaceChildren();
         if (!visible.length) {
           const empty = document.createElement('p');
           empty.className = 'empty';
           empty.textContent = t.empty;
-          grid.append(empty);
+          list.append(empty);
           return;
         }
 
-        visible.forEach((project, index) => {
-          const category = categoryById.get(project.category);
-          const effect = language === 'zh' ? project.effectZh : project.effect;
-          const article = document.createElement('article');
-          article.className = 'card';
-          article.id = project.slug;
-          article.dataset.category = project.category;
-          const media = project.preview
-            ? `<img src="./gifs/${escapeHTML(project.preview)}.gif" alt="${escapeHTML(project.name)} — ${escapeHTML(effect)}" loading="lazy" decoding="async" />`
-            : `<div class="poster"><span class="poster-code">${escapeHTML(project.name)}</span></div>`;
-          const status = project.legacy
-            ? `<span class="badge legacy">${t.legacy}</span>`
-            : project.isNew ? `<span class="badge new">${t.newBadge}</span>` : '';
-          article.innerHTML = `
-            <a class="media-link" href="${escapeHTML(project.url)}" target="_blank" rel="noreferrer" aria-label="Open ${escapeHTML(project.name)} on GitHub">
-              <div class="media">${media}<span class="badge">${project.preview ? t.preview : t.codeFirst}</span>${status}<span class="visit" aria-hidden="true">↗</span></div>
-            </a>
-            <div class="card-head">
-              <div><p class="kind">${escapeHTML(labelFor(category))} · ${escapeHTML(effect)}</p><h3><a href="${escapeHTML(project.url)}" target="_blank" rel="noreferrer">${escapeHTML(project.name)} ↗</a></h3></div>
-              <span class="number">${String(project.order || index + 1).padStart(3, '0')}</span>
-            </div>
-            <p class="description">${escapeHTML(effect)}.</p>
-            <div class="stats"><span>★ ${project.stars.toLocaleString('en-US')}</span><span>${escapeHTML(project.repo)}</span></div>
-            <details class="code-example">
-              <summary>${t.minimal}</summary>
-              <div class="code-wrap"><pre><code>${escapeHTML(project.snippet)}</code></pre><button class="copy" type="button">${t.copy}</button></div>
-            </details>`;
-          article.querySelector('.copy').addEventListener('click', async event => {
-            await navigator.clipboard.writeText(project.snippet);
-            event.currentTarget.textContent = t.copied;
-            setTimeout(() => { event.currentTarget.textContent = t.copy; }, 1200);
-          });
-          grid.append(article);
+        visible.forEach(effect => {
+          const category = categoryById.get(effect.category);
+          const primary = recommendedSource(effect);
+          const primaryProject = projectById.get(primary.projectId);
+          const row = document.createElement('details');
+          row.className = 'effect-row';
+          row.id = effect.id;
+          row.dataset.category = effect.category;
+          const preview = primary.preview
+            ? `<div class="row-preview"><img src="./gifs/${escapeHTML(primary.preview)}.gif" alt="${escapeHTML(effectName(effect))}" loading="lazy" decoding="async" /></div>`
+            : `<div class="row-preview"><span class="preview-fallback">${t.codeFirst}</span></div>`;
+          const implementations = effect.sources.map(source => {
+            const project = projectById.get(source.projectId);
+            return `<section class="implementation">
+              <div class="implementation-meta">
+                ${source.recommended ? `<span class="recommendation">${t.recommended}</span>` : ''}
+                <h4>${escapeHTML(project.name)}</h4>
+                <a class="repo-link" href="${escapeHTML(project.url)}" target="_blank" rel="noreferrer" aria-label="${escapeHTML(project.name)} ${t.repositoryLabel}">${escapeHTML(project.repo)} ↗</a>
+                <div class="source-meta"><span>★ ${project.stars.toLocaleString('en-US')}</span>${project.legacy ? `<span class="legacy-tag">${t.legacy}</span>` : ''}</div>
+              </div>
+              <div class="code-wrap"><pre><code>${escapeHTML(source.snippet)}</code></pre><button class="copy" type="button">${t.copy}</button></div>
+            </section>`;
+          }).join('');
+          row.innerHTML = `
+            <summary class="effect-summary">
+              <span class="row-number">${String(effect.order).padStart(3, '0')}</span>
+              <div class="effect-cell"><p class="category-label">${escapeHTML(labelFor(category))}</p><h3>${escapeHTML(effectName(effect))}</h3><span class="effect-key">effect:${escapeHTML(effect.id)}</span></div>
+              ${preview}
+              <div class="source-cell"><span class="source-label">${t.recommended}</span><span class="source-name">${escapeHTML(primaryProject.name)}</span><span class="source-meta"><span>★ ${primaryProject.stars.toLocaleString('en-US')}</span><span>${effect.sources.length} ${effect.sources.length === 1 ? t.implementation : t.implementations}</span>${primaryProject.legacy ? `<span class="legacy-tag">${t.legacy}</span>` : ''}</span></div>
+              <span class="inspect">${t.inspect}</span>
+            </summary>
+            <div class="detail-panel">
+              <div class="detail-intro"><p><strong>${t.definition}:</strong> ${escapeHTML(effectName(effect))}.</p><a class="permalink" href="#${escapeHTML(effect.id)}"># ${t.permalink}</a></div>
+              <div class="implementations">${implementations}</div>
+            </div>`;
+          row.querySelectorAll('.copy').forEach((button, index) => button.addEventListener('click', event => {
+            event.preventDefault();
+            copyCode(button, effect.sources[index].snippet);
+          }));
+          list.append(row);
         });
+        openHashTarget();
       }
 
       document.querySelector('#language').addEventListener('click', () => setLanguage(language === 'en' ? 'zh' : 'en'));
       search.addEventListener('input', render);
       sort.addEventListener('change', render);
+      window.addEventListener('hashchange', openHashTarget);
       setLanguage(language);
 
       const hero = document.querySelector('#hero');

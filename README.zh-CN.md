@@ -2,62 +2,69 @@
 
 [English (default)](README.md) · [在线 Demo](https://giraffe-tree.github.io/awesome-interaction/)
 
-一个经过双重去重、以代码为先的开源 Web 视觉效果图鉴。共收录 **10 类 120 个项目**，其中在原有 20 个基础上**新增 101 个**。Demo 为每个项目提供可复制的最小代码；英文是默认界面和默认文档语言，同时提供完整中文文档与中文界面。
+一个**以效果为先**、代码优先的开源 Web 交互图鉴。当前收录 **10 类 121 种不同效果**，背后有 **120 个来源项目**。每种效果独占一行，拥有稳定语义 Key、推荐实现和可复制的最小代码。英文是默认界面与默认文档语言，同时提供完整中文文档与中文界面。
 
-## 本次更新
+## 效果优先模型
 
-- 新增 101 个经 GitHub 核验的项目，不把原有 20 个计入新增数量。
-- 做两层去重：先按仓库去重，再按可见效果签名 **触发方式 + 视觉变化 + 时间关系 + 页面层级** 去重。
-- 同类优先保留维护更活跃、生态更强、官方示例更清楚的项目。14 个技术栈较旧但仍有参考价值的项目明确标注为“经典旧版”；最终目录不包含已归档仓库。
-- 保留 19 个项目专属 GIF；其余代码优先条目使用有明确标签的抽象占位图，不拿无关素材冒充项目效果。
-- GIF 总体积从 **27.28 MiB 压缩到 15.81 MiB**，减少 42.03%；720×450 尺寸、帧数、帧率和时长保持不变。
-- 新增 GitHub Pages 静态发布工作流。
+- **效果是目录主键。** 锚点、搜索结果、行、分类与代码示例都从用户看得见的交互出发，而不是从仓库出发。
+- **项目是实现来源。** 一个项目可以实现多种不同效果；当前种子目录已有 1 个来源项目明确展示这种关系。
+- **一种效果可以有多个实现。** 每个来源关系拥有自己的最小代码和 GIF，因此替代方案可以放在同一行中比较，不必复制效果行。
+- **去重发生在可见效果层。** 候选按触发方式、视觉变化、时间关系和页面层级比较；更新、维护更好、文档更清楚的实现成为推荐来源。
+
+## 目录快照
+
+- 121 行效果，其中 20 种为基线效果。
+- 120 个唯一 GitHub 来源项目；2026 扩展阶段新增 101 个。
+- 19 个与具体来源对应的 GIF；其余行明确标记为代码优先。
+- 14 个较旧但仍有参考价值的来源标记为“经典旧版”；不包含已归档仓库。
+- Stars 是 **2026-07-16** 的快照，不是实时计数器。
+- GIF 优化后总计仍为 **15.81 MiB**，相较 27.28 MiB 减少 42.03%。
 
 ## 收录与去重规则
 
-1. 效果必须能出现在普通网页中：动画、转场、绘制、2D/3D 渲染、指针响应或媒体展示。
-2. 仓库必须公开且可以核验。Stars 是 **2026-07-16** 的快照，不是实时计数器。
-3. 相似库只有在代表性可见结果或集成模型存在实质差异时才同时保留。
-4. 重复候选中优先较新、持续维护、文档清楚的方案；只有交互范式仍然独特时才保留较旧但未归档的项目，并标注“经典旧版”。
-5. 最小代码只展示最小而有用的 API 调用，不复制完整脚手架应用。
+1. 每一行只能描述一种能在普通网页中呈现的可见交互效果。
+2. 每种效果必须有稳定的中英文名称、语义化效果 ID、分类和至少一个可核验来源。
+3. 同一仓库出现在不同效果行中是合法的；重复的效果 ID 或效果名称不合法。
+4. 每种效果必须且只能有一个推荐来源；替代实现应加入同一行，不能复制效果。
+5. 最小代码与预览媒体属于“效果 × 来源”关系，因为不同项目的实现方式不同。
 
 ## 分类概览
 
-| 分类 | 项目数 | 关注结果 |
-| --- | ---: | --- |
-| [动画引擎](#animation) | 12 | 时间线、弹簧、补间、类动画与框架原生动效。 |
-| [滚动与揭示](#scroll) | 12 | 平滑滚动、滚动关联场景、进入揭示、视差与整屏吸附。 |
-| [页面与布局](#transition) | 12 | 页面转场、FLIP 动画、筛选、紧密排布与布局重排。 |
-| [导航与浮层](#carousel) | 12 | 轮播、灯箱、菜单、导览、通知、拖拽浮层与空间导航。 |
-| [指针与悬停](#pointer) | 12 | 倾斜、景深、自定义光标、磁性运动与图像扭曲。 |
-| [文本与 SVG](#vector) | 12 | 打字、文字拆分、矢量绘制、手写与 SVG 变形。 |
-| [Canvas 与 2D](#canvas) | 12 | 场景图、创意编程、物理、绘图工具与 2D 渲染器。 |
-| [3D 与 WebGL](#webgl) | 12 | 3D 引擎、声明式渲染器、着色器图层与后期处理。 |
-| [背景与粒子](#background) | 12 | 流体、粒子、渐变、彩纸、网格、丝带与烟花。 |
-| [媒体与图像](#media) | 12 | 前后对比、平移缩放、裁剪、滤镜、镜头放大与着色器转场。 |
+| 分类 | 效果数 | 来源项目 | 关注结果 |
+| --- | ---: | ---: | --- |
+| [动画与编排](#animation) | 12 | 12 | 时间线、弹簧、补间、类动画与框架原生动效。 |
+| [滚动与揭示](#scroll) | 13 | 13 | 平滑滚动、滚动关联场景、进入揭示、视差与整屏吸附。 |
+| [页面与布局](#transition) | 12 | 12 | 页面转场、FLIP 动画、筛选、紧密排布与布局重排。 |
+| [导航与浮层](#carousel) | 12 | 12 | 轮播、灯箱、菜单、导览、通知、拖拽浮层与空间导航。 |
+| [指针与悬停](#pointer) | 12 | 12 | 倾斜、景深、自定义光标、磁性运动与图像扭曲。 |
+| [文本与 SVG](#vector) | 12 | 12 | 打字、文字拆分、矢量绘制、手写与 SVG 变形。 |
+| [Canvas 与 2D](#canvas) | 12 | 12 | 场景图、创意编程、物理、绘图工具与 2D 渲染器。 |
+| [3D 与 WebGL](#webgl) | 12 | 12 | 3D 引擎、声明式渲染器、着色器图层与后期处理。 |
+| [背景与粒子](#background) | 12 | 12 | 流体、粒子、渐变、彩纸、网格、丝带与烟花。 |
+| [媒体与图像](#media) | 12 | 12 | 前后对比、平移缩放、裁剪、滤镜、镜头放大与着色器转场。 |
 
-## 项目目录
+## 效果目录
 
 <a id="animation"></a>
 
-### 动画引擎
+### 动画与编排
 
 时间线、弹簧、补间、类动画与框架原生动效。
 
-| 项目 | 可见效果 | Stars | 状态 | 最小代码 |
-| --- | --- | ---: | --- | --- |
-| [GSAP](https://github.com/greensock/GSAP) | 滚动擦洗主时间线 | 26,600 | 原有 | [打开](https://giraffe-tree.github.io/awesome-interaction/#gsap-scrolltrigger) |
-| [Motion](https://github.com/motiondivision/motion) | 共享布局弹簧变形 | 32,819 | 原有 | [打开](https://giraffe-tree.github.io/awesome-interaction/#motion) |
-| [Anime.js](https://github.com/juliangarnier/anime) | 交错变换编排 | 71,056 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#juliangarnier-anime) |
-| [Tween.js](https://github.com/tweenjs/tween.js) | 与渲染器无关的数值补间 | 10,129 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#tweenjs-tween-js) |
-| [Mo.js](https://github.com/mojs/mojs) | 动态图形爆发 | 18,728 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#mojs-mojs) |
-| [Theatre.js](https://github.com/theatre-js/theatre) | 可视化编排关键帧序列 | 12,541 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#theatre-js-theatre) |
-| [Popmotion](https://github.com/Popmotion/popmotion) | 函数式数值管线 | 20,167 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#popmotion-popmotion) |
-| [React Spring](https://github.com/pmndrs/react-spring) | Hook 驱动弹簧动画 | 29,127 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#pmndrs-react-spring) |
-| [KUTE.js](https://github.com/thednp/kute.js) | 轻量 SVG 形状补间 | 2,639 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#thednp-kute-js) |
-| [VueUse Motion](https://github.com/vueuse/motion) | Vue 指令式动效状态 | 2,753 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#vueuse-motion) |
-| [Animate.css](https://github.com/animate-css/animate.css) | CSS 类进入动画 | 82,667 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#animate-css-animate-css) |
-| [Rive Web](https://github.com/rive-app/rive-wasm) | 交互式矢量状态机 | 954 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#rive-app-rive-wasm) |
+| 效果 | 推荐来源 | Stars | 实现数 | 状态 | 最小代码 |
+| --- | --- | ---: | ---: | --- | --- |
+| [滚动擦洗主时间线](https://giraffe-tree.github.io/awesome-interaction/#scroll-scrubbed-master-timeline) | [GSAP](https://github.com/greensock/GSAP) | 26,600 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#scroll-scrubbed-master-timeline) |
+| [共享布局弹簧变形](https://giraffe-tree.github.io/awesome-interaction/#shared-layout-spring-morph) | [Motion](https://github.com/motiondivision/motion) | 32,819 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#shared-layout-spring-morph) |
+| [交错变换编排](https://giraffe-tree.github.io/awesome-interaction/#staggered-transform-choreography) | [Anime.js](https://github.com/juliangarnier/anime) | 71,056 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#staggered-transform-choreography) |
+| [与渲染器无关的数值补间](https://giraffe-tree.github.io/awesome-interaction/#render-agnostic-value-tween) | [Tween.js](https://github.com/tweenjs/tween.js) | 10,129 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#render-agnostic-value-tween) |
+| [动态图形爆发](https://giraffe-tree.github.io/awesome-interaction/#motion-graphics-burst) | [Mo.js](https://github.com/mojs/mojs) | 18,728 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#motion-graphics-burst) |
+| [可视化编排关键帧序列](https://giraffe-tree.github.io/awesome-interaction/#visually-authored-keyframe-sequence) | [Theatre.js](https://github.com/theatre-js/theatre) | 12,541 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#visually-authored-keyframe-sequence) |
+| [函数式数值管线](https://giraffe-tree.github.io/awesome-interaction/#functional-value-pipeline) | [Popmotion](https://github.com/Popmotion/popmotion) | 20,167 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#functional-value-pipeline) |
+| [Hook 驱动弹簧动画](https://giraffe-tree.github.io/awesome-interaction/#hook-driven-spring-motion) | [React Spring](https://github.com/pmndrs/react-spring) | 29,127 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#hook-driven-spring-motion) |
+| [轻量 SVG 形状补间](https://giraffe-tree.github.io/awesome-interaction/#compact-svg-shape-tween) | [KUTE.js](https://github.com/thednp/kute.js) | 2,639 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#compact-svg-shape-tween) |
+| [Vue 指令式动效状态](https://giraffe-tree.github.io/awesome-interaction/#vue-directive-motion-state) | [VueUse Motion](https://github.com/vueuse/motion) | 2,753 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#vue-directive-motion-state) |
+| [CSS 类进入动画](https://giraffe-tree.github.io/awesome-interaction/#css-class-entrance-animation) | [Animate.css](https://github.com/animate-css/animate.css) | 82,667 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#css-class-entrance-animation) |
+| [交互式矢量状态机](https://giraffe-tree.github.io/awesome-interaction/#interactive-vector-state-machine) | [Rive Web](https://github.com/rive-app/rive-wasm) | 954 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#interactive-vector-state-machine) |
 
 <a id="scroll"></a>
 
@@ -65,20 +72,21 @@
 
 平滑滚动、滚动关联场景、进入揭示、视差与整屏吸附。
 
-| 项目 | 可见效果 | Stars | 状态 | 最小代码 |
-| --- | --- | ---: | --- | --- |
-| [Lenis](https://github.com/darkroomengineering/lenis) | 兼容原生语义的惯性滚动 | 14,373 | 原有 | [打开](https://giraffe-tree.github.io/awesome-interaction/#lenis) |
-| [Scrollama](https://github.com/russellsamora/scrollama) | 分步滚动叙事 | 5,985 | 原有 | [打开](https://giraffe-tree.github.io/awesome-interaction/#scrollama) |
-| [AOS](https://github.com/michalsnik/aos) | 数据属性视口揭示 | 28,069 | 原有 | [打开](https://giraffe-tree.github.io/awesome-interaction/#aos) |
-| [Locomotive Scroll](https://github.com/locomotivemtl/locomotive-scroll) | 数据驱动滚动变换 | 8,825 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#locomotivemtl-locomotive-scroll) |
-| [Smooth Scrollbar](https://github.com/dolphin-wood/smooth-scrollbar) | 惯性自定义滚动容器 | 3,354 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#dolphin-wood-smooth-scrollbar) |
-| [r3f-scroll-rig](https://github.com/14islands/r3f-scroll-rig) | DOM 与 3D 滚动同步 | 954 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#14islands-r3f-scroll-rig) |
-| [scroll-into-view-if-needed](https://github.com/scroll-into-view/scroll-into-view-if-needed) | 按需聚焦目标滚动 | 1,449 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#scroll-into-view-scroll-into-view-if-needed) |
-| [SimpleBar](https://github.com/Grsmto/simplebar) | 保留原生滚动的样式化滚动条 | 6,411 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#grsmto-simplebar) |
-| [TanStack Virtual](https://github.com/TanStack/virtual) | 窗口化百万行滚动 | 7,004 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#tanstack-virtual) |
-| [Infinite Scroll](https://github.com/metafizzy/infinite-scroll) | 到达阈值追加连续信息流 | 7,483 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#metafizzy-infinite-scroll) |
-| [fullPage.js](https://github.com/alvarotrigo/fullPage.js) | 全屏分区吸附 | 35,422 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#alvarotrigo-fullpage-js) |
-| [multiScroll.js](https://github.com/alvarotrigo/multiscroll.js) | 反向移动分屏面板 | 1,572 | 经典旧版 | [打开](https://giraffe-tree.github.io/awesome-interaction/#alvarotrigo-multiscroll-js) |
+| 效果 | 推荐来源 | Stars | 实现数 | 状态 | 最小代码 |
+| --- | --- | ---: | ---: | --- | --- |
+| [固定式横向滚动场景](https://giraffe-tree.github.io/awesome-interaction/#pinned-horizontal-scroll-scene) | [GSAP](https://github.com/greensock/GSAP) | 26,600 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#pinned-horizontal-scroll-scene) |
+| [兼容原生语义的惯性滚动](https://giraffe-tree.github.io/awesome-interaction/#native-friendly-inertial-scrolling) | [Lenis](https://github.com/darkroomengineering/lenis) | 14,373 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#native-friendly-inertial-scrolling) |
+| [分步滚动叙事](https://giraffe-tree.github.io/awesome-interaction/#step-based-scrollytelling) | [Scrollama](https://github.com/russellsamora/scrollama) | 5,985 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#step-based-scrollytelling) |
+| [数据属性视口揭示](https://giraffe-tree.github.io/awesome-interaction/#data-attribute-viewport-reveal) | [AOS](https://github.com/michalsnik/aos) | 28,069 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#data-attribute-viewport-reveal) |
+| [数据驱动滚动变换](https://giraffe-tree.github.io/awesome-interaction/#data-driven-scroll-transforms) | [Locomotive Scroll](https://github.com/locomotivemtl/locomotive-scroll) | 8,825 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#data-driven-scroll-transforms) |
+| [惯性自定义滚动容器](https://giraffe-tree.github.io/awesome-interaction/#inertial-custom-scroll-container) | [Smooth Scrollbar](https://github.com/dolphin-wood/smooth-scrollbar) | 3,354 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#inertial-custom-scroll-container) |
+| [DOM 与 3D 滚动同步](https://giraffe-tree.github.io/awesome-interaction/#dom-to-3d-scroll-synchronization) | [r3f-scroll-rig](https://github.com/14islands/r3f-scroll-rig) | 954 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#dom-to-3d-scroll-synchronization) |
+| [按需聚焦目标滚动](https://giraffe-tree.github.io/awesome-interaction/#conditional-focus-to-target-scroll) | [scroll-into-view-if-needed](https://github.com/scroll-into-view/scroll-into-view-if-needed) | 1,449 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#conditional-focus-to-target-scroll) |
+| [保留原生滚动的样式化滚动条](https://giraffe-tree.github.io/awesome-interaction/#styled-native-scrollbar-surface) | [SimpleBar](https://github.com/Grsmto/simplebar) | 6,411 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#styled-native-scrollbar-surface) |
+| [窗口化百万行滚动](https://giraffe-tree.github.io/awesome-interaction/#windowed-million-row-scrolling) | [TanStack Virtual](https://github.com/TanStack/virtual) | 7,004 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#windowed-million-row-scrolling) |
+| [到达阈值追加连续信息流](https://giraffe-tree.github.io/awesome-interaction/#append-at-threshold-continuous-feed) | [Infinite Scroll](https://github.com/metafizzy/infinite-scroll) | 7,483 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#append-at-threshold-continuous-feed) |
+| [全屏分区吸附](https://giraffe-tree.github.io/awesome-interaction/#full-screen-section-snapping) | [fullPage.js](https://github.com/alvarotrigo/fullPage.js) | 35,422 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#full-screen-section-snapping) |
+| [反向移动分屏面板](https://giraffe-tree.github.io/awesome-interaction/#counter-moving-split-screen-panels) | [multiScroll.js](https://github.com/alvarotrigo/multiscroll.js) | 1,572 | 1 | 经典旧版 | [打开](https://giraffe-tree.github.io/awesome-interaction/#counter-moving-split-screen-panels) |
 
 <a id="transition"></a>
 
@@ -86,20 +94,20 @@
 
 页面转场、FLIP 动画、筛选、紧密排布与布局重排。
 
-| 项目 | 可见效果 | Stars | 状态 | 最小代码 |
-| --- | --- | ---: | --- | --- |
-| [Swup](https://github.com/swup/swup) | 渐进增强页面替换 | 5,198 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#swup-swup) |
-| [Isotope](https://github.com/metafizzy/isotope) | 可筛选网格重排 | 11,103 | 经典旧版 | [打开](https://giraffe-tree.github.io/awesome-interaction/#isotope) |
-| [AutoAnimate](https://github.com/FormKit/auto-animate) | 一行调用 DOM 重排动画 | 13,875 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#formkit-auto-animate) |
-| [React Flip Toolkit](https://github.com/aholachek/react-flip-toolkit) | FLIP 共享元素转场 | 4,189 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#aholachek-react-flip-toolkit) |
-| [Muuri](https://github.com/haltu/muuri) | 可拖拽紧密网格 | 10,949 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#haltu-muuri) |
-| [Masonry](https://github.com/desandro/masonry) | 列式瀑布流布局 | 16,710 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#desandro-masonry) |
-| [Packery](https://github.com/metafizzy/packery) | 填补空隙的装箱布局 | 4,316 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#metafizzy-packery) |
-| [React Transition Group](https://github.com/reactjs/react-transition-group) | 组件进出状态机 | 10,234 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#reactjs-react-transition-group) |
-| [Vaul](https://github.com/emilkowalski/vaul) | 速度感知滑动抽屉 | 8,479 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#emilkowalski-vaul) |
-| [GridStack](https://github.com/gridstack/gridstack.js) | 拖拽缩放仪表盘碰撞重排 | 8,994 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#gridstack-gridstack-js) |
-| [Split.js](https://github.com/nathancahill/split) | 可拖拽分栏尺寸调整 | 6,277 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#nathancahill-split) |
-| [next-view-transitions](https://github.com/shuding/next-view-transitions) | 原生跨路由共享元素变形 | 2,385 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#shuding-next-view-transitions) |
+| 效果 | 推荐来源 | Stars | 实现数 | 状态 | 最小代码 |
+| --- | --- | ---: | ---: | --- | --- |
+| [渐进增强页面替换](https://giraffe-tree.github.io/awesome-interaction/#progressively-enhanced-page-swap) | [Swup](https://github.com/swup/swup) | 5,198 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#progressively-enhanced-page-swap) |
+| [可筛选网格重排](https://giraffe-tree.github.io/awesome-interaction/#filterable-grid-reflow) | [Isotope](https://github.com/metafizzy/isotope) | 11,103 | 1 | 经典旧版 | [打开](https://giraffe-tree.github.io/awesome-interaction/#filterable-grid-reflow) |
+| [一行调用 DOM 重排动画](https://giraffe-tree.github.io/awesome-interaction/#one-call-dom-reflow-animation) | [AutoAnimate](https://github.com/FormKit/auto-animate) | 13,875 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#one-call-dom-reflow-animation) |
+| [FLIP 共享元素转场](https://giraffe-tree.github.io/awesome-interaction/#flip-shared-element-transition) | [React Flip Toolkit](https://github.com/aholachek/react-flip-toolkit) | 4,189 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#flip-shared-element-transition) |
+| [可拖拽紧密网格](https://giraffe-tree.github.io/awesome-interaction/#draggable-packed-grid) | [Muuri](https://github.com/haltu/muuri) | 10,949 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#draggable-packed-grid) |
+| [列式瀑布流布局](https://giraffe-tree.github.io/awesome-interaction/#column-based-masonry-layout) | [Masonry](https://github.com/desandro/masonry) | 16,710 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#column-based-masonry-layout) |
+| [填补空隙的装箱布局](https://giraffe-tree.github.io/awesome-interaction/#gap-filling-bin-pack-layout) | [Packery](https://github.com/metafizzy/packery) | 4,316 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#gap-filling-bin-pack-layout) |
+| [组件进出状态机](https://giraffe-tree.github.io/awesome-interaction/#component-enter-exit-state-machine) | [React Transition Group](https://github.com/reactjs/react-transition-group) | 10,234 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#component-enter-exit-state-machine) |
+| [速度感知滑动抽屉](https://giraffe-tree.github.io/awesome-interaction/#velocity-aware-swipe-drawer) | [Vaul](https://github.com/emilkowalski/vaul) | 8,479 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#velocity-aware-swipe-drawer) |
+| [拖拽缩放仪表盘碰撞重排](https://giraffe-tree.github.io/awesome-interaction/#drag-resize-dashboard-collision-reflow) | [GridStack](https://github.com/gridstack/gridstack.js) | 8,994 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#drag-resize-dashboard-collision-reflow) |
+| [可拖拽分栏尺寸调整](https://giraffe-tree.github.io/awesome-interaction/#draggable-split-pane-resize) | [Split.js](https://github.com/nathancahill/split) | 6,277 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#draggable-split-pane-resize) |
+| [原生跨路由共享元素变形](https://giraffe-tree.github.io/awesome-interaction/#native-cross-route-shared-element-morph) | [next-view-transitions](https://github.com/shuding/next-view-transitions) | 2,385 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#native-cross-route-shared-element-morph) |
 
 <a id="carousel"></a>
 
@@ -107,20 +115,20 @@
 
 轮播、灯箱、菜单、导览、通知、拖拽浮层与空间导航。
 
-| 项目 | 可见效果 | Stars | 状态 | 最小代码 |
-| --- | --- | ---: | --- | --- |
-| [Swiper](https://github.com/nolimits4web/swiper) | 惯性触摸轮播 | 41,869 | 原有 | [打开](https://giraffe-tree.github.io/awesome-interaction/#swiper) |
-| [PhotoSwipe](https://github.com/dimsemenov/PhotoSwipe) | 缩略图到灯箱缩放 | 25,215 | 原有 | [打开](https://giraffe-tree.github.io/awesome-interaction/#photoswipe) |
-| [mmenu.js](https://github.com/FrDH/mmenu-js) | 嵌套式画布外导航面板 | 2,574 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#frdh-mmenu-js) |
-| [Driver.js](https://github.com/nilbuild/driver.js) | 焦点交接式聚光导览 | 26,283 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#nilbuild-driver-js) |
-| [SweetAlert2](https://github.com/sweetalert2/sweetalert2) | 动画无障碍模态提示 | 18,099 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#sweetalert2-sweetalert2) |
-| [cmdk](https://github.com/dip/cmdk) | 筛选式命令面板浮层 | 12,799 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#dip-cmdk) |
-| [react-hot-toast](https://github.com/timolins/react-hot-toast) | 堆叠可关闭通知队列 | 10,956 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#timolins-react-hot-toast) |
-| [Floating UI](https://github.com/floating-ui/floating-ui) | 锚点浮层翻转与位移 | 32,665 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#floating-ui-floating-ui) |
-| [React Menu](https://github.com/szhsin/react-menu) | 嵌套菜单与子菜单转场 | 1,218 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#szhsin-react-menu) |
-| [dnd kit](https://github.com/clauderic/dnd-kit) | 拖拽浮层与落点预览 | 17,408 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#clauderic-dnd-kit) |
-| [use-gesture](https://github.com/pmndrs/use-gesture) | 带边界的弹簧拖拽与捏合 | 9,620 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#pmndrs-use-gesture) |
-| [reveal.js](https://github.com/hakimel/reveal.js) | 空间化演示文稿导航 | 71,936 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#hakimel-reveal-js) |
+| 效果 | 推荐来源 | Stars | 实现数 | 状态 | 最小代码 |
+| --- | --- | ---: | ---: | --- | --- |
+| [惯性触摸轮播](https://giraffe-tree.github.io/awesome-interaction/#momentum-touch-carousel) | [Swiper](https://github.com/nolimits4web/swiper) | 41,869 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#momentum-touch-carousel) |
+| [缩略图到灯箱缩放](https://giraffe-tree.github.io/awesome-interaction/#thumbnail-to-lightbox-zoom) | [PhotoSwipe](https://github.com/dimsemenov/PhotoSwipe) | 25,215 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#thumbnail-to-lightbox-zoom) |
+| [嵌套式画布外导航面板](https://giraffe-tree.github.io/awesome-interaction/#nested-off-canvas-navigation-panels) | [mmenu.js](https://github.com/FrDH/mmenu-js) | 2,574 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#nested-off-canvas-navigation-panels) |
+| [焦点交接式聚光导览](https://giraffe-tree.github.io/awesome-interaction/#spotlight-tour-with-focus-handoff) | [Driver.js](https://github.com/nilbuild/driver.js) | 26,283 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#spotlight-tour-with-focus-handoff) |
+| [动画无障碍模态提示](https://giraffe-tree.github.io/awesome-interaction/#animated-accessible-modal-alert) | [SweetAlert2](https://github.com/sweetalert2/sweetalert2) | 18,099 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#animated-accessible-modal-alert) |
+| [筛选式命令面板浮层](https://giraffe-tree.github.io/awesome-interaction/#filtered-command-palette-overlay) | [cmdk](https://github.com/dip/cmdk) | 12,799 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#filtered-command-palette-overlay) |
+| [堆叠可关闭通知队列](https://giraffe-tree.github.io/awesome-interaction/#stacking-dismissible-toast-queue) | [react-hot-toast](https://github.com/timolins/react-hot-toast) | 10,956 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#stacking-dismissible-toast-queue) |
+| [锚点浮层翻转与位移](https://giraffe-tree.github.io/awesome-interaction/#anchored-popover-flip-and-shift) | [Floating UI](https://github.com/floating-ui/floating-ui) | 32,665 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#anchored-popover-flip-and-shift) |
+| [嵌套菜单与子菜单转场](https://giraffe-tree.github.io/awesome-interaction/#nested-menu-and-submenu-transition) | [React Menu](https://github.com/szhsin/react-menu) | 1,218 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#nested-menu-and-submenu-transition) |
+| [拖拽浮层与落点预览](https://giraffe-tree.github.io/awesome-interaction/#drag-overlay-and-drop-preview) | [dnd kit](https://github.com/clauderic/dnd-kit) | 17,408 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#drag-overlay-and-drop-preview) |
+| [带边界的弹簧拖拽与捏合](https://giraffe-tree.github.io/awesome-interaction/#bound-spring-drag-and-pinch) | [use-gesture](https://github.com/pmndrs/use-gesture) | 9,620 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#bound-spring-drag-and-pinch) |
+| [空间化演示文稿导航](https://giraffe-tree.github.io/awesome-interaction/#spatial-slide-deck-navigation) | [reveal.js](https://github.com/hakimel/reveal.js) | 71,936 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#spatial-slide-deck-navigation) |
 
 <a id="pointer"></a>
 
@@ -128,20 +136,20 @@
 
 倾斜、景深、自定义光标、磁性运动与图像扭曲。
 
-| 项目 | 可见效果 | Stars | 状态 | 最小代码 |
-| --- | --- | ---: | --- | --- |
-| [Parallax.js](https://github.com/wagerfield/parallax) | 指针驱动图层景深 | 16,583 | 原有 | [打开](https://giraffe-tree.github.io/awesome-interaction/#parallax) |
-| [vanilla-tilt.js](https://github.com/micku7zu/vanilla-tilt.js) | 透视倾斜与高光 | 4,019 | 原有 | [打开](https://giraffe-tree.github.io/awesome-interaction/#vanilla-tilt) |
-| [mouse-follower](https://github.com/Cuberto/mouse-follower) | 情境感知自定义光标 | 818 | 原有 | [打开](https://giraffe-tree.github.io/awesome-interaction/#mouse-follower) |
-| [hover-effect](https://github.com/robin-dela/hover-effect) | 位移贴图图像悬停 | 1,874 | 原有 | [打开](https://giraffe-tree.github.io/awesome-interaction/#hover-effect) |
-| [Hover.css](https://github.com/IanLunn/Hover) | 可复用 CSS 悬停词汇 | 29,395 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#ianlunn-hover) |
-| [cursor-effects](https://github.com/tholman/cursor-effects) | 尾随光标粒子 | 4,013 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#tholman-cursor-effects) |
-| [fake3d](https://github.com/akella/fake3d) | 深度图人像视差 | 545 | 经典旧版 | [打开](https://giraffe-tree.github.io/awesome-interaction/#akella-fake3d) |
-| [Magnetic Buttons](https://github.com/codrops/MagneticButtons) | 指针吸引按钮运动 | 485 | 经典旧版 | [打开](https://giraffe-tree.github.io/awesome-interaction/#codrops-magneticbuttons) |
-| [Direction-Aware Hover](https://github.com/codrops/DirectionAwareHoverEffect) | 按接近方向进入的遮罩 | 393 | 经典旧版 | [打开](https://giraffe-tree.github.io/awesome-interaction/#codrops-directionawarehovereffect) |
-| [Gooey Text Hover](https://github.com/codrops/GooeyTextHoverEffect) | SVG 滤镜黏液文字悬停 | 155 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#codrops-gooeytexthovereffect) |
-| [Interactive Points](https://github.com/codrops/InteractivePoints) | 热点揭示图像区域 | 302 | 经典旧版 | [打开](https://giraffe-tree.github.io/awesome-interaction/#codrops-interactivepoints) |
-| [Stack Motion Hover](https://github.com/codrops/StackMotionHoverEffects) | 展开式彩色卡片堆栈 | 499 | 经典旧版 | [打开](https://giraffe-tree.github.io/awesome-interaction/#codrops-stackmotionhovereffects) |
+| 效果 | 推荐来源 | Stars | 实现数 | 状态 | 最小代码 |
+| --- | --- | ---: | ---: | --- | --- |
+| [指针驱动图层景深](https://giraffe-tree.github.io/awesome-interaction/#pointer-driven-layer-depth) | [Parallax.js](https://github.com/wagerfield/parallax) | 16,583 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#pointer-driven-layer-depth) |
+| [透视倾斜与高光](https://giraffe-tree.github.io/awesome-interaction/#perspective-tilt-and-glare) | [vanilla-tilt.js](https://github.com/micku7zu/vanilla-tilt.js) | 4,019 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#perspective-tilt-and-glare) |
+| [情境感知自定义光标](https://giraffe-tree.github.io/awesome-interaction/#context-aware-custom-cursor) | [mouse-follower](https://github.com/Cuberto/mouse-follower) | 818 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#context-aware-custom-cursor) |
+| [位移贴图图像悬停](https://giraffe-tree.github.io/awesome-interaction/#displacement-map-image-hover) | [hover-effect](https://github.com/robin-dela/hover-effect) | 1,874 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#displacement-map-image-hover) |
+| [可复用 CSS 悬停词汇](https://giraffe-tree.github.io/awesome-interaction/#reusable-css-hover-vocabulary) | [Hover.css](https://github.com/IanLunn/Hover) | 29,395 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#reusable-css-hover-vocabulary) |
+| [尾随光标粒子](https://giraffe-tree.github.io/awesome-interaction/#trailing-cursor-particles) | [cursor-effects](https://github.com/tholman/cursor-effects) | 4,013 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#trailing-cursor-particles) |
+| [深度图人像视差](https://giraffe-tree.github.io/awesome-interaction/#depth-map-portrait-parallax) | [fake3d](https://github.com/akella/fake3d) | 545 | 1 | 经典旧版 | [打开](https://giraffe-tree.github.io/awesome-interaction/#depth-map-portrait-parallax) |
+| [指针吸引按钮运动](https://giraffe-tree.github.io/awesome-interaction/#pointer-attracted-button-motion) | [Magnetic Buttons](https://github.com/codrops/MagneticButtons) | 485 | 1 | 经典旧版 | [打开](https://giraffe-tree.github.io/awesome-interaction/#pointer-attracted-button-motion) |
+| [按接近方向进入的遮罩](https://giraffe-tree.github.io/awesome-interaction/#approach-direction-overlay-entrance) | [Direction-Aware Hover](https://github.com/codrops/DirectionAwareHoverEffect) | 393 | 1 | 经典旧版 | [打开](https://giraffe-tree.github.io/awesome-interaction/#approach-direction-overlay-entrance) |
+| [SVG 滤镜黏液文字悬停](https://giraffe-tree.github.io/awesome-interaction/#svg-filter-gooey-text-hover) | [Gooey Text Hover](https://github.com/codrops/GooeyTextHoverEffect) | 155 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#svg-filter-gooey-text-hover) |
+| [热点揭示图像区域](https://giraffe-tree.github.io/awesome-interaction/#hotspot-revealed-image-regions) | [Interactive Points](https://github.com/codrops/InteractivePoints) | 302 | 1 | 经典旧版 | [打开](https://giraffe-tree.github.io/awesome-interaction/#hotspot-revealed-image-regions) |
+| [展开式彩色卡片堆栈](https://giraffe-tree.github.io/awesome-interaction/#expanding-colored-card-stack) | [Stack Motion Hover](https://github.com/codrops/StackMotionHoverEffects) | 499 | 1 | 经典旧版 | [打开](https://giraffe-tree.github.io/awesome-interaction/#expanding-colored-card-stack) |
 
 <a id="vector"></a>
 
@@ -149,20 +157,20 @@
 
 打字、文字拆分、矢量绘制、手写与 SVG 变形。
 
-| 项目 | 可见效果 | Stars | 状态 | 最小代码 |
-| --- | --- | ---: | --- | --- |
-| [Vivus](https://github.com/maxwellito/vivus) | SVG 描边绘制 | 15,479 | 经典旧版 | [打开](https://giraffe-tree.github.io/awesome-interaction/#vivus) |
-| [lottie-web](https://github.com/airbnb/lottie-web) | After Effects 矢量播放 | 32,014 | 原有 | [打开](https://giraffe-tree.github.io/awesome-interaction/#lottie-web) |
-| [Typed.js](https://github.com/mattboldt/typed.js) | 循环打字序列 | 16,283 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#mattboldt-typed-js) |
-| [Splitting](https://github.com/shshaw/Splitting) | 文本拆字符 CSS 变量 | 1,755 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#shshaw-splitting) |
-| [Blotter](https://github.com/bradley/Blotter) | 着色器处理字体 | 3,076 | 经典旧版 | [打开](https://giraffe-tree.github.io/awesome-interaction/#bradley-blotter) |
-| [use-scramble](https://github.com/tol-is/use-scramble) | 随机解码文本揭示 | 143 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#tol-is-use-scramble) |
-| [SVG.js](https://github.com/svgdotjs/svg.js) | 流式 SVG 场景动画 | 11,802 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#svgdotjs-svg-js) |
-| [Rough.js](https://github.com/rough-stuff/rough) | 手绘感矢量渲染 | 21,074 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#rough-stuff-rough) |
-| [Vara](https://github.com/akzhy/Vara) | 手写路径字形 | 289 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#akzhy-vara) |
-| [smart-ticker](https://github.com/tombcato/smart-ticker) | 字符差异文本转场 | 165 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#tombcato-smart-ticker) |
-| [Flip](https://github.com/pqina/flip) | 机械翻牌字符变化 | 1,018 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#pqina-flip) |
-| [Flubber](https://github.com/veltman/flubber) | 拓扑安全 SVG 形状变形 | 6,923 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#veltman-flubber) |
+| 效果 | 推荐来源 | Stars | 实现数 | 状态 | 最小代码 |
+| --- | --- | ---: | ---: | --- | --- |
+| [SVG 描边绘制](https://giraffe-tree.github.io/awesome-interaction/#svg-stroke-drawing) | [Vivus](https://github.com/maxwellito/vivus) | 15,479 | 1 | 经典旧版 | [打开](https://giraffe-tree.github.io/awesome-interaction/#svg-stroke-drawing) |
+| [After Effects 矢量播放](https://giraffe-tree.github.io/awesome-interaction/#after-effects-vector-playback) | [lottie-web](https://github.com/airbnb/lottie-web) | 32,014 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#after-effects-vector-playback) |
+| [循环打字序列](https://giraffe-tree.github.io/awesome-interaction/#looping-typewriter-sequence) | [Typed.js](https://github.com/mattboldt/typed.js) | 16,283 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#looping-typewriter-sequence) |
+| [文本拆字符 CSS 变量](https://giraffe-tree.github.io/awesome-interaction/#text-to-character-css-variables) | [Splitting](https://github.com/shshaw/Splitting) | 1,755 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#text-to-character-css-variables) |
+| [着色器处理字体](https://giraffe-tree.github.io/awesome-interaction/#shader-processed-typography) | [Blotter](https://github.com/bradley/Blotter) | 3,076 | 1 | 经典旧版 | [打开](https://giraffe-tree.github.io/awesome-interaction/#shader-processed-typography) |
+| [随机解码文本揭示](https://giraffe-tree.github.io/awesome-interaction/#randomized-decode-text-reveal) | [use-scramble](https://github.com/tol-is/use-scramble) | 143 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#randomized-decode-text-reveal) |
+| [流式 SVG 场景动画](https://giraffe-tree.github.io/awesome-interaction/#fluent-svg-scene-animation) | [SVG.js](https://github.com/svgdotjs/svg.js) | 11,802 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#fluent-svg-scene-animation) |
+| [手绘感矢量渲染](https://giraffe-tree.github.io/awesome-interaction/#hand-drawn-vector-rendering) | [Rough.js](https://github.com/rough-stuff/rough) | 21,074 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#hand-drawn-vector-rendering) |
+| [手写路径字形](https://giraffe-tree.github.io/awesome-interaction/#handwritten-path-lettering) | [Vara](https://github.com/akzhy/Vara) | 289 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#handwritten-path-lettering) |
+| [字符差异文本转场](https://giraffe-tree.github.io/awesome-interaction/#character-diff-text-transition) | [smart-ticker](https://github.com/tombcato/smart-ticker) | 165 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#character-diff-text-transition) |
+| [机械翻牌字符变化](https://giraffe-tree.github.io/awesome-interaction/#mechanical-split-flap-character-change) | [Flip](https://github.com/pqina/flip) | 1,018 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#mechanical-split-flap-character-change) |
+| [拓扑安全 SVG 形状变形](https://giraffe-tree.github.io/awesome-interaction/#topology-safe-svg-shape-morph) | [Flubber](https://github.com/veltman/flubber) | 6,923 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#topology-safe-svg-shape-morph) |
 
 <a id="canvas"></a>
 
@@ -170,20 +178,20 @@
 
 场景图、创意编程、物理、绘图工具与 2D 渲染器。
 
-| 项目 | 可见效果 | Stars | 状态 | 最小代码 |
-| --- | --- | ---: | --- | --- |
-| [PixiJS](https://github.com/pixijs/pixijs) | GPU 加速 2D 场景图 | 47,790 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#pixijs-pixijs) |
-| [p5.js](https://github.com/processing/p5.js) | 草图式创意编程循环 | 23,797 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#processing-p5-js) |
-| [Paper.js](https://github.com/paperjs/paper.js) | Canvas 上的矢量几何 | 15,061 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#paperjs-paper-js) |
-| [Fabric.js](https://github.com/fabricjs/fabric.js) | 交互式对象画布 | 31,321 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#fabricjs-fabric-js) |
-| [Konva](https://github.com/konvajs/konva) | 分层可拖拽 Canvas 节点 | 14,619 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#konvajs-konva) |
-| [Two.js](https://github.com/jonobr1/two.js) | 跨渲染器 2D 图元 | 8,643 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#jonobr1-two-js) |
-| [EaselJS](https://github.com/CreateJS/EaselJS) | 显示列表 Canvas 动画 | 8,169 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#createjs-easeljs) |
-| [Phaser](https://github.com/phaserjs/phaser) | 浏览器游戏场景生命周期 | 39,960 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#phaserjs-phaser) |
-| [Matter.js](https://github.com/liabru/matter-js) | 网页刚体物理 | 18,321 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#liabru-matter-js) |
-| [Pts](https://github.com/williamngan/pts) | 基于点的生成式几何 | 5,336 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#williamngan-pts) |
-| [Zdog](https://github.com/metafizzy/zdog) | 伪 3D 扁平插画 | 10,634 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#metafizzy-zdog) |
-| [tldraw](https://github.com/tldraw/tldraw) | 无限协作绘图画布 | 48,780 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#tldraw-tldraw) |
+| 效果 | 推荐来源 | Stars | 实现数 | 状态 | 最小代码 |
+| --- | --- | ---: | ---: | --- | --- |
+| [GPU 加速 2D 场景图](https://giraffe-tree.github.io/awesome-interaction/#gpu-accelerated-2d-scene-graph) | [PixiJS](https://github.com/pixijs/pixijs) | 47,790 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#gpu-accelerated-2d-scene-graph) |
+| [草图式创意编程循环](https://giraffe-tree.github.io/awesome-interaction/#sketch-style-creative-coding-loop) | [p5.js](https://github.com/processing/p5.js) | 23,797 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#sketch-style-creative-coding-loop) |
+| [Canvas 上的矢量几何](https://giraffe-tree.github.io/awesome-interaction/#vector-geometry-on-canvas) | [Paper.js](https://github.com/paperjs/paper.js) | 15,061 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#vector-geometry-on-canvas) |
+| [交互式对象画布](https://giraffe-tree.github.io/awesome-interaction/#interactive-object-canvas) | [Fabric.js](https://github.com/fabricjs/fabric.js) | 31,321 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#interactive-object-canvas) |
+| [分层可拖拽 Canvas 节点](https://giraffe-tree.github.io/awesome-interaction/#layered-draggable-canvas-nodes) | [Konva](https://github.com/konvajs/konva) | 14,619 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#layered-draggable-canvas-nodes) |
+| [跨渲染器 2D 图元](https://giraffe-tree.github.io/awesome-interaction/#renderer-agnostic-2d-primitives) | [Two.js](https://github.com/jonobr1/two.js) | 8,643 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#renderer-agnostic-2d-primitives) |
+| [显示列表 Canvas 动画](https://giraffe-tree.github.io/awesome-interaction/#display-list-canvas-animation) | [EaselJS](https://github.com/CreateJS/EaselJS) | 8,169 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#display-list-canvas-animation) |
+| [浏览器游戏场景生命周期](https://giraffe-tree.github.io/awesome-interaction/#browser-game-scene-lifecycle) | [Phaser](https://github.com/phaserjs/phaser) | 39,960 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#browser-game-scene-lifecycle) |
+| [网页刚体物理](https://giraffe-tree.github.io/awesome-interaction/#rigid-body-web-physics) | [Matter.js](https://github.com/liabru/matter-js) | 18,321 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#rigid-body-web-physics) |
+| [基于点的生成式几何](https://giraffe-tree.github.io/awesome-interaction/#point-based-generative-geometry) | [Pts](https://github.com/williamngan/pts) | 5,336 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#point-based-generative-geometry) |
+| [伪 3D 扁平插画](https://giraffe-tree.github.io/awesome-interaction/#pseudo-3d-flat-illustration) | [Zdog](https://github.com/metafizzy/zdog) | 10,634 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#pseudo-3d-flat-illustration) |
+| [无限协作绘图画布](https://giraffe-tree.github.io/awesome-interaction/#infinite-collaborative-drawing-surface) | [tldraw](https://github.com/tldraw/tldraw) | 48,780 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#infinite-collaborative-drawing-surface) |
 
 <a id="webgl"></a>
 
@@ -191,20 +199,20 @@
 
 3D 引擎、声明式渲染器、着色器图层与后期处理。
 
-| 项目 | 可见效果 | Stars | 状态 | 最小代码 |
-| --- | --- | ---: | --- | --- |
-| [react-three-fiber](https://github.com/pmndrs/react-three-fiber) | 声明式 React 3D 场景 | 31,433 | 原有 | [打开](https://giraffe-tree.github.io/awesome-interaction/#react-three-fiber) |
-| [three.js](https://github.com/mrdoob/three.js) | 通用 WebGL 场景图 | 113,755 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#mrdoob-three-js) |
-| [Babylon.js](https://github.com/BabylonJS/Babylon.js) | 功能齐全 3D 引擎 | 25,806 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#babylonjs-babylon-js) |
-| [PlayCanvas Engine](https://github.com/playcanvas/engine) | 实体组件 3D 运行时 | 16,245 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#playcanvas-engine) |
-| [OGL](https://github.com/oframe/ogl) | 极简 WebGL 抽象 | 4,582 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#oframe-ogl) |
-| [regl](https://github.com/regl-project/regl) | 函数式 WebGL 绘制命令 | 5,557 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#regl-project-regl) |
-| [Curtains.js](https://github.com/martinlaxenaire/curtainsjs) | 与 DOM 同步的着色器平面 | 1,823 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#martinlaxenaire-curtainsjs) |
-| [<model-viewer>](https://github.com/google/model-viewer) | 无障碍交互式 3D 商品查看 | 8,161 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#google-model-viewer) |
-| [A-Frame](https://github.com/aframevr/aframe) | 声明式 HTML 3D 场景 | 17,586 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#aframevr-aframe) |
-| [TresJS](https://github.com/Tresjs/tres) | Vue 声明式 Three.js | 3,625 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#tresjs-tres) |
-| [Threlte](https://github.com/threlte/threlte) | Svelte 声明式 Three.js | 3,300 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#threlte-threlte) |
-| [postprocessing](https://github.com/pmndrs/postprocessing) | 合并式实时辉光后期 | 2,811 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#pmndrs-postprocessing) |
+| 效果 | 推荐来源 | Stars | 实现数 | 状态 | 最小代码 |
+| --- | --- | ---: | ---: | --- | --- |
+| [声明式 React 3D 场景](https://giraffe-tree.github.io/awesome-interaction/#declarative-react-3d-scene) | [react-three-fiber](https://github.com/pmndrs/react-three-fiber) | 31,433 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#declarative-react-3d-scene) |
+| [通用 WebGL 场景图](https://giraffe-tree.github.io/awesome-interaction/#general-purpose-webgl-scene-graph) | [three.js](https://github.com/mrdoob/three.js) | 113,755 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#general-purpose-webgl-scene-graph) |
+| [功能齐全 3D 引擎](https://giraffe-tree.github.io/awesome-interaction/#batteries-included-3d-engine) | [Babylon.js](https://github.com/BabylonJS/Babylon.js) | 25,806 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#batteries-included-3d-engine) |
+| [实体组件 3D 运行时](https://giraffe-tree.github.io/awesome-interaction/#entity-component-3d-runtime) | [PlayCanvas Engine](https://github.com/playcanvas/engine) | 16,245 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#entity-component-3d-runtime) |
+| [极简 WebGL 抽象](https://giraffe-tree.github.io/awesome-interaction/#minimal-webgl-abstraction) | [OGL](https://github.com/oframe/ogl) | 4,582 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#minimal-webgl-abstraction) |
+| [函数式 WebGL 绘制命令](https://giraffe-tree.github.io/awesome-interaction/#functional-webgl-draw-commands) | [regl](https://github.com/regl-project/regl) | 5,557 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#functional-webgl-draw-commands) |
+| [与 DOM 同步的着色器平面](https://giraffe-tree.github.io/awesome-interaction/#dom-synced-shader-planes) | [Curtains.js](https://github.com/martinlaxenaire/curtainsjs) | 1,823 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#dom-synced-shader-planes) |
+| [无障碍交互式 3D 商品查看](https://giraffe-tree.github.io/awesome-interaction/#accessible-interactive-3d-product-view) | [<model-viewer>](https://github.com/google/model-viewer) | 8,161 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#accessible-interactive-3d-product-view) |
+| [声明式 HTML 3D 场景](https://giraffe-tree.github.io/awesome-interaction/#declarative-html-3d-scene) | [A-Frame](https://github.com/aframevr/aframe) | 17,586 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#declarative-html-3d-scene) |
+| [Vue 声明式 Three.js](https://giraffe-tree.github.io/awesome-interaction/#vue-declarative-three-js) | [TresJS](https://github.com/Tresjs/tres) | 3,625 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#vue-declarative-three-js) |
+| [Svelte 声明式 Three.js](https://giraffe-tree.github.io/awesome-interaction/#svelte-declarative-three-js) | [Threlte](https://github.com/threlte/threlte) | 3,300 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#svelte-declarative-three-js) |
+| [合并式实时辉光后期](https://giraffe-tree.github.io/awesome-interaction/#merged-real-time-bloom-pass) | [postprocessing](https://github.com/pmndrs/postprocessing) | 2,811 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#merged-real-time-bloom-pass) |
 
 <a id="background"></a>
 
@@ -212,20 +220,20 @@
 
 流体、粒子、渐变、彩纸、网格、丝带与烟花。
 
-| 项目 | 可见效果 | Stars | 状态 | 最小代码 |
-| --- | --- | ---: | --- | --- |
-| [WebGL Fluid Simulation](https://github.com/PavelDoGreat/WebGL-Fluid-Simulation) | 指针注入 GPU 流体 | 16,493 | 原有 | [打开](https://giraffe-tree.github.io/awesome-interaction/#webgl-fluid) |
-| [tsParticles](https://github.com/tsparticles/tsparticles) | 可配置响应式粒子场 | 8,920 | 原有 | [打开](https://giraffe-tree.github.io/awesome-interaction/#tsparticles) |
-| [Vanta](https://github.com/tengbao/vanta) | 即插即用 WebGL 动态背景 | 6,608 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#tengbao-vanta) |
-| [canvas-confetti](https://github.com/catdad/canvas-confetti) | 事件触发彩纸爆发 | 12,648 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#catdad-canvas-confetti) |
-| [Granim.js](https://github.com/sarcadass/granim.js) | 动态渐变状态转场 | 5,304 | 经典旧版 | [打开](https://giraffe-tree.github.io/awesome-interaction/#sarcadass-granim-js) |
-| [Trianglify](https://github.com/qrohlf/trianglify) | 程序化低多边形网格 | 10,089 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#qrohlf-trianglify) |
-| [Fireworks.js](https://github.com/crashmax-dev/fireworks-js) | 交互式烟花场 | 1,380 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#crashmax-dev-fireworks-js) |
-| [ribbon.js](https://github.com/hustcc/ribbon.js) | 程序化丝带轨迹 | 237 | 经典旧版 | [打开](https://giraffe-tree.github.io/awesome-interaction/#hustcc-ribbon-js) |
-| [Flat Surface Shader](https://github.com/wagerfield/flat-surface-shader) | 带光照低多边形曲面 | 2,469 | 经典旧版 | [打开](https://giraffe-tree.github.io/awesome-interaction/#wagerfield-flat-surface-shader) |
-| [CSS Doodle](https://github.com/css-doodle/css-doodle) | 生成式 CSS 网格图案动画 | 6,020 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#css-doodle-css-doodle) |
-| [shader-web-background](https://github.com/xemantic/shader-web-background) | 全页片段着色器背景 | 280 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#xemantic-shader-web-background) |
-| [Particle Life](https://github.com/hunar4321/particle-life) | 涌现式吸引排斥粒子群 | 3,343 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#hunar4321-particle-life) |
+| 效果 | 推荐来源 | Stars | 实现数 | 状态 | 最小代码 |
+| --- | --- | ---: | ---: | --- | --- |
+| [指针注入 GPU 流体](https://giraffe-tree.github.io/awesome-interaction/#pointer-injected-gpu-fluid) | [WebGL Fluid Simulation](https://github.com/PavelDoGreat/WebGL-Fluid-Simulation) | 16,493 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#pointer-injected-gpu-fluid) |
+| [可配置响应式粒子场](https://giraffe-tree.github.io/awesome-interaction/#configurable-reactive-particle-field) | [tsParticles](https://github.com/tsparticles/tsparticles) | 8,920 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#configurable-reactive-particle-field) |
+| [即插即用 WebGL 动态背景](https://giraffe-tree.github.io/awesome-interaction/#drop-in-animated-webgl-background) | [Vanta](https://github.com/tengbao/vanta) | 6,608 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#drop-in-animated-webgl-background) |
+| [事件触发彩纸爆发](https://giraffe-tree.github.io/awesome-interaction/#event-triggered-confetti-burst) | [canvas-confetti](https://github.com/catdad/canvas-confetti) | 12,648 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#event-triggered-confetti-burst) |
+| [动态渐变状态转场](https://giraffe-tree.github.io/awesome-interaction/#animated-gradient-state-transitions) | [Granim.js](https://github.com/sarcadass/granim.js) | 5,304 | 1 | 经典旧版 | [打开](https://giraffe-tree.github.io/awesome-interaction/#animated-gradient-state-transitions) |
+| [程序化低多边形网格](https://giraffe-tree.github.io/awesome-interaction/#procedural-low-poly-mesh) | [Trianglify](https://github.com/qrohlf/trianglify) | 10,089 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#procedural-low-poly-mesh) |
+| [交互式烟花场](https://giraffe-tree.github.io/awesome-interaction/#interactive-fireworks-field) | [Fireworks.js](https://github.com/crashmax-dev/fireworks-js) | 1,380 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#interactive-fireworks-field) |
+| [程序化丝带轨迹](https://giraffe-tree.github.io/awesome-interaction/#procedural-ribbon-trail) | [ribbon.js](https://github.com/hustcc/ribbon.js) | 237 | 1 | 经典旧版 | [打开](https://giraffe-tree.github.io/awesome-interaction/#procedural-ribbon-trail) |
+| [带光照低多边形曲面](https://giraffe-tree.github.io/awesome-interaction/#lit-low-poly-surface) | [Flat Surface Shader](https://github.com/wagerfield/flat-surface-shader) | 2,469 | 1 | 经典旧版 | [打开](https://giraffe-tree.github.io/awesome-interaction/#lit-low-poly-surface) |
+| [生成式 CSS 网格图案动画](https://giraffe-tree.github.io/awesome-interaction/#generated-css-grid-pattern-animation) | [CSS Doodle](https://github.com/css-doodle/css-doodle) | 6,020 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#generated-css-grid-pattern-animation) |
+| [全页片段着色器背景](https://giraffe-tree.github.io/awesome-interaction/#full-page-fragment-shader-backdrop) | [shader-web-background](https://github.com/xemantic/shader-web-background) | 280 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#full-page-fragment-shader-backdrop) |
+| [涌现式吸引排斥粒子群](https://giraffe-tree.github.io/awesome-interaction/#emergent-attraction-repulsion-swarm) | [Particle Life](https://github.com/hunar4321/particle-life) | 3,343 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#emergent-attraction-repulsion-swarm) |
 
 <a id="media"></a>
 
@@ -233,24 +241,24 @@
 
 前后对比、平移缩放、裁剪、滤镜、镜头放大与着色器转场。
 
-| 项目 | 可见效果 | Stars | 状态 | 最小代码 |
-| --- | --- | ---: | --- | --- |
-| [img-comparison-slider](https://github.com/sneas/img-comparison-slider) | 拖拽揭示图像对比 | 864 | 原有 | [打开](https://giraffe-tree.github.io/awesome-interaction/#img-comparison-slider) |
-| [GL Transitions](https://github.com/gl-transitions/gl-transitions) | 可复用 GLSL 媒体转场 | 2,115 | 原有 | [打开](https://giraffe-tree.github.io/awesome-interaction/#gl-transitions) |
-| [medium-zoom](https://github.com/francoischalifour/medium-zoom) | 行内图片聚焦缩放 | 3,936 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#francoischalifour-medium-zoom) |
-| [Panzoom](https://github.com/timmywil/panzoom) | 指针平移与捏合缩放 | 2,440 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#timmywil-panzoom) |
-| [OpenSeadragon](https://github.com/openseadragon/openseadragon) | 深度缩放切片图像 | 3,479 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#openseadragon-openseadragon) |
-| [Cropper.js](https://github.com/fengyuanchen/cropperjs) | 交互式图像裁剪变换 | 13,857 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#fengyuanchen-cropperjs) |
-| [Drift](https://github.com/strawdynamics/drift) | 电商镜头放大 | 1,562 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#strawdynamics-drift) |
-| [CamanJS](https://github.com/meltingice/CamanJS) | 可链式 Canvas 照片滤镜 | 3,571 | 经典旧版 | [打开](https://giraffe-tree.github.io/awesome-interaction/#meltingice-camanjs) |
-| [glfx.js](https://github.com/evanw/glfx.js) | GPU 图像滤镜画布 | 3,449 | 经典旧版 | [打开](https://giraffe-tree.github.io/awesome-interaction/#evanw-glfx-js) |
-| [FilePond](https://github.com/pqina/filepond) | 拖拽上传图片预览转场 | 16,382 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#pqina-filepond) |
-| [TUI Image Editor](https://github.com/nhn/tui.image-editor) | 完整图像编辑画布工作区 | 7,660 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#nhn-tui-image-editor) |
-| [Media Chrome](https://github.com/muxinc/media-chrome) | 响应式自定义媒体控制条 | 2,710 | 新增 | [打开](https://giraffe-tree.github.io/awesome-interaction/#muxinc-media-chrome) |
+| 效果 | 推荐来源 | Stars | 实现数 | 状态 | 最小代码 |
+| --- | --- | ---: | ---: | --- | --- |
+| [拖拽揭示图像对比](https://giraffe-tree.github.io/awesome-interaction/#drag-to-reveal-image-comparison) | [img-comparison-slider](https://github.com/sneas/img-comparison-slider) | 864 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#drag-to-reveal-image-comparison) |
+| [可复用 GLSL 媒体转场](https://giraffe-tree.github.io/awesome-interaction/#reusable-glsl-media-transition) | [GL Transitions](https://github.com/gl-transitions/gl-transitions) | 2,115 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#reusable-glsl-media-transition) |
+| [行内图片聚焦缩放](https://giraffe-tree.github.io/awesome-interaction/#inline-image-focus-zoom) | [medium-zoom](https://github.com/francoischalifour/medium-zoom) | 3,936 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#inline-image-focus-zoom) |
+| [指针平移与捏合缩放](https://giraffe-tree.github.io/awesome-interaction/#pointer-pan-and-pinch-zoom) | [Panzoom](https://github.com/timmywil/panzoom) | 2,440 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#pointer-pan-and-pinch-zoom) |
+| [深度缩放切片图像](https://giraffe-tree.github.io/awesome-interaction/#deep-zoom-tiled-imagery) | [OpenSeadragon](https://github.com/openseadragon/openseadragon) | 3,479 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#deep-zoom-tiled-imagery) |
+| [交互式图像裁剪变换](https://giraffe-tree.github.io/awesome-interaction/#interactive-image-crop-transform) | [Cropper.js](https://github.com/fengyuanchen/cropperjs) | 13,857 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#interactive-image-crop-transform) |
+| [电商镜头放大](https://giraffe-tree.github.io/awesome-interaction/#e-commerce-lens-magnification) | [Drift](https://github.com/strawdynamics/drift) | 1,562 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#e-commerce-lens-magnification) |
+| [可链式 Canvas 照片滤镜](https://giraffe-tree.github.io/awesome-interaction/#chainable-canvas-photo-filters) | [CamanJS](https://github.com/meltingice/CamanJS) | 3,571 | 1 | 经典旧版 | [打开](https://giraffe-tree.github.io/awesome-interaction/#chainable-canvas-photo-filters) |
+| [GPU 图像滤镜画布](https://giraffe-tree.github.io/awesome-interaction/#gpu-image-filter-canvas) | [glfx.js](https://github.com/evanw/glfx.js) | 3,449 | 1 | 经典旧版 | [打开](https://giraffe-tree.github.io/awesome-interaction/#gpu-image-filter-canvas) |
+| [拖拽上传图片预览转场](https://giraffe-tree.github.io/awesome-interaction/#drop-upload-image-preview-transition) | [FilePond](https://github.com/pqina/filepond) | 16,382 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#drop-upload-image-preview-transition) |
+| [完整图像编辑画布工作区](https://giraffe-tree.github.io/awesome-interaction/#full-image-editing-canvas-workspace) | [TUI Image Editor](https://github.com/nhn/tui.image-editor) | 7,660 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#full-image-editing-canvas-workspace) |
+| [响应式自定义媒体控制条](https://giraffe-tree.github.io/awesome-interaction/#responsive-custom-media-controls) | [Media Chrome](https://github.com/muxinc/media-chrome) | 2,710 | 1 | 当前推荐 | [打开](https://giraffe-tree.github.io/awesome-interaction/#responsive-custom-media-controls) |
 
 ## Demo
 
-Demo 只使用静态 HTML、CSS、JavaScript 模块和 GIF，无第三方运行依赖。它支持搜索、分类筛选、排序、中英文切换、项目直达锚点和代码复制。
+Demo 只使用静态 HTML、CSS、JavaScript 模块和 GIF，无第三方运行依赖。它支持效果搜索、分类筛选、效果优先排序、中英文切换、稳定效果锚点、展开来源详情和代码复制。
 
 ```bash
 python3 -m http.server 4173 --directory demo
@@ -266,19 +274,21 @@ python3 -m http.server 4173 --directory demo
 ./scripts/optimize-gifs.sh
 ```
 
-脚本使用自适应 128 色调色板、Bayer 抖动与差异矩形编码。只有候选文件更小时才替换源文件，并强制核验尺寸、时长、帧率与帧数。调色板缩减属于感知压缩；如果以后需要重新编码，应在优化输出之外保留原始素材。
+脚本使用自适应 128 色调色板、Bayer 抖动与差异矩形编码。只有候选文件更小时才替换源文件，并强制核验尺寸、时长、帧率与帧数。
 
 ## GitHub Pages
 
-可以。Demo 完全静态且只使用相对路径，适合 GitHub Pages。仓库内工作流会在推送到 `main` 后发布 `demo/`，也支持手动运行。首次部署前需要在 **Settings → Pages → Source** 选择 **GitHub Actions**。详见 [中文部署说明](docs/GITHUB_PAGES.zh-CN.md)。
+Demo 完全静态且只使用相对路径。仓库内工作流会在推送到 `main` 后发布 `demo/`，也支持手动运行。首次部署前需要在 **Settings → Pages → Source** 选择 **GitHub Actions**。详见 [中文部署说明](docs/GITHUB_PAGES.zh-CN.md)。
 
 预计地址：[https://giraffe-tree.github.io/awesome-interaction/](https://giraffe-tree.github.io/awesome-interaction/)
 
 ## 维护目录
 
-- 修改唯一数据源 `demo/data/projects.js`。
+- 修改唯一数据源 `demo/data/effects.js`。
+- `effect.id` 必须语义化且保持稳定，禁止从仓库名派生。
+- 同一项目可被多个效果复用；替代实现加入效果的 `sources` 数组。
+- 代码与预览必须放在来源关系上，不能放到项目或效果根节点。
 - 运行 `node scripts/build-docs.mjs` 同步生成两份 README。
 - 提交前运行 `node scripts/validate.mjs`。
-- 始终区分真实项目 GIF 与代码优先占位图。
 
 GIF 与项目名称仅用于研究、索引和比较，权利归各自作者所有。

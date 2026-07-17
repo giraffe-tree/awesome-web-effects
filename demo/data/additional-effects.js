@@ -1424,5 +1424,23 @@ export const additionalEffectSeeds = [
     "difference": "Hover acts as a reversible rehearsal while click commits an accessible selection and recenters the rail, separating preview intent from choice intent. Existing media hovers do not combine rewind-on-leave, radio semantics, and post-selection positioning.",
     "sourceUrl": "https://www.captions.ai/",
     "verifiedAt": "2026-07-17"
+  },
+  {
+    "name": "Autonomous agent-cursor constellation",
+    "nameZh": "自主 Agent 光标星座",
+    "category": "animation",
+    "projectName": "Awesome Web Effects",
+    "repo": "giraffe-tree/awesome-web-effects",
+    "stars": 0,
+    "snippet": "<section class=\"agent-hero\"><h1>Your creative agent team</h1><div class=\"agent a\" aria-hidden=\"true\">➤<span>You</span></div><div class=\"agent b\" aria-hidden=\"true\">➤<span>Researcher</span></div><div class=\"agent c\" aria-hidden=\"true\">➤<span>Editor</span></div><div class=\"agent d\" aria-hidden=\"true\">➤<span>Agent One</span></div></section>\n<style>.agent-hero{position:relative;min-height:30rem;display:grid;place-items:center;overflow:hidden}.agent{position:absolute;z-index:2;display:flex;flex-direction:column;align-items:flex-start;color:#fff;animation:agent-float 3.2s ease-in-out infinite;filter:drop-shadow(0 2px 2px #0005)}.agent span{margin:.1rem 0 0 1rem;padding:.25rem .55rem;border-radius:.35rem;background:#6548e8;font:600 .75rem/1 system-ui}.a{left:7%;top:12%;animation-delay:-.2s}.b{right:7%;top:10%;animation-delay:-1.4s}.c{left:9%;bottom:12%;animation-delay:-2.8s}.d{right:9%;bottom:12%;animation-delay:-4.1s}@keyframes agent-float{50%{transform:translate(5px,-12px) rotate(2deg)}}@media(prefers-reduced-motion:reduce){.agent{animation:none}}</style>",
+    "behavior": {
+      "trigger": "page load and autonomous CSS timelines",
+      "response": "four named pointer glyphs float independently around the hero as visible stand-ins for simultaneous collaborators",
+      "timing": "3.2 s ease-in-out loops with four negative phase offsets",
+      "layer": "hero foreground around the title and CTA"
+    },
+    "difference": "These cursors are autonomous narrative actors with names and independent phases, not a decoration attached to the visitor's input. Existing custom cursor effects follow one local pointer and therefore communicate interaction rather than parallel agency.",
+    "sourceUrl": "https://invideo.io/",
+    "verifiedAt": "2026-07-17"
   }
 ];

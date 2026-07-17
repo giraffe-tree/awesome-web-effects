@@ -104,6 +104,18 @@ function cards(frame, time, accent, secondary, mode) {
   } else if (mode === 4) {
     const y = 38 + Math.abs(Math.sin(time * Math.PI * 2)) * 80;
     circle(frame, 160, y, 20, accent); rect(frame, 80, 132, 160, 6, secondary, .45);
+  } else if (mode === 6) {
+    rect(frame, 88, 70, 144, 13, [46, 50, 60], .82);
+    rect(frame, 112, 94, 96, 8, [46, 50, 60], .42);
+    const cursors = [[42, 34, 0, accent], [250, 30, 1.4, secondary], [48, 128, 2.8, [215, 91, 66]], [248, 126, 4.1, [138, 85, 199]]];
+    cursors.forEach(([x, y, phase, color], index) => {
+      const dx = Math.sin(time * Math.PI * 2 + phase) * 8;
+      const dy = Math.cos(time * Math.PI * 2 + phase) * 10;
+      line(frame, x + dx, y + dy, x + dx + 12, y + dy + 8, color, 3, .95);
+      line(frame, x + dx, y + dy, x + dx + 3, y + dy + 14, color, 3, .95);
+      rect(frame, x + dx + 10, y + dy + 13, 38 + index * 5, 14, color, .86);
+      rect(frame, x + dx + 15, y + dy + 18, 24 + index * 4, 4, [255, 255, 255], .68);
+    });
   } else {
     for (let index = 0; index < 4; index += 1) {
       const progress = clamp(time * 1.6 - index * .16, 0, 1);
@@ -498,7 +510,7 @@ function mediaScene(frame, time, accent, secondary, mode) {
 }
 
 const modeRules = {
-  animation: [[/stagger/, 1], [/morph|shape/, 2], [/burst/, 3], [/spring|bounce/, 4], [/timeline|sequence|keyframe/, 5]],
+  animation: [[/agent-cursor|cursor constellation/, 6], [/stagger/, 1], [/morph|shape/, 2], [/burst/, 3], [/spring|bounce/, 4], [/timeline|sequence|keyframe/, 5]],
   scroll: [[/hysteretic|threshold header/, 7], [/document generation|generation playback/, 6], [/horizontal/, 0], [/scrollbar|container/, 1], [/parallax|3d/, 2], [/reveal|viewport/, 3], [/infinite|million|virtual|append/, 4], [/snap|section|split/, 5]],
   transition: [[/scenario scene|scene handoff/, 8], [/dropdown promo sweep|promo sweep/, 7], [/self-inverting|blend-mode/, 6], [/page|route/, 0], [/grid|masonry|pack|reflow/, 1], [/shared|flip|morph/, 2], [/drawer/, 3], [/split|resize/, 4], [/filter|enter|exit/, 5]],
   carousel: [[/carousel|slide|deck/, 0], [/modal|lightbox|alert/, 1], [/command|menu/, 2], [/toast|notification/, 3], [/popover|tour|spotlight/, 4], [/drag|drop|pinch/, 5]],

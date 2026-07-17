@@ -2,7 +2,7 @@
 
 [中文文档](README.zh-CN.md) · [Live demo](https://giraffe-tree.github.io/awesome-interaction/)
 
-An **effect-first** atlas of open-source interactions for the web. It catalogs **241 distinct effects across 10 categories**, backed by **154 source projects**. Each effect is one row with a stable semantic key, a GIF preview, copyable minimal code, and a one-click implementation prompt for Codex or Claude Code. English is the default interface and documentation language.
+An **effect-first** atlas of open-source interactions for the web. It catalogs **242 distinct effects across 10 categories**, backed by **154 source projects**. Each effect is one row with a stable semantic key, a GIF preview, copyable minimal code, and a one-click implementation prompt for Codex or Claude Code. English is the default interface and documentation language.
 
 ## Effect-first model
 
@@ -13,14 +13,14 @@ An **effect-first** atlas of open-source interactions for the web. It catalogs *
 
 ## Catalog snapshot
 
-- 241 effect rows, including 20 baseline effects.
-- 120 independently researched effects were added in the latest effect-level expansion.
+- 242 effect rows, including 20 baseline effects.
+- 121 independently researched effects were added in the latest effect-level expansion.
 - 154 unique GitHub source projects; 101 were added during the 2026 expansion.
-- 241 source-specific GIF previews: 8 official captures and 233 labeled editorial recreations.
-- 241 one-click implementation prompts, one for every effect.
+- 242 source-specific GIF previews: 8 official captures and 234 labeled editorial recreations.
+- 242 one-click implementation prompts, one for every effect.
 - 14 useful older sources are marked **Legacy**; no archived repository is included.
 - Stars are a snapshot from **2026-07-17**, not a live counter.
-- The referenced, optimized GIF set is **10.22 MiB**; each preview is 320×180, at most three seconds, and below 1 MiB.
+- The referenced, optimized GIF set is **10.26 MiB**; each preview is 320×180, at most three seconds, and below 1 MiB.
 
 ## Selection rules
 
@@ -34,7 +34,7 @@ An **effect-first** atlas of open-source interactions for the web. It catalogs *
 
 | Category | Effects | Source projects | Visible result |
 | --- | ---: | ---: | --- |
-| [Motion & choreography](#animation) | 22 | 14 | Timelines, springs, tweens, class animation, and framework-native motion. |
+| [Motion & choreography](#animation) | 23 | 15 | Timelines, springs, tweens, class animation, and framework-native motion. |
 | [Scroll & reveal](#scroll) | 25 | 18 | Smooth scrolling, scroll-linked scenes, reveals, parallax, and snap navigation. |
 | [Page & layout](#transition) | 25 | 16 | Page transitions, FLIP motion, filtering, packing, and animated reflow. |
 | [Navigation & overlays](#carousel) | 22 | 14 | Carousel, lightbox, menus, tours, notifications, drag overlays, and spatial navigation. |
@@ -77,6 +77,7 @@ Timelines, springs, tweens, class animation, and framework-native motion.
 | [DOM-node connection beam](https://giraffe-tree.github.io/awesome-interaction/#dom-node-connection-beam) | [Magic UI](https://github.com/magicuidesign/magicui) | 21,567 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#dom-node-connection-beam) |
 | [Animated circular gauge fill](https://giraffe-tree.github.io/awesome-interaction/#animated-circular-gauge-fill) | [Magic UI](https://github.com/magicuidesign/magicui) | 21,567 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#animated-circular-gauge-fill) |
 | [Chromatic band text sweep](https://giraffe-tree.github.io/awesome-interaction/#chromatic-band-text-sweep) | [Magic UI](https://github.com/magicuidesign/magicui) | 21,567 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#chromatic-band-text-sweep) |
+| [Autonomous agent-cursor constellation](https://giraffe-tree.github.io/awesome-interaction/#autonomous-agent-cursor-constellation) | [Awesome Web Effects](https://github.com/giraffe-tree/awesome-web-effects) | 0 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#autonomous-agent-cursor-constellation) |
 
 <a id="scroll"></a>
 

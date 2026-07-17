@@ -1,6 +1,6 @@
 import { additionalEffectSeeds } from './additional-effects.js';
 
-export const snapshotDate = '2026-07-16';
+export const snapshotDate = '2026-07-17';
 
 export const categories = [
   { id: 'animation', label: 'Motion & choreography', labelZh: '动画与编排', description: 'Timelines, springs, tweens, class animation, and framework-native motion.', descriptionZh: '时间线、弹簧、补间、类动画与框架原生动效。' },
@@ -285,7 +285,7 @@ const researchedEffects = additionalEffectSeeds.map(item => effect(
     research: {
       sourceUrl: item.sourceUrl,
       difference: item.difference,
-      verifiedAt: snapshotDate
+      verifiedAt: item.verifiedAt || '2026-07-16'
     }
   }
 ));

@@ -2,7 +2,7 @@
 
 [中文文档](README.zh-CN.md) · [Live demo](https://giraffe-tree.github.io/awesome-interaction/)
 
-An **effect-first** atlas of open-source interactions for the web. It catalogs **221 distinct effects across 10 categories**, backed by **153 source projects**. Each effect is one row with a stable semantic key, a GIF preview, copyable minimal code, and a one-click implementation prompt for Codex or Claude Code. English is the default interface and documentation language.
+An **effect-first** atlas of open-source interactions for the web. It catalogs **222 distinct effects across 10 categories**, backed by **153 source projects**. Each effect is one row with a stable semantic key, a GIF preview, copyable minimal code, and a one-click implementation prompt for Codex or Claude Code. English is the default interface and documentation language.
 
 ## Effect-first model
 
@@ -13,14 +13,14 @@ An **effect-first** atlas of open-source interactions for the web. It catalogs *
 
 ## Catalog snapshot
 
-- 221 effect rows, including 20 baseline effects.
-- 100 independently researched effects were added in the latest effect-level expansion.
+- 222 effect rows, including 20 baseline effects.
+- 101 independently researched effects were added in the latest effect-level expansion.
 - 153 unique GitHub source projects; 101 were added during the 2026 expansion.
-- 221 source-specific GIF previews: 8 official captures and 213 labeled editorial recreations.
-- 221 one-click implementation prompts, one for every effect.
+- 222 source-specific GIF previews: 8 official captures and 214 labeled editorial recreations.
+- 222 one-click implementation prompts, one for every effect.
 - 14 useful older sources are marked **Legacy**; no archived repository is included.
-- Stars are a snapshot from **2026-07-16**, not a live counter.
-- The referenced, optimized GIF set is **9.74 MiB**; each preview is 320×180, at most three seconds, and below 1 MiB.
+- Stars are a snapshot from **2026-07-17**, not a live counter.
+- The referenced, optimized GIF set is **9.75 MiB**; each preview is 320×180, at most three seconds, and below 1 MiB.
 
 ## Selection rules
 
@@ -43,7 +43,7 @@ An **effect-first** atlas of open-source interactions for the web. It catalogs *
 | [Canvas & 2D](#canvas) | 22 | 19 | Scene graphs, creative coding, physics, drawing tools, and 2D renderers. |
 | [3D & WebGL](#webgl) | 22 | 20 | 3D engines, declarative renderers, shader layers, and post-processing. |
 | [Background & particles](#background) | 22 | 13 | Fluid, particles, gradients, confetti, meshes, ribbons, and fireworks. |
-| [Media & image](#media) | 22 | 21 | Comparison, pan-and-zoom, cropping, filters, lens zoom, and shader transitions. |
+| [Media & image](#media) | 23 | 22 | Comparison, pan-and-zoom, cropping, filters, lens zoom, and shader transitions. |
 
 ## Effect catalog
 
@@ -357,6 +357,7 @@ Comparison, pan-and-zoom, cropping, filters, lens zoom, and shader transitions.
 | [Frame-by-frame GIF scrubber](https://giraffe-tree.github.io/awesome-interaction/#frame-by-frame-gif-scrubber) | [gifuct-js](https://github.com/matt-way/gifuct-js) | 514 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#frame-by-frame-gif-scrubber) |
 | [BlurHash-to-photo progressive reveal](https://giraffe-tree.github.io/awesome-interaction/#blurhash-to-photo-progressive-reveal) | [BlurHash](https://github.com/woltapp/blurhash) | 17,040 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#blurhash-to-photo-progressive-reveal) |
 | [Image-palette ambient color transition](https://giraffe-tree.github.io/awesome-interaction/#image-palette-ambient-color-transition) | [Color Thief](https://github.com/lokesh/color-thief) | 13,600 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#image-palette-ambient-color-transition) |
+| [Depth-map ordered blur dissolve](https://giraffe-tree.github.io/awesome-interaction/#depth-map-ordered-blur-dissolve) | [three.js](https://github.com/mrdoob/three.js) | 113,755 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#depth-map-ordered-blur-dissolve) |
 
 ## Demo
 

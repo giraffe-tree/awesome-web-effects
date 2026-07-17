@@ -6,7 +6,7 @@ import { dirname, resolve } from 'node:path';
 import { createHash } from 'node:crypto';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
-import { categories, effects, projects } from '../demo/data/effects.js';
+import { categories, effects, projects, snapshotDate } from '../demo/data/effects.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const errors = [];
@@ -47,7 +47,8 @@ for (const effect of effects) {
   if (effect.addedIn === '2026-effect-expansion') {
     assert(/^https:\/\//.test(effect.research?.sourceUrl), `${effect.id}: missing official research source URL.`);
     assert(effect.research?.difference?.length >= 40, `${effect.id}: missing effect-level deduplication rationale.`);
-    assert(effect.research?.verifiedAt === '2026-07-16', `${effect.id}: invalid research verification date.`);
+    assert(/^2026-\d{2}-\d{2}$/.test(effect.research?.verifiedAt), `${effect.id}: invalid research verification date.`);
+    assert(effect.research.verifiedAt <= snapshotDate, `${effect.id}: research verification is newer than the catalog snapshot.`);
   }
   assert(Array.isArray(effect.sources) && effect.sources.length > 0, `${effect.id}: effect requires at least one source.`);
   assert(effect.sources.filter(source => source.recommended).length === 1, `${effect.id}: effect requires exactly one recommended source.`);

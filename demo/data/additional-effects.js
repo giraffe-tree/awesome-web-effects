@@ -1100,5 +1100,17 @@ export const additionalEffectSeeds = [
     "snippet": "import ColorThief from 'colorthief';\nconst thief = new ColorThief();\nphoto.addEventListener('load', () => { const [r, g, b] = thief.getColor(photo); hero.animate([{ backgroundColor: getComputedStyle(hero).backgroundColor }, { backgroundColor: `rgb(${r} ${g} ${b})` }], { duration: 650, fill: 'forwards' }); });",
     "difference": "The surrounding interface color is extracted from each loaded image and animated to match it; current photo filters modify pixels inside the image itself.",
     "sourceUrl": "https://github.com/lokesh/color-thief"
+  },
+  {
+    "name": "Depth-map ordered blur dissolve",
+    "nameZh": "深度图分层模糊溶解",
+    "category": "media",
+    "projectName": "Three.js",
+    "repo": "mrdoob/three.js",
+    "stars": 113773,
+    "snippet": "const material = new THREE.ShaderMaterial({ uniforms: { from: { value: fromTexture }, to: { value: toTexture }, depthMap: { value: depthTexture }, progress: { value: 0 } }, vertexShader, fragmentShader: `uniform sampler2D from, to, depthMap; uniform float progress; varying vec2 vUv; void main(){ float d = texture2D(depthMap, vUv).r; float local = smoothstep(d - .18, d + .18, progress); vec4 sharp = mix(texture2D(from, vUv), texture2D(to, vUv), local); vec4 soft = texture2D(to, vUv + vec2(.006 * (1. - local), 0.)); gl_FragColor = mix(soft, sharp, local); }` });\ngsap.to(material.uniforms.progress, { value: 1, duration: 1.1, ease: 'power2.inOut' });",
+    "difference": "The grayscale depth texture schedules which image regions blur and resolve first during a carousel change. Existing depth-map portrait parallax offsets sampling from pointer movement; it does not use scene depth as the temporal order of a media transition.",
+    "sourceUrl": "https://blackforestlabs.ai/",
+    "verifiedAt": "2026-07-17"
   }
 ];

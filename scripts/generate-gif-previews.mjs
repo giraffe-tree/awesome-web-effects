@@ -238,6 +238,19 @@ function mediaScene(frame, time, accent, secondary, mode) {
   else if (mode === 2) { const x = 56 - time * 72; for (let index = 0; index < 5; index += 1) rect(frame, x + index * 74, 42 + (index % 2) * 28, 62, 74, index % 2 ? accent : secondary, .45); }
   else if (mode === 3) { rect(frame, 80, 45, 160, 90, accent, .24); const inset = 10 + wave(time) * 26; line(frame, 80 + inset, 45 + inset, 240 - inset, 45 + inset, secondary, 2); line(frame, 240 - inset, 45 + inset, 240 - inset, 135 - inset, secondary, 2); line(frame, 240 - inset, 135 - inset, 80 + inset, 135 - inset, secondary, 2); line(frame, 80 + inset, 135 - inset, 80 + inset, 45 + inset, secondary, 2); }
   else if (mode === 4) { rect(frame, 36, 24, 248, 132, mix(accent, secondary, wave(time)), .58); for (let index = 0; index < 4; index += 1) circle(frame, 90 + index * 48, 90, 18, index % 2 ? accent : secondary, .45); }
+  else if (mode === 6) {
+    rect(frame, 36, 24, 248, 132, [218, 226, 236]);
+    circle(frame, 102, 78, 42, [94, 120, 158], .8);
+    rect(frame, 150, 48, 104, 76, [235, 145, 105], .78);
+    circle(frame, 204, 104, 29, [45, 56, 76], .92);
+    const far = ease(clamp(time * 2.1, 0, 1));
+    const middle = ease(clamp(time * 2.1 - .42, 0, 1));
+    const near = ease(clamp(time * 2.1 - .84, 0, 1));
+    rect(frame, 36, 24, 248, 132, mix([218, 226, 236], [249, 225, 214], far), far);
+    circle(frame, 102, 78, 42 + (1 - middle) * 7, mix([94, 120, 158], secondary, middle), .8 * middle);
+    rect(frame, 150 - (1 - middle) * 5, 48, 104 + (1 - middle) * 10, 76, mix([235, 145, 105], accent, middle), .78 * middle);
+    circle(frame, 204, 104, 29 + (1 - near) * 9, mix([45, 56, 76], [255, 255, 255], near), .92 * near);
+  }
   else { circle(frame, 160, 90, 26, accent, .85); line(frame, 152, 76, 178, 90, [255,255,255], 3); line(frame, 178, 90, 152, 104, [255,255,255], 3); rect(frame, 68, 138, 184, 5, secondary, .25); rect(frame, 68, 138, 184 * time, 5, secondary, .9); }
 }
 
@@ -251,7 +264,7 @@ const modeRules = {
   canvas: [[/generative|particle|sprite/, 0], [/physics|game|rigid/, 1], [/draw|sketch/, 2], [/object|node|drag|layer/, 3], [/geometry|primitive|illustration/, 4], [/infinite|grid|surface/, 5]],
   webgl: [[/mesh|object|react|vue|svelte/, 0], [/particle|sphere/, 1], [/shader|plane|functional|minimal/, 2], [/bloom|post/, 3], [/product|model|orbit|camera/, 4], [/scene|webgl|3d/, 5]],
   background: [[/fluid|gradient|vanta/, 0], [/particle|swarm|link/, 1], [/confetti/, 2], [/gradient|backdrop/, 3], [/mesh|poly|grid|surface/, 4], [/firework|ribbon|trail/, 5]],
-  media: [[/comparison|reveal/, 0], [/zoom|magnif|lens/, 1], [/pan|deep/, 2], [/crop/, 3], [/filter|editor/, 4], [/media|control|upload|preview/, 5]]
+  media: [[/comparison|reveal/, 0], [/zoom|magnif|lens/, 1], [/depth|dissolve/, 6], [/pan|deep/, 2], [/crop/, 3], [/filter|editor/, 4], [/media|control|upload|preview/, 5]]
 };
 
 function modeFor(effect, seed) {

@@ -2,7 +2,7 @@
 
 [中文文档](README.zh-CN.md) · [Live demo](https://giraffe-tree.github.io/awesome-interaction/)
 
-An **effect-first** atlas of open-source interactions for the web. It catalogs **236 distinct effects across 10 categories**, backed by **154 source projects**. Each effect is one row with a stable semantic key, a GIF preview, copyable minimal code, and a one-click implementation prompt for Codex or Claude Code. English is the default interface and documentation language.
+An **effect-first** atlas of open-source interactions for the web. It catalogs **237 distinct effects across 10 categories**, backed by **154 source projects**. Each effect is one row with a stable semantic key, a GIF preview, copyable minimal code, and a one-click implementation prompt for Codex or Claude Code. English is the default interface and documentation language.
 
 ## Effect-first model
 
@@ -13,14 +13,14 @@ An **effect-first** atlas of open-source interactions for the web. It catalogs *
 
 ## Catalog snapshot
 
-- 236 effect rows, including 20 baseline effects.
-- 115 independently researched effects were added in the latest effect-level expansion.
+- 237 effect rows, including 20 baseline effects.
+- 116 independently researched effects were added in the latest effect-level expansion.
 - 154 unique GitHub source projects; 101 were added during the 2026 expansion.
-- 236 source-specific GIF previews: 8 official captures and 228 labeled editorial recreations.
-- 236 one-click implementation prompts, one for every effect.
+- 237 source-specific GIF previews: 8 official captures and 229 labeled editorial recreations.
+- 237 one-click implementation prompts, one for every effect.
 - 14 useful older sources are marked **Legacy**; no archived repository is included.
 - Stars are a snapshot from **2026-07-17**, not a live counter.
-- The referenced, optimized GIF set is **10.08 MiB**; each preview is 320×180, at most three seconds, and below 1 MiB.
+- The referenced, optimized GIF set is **10.15 MiB**; each preview is 320×180, at most three seconds, and below 1 MiB.
 
 ## Selection rules
 
@@ -40,7 +40,7 @@ An **effect-first** atlas of open-source interactions for the web. It catalogs *
 | [Navigation & overlays](#carousel) | 22 | 14 | Carousel, lightbox, menus, tours, notifications, drag overlays, and spatial navigation. |
 | [Pointer & hover](#pointer) | 25 | 14 | Tilt, depth, custom cursors, magnetic motion, and image distortion. |
 | [Text & SVG](#vector) | 24 | 19 | Typing, text splitting, vector drawing, handwriting, and SVG morphing. |
-| [Canvas & 2D](#canvas) | 23 | 20 | Scene graphs, creative coding, physics, drawing tools, and 2D renderers. |
+| [Canvas & 2D](#canvas) | 24 | 20 | Scene graphs, creative coding, physics, drawing tools, and 2D renderers. |
 | [3D & WebGL](#webgl) | 22 | 20 | 3D engines, declarative renderers, shader layers, and post-processing. |
 | [Background & particles](#background) | 24 | 15 | Fluid, particles, gradients, confetti, meshes, ribbons, and fireworks. |
 | [Media & image](#media) | 25 | 23 | Comparison, pan-and-zoom, cropping, filters, lens zoom, and shader transitions. |
@@ -274,6 +274,7 @@ Scene graphs, creative coding, physics, drawing tools, and 2D renderers.
 | [Resize-and-rotate transform handles](https://giraffe-tree.github.io/awesome-interaction/#resize-and-rotate-transform-handles) | [Konva](https://github.com/konvajs/konva) | 14,619 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#resize-and-rotate-transform-handles) |
 | [Hover hit-test color highlight](https://giraffe-tree.github.io/awesome-interaction/#hover-hit-test-color-highlight) | [LeaferJS](https://github.com/leaferjs/leafer-ui) | 4,270 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#hover-hit-test-color-highlight) |
 | [Staggered multi-chart telemetry boot](https://giraffe-tree.github.io/awesome-interaction/#staggered-multi-chart-telemetry-boot) | [Awesome Web Effects](https://github.com/giraffe-tree/awesome-web-effects) | 0 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#staggered-multi-chart-telemetry-boot) |
+| [Drag-spawned DOM-aware fish flock](https://giraffe-tree.github.io/awesome-interaction/#drag-spawned-dom-aware-fish-flock) | [Awesome Web Effects](https://github.com/giraffe-tree/awesome-web-effects) | 0 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#drag-spawned-dom-aware-fish-flock) |
 
 <a id="webgl"></a>
 

@@ -317,6 +317,25 @@ function canvasScene(frame, time, accent, secondary, mode, seed) {
         rect(frame, x0 + 8, y0 + 11, 38 * progress, 5, [255, 255, 255], .42);
       }
     }
+  } else if (mode === 7) {
+    const obstacleRadius = 22 + Math.sin(time * Math.PI * 4) * 3;
+    circle(frame, 240, 104, obstacleRadius, accent, .86);
+    rect(frame, 225, 100, 30, 7, [255, 255, 255], .72);
+    for (let index = 0; index < 24; index += 1) {
+      const phase = index * .57 + time * 3.7;
+      const lane = 38 + (index % 6) * 20;
+      let x = (index * 43 + time * 128) % 360 - 20;
+      let y = lane + Math.sin(phase) * 12;
+      const distance = Math.hypot(x - 240, y - 104);
+      if (distance < 62) y += (y < 104 ? -1 : 1) * (62 - distance);
+      const color = index === 23 ? [225, 32, 28] : index % 2 ? secondary : [128, 134, 145];
+      line(frame, x - 7, y - 4, x + 7, y, color, 2, .86);
+      line(frame, x - 7, y + 4, x + 7, y, color, 2, .86);
+      line(frame, x - 7, y - 4, x - 3, y, color, 2, .86);
+      line(frame, x - 7, y + 4, x - 3, y, color, 2, .86);
+    }
+    const dragX = 42 + time * 122; const dragY = 142 - time * 62;
+    circle(frame, dragX, dragY, 4, [35, 38, 46], .7);
   } else {
     const offset = time * 42; for (let x = -40; x < width + 40; x += 24) line(frame, x + offset % 24, 0, x + offset % 24, height, accent, 1, .2); for (let y = -40; y < height + 40; y += 24) line(frame, 0, y + offset % 24, width, y + offset % 24, secondary, 1, .2); circle(frame, 160, 90, 18, accent, .85);
   }
@@ -424,7 +443,7 @@ const modeRules = {
   carousel: [[/carousel|slide|deck/, 0], [/modal|lightbox|alert/, 1], [/command|menu/, 2], [/toast|notification/, 3], [/popover|tour|spotlight/, 4], [/drag|drop|pinch/, 5]],
   pointer: [[/opposed diagonal|offset cta/, 8], [/metadata-to-cta|role swap/, 7], [/crop marks|four-corner/, 6], [/cursor|trail|particle/, 0], [/tilt|depth|parallax|glare/, 1], [/magnetic|attracted|button/, 2], [/hover|overlay|card/, 3], [/hotspot|region|point/, 4], [/distortion|gooey|displacement/, 5]],
   vector: [[/type-select|select-replace/, 7], [/text-path|curved text/, 6], [/draw|stroke|path/, 0], [/type|split|character css/, 1], [/flip|ticker|mechanical/, 2], [/morph|shape/, 3], [/hand|rough|letter/, 4], [/scramble|decode|random/, 5]],
-  canvas: [[/multi-chart|telemetry boot/, 6], [/generative|particle|sprite/, 0], [/physics|game|rigid/, 1], [/draw|sketch/, 2], [/object|node|drag|layer/, 3], [/geometry|primitive|illustration/, 4], [/infinite|grid|surface/, 5]],
+  canvas: [[/fish flock|dom-aware/, 7], [/multi-chart|telemetry boot/, 6], [/generative|particle|sprite/, 0], [/physics|game|rigid/, 1], [/draw|sketch/, 2], [/object|node|drag|layer/, 3], [/geometry|primitive|illustration/, 4], [/infinite|grid|surface/, 5]],
   webgl: [[/mesh|object|react|vue|svelte/, 0], [/particle|sphere/, 1], [/shader|plane|functional|minimal/, 2], [/bloom|post/, 3], [/product|model|orbit|camera/, 4], [/scene|webgl|3d/, 5]],
   background: [[/video ambience|blurred autoplay/, 7], [/starfield/, 6], [/fluid|gradient|vanta/, 0], [/particle|swarm|link/, 1], [/confetti/, 2], [/gradient|backdrop/, 3], [/mesh|poly|grid|surface/, 4], [/firework|ribbon|trail/, 5]],
   media: [[/duration-aware|film handoff|layered hero film/, 8], [/device-silhouette|silhouette masked/, 7], [/comparison|reveal/, 0], [/zoom|magnif|lens/, 1], [/depth|dissolve/, 6], [/pan|deep/, 2], [/crop/, 3], [/filter|editor/, 4], [/media|control|upload|preview/, 5]]

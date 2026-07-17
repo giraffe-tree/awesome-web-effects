@@ -1334,5 +1334,23 @@ export const additionalEffectSeeds = [
     "difference": "Each chart has an independent loading lifecycle, creating a readable cascade from unresolved panel to drawn telemetry. Existing line-chart effects stream one trace continuously or synchronize all charts to a shared cursor.",
     "sourceUrl": "https://www.pinecone.io/",
     "verifiedAt": "2026-07-17"
+  },
+  {
+    "name": "Drag-spawned DOM-aware fish flock",
+    "nameZh": "拖拽生成且避让 DOM 的鱼群",
+    "category": "canvas",
+    "projectName": "Awesome Web Effects",
+    "repo": "giraffe-tree/awesome-web-effects",
+    "stars": 0,
+    "snippet": "<canvas id=\"school\"></canvas><a class=\"fugu\" href=\"#\">Join us 🐡</a>\n<style>#school{position:fixed;inset:0;width:100%;height:100%}.fugu{position:fixed;right:3rem;bottom:3rem;z-index:2;padding:1rem;border-radius:50%;background:#e10600;color:#fff;animation:breathe 3.2s ease-in-out infinite}@keyframes breathe{50%{transform:scale(1.1)}}@media(prefers-reduced-motion:reduce){.fugu{animation:none}}</style>\n<script>const c=document.querySelector('#school'),x=c.getContext('2d'),cta=document.querySelector('.fugu'),fish=[];const add=(px=Math.random()*innerWidth,py=Math.random()*innerHeight)=>fish.length<250&&fish.push({x:px,y:py,vx:Math.random()*2-1,vy:Math.random()*2-1});for(let i=0;i<70;i++)add();function frame(){c.width=innerWidth;c.height=innerHeight;const b=cta.getBoundingClientRect();fish.forEach((f,i)=>{let ax=0,ay=0,n=0;fish.forEach(o=>{const dx=o.x-f.x,dy=o.y-f.y,d=Math.hypot(dx,dy);if(o!==f&&d<55){ax+=dx*.0008+(f.x-o.x)/(d*d||1);ay+=dy*.0008+(f.y-o.y)/(d*d||1);n++}});const fx=f.x+f.vx*50,fy=f.y+f.vy*50;if(fx>b.left-20&&fx<b.right+20&&fy>b.top-20&&fy<b.bottom+20){ax-=f.vy*.09;ay+=f.vx*.09}f.vx+=ax;f.vy+=ay;const s=Math.max(1,Math.hypot(f.vx,f.vy)/3);f.vx/=s;f.vy/=s;f.x=(f.x+f.vx+innerWidth)%innerWidth;f.y=(f.y+f.vy+innerHeight)%innerHeight;x.fillStyle=i===fish.length-1?'#e10600':'#999';x.fillRect(f.x,f.y,8,3)});requestAnimationFrame(frame)}frame();c.addEventListener('pointermove',e=>e.buttons&&add(e.clientX,e.clientY))</script>",
+    "behavior": {
+      "trigger": "continuous simulation plus pointer dragging",
+      "response": "new fish join a flock whose predicted paths curve around a breathing DOM recruitment control",
+      "timing": "one simulation step per animation frame; 50-frame obstacle lookahead",
+      "layer": "full-viewport canvas behind a measured DOM obstacle"
+    },
+    "difference": "The flock accepts drag-spawned members and treats a live, scaling HTML control as a predictive collision obstacle. Existing attraction-repulsion swarms coordinate particles only with each other and do not share geometry with a semantic DOM element.",
+    "sourceUrl": "https://sakana.ai/",
+    "verifiedAt": "2026-07-17"
   }
 ];

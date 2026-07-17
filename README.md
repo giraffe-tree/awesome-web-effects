@@ -2,7 +2,7 @@
 
 [中文文档](README.zh-CN.md) · [Live demo](https://giraffe-tree.github.io/awesome-interaction/)
 
-An **effect-first** atlas of open-source interactions for the web. It catalogs **240 distinct effects across 10 categories**, backed by **154 source projects**. Each effect is one row with a stable semantic key, a GIF preview, copyable minimal code, and a one-click implementation prompt for Codex or Claude Code. English is the default interface and documentation language.
+An **effect-first** atlas of open-source interactions for the web. It catalogs **241 distinct effects across 10 categories**, backed by **154 source projects**. Each effect is one row with a stable semantic key, a GIF preview, copyable minimal code, and a one-click implementation prompt for Codex or Claude Code. English is the default interface and documentation language.
 
 ## Effect-first model
 
@@ -13,14 +13,14 @@ An **effect-first** atlas of open-source interactions for the web. It catalogs *
 
 ## Catalog snapshot
 
-- 240 effect rows, including 20 baseline effects.
-- 119 independently researched effects were added in the latest effect-level expansion.
+- 241 effect rows, including 20 baseline effects.
+- 120 independently researched effects were added in the latest effect-level expansion.
 - 154 unique GitHub source projects; 101 were added during the 2026 expansion.
-- 240 source-specific GIF previews: 8 official captures and 232 labeled editorial recreations.
-- 240 one-click implementation prompts, one for every effect.
+- 241 source-specific GIF previews: 8 official captures and 233 labeled editorial recreations.
+- 241 one-click implementation prompts, one for every effect.
 - 14 useful older sources are marked **Legacy**; no archived repository is included.
 - Stars are a snapshot from **2026-07-17**, not a live counter.
-- The referenced, optimized GIF set is **10.19 MiB**; each preview is 320×180, at most three seconds, and below 1 MiB.
+- The referenced, optimized GIF set is **10.22 MiB**; each preview is 320×180, at most three seconds, and below 1 MiB.
 
 ## Selection rules
 
@@ -43,7 +43,7 @@ An **effect-first** atlas of open-source interactions for the web. It catalogs *
 | [Canvas & 2D](#canvas) | 24 | 20 | Scene graphs, creative coding, physics, drawing tools, and 2D renderers. |
 | [3D & WebGL](#webgl) | 22 | 20 | 3D engines, declarative renderers, shader layers, and post-processing. |
 | [Background & particles](#background) | 24 | 15 | Fluid, particles, gradients, confetti, meshes, ribbons, and fireworks. |
-| [Media & image](#media) | 25 | 23 | Comparison, pan-and-zoom, cropping, filters, lens zoom, and shader transitions. |
+| [Media & image](#media) | 26 | 23 | Comparison, pan-and-zoom, cropping, filters, lens zoom, and shader transitions. |
 
 ## Effect catalog
 
@@ -376,6 +376,7 @@ Comparison, pan-and-zoom, cropping, filters, lens zoom, and shader transitions.
 | [Depth-map ordered blur dissolve](https://giraffe-tree.github.io/awesome-interaction/#depth-map-ordered-blur-dissolve) | [three.js](https://github.com/mrdoob/three.js) | 113,755 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#depth-map-ordered-blur-dissolve) |
 | [Device-silhouette masked video](https://giraffe-tree.github.io/awesome-interaction/#device-silhouette-masked-video) | [Awesome Web Effects](https://github.com/giraffe-tree/awesome-web-effects) | 0 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#device-silhouette-masked-video) |
 | [Duration-aware layered hero film handoff](https://giraffe-tree.github.io/awesome-interaction/#duration-aware-layered-hero-film-handoff) | [Awesome Web Effects](https://github.com/giraffe-tree/awesome-web-effects) | 0 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#duration-aware-layered-hero-film-handoff) |
+| [Hover-rehearsed video style rail](https://giraffe-tree.github.io/awesome-interaction/#hover-rehearsed-video-style-rail) | [Awesome Web Effects](https://github.com/giraffe-tree/awesome-web-effects) | 0 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#hover-rehearsed-video-style-rail) |
 
 ## Demo
 

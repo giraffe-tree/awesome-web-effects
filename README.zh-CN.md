@@ -2,7 +2,7 @@
 
 [English (default)](README.md) · [在线 Demo](https://giraffe-tree.github.io/awesome-interaction/)
 
-一个**以效果为先**的开源 Web 交互图鉴。当前收录 **10 类 240 种不同效果**，背后有 **154 个来源项目**。每种效果独占一行，拥有稳定语义 Key、GIF 预览、可复制的最小代码，以及可一键交给 Codex 或 Claude Code 的实现提示词。英文是默认界面与默认文档语言，同时提供完整中文文档与中文界面。
+一个**以效果为先**的开源 Web 交互图鉴。当前收录 **10 类 241 种不同效果**，背后有 **154 个来源项目**。每种效果独占一行，拥有稳定语义 Key、GIF 预览、可复制的最小代码，以及可一键交给 Codex 或 Claude Code 的实现提示词。英文是默认界面与默认文档语言，同时提供完整中文文档与中文界面。
 
 ## 效果优先模型
 
@@ -13,14 +13,14 @@
 
 ## 目录快照
 
-- 240 行效果，其中 20 种为基线效果。
-- 最近一次效果级扩展独立调研并新增 119 种效果。
+- 241 行效果，其中 20 种为基线效果。
+- 最近一次效果级扩展独立调研并新增 120 种效果。
 - 154 个唯一 GitHub 来源项目；2026 扩展阶段新增 101 个。
-- 240 个与具体来源对应的 GIF：8 个官方捕获，232 个明确标注的编辑重现。
-- 240 份一键实现提示词，每种效果都有一份。
+- 241 个与具体来源对应的 GIF：8 个官方捕获，233 个明确标注的编辑重现。
+- 241 份一键实现提示词，每种效果都有一份。
 - 14 个较旧但仍有参考价值的来源标记为“经典旧版”；不包含已归档仓库。
 - Stars 是 **2026-07-17** 的快照，不是实时计数器。
-- 被目录引用的 GIF 优化后总计 **10.19 MiB**；每个预览均为 320×180、最长三秒且小于 1 MiB。
+- 被目录引用的 GIF 优化后总计 **10.22 MiB**；每个预览均为 320×180、最长三秒且小于 1 MiB。
 
 ## 收录与去重规则
 
@@ -43,7 +43,7 @@
 | [Canvas 与 2D](#canvas) | 24 | 20 | 场景图、创意编程、物理、绘图工具与 2D 渲染器。 |
 | [3D 与 WebGL](#webgl) | 22 | 20 | 3D 引擎、声明式渲染器、着色器图层与后期处理。 |
 | [背景与粒子](#background) | 24 | 15 | 流体、粒子、渐变、彩纸、网格、丝带与烟花。 |
-| [媒体与图像](#media) | 25 | 23 | 前后对比、平移缩放、裁剪、滤镜、镜头放大与着色器转场。 |
+| [媒体与图像](#media) | 26 | 23 | 前后对比、平移缩放、裁剪、滤镜、镜头放大与着色器转场。 |
 
 ## 效果目录
 
@@ -376,6 +376,7 @@
 | [深度图分层模糊溶解](https://giraffe-tree.github.io/awesome-interaction/#depth-map-ordered-blur-dissolve) | [three.js](https://github.com/mrdoob/three.js) | 113,755 | 1 | 当前推荐 | [代码 + 提示词](https://giraffe-tree.github.io/awesome-interaction/#depth-map-ordered-blur-dissolve) |
 | [设备轮廓蒙版视频](https://giraffe-tree.github.io/awesome-interaction/#device-silhouette-masked-video) | [Awesome Web Effects](https://github.com/giraffe-tree/awesome-web-effects) | 0 | 1 | 当前推荐 | [代码 + 提示词](https://giraffe-tree.github.io/awesome-interaction/#device-silhouette-masked-video) |
 | [按片段时长分层接力的首屏影片](https://giraffe-tree.github.io/awesome-interaction/#duration-aware-layered-hero-film-handoff) | [Awesome Web Effects](https://github.com/giraffe-tree/awesome-web-effects) | 0 | 1 | 当前推荐 | [代码 + 提示词](https://giraffe-tree.github.io/awesome-interaction/#duration-aware-layered-hero-film-handoff) |
+| [悬停预演视频风格轨](https://giraffe-tree.github.io/awesome-interaction/#hover-rehearsed-video-style-rail) | [Awesome Web Effects](https://github.com/giraffe-tree/awesome-web-effects) | 0 | 1 | 当前推荐 | [代码 + 提示词](https://giraffe-tree.github.io/awesome-interaction/#hover-rehearsed-video-style-rail) |
 
 ## Demo
 

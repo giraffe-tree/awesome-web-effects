@@ -1406,5 +1406,23 @@ export const additionalEffectSeeds = [
     "difference": "One state transition coordinates four visual layers with distinct motion roles and timing, creating a complete scene change. Existing tab panels or flip labels change a single layer without synchronizing background media and content choreography.",
     "sourceUrl": "https://vapi.ai/",
     "verifiedAt": "2026-07-17"
+  },
+  {
+    "name": "Hover-rehearsed video style rail",
+    "nameZh": "悬停预演视频风格轨",
+    "category": "media",
+    "projectName": "Awesome Web Effects",
+    "repo": "giraffe-tree/awesome-web-effects",
+    "stars": 0,
+    "snippet": "<div class=\"styles\" role=\"radiogroup\" aria-label=\"Select a style\"><button role=\"radio\" aria-checked=\"true\"><video muted loop playsinline src=\"bloom.mp4\"></video><span>Bloom</span></button><button role=\"radio\" aria-checked=\"false\"><video muted loop playsinline src=\"paper.mp4\"></video><span>Paper</span></button><button role=\"radio\" aria-checked=\"false\"><video muted loop playsinline src=\"orbit.mp4\"></video><span>Orbit</span></button></div>\n<style>.styles{display:flex;gap:.75rem;overflow:auto;scroll-snap-type:x mandatory}.styles button{position:relative;flex:0 0 10rem;padding:0;border:2px solid transparent;border-radius:1rem;overflow:hidden;scroll-snap-align:center;background:#111;color:#fff}.styles button[aria-checked=\"true\"]{border-color:#7c5cff}.styles video{width:100%;aspect-ratio:9/16;object-fit:cover;display:block}</style>\n<script>document.querySelectorAll('.styles button').forEach(button=>{const video=button.querySelector('video');button.addEventListener('pointerenter',()=>video.play().catch(()=>{}));button.addEventListener('pointerleave',()=>{video.pause();video.currentTime=0});button.addEventListener('click',()=>{button.parentElement.querySelectorAll('[role=\"radio\"]').forEach(x=>x.setAttribute('aria-checked',x===button));button.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'})})})</script>",
+    "behavior": {
+      "trigger": "style-thumbnail pointer enter, leave, and click",
+      "response": "hover temporarily plays a style preview, leave pauses and rewinds it, while click persists the radio choice and centers that option in the rail",
+      "timing": "immediate media rehearsal and reset; smooth native centering after selection",
+      "layer": "horizontal style-picker rail and thumbnail media"
+    },
+    "difference": "Hover acts as a reversible rehearsal while click commits an accessible selection and recenters the rail, separating preview intent from choice intent. Existing media hovers do not combine rewind-on-leave, radio semantics, and post-selection positioning.",
+    "sourceUrl": "https://www.captions.ai/",
+    "verifiedAt": "2026-07-17"
   }
 ];

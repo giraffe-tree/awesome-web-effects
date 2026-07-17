@@ -473,6 +473,26 @@ function mediaScene(frame, time, accent, secondary, mode) {
     rect(frame, 58, 126, 204, 5, [255, 255, 255], .2);
     rect(frame, 58, 126, 204 * local, 5, [255, 255, 255], .86);
     for (let index = 0; index < 3; index += 1) circle(frame, 140 + index * 18, 144, 4, index === segment ? [255, 255, 255] : [120, 125, 135], .9);
+  } else if (mode === 9) {
+    const hovered = time < .58 ? 1 : 2;
+    const selected = time < .76 ? 0 : 2;
+    const offset = selected === 2 ? -32 * ease(clamp((time - .76) / .2, 0, 1)) : 0;
+    for (let index = 0; index < 4; index += 1) {
+      const x = 30 + index * 72 + offset;
+      rect(frame, x, 35, 60, 104, index % 2 ? accent : secondary, index === hovered ? .82 : .42);
+      if (index === hovered) {
+        const playhead = (time * 5) % 1;
+        circle(frame, x + 30 + Math.sin(playhead * Math.PI * 2) * 14, 79, 12, [255, 255, 255], .5);
+        rect(frame, x + 8, 126, 44 * playhead, 3, [255, 255, 255], .9);
+      }
+      if (index === selected) {
+        rect(frame, x - 3, 32, 66, 3, [40, 43, 52], .95);
+        rect(frame, x - 3, 139, 66, 3, [40, 43, 52], .95);
+        rect(frame, x - 3, 32, 3, 110, [40, 43, 52], .95);
+        rect(frame, x + 60, 32, 3, 110, [40, 43, 52], .95);
+      }
+    }
+    circle(frame, 70 + time * 184, 90, 4, [32, 35, 44], .7);
   }
   else { circle(frame, 160, 90, 26, accent, .85); line(frame, 152, 76, 178, 90, [255,255,255], 3); line(frame, 178, 90, 152, 104, [255,255,255], 3); rect(frame, 68, 138, 184, 5, secondary, .25); rect(frame, 68, 138, 184 * time, 5, secondary, .9); }
 }
@@ -487,7 +507,7 @@ const modeRules = {
   canvas: [[/fish flock|dom-aware/, 7], [/multi-chart|telemetry boot/, 6], [/generative|particle|sprite/, 0], [/physics|game|rigid/, 1], [/draw|sketch/, 2], [/object|node|drag|layer/, 3], [/geometry|primitive|illustration/, 4], [/infinite|grid|surface/, 5]],
   webgl: [[/mesh|object|react|vue|svelte/, 0], [/particle|sphere/, 1], [/shader|plane|functional|minimal/, 2], [/bloom|post/, 3], [/product|model|orbit|camera/, 4], [/scene|webgl|3d/, 5]],
   background: [[/video ambience|blurred autoplay/, 7], [/starfield/, 6], [/fluid|gradient|vanta/, 0], [/particle|swarm|link/, 1], [/confetti/, 2], [/gradient|backdrop/, 3], [/mesh|poly|grid|surface/, 4], [/firework|ribbon|trail/, 5]],
-  media: [[/duration-aware|film handoff|layered hero film/, 8], [/device-silhouette|silhouette masked/, 7], [/comparison|reveal/, 0], [/zoom|magnif|lens/, 1], [/depth|dissolve/, 6], [/pan|deep/, 2], [/crop/, 3], [/filter|editor/, 4], [/media|control|upload|preview/, 5]]
+  media: [[/hover-rehearsed|video style rail/, 9], [/duration-aware|film handoff|layered hero film/, 8], [/device-silhouette|silhouette masked/, 7], [/comparison|reveal/, 0], [/zoom|magnif|lens/, 1], [/depth|dissolve/, 6], [/pan|deep/, 2], [/crop/, 3], [/filter|editor/, 4], [/media|control|upload|preview/, 5]]
 };
 
 function modeFor(effect, seed) {

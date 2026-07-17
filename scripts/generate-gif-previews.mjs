@@ -238,6 +238,20 @@ function pointerScene(frame, time, accent, secondary, mode) {
     line(frame, 198, 119, 204, 114, [32, 35, 44], 2, amount);
     circle(frame, cx, cy, 4, [32, 35, 44], .72);
   }
+  else if (mode === 8) {
+    const hovering = time > .2 && time < .72;
+    const pressed = time >= .72 && time < .84;
+    const amount = pressed ? 0 : hovering ? ease(clamp((time - .2) * 6, 0, 1)) : 0;
+    const baseX = 94; const baseY = 66;
+    rect(frame, baseX + amount * 10, baseY + amount * 10, 132, 48, accent, .88);
+    rect(frame, baseX - amount * 5, baseY - amount * 5, 132, 48, [255, 255, 255]);
+    rect(frame, baseX - amount * 5, baseY - amount * 5, 132, 3, [28, 31, 38]);
+    rect(frame, baseX - amount * 5, baseY + 45 - amount * 5, 132, 3, [28, 31, 38]);
+    rect(frame, baseX - amount * 5, baseY - amount * 5, 3, 48, [28, 31, 38]);
+    rect(frame, baseX + 129 - amount * 5, baseY - amount * 5, 3, 48, [28, 31, 38]);
+    rect(frame, 122 - amount * 5, 86 - amount * 5, 76, 7, [28, 31, 38], .82);
+    circle(frame, cx, cy, 4, secondary, .76);
+  }
   else { for (let index = 0; index < 12; index += 1) line(frame, 30 + index * 24, 48, 30 + index * 24 + Math.sin(time * Math.PI * 2 + index) * 18, 132, index % 2 ? accent : secondary, 2, .7); circle(frame, cx, cy, 5, [20, 24, 32]); }
 }
 
@@ -389,7 +403,7 @@ const modeRules = {
   scroll: [[/hysteretic|threshold header/, 7], [/document generation|generation playback/, 6], [/horizontal/, 0], [/scrollbar|container/, 1], [/parallax|3d/, 2], [/reveal|viewport/, 3], [/infinite|million|virtual|append/, 4], [/snap|section|split/, 5]],
   transition: [[/dropdown promo sweep|promo sweep/, 7], [/self-inverting|blend-mode/, 6], [/page|route/, 0], [/grid|masonry|pack|reflow/, 1], [/shared|flip|morph/, 2], [/drawer/, 3], [/split|resize/, 4], [/filter|enter|exit/, 5]],
   carousel: [[/carousel|slide|deck/, 0], [/modal|lightbox|alert/, 1], [/command|menu/, 2], [/toast|notification/, 3], [/popover|tour|spotlight/, 4], [/drag|drop|pinch/, 5]],
-  pointer: [[/metadata-to-cta|role swap/, 7], [/crop marks|four-corner/, 6], [/cursor|trail|particle/, 0], [/tilt|depth|parallax|glare/, 1], [/magnetic|attracted|button/, 2], [/hover|overlay|card/, 3], [/hotspot|region|point/, 4], [/distortion|gooey|displacement/, 5]],
+  pointer: [[/opposed diagonal|offset cta/, 8], [/metadata-to-cta|role swap/, 7], [/crop marks|four-corner/, 6], [/cursor|trail|particle/, 0], [/tilt|depth|parallax|glare/, 1], [/magnetic|attracted|button/, 2], [/hover|overlay|card/, 3], [/hotspot|region|point/, 4], [/distortion|gooey|displacement/, 5]],
   vector: [[/type-select|select-replace/, 7], [/text-path|curved text/, 6], [/draw|stroke|path/, 0], [/type|split|character css/, 1], [/flip|ticker|mechanical/, 2], [/morph|shape/, 3], [/hand|rough|letter/, 4], [/scramble|decode|random/, 5]],
   canvas: [[/generative|particle|sprite/, 0], [/physics|game|rigid/, 1], [/draw|sketch/, 2], [/object|node|drag|layer/, 3], [/geometry|primitive|illustration/, 4], [/infinite|grid|surface/, 5]],
   webgl: [[/mesh|object|react|vue|svelte/, 0], [/particle|sphere/, 1], [/shader|plane|functional|minimal/, 2], [/bloom|post/, 3], [/product|model|orbit|camera/, 4], [/scene|webgl|3d/, 5]],

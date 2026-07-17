@@ -1298,5 +1298,23 @@ export const additionalEffectSeeds = [
     "difference": "The same card slot changes semantic role from attribution to action as interaction intent arrives, rather than merely revealing an overlay or moving an already-visible button. The focus-visible path preserves the complete transformation for keyboard users.",
     "sourceUrl": "https://www.together.ai/",
     "verifiedAt": "2026-07-17"
+  },
+  {
+    "name": "Opposed diagonal offset CTA",
+    "nameZh": "反向对冲斜移 CTA",
+    "category": "pointer",
+    "projectName": "Awesome Web Effects",
+    "repo": "giraffe-tree/awesome-web-effects",
+    "stars": 0,
+    "snippet": "<a class=\"offset-cta\" href=\"#\"><span>Parse a document</span></a>\n<style>.offset-cta{position:relative;display:inline-block;margin:24px;color:#111;text-decoration:none}.offset-cta::after,.offset-cta span{display:block;border:2px solid #111;transition:transform .18s ease}.offset-cta::after{content:\"\";position:absolute;inset:0;background:#78efbf;z-index:-1}.offset-cta span{padding:15px 22px;background:#fff}.offset-cta:is(:hover,:focus-visible) span{transform:translate(-5px,-5px)}.offset-cta:is(:hover,:focus-visible)::after{transform:translate(10px,10px)}.offset-cta:active span,.offset-cta:active::after{transform:translate(0)}@media(prefers-reduced-motion:reduce){.offset-cta::after,.offset-cta span{transition:none}}</style>",
+    "behavior": {
+      "trigger": "button hover, keyboard focus, and press",
+      "response": "the white face travels up-left while its colored backing surface travels farther down-right, then both snap together on press",
+      "timing": "180 ms opposed movement; immediate pressed reset",
+      "layer": "two physical-looking CTA surfaces"
+    },
+    "difference": "Two linked layers move in opposite directions with unequal distance, multiplying the apparent depth before collapsing under pressure. A standard offset-shadow button moves only its face or preserves a stationary shadow.",
+    "sourceUrl": "https://unstructured.io/",
+    "verifiedAt": "2026-07-17"
   }
 ];

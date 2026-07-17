@@ -298,6 +298,25 @@ function canvasScene(frame, time, accent, secondary, mode, seed) {
     let previous = [38, 92]; for (let index = 1; index < 80; index += 1) { const x = 38 + index * 3; const y = 90 + Math.sin(index / 7 + time * 7) * 34; line(frame, previous[0], previous[1], x, y, mix(accent, secondary, index / 80), 3); previous = [x, y]; }
   } else if (mode === 3) {
     for (let index = 0; index < 5; index += 1) { const x = 54 + index * 48 + Math.sin(time * 6 + index) * 14; const y = 54 + (index % 2) * 50; rect(frame, x, y, 38, 32, index % 2 ? secondary : accent, .82); }
+  } else if (mode === 6) {
+    for (let chart = 0; chart < 3; chart += 1) {
+      const x0 = 20 + chart * 101; const y0 = 48; const chartWidth = 86; const chartHeight = 82;
+      rect(frame, x0, y0, chartWidth, chartHeight, [25, 29, 38], .96);
+      const progress = clamp((time - chart * .2) * 2.1, 0, 1);
+      if (progress === 0) {
+        circle(frame, x0 + chartWidth / 2, y0 + chartHeight / 2, 7, chart % 2 ? accent : secondary, .42);
+      } else {
+        let previous = [x0 + 8, y0 + chartHeight * .66];
+        const points = Math.floor(22 * ease(progress));
+        for (let index = 1; index <= points; index += 1) {
+          const x = x0 + 8 + index * 3.15;
+          const y = y0 + chartHeight * .56 + Math.sin(index * .58 + chart) * (11 + chart * 2);
+          line(frame, previous[0], previous[1], x, y, chart % 2 ? accent : secondary, 2, .92);
+          previous = [x, y];
+        }
+        rect(frame, x0 + 8, y0 + 11, 38 * progress, 5, [255, 255, 255], .42);
+      }
+    }
   } else {
     const offset = time * 42; for (let x = -40; x < width + 40; x += 24) line(frame, x + offset % 24, 0, x + offset % 24, height, accent, 1, .2); for (let y = -40; y < height + 40; y += 24) line(frame, 0, y + offset % 24, width, y + offset % 24, secondary, 1, .2); circle(frame, 160, 90, 18, accent, .85);
   }
@@ -405,7 +424,7 @@ const modeRules = {
   carousel: [[/carousel|slide|deck/, 0], [/modal|lightbox|alert/, 1], [/command|menu/, 2], [/toast|notification/, 3], [/popover|tour|spotlight/, 4], [/drag|drop|pinch/, 5]],
   pointer: [[/opposed diagonal|offset cta/, 8], [/metadata-to-cta|role swap/, 7], [/crop marks|four-corner/, 6], [/cursor|trail|particle/, 0], [/tilt|depth|parallax|glare/, 1], [/magnetic|attracted|button/, 2], [/hover|overlay|card/, 3], [/hotspot|region|point/, 4], [/distortion|gooey|displacement/, 5]],
   vector: [[/type-select|select-replace/, 7], [/text-path|curved text/, 6], [/draw|stroke|path/, 0], [/type|split|character css/, 1], [/flip|ticker|mechanical/, 2], [/morph|shape/, 3], [/hand|rough|letter/, 4], [/scramble|decode|random/, 5]],
-  canvas: [[/generative|particle|sprite/, 0], [/physics|game|rigid/, 1], [/draw|sketch/, 2], [/object|node|drag|layer/, 3], [/geometry|primitive|illustration/, 4], [/infinite|grid|surface/, 5]],
+  canvas: [[/multi-chart|telemetry boot/, 6], [/generative|particle|sprite/, 0], [/physics|game|rigid/, 1], [/draw|sketch/, 2], [/object|node|drag|layer/, 3], [/geometry|primitive|illustration/, 4], [/infinite|grid|surface/, 5]],
   webgl: [[/mesh|object|react|vue|svelte/, 0], [/particle|sphere/, 1], [/shader|plane|functional|minimal/, 2], [/bloom|post/, 3], [/product|model|orbit|camera/, 4], [/scene|webgl|3d/, 5]],
   background: [[/video ambience|blurred autoplay/, 7], [/starfield/, 6], [/fluid|gradient|vanta/, 0], [/particle|swarm|link/, 1], [/confetti/, 2], [/gradient|backdrop/, 3], [/mesh|poly|grid|surface/, 4], [/firework|ribbon|trail/, 5]],
   media: [[/duration-aware|film handoff|layered hero film/, 8], [/device-silhouette|silhouette masked/, 7], [/comparison|reveal/, 0], [/zoom|magnif|lens/, 1], [/depth|dissolve/, 6], [/pan|deep/, 2], [/crop/, 3], [/filter|editor/, 4], [/media|control|upload|preview/, 5]]

@@ -1316,5 +1316,23 @@ export const additionalEffectSeeds = [
     "difference": "Two linked layers move in opposite directions with unequal distance, multiplying the apparent depth before collapsing under pressure. A standard offset-shadow button moves only its face or preserves a stationary shadow.",
     "sourceUrl": "https://unstructured.io/",
     "verifiedAt": "2026-07-17"
+  },
+  {
+    "name": "Staggered multi-chart telemetry boot",
+    "nameZh": "交错多图表遥测启动",
+    "category": "canvas",
+    "projectName": "Awesome Web Effects",
+    "repo": "giraffe-tree/awesome-web-effects",
+    "stars": 0,
+    "snippet": "<section class=\"telemetry\"><canvas></canvas><canvas></canvas><canvas></canvas></section>\n<style>.telemetry{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.telemetry canvas{width:100%;height:150px;background:#11141c;border-radius:12px}</style>\n<script>const charts=[...document.querySelectorAll('.telemetry canvas')];const delay=ms=>new Promise(r=>setTimeout(r,ms));function draw(canvas,p){const c=canvas.getContext('2d'),w=canvas.width=canvas.clientWidth*devicePixelRatio,h=canvas.height=150*devicePixelRatio;c.clearRect(0,0,w,h);c.strokeStyle='#8cf7cf';c.lineWidth=2*devicePixelRatio;c.beginPath();for(let x=0;x<=w*p;x+=8){const y=h*.55+Math.sin(x*.035)*h*.2;c.lineTo(x,y)}c.stroke()}if(!matchMedia('(prefers-reduced-motion:reduce)').matches){charts.forEach(async(canvas,index)=>{canvas.setAttribute('aria-busy','true');await delay(240+index*320);canvas.removeAttribute('aria-busy');let p=0;const tick=()=>{draw(canvas,p=Math.min(1,p+.045));if(p<1)requestAnimationFrame(tick)};tick()})}</script>",
+    "behavior": {
+      "trigger": "dashboard mount and independent data resolution",
+      "response": "three loaders resolve one after another and each telemetry chart progressively draws only when its own data is ready",
+      "timing": "320 ms stagger between panels followed by per-chart draw animation",
+      "layer": "multi-panel canvas dashboard"
+    },
+    "difference": "Each chart has an independent loading lifecycle, creating a readable cascade from unresolved panel to drawn telemetry. Existing line-chart effects stream one trace continuously or synchronize all charts to a shared cursor.",
+    "sourceUrl": "https://www.pinecone.io/",
+    "verifiedAt": "2026-07-17"
   }
 ];

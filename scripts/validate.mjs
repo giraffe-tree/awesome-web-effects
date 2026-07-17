@@ -88,6 +88,12 @@ assert(html.includes('prompt-button') && html.includes('copyPrompt'), 'Demo does
 assert(html.includes('copy-code') && html.includes('source.snippet'), 'Demo does not expose copyable minimal code.');
 assert(readme.includes('| Effect | Recommended source |'), 'English README is not effect-first.');
 assert(readmeZh.includes('| 效果 | 推荐来源 |'), 'Chinese README is not effect-first.');
+const liveDemo = 'https://giraffe-tree.github.io/awesome-web-effects/';
+assert(readme.includes(liveDemo), 'English README does not link to the current GitHub Pages site.');
+assert(readmeZh.includes(liveDemo), 'Chinese README does not link to the current GitHub Pages site.');
+assert(readme.includes('research/ai-native-homepages-100.md'), 'English README does not link to the homepage research summary.');
+assert(readmeZh.includes('research/ai-native-homepages-100.md'), 'Chinese README does not link to the homepage research summary.');
+assert(!`${html}\n${readme}\n${readmeZh}`.includes('giraffe-tree/awesome-interaction'), 'Stale awesome-interaction repository or Pages link detected.');
 
 const previewRecords = [];
 for (const effect of effects) {

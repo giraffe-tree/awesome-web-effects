@@ -6,7 +6,7 @@
 
 The demo is compatible with GitHub Pages. GitHub Pages publishes static HTML, CSS, and JavaScript, and this repository's `demo/` has no server-side runtime or build step. Its JavaScript data files and GIFs use relative URLs, so they continue to work at the project-site URL.
 
-Expected production URL: <https://giraffe-tree.github.io/awesome-interaction/>
+Expected production URL: <https://giraffe-tree.github.io/awesome-web-effects/>
 
 ## Enable it once
 

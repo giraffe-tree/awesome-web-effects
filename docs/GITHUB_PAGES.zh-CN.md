@@ -6,7 +6,7 @@
 
 当前 demo 兼容 GitHub Pages。GitHub Pages 可发布静态 HTML、CSS 和 JavaScript；本仓库的 `demo/` 不依赖服务端运行时，也不需要构建步骤。JavaScript 数据文件与 GIF 都使用相对 URL，因此部署到项目站点路径后仍可正常加载。
 
-预期线上地址：<https://giraffe-tree.github.io/awesome-interaction/>
+预期线上地址：<https://giraffe-tree.github.io/awesome-web-effects/>
 
 ## 首次启用
 

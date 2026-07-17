@@ -6,7 +6,7 @@ import { dirname, resolve } from 'node:path';
 import { categories, effects, projects, snapshotDate } from '../demo/data/effects.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const liveDemo = 'https://giraffe-tree.github.io/awesome-interaction/';
+const liveDemo = 'https://giraffe-tree.github.io/awesome-web-effects/';
 const projectById = new Map(projects.map(project => [project.id, project]));
 const newProjectCount = projects.filter(project => project.addedIn === '2026-expansion').length;
 const baselineEffectCount = effects.filter(effect => effect.addedIn === 'baseline').length;
@@ -58,7 +58,7 @@ function effectTables(language) {
 
 const english = `# Awesome Web Effects
 
-[中文文档](README.zh-CN.md) · [Live demo](${liveDemo})
+[中文文档](README.zh-CN.md) · [Live demo](${liveDemo}) · [100 AI-native homepage audit](research/ai-native-homepages-100.md)
 
 An **effect-first** atlas of open-source interactions for the web. It catalogs **${effects.length} distinct effects across ${categories.length} categories**, backed by **${projects.length} source projects**. Each effect is one row with a stable semantic key, a GIF preview, copyable minimal code, and a one-click implementation prompt for Codex or Claude Code. English is the default interface and documentation language.
 
@@ -137,7 +137,7 @@ GIFs and project names are used for research, indexing, and comparison. Rights r
 
 const chinese = `# Awesome Web Effects
 
-[English (default)](README.md) · [在线 Demo](${liveDemo})
+[English (default)](README.md) · [在线 Demo](${liveDemo}) · [100 家 AI 公司主页特效调研](research/ai-native-homepages-100.md)
 
 一个**以效果为先**的开源 Web 交互图鉴。当前收录 **${categories.length} 类 ${effects.length} 种不同效果**，背后有 **${projects.length} 个来源项目**。每种效果独占一行，拥有稳定语义 Key、GIF 预览、可复制的最小代码，以及可一键交给 Codex 或 Claude Code 的实现提示词。英文是默认界面与默认文档语言，同时提供完整中文文档与中文界面。
 

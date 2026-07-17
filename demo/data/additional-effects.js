@@ -1136,5 +1136,17 @@ export const additionalEffectSeeds = [
     "difference": "A long phrase continuously advances along an open SVG curve, so the baseline itself bends while the copy streams through it. The circular-letter effect rotates a closed ring as one unit, and the motion-path follower moves a separate object rather than the text content.",
     "sourceUrl": "https://wisprflow.ai/",
     "verifiedAt": "2026-07-17"
+  },
+  {
+    "name": "Scroll-scrubbed document generation playback",
+    "nameZh": "滚动擦洗文档生成回放",
+    "category": "scroll",
+    "projectName": "GSAP",
+    "repo": "greensock/GSAP",
+    "stars": 26600,
+    "snippet": "import { gsap } from 'gsap';\nimport { ScrollTrigger } from 'gsap/ScrollTrigger';\ngsap.registerPlugin(ScrollTrigger);\nScrollTrigger.create({ trigger: '.note-story', start: 'top top', end: '+=1800', pin: true, scrub: true, onUpdate: ({ progress }) => {\n  const reveal = progress * Math.max(0, generated.scrollHeight - viewport.clientHeight / 2);\n  generated.style.clipPath = `inset(0 0 ${Math.max(0, generated.scrollHeight - reveal)}px 0)`;\n  cursor.style.transform = `translateY(${reveal}px)`;\n  viewport.scrollTop = Math.max(0, progress - .5) * 2 * (viewport.scrollHeight - viewport.clientHeight);\n  lines.forEach(line => line.classList.toggle('resolved', reveal >= line.offsetTop));\n} });",
+    "difference": "One scroll progress value grows a clipped generated document, moves its live cursor, scrolls the nested note viewport, and resolves reached lines. The existing sticky ink reveal only recolors already laid-out words and does not simulate a document being produced inside its own scrolling surface.",
+    "sourceUrl": "https://www.granola.ai/",
+    "verifiedAt": "2026-07-17"
   }
 ];

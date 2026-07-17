@@ -2,7 +2,7 @@
 
 [中文文档](README.zh-CN.md) · [Live demo](https://giraffe-tree.github.io/awesome-interaction/)
 
-An **effect-first** atlas of open-source interactions for the web. It catalogs **224 distinct effects across 10 categories**, backed by **153 source projects**. Each effect is one row with a stable semantic key, a GIF preview, copyable minimal code, and a one-click implementation prompt for Codex or Claude Code. English is the default interface and documentation language.
+An **effect-first** atlas of open-source interactions for the web. It catalogs **225 distinct effects across 10 categories**, backed by **153 source projects**. Each effect is one row with a stable semantic key, a GIF preview, copyable minimal code, and a one-click implementation prompt for Codex or Claude Code. English is the default interface and documentation language.
 
 ## Effect-first model
 
@@ -13,14 +13,14 @@ An **effect-first** atlas of open-source interactions for the web. It catalogs *
 
 ## Catalog snapshot
 
-- 224 effect rows, including 20 baseline effects.
-- 103 independently researched effects were added in the latest effect-level expansion.
+- 225 effect rows, including 20 baseline effects.
+- 104 independently researched effects were added in the latest effect-level expansion.
 - 153 unique GitHub source projects; 101 were added during the 2026 expansion.
-- 224 source-specific GIF previews: 8 official captures and 216 labeled editorial recreations.
-- 224 one-click implementation prompts, one for every effect.
+- 225 source-specific GIF previews: 8 official captures and 217 labeled editorial recreations.
+- 225 one-click implementation prompts, one for every effect.
 - 14 useful older sources are marked **Legacy**; no archived repository is included.
 - Stars are a snapshot from **2026-07-17**, not a live counter.
-- The referenced, optimized GIF set is **9.83 MiB**; each preview is 320×180, at most three seconds, and below 1 MiB.
+- The referenced, optimized GIF set is **9.85 MiB**; each preview is 320×180, at most three seconds, and below 1 MiB.
 
 ## Selection rules
 
@@ -35,7 +35,7 @@ An **effect-first** atlas of open-source interactions for the web. It catalogs *
 | Category | Effects | Source projects | Visible result |
 | --- | ---: | ---: | --- |
 | [Motion & choreography](#animation) | 22 | 14 | Timelines, springs, tweens, class animation, and framework-native motion. |
-| [Scroll & reveal](#scroll) | 23 | 17 | Smooth scrolling, scroll-linked scenes, reveals, parallax, and snap navigation. |
+| [Scroll & reveal](#scroll) | 24 | 17 | Smooth scrolling, scroll-linked scenes, reveals, parallax, and snap navigation. |
 | [Page & layout](#transition) | 22 | 15 | Page transitions, FLIP motion, filtering, packing, and animated reflow. |
 | [Navigation & overlays](#carousel) | 22 | 14 | Carousel, lightbox, menus, tours, notifications, drag overlays, and spatial navigation. |
 | [Pointer & hover](#pointer) | 22 | 13 | Tilt, depth, custom cursors, magnetic motion, and image distortion. |
@@ -109,6 +109,7 @@ Smooth scrolling, scroll-linked scenes, reveals, parallax, and snap navigation.
 | [Viewport-triggered metric count](https://giraffe-tree.github.io/awesome-interaction/#viewport-triggered-metric-count) | [Motion Primitives](https://github.com/ibelick/motion-primitives) | 5,695 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#viewport-triggered-metric-count) |
 | [Scroll-direction auto-hiding header](https://giraffe-tree.github.io/awesome-interaction/#scroll-direction-auto-hiding-header) | [Motion](https://github.com/motiondivision/motion) | 32,819 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#scroll-direction-auto-hiding-header) |
 | [Scroll-controlled video scrubbing](https://giraffe-tree.github.io/awesome-interaction/#scroll-controlled-video-scrubbing) | [Motion](https://github.com/motiondivision/motion) | 32,819 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#scroll-controlled-video-scrubbing) |
+| [Scroll-scrubbed document generation playback](https://giraffe-tree.github.io/awesome-interaction/#scroll-scrubbed-document-generation-playback) | [GSAP](https://github.com/greensock/GSAP) | 26,600 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#scroll-scrubbed-document-generation-playback) |
 
 <a id="transition"></a>
 

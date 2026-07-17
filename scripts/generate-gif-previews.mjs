@@ -124,6 +124,17 @@ function scrollScene(frame, time, accent, secondary, mode) {
     for (let index = 0; index < 3; index += 1) { const reveal = clamp(time * 2 - index * .22, 0, 1); rect(frame, 42 + index * 84, 116 - reveal * 54, 64, 50, index % 2 ? secondary : accent, reveal); }
   } else if (mode === 4) {
     for (let index = 0; index < 7; index += 1) rect(frame, 56, 18 + ((index * 34 - time * 92 + 210) % 238) - 30, 208, 25, index % 2 ? [255, 255, 255] : mix(accent, [255, 255, 255], .65));
+  } else if (mode === 6) {
+    rect(frame, 58, 20, 204, 140, [255, 255, 255]);
+    const scrollOffset = Math.max(0, time - .48) * 96;
+    for (let index = 0; index < 7; index += 1) {
+      const y = 38 + index * 20 - scrollOffset;
+      const reveal = clamp(time * 8 - index * .72, 0, 1);
+      rect(frame, 78, y, (92 + (index % 3) * 22) * reveal, 7, index < 2 ? secondary : accent, .28 + reveal * .62);
+    }
+    const cursorY = 38 + Math.min(6, Math.floor(time * 8)) * 20 - scrollOffset;
+    rect(frame, 76, cursorY, 3, 12, secondary, .95);
+    rect(frame, 248, 30 + time * 92, 4, 26, accent, .7);
   } else {
     for (let index = 0; index < 3; index += 1) rect(frame, 36, 24 + index * 52, 230, 42, index === Math.floor(time * 3) % 3 ? accent : [255, 255, 255], index === Math.floor(time * 3) % 3 ? .85 : 1);
   }
@@ -281,7 +292,7 @@ function mediaScene(frame, time, accent, secondary, mode) {
 
 const modeRules = {
   animation: [[/stagger/, 1], [/morph|shape/, 2], [/burst/, 3], [/spring|bounce/, 4], [/timeline|sequence|keyframe/, 5]],
-  scroll: [[/horizontal/, 0], [/scrollbar|container/, 1], [/parallax|3d/, 2], [/reveal|viewport/, 3], [/infinite|million|virtual|append/, 4], [/snap|section|split/, 5]],
+  scroll: [[/document generation|generation playback/, 6], [/horizontal/, 0], [/scrollbar|container/, 1], [/parallax|3d/, 2], [/reveal|viewport/, 3], [/infinite|million|virtual|append/, 4], [/snap|section|split/, 5]],
   transition: [[/page|route/, 0], [/grid|masonry|pack|reflow/, 1], [/shared|flip|morph/, 2], [/drawer/, 3], [/split|resize/, 4], [/filter|enter|exit/, 5]],
   carousel: [[/carousel|slide|deck/, 0], [/modal|lightbox|alert/, 1], [/command|menu/, 2], [/toast|notification/, 3], [/popover|tour|spotlight/, 4], [/drag|drop|pinch/, 5]],
   pointer: [[/cursor|trail|particle/, 0], [/tilt|depth|parallax|glare/, 1], [/magnetic|attracted|button/, 2], [/hover|overlay|card/, 3], [/hotspot|region|point/, 4], [/distortion|gooey|displacement/, 5]],

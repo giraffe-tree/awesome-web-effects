@@ -2,7 +2,7 @@
 
 [中文文档](README.zh-CN.md) · [Live demo](https://giraffe-tree.github.io/awesome-interaction/)
 
-An **effect-first** atlas of open-source interactions for the web. It catalogs **223 distinct effects across 10 categories**, backed by **153 source projects**. Each effect is one row with a stable semantic key, a GIF preview, copyable minimal code, and a one-click implementation prompt for Codex or Claude Code. English is the default interface and documentation language.
+An **effect-first** atlas of open-source interactions for the web. It catalogs **224 distinct effects across 10 categories**, backed by **153 source projects**. Each effect is one row with a stable semantic key, a GIF preview, copyable minimal code, and a one-click implementation prompt for Codex or Claude Code. English is the default interface and documentation language.
 
 ## Effect-first model
 
@@ -13,14 +13,14 @@ An **effect-first** atlas of open-source interactions for the web. It catalogs *
 
 ## Catalog snapshot
 
-- 223 effect rows, including 20 baseline effects.
-- 102 independently researched effects were added in the latest effect-level expansion.
+- 224 effect rows, including 20 baseline effects.
+- 103 independently researched effects were added in the latest effect-level expansion.
 - 153 unique GitHub source projects; 101 were added during the 2026 expansion.
-- 223 source-specific GIF previews: 8 official captures and 215 labeled editorial recreations.
-- 223 one-click implementation prompts, one for every effect.
+- 224 source-specific GIF previews: 8 official captures and 216 labeled editorial recreations.
+- 224 one-click implementation prompts, one for every effect.
 - 14 useful older sources are marked **Legacy**; no archived repository is included.
 - Stars are a snapshot from **2026-07-17**, not a live counter.
-- The referenced, optimized GIF set is **9.79 MiB**; each preview is 320×180, at most three seconds, and below 1 MiB.
+- The referenced, optimized GIF set is **9.83 MiB**; each preview is 320×180, at most three seconds, and below 1 MiB.
 
 ## Selection rules
 
@@ -39,7 +39,7 @@ An **effect-first** atlas of open-source interactions for the web. It catalogs *
 | [Page & layout](#transition) | 22 | 15 | Page transitions, FLIP motion, filtering, packing, and animated reflow. |
 | [Navigation & overlays](#carousel) | 22 | 14 | Carousel, lightbox, menus, tours, notifications, drag overlays, and spatial navigation. |
 | [Pointer & hover](#pointer) | 22 | 13 | Tilt, depth, custom cursors, magnetic motion, and image distortion. |
-| [Text & SVG](#vector) | 22 | 18 | Typing, text splitting, vector drawing, handwriting, and SVG morphing. |
+| [Text & SVG](#vector) | 23 | 19 | Typing, text splitting, vector drawing, handwriting, and SVG morphing. |
 | [Canvas & 2D](#canvas) | 22 | 19 | Scene graphs, creative coding, physics, drawing tools, and 2D renderers. |
 | [3D & WebGL](#webgl) | 22 | 20 | 3D engines, declarative renderers, shader layers, and post-processing. |
 | [Background & particles](#background) | 23 | 14 | Fluid, particles, gradients, confetti, meshes, ribbons, and fireworks. |
@@ -233,6 +233,7 @@ Typing, text splitting, vector drawing, handwriting, and SVG morphing.
 | [Shimmering SVG content skeleton](https://giraffe-tree.github.io/awesome-interaction/#shimmering-svg-content-skeleton) | [React Content Loader](https://github.com/danilowoz/react-content-loader) | 13,997 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#shimmering-svg-content-skeleton) |
 | [Clickable generated diagram callback](https://giraffe-tree.github.io/awesome-interaction/#clickable-generated-diagram-callback) | [Mermaid](https://github.com/mermaid-js/mermaid) | 89,262 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#clickable-generated-diagram-callback) |
 | [SVG curve motion-path follower](https://giraffe-tree.github.io/awesome-interaction/#svg-curve-motion-path-follower) | [Motion](https://github.com/motiondivision/motion) | 32,819 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#svg-curve-motion-path-follower) |
+| [Infinite curved text-path conveyor](https://giraffe-tree.github.io/awesome-interaction/#infinite-curved-text-path-conveyor) | [GSAP](https://github.com/greensock/GSAP) | 26,600 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#infinite-curved-text-path-conveyor) |
 
 <a id="canvas"></a>
 

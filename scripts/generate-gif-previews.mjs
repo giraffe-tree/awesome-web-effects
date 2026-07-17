@@ -183,6 +183,18 @@ function vectorScene(frame, time, accent, secondary, mode) {
     for (let index = 0; index < 8; index += 1) { const flip = wave(time, index * .11); rect(frame, 48 + index * 29, 64, 21, 48 * Math.max(.12, Math.abs(flip - .5) * 2), index % 2 ? secondary : accent, .86); }
   } else if (mode === 3) {
     const amount = wave(time); circle(frame, 160, 90, 28 + amount * 24, accent, .7); rect(frame, 126 + amount * 16, 56 + amount * 12, 68 - amount * 32, 68 - amount * 24, secondary, .55);
+  } else if (mode === 6) {
+    let previous = [0, 100];
+    for (let x = 0; x <= width; x += 3) {
+      const y = 90 + Math.sin((x / width) * Math.PI * 2.2 - .7) * 38;
+      line(frame, previous[0], previous[1], x, y, [177, 184, 198], 1, .55);
+      previous = [x, y];
+    }
+    for (let index = 0; index < 14; index += 1) {
+      const x = (index * 29 + time * 116) % (width + 36) - 18;
+      const y = 90 + Math.sin((x / width) * Math.PI * 2.2 - .7) * 38;
+      rect(frame, x - 5, y - 5, 10 + index % 3 * 4, 7, index % 2 ? accent : secondary, .9);
+    }
   }
 }
 
@@ -273,7 +285,7 @@ const modeRules = {
   transition: [[/page|route/, 0], [/grid|masonry|pack|reflow/, 1], [/shared|flip|morph/, 2], [/drawer/, 3], [/split|resize/, 4], [/filter|enter|exit/, 5]],
   carousel: [[/carousel|slide|deck/, 0], [/modal|lightbox|alert/, 1], [/command|menu/, 2], [/toast|notification/, 3], [/popover|tour|spotlight/, 4], [/drag|drop|pinch/, 5]],
   pointer: [[/cursor|trail|particle/, 0], [/tilt|depth|parallax|glare/, 1], [/magnetic|attracted|button/, 2], [/hover|overlay|card/, 3], [/hotspot|region|point/, 4], [/distortion|gooey|displacement/, 5]],
-  vector: [[/draw|stroke|path/, 0], [/type|split|character css/, 1], [/flip|ticker|mechanical/, 2], [/morph|shape/, 3], [/hand|rough|letter/, 4], [/scramble|decode|random/, 5]],
+  vector: [[/text-path|curved text/, 6], [/draw|stroke|path/, 0], [/type|split|character css/, 1], [/flip|ticker|mechanical/, 2], [/morph|shape/, 3], [/hand|rough|letter/, 4], [/scramble|decode|random/, 5]],
   canvas: [[/generative|particle|sprite/, 0], [/physics|game|rigid/, 1], [/draw|sketch/, 2], [/object|node|drag|layer/, 3], [/geometry|primitive|illustration/, 4], [/infinite|grid|surface/, 5]],
   webgl: [[/mesh|object|react|vue|svelte/, 0], [/particle|sphere/, 1], [/shader|plane|functional|minimal/, 2], [/bloom|post/, 3], [/product|model|orbit|camera/, 4], [/scene|webgl|3d/, 5]],
   background: [[/starfield/, 6], [/fluid|gradient|vanta/, 0], [/particle|swarm|link/, 1], [/confetti/, 2], [/gradient|backdrop/, 3], [/mesh|poly|grid|surface/, 4], [/firework|ribbon|trail/, 5]],

@@ -1124,5 +1124,17 @@ export const additionalEffectSeeds = [
     "difference": "Multiple transparent star canvases with different densities and point sizes travel at different rates as the page scrolls, creating background depth. Existing particle fields loop on their own, while pointer parallax responds to cursor position rather than document progress.",
     "sourceUrl": "https://fathom.video/",
     "verifiedAt": "2026-07-17"
+  },
+  {
+    "name": "Infinite curved text-path conveyor",
+    "nameZh": "无限曲线路径文字传送带",
+    "category": "vector",
+    "projectName": "GSAP",
+    "repo": "greensock/GSAP",
+    "stars": 26600,
+    "snippet": "import { gsap } from 'gsap';\nconst copy = document.querySelector('#curve-copy');\ngsap.fromTo(copy, { attr: { startOffset: '-100%' } }, { attr: { startOffset: '0%' }, duration: 35, ease: 'none', repeat: -1 });\n// <svg viewBox=\"0 0 1200 240\"><path id=\"curve\" d=\"M-80 180 Q300 0 640 130 T1280 70\" fill=\"none\"/><text><textPath id=\"curve-copy\" href=\"#curve\">SPEAK NATURALLY — WRITE FASTER — </textPath></text></svg>",
+    "difference": "A long phrase continuously advances along an open SVG curve, so the baseline itself bends while the copy streams through it. The circular-letter effect rotates a closed ring as one unit, and the motion-path follower moves a separate object rather than the text content.",
+    "sourceUrl": "https://wisprflow.ai/",
+    "verifiedAt": "2026-07-17"
   }
 ];

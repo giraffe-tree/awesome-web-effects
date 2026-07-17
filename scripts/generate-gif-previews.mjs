@@ -336,6 +336,19 @@ function mediaScene(frame, time, accent, secondary, mode) {
     circle(frame, 160, 144, 38, mix(accent, secondary, wave(time)), .82);
     for (let index = 0; index < 4; index += 1) circle(frame, 138 + index * 16, 74 + Math.sin(time * 7 + index) * 24, 7 + index, index % 2 ? [255, 255, 255] : secondary, .72);
     rect(frame, 148, 34, 24, 4, [31, 35, 47], .9);
+  } else if (mode === 8) {
+    const timeline = time * 3;
+    const segment = Math.floor(timeline) % 3;
+    const local = timeline - Math.floor(timeline);
+    const scenes = [[42, 71, 112], accent, secondary];
+    const nextScene = scenes[(segment + 1) % scenes.length];
+    const handoff = ease(clamp((local - .72) / .28, 0, 1));
+    rect(frame, 36, 24, 248, 132, scenes[segment], .92);
+    rect(frame, 36, 24, 248, 132, nextScene, handoff * .92);
+    circle(frame, 88 + segment * 68, 86, 34, [255, 255, 255], .12 + handoff * .16);
+    rect(frame, 58, 126, 204, 5, [255, 255, 255], .2);
+    rect(frame, 58, 126, 204 * local, 5, [255, 255, 255], .86);
+    for (let index = 0; index < 3; index += 1) circle(frame, 140 + index * 18, 144, 4, index === segment ? [255, 255, 255] : [120, 125, 135], .9);
   }
   else { circle(frame, 160, 90, 26, accent, .85); line(frame, 152, 76, 178, 90, [255,255,255], 3); line(frame, 178, 90, 152, 104, [255,255,255], 3); rect(frame, 68, 138, 184, 5, secondary, .25); rect(frame, 68, 138, 184 * time, 5, secondary, .9); }
 }
@@ -350,7 +363,7 @@ const modeRules = {
   canvas: [[/generative|particle|sprite/, 0], [/physics|game|rigid/, 1], [/draw|sketch/, 2], [/object|node|drag|layer/, 3], [/geometry|primitive|illustration/, 4], [/infinite|grid|surface/, 5]],
   webgl: [[/mesh|object|react|vue|svelte/, 0], [/particle|sphere/, 1], [/shader|plane|functional|minimal/, 2], [/bloom|post/, 3], [/product|model|orbit|camera/, 4], [/scene|webgl|3d/, 5]],
   background: [[/starfield/, 6], [/fluid|gradient|vanta/, 0], [/particle|swarm|link/, 1], [/confetti/, 2], [/gradient|backdrop/, 3], [/mesh|poly|grid|surface/, 4], [/firework|ribbon|trail/, 5]],
-  media: [[/device-silhouette|silhouette masked/, 7], [/comparison|reveal/, 0], [/zoom|magnif|lens/, 1], [/depth|dissolve/, 6], [/pan|deep/, 2], [/crop/, 3], [/filter|editor/, 4], [/media|control|upload|preview/, 5]]
+  media: [[/duration-aware|film handoff|layered hero film/, 8], [/device-silhouette|silhouette masked/, 7], [/comparison|reveal/, 0], [/zoom|magnif|lens/, 1], [/depth|dissolve/, 6], [/pan|deep/, 2], [/crop/, 3], [/filter|editor/, 4], [/media|control|upload|preview/, 5]]
 };
 
 function modeFor(effect, seed) {

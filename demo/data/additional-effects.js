@@ -1226,5 +1226,23 @@ export const additionalEffectSeeds = [
     "difference": "The four crop marks belong to the card and appear only on interaction intent, giving still media a tool-like focus state. The existing target reticle follows the cursor, while the focus-window headline moves a frame between words.",
     "sourceUrl": "https://cognition.com/",
     "verifiedAt": "2026-07-17"
+  },
+  {
+    "name": "Duration-aware layered hero film handoff",
+    "nameZh": "按片段时长分层接力的首屏影片",
+    "category": "media",
+    "projectName": "Awesome Web Effects",
+    "repo": "giraffe-tree/awesome-web-effects",
+    "stars": 0,
+    "snippet": "<div class=\"film-sequence\"><video class=\"active\" muted playsinline preload=\"auto\" data-range=\"12\" src=\"part-1.mp4\"></video><video muted playsinline preload=\"none\" data-range=\"10\" data-src=\"part-2.mp4\"></video><video muted playsinline preload=\"none\" data-range=\"7\" data-src=\"part-3.mp4\"></video></div>\n<style>.film-sequence{position:relative;min-height:100vh;overflow:hidden;background:#000}.film-sequence video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .3s ease-in-out}.film-sequence video.active{opacity:1}@media(prefers-reduced-motion:reduce){.film-sequence video{display:none}.film-sequence video:first-child{display:block;opacity:1}}</style>\n<script>const clips=[...document.querySelectorAll('.film-sequence video')];const load=v=>{if(!v.src&&v.dataset.src){v.src=v.dataset.src;v.load()}};function play(index){const current=clips[index],next=clips[(index+1)%clips.length],range=Number(current.dataset.range);load(current);current.currentTime=0;current.play();let armed=false;current.ontimeupdate=()=>{if(!armed&&current.currentTime>=range-1){armed=true;load(next)}if(current.currentTime>=range){current.pause();current.classList.remove('active');next.classList.add('active');play((index+1)%clips.length)}}}if(!matchMedia('(prefers-reduced-motion:reduce)').matches)play(0)</script>",
+    "behavior": {
+      "trigger": "page load and each clip reaching its configured range",
+      "response": "the next stacked hero video is loaded just in time and crossfades over the current layer",
+      "timing": "per-clip editorial ranges with a 300 ms opacity handoff",
+      "layer": "full-bleed media background"
+    },
+    "difference": "This is a cinematic playlist built from stacked native videos, each with its own editorial range, just-in-time loading of the next clip, and a short opacity handoff. Existing media entries use one loop, scroll timecodes, or a two-texture shader transition.",
+    "sourceUrl": "https://kling.ai/",
+    "verifiedAt": "2026-07-17"
   }
 ];

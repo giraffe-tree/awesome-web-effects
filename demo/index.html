@@ -153,6 +153,10 @@
       .source-name { display: block; color: var(--ink); font-size: 16px; font-weight: 650; line-height: 1.2; text-decoration: none; overflow-wrap: anywhere; }
       .source-name:hover { color: var(--blue); }
       .source-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 7px; color: var(--quiet); font-size: 10px; }
+      .party-label { margin-top: 12px; }
+      .party-list { display: flex; flex-wrap: wrap; gap: 5px; }
+      .party-link { display: inline-flex; max-width: 100%; padding: 4px 7px; border-radius: 999px; color: #075ea8; background: #eaf3fc; font-size: 9px; font-weight: 650; line-height: 1.2; text-decoration: none; overflow-wrap: anywhere; }
+      .party-link:hover { color: white; background: var(--blue); }
       .legacy-tag { color: #d70015; }
       .row-actions { display: grid; grid-template-columns: 1fr; gap: 8px; }
       .action-button { display: inline-flex; align-items: center; justify-content: center; min-height: 40px; padding: 0 13px; border: 0; border-radius: 99px; cursor: pointer; font-size: 12px; font-weight: 600; }
@@ -336,9 +340,9 @@
           section: 'Interaction catalog', catalogTitle: 'Choose the behavior first. Choose the tool second.',
           search: 'Search effect, source project, or keyword…', searchLabel: 'Search effects', filterLabel: 'Effect categories', sortLabel: 'Sort effects',
           curated: 'Curated effect order', stars: 'Recommended source stars', name: 'Effect: A–Z', sourcesSort: 'Most implementations', all: 'All',
-          resultEffects: 'effects', resultSources: 'source projects', note: 'GIF · Effect key · Source · Copy prompt · Code', empty: 'No matching effects. Try a shorter keyword.',
+          resultEffects: 'effects', resultSources: 'source projects', note: 'GIF · Effect key · Implementation · AI homepage references · Prompt · Code', empty: 'No matching effects. Try a shorter keyword.',
           previewOfficial: 'Official', previewEditorial: 'Concept', previewPaused: 'Preview paused', headPreview: 'Preview', headEffect: 'Effect', headSource: 'Recommended source', headAction: 'Actions',
-          recommended: 'Recommended', legacy: 'Legacy', implementations: 'implementations', implementation: 'implementation', copyPrompt: 'Copy agent prompt', promptCopied: 'Prompt copied',
+          recommended: 'Recommended implementation', observedOn: 'Observed on AI homepages', legacy: 'Legacy', implementations: 'implementations', implementation: 'implementation', copyPrompt: 'Copy agent prompt', promptCopied: 'Prompt copied',
           showCode: 'View minimal code', hideCode: 'Hide code', copyCode: 'Copy', codeCopied: 'Copied', copyFailed: 'Select text', definition: 'Effect', permalink: 'Effect link',
           repositoryLabel: 'on GitHub (opens in a new tab)', previewSource: 'Preview source ↗', footer: 'Effect-first, bilingual, and built for implementation. Project names and previews remain the property of their respective authors.', back: 'Back to top ↑'
         },
@@ -353,9 +357,9 @@
           section: '交互效果目录', catalogTitle: '先选交互行为，再选实现工具。',
           search: '搜索效果、来源项目或关键词…', searchLabel: '搜索效果', filterLabel: '效果分类', sortLabel: '效果排序',
           curated: '效果策展顺序', stars: '推荐来源 Stars', name: '效果名称 A–Z', sourcesSort: '实现来源最多', all: '全部',
-          resultEffects: '种效果', resultSources: '个来源项目', note: 'GIF · 效果 Key · 来源 · 复制 Prompt · 代码', empty: '没有匹配的效果，请尝试更短的关键词。',
+          resultEffects: '种效果', resultSources: '个来源项目', note: 'GIF · 效果 Key · 推荐实现 · AI 官网参考 · Prompt · 代码', empty: '没有匹配的效果，请尝试更短的关键词。',
           previewOfficial: '官方素材', previewEditorial: '概念重制', previewPaused: '已减少动态', headPreview: '预览', headEffect: '效果', headSource: '推荐来源', headAction: '操作',
-          recommended: '推荐实现', legacy: '经典旧版', implementations: '个实现', implementation: '个实现', copyPrompt: '复制 Agent Prompt', promptCopied: 'Prompt 已复制',
+          recommended: '推荐实现', observedOn: '观察到该效果的 AI 官网', legacy: '经典旧版', implementations: '个实现', implementation: '个实现', copyPrompt: '复制 Agent Prompt', promptCopied: 'Prompt 已复制',
           showCode: '查看最小代码', hideCode: '收起代码', copyCode: '复制', codeCopied: '已复制', copyFailed: '请选中文本', definition: '效果', permalink: '效果链接',
           repositoryLabel: 'GitHub 仓库（在新标签页打开）', previewSource: '预览来源 ↗', footer: '以效果为先，提供双语内容，并面向真实实现。项目名称与预览素材权利归各自作者所有。', back: '回到顶部 ↑'
         }
@@ -479,7 +483,8 @@
         let visible = effects.filter(effect => {
           const category = categoryById.get(effect.category);
           const sourceText = effect.sources.map(source => { const project = projectById.get(source.projectId); return `${project.name} ${project.repo}`; }).join(' ');
-          const haystack = `${effect.id} ${effect.name} ${effect.nameZh} ${category.label} ${category.labelZh} ${sourceText}`.toLowerCase();
+          const partyText = effect.relatedParties.map(party => `${party.name} ${party.observedAs}`).join(' ');
+          const haystack = `${effect.id} ${effect.name} ${effect.nameZh} ${category.label} ${category.labelZh} ${sourceText} ${partyText}`.toLowerCase();
           return (activeCategory === 'all' || effect.category === activeCategory) && (!query || haystack.includes(query));
         });
         if (sort.value === 'stars') visible = [...visible].sort((a, b) => projectById.get(recommendedSource(b).projectId).stars - projectById.get(recommendedSource(a).projectId).stars);
@@ -506,7 +511,8 @@
             const project = projectById.get(source.projectId);
             return `<section class="implementation"><div class="implementation-meta">${source.recommended ? `<span class="recommendation">${t.recommended}</span>` : ''}<h4>${escapeHTML(project.name)}</h4><a class="repo-link" href="${escapeHTML(project.url)}" target="_blank" rel="noreferrer" aria-label="${escapeHTML(project.name)} ${t.repositoryLabel}">${escapeHTML(project.repo)} ↗</a>${source.originUrl ? `<a class="origin-link" href="${escapeHTML(source.originUrl)}" target="_blank" rel="noreferrer">${t.previewSource}</a>` : ''}<div class="source-meta"><span>★ ${project.stars.toLocaleString('en-US')}</span>${project.legacy ? `<span class="legacy-tag">${t.legacy}</span>` : ''}</div></div><div class="code-wrap"><pre><code>${escapeHTML(source.snippet)}</code></pre><button class="copy-code" type="button">${t.copyCode}</button></div></section>`;
           }).join('');
-          row.innerHTML = `<div class="effect-main"><span class="row-number">${String(effect.order).padStart(3, '0')}</span><div class="row-preview">${previewMedia}<span class="preview-kind">${primary.previewKind === 'official-capture' ? t.previewOfficial : t.previewEditorial}</span></div><div class="effect-cell"><p class="category-label">${escapeHTML(labelFor(category))}</p><h3>${escapeHTML(effectName(effect))}</h3><span class="effect-key">effect:${escapeHTML(effect.id)}</span></div><div class="source-cell"><span class="source-label">${t.recommended}</span><a class="source-name" href="${escapeHTML(primaryProject.url)}" target="_blank" rel="noreferrer">${escapeHTML(primaryProject.name)} ↗</a><span class="source-meta"><span>★ ${primaryProject.stars.toLocaleString('en-US')}</span><span>${effect.sources.length} ${effect.sources.length === 1 ? t.implementation : t.implementations}</span>${primaryProject.legacy ? `<span class="legacy-tag">${t.legacy}</span>` : ''}</span></div><div class="row-actions"><button class="action-button prompt-button" type="button">${t.copyPrompt}</button><button class="action-button code-button" type="button" aria-expanded="false" aria-controls="detail-${escapeHTML(effect.id)}">${t.showCode}</button></div></div><div class="detail-panel" id="detail-${escapeHTML(effect.id)}" hidden><div class="detail-top"><p><strong>${t.definition}:</strong> ${escapeHTML(effectName(effect))}. ${effect.sources.length} ${effect.sources.length === 1 ? t.implementation : t.implementations}.</p><a class="permalink" href="#${escapeHTML(effect.id)}"># ${t.permalink}</a></div><div class="implementations">${implementations}</div></div>`;
+          const relatedParties = effect.relatedParties.map(party => `<a class="party-link" href="${escapeHTML(party.url)}" target="_blank" rel="noreferrer" title="${escapeHTML(party.observedAs)}">${escapeHTML(party.name)} ↗</a>`).join('');
+          row.innerHTML = `<div class="effect-main"><span class="row-number">${String(effect.order).padStart(3, '0')}</span><div class="row-preview">${previewMedia}<span class="preview-kind">${primary.previewKind === 'official-capture' ? t.previewOfficial : t.previewEditorial}</span></div><div class="effect-cell"><p class="category-label">${escapeHTML(labelFor(category))}</p><h3>${escapeHTML(effectName(effect))}</h3><span class="effect-key">effect:${escapeHTML(effect.id)}</span></div><div class="source-cell"><span class="source-label">${t.recommended}</span><a class="source-name" href="${escapeHTML(primaryProject.url)}" target="_blank" rel="noreferrer">${escapeHTML(primaryProject.name)} ↗</a><span class="source-meta"><span>★ ${primaryProject.stars.toLocaleString('en-US')}</span><span>${effect.sources.length} ${effect.sources.length === 1 ? t.implementation : t.implementations}</span>${primaryProject.legacy ? `<span class="legacy-tag">${t.legacy}</span>` : ''}</span>${relatedParties ? `<span class="source-label party-label">${t.observedOn}</span><span class="party-list">${relatedParties}</span>` : ''}</div><div class="row-actions"><button class="action-button prompt-button" type="button">${t.copyPrompt}</button><button class="action-button code-button" type="button" aria-expanded="false" aria-controls="detail-${escapeHTML(effect.id)}">${t.showCode}</button></div></div><div class="detail-panel" id="detail-${escapeHTML(effect.id)}" hidden><div class="detail-top"><p><strong>${t.definition}:</strong> ${escapeHTML(effectName(effect))}. ${effect.sources.length} ${effect.sources.length === 1 ? t.implementation : t.implementations}.</p><a class="permalink" href="#${escapeHTML(effect.id)}"># ${t.permalink}</a></div><div class="implementations">${implementations}</div></div>`;
 
           const promptButton = row.querySelector('.prompt-button');
           promptButton.addEventListener('click', () => copyText(promptButton, effect.prompt, t.promptCopied, t.copyPrompt));

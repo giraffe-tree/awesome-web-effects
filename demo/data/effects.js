@@ -1,4 +1,5 @@
 import { additionalEffectSeeds } from './additional-effects.js';
+import { companyObservations } from './company-observations.js';
 
 export const snapshotDate = '2026-07-17';
 
@@ -292,6 +293,10 @@ const researchedEffects = additionalEffectSeeds.map(item => effect(
 ));
 
 export const effects = [...coreEffects, ...researchedEffects]
-  .map((item, index) => ({ ...item, order: index + 1 }));
+  .map((item, index) => ({
+    ...item,
+    order: index + 1,
+    relatedParties: companyObservations[item.id] || []
+  }));
 
 export const projects = [...projectRegistry.values()];

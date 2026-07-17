@@ -18,11 +18,17 @@ const conceptPreviewCount = sources.filter(source => source.previewKind === 'edi
 const promptCount = effects.filter(effect => effect.prompt).length;
 const legacyProjectCount = projects.filter(project => project.legacy).length;
 const multiEffectProjectCount = projects.filter(project => effects.filter(effect => effect.sources.some(source => source.projectId === project.id)).length > 1).length;
+const observedEffectCount = effects.filter(effect => effect.relatedParties.length).length;
+const relatedPartyLinkCount = effects.reduce((sum, effect) => sum + effect.relatedParties.length, 0);
+const observedCompanyCount = new Set(effects.flatMap(effect => effect.relatedParties.map(party => party.name))).size;
 const previewPaths = [...new Set(sources.map(source => resolve(root, 'demo', 'gifs', `${source.preview}.gif`)))];
 const previewBytes = (await Promise.all(previewPaths.map(path => stat(path)))).reduce((sum, item) => sum + item.size, 0);
 const previewMiB = (previewBytes / 1024 / 1024).toFixed(2);
 const formatStars = value => value.toLocaleString('en-US');
 const recommendedSource = effect => effect.sources.find(source => source.recommended) || effect.sources[0];
+const relatedPartyLinks = effect => effect.relatedParties.length
+  ? effect.relatedParties.map(party => `[${party.name}](${party.url})`).join('<br>')
+  : '—';
 
 function categorySummary(language) {
   const isZh = language === 'zh';
@@ -45,20 +51,20 @@ function effectTables(language) {
       const project = projectById.get(source.projectId);
       const status = project.legacy ? (isZh ? '经典旧版' : 'Legacy') : (isZh ? '当前推荐' : 'Recommended');
       const name = isZh ? effect.nameZh : effect.name;
-      return `| [${name}](${liveDemo}#${effect.id}) | [${project.name}](${project.url}) | ${formatStars(project.stars)} | ${effect.sources.length} | ${status} | [${isZh ? '代码 + 提示词' : 'Code + prompt'}](${liveDemo}#${effect.id}) |`;
+      return `| [${name}](${liveDemo}#${effect.id}) | [${project.name}](${project.url}) | ${relatedPartyLinks(effect)} | ${formatStars(project.stars)} | ${effect.sources.length} | ${status} | [${isZh ? '代码 + 提示词' : 'Code + prompt'}](${liveDemo}#${effect.id}) |`;
     });
     const heading = isZh ? category.labelZh : category.label;
     const description = isZh ? category.descriptionZh : category.description;
     const headers = isZh
-      ? '| 效果 | 推荐来源 | Stars | 实现数 | 状态 | 实现 |\n| --- | --- | ---: | ---: | --- | --- |'
-      : '| Effect | Recommended source | Stars | Implementations | Status | Implementation |\n| --- | --- | ---: | ---: | --- | --- |';
+      ? '| 效果 | 推荐实现 | AI 官网参考（最多 3 家） | Stars | 实现数 | 状态 | 实现 |\n| --- | --- | --- | ---: | ---: | --- | --- |'
+      : '| Effect | Recommended implementation | AI homepage references (max 3) | Stars | Implementations | Status | Implementation |\n| --- | --- | --- | ---: | ---: | --- | --- |';
     return `<a id="${category.id}"></a>\n\n### ${heading}\n\n${description}\n\n${headers}\n${rows.join('\n')}`;
   }).join('\n\n');
 }
 
 const english = `# Awesome Web Effects
 
-[中文文档](README.zh-CN.md) · [Live demo](${liveDemo}) · [100 AI-native homepage audit](research/ai-native-homepages-100.md)
+[中文文档](README.zh-CN.md) · [Live demo](${liveDemo})
 
 An **effect-first** atlas of open-source interactions for the web. It catalogs **${effects.length} distinct effects across ${categories.length} categories**, backed by **${projects.length} source projects**. Each effect is one row with a stable semantic key, a GIF preview, copyable minimal code, and a one-click implementation prompt for Codex or Claude Code. English is the default interface and documentation language.
 
@@ -76,9 +82,12 @@ An **effect-first** atlas of open-source interactions for the web. It catalogs *
 - ${projects.length} unique GitHub source projects; ${newProjectCount} were added during the 2026 expansion.
 - ${previewCount} source-specific GIF previews: ${officialPreviewCount} official captures and ${conceptPreviewCount} labeled editorial recreations.
 - ${promptCount} one-click implementation prompts, one for every effect.
+- ${relatedPartyLinkCount} source-backed AI homepage references are integrated into ${observedEffectCount} existing effect rows, covering ${observedCompanyCount} companies; each effect shows at most three representative companies.
 - ${legacyProjectCount} useful older sources are marked **Legacy**; no archived repository is included.
 - Stars are a snapshot from **${snapshotDate}**, not a live counter.
 - The referenced, optimized GIF set is **${previewMiB} MiB**; each preview is 320×180, at most three seconds, and below 1 MiB.
+
+The implementation source and the website where an effect was observed are separate relationships. See the [Chinese-first 100-company audit](research/ai-native-homepages-100.md) for all observations, including common patterns that were not duplicated as new effect rows.
 
 ## Selection rules
 
@@ -126,6 +135,7 @@ Expected project URL: [${liveDemo}](${liveDemo})
 ## Maintaining the catalog
 
 - Edit \`demo/data/effects.js\` for the core catalog and \`demo/data/additional-effects.js\` for researched expansion records.
+- Edit \`demo/data/company-observations.js\` to associate source-backed AI homepage sightings with existing effects; keep at most three companies per effect.
 - Keep \`effect.id\` semantic and stable; never derive it from a repository name.
 - Reusing a project across effects is valid. Add alternative implementations to an effect's \`sources\` array.
 - Keep snippets and previews on the source relation, not on the project or effect root.
@@ -137,7 +147,7 @@ GIFs and project names are used for research, indexing, and comparison. Rights r
 
 const chinese = `# Awesome Web Effects
 
-[English (default)](README.md) · [在线 Demo](${liveDemo}) · [100 家 AI 公司主页特效调研](research/ai-native-homepages-100.md)
+[English (default)](README.md) · [在线 Demo](${liveDemo})
 
 一个**以效果为先**的开源 Web 交互图鉴。当前收录 **${categories.length} 类 ${effects.length} 种不同效果**，背后有 **${projects.length} 个来源项目**。每种效果独占一行，拥有稳定语义 Key、GIF 预览、可复制的最小代码，以及可一键交给 Codex 或 Claude Code 的实现提示词。英文是默认界面与默认文档语言，同时提供完整中文文档与中文界面。
 
@@ -155,9 +165,12 @@ const chinese = `# Awesome Web Effects
 - ${projects.length} 个唯一 GitHub 来源项目；2026 扩展阶段新增 ${newProjectCount} 个。
 - ${previewCount} 个与具体来源对应的 GIF：${officialPreviewCount} 个官方捕获，${conceptPreviewCount} 个明确标注的编辑重现。
 - ${promptCount} 份一键实现提示词，每种效果都有一份。
+- 已把 ${relatedPartyLinkCount} 条有证据的 AI 官网参考整合进 ${observedEffectCount} 个原有特效行，共覆盖 ${observedCompanyCount} 家公司；每种特效最多展示 3 家代表公司。
 - ${legacyProjectCount} 个较旧但仍有参考价值的来源标记为“经典旧版”；不包含已归档仓库。
 - Stars 是 **${snapshotDate}** 的快照，不是实时计数器。
 - 被目录引用的 GIF 优化后总计 **${previewMiB} MiB**；每个预览均为 320×180、最长三秒且小于 1 MiB。
+
+“推荐实现”和“在哪家公司官网观察到”是两种不同关系，现在会在同一个特效行中同时展示。完整观察记录见 [100 家 AI 公司主页特效调研](research/ai-native-homepages-100.md)，其中也保留了没有重复加入目录的常见效果。
 
 ## 收录与去重规则
 
@@ -205,6 +218,7 @@ Demo 完全静态且只使用相对路径。仓库内工作流会在推送到 \`
 ## 维护目录
 
 - 核心目录修改 \`demo/data/effects.js\`，独立调研的扩展记录修改 \`demo/data/additional-effects.js\`。
+- 官网观察关系修改 \`demo/data/company-observations.js\`；每种特效最多关联 3 家有证据的公司。
 - \`effect.id\` 必须语义化且保持稳定，禁止从仓库名派生。
 - 同一项目可被多个效果复用；替代实现加入效果的 \`sources\` 数组。
 - 代码与预览必须放在来源关系上，不能放到项目或效果根节点。

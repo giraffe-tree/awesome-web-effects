@@ -7,6 +7,7 @@ import { createHash } from 'node:crypto';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { categories, effects, projects, snapshotDate } from '../demo/data/effects.js';
+import { companyObservations } from '../demo/data/company-observations.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const errors = [];
@@ -26,6 +27,7 @@ for (const duplicate of duplicates(effects.map(effect => effect.id))) errors.pus
 for (const duplicate of duplicates(effects.map(effect => effect.name.toLowerCase()))) errors.push(`Duplicate effect name: ${duplicate}`);
 for (const duplicate of duplicates(projects.map(project => project.id))) errors.push(`Duplicate project id: ${duplicate}`);
 for (const duplicate of duplicates(projects.map(project => project.repo.toLowerCase()))) errors.push(`Duplicate source repository: ${duplicate}`);
+for (const effectId of Object.keys(companyObservations)) assert(effects.some(effect => effect.id === effectId), `Unknown company-observation effect id: ${effectId}.`);
 
 const projectById = new Map(projects.map(project => [project.id, project]));
 
@@ -44,6 +46,14 @@ for (const effect of effects) {
   assert(Number.isInteger(effect.order) && effect.order > 0, `${effect.id}: invalid curated order.`);
   assert(effect.behavior && ['trigger', 'response', 'timing', 'layer'].every(key => effect.behavior[key]?.length >= 3), `${effect.id}: incomplete interaction behavior.`);
   assert(effect.prompt?.includes(effect.name) && effect.prompt.length >= 400, `${effect.id}: missing implementation prompt.`);
+  assert(Array.isArray(effect.relatedParties), `${effect.id}: related parties must be an array.`);
+  assert(effect.relatedParties.length <= 3, `${effect.id}: at most three related parties may be shown.`);
+  for (const duplicate of duplicates(effect.relatedParties.map(party => party.name.toLowerCase()))) errors.push(`${effect.id}: duplicate related party ${duplicate}.`);
+  for (const party of effect.relatedParties) {
+    assert(party.name?.length >= 2, `${effect.id}: related party is missing a name.`);
+    assert(/^https:\/\//.test(party.url), `${effect.id}/${party.name}: related party requires an HTTPS homepage.`);
+    assert(party.observedAs?.length >= 6, `${effect.id}/${party.name}: related party requires an observed behavior label.`);
+  }
   if (effect.addedIn === '2026-effect-expansion') {
     assert(/^https:\/\//.test(effect.research?.sourceUrl), `${effect.id}: missing official research source URL.`);
     assert(effect.research?.difference?.length >= 40, `${effect.id}: missing effect-level deduplication rationale.`);
@@ -86,14 +96,22 @@ assert(html.includes("./data/effects.js"), 'Demo does not load the canonical eff
 assert(html.includes('type="module"'), 'Demo catalog must load as an ES module.');
 assert(html.includes('prompt-button') && html.includes('copyPrompt'), 'Demo does not expose one-click agent prompts.');
 assert(html.includes('copy-code') && html.includes('source.snippet'), 'Demo does not expose copyable minimal code.');
-assert(readme.includes('| Effect | Recommended source |'), 'English README is not effect-first.');
-assert(readmeZh.includes('| 效果 | 推荐来源 |'), 'Chinese README is not effect-first.');
+assert(readme.includes('| Effect | Recommended implementation | AI homepage references (max 3) |'), 'English README is not effect-first or lacks integrated homepage references.');
+assert(readmeZh.includes('| 效果 | 推荐实现 | AI 官网参考（最多 3 家） |'), 'Chinese README is not effect-first or lacks integrated homepage references.');
 const liveDemo = 'https://giraffe-tree.github.io/awesome-web-effects/';
 assert(readme.includes(liveDemo), 'English README does not link to the current GitHub Pages site.');
 assert(readmeZh.includes(liveDemo), 'Chinese README does not link to the current GitHub Pages site.');
 assert(readme.includes('research/ai-native-homepages-100.md'), 'English README does not link to the homepage research summary.');
 assert(readmeZh.includes('research/ai-native-homepages-100.md'), 'Chinese README does not link to the homepage research summary.');
 assert(!`${html}\n${readme}\n${readmeZh}`.includes('giraffe-tree/awesome-interaction'), 'Stale awesome-interaction repository or Pages link detected.');
+
+try {
+  const { stdout } = await execFileAsync(process.execPath, [resolve(root, 'scripts', 'generate-gif-previews.mjs'), '--audit']);
+  const coverage = stdout.match(/Matched (\d+)\/(\d+) generated previews to a semantic scene rule\./);
+  assert(coverage && coverage[1] === coverage[2], 'Generated GIF previews must all use a semantic scene rule; random fallback previews are not allowed.');
+} catch (error) {
+  errors.push(`Semantic GIF audit failed (${error.message}).`);
+}
 
 const previewRecords = [];
 for (const effect of effects) {

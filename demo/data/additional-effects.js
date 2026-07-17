@@ -1148,5 +1148,17 @@ export const additionalEffectSeeds = [
     "difference": "One scroll progress value grows a clipped generated document, moves its live cursor, scrolls the nested note viewport, and resolves reached lines. The existing sticky ink reveal only recolors already laid-out words and does not simulate a document being produced inside its own scrolling surface.",
     "sourceUrl": "https://www.granola.ai/",
     "verifiedAt": "2026-07-17"
+  },
+  {
+    "name": "Type-select-replace prompt loop",
+    "nameZh": "输入选中替换提示词循环",
+    "category": "vector",
+    "projectName": "Motion",
+    "repo": "motiondivision/motion",
+    "stars": 32819,
+    "snippet": "import { motion } from 'motion/react';\nconst character = { hidden: { display: 'none' }, visible: index => ({ display: 'inline', transition: { delay: index * .035 } }) };\nfunction Prompt({ item, phase }) { return <><motion.p initial=\"hidden\" animate=\"visible\" key={item.prompt} className={phase === 'selected' ? 'selection' : ''}>{item.prompt.split('').map((char, index) => <motion.span custom={index} variants={character} key={index}>{char}</motion.span>)}<span className={phase === 'resting' ? 'caret blink' : 'caret'} /></motion.p><motion.span key={item.category} initial={{ scale: .5 }} animate={{ scale: 1 }} transition={{ type: 'spring', bounce: .6 }}>{item.category}</motion.span></>; }\n// Advance phase: typing → resting → selected → next item.",
+    "difference": "The prompt is typed character by character, pauses with a caret, becomes a full text-selection highlight, then swaps together with a springing category chip. A conventional typewriter only types and erases glyphs; it does not model the editor-like select-and-replace phase.",
+    "sourceUrl": "https://www.granola.ai/",
+    "verifiedAt": "2026-07-17"
   }
 ];

@@ -206,6 +206,14 @@ function vectorScene(frame, time, accent, secondary, mode) {
       const y = 90 + Math.sin((x / width) * Math.PI * 2.2 - .7) * 38;
       rect(frame, x - 5, y - 5, 10 + index % 3 * 4, 7, index % 2 ? accent : secondary, .9);
     }
+  } else if (mode === 7) {
+    const phase = time < .62 ? time / .62 : (time - .62) / .38;
+    const visible = time < .62 ? Math.floor(phase * 16) : 16;
+    if (time >= .62 && time < .86) rect(frame, 42, 62, 236, 34, mix(accent, [255, 255, 255], .56), .78);
+    for (let index = 0; index < visible; index += 1) rect(frame, 48 + index * 13, 72, 8, 14, index % 3 ? [57, 61, 70] : secondary, .92);
+    if (time < .62) rect(frame, 48 + visible * 13, 69, 3, 21, accent, .9);
+    const chipScale = time < .86 ? 1 : ease(clamp((time - .86) / .14, 0, 1));
+    rect(frame, 48, 112, 72 * chipScale, 24, secondary, .78);
   }
 }
 
@@ -296,7 +304,7 @@ const modeRules = {
   transition: [[/page|route/, 0], [/grid|masonry|pack|reflow/, 1], [/shared|flip|morph/, 2], [/drawer/, 3], [/split|resize/, 4], [/filter|enter|exit/, 5]],
   carousel: [[/carousel|slide|deck/, 0], [/modal|lightbox|alert/, 1], [/command|menu/, 2], [/toast|notification/, 3], [/popover|tour|spotlight/, 4], [/drag|drop|pinch/, 5]],
   pointer: [[/cursor|trail|particle/, 0], [/tilt|depth|parallax|glare/, 1], [/magnetic|attracted|button/, 2], [/hover|overlay|card/, 3], [/hotspot|region|point/, 4], [/distortion|gooey|displacement/, 5]],
-  vector: [[/text-path|curved text/, 6], [/draw|stroke|path/, 0], [/type|split|character css/, 1], [/flip|ticker|mechanical/, 2], [/morph|shape/, 3], [/hand|rough|letter/, 4], [/scramble|decode|random/, 5]],
+  vector: [[/type-select|select-replace/, 7], [/text-path|curved text/, 6], [/draw|stroke|path/, 0], [/type|split|character css/, 1], [/flip|ticker|mechanical/, 2], [/morph|shape/, 3], [/hand|rough|letter/, 4], [/scramble|decode|random/, 5]],
   canvas: [[/generative|particle|sprite/, 0], [/physics|game|rigid/, 1], [/draw|sketch/, 2], [/object|node|drag|layer/, 3], [/geometry|primitive|illustration/, 4], [/infinite|grid|surface/, 5]],
   webgl: [[/mesh|object|react|vue|svelte/, 0], [/particle|sphere/, 1], [/shader|plane|functional|minimal/, 2], [/bloom|post/, 3], [/product|model|orbit|camera/, 4], [/scene|webgl|3d/, 5]],
   background: [[/starfield/, 6], [/fluid|gradient|vanta/, 0], [/particle|swarm|link/, 1], [/confetti/, 2], [/gradient|backdrop/, 3], [/mesh|poly|grid|surface/, 4], [/firework|ribbon|trail/, 5]],

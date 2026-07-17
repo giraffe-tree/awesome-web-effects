@@ -282,6 +282,7 @@ const researchedEffects = additionalEffectSeeds.map(item => effect(
   item.snippet,
   {
     addedIn: '2026-effect-expansion',
+    behavior: item.behavior,
     research: {
       sourceUrl: item.sourceUrl,
       difference: item.difference,

@@ -2,25 +2,25 @@
 
 [English (default)](README.md) · [在线 Demo](https://giraffe-tree.github.io/awesome-interaction/)
 
-一个**以效果为先**的开源 Web 交互图鉴。当前收录 **10 类 227 种不同效果**，背后有 **154 个来源项目**。每种效果独占一行，拥有稳定语义 Key、GIF 预览、可复制的最小代码，以及可一键交给 Codex 或 Claude Code 的实现提示词。英文是默认界面与默认文档语言，同时提供完整中文文档与中文界面。
+一个**以效果为先**的开源 Web 交互图鉴。当前收录 **10 类 228 种不同效果**，背后有 **154 个来源项目**。每种效果独占一行，拥有稳定语义 Key、GIF 预览、可复制的最小代码，以及可一键交给 Codex 或 Claude Code 的实现提示词。英文是默认界面与默认文档语言，同时提供完整中文文档与中文界面。
 
 ## 效果优先模型
 
 - **效果是目录主键。** 锚点、搜索结果、行、分类与代码示例都从用户看得见的交互出发，而不是从仓库出发。
-- **项目是实现来源。** 一个项目可以实现多种不同效果；当前种子目录已有 11 个来源项目明确展示这种关系。
+- **项目是实现来源。** 一个项目可以实现多种不同效果；当前种子目录已有 12 个来源项目明确展示这种关系。
 - **一种效果可以有多个实现。** 每个来源关系拥有自己的最小代码和 GIF，因此替代方案可以放在同一行中比较，不必复制效果行。
 - **去重发生在可见效果层。** 候选按触发方式、视觉变化、时间关系和页面层级比较；更新、维护更好、文档更清楚的实现成为推荐来源。
 
 ## 目录快照
 
-- 227 行效果，其中 20 种为基线效果。
-- 最近一次效果级扩展独立调研并新增 106 种效果。
+- 228 行效果，其中 20 种为基线效果。
+- 最近一次效果级扩展独立调研并新增 107 种效果。
 - 154 个唯一 GitHub 来源项目；2026 扩展阶段新增 101 个。
-- 227 个与具体来源对应的 GIF：8 个官方捕获，219 个明确标注的编辑重现。
-- 227 份一键实现提示词，每种效果都有一份。
+- 228 个与具体来源对应的 GIF：8 个官方捕获，220 个明确标注的编辑重现。
+- 228 份一键实现提示词，每种效果都有一份。
 - 14 个较旧但仍有参考价值的来源标记为“经典旧版”；不包含已归档仓库。
 - Stars 是 **2026-07-17** 的快照，不是实时计数器。
-- 被目录引用的 GIF 优化后总计 **9.88 MiB**；每个预览均为 320×180、最长三秒且小于 1 MiB。
+- 被目录引用的 GIF 优化后总计 **9.89 MiB**；每个预览均为 320×180、最长三秒且小于 1 MiB。
 
 ## 收录与去重规则
 
@@ -36,7 +36,7 @@
 | --- | ---: | ---: | --- |
 | [动画与编排](#animation) | 22 | 14 | 时间线、弹簧、补间、类动画与框架原生动效。 |
 | [滚动与揭示](#scroll) | 24 | 17 | 平滑滚动、滚动关联场景、进入揭示、视差与整屏吸附。 |
-| [页面与布局](#transition) | 22 | 15 | 页面转场、FLIP 动画、筛选、紧密排布与布局重排。 |
+| [页面与布局](#transition) | 23 | 16 | 页面转场、FLIP 动画、筛选、紧密排布与布局重排。 |
 | [导航与浮层](#carousel) | 22 | 14 | 轮播、灯箱、菜单、导览、通知、拖拽浮层与空间导航。 |
 | [指针与悬停](#pointer) | 22 | 13 | 倾斜、景深、自定义光标、磁性运动与图像扭曲。 |
 | [文本与 SVG](#vector) | 24 | 19 | 打字、文字拆分、矢量绘制、手写与 SVG 变形。 |
@@ -141,6 +141,7 @@
 | [上下文切换动态工具栏](https://giraffe-tree.github.io/awesome-interaction/#context-switching-dynamic-toolbar) | [Motion Primitives](https://github.com/ibelick/motion-primitives) | 5,695 | 1 | 当前推荐 | [代码 + 提示词](https://giraffe-tree.github.io/awesome-interaction/#context-switching-dynamic-toolbar) |
 | [自适应高度标签面板滑动](https://giraffe-tree.github.io/awesome-interaction/#adaptive-height-tab-panel-slide) | [Motion Primitives](https://github.com/ibelick/motion-primitives) | 5,695 | 1 | 当前推荐 | [代码 + 提示词](https://giraffe-tree.github.io/awesome-interaction/#adaptive-height-tab-panel-slide) |
 | [裁剪形状主题揭示](https://giraffe-tree.github.io/awesome-interaction/#clip-shape-theme-reveal) | [Magic UI](https://github.com/magicuidesign/magicui) | 21,567 | 1 | 当前推荐 | [代码 + 提示词](https://giraffe-tree.github.io/awesome-interaction/#clip-shape-theme-reveal) |
+| [混合模式自反色固定导航](https://giraffe-tree.github.io/awesome-interaction/#blend-mode-self-inverting-fixed-navigation) | [Awesome Web Effects](https://github.com/giraffe-tree/awesome-web-effects) | 0 | 1 | 当前推荐 | [代码 + 提示词](https://giraffe-tree.github.io/awesome-interaction/#blend-mode-self-inverting-fixed-navigation) |
 
 <a id="carousel"></a>
 

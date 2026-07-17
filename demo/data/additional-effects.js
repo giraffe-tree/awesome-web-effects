@@ -1172,5 +1172,23 @@ export const additionalEffectSeeds = [
     "difference": "A continuously playing HTML video is clipped by an arbitrary alpha silhouette instead of a rectangular media box. Existing entries cover crop tools, comparison sliders, zoom, filters, and transition masks, but not a persistent non-rectangular video surface.",
     "sourceUrl": "https://pika.art/",
     "verifiedAt": "2026-07-17"
+  },
+  {
+    "name": "Blend-mode self-inverting fixed navigation",
+    "nameZh": "混合模式自反色固定导航",
+    "category": "transition",
+    "projectName": "Awesome Web Effects",
+    "repo": "giraffe-tree/awesome-web-effects",
+    "stars": 0,
+    "snippet": "<nav class=\"adaptive-nav\"><a href=\"#top\">LUMA</a><a href=\"#work\">Work</a></nav>\n<section class=\"light\" id=\"top\"></section><section class=\"dark\" id=\"work\"></section>\n<style>\n.adaptive-nav { position:fixed; inset:18px 20px auto; z-index:10; display:flex; justify-content:space-between; color:#fff; mix-blend-mode:difference; }\n.light { min-height:100vh; background:#fff; }\n.dark { min-height:100vh; background:#090909; }\n</style>",
+    "behavior": {
+      "trigger": "scroll across contrasting page sections",
+      "response": "fixed navigation continuously inverts against underlying pixels",
+      "timing": "continuous compositor-linked",
+      "layer": "navigation overlay"
+    },
+    "difference": "The compositor keeps a fixed navigation layer legible by continuously blending it with unrelated light and dark sections underneath. Existing theme reveals explicitly animate a chosen palette, and the auto-hiding header responds to scroll direction instead of page pixels.",
+    "sourceUrl": "https://lumalabs.ai/",
+    "verifiedAt": "2026-07-17"
   }
 ];

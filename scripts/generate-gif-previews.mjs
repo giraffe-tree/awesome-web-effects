@@ -153,6 +153,17 @@ function transitionScene(frame, time, accent, secondary, mode) {
     const amount = ease(wave(time)); rect(frame, 54 + amount * 94, 48 - amount * 18, 66 + amount * 72, 70 + amount * 36, accent, .82);
   } else if (mode === 3) {
     rect(frame, 0, 0, width, height, [20, 25, 35], time * .35); rect(frame, width - ease(time) * 210, 0, 210, height, [255, 255, 255]); rect(frame, width - ease(time) * 188, 30, 150, 12, accent);
+  } else if (mode === 6) {
+    const boundary = 52 + time * 216;
+    rect(frame, 0, 0, boundary, height, [24, 28, 35]);
+    rect(frame, boundary, 0, width - boundary, height, [246, 244, 238]);
+    const navigation = [[28, 28, 46], [226, 28, 66]];
+    navigation.forEach(([x, y, w]) => {
+      const leftWidth = clamp(boundary - x, 0, w);
+      rect(frame, x, y, leftWidth, 9, [255, 255, 255], .96);
+      rect(frame, x + leftWidth, y, w - leftWidth, 9, [18, 21, 26], .96);
+    });
+    rect(frame, 62, 112, 196, 7, boundary > 160 ? secondary : accent, .62);
   } else {
     rect(frame, 30, 42, 260 * wave(time), 96, accent, .7); rect(frame, 30 + 260 * wave(time), 42, 260 * (1 - wave(time)), 96, secondary, .65);
   }
@@ -310,7 +321,7 @@ function mediaScene(frame, time, accent, secondary, mode) {
 const modeRules = {
   animation: [[/stagger/, 1], [/morph|shape/, 2], [/burst/, 3], [/spring|bounce/, 4], [/timeline|sequence|keyframe/, 5]],
   scroll: [[/document generation|generation playback/, 6], [/horizontal/, 0], [/scrollbar|container/, 1], [/parallax|3d/, 2], [/reveal|viewport/, 3], [/infinite|million|virtual|append/, 4], [/snap|section|split/, 5]],
-  transition: [[/page|route/, 0], [/grid|masonry|pack|reflow/, 1], [/shared|flip|morph/, 2], [/drawer/, 3], [/split|resize/, 4], [/filter|enter|exit/, 5]],
+  transition: [[/self-inverting|blend-mode/, 6], [/page|route/, 0], [/grid|masonry|pack|reflow/, 1], [/shared|flip|morph/, 2], [/drawer/, 3], [/split|resize/, 4], [/filter|enter|exit/, 5]],
   carousel: [[/carousel|slide|deck/, 0], [/modal|lightbox|alert/, 1], [/command|menu/, 2], [/toast|notification/, 3], [/popover|tour|spotlight/, 4], [/drag|drop|pinch/, 5]],
   pointer: [[/cursor|trail|particle/, 0], [/tilt|depth|parallax|glare/, 1], [/magnetic|attracted|button/, 2], [/hover|overlay|card/, 3], [/hotspot|region|point/, 4], [/distortion|gooey|displacement/, 5]],
   vector: [[/type-select|select-replace/, 7], [/text-path|curved text/, 6], [/draw|stroke|path/, 0], [/type|split|character css/, 1], [/flip|ticker|mechanical/, 2], [/morph|shape/, 3], [/hand|rough|letter/, 4], [/scramble|decode|random/, 5]],

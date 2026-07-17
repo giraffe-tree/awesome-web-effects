@@ -1,5 +1,6 @@
 # 仓库约定
 
+- 除非用户明确要求使用其他分支或发起 Pull Request，完成变更后默认直接提交并推送到 `main` 分支，不创建功能分支。
 - Git 远端：`git@github.com:giraffe-tree/awesome-web-effects.git`。用户要求推送且 SSH 失败时，改用 `git push https://github.com/giraffe-tree/awesome-web-effects.git main:main`。
 - `demo/data/effects.js` 和 `demo/data/additional-effects.js` 是特效目录数据源；`demo/data/company-observations.js` 只记录官网观察关系。
 - 特效是主实体。“推荐实现”和“观察到该效果的 AI 官网”是不同关系，不得混为实现归属；每种特效最多关联 3 家有证据的公司，无法验证时不添加。

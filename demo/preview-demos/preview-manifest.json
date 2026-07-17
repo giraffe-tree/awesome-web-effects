@@ -3,6 +3,51 @@
   "captureScript": "scripts/capture-real-preview-gifs.py",
   "demos": [
     {
+      "id": "visually-authored-keyframe-sequence",
+      "library": "@theatre/core@0.7.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/visually-authored-keyframe-sequence.html",
+      "demoSourcePath": "preview-demos/visually-authored-keyframe-sequence.html",
+      "gifPath": "gifs/captured/visually-authored-keyframe-sequence.gif"
+    },
+    {
+      "id": "staggered-transform-choreography",
+      "library": "animejs@4.5.0",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/staggered-transform-choreography.html",
+      "demoSourcePath": "preview-demos/staggered-transform-choreography.html",
+      "gifPath": "gifs/captured/staggered-transform-choreography.gif"
+    },
+    {
+      "id": "motion-graphics-burst",
+      "library": "@mojs/core@1.7.1",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/motion-graphics-burst.html",
+      "demoSourcePath": "preview-demos/motion-graphics-burst.html",
+      "gifPath": "gifs/captured/motion-graphics-burst.gif"
+    },
+    {
+      "id": "functional-value-pipeline",
+      "library": "popmotion@11.0.5",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/functional-value-pipeline.html",
+      "demoSourcePath": "preview-demos/functional-value-pipeline.html",
+      "gifPath": "gifs/captured/functional-value-pipeline.gif"
+    },
+    {
+      "id": "compact-svg-shape-tween",
+      "library": "kute.js@2.2.6",
+      "renderer": "svg",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/compact-svg-shape-tween.html",
+      "demoSourcePath": "preview-demos/compact-svg-shape-tween.html",
+      "gifPath": "gifs/captured/compact-svg-shape-tween.gif"
+    },
+    {
       "id": "functional-webgl-draw-commands",
       "library": "regl@2.1.1",
       "demoPath": "preview-demos/dist/functional-webgl-draw-commands.html",
@@ -52,6 +97,33 @@
       "demoPath": "preview-demos/dist/scroll-scrubbed-master-timeline.html",
       "demoSourcePath": "preview-demos/scroll-scrubbed-master-timeline.html",
       "gifPath": "gifs/captured/scroll-scrubbed-master-timeline.gif"
+    },
+    {
+      "id": "pinned-horizontal-scroll-scene",
+      "library": "gsap@3.15.0",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/pinned-horizontal-scroll-scene.html",
+      "demoSourcePath": "preview-demos/pinned-horizontal-scroll-scene.html",
+      "gifPath": "gifs/captured/pinned-horizontal-scroll-scene.gif"
+    },
+    {
+      "id": "shared-layout-spring-morph",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/shared-layout-spring-morph.html",
+      "demoSourcePath": "preview-demos/shared-layout-spring-morph.html",
+      "gifPath": "gifs/captured/shared-layout-spring-morph.gif"
+    },
+    {
+      "id": "render-agnostic-value-tween",
+      "library": "@tweenjs/tween.js@25.0.0",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/render-agnostic-value-tween.html",
+      "demoSourcePath": "preview-demos/render-agnostic-value-tween.html",
+      "gifPath": "gifs/captured/render-agnostic-value-tween.gif"
     },
     {
       "id": "filterable-grid-reflow",

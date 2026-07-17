@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tween.js — Render-agnostic Value Tween</title>
+    <link rel="stylesheet" href="./shared.css" />
+    <style>
+      :root { --preview-background: #07111f; }
+      .value-stage {
+        position: absolute;
+        inset: 39px 20px 28px;
+        border: 1px solid #9fdcff24;
+        border-radius: 18px;
+        background:
+          linear-gradient(180deg, #0d2035cc, #091626e6),
+          repeating-linear-gradient(90deg, transparent 0 34px, #ffffff08 35px 36px);
+        box-shadow: inset 0 1px #ffffff0d, 0 18px 35px #0006;
+      }
+      .value-track {
+        position: absolute;
+        left: 22px;
+        right: 22px;
+        top: 49px;
+        height: 3px;
+        border-radius: 999px;
+        background: #d9efff17;
+      }
+      .value-progress {
+        width: 100%;
+        height: 100%;
+        border-radius: inherit;
+        transform: scaleX(0);
+        transform-origin: left;
+        background: linear-gradient(90deg, #46dcff, #8874ff, #ff62bb);
+        box-shadow: 0 0 14px #5ce2ff91;
+      }
+      .value-node {
+        position: absolute;
+        left: 13px;
+        top: 34px;
+        width: 32px;
+        height: 32px;
+        display: grid;
+        place-items: center;
+        border: 1px solid #ffffff7a;
+        border-radius: 10px;
+        color: #07111f;
+        background: linear-gradient(135deg, #d9fbff, #59dcff 55%, #a887ff);
+        box-shadow: 0 9px 24px #37cfff4f;
+      }
+      .value-node::before,
+      .value-node::after {
+        content: '';
+        position: absolute;
+        width: 13px;
+        height: 2px;
+        border-radius: 999px;
+        background: currentColor;
+      }
+      .value-node::after { transform: rotate(90deg); }
+      .value-readout {
+        position: absolute;
+        left: 22px;
+        right: 22px;
+        bottom: 12px;
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        color: #8fa9bd;
+        font-size: 7px;
+        font-weight: 800;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+      }
+      .value-readout strong {
+        color: white;
+        font-size: 15px;
+        font-variant-numeric: tabular-nums;
+        letter-spacing: -.03em;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="preview-stage" aria-label="A real Tween.js value drives position, rotation, progress, and a numeric readout">
+      <section class="value-stage" data-preview-mechanism="tweenjs-value-pipeline">
+        <div class="value-track"><div class="value-progress" id="value-progress"></div></div>
+        <div class="value-node" id="value-node" aria-hidden="true"></div>
+        <div class="value-readout"><span>one tween · four render targets</span><strong id="value-number">000</strong></div>
+      </section>
+      <span class="library-badge">Tween.js · Group.update</span>
+      <span class="scene-caption">plain values drive DOM without owning the renderer</span>
+    </main>
+    <script type="module" src="./src/tween-value-demo.js"></script>
+  </body>
+</html>

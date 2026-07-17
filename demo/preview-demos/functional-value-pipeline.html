@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Popmotion — Functional Value Pipeline</title>
+    <link rel="stylesheet" href="./shared.css" />
+    <style>
+      :root { --preview-background: #080b12; }
+      .pipeline-stage {
+        background:
+          radial-gradient(circle at 52% 36%, rgba(31, 167, 207, .14), transparent 40%),
+          linear-gradient(145deg, #080b12, #101524);
+      }
+      .pipeline-shell { position: absolute; inset: 39px 14px 12px; }
+      .pipeline-rail { position: absolute; left: 7px; right: 7px; top: 20px; height: 2px; background: rgba(255,255,255,.12); }
+      .pipeline-fill { width: 100%; height: 100%; transform: scaleX(0); transform-origin: left; background: linear-gradient(90deg, #52ebff, #8f75ff, #ff69bd); box-shadow: 0 0 10px #62dfff; }
+      .pipeline-packet { position: absolute; z-index: 5; left: 1px; top: 12px; width: 16px; height: 16px; border: 2px solid white; border-radius: 50%; background: #5be9ff; box-shadow: 0 0 16px #4eeaff, 0 0 28px #746eff; will-change: transform; }
+      .pipeline-node { position: absolute; z-index: 3; top: 10px; width: 22px; height: 22px; transform: translateX(-50%); border: 1px solid rgba(255,255,255,.25); border-radius: 7px; background: #171c2a; box-shadow: 0 6px 14px rgba(0,0,0,.28); }
+      .pipeline-node::before { content: ""; position: absolute; inset: 7px; border-radius: 3px; background: #6f778a; transition: background .1s linear, box-shadow .1s linear; }
+      .pipeline-node.active::before { background: #7deaff; box-shadow: 0 0 10px #6ce7ff; }
+      .pipeline-node span { position: absolute; left: 50%; top: 27px; color: #959cab; font-size: 6px; font-weight: 900; letter-spacing: .07em; text-transform: uppercase; transform: translateX(-50%); white-space: nowrap; }
+      .pipeline-node output { position: absolute; left: 50%; top: 38px; color: #e9faff; font: 700 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace; transform: translateX(-50%); white-space: nowrap; }
+      .node-a { left: 3%; }
+      .node-b { left: 27%; }
+      .node-c { left: 51%; }
+      .node-d { left: 75%; }
+      .node-e { left: 98%; }
+      .output-lane { position: absolute; left: 7px; right: 7px; bottom: 5px; height: 48px; border-top: 1px solid rgba(255,255,255,.08); }
+      .output-curve { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+      .output-curve path { fill: none; stroke: rgba(116, 144, 255, .25); stroke-width: 1; stroke-dasharray: 3 4; }
+      .output-card {
+        position: absolute;
+        left: 2px;
+        top: 11px;
+        width: 34px;
+        height: 28px;
+        border: 1px solid rgba(255,255,255,.55);
+        border-radius: 9px;
+        background: #52ebff;
+        box-shadow: 0 9px 18px rgba(28, 75, 130, .45);
+        will-change: transform, background-color;
+      }
+      .output-card::before,
+      .output-card::after { content: ""; position: absolute; left: 7px; height: 3px; border-radius: 9px; background: rgba(8,11,18,.5); }
+      .output-card::before { top: 8px; width: 18px; }
+      .output-card::after { top: 15px; width: 11px; opacity: .65; }
+      .pipeline-toggle { position: absolute; right: 12px; top: 9px; min-height: 22px; padding: 0 9px; border: 1px solid rgba(255,255,255,.2); border-radius: 99px; color: #dffbff; background: rgba(10,13,24,.78); font-size: 6px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; }
+      .pipeline-toggle:hover { background: #304b78; }
+      .pipeline-stage > .scene-caption { display: none; }
+      @media (prefers-reduced-motion: reduce) { .pipeline-toggle { display: none; } }
+    </style>
+  </head>
+  <body>
+    <main class="preview-stage pipeline-stage" aria-label="A Popmotion value moves through clamp, easing, interpolation, and DOM render functions">
+      <div class="pipeline-shell" data-preview-mechanism="popmotion-value-pipeline">
+        <div class="pipeline-rail"><div class="pipeline-fill" id="pipeline-fill"></div></div>
+        <div class="pipeline-packet" id="pipeline-packet" aria-hidden="true"></div>
+        <div class="pipeline-node node-a active"><span>animate</span><output id="raw-value">0.00</output></div>
+        <div class="pipeline-node node-b"><span>clamp</span><output id="clamped-value">0.00</output></div>
+        <div class="pipeline-node node-c"><span>ease</span><output id="eased-value">0.00</output></div>
+        <div class="pipeline-node node-d"><span>map</span><output id="mapped-value">0px</output></div>
+        <div class="pipeline-node node-e"><span>render</span><output>DOM</output></div>
+        <div class="output-lane" aria-hidden="true">
+          <svg class="output-curve" viewBox="0 0 284 48" preserveAspectRatio="none"><path d="M 18 31 C 82 -4, 203 -4, 266 31" /></svg>
+          <div class="output-card" id="output-card"></div>
+        </div>
+      </div>
+      <button class="pipeline-toggle" id="pipeline-toggle" type="button" aria-pressed="false">Pause flow</button>
+      <span class="library-badge">Popmotion · value pipeline</span>
+      <span class="scene-caption">animate → clamp → ease → interpolate → DOM</span>
+    </main>
+    <script type="module" src="./src/popmotion-value-pipeline-demo.js"></script>
+  </body>
+</html>

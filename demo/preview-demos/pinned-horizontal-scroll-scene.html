@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GSAP — Pinned Horizontal Scroll Scene</title>
+    <link rel="stylesheet" href="./shared.css" />
+    <style>
+      :root { --preview-background: #f4eddd; color-scheme: light; }
+      #horizontal-scrollport { position: absolute; inset: 0; overflow-y: auto; scrollbar-width: none; }
+      #horizontal-scrollport::-webkit-scrollbar { display: none; }
+      .horizontal-scene { height: 180px; }
+      .horizontal-stage { position: relative; height: 180px; overflow: hidden; background: #162c27; }
+      .horizontal-track { display: flex; width: 400%; height: 100%; will-change: transform; }
+      .story-panel { position: relative; flex: 0 0 25%; height: 100%; overflow: hidden; padding: 45px 22px 30px; }
+      .story-panel::before { content: attr(data-index); position: absolute; right: 15px; top: 28px; color: currentColor; opacity: .2; font: 900 54px/.8 Georgia, serif; }
+      .story-panel h2 { position: relative; z-index: 2; max-width: 180px; margin: 0; color: currentColor; font: 900 25px/.88 Georgia, serif; letter-spacing: -.04em; }
+      .story-panel p { position: relative; z-index: 2; width: 170px; margin: 10px 0 0; color: currentColor; opacity: .68; font: 700 7px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .1em; text-transform: uppercase; }
+      .story-panel--signal { color: #17322c; background: #f6c761; }
+      .story-panel--shape { color: #f3ede3; background: #1e4b43; }
+      .story-panel--motion { color: #271d30; background: #ef7b70; }
+      .story-panel--ship { color: #17322c; background: #b8dfbf; }
+      .signal-orbit { position: absolute; right: 26px; bottom: 22px; width: 62px; height: 62px; border: 1px solid currentColor; border-radius: 50%; opacity: .72; }
+      .signal-orbit::before,
+      .signal-orbit::after { content: ''; position: absolute; border-radius: 50%; background: currentColor; }
+      .signal-orbit::before { width: 12px; height: 12px; left: -5px; top: 23px; }
+      .signal-orbit::after { width: 7px; height: 7px; right: 7px; top: 4px; }
+      .shape-stack { position: absolute; right: 25px; bottom: 19px; width: 76px; height: 67px; }
+      .shape-stack span { position: absolute; display: block; width: 48px; height: 31px; border: 1px solid #b8dfbf; border-radius: 4px; background: #346a5f; transform: rotate(-8deg); }
+      .shape-stack span:nth-child(2) { left: 15px; top: 12px; background: #f6c761; transform: rotate(5deg); }
+      .shape-stack span:nth-child(3) { left: 28px; top: 26px; background: #ef7b70; transform: rotate(-3deg); }
+      .motion-ribbon { position: absolute; right: 19px; bottom: 22px; width: 94px; height: 53px; border: 8px solid currentColor; border-left-color: transparent; border-radius: 50%; transform: rotate(-12deg); opacity: .82; }
+      .ship-mark { position: absolute; right: 29px; bottom: 24px; width: 65px; height: 48px; border: 2px solid currentColor; border-radius: 50% 50% 46% 54%; transform: rotate(-9deg); }
+      .ship-mark::after { content: '✓'; position: absolute; inset: 0; display: grid; place-items: center; font: 900 26px/1 system-ui; }
+      .viewport-marker { position: absolute; z-index: 10; left: 50%; top: 40px; bottom: 24px; width: 1px; background: #fff5; pointer-events: none; }
+      .viewport-marker::before,
+      .viewport-marker::after { content: ''; position: absolute; left: -3px; width: 7px; height: 7px; border: 1px solid #fffb; border-radius: 50%; }
+      .viewport-marker::before { top: 0; }
+      .viewport-marker::after { bottom: 0; }
+      .scene-progress { position: absolute; z-index: 12; left: 12px; right: 12px; bottom: 12px; height: 2px; background: #ffffff45; pointer-events: none; }
+      .scene-progress__fill { display: block; width: 100%; height: 100%; background: #fff; box-shadow: 0 0 8px #fff8; transform: scaleX(0); transform-origin: left; }
+      .panel-counter { position: absolute; z-index: 12; right: 13px; bottom: 17px; color: #fff; font: 800 7px/1 ui-monospace, monospace; letter-spacing: .08em; pointer-events: none; }
+      .library-badge { color: #fff; background: #112822cc; border-color: #ffffff28; }
+      .scene-caption { bottom: 18px; color: #fff; mix-blend-mode: difference; }
+    </style>
+  </head>
+  <body>
+    <main class="preview-stage" aria-label="A real GSAP ScrollTrigger scene pinned while a four-panel story moves horizontally">
+      <div id="horizontal-scrollport">
+        <section class="horizontal-scene" id="horizontal-scene">
+          <div class="horizontal-stage" id="horizontal-stage">
+            <div class="horizontal-track" id="horizontal-track" data-preview-mechanism="gsap-pinned-horizontal-scroll">
+              <article class="story-panel story-panel--signal" data-index="01"><h2>Find the signal.</h2><p>Vertical intent begins a horizontal narrative.</p><div class="signal-orbit"></div></article>
+              <article class="story-panel story-panel--shape" data-index="02"><h2>Shape the system.</h2><p>The viewport stays pinned while the track advances.</p><div class="shape-stack"><span></span><span></span><span></span></div></article>
+              <article class="story-panel story-panel--motion" data-index="03"><h2>Direct the motion.</h2><p>Scroll progress maps continuously to track translation.</p><div class="motion-ribbon"></div></article>
+              <article class="story-panel story-panel--ship" data-index="04"><h2>Ship the story.</h2><p>The final panel lands before vertical flow resumes.</p><div class="ship-mark"></div></article>
+            </div>
+            <span class="viewport-marker" aria-hidden="true"></span>
+            <div class="scene-progress" aria-hidden="true"><span class="scene-progress__fill" id="scene-progress"></span></div>
+            <span class="panel-counter" id="panel-counter">01 / 04</span>
+          </div>
+        </section>
+      </div>
+      <span class="library-badge">GSAP · ScrollTrigger</span>
+      <span class="scene-caption">vertical scroll · pinned viewport · horizontal story</span>
+    </main>
+    <script type="module" src="./src/gsap-pinned-horizontal-demo.js"></script>
+  </body>
+</html>

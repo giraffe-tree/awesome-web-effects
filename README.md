@@ -16,13 +16,13 @@ An **effect-first** atlas of open-source interactions for the web. It catalogs *
 - 242 effect rows, including 20 baseline effects.
 - 121 independently researched effects were added in the latest effect-level expansion.
 - 154 unique GitHub source projects; 101 were added during the 2026 expansion.
-- 20 verified source-specific GIF previews: 8 official captures and 12 captures from runnable local demos.
-- 222 source relations currently have no verified preview; the site explicitly displays **No real preview** instead of loading a placeholder.
+- 28 verified source-specific GIF previews: 8 official captures and 20 captures from runnable local demos.
+- 214 source relations currently have no verified preview; the site explicitly displays **No real preview** instead of loading a placeholder.
 - 242 one-click implementation prompts, one for every effect.
 - 117 source-backed AI homepage references are integrated into 68 existing effect rows, covering 94 companies; each effect shows at most three representative companies.
 - 14 useful older sources are marked **Legacy**; no archived repository is included.
 - Stars are a snapshot from **2026-07-17**, not a live counter.
-- The verified, optimized GIF set is **4.36 MiB**; each published preview is 320×180, at most three seconds, and below 1 MiB.
+- The verified, optimized GIF set is **5.77 MiB**; each published preview is 320×180, at most three seconds, and below 1 MiB.
 
 The implementation source and the website where an effect was observed are separate relationships. See the [Chinese-first 100-company audit](research/ai-native-homepages-100.md) for all observations, including common patterns that were not duplicated as new effect rows.
 

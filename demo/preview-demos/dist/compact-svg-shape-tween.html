@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KUTE.js — Compact SVG Shape Tween</title>
+    <style>
+      :root { --preview-background: #f2efe7; color-scheme: light; }
+      .morph-board {
+        position: absolute;
+        inset: 38px 16px 24px;
+        overflow: hidden;
+        border: 1px solid #2a30401c;
+        border-radius: 20px;
+        background:
+          radial-gradient(circle at 50% 46%, #ffb8c866, transparent 27%),
+          linear-gradient(135deg, #fffdf7, #e9e9ff);
+        box-shadow: 0 16px 30px #4f526518, inset 0 1px white;
+      }
+      .morph-svg { width: 100%; height: 100%; }
+      .shape-ghost { fill: none; stroke: #30344924; stroke-width: 1; stroke-dasharray: 3 4; }
+      .shape-active { filter: drop-shadow(0 12px 15px #644dc64a); }
+      .morph-axis { stroke: #272b3d14; stroke-width: 1; }
+      .morph-dot { fill: #fff; stroke: #37334a; stroke-width: 1.5; }
+      .morph-label {
+        fill: #4a4b5f99;
+        font: 800 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .11em;
+        text-transform: uppercase;
+      }
+      .library-badge { color: #282635; background: #fffdf0e8; border-color: #34304426; }
+      .scene-caption { color: #656477; }
+    </style>
+    <script type="module" crossorigin src="./assets/compact-svg-shape-tween-tcSolyMm.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-C4iZKo3w.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main class="preview-stage" aria-label="A real KUTE.js tween morphs one SVG path between a star and a heart">
+      <section class="morph-board" data-preview-mechanism="kute-svg-morph">
+        <svg class="morph-svg" viewBox="0 0 288 118" role="img" aria-label="SVG path morphing continuously between two silhouettes">
+          <defs>
+            <linearGradient id="morph-gradient" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#6ee7ff" />
+              <stop offset=".48" stop-color="#7c63ff" />
+              <stop offset="1" stop-color="#ff668f" />
+            </linearGradient>
+          </defs>
+          <line class="morph-axis" x1="34" y1="59" x2="254" y2="59" />
+          <circle class="morph-dot" cx="34" cy="59" r="3" />
+          <circle class="morph-dot" cx="254" cy="59" r="3" />
+          <path class="shape-ghost" d="M144 18 L156 45 L186 45 L162 63 L171 92 L144 76 L117 92 L126 63 L102 45 L132 45 Z" />
+          <path class="shape-ghost" d="M144 94 C134 85 104 65 104 43 C104 23 128 16 144 34 C160 16 184 23 184 43 C184 65 154 85 144 94 Z" />
+          <path id="morph-path" class="shape-active" fill="url(#morph-gradient)" d="M144 18 L156 45 L186 45 L162 63 L171 92 L144 76 L117 92 L126 63 L102 45 L132 45 Z" />
+          <text class="morph-label" x="12" y="18">path A · angular</text>
+          <text class="morph-label" x="206" y="105">path B · curved</text>
+        </svg>
+      </section>
+      <span class="library-badge">KUTE.js · SVG morph</span>
+      <span class="scene-caption">one live path · topology normalized by the tween</span>
+    </main>
+  </body>
+</html>

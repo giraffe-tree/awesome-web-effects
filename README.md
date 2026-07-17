@@ -2,7 +2,7 @@
 
 [中文文档](README.zh-CN.md) · [Live demo](https://giraffe-tree.github.io/awesome-interaction/)
 
-An **effect-first** atlas of open-source interactions for the web. It catalogs **228 distinct effects across 10 categories**, backed by **154 source projects**. Each effect is one row with a stable semantic key, a GIF preview, copyable minimal code, and a one-click implementation prompt for Codex or Claude Code. English is the default interface and documentation language.
+An **effect-first** atlas of open-source interactions for the web. It catalogs **229 distinct effects across 10 categories**, backed by **154 source projects**. Each effect is one row with a stable semantic key, a GIF preview, copyable minimal code, and a one-click implementation prompt for Codex or Claude Code. English is the default interface and documentation language.
 
 ## Effect-first model
 
@@ -13,14 +13,14 @@ An **effect-first** atlas of open-source interactions for the web. It catalogs *
 
 ## Catalog snapshot
 
-- 228 effect rows, including 20 baseline effects.
-- 107 independently researched effects were added in the latest effect-level expansion.
+- 229 effect rows, including 20 baseline effects.
+- 108 independently researched effects were added in the latest effect-level expansion.
 - 154 unique GitHub source projects; 101 were added during the 2026 expansion.
-- 228 source-specific GIF previews: 8 official captures and 220 labeled editorial recreations.
-- 228 one-click implementation prompts, one for every effect.
+- 229 source-specific GIF previews: 8 official captures and 221 labeled editorial recreations.
+- 229 one-click implementation prompts, one for every effect.
 - 14 useful older sources are marked **Legacy**; no archived repository is included.
 - Stars are a snapshot from **2026-07-17**, not a live counter.
-- The referenced, optimized GIF set is **9.89 MiB**; each preview is 320×180, at most three seconds, and below 1 MiB.
+- The referenced, optimized GIF set is **9.91 MiB**; each preview is 320×180, at most three seconds, and below 1 MiB.
 
 ## Selection rules
 
@@ -36,7 +36,7 @@ An **effect-first** atlas of open-source interactions for the web. It catalogs *
 | --- | ---: | ---: | --- |
 | [Motion & choreography](#animation) | 22 | 14 | Timelines, springs, tweens, class animation, and framework-native motion. |
 | [Scroll & reveal](#scroll) | 24 | 17 | Smooth scrolling, scroll-linked scenes, reveals, parallax, and snap navigation. |
-| [Page & layout](#transition) | 23 | 16 | Page transitions, FLIP motion, filtering, packing, and animated reflow. |
+| [Page & layout](#transition) | 24 | 16 | Page transitions, FLIP motion, filtering, packing, and animated reflow. |
 | [Navigation & overlays](#carousel) | 22 | 14 | Carousel, lightbox, menus, tours, notifications, drag overlays, and spatial navigation. |
 | [Pointer & hover](#pointer) | 22 | 13 | Tilt, depth, custom cursors, magnetic motion, and image distortion. |
 | [Text & SVG](#vector) | 24 | 19 | Typing, text splitting, vector drawing, handwriting, and SVG morphing. |
@@ -142,6 +142,7 @@ Page transitions, FLIP motion, filtering, packing, and animated reflow.
 | [Adaptive-height tab panel slide](https://giraffe-tree.github.io/awesome-interaction/#adaptive-height-tab-panel-slide) | [Motion Primitives](https://github.com/ibelick/motion-primitives) | 5,695 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#adaptive-height-tab-panel-slide) |
 | [Clip-shape theme reveal](https://giraffe-tree.github.io/awesome-interaction/#clip-shape-theme-reveal) | [Magic UI](https://github.com/magicuidesign/magicui) | 21,567 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#clip-shape-theme-reveal) |
 | [Blend-mode self-inverting fixed navigation](https://giraffe-tree.github.io/awesome-interaction/#blend-mode-self-inverting-fixed-navigation) | [Awesome Web Effects](https://github.com/giraffe-tree/awesome-web-effects) | 0 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#blend-mode-self-inverting-fixed-navigation) |
+| [Delayed dropdown promo sweep](https://giraffe-tree.github.io/awesome-interaction/#delayed-dropdown-promo-sweep) | [Awesome Web Effects](https://github.com/giraffe-tree/awesome-web-effects) | 0 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#delayed-dropdown-promo-sweep) |
 
 <a id="carousel"></a>
 

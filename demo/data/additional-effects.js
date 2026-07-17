@@ -1190,5 +1190,23 @@ export const additionalEffectSeeds = [
     "difference": "The compositor keeps a fixed navigation layer legible by continuously blending it with unrelated light and dark sections underneath. Existing theme reveals explicitly animate a chosen palette, and the auto-hiding header responds to scroll direction instead of page pixels.",
     "sourceUrl": "https://lumalabs.ai/",
     "verifiedAt": "2026-07-17"
+  },
+  {
+    "name": "Delayed dropdown promo sweep",
+    "nameZh": "延迟触发的下拉菜单推广光扫",
+    "category": "transition",
+    "projectName": "Awesome Web Effects",
+    "repo": "giraffe-tree/awesome-web-effects",
+    "stars": 0,
+    "snippet": "<button id=\"products\" aria-expanded=\"false\">Products</button><div id=\"menu\" hidden><a class=\"promo\" href=\"#\">Explore resources →</a></div>\n<style>.promo{position:relative;isolation:isolate;display:block;overflow:hidden;padding:18px}.promo::after{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(88deg,transparent 34%,#ef601b66 48%,#e16bff66 55%,transparent 68%);transform:translateX(-100%)}.promo.is-sweeping::after{animation:promo-sweep 1.3s ease-in-out forwards}@keyframes promo-sweep{to{transform:translateX(100%)}}@media(prefers-reduced-motion:reduce){.promo.is-sweeping::after{animation:none}}</style>\n<script>const trigger=document.querySelector('#products'),menu=document.querySelector('#menu'),promo=document.querySelector('.promo');let timer;trigger.onclick=()=>{const open=trigger.ariaExpanded!=='true';trigger.ariaExpanded=open;menu.hidden=!open;clearTimeout(timer);promo.classList.remove('is-sweeping');if(open)timer=setTimeout(()=>promo.classList.add('is-sweeping'),200)};promo.onanimationend=()=>promo.classList.remove('is-sweeping');</script>",
+    "behavior": {
+      "trigger": "dropdown open",
+      "response": "a narrow gradient highlight sweeps once behind the promotional row",
+      "timing": "200 ms delay followed by a 1.3 second one-shot sweep",
+      "layer": "navigation overlay"
+    },
+    "difference": "The highlight is a one-shot delayed orientation cue bound to a menu-open event, travels behind one promotional row, parks off-screen, and resets for the next open. Existing shine effects decorate continuously or sweep through text rather than responding to navigation state.",
+    "sourceUrl": "https://www.glean.com/",
+    "verifiedAt": "2026-07-17"
   }
 ];

@@ -150,7 +150,7 @@ let previewVendorFiles = [];
 try {
   previewVendorFiles = await readdir(resolve(demoRoot, 'preview-demos', 'vendor'));
 } catch (error) {
-  previewCaptureManifestProblems.push(`cannot inspect demo/preview-demos/vendor: ${error.message}`);
+  if (error?.code !== 'ENOENT') previewCaptureManifestProblems.push(`cannot inspect demo/preview-demos/vendor: ${error.message}`);
 }
 
 function expectedLibraryVersion(effectId) {

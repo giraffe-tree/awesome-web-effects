@@ -151,7 +151,9 @@
       .effect-cell, .source-cell { min-width: 0; }
       .category-label { display: flex; align-items: center; gap: 7px; margin: 0 0 7px; color: var(--blue); font-size: 10px; font-weight: 650; letter-spacing: .05em; text-transform: uppercase; }
       .category-label::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--category-color); }
+      .effect-heading { display: flex; align-items: flex-start; gap: 12px; }
       .effect-cell h3 { margin: 0; font-size: clamp(21px, 2vw, 29px); line-height: 1.04; letter-spacing: -.04em; text-wrap: balance; }
+      .effect-score { flex: 0 0 auto; display: inline-grid; place-items: center; min-width: 44px; height: 28px; padding: 0 8px; border-radius: 99px; color: #137333; background: #e6f4ea; font-size: 11px; font-weight: 750; letter-spacing: -.01em; }
       .effect-key { display: block; margin-top: 8px; color: #aeaeb2; font: 10px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; overflow-wrap: anywhere; }
       .source-label { display: block; margin-bottom: 5px; color: var(--quiet); font-size: 9px; font-weight: 650; text-transform: uppercase; letter-spacing: .05em; }
       .source-name { display: block; color: var(--ink); font-size: 16px; font-weight: 650; line-height: 1.2; text-decoration: none; overflow-wrap: anywhere; }
@@ -210,6 +212,14 @@
       .modal-fact { min-width: 0; padding: 15px; border: 1px solid var(--line); border-radius: 15px; background: #fafafa; }
       .modal-fact span { display: block; color: var(--quiet); font-size: 9px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
       .modal-fact strong { display: block; margin-top: 7px; font-size: 13px; line-height: 1.35; overflow-wrap: anywhere; }
+      .modal-score-card { display: grid; grid-template-columns: minmax(180px, .45fr) minmax(0, 1.55fr); gap: 20px; margin-top: 14px; padding: 20px; border: 1px solid #b7ddc0; border-radius: 18px; background: linear-gradient(135deg, #f2fbf4, #fbfffc); }
+      .modal-score-total { display: flex; align-items: baseline; gap: 3px; margin-top: 7px; color: #137333; font-size: 42px; font-weight: 760; letter-spacing: -.06em; }
+      .modal-score-total span { color: #4f7658; font-size: 14px; font-weight: 650; letter-spacing: -.01em; }
+      .modal-score-summary { margin: 8px 0 0; color: #496550; font-size: 12px; line-height: 1.5; }
+      .score-breakdown { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+      .score-dimension { min-width: 0; padding: 10px 11px; border-radius: 12px; background: rgba(255,255,255,.8); }
+      .score-dimension span { display: block; color: #607165; font-size: 9px; line-height: 1.25; }
+      .score-dimension strong { display: block; margin-top: 5px; font-size: 14px; }
       .modal-detail-grid { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: 14px; margin-top: 14px; }
       .modal-detail-card { min-width: 0; padding: 20px; border: 1px solid var(--line); border-radius: 18px; }
       .modal-detail-label { margin: 0; color: var(--quiet); font-size: 9px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
@@ -306,7 +316,8 @@
         .modal-preview img { max-height: 42vh; }
         .modal-preview-status { left: 12px; bottom: 12px; }
         .modal-content-body { padding: 24px 18px 30px; }
-        .modal-facts, .modal-detail-grid { grid-template-columns: 1fr; }
+        .modal-facts, .modal-detail-grid, .modal-score-card { grid-template-columns: 1fr; }
+        .score-breakdown { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         .modal-code-header { align-items: flex-start; }
         .modal-actions { justify-content: stretch; }
         .modal-prompt-button { width: 100%; }
@@ -336,7 +347,7 @@
       <div class="shell">
         <p class="hero-kicker" id="hero-kicker">The effect-first interaction atlas</p>
         <h1 id="hero-title">Find the effect.<br />Ship the feeling.</h1>
-        <p class="hero-copy" id="hero-copy">Verified visual previews are shown when available, alongside minimal code and a ready-to-copy prompt for Codex or Claude Code.</p>
+        <p class="hero-copy" id="hero-copy">Only visually reviewed demos scoring 80 or higher are published, each with a real preview, minimal code, and an implementation prompt.</p>
         <div class="hero-actions">
           <a class="primary-action" href="#catalog" id="browse-action">Browse effects</a>
           <a class="secondary-action" href="https://github.com/giraffe-tree/awesome-web-effects" target="_blank" rel="noreferrer" id="repo-action">View repository</a>
@@ -352,7 +363,7 @@
 
     <section class="features shell" aria-label="Catalog coverage">
       <div class="feature-grid">
-        <article class="feature-card"><h2 id="feature-visual-title">See the real demo before you build it.</h2><p id="feature-visual-copy">Published previews come from verified official footage or runnable local demos. Entries still awaiting a real capture say so plainly.</p><div class="feature-visual visual-gif" aria-hidden="true"></div></article>
+        <article class="feature-card"><h2 id="feature-visual-title">See the real demo before you build it.</h2><p id="feature-visual-copy">Every published entry has passed a 100-point creativity, art direction, motion, legibility, inspiration, and evidence review.</p><div class="feature-visual visual-gif" aria-hidden="true"></div></article>
         <article class="feature-card"><h2 id="feature-code-title">Start from working code.</h2><p id="feature-code-copy">Open any effect to copy the smallest useful implementation for its recommended source.</p><div class="feature-visual visual-code" aria-hidden="true"><span style="--w:44%;--o:.8"></span><span style="--w:86%"></span><span style="--w:68%;--o:.35"></span><span style="--w:76%"></span></div></article>
         <article class="feature-card"><h2 id="feature-prompt-title">Hand it to your coding agent.</h2><p id="feature-prompt-copy">One click copies a scoped prompt with accessibility, responsive, cleanup, and reduced-motion requirements.</p><div class="feature-visual visual-prompt" aria-hidden="true"><span class="prompt-dot"></span><div class="prompt-lines"><span style="--w:88%"></span><span style="--w:72%"></span><span style="--w:54%"></span></div></div></article>
       </div>
@@ -369,6 +380,7 @@
           <label class="search-wrap"><span class="sr-only" id="search-label">Search effects</span><input class="search" id="search" type="search" placeholder="Search effect, source project, or keyword…" autocomplete="off" /></label>
           <select class="sort" id="sort" aria-label="Sort effects">
             <option value="curated">Curated effect order</option>
+            <option value="score">Highest curatorial score</option>
             <option value="name">Effect: A–Z</option>
             <option value="stars">Recommended source stars</option>
             <option value="sources">Most implementations</option>
@@ -398,21 +410,22 @@
     </div>
 
     <script type="module">
-      import { categories, effects, projects } from './data/effects.js';
+      import { categories, effects, projects } from './data/effects.js?v=20260717-admission-v2';
+      import { admissionPolicy } from './data/demo-admission.js?v=20260717-admission-v2';
 
       const copy = {
         en: {
           language: '中文', languageLabel: 'Switch to Chinese', navCatalog: 'Catalog',
           kicker: 'The effect-first interaction atlas', title: 'Find the effect.<br />Ship the feeling.',
-          hero: 'Verified visual previews are shown when available, alongside minimal code and a ready-to-copy prompt for Codex or Claude Code.', browse: 'Browse effects', repo: 'View repository',
+          hero: 'Only visually reviewed demos scoring 80 or higher are published, each with a real preview, minimal code, and an implementation prompt.', browse: 'Browse effects', repo: 'View repository',
           effects: 'Effects', sources: 'Source projects', gifs: 'Verified GIFs', prompts: 'Agent prompts',
-          visualTitle: 'See the real demo before you build it.', visualCopy: 'Published previews come from verified official footage or runnable local demos. Entries still awaiting a real capture say so plainly.',
+          visualTitle: 'See the real demo before you build it.', visualCopy: 'Every published entry has passed a 100-point creativity, art direction, motion, legibility, inspiration, and evidence review.',
           codeTitle: 'Start from working code.', codeCopy: 'Open any effect to copy the smallest useful implementation for its recommended source.',
           promptTitle: 'Hand it to your coding agent.', promptCopy: 'One click copies a scoped prompt with accessibility, responsive, cleanup, and reduced-motion requirements.',
           section: 'Interaction catalog', catalogTitle: 'Choose the behavior first. Choose the tool second.',
           search: 'Search effect, source project, or keyword…', searchLabel: 'Search effects', filterLabel: 'Effect categories', sortLabel: 'Sort effects',
-          curated: 'Curated effect order', stars: 'Recommended source stars', name: 'Effect: A–Z', sourcesSort: 'Most implementations', all: 'All',
-          resultEffects: 'effects', resultSources: 'source projects', note: 'GIF · Effect key · Implementation · AI homepage references · Prompt · Code', empty: 'No matching effects. Try a shorter keyword.',
+          curated: 'Curated effect order', scoreSort: 'Highest curatorial score', stars: 'Recommended source stars', name: 'Effect: A–Z', sourcesSort: 'Most implementations', all: 'All',
+          resultEffects: 'effects', resultSources: 'source projects', note: 'Verified GIF · Curatorial score · Effect key · Implementation · Prompt · Code', empty: 'No matching effects. Try a shorter keyword.',
           previewOfficial: 'Official', previewLocal: 'Local demo', previewUnavailable: 'No real preview', previewPaused: 'Preview paused', openDemo: 'Open demo ↗', headPreview: 'Preview', headEffect: 'Effect', headSource: 'Recommended source', headAction: 'Actions',
           recommended: 'Recommended implementation', observedOn: 'Observed on AI homepages', legacy: 'Legacy', implementations: 'implementations', implementation: 'implementation', copyPrompt: 'Copy agent prompt', promptCopied: 'Prompt copied',
           showCode: 'View minimal code', hideCode: 'Hide code', copyCode: 'Copy', codeCopied: 'Copied', copyFailed: 'Select text', definition: 'Effect', permalink: 'Effect link',
@@ -420,20 +433,21 @@
           openDetails: 'View effect details', closeDetails: 'Close details', detailsLabel: 'Effect details', triggerLabel: 'Trigger', timingLabel: 'Timing', layerLabel: 'Layer', implementationLabel: 'Implementation project', provenanceLabel: 'Preview provenance',
           officialDetail: 'Verified official media', localDetail: 'Captured local demo', unavailableDetail: 'No real preview', officialProvenance: 'This GIF is a verified official asset linked to its upstream source.', localProvenance: 'This GIF is a browser capture of the runnable published demo and is backed by reusable local source code.', unavailableProvenance: 'A real preview has not been completed. This entry deliberately loads no generated or placeholder GIF.', unavailableHelp: 'The implementation details remain available while a verifiable preview is being prepared.',
           viewProject: 'Open project ↗', viewPreviewSource: 'Open preview source ↗', viewReference: 'Open implementation reference ↗', viewDemoSource: 'View demo source ↗', noRunnableDemo: 'No runnable local demo is published for this entry.',
-          minimalCodeLabel: 'Recommended source · minimal integration code', minimalCodeHelp: 'This is the smallest useful integration snippet. The runnable demo and recorded GIF are separate, linked evidence.', minimalCodeUnavailableHelp: 'This is a minimal integration snippet only—not a runnable or recorded demo.', copyMinimalCode: 'Copy code'
+          minimalCodeLabel: 'Recommended source · minimal integration code', minimalCodeHelp: 'This is the smallest useful integration snippet. The runnable demo and recorded GIF are separate, linked evidence.', minimalCodeUnavailableHelp: 'This is a minimal integration snippet only—not a runnable or recorded demo.', copyMinimalCode: 'Copy code',
+          curatorialScore: 'Curatorial admission score', scorePassed: 'Passed', scoreSummary: 'Passed the strict visual-demo admission threshold and every core-dimension minimum.', scoreOutOf: 'out of 100'
         },
         zh: {
           language: 'EN', languageLabel: '切换到英文', navCatalog: '效果目录',
           kicker: '以效果为先的交互图鉴', title: '先找到效果。<br />再实现体验。',
-          hero: '有可靠来源时展示真实视觉预览，并提供最小代码和可直接交给 Codex 或 Claude Code 的实现 Prompt。', browse: '浏览效果', repo: '查看仓库',
+          hero: '只发布经过视觉评审且达到 80 分的 Demo；每项均包含真实预览、最小代码和可直接使用的实现 Prompt。', browse: '浏览效果', repo: '查看仓库',
           effects: '种效果', sources: '来源项目', gifs: '真实 GIF', prompts: 'Agent Prompt',
-          visualTitle: '动手之前，先看真实 Demo。', visualCopy: '发布预览只来自已核验的官方素材或可运行的本地 Demo；尚未完成真实录制的条目会如实注明。',
+          visualTitle: '动手之前，先看真实 Demo。', visualCopy: '每个发布条目都通过创意、艺术、动效、辨识度、启发价值与证据质量六项 100 分制评审。',
           codeTitle: '从可用的最小代码开始。', codeCopy: '展开任意效果，即可复制推荐来源最小而有用的实现。',
           promptTitle: '把任务直接交给编程 Agent。', promptCopy: '一键复制包含无障碍、响应式、清理和减少动态要求的完整 Prompt。',
           section: '交互效果目录', catalogTitle: '先选交互行为，再选实现工具。',
           search: '搜索效果、来源项目或关键词…', searchLabel: '搜索效果', filterLabel: '效果分类', sortLabel: '效果排序',
-          curated: '效果策展顺序', stars: '推荐来源 Stars', name: '效果名称 A–Z', sourcesSort: '实现来源最多', all: '全部',
-          resultEffects: '种效果', resultSources: '个来源项目', note: 'GIF · 效果 Key · 推荐实现 · AI 官网参考 · Prompt · 代码', empty: '没有匹配的效果，请尝试更短的关键词。',
+          curated: '效果策展顺序', scoreSort: '策展评分最高', stars: '推荐来源 Stars', name: '效果名称 A–Z', sourcesSort: '实现来源最多', all: '全部',
+          resultEffects: '种效果', resultSources: '个来源项目', note: '真实 GIF · 策展评分 · 效果 Key · 推荐实现 · Prompt · 代码', empty: '没有匹配的效果，请尝试更短的关键词。',
           previewOfficial: '官方素材', previewLocal: '真实 Demo', previewUnavailable: '暂无真实预览', previewPaused: '已减少动态', openDemo: '打开 Demo ↗', headPreview: '预览', headEffect: '效果', headSource: '推荐来源', headAction: '操作',
           recommended: '推荐实现', observedOn: '观察到该效果的 AI 官网', legacy: '经典旧版', implementations: '个实现', implementation: '个实现', copyPrompt: '复制 Agent Prompt', promptCopied: 'Prompt 已复制',
           showCode: '查看最小代码', hideCode: '收起代码', copyCode: '复制', codeCopied: '已复制', copyFailed: '请选中文本', definition: '效果', permalink: '效果链接',
@@ -441,7 +455,8 @@
           openDetails: '查看效果详情', closeDetails: '关闭详情', detailsLabel: '效果详情', triggerLabel: '触发方式', timingLabel: '时间关系', layerLabel: '呈现层级', implementationLabel: '实现项目', provenanceLabel: '真实预览来源',
           officialDetail: '已核验官方素材', localDetail: '真实本地 Demo 录制', unavailableDetail: '暂无真实预览', officialProvenance: '此 GIF 是已经核验并可追溯到上游来源的官方素材。', localProvenance: '此 GIF 由浏览器录制可运行的发布 Demo，并有可复用的本地源码作为依据。', unavailableProvenance: '真实预览尚未完成；此条目不会加载生成动画或占位 GIF。', unavailableHelp: '在准备可核验预览期间，仍可查看实现信息并复制 Agent Prompt。',
           viewProject: '打开项目 ↗', viewPreviewSource: '打开预览来源 ↗', viewReference: '打开实现参考 ↗', viewDemoSource: '查看 Demo 源码 ↗', noRunnableDemo: '此条目尚未发布可运行的本地 Demo。',
-          minimalCodeLabel: '推荐来源 · 最小集成代码', minimalCodeHelp: '这是最小可用的集成片段；可运行 Demo 与录制 GIF 是另外列出的独立证据。', minimalCodeUnavailableHelp: '这只是最小集成片段，不是可运行 Demo，也不是已录制效果。', copyMinimalCode: '一键复制代码'
+          minimalCodeLabel: '推荐来源 · 最小集成代码', minimalCodeHelp: '这是最小可用的集成片段；可运行 Demo 与录制 GIF 是另外列出的独立证据。', minimalCodeUnavailableHelp: '这只是最小集成片段，不是可运行 Demo，也不是已录制效果。', copyMinimalCode: '一键复制代码',
+          curatorialScore: '策展准入评分', scorePassed: '已通过', scoreSummary: '已通过严格的视觉 Demo 准入总分线与全部核心维度最低分。', scoreOutOf: '满分 100'
         }
       };
 
@@ -512,10 +527,13 @@
         const secondaryName = language === 'zh' ? effect.name : effect.nameZh;
         const minimalCodeNote = source.demoPath ? t.minimalCodeHelp : t.minimalCodeUnavailableHelp;
         const codeSection = `<section class="modal-code-card modal-code-block"><div class="modal-code-header"><div class="modal-code-heading"><p class="modal-detail-label">${t.minimalCodeLabel}</p><p class="modal-code-note">${minimalCodeNote}</p></div><button class="modal-copy-code" data-modal-copy-code type="button">${t.copyMinimalCode}</button></div><pre><code>${escapeHTML(source.snippet)}</code></pre></section>`;
+        const scoreSummary = language === 'zh' ? effect.admission.rationaleZh : t.scoreSummary;
+        const scoreBreakdown = admissionPolicy.dimensions.map(dimension => `<div class="score-dimension"><span>${escapeHTML(language === 'zh' ? dimension.labelZh : dimension.label)}</span><strong>${effect.admission.scores[dimension.id]} / ${dimension.maximum}</strong></div>`).join('');
+        const scoreSection = `<section class="modal-score-card"><div><p class="modal-detail-label">${t.curatorialScore} · ${t.scorePassed}</p><div class="modal-score-total">${effect.admission.total}<span>/ 100</span></div><p class="modal-score-summary">${escapeHTML(scoreSummary)}</p></div><div class="score-breakdown">${scoreBreakdown}</div></section>`;
 
         modalTrigger = trigger || document.activeElement;
         modalClose.setAttribute('aria-label', t.closeDetails);
-        modalContent.innerHTML = `${preview}<div class="modal-content-body"><p class="modal-category">${escapeHTML(category.label)} / ${escapeHTML(category.labelZh)}</p><h2 class="modal-title" id="modal-title">${escapeHTML(primaryName)}</h2><p class="modal-title-secondary">${escapeHTML(secondaryName)}</p><p class="modal-description" id="modal-description">${escapeHTML(description)}</p><div class="modal-facts"><div class="modal-fact"><span>${t.triggerLabel}</span><strong>${escapeHTML(effect.behavior.trigger)}</strong></div><div class="modal-fact"><span>${t.timingLabel}</span><strong>${escapeHTML(effect.behavior.timing)}</strong></div><div class="modal-fact"><span>${t.layerLabel}</span><strong>${escapeHTML(effect.behavior.layer)}</strong></div></div><div class="modal-detail-grid"><section class="modal-detail-card"><p class="modal-detail-label">${t.implementationLabel}</p><h3 class="modal-project-name">${escapeHTML(project.name)}</h3><p class="modal-project-meta">${escapeHTML(project.repo)} · ★ ${project.stars.toLocaleString('en-US')}</p><div class="modal-links">${links.join('')}</div>${source.demoPath ? '' : `<p class="modal-no-demo">${t.noRunnableDemo}</p>`}</section><section class="modal-detail-card"><p class="modal-detail-label">${t.provenanceLabel}</p><h3 class="modal-project-name">${previewStatus}</h3><p class="modal-provenance-text">${provenance}${provenancePaths}</p></section></div>${codeSection}<div class="modal-actions"><button class="modal-prompt-button" type="button">${t.copyPrompt}</button></div></div>`;
+        modalContent.innerHTML = `${preview}<div class="modal-content-body"><p class="modal-category">${escapeHTML(category.label)} / ${escapeHTML(category.labelZh)}</p><h2 class="modal-title" id="modal-title">${escapeHTML(primaryName)}</h2><p class="modal-title-secondary">${escapeHTML(secondaryName)}</p><p class="modal-description" id="modal-description">${escapeHTML(description)}</p>${scoreSection}<div class="modal-facts"><div class="modal-fact"><span>${t.triggerLabel}</span><strong>${escapeHTML(effect.behavior.trigger)}</strong></div><div class="modal-fact"><span>${t.timingLabel}</span><strong>${escapeHTML(effect.behavior.timing)}</strong></div><div class="modal-fact"><span>${t.layerLabel}</span><strong>${escapeHTML(effect.behavior.layer)}</strong></div></div><div class="modal-detail-grid"><section class="modal-detail-card"><p class="modal-detail-label">${t.implementationLabel}</p><h3 class="modal-project-name">${escapeHTML(project.name)}</h3><p class="modal-project-meta">${escapeHTML(project.repo)} · ★ ${project.stars.toLocaleString('en-US')}</p><div class="modal-links">${links.join('')}</div>${source.demoPath ? '' : `<p class="modal-no-demo">${t.noRunnableDemo}</p>`}</section><section class="modal-detail-card"><p class="modal-detail-label">${t.provenanceLabel}</p><h3 class="modal-project-name">${previewStatus}</h3><p class="modal-provenance-text">${provenance}${provenancePaths}</p></section></div>${codeSection}<div class="modal-actions"><button class="modal-prompt-button" type="button">${t.copyPrompt}</button></div></div>`;
         const promptButton = modalContent.querySelector('.modal-prompt-button');
         promptButton.addEventListener('click', event => {
           event.stopPropagation();
@@ -595,9 +613,10 @@
         search.placeholder = t.search;
         sort.setAttribute('aria-label', t.sortLabel);
         sort.options[0].textContent = t.curated;
-        sort.options[1].textContent = t.name;
-        sort.options[2].textContent = t.stars;
-        sort.options[3].textContent = t.sourcesSort;
+        sort.options[1].textContent = t.scoreSort;
+        sort.options[2].textContent = t.name;
+        sort.options[3].textContent = t.stars;
+        sort.options[4].textContent = t.sourcesSort;
         buildFilters();
         render();
       }
@@ -639,6 +658,7 @@
           return (activeCategory === 'all' || effect.category === activeCategory) && (!query || haystack.includes(query));
         });
         if (sort.value === 'stars') visible = [...visible].sort((a, b) => projectById.get(recommendedSource(b).projectId).stars - projectById.get(recommendedSource(a).projectId).stars);
+        if (sort.value === 'score') visible = [...visible].sort((a, b) => b.admission.total - a.admission.total || a.order - b.order);
         if (sort.value === 'name') visible = [...visible].sort((a, b) => effectName(a).localeCompare(effectName(b), language === 'zh' ? 'zh-CN' : 'en'));
         if (sort.value === 'sources') visible = [...visible].sort((a, b) => b.sources.length - a.sources.length || a.order - b.order);
 
@@ -670,7 +690,7 @@
             return `<section class="implementation"><div class="implementation-meta">${source.recommended ? `<span class="recommendation">${t.recommended}</span>` : ''}<h4>${escapeHTML(project.name)}</h4><a class="repo-link" href="${escapeHTML(project.url)}" target="_blank" rel="noreferrer" aria-label="${escapeHTML(project.name)} ${t.repositoryLabel}">${escapeHTML(project.repo)} ↗</a>${source.demoPath ? `<a class="origin-link" href="./${escapeHTML(source.demoPath)}" target="_blank" rel="noreferrer">${t.openDemo}</a>` : source.originUrl ? `<a class="origin-link" href="${escapeHTML(source.originUrl)}" target="_blank" rel="noreferrer">${t.previewSource}</a>` : source.referenceUrl ? `<a class="origin-link" href="${escapeHTML(source.referenceUrl)}" target="_blank" rel="noreferrer">${t.referenceSource}</a>` : ''}<div class="source-meta"><span>★ ${project.stars.toLocaleString('en-US')}</span>${project.legacy ? `<span class="legacy-tag">${t.legacy}</span>` : ''}</div></div><div class="code-wrap"><pre><code>${escapeHTML(source.snippet)}</code></pre><button class="copy-code" type="button">${t.copyCode}</button></div></section>`;
           }).join('');
           const relatedParties = effect.relatedParties.map(party => `<a class="party-link" href="${escapeHTML(party.url)}" target="_blank" rel="noreferrer" title="${escapeHTML(party.observedAs)}">${escapeHTML(party.name)} ↗</a>`).join('');
-          row.innerHTML = `<div class="effect-main"><span class="row-number">${String(effect.order).padStart(3, '0')}</span><div class="row-preview">${previewMedia}${demoLink}<span class="preview-kind">${previewLabel}</span></div><div class="effect-cell"><p class="category-label">${escapeHTML(labelFor(category))}</p><h3>${escapeHTML(effectName(effect))}</h3><span class="effect-key">effect:${escapeHTML(effect.id)}</span></div><div class="source-cell"><span class="source-label">${t.recommended}</span><a class="source-name" href="${escapeHTML(primaryProject.url)}" target="_blank" rel="noreferrer">${escapeHTML(primaryProject.name)} ↗</a><span class="source-meta"><span>★ ${primaryProject.stars.toLocaleString('en-US')}</span><span>${effect.sources.length} ${effect.sources.length === 1 ? t.implementation : t.implementations}</span>${primaryProject.legacy ? `<span class="legacy-tag">${t.legacy}</span>` : ''}</span>${relatedParties ? `<span class="source-label party-label">${t.observedOn}</span><span class="party-list">${relatedParties}</span>` : ''}</div><div class="row-actions"><button class="action-button prompt-button" type="button">${t.copyPrompt}</button><button class="action-button code-button" type="button" aria-expanded="false" aria-controls="detail-${escapeHTML(effect.id)}">${t.showCode}</button></div></div><div class="detail-panel" id="detail-${escapeHTML(effect.id)}" hidden><div class="detail-top"><p><strong>${t.definition}:</strong> ${escapeHTML(effectName(effect))}. ${effect.sources.length} ${effect.sources.length === 1 ? t.implementation : t.implementations}.</p><a class="permalink" href="#${escapeHTML(effect.id)}"># ${t.permalink}</a></div><div class="implementations">${implementations}</div></div>`;
+          row.innerHTML = `<div class="effect-main"><span class="row-number">${String(effect.order).padStart(3, '0')}</span><div class="row-preview">${previewMedia}${demoLink}<span class="preview-kind">${previewLabel}</span></div><div class="effect-cell"><p class="category-label">${escapeHTML(labelFor(category))}</p><div class="effect-heading"><h3>${escapeHTML(effectName(effect))}</h3><span class="effect-score" aria-label="${escapeHTML(t.curatorialScore)}">${effect.admission.total}</span></div><span class="effect-key">effect:${escapeHTML(effect.id)}</span></div><div class="source-cell"><span class="source-label">${t.recommended}</span><a class="source-name" href="${escapeHTML(primaryProject.url)}" target="_blank" rel="noreferrer">${escapeHTML(primaryProject.name)} ↗</a><span class="source-meta"><span>★ ${primaryProject.stars.toLocaleString('en-US')}</span><span>${effect.sources.length} ${effect.sources.length === 1 ? t.implementation : t.implementations}</span>${primaryProject.legacy ? `<span class="legacy-tag">${t.legacy}</span>` : ''}</span>${relatedParties ? `<span class="source-label party-label">${t.observedOn}</span><span class="party-list">${relatedParties}</span>` : ''}</div><div class="row-actions"><button class="action-button prompt-button" type="button">${t.copyPrompt}</button><button class="action-button code-button" type="button" aria-expanded="false" aria-controls="detail-${escapeHTML(effect.id)}">${t.showCode}</button></div></div><div class="detail-panel" id="detail-${escapeHTML(effect.id)}" hidden><div class="detail-top"><p><strong>${t.definition}:</strong> ${escapeHTML(effectName(effect))}. ${effect.sources.length} ${effect.sources.length === 1 ? t.implementation : t.implementations}. ${t.curatorialScore}: ${effect.admission.total}/100.</p><a class="permalink" href="#${escapeHTML(effect.id)}"># ${t.permalink}</a></div><div class="implementations">${implementations}</div></div>`;
 
           row.classList.add('effect-card-trigger');
           row.tabIndex = 0;

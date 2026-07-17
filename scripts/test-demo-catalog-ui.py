@@ -72,19 +72,24 @@ def main() -> int:
             page.goto(f"{origin}/", wait_until="networkidle")
 
             rows = page.locator("#effect-list .effect-row")
-            expect(rows).to_have_count(242)
+            expect(rows).to_have_count(15)
 
-            migrated_preview_ids = [
+            admitted_local_preview_ids = [
+                "scroll-scrubbed-master-timeline",
                 "pinned-horizontal-scroll-scene",
                 "shared-layout-spring-morph",
                 "staggered-transform-choreography",
-                "render-agnostic-value-tween",
                 "motion-graphics-burst",
                 "visually-authored-keyframe-sequence",
-                "functional-value-pipeline",
                 "compact-svg-shape-tween",
+                "filterable-grid-reflow",
+                "perspective-tilt-and-glare",
+                "svg-stroke-drawing",
+                "sketch-style-creative-coding-loop",
+                "functional-webgl-draw-commands",
+                "dom-synced-shader-planes",
             ]
-            for effect_id in migrated_preview_ids:
+            for effect_id in admitted_local_preview_ids:
                 migrated_row = page.locator(f"#{effect_id}")
                 expect(migrated_row.locator(".row-preview img")).to_have_attribute(
                     "src", f"./gifs/captured/{effect_id}.gif"
@@ -96,6 +101,8 @@ def main() -> int:
             modal = page.locator("#effect-modal")
             expect(modal).to_be_visible()
             expect(modal.locator(".modal-preview img")).to_have_count(1)
+            expect(modal.locator(".modal-score-total")).to_contain_text("85")
+            expect(modal.locator(".score-dimension")).to_have_count(6)
             expect(modal.locator(".modal-code-card code")).to_contain_text("gsap.registerPlugin")
             page.wait_for_timeout(250)
             desktop_screenshot = ROOT / "tmp" / "catalog-detail-desktop.png"
@@ -108,20 +115,14 @@ def main() -> int:
             expect(modal).to_be_hidden()
             assert page.evaluate("document.activeElement?.id") == "scroll-scrubbed-master-timeline"
 
-            unavailable_row = rows.filter(has=page.locator(".paused-preview")).first
-            unavailable_row.locator(".effect-cell").click()
-            expect(modal.locator(".modal-preview-unavailable")).to_be_visible()
-            expect(modal.locator(".modal-preview img")).to_have_count(0)
-            expect(modal.locator(".modal-code-card code")).to_be_visible()
-            page.keyboard.press("Escape")
-
-            prompt_button = unavailable_row.locator(".prompt-button")
+            expect(page.locator("#effect-list .paused-preview")).to_have_count(0)
+            prompt_button = real_row.locator(".prompt-button")
             prompt_button.click()
             expect(modal).to_be_hidden()
             expect(prompt_button).to_have_text("Prompt copied")
 
             page.set_viewport_size({"width": 390, "height": 844})
-            unavailable_row.locator(".effect-cell").click()
+            real_row.locator(".effect-cell").click()
             expect(modal.locator(".effect-modal-dialog")).to_be_visible()
             expect(modal.locator(".modal-copy-code")).to_be_visible()
             page.wait_for_timeout(250)
@@ -139,7 +140,7 @@ def main() -> int:
             server.kill()
             server.wait()
 
-    print("Catalog UI verified: 242 detail dialogs, preview states, code/prompt copy, focus, and mobile layout.")
+    print("Catalog UI verified: 15 admitted demos, visible scores, real previews, copy actions, focus, and mobile layout.")
     return 0
 
 

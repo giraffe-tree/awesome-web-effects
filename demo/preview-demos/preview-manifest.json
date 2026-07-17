@@ -30,15 +30,6 @@
       "gifPath": "gifs/captured/motion-graphics-burst.gif"
     },
     {
-      "id": "functional-value-pipeline",
-      "library": "popmotion@11.0.5",
-      "renderer": "dom",
-      "runtimeAssertion": true,
-      "demoPath": "preview-demos/dist/functional-value-pipeline.html",
-      "demoSourcePath": "preview-demos/functional-value-pipeline.html",
-      "gifPath": "gifs/captured/functional-value-pipeline.gif"
-    },
-    {
       "id": "compact-svg-shape-tween",
       "library": "kute.js@2.2.6",
       "renderer": "svg",
@@ -60,34 +51,6 @@
       "demoPath": "preview-demos/dist/dom-synced-shader-planes.html",
       "demoSourcePath": "preview-demos/dom-synced-shader-planes.html",
       "gifPath": "gifs/captured/dom-synced-shader-planes.gif"
-    },
-    {
-      "id": "accessible-interactive-3d-product-view",
-      "library": "@google/model-viewer@4.3.1",
-      "demoPath": "preview-demos/dist/accessible-interactive-3d-product-view.html",
-      "demoSourcePath": "preview-demos/accessible-interactive-3d-product-view.html",
-      "gifPath": "gifs/captured/accessible-interactive-3d-product-view.gif"
-    },
-    {
-      "id": "declarative-html-3d-scene",
-      "library": "aframe@1.8.0",
-      "demoPath": "preview-demos/dist/declarative-html-3d-scene.html",
-      "demoSourcePath": "preview-demos/declarative-html-3d-scene.html",
-      "gifPath": "gifs/captured/declarative-html-3d-scene.gif"
-    },
-    {
-      "id": "vue-declarative-three-js",
-      "library": "@tresjs/core@5.8.3 + vue@3.5.40",
-      "demoPath": "preview-demos/dist/vue-declarative-three-js.html",
-      "demoSourcePath": "preview-demos/vue-declarative-three-js.html",
-      "gifPath": "gifs/captured/vue-declarative-three-js.gif"
-    },
-    {
-      "id": "svelte-declarative-three-js",
-      "library": "@threlte/core@8.5.16 + svelte@5.56.6",
-      "demoPath": "preview-demos/dist/svelte-declarative-three-js.html",
-      "demoSourcePath": "preview-demos/svelte-declarative-three-js.html",
-      "gifPath": "gifs/captured/svelte-declarative-three-js.gif"
     },
     {
       "id": "scroll-scrubbed-master-timeline",
@@ -115,15 +78,6 @@
       "demoPath": "preview-demos/dist/shared-layout-spring-morph.html",
       "demoSourcePath": "preview-demos/shared-layout-spring-morph.html",
       "gifPath": "gifs/captured/shared-layout-spring-morph.gif"
-    },
-    {
-      "id": "render-agnostic-value-tween",
-      "library": "@tweenjs/tween.js@25.0.0",
-      "renderer": "dom",
-      "runtimeAssertion": true,
-      "demoPath": "preview-demos/dist/render-agnostic-value-tween.html",
-      "demoSourcePath": "preview-demos/render-agnostic-value-tween.html",
-      "gifPath": "gifs/captured/render-agnostic-value-tween.gif"
     },
     {
       "id": "filterable-grid-reflow",
@@ -160,15 +114,6 @@
       "demoPath": "preview-demos/dist/sketch-style-creative-coding-loop.html",
       "demoSourcePath": "preview-demos/sketch-style-creative-coding-loop.html",
       "gifPath": "gifs/captured/sketch-style-creative-coding-loop.gif"
-    },
-    {
-      "id": "anchored-popover-flip-and-shift",
-      "library": "@floating-ui/dom@1.8.0",
-      "renderer": "dom",
-      "runtimeAssertion": true,
-      "demoPath": "preview-demos/dist/anchored-popover-flip-and-shift.html",
-      "demoSourcePath": "preview-demos/anchored-popover-flip-and-shift.html",
-      "gifPath": "gifs/captured/anchored-popover-flip-and-shift.gif"
     }
   ]
 }

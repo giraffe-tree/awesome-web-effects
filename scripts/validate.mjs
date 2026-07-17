@@ -7,7 +7,7 @@ import { createHash } from 'node:crypto';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { categories, effects, projects, snapshotDate } from '../demo/data/effects.js';
-import { companyObservations } from '../demo/data/company-observations.js';
+import { admissionAuditSummary, admissionPolicy, reviewedDemoScores } from '../demo/data/demo-admission.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const errors = [];
@@ -16,11 +16,17 @@ const duplicates = values => [...new Set(values.filter((value, index) => values.
 const execFileAsync = promisify(execFile);
 const realPreviewKinds = new Set(['official-capture', 'local-demo-capture']);
 
-assert(effects.length >= 221, `Expected at least 221 effects; received ${effects.length}.`);
-assert(projects.length >= 120, `Expected at least 120 source projects; received ${projects.length}.`);
-assert(projects.filter(project => project.addedIn === '2026-expansion').length >= 100, 'Expected at least 100 source projects from the 2026 expansion.');
-assert(effects.filter(effect => effect.addedIn === '2026-effect-expansion').length >= 100, 'Expected at least 100 effects from the 2026 effect expansion.');
-assert(categories.length >= 8, 'Expected a useful effect taxonomy.');
+assert(effects.length > 0, 'The admitted demo catalog must not be empty.');
+assert(effects.length === admissionAuditSummary.admittedCount, 'Published effect count does not match the dated admission audit.');
+assert(admissionAuditSummary.candidateCount === admissionAuditSummary.admittedCount + admissionAuditSummary.rejectedCount, 'Admission audit totals are inconsistent.');
+assert(projects.length > 0, 'The admitted demo catalog must retain source projects.');
+assert(categories.length > 0, 'The admitted demo catalog must retain active categories.');
+
+const scoreTotal = scores => admissionPolicy.dimensions.reduce((total, dimension) => total + scores[dimension.id], 0);
+const scorePasses = scores => scoreTotal(scores) >= admissionPolicy.threshold
+  && Object.entries(admissionPolicy.minimums).every(([dimension, minimum]) => scores[dimension] >= minimum);
+const expectedAdmittedIds = Object.entries(reviewedDemoScores).filter(([, scores]) => scorePasses(scores)).map(([id]) => id).sort();
+assert(JSON.stringify(effects.map(effect => effect.id).sort()) === JSON.stringify(expectedAdmittedIds), 'Published effects do not exactly match the reviewed demos that passed the admission policy.');
 
 const categoryIds = categories.map(category => category.id);
 for (const duplicate of duplicates(categoryIds)) errors.push(`Duplicate category id: ${duplicate}`);
@@ -28,7 +34,6 @@ for (const duplicate of duplicates(effects.map(effect => effect.id))) errors.pus
 for (const duplicate of duplicates(effects.map(effect => effect.name.toLowerCase()))) errors.push(`Duplicate effect name: ${duplicate}`);
 for (const duplicate of duplicates(projects.map(project => project.id))) errors.push(`Duplicate project id: ${duplicate}`);
 for (const duplicate of duplicates(projects.map(project => project.repo.toLowerCase()))) errors.push(`Duplicate source repository: ${duplicate}`);
-for (const effectId of Object.keys(companyObservations)) assert(effects.some(effect => effect.id === effectId), `Unknown company-observation effect id: ${effectId}.`);
 
 const projectById = new Map(projects.map(project => [project.id, project]));
 
@@ -47,6 +52,13 @@ for (const effect of effects) {
   assert(Number.isInteger(effect.order) && effect.order > 0, `${effect.id}: invalid curated order.`);
   assert(effect.behavior && ['trigger', 'response', 'timing', 'layer'].every(key => effect.behavior[key]?.length >= 3), `${effect.id}: incomplete interaction behavior.`);
   assert(effect.prompt?.includes(effect.name) && effect.prompt.length >= 400, `${effect.id}: missing implementation prompt.`);
+  assert(effect.admission?.decision === 'admit', `${effect.id}: published effect did not pass admission.`);
+  assert(effect.admission?.policyVersion === admissionPolicy.version, `${effect.id}: stale admission policy version.`);
+  assert(effect.admission?.total >= admissionPolicy.threshold, `${effect.id}: admission score is below ${admissionPolicy.threshold}.`);
+  assert(admissionPolicy.dimensions.reduce((total, dimension) => total + effect.admission.scores[dimension.id], 0) === effect.admission.total, `${effect.id}: admission score total is inconsistent.`);
+  for (const [dimension, minimum] of Object.entries(admissionPolicy.minimums)) {
+    assert(effect.admission.scores[dimension] >= minimum, `${effect.id}: ${dimension} score is below the hard minimum.`);
+  }
   assert(Array.isArray(effect.relatedParties), `${effect.id}: related parties must be an array.`);
   assert(effect.relatedParties.length <= 3, `${effect.id}: at most three related parties may be shown.`);
   for (const duplicate of duplicates(effect.relatedParties.map(party => party.name.toLowerCase()))) errors.push(`${effect.id}: duplicate related party ${duplicate}.`);
@@ -122,10 +134,11 @@ for (const category of categories) {
   assert(count > 0, `Empty effect category: ${category.id}.`);
 }
 
-const [html, readme, readmeZh] = await Promise.all([
+const [html, readme, readmeZh, admissionAudit] = await Promise.all([
   readFile(resolve(root, 'demo', 'index.html'), 'utf8'),
   readFile(resolve(root, 'README.md'), 'utf8'),
-  readFile(resolve(root, 'README.zh-CN.md'), 'utf8')
+  readFile(resolve(root, 'README.zh-CN.md'), 'utf8'),
+  readFile(resolve(root, 'research', 'demo-admission-audit-2026-07-17.md'), 'utf8')
 ]);
 assert(html.includes("./data/effects.js"), 'Demo does not load the canonical effect catalog.');
 assert(html.includes('type="module"'), 'Demo catalog must load as an ES module.');
@@ -148,9 +161,13 @@ assert(/copyText\(\s*[^,]+\s*,\s*source\.snippet\s*,/.test(modalRenderer), 'Effe
 assert(modalRenderer.includes('hasRealPreview(source)') && /realPreview\s*\?/.test(modalRenderer), 'Effect-detail modal must branch on verified preview availability.');
 assert(/<img[^>]*source\.preview[^>]*\.gif/.test(modalRenderer), 'Effect-detail modal must render the selected real GIF when available.');
 assert(modalRenderer.includes('modal-preview-unavailable'), 'Effect-detail modal must render an explicit unavailable-preview state.');
+assert(html.includes('effect.admission.total') && html.includes('score-breakdown'), 'Demo must display each admitted effect score and its dimension breakdown.');
 
-assert(readme.includes('| Effect | Recommended implementation | AI homepage references (max 3) |'), 'English README is not effect-first or lacks integrated homepage references.');
-assert(readmeZh.includes('| 效果 | 推荐实现 | AI 官网参考（最多 3 家） |'), 'Chinese README is not effect-first or lacks integrated homepage references.');
+assert(readme.includes('| Effect | Recommended implementation | Curatorial score | AI homepage references (max 3) |'), 'English README is not effect-first or lacks scores and integrated homepage references.');
+assert(readmeZh.includes('| 效果 | 推荐实现 | 策展评分 | AI 官网参考（最多 3 家） |'), 'Chinese README is not effect-first or lacks scores and integrated homepage references.');
+assert(readme.includes('research/demo-admission-audit-2026-07-17.md'), 'English README does not link to the demo admission policy and audit.');
+assert(readmeZh.includes('research/demo-admission-audit-2026-07-17.md'), 'Chinese README does not link to the demo admission policy and audit.');
+assert(admissionAudit.includes('共审计 **242** 个既有候选') && admissionAudit.includes('**214** 个因缺少真实预览') && admissionAudit.includes('最终 **15 个入选**'), 'Demo admission audit is missing the complete candidate accounting.');
 const liveDemo = 'https://giraffe-tree.github.io/awesome-web-effects/';
 assert(readme.includes(liveDemo), 'English README does not link to the current GitHub Pages site.');
 assert(readmeZh.includes(liveDemo), 'Chinese README does not link to the current GitHub Pages site.');

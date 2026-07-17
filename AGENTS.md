@@ -2,7 +2,8 @@
 
 - 除非用户明确要求使用其他分支或发起 Pull Request，完成变更后默认直接提交并推送到 `main` 分支，不创建功能分支。
 - Git 远端：`git@github.com:giraffe-tree/awesome-web-effects.git`。用户要求推送且 SSH 失败时，改用 `git push https://github.com/giraffe-tree/awesome-web-effects.git main:main`。
-- `demo/data/effects.js` 和 `demo/data/additional-effects.js` 是特效目录数据源；`demo/data/company-observations.js` 只记录官网观察关系。
+- `demo/data/effects.js` 只保存已经通过策展准入的发布目录；`demo/data/demo-admission.js` 保存评分门槛与评分记录；被拒候选只能保留在带日期的研究审计中。
+- 每个发布效果必须有真实预览、六维评分和总分，且总分不低于 80；艺术完成度、动效编排、辨识度和证据质量还必须分别通过核心最低分。不得为了补齐分类或保留知名项目降低门槛。
 - 特效是主实体。“推荐实现”和“观察到该效果的 AI 官网”是不同关系，不得混为实现归属；每种特效最多关联 3 家有证据的公司，无法验证时不添加。
 - GIF 是效果证据，不是装饰缩略图。发布态 GIF 必须满足下述“真实预览门禁”；任一项不满足即不得合入或发布。
 - `README.md` 与 `README.zh-CN.md` 由 `scripts/build-docs.mjs` 生成，不要手改目录表格。

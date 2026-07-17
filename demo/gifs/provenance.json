@@ -2,28 +2,6 @@
   "schemaVersion": 1,
   "records": [
     {
-      "effectId": "native-friendly-inertial-scrolling",
-      "projectId": "darkroomengineering-lenis",
-      "sourceType": "official",
-      "originUrl": "https://assets.darkroom.engineering/lenis/banner.gif",
-      "demoSourcePath": null,
-      "libraryVersion": "upstream version not recorded",
-      "generatedAt": "2026-07-17",
-      "outputPath": "demo/gifs/lenis.gif",
-      "usageBasis": "upstream repository/project material; verify license https://github.com/darkroomengineering/lenis/blob/HEAD/LICENSE"
-    },
-    {
-      "effectId": "step-based-scrollytelling",
-      "projectId": "russellsamora-scrollama",
-      "sourceType": "official",
-      "originUrl": "https://pudding.cool/process/how-to-implement-scrollytelling/",
-      "demoSourcePath": null,
-      "libraryVersion": "upstream version not recorded",
-      "generatedAt": "2026-07-17",
-      "outputPath": "demo/gifs/scrollama.gif",
-      "usageBasis": "upstream repository/project material; verify license https://github.com/russellsamora/scrollama/blob/HEAD/LICENSE"
-    },
-    {
       "effectId": "context-aware-custom-cursor",
       "projectId": "cuberto-mouse-follower",
       "sourceType": "official",
@@ -46,28 +24,6 @@
       "usageBasis": "upstream repository/project material; verify license https://github.com/robin-dela/hover-effect/blob/HEAD/LICENSE"
     },
     {
-      "effectId": "after-effects-vector-playback",
-      "projectId": "airbnb-lottie-web",
-      "sourceType": "official",
-      "originUrl": "https://github.com/airbnb/lottie-web/blob/master/gifs/Example1.gif",
-      "demoSourcePath": null,
-      "libraryVersion": "upstream version not recorded",
-      "generatedAt": "2026-07-17",
-      "outputPath": "demo/gifs/lottie-web.gif",
-      "usageBasis": "upstream repository/project material; verify license https://github.com/airbnb/lottie-web/blob/HEAD/LICENSE.md"
-    },
-    {
-      "effectId": "declarative-react-3d-scene",
-      "projectId": "pmndrs-react-three-fiber",
-      "sourceType": "official",
-      "originUrl": "https://github.com/pmndrs/react-three-fiber/blob/master/docs/basic-app.gif",
-      "demoSourcePath": null,
-      "libraryVersion": "upstream version not recorded",
-      "generatedAt": "2026-07-17",
-      "outputPath": "demo/gifs/react-three-fiber.gif",
-      "usageBasis": "upstream repository/project material; verify license https://github.com/pmndrs/react-three-fiber/blob/HEAD/LICENSE"
-    },
-    {
       "effectId": "functional-webgl-draw-commands",
       "projectId": "regl-project-regl",
       "sourceType": "demo",
@@ -88,72 +44,6 @@
       "generatedAt": "2026-07-17",
       "outputPath": "demo/gifs/captured/dom-synced-shader-planes.gif",
       "usageBasis": "upstream repository/project material; verify license https://github.com/martinlaxenaire/curtainsjs/blob/HEAD/LICENSE.txt"
-    },
-    {
-      "effectId": "accessible-interactive-3d-product-view",
-      "projectId": "google-model-viewer",
-      "sourceType": "demo",
-      "originUrl": "https://github.com/google/model-viewer",
-      "demoSourcePath": "demo/preview-demos/accessible-interactive-3d-product-view.html",
-      "libraryVersion": "@google/model-viewer@4.3.1",
-      "generatedAt": "2026-07-17",
-      "outputPath": "demo/gifs/captured/accessible-interactive-3d-product-view.gif",
-      "usageBasis": "upstream repository/project material; verify license https://github.com/google/model-viewer/blob/HEAD/LICENSE"
-    },
-    {
-      "effectId": "declarative-html-3d-scene",
-      "projectId": "aframevr-aframe",
-      "sourceType": "demo",
-      "originUrl": "https://github.com/aframevr/aframe",
-      "demoSourcePath": "demo/preview-demos/declarative-html-3d-scene.html",
-      "libraryVersion": "aframe@1.8.0",
-      "generatedAt": "2026-07-17",
-      "outputPath": "demo/gifs/captured/declarative-html-3d-scene.gif",
-      "usageBasis": "upstream repository/project material; verify license https://github.com/aframevr/aframe/blob/HEAD/LICENSE"
-    },
-    {
-      "effectId": "vue-declarative-three-js",
-      "projectId": "tresjs-tres",
-      "sourceType": "demo",
-      "originUrl": "https://github.com/Tresjs/tres",
-      "demoSourcePath": "demo/preview-demos/vue-declarative-three-js.html",
-      "libraryVersion": "@tresjs/core@5.8.3; vue@3.5.40",
-      "generatedAt": "2026-07-17",
-      "outputPath": "demo/gifs/captured/vue-declarative-three-js.gif",
-      "usageBasis": "upstream repository/project material; verify license https://github.com/Tresjs/tres/blob/HEAD/LICENSE"
-    },
-    {
-      "effectId": "svelte-declarative-three-js",
-      "projectId": "threlte-threlte",
-      "sourceType": "demo",
-      "originUrl": "https://github.com/threlte/threlte",
-      "demoSourcePath": "demo/preview-demos/svelte-declarative-three-js.html",
-      "libraryVersion": "@threlte/core@8.5.16; svelte@5.56.6",
-      "generatedAt": "2026-07-17",
-      "outputPath": "demo/gifs/captured/svelte-declarative-three-js.gif",
-      "usageBasis": "upstream repository/project material; verify license https://github.com/threlte/threlte/blob/HEAD/LICENSE.md"
-    },
-    {
-      "effectId": "configurable-reactive-particle-field",
-      "projectId": "tsparticles-tsparticles",
-      "sourceType": "official",
-      "originUrl": "https://github.com/tsparticles/tsparticles/blob/main/demo/vanilla/public/images/gifs/connect.gif",
-      "demoSourcePath": null,
-      "libraryVersion": "upstream version not recorded",
-      "generatedAt": "2026-07-17",
-      "outputPath": "demo/gifs/tsparticles.gif",
-      "usageBasis": "upstream repository/project material; verify license https://github.com/tsparticles/tsparticles/blob/HEAD/LICENSE"
-    },
-    {
-      "effectId": "drag-to-reveal-image-comparison",
-      "projectId": "sneas-img-comparison-slider",
-      "sourceType": "official",
-      "originUrl": "https://github.com/sneas/img-comparison-slider/blob/master/docs/example.gif",
-      "demoSourcePath": null,
-      "libraryVersion": "upstream version not recorded",
-      "generatedAt": "2026-07-17",
-      "outputPath": "demo/gifs/img-comparison-slider.gif",
-      "usageBasis": "upstream repository/project material; verify license https://github.com/sneas/img-comparison-slider/blob/HEAD/LICENSE"
     },
     {
       "effectId": "scroll-scrubbed-master-timeline",
@@ -211,17 +101,6 @@
       "usageBasis": "local demo capture using the pinned Theatre.js core package; verify license https://github.com/theatre-js/theatre/blob/HEAD/LICENSE"
     },
     {
-      "effectId": "render-agnostic-value-tween",
-      "projectId": "tweenjs-tween-js",
-      "sourceType": "demo",
-      "originUrl": "https://github.com/tweenjs/tween.js",
-      "demoSourcePath": "demo/preview-demos/render-agnostic-value-tween.html",
-      "libraryVersion": "@tweenjs/tween.js@25.0.0",
-      "generatedAt": "2026-07-17",
-      "outputPath": "demo/gifs/captured/render-agnostic-value-tween.gif",
-      "usageBasis": "local demo capture using the pinned Tween.js package; verify license https://github.com/tweenjs/tween.js/blob/HEAD/LICENSE"
-    },
-    {
       "effectId": "motion-graphics-burst",
       "projectId": "mojs-mojs",
       "sourceType": "demo",
@@ -231,17 +110,6 @@
       "generatedAt": "2026-07-17",
       "outputPath": "demo/gifs/captured/motion-graphics-burst.gif",
       "usageBasis": "local demo capture using the pinned Mo.js package; verify license https://github.com/mojs/mojs/blob/HEAD/LICENSE.md"
-    },
-    {
-      "effectId": "functional-value-pipeline",
-      "projectId": "popmotion-popmotion",
-      "sourceType": "demo",
-      "originUrl": "https://github.com/Popmotion/popmotion",
-      "demoSourcePath": "demo/preview-demos/functional-value-pipeline.html",
-      "libraryVersion": "popmotion@11.0.5",
-      "generatedAt": "2026-07-17",
-      "outputPath": "demo/gifs/captured/functional-value-pipeline.gif",
-      "usageBasis": "local demo capture using the pinned Popmotion package; verify license https://github.com/Popmotion/popmotion/blob/HEAD/LICENSE.md"
     },
     {
       "effectId": "compact-svg-shape-tween",
@@ -297,17 +165,6 @@
       "generatedAt": "2026-07-17",
       "outputPath": "demo/gifs/captured/sketch-style-creative-coding-loop.gif",
       "usageBasis": "local demo capture using the pinned p5.js package; verify license https://github.com/processing/p5.js/blob/HEAD/license.txt"
-    },
-    {
-      "effectId": "anchored-popover-flip-and-shift",
-      "projectId": "floating-ui-floating-ui",
-      "sourceType": "demo",
-      "originUrl": "https://github.com/floating-ui/floating-ui",
-      "demoSourcePath": "demo/preview-demos/anchored-popover-flip-and-shift.html",
-      "libraryVersion": "@floating-ui/dom@1.8.0",
-      "generatedAt": "2026-07-17",
-      "outputPath": "demo/gifs/captured/anchored-popover-flip-and-shift.gif",
-      "usageBasis": "local demo capture using the pinned Floating UI package; verify license https://github.com/floating-ui/floating-ui/blob/HEAD/LICENSE"
     }
   ]
 }

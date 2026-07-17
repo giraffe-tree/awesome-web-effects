@@ -2,7 +2,7 @@
 
 [中文文档](README.zh-CN.md) · [Live demo](https://giraffe-tree.github.io/awesome-interaction/)
 
-An **effect-first** atlas of open-source interactions for the web. It catalogs **239 distinct effects across 10 categories**, backed by **154 source projects**. Each effect is one row with a stable semantic key, a GIF preview, copyable minimal code, and a one-click implementation prompt for Codex or Claude Code. English is the default interface and documentation language.
+An **effect-first** atlas of open-source interactions for the web. It catalogs **240 distinct effects across 10 categories**, backed by **154 source projects**. Each effect is one row with a stable semantic key, a GIF preview, copyable minimal code, and a one-click implementation prompt for Codex or Claude Code. English is the default interface and documentation language.
 
 ## Effect-first model
 
@@ -13,14 +13,14 @@ An **effect-first** atlas of open-source interactions for the web. It catalogs *
 
 ## Catalog snapshot
 
-- 239 effect rows, including 20 baseline effects.
-- 118 independently researched effects were added in the latest effect-level expansion.
+- 240 effect rows, including 20 baseline effects.
+- 119 independently researched effects were added in the latest effect-level expansion.
 - 154 unique GitHub source projects; 101 were added during the 2026 expansion.
-- 239 source-specific GIF previews: 8 official captures and 231 labeled editorial recreations.
-- 239 one-click implementation prompts, one for every effect.
+- 240 source-specific GIF previews: 8 official captures and 232 labeled editorial recreations.
+- 240 one-click implementation prompts, one for every effect.
 - 14 useful older sources are marked **Legacy**; no archived repository is included.
 - Stars are a snapshot from **2026-07-17**, not a live counter.
-- The referenced, optimized GIF set is **10.18 MiB**; each preview is 320×180, at most three seconds, and below 1 MiB.
+- The referenced, optimized GIF set is **10.19 MiB**; each preview is 320×180, at most three seconds, and below 1 MiB.
 
 ## Selection rules
 
@@ -36,7 +36,7 @@ An **effect-first** atlas of open-source interactions for the web. It catalogs *
 | --- | ---: | ---: | --- |
 | [Motion & choreography](#animation) | 22 | 14 | Timelines, springs, tweens, class animation, and framework-native motion. |
 | [Scroll & reveal](#scroll) | 25 | 18 | Smooth scrolling, scroll-linked scenes, reveals, parallax, and snap navigation. |
-| [Page & layout](#transition) | 24 | 16 | Page transitions, FLIP motion, filtering, packing, and animated reflow. |
+| [Page & layout](#transition) | 25 | 16 | Page transitions, FLIP motion, filtering, packing, and animated reflow. |
 | [Navigation & overlays](#carousel) | 22 | 14 | Carousel, lightbox, menus, tours, notifications, drag overlays, and spatial navigation. |
 | [Pointer & hover](#pointer) | 26 | 14 | Tilt, depth, custom cursors, magnetic motion, and image distortion. |
 | [Text & SVG](#vector) | 25 | 20 | Typing, text splitting, vector drawing, handwriting, and SVG morphing. |
@@ -144,6 +144,7 @@ Page transitions, FLIP motion, filtering, packing, and animated reflow.
 | [Clip-shape theme reveal](https://giraffe-tree.github.io/awesome-interaction/#clip-shape-theme-reveal) | [Magic UI](https://github.com/magicuidesign/magicui) | 21,567 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#clip-shape-theme-reveal) |
 | [Blend-mode self-inverting fixed navigation](https://giraffe-tree.github.io/awesome-interaction/#blend-mode-self-inverting-fixed-navigation) | [Awesome Web Effects](https://github.com/giraffe-tree/awesome-web-effects) | 0 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#blend-mode-self-inverting-fixed-navigation) |
 | [Delayed dropdown promo sweep](https://giraffe-tree.github.io/awesome-interaction/#delayed-dropdown-promo-sweep) | [Awesome Web Effects](https://github.com/giraffe-tree/awesome-web-effects) | 0 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#delayed-dropdown-promo-sweep) |
+| [Synchronized scenario scene handoff](https://giraffe-tree.github.io/awesome-interaction/#synchronized-scenario-scene-handoff) | [Awesome Web Effects](https://github.com/giraffe-tree/awesome-web-effects) | 0 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#synchronized-scenario-scene-handoff) |
 
 <a id="carousel"></a>
 

@@ -1388,5 +1388,23 @@ export const additionalEffectSeeds = [
     "difference": "The moving dot gives the letter transition a spatial cause: it visibly erases in one direction and writes in the other. Existing rotating word slots swap a bounded label without a marker that traverses and explains the character sequence.",
     "sourceUrl": "https://poly.ai/",
     "verifiedAt": "2026-07-17"
+  },
+  {
+    "name": "Synchronized scenario scene handoff",
+    "nameZh": "场景同步换幕",
+    "category": "transition",
+    "projectName": "Awesome Web Effects",
+    "repo": "giraffe-tree/awesome-web-effects",
+    "stars": 0,
+    "snippet": "<section class=\"scene\"><video class=\"bg active\" src=\"support.mp4\" muted loop autoplay playsinline></video><video class=\"bg\" src=\"sales.mp4\" muted loop autoplay playsinline></video><div class=\"shade\"></div><div class=\"copy\"><h2>Speak human to every customer</h2><b class=\"label\">Customer Support</b></div><nav><button data-scene=\"0\" data-label=\"Customer Support\">Support</button><button data-scene=\"1\" data-label=\"Lead Qualification\">Sales</button></nav></section>\n<style>.scene{position:relative;min-height:32rem;overflow:hidden;color:#fff;background:#111}.bg,.shade{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .42s ease-out}.bg.active{opacity:1}.shade{opacity:1;background:#0005}.copy{position:relative;padding:8rem 8%;transition:transform .52s cubic-bezier(.2,.8,.2,1)}.label{display:inline-block;transform-origin:50% 0}.label.flap{animation:flap .52s ease-out}@keyframes flap{0%{opacity:0;transform:translateY(100%) rotateX(75deg)}55%{opacity:1;transform:translateY(-6%) rotateX(-12deg)}80%{transform:translateY(2%) rotateX(4deg)}to{transform:none}}@media(prefers-reduced-motion:reduce){.bg,.copy{transition:none}.label.flap{animation:none}}</style>\n<script>const videos=[...document.querySelectorAll('.bg')],label=document.querySelector('.label');document.querySelector('nav').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;videos.forEach((v,i)=>v.classList.toggle('active',i==b.dataset.scene));label.textContent=b.dataset.label;label.classList.remove('flap');void label.offsetWidth;label.classList.add('flap')})</script>",
+    "behavior": {
+      "trigger": "selecting a product demo scenario",
+      "response": "background films crossfade as the content plane slides, the dim overlay hands off, and a new scenario label flaps in with perspective overshoot",
+      "timing": "420 ms media and overlay crossfade; 520 ms slide and damped label flap",
+      "layer": "background media, overlay, content plane, and foreground label"
+    },
+    "difference": "One state transition coordinates four visual layers with distinct motion roles and timing, creating a complete scene change. Existing tab panels or flip labels change a single layer without synchronizing background media and content choreography.",
+    "sourceUrl": "https://vapi.ai/",
+    "verifiedAt": "2026-07-17"
   }
 ];

@@ -185,6 +185,19 @@ function transitionScene(frame, time, accent, secondary, mode) {
       const amount = 1 - Math.abs(index) / 17;
       rect(frame, x + index * 3, 116, 4, 24, mix(accent, secondary, (index + 16) / 32), amount * .58);
     }
+  } else if (mode === 8) {
+    const switchProgress = ease(clamp((time - .28) / .42, 0, 1));
+    rect(frame, 0, 0, width, height, accent, .88);
+    rect(frame, 0, 0, width, height, secondary, switchProgress * .9);
+    rect(frame, 0, 0, width, height, [18, 21, 29], .18 + switchProgress * .12);
+    const contentX = 42 - Math.sin(switchProgress * Math.PI) * 26;
+    rect(frame, contentX, 56, 178, 12, [255, 255, 255], .92);
+    rect(frame, contentX, 78, 132, 8, [255, 255, 255], .58);
+    const overshoot = switchProgress < .58 ? 1.1 * switchProgress / .58 : 1 - Math.sin((switchProgress - .58) / .42 * Math.PI) * .08;
+    const labelY = 112 + (1 - overshoot) * 34;
+    rect(frame, contentX, labelY, 124 + switchProgress * 28, Math.max(5, 24 * overshoot), [255, 255, 255], switchProgress);
+    rect(frame, 46, 148, 84, 5, [255, 255, 255], 1 - switchProgress);
+    rect(frame, 142, 148, 84, 5, [255, 255, 255], switchProgress);
   } else {
     rect(frame, 30, 42, 260 * wave(time), 96, accent, .7); rect(frame, 30 + 260 * wave(time), 42, 260 * (1 - wave(time)), 96, secondary, .65);
   }
@@ -467,7 +480,7 @@ function mediaScene(frame, time, accent, secondary, mode) {
 const modeRules = {
   animation: [[/stagger/, 1], [/morph|shape/, 2], [/burst/, 3], [/spring|bounce/, 4], [/timeline|sequence|keyframe/, 5]],
   scroll: [[/hysteretic|threshold header/, 7], [/document generation|generation playback/, 6], [/horizontal/, 0], [/scrollbar|container/, 1], [/parallax|3d/, 2], [/reveal|viewport/, 3], [/infinite|million|virtual|append/, 4], [/snap|section|split/, 5]],
-  transition: [[/dropdown promo sweep|promo sweep/, 7], [/self-inverting|blend-mode/, 6], [/page|route/, 0], [/grid|masonry|pack|reflow/, 1], [/shared|flip|morph/, 2], [/drawer/, 3], [/split|resize/, 4], [/filter|enter|exit/, 5]],
+  transition: [[/scenario scene|scene handoff/, 8], [/dropdown promo sweep|promo sweep/, 7], [/self-inverting|blend-mode/, 6], [/page|route/, 0], [/grid|masonry|pack|reflow/, 1], [/shared|flip|morph/, 2], [/drawer/, 3], [/split|resize/, 4], [/filter|enter|exit/, 5]],
   carousel: [[/carousel|slide|deck/, 0], [/modal|lightbox|alert/, 1], [/command|menu/, 2], [/toast|notification/, 3], [/popover|tour|spotlight/, 4], [/drag|drop|pinch/, 5]],
   pointer: [[/interaction-history|hiring badge/, 9], [/opposed diagonal|offset cta/, 8], [/metadata-to-cta|role swap/, 7], [/crop marks|four-corner/, 6], [/cursor|trail|particle/, 0], [/tilt|depth|parallax|glare/, 1], [/magnetic|attracted|button/, 2], [/hover|overlay|card/, 3], [/hotspot|region|point/, 4], [/distortion|gooey|displacement/, 5]],
   vector: [[/traveling-dot|eraser-writer/, 8], [/type-select|select-replace/, 7], [/text-path|curved text/, 6], [/draw|stroke|path/, 0], [/type|split|character css/, 1], [/flip|ticker|mechanical/, 2], [/morph|shape/, 3], [/hand|rough|letter/, 4], [/scramble|decode|random/, 5]],

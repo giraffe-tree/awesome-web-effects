@@ -2,7 +2,7 @@
 
 [English (default)](README.md) · [在线 Demo](https://giraffe-tree.github.io/awesome-interaction/)
 
-一个**以效果为先**的开源 Web 交互图鉴。当前收录 **10 类 239 种不同效果**，背后有 **154 个来源项目**。每种效果独占一行，拥有稳定语义 Key、GIF 预览、可复制的最小代码，以及可一键交给 Codex 或 Claude Code 的实现提示词。英文是默认界面与默认文档语言，同时提供完整中文文档与中文界面。
+一个**以效果为先**的开源 Web 交互图鉴。当前收录 **10 类 240 种不同效果**，背后有 **154 个来源项目**。每种效果独占一行，拥有稳定语义 Key、GIF 预览、可复制的最小代码，以及可一键交给 Codex 或 Claude Code 的实现提示词。英文是默认界面与默认文档语言，同时提供完整中文文档与中文界面。
 
 ## 效果优先模型
 
@@ -13,14 +13,14 @@
 
 ## 目录快照
 
-- 239 行效果，其中 20 种为基线效果。
-- 最近一次效果级扩展独立调研并新增 118 种效果。
+- 240 行效果，其中 20 种为基线效果。
+- 最近一次效果级扩展独立调研并新增 119 种效果。
 - 154 个唯一 GitHub 来源项目；2026 扩展阶段新增 101 个。
-- 239 个与具体来源对应的 GIF：8 个官方捕获，231 个明确标注的编辑重现。
-- 239 份一键实现提示词，每种效果都有一份。
+- 240 个与具体来源对应的 GIF：8 个官方捕获，232 个明确标注的编辑重现。
+- 240 份一键实现提示词，每种效果都有一份。
 - 14 个较旧但仍有参考价值的来源标记为“经典旧版”；不包含已归档仓库。
 - Stars 是 **2026-07-17** 的快照，不是实时计数器。
-- 被目录引用的 GIF 优化后总计 **10.18 MiB**；每个预览均为 320×180、最长三秒且小于 1 MiB。
+- 被目录引用的 GIF 优化后总计 **10.19 MiB**；每个预览均为 320×180、最长三秒且小于 1 MiB。
 
 ## 收录与去重规则
 
@@ -36,7 +36,7 @@
 | --- | ---: | ---: | --- |
 | [动画与编排](#animation) | 22 | 14 | 时间线、弹簧、补间、类动画与框架原生动效。 |
 | [滚动与揭示](#scroll) | 25 | 18 | 平滑滚动、滚动关联场景、进入揭示、视差与整屏吸附。 |
-| [页面与布局](#transition) | 24 | 16 | 页面转场、FLIP 动画、筛选、紧密排布与布局重排。 |
+| [页面与布局](#transition) | 25 | 16 | 页面转场、FLIP 动画、筛选、紧密排布与布局重排。 |
 | [导航与浮层](#carousel) | 22 | 14 | 轮播、灯箱、菜单、导览、通知、拖拽浮层与空间导航。 |
 | [指针与悬停](#pointer) | 26 | 14 | 倾斜、景深、自定义光标、磁性运动与图像扭曲。 |
 | [文本与 SVG](#vector) | 25 | 20 | 打字、文字拆分、矢量绘制、手写与 SVG 变形。 |
@@ -144,6 +144,7 @@
 | [裁剪形状主题揭示](https://giraffe-tree.github.io/awesome-interaction/#clip-shape-theme-reveal) | [Magic UI](https://github.com/magicuidesign/magicui) | 21,567 | 1 | 当前推荐 | [代码 + 提示词](https://giraffe-tree.github.io/awesome-interaction/#clip-shape-theme-reveal) |
 | [混合模式自反色固定导航](https://giraffe-tree.github.io/awesome-interaction/#blend-mode-self-inverting-fixed-navigation) | [Awesome Web Effects](https://github.com/giraffe-tree/awesome-web-effects) | 0 | 1 | 当前推荐 | [代码 + 提示词](https://giraffe-tree.github.io/awesome-interaction/#blend-mode-self-inverting-fixed-navigation) |
 | [延迟触发的下拉菜单推广光扫](https://giraffe-tree.github.io/awesome-interaction/#delayed-dropdown-promo-sweep) | [Awesome Web Effects](https://github.com/giraffe-tree/awesome-web-effects) | 0 | 1 | 当前推荐 | [代码 + 提示词](https://giraffe-tree.github.io/awesome-interaction/#delayed-dropdown-promo-sweep) |
+| [场景同步换幕](https://giraffe-tree.github.io/awesome-interaction/#synchronized-scenario-scene-handoff) | [Awesome Web Effects](https://github.com/giraffe-tree/awesome-web-effects) | 0 | 1 | 当前推荐 | [代码 + 提示词](https://giraffe-tree.github.io/awesome-interaction/#synchronized-scenario-scene-handoff) |
 
 <a id="carousel"></a>
 

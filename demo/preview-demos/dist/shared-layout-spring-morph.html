@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Motion — Shared-layout Spring Morph</title>
+    <style>
+      :root { --preview-background: #080a12; }
+      .morph-stage {
+        background:
+          radial-gradient(circle at 74% 42%, rgba(137, 92, 255, .2), transparent 38%),
+          linear-gradient(145deg, #090b14, #111525);
+      }
+      .layout-shell { position: absolute; inset: 32px 14px 16px; }
+      .source-slot,
+      .destination-slot {
+        position: absolute;
+        border: 1px dashed rgba(255,255,255,.18);
+        background: rgba(255,255,255,.025);
+      }
+      .source-slot { left: 4px; top: 16px; width: 74px; height: 72px; border-radius: 18px; }
+      .destination-slot { right: 2px; top: 2px; width: 202px; height: 122px; border-radius: 28px; }
+      .slot-label { position: absolute; left: 7px; bottom: -15px; color: #ffffff5c; font-size: 6px; font-weight: 800; letter-spacing: .11em; text-transform: uppercase; }
+      .shared-card {
+        position: absolute;
+        z-index: 4;
+        left: 4px;
+        top: 16px;
+        width: 74px;
+        height: 72px;
+        overflow: hidden;
+        border: 1px solid rgba(255,255,255,.34);
+        border-radius: 18px;
+        background: linear-gradient(145deg, #7f5cff, #3c2d89);
+        box-shadow: 0 16px 36px rgba(21, 12, 63, .58), inset 0 1px rgba(255,255,255,.24);
+        will-change: transform, width, height, border-radius;
+      }
+      .card-orb {
+        position: absolute;
+        left: 14px;
+        top: 15px;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 34% 30%, #fff 0 6%, #aef7ff 7% 18%, #5d8dff 43%, #39206f 72%);
+        box-shadow: 0 0 24px rgba(126, 214, 255, .52);
+      }
+      .card-orb::after {
+        content: "";
+        position: absolute;
+        inset: 7px -8px;
+        border: 1px solid rgba(255,255,255,.66);
+        border-radius: 50%;
+        transform: rotate(-24deg);
+      }
+      .card-copy { position: absolute; left: 78px; top: 18px; width: 102px; color: white; }
+      .card-copy strong { display: block; font-size: 13px; letter-spacing: -.035em; white-space: nowrap; }
+      .card-copy span { display: block; width: 76px; height: 4px; margin-top: 8px; border-radius: 99px; background: rgba(255,255,255,.48); }
+      .card-copy span:nth-child(3) { width: 94px; opacity: .58; }
+      .card-copy span:nth-child(4) { width: 55px; opacity: .35; }
+      .card-chip { position: absolute; left: 78px; bottom: 18px; width: 62px; height: 16px; border-radius: 99px; background: rgba(7,10,24,.35); }
+      .card-chip::after { content: "SPRING"; display: grid; place-items: center; height: 100%; color: #c8f7ff; font-size: 6px; font-weight: 900; letter-spacing: .08em; }
+      .state-readout { position: absolute; left: 6px; bottom: 7px; color: #c9c9d3; font-size: 7px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+      .state-readout b { color: #9eeaff; }
+      .morph-toggle {
+        position: absolute;
+        z-index: 8;
+        right: 12px;
+        bottom: 9px;
+        min-height: 24px;
+        padding: 0 10px;
+        border: 1px solid rgba(255,255,255,.2);
+        border-radius: 99px;
+        color: white;
+        background: rgba(10,12,24,.76);
+        font-size: 7px;
+        font-weight: 800;
+        letter-spacing: .07em;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+      .morph-toggle:hover { background: #6650d8; }
+      .morph-stage > .scene-caption { display: none; }
+      @media (prefers-reduced-motion: reduce) {
+        .morph-toggle { display: none; }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/shared-layout-spring-morph-BZ_q0qOd.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-C4iZKo3w.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main class="preview-stage morph-stage" aria-label="One shared card springs between compact and expanded layout slots">
+      <div class="layout-shell">
+        <div class="source-slot" aria-hidden="true"><span class="slot-label">compact slot</span></div>
+        <div class="destination-slot" aria-hidden="true"><span class="slot-label">expanded slot</span></div>
+        <article class="shared-card" id="shared-card" data-preview-mechanism="motion-spring">
+          <div class="card-orb" aria-hidden="true"></div>
+          <div class="card-copy" aria-hidden="true"><strong>Shared node</strong><span></span><span></span><span></span></div>
+          <div class="card-chip" aria-hidden="true"></div>
+        </article>
+        <p class="state-readout" aria-live="polite">layout: <b id="layout-state">compact</b></p>
+      </div>
+      <button class="morph-toggle" id="morph-toggle" type="button" aria-pressed="false">Toggle layout</button>
+      <span class="library-badge">Motion · physics spring</span>
+      <span class="scene-caption">one DOM node changes layout with spring overshoot</span>
+    </main>
+  </body>
+</html>

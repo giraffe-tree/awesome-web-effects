@@ -5,8 +5,8 @@
 - Removed 234 editorial/concept GIFs from the published `demo/gifs/` tree.
 - Removed the synthetic GIF generator so new previews cannot fall back to category templates.
 - Kept 8 source-verified official previews.
-- Added 12 runnable, library-backed demos across WebGL, DOM, SVG, and Canvas 2D, then captured their browser output as GIFs.
-- Marked the remaining 222 source relations as `unavailable`; the catalog renders “No real preview / 暂无真实预览” instead of an image.
+- Added 20 runnable, library-backed demos across WebGL, DOM, SVG, and Canvas 2D, then captured their browser output as GIFs.
+- Marked the remaining 214 source relations as `unavailable`; the catalog renders “No real preview / 暂无真实预览” instead of an image.
 - Added one-to-one provenance, exact hash checks, perceptual duplicate detection, GIF format checks, and local-demo path checks.
 
 ## Initial accepted local-demo batch
@@ -33,17 +33,32 @@
 
 Each published demo was loaded from the static `demo/` tree, matched its pinned manifest version, exposed the expected live WebGL/Canvas/SVG/DOM surface, passed any library-specific runtime assertion, and completed without page errors. The six second-batch GIFs were also reviewed as distinct visual sequences rather than accepted on script output alone.
 
+## Third accepted multi-agent pilot batch
+
+| Effect ID | Runtime | Core runtime proof | Capture result |
+| --- | --- | --- | --- |
+| `pinned-horizontal-scroll-scene` | `gsap@3.15.0` | ScrollTrigger pins the stage and maps real vertical scroll progress to a four-panel horizontal track | 29/36 distinct frames |
+| `shared-layout-spring-morph` | `motion@12.42.2` | Motion's physics spring moves one persistent DOM card between compact and expanded layout slots | 28/36 distinct frames |
+| `staggered-transform-choreography` | `animejs@4.5.0` | Anime.js `animate()` uses a real `stagger()` delay function across eight DOM targets | 36/36 distinct frames |
+| `render-agnostic-value-tween` | `@tweenjs/tween.js@25.0.0` | One Tween.js value object drives four independent DOM render targets through `Group.update()` | 36/36 distinct frames |
+| `motion-graphics-burst` | `@mojs/core@1.7.1` | Two Mo.js `Burst` instances plus `Shape` layers are deterministically seeked by one real `Timeline` | 26/36 distinct frames |
+| `visually-authored-keyframe-sequence` | `@theatre/core@0.7.2` | A saved Theatre project drives one sheet object through six real keyframed property tracks | 36/36 distinct frames |
+| `functional-value-pipeline` | `popmotion@11.0.5` | Popmotion `animate()` emits a scalar through real clamp, easing, pipe, and interpolation functions | 36/36 distinct frames |
+| `compact-svg-shape-tween` | `kute.js@2.2.6` | KUTE.js normalizes and interpolates the live path topology between angular and curved silhouettes | 36/36 distinct frames |
+
+The eight demos were implemented independently, integrated into the shared capture workspace, rebuilt from a clean dependency install, and reviewed together as contact sheets. Their subject, layout, trajectory, and timing remain visually distinct at 320×180.
+
 ## Final audit
 
 ```text
 effects: 242
-authentic: 20
+authentic: 28
 official: 8
-localDemo: 12
-unavailable: 222
+localDemo: 20
+unavailable: 214
 legacyGeneratedEditorial: 0
 orphanedGifFiles: 0
-provenanceRecords: 20
+provenanceRecords: 28
 invalidProvenanceRecords: 0
 perceptualDuplicatePairs: 0
 blockingIssues: 0
@@ -62,13 +77,13 @@ git diff --check
 
 ## Remaining work
 
-The 222 unavailable entries are deliberately incomplete rather than misleading. Migrate them only in reviewed batches: build a runnable demo with the named implementation, capture the browser result, add provenance, compare neighboring GIFs visually, and pass the authenticity audit before changing `previewKind` from `unavailable`.
+The 214 unavailable entries are deliberately incomplete rather than misleading. Migrate them only in reviewed batches: build a runnable demo with the named implementation, capture the browser result, add provenance, compare neighboring GIFs visually, and pass the authenticity audit before changing `previewKind` from `unavailable`.
 
 ## Why the first migration left 228 entries without a preview
 
 `unavailable` is an evidence state, not a rendering error. The previous catalog made 234 editorial animations look like implementation evidence. This migration removed those files, retained eight verifiable official previews, and replaced six entries with real local demos. The remaining 228 were not promoted because none yet had the complete chain `named implementation -> runnable source -> deterministic browser capture -> GIF -> provenance -> visual review`.
 
-The follow-up batch then completed that chain for six more entries, reducing the current unavailable count from 228 to 222. The baseline inventory below is retained so the original workload classification remains auditable.
+The follow-up batch completed that chain for six more entries, reducing the unavailable count from 228 to 222. The multi-agent pilot then completed the first eight remaining IDs in sequence, reducing the current count to 214. The baseline inventory below is retained so the original workload classification remains auditable.
 
 The backlog is structurally mixed:
 
@@ -86,8 +101,8 @@ The backlog therefore cannot be solved honestly by one generic generator. Simila
 
 | Category | Unavailable |
 | --- | ---: |
-| Animation | 22 |
-| Scroll | 23 |
+| Animation | 15 |
+| Scroll | 22 |
 | Transition | 24 |
 | Carousel / overlay | 21 |
 | Pointer / hover | 23 |
@@ -96,7 +111,7 @@ The backlog therefore cannot be solved honestly by one generic generator. Simila
 | WebGL / 3D | 15 |
 | Background / particles | 23 |
 | Media / image | 25 |
-| **Total** | **222** |
+| **Total** | **214** |
 
 ## Baseline migration bands (228-entry inventory)
 

@@ -167,6 +167,94 @@
       "usageBasis": "local demo capture using the pinned GSAP package; verify license https://github.com/greensock/GSAP/blob/HEAD/LICENSE.md"
     },
     {
+      "effectId": "pinned-horizontal-scroll-scene",
+      "projectId": "greensock-gsap",
+      "sourceType": "demo",
+      "originUrl": "https://github.com/greensock/GSAP",
+      "demoSourcePath": "demo/preview-demos/pinned-horizontal-scroll-scene.html",
+      "libraryVersion": "gsap@3.15.0",
+      "generatedAt": "2026-07-17",
+      "outputPath": "demo/gifs/captured/pinned-horizontal-scroll-scene.gif",
+      "usageBasis": "local demo capture using the pinned GSAP package; verify license https://github.com/greensock/GSAP/blob/HEAD/LICENSE.md"
+    },
+    {
+      "effectId": "shared-layout-spring-morph",
+      "projectId": "motiondivision-motion",
+      "sourceType": "demo",
+      "originUrl": "https://github.com/motiondivision/motion",
+      "demoSourcePath": "demo/preview-demos/shared-layout-spring-morph.html",
+      "libraryVersion": "motion@12.42.2",
+      "generatedAt": "2026-07-17",
+      "outputPath": "demo/gifs/captured/shared-layout-spring-morph.gif",
+      "usageBasis": "local demo capture using the pinned Motion package; verify license https://github.com/motiondivision/motion/blob/HEAD/LICENSE.md"
+    },
+    {
+      "effectId": "staggered-transform-choreography",
+      "projectId": "juliangarnier-anime",
+      "sourceType": "demo",
+      "originUrl": "https://github.com/juliangarnier/anime",
+      "demoSourcePath": "demo/preview-demos/staggered-transform-choreography.html",
+      "libraryVersion": "animejs@4.5.0",
+      "generatedAt": "2026-07-17",
+      "outputPath": "demo/gifs/captured/staggered-transform-choreography.gif",
+      "usageBasis": "local demo capture using the pinned Anime.js package; verify license https://github.com/juliangarnier/anime/blob/HEAD/LICENSE.md"
+    },
+    {
+      "effectId": "visually-authored-keyframe-sequence",
+      "projectId": "theatre-js-theatre",
+      "sourceType": "demo",
+      "originUrl": "https://github.com/theatre-js/theatre",
+      "demoSourcePath": "demo/preview-demos/visually-authored-keyframe-sequence.html",
+      "libraryVersion": "@theatre/core@0.7.2",
+      "generatedAt": "2026-07-17",
+      "outputPath": "demo/gifs/captured/visually-authored-keyframe-sequence.gif",
+      "usageBasis": "local demo capture using the pinned Theatre.js core package; verify license https://github.com/theatre-js/theatre/blob/HEAD/LICENSE"
+    },
+    {
+      "effectId": "render-agnostic-value-tween",
+      "projectId": "tweenjs-tween-js",
+      "sourceType": "demo",
+      "originUrl": "https://github.com/tweenjs/tween.js",
+      "demoSourcePath": "demo/preview-demos/render-agnostic-value-tween.html",
+      "libraryVersion": "@tweenjs/tween.js@25.0.0",
+      "generatedAt": "2026-07-17",
+      "outputPath": "demo/gifs/captured/render-agnostic-value-tween.gif",
+      "usageBasis": "local demo capture using the pinned Tween.js package; verify license https://github.com/tweenjs/tween.js/blob/HEAD/LICENSE"
+    },
+    {
+      "effectId": "motion-graphics-burst",
+      "projectId": "mojs-mojs",
+      "sourceType": "demo",
+      "originUrl": "https://github.com/mojs/mojs",
+      "demoSourcePath": "demo/preview-demos/motion-graphics-burst.html",
+      "libraryVersion": "@mojs/core@1.7.1",
+      "generatedAt": "2026-07-17",
+      "outputPath": "demo/gifs/captured/motion-graphics-burst.gif",
+      "usageBasis": "local demo capture using the pinned Mo.js package; verify license https://github.com/mojs/mojs/blob/HEAD/LICENSE.md"
+    },
+    {
+      "effectId": "functional-value-pipeline",
+      "projectId": "popmotion-popmotion",
+      "sourceType": "demo",
+      "originUrl": "https://github.com/Popmotion/popmotion",
+      "demoSourcePath": "demo/preview-demos/functional-value-pipeline.html",
+      "libraryVersion": "popmotion@11.0.5",
+      "generatedAt": "2026-07-17",
+      "outputPath": "demo/gifs/captured/functional-value-pipeline.gif",
+      "usageBasis": "local demo capture using the pinned Popmotion package; verify license https://github.com/Popmotion/popmotion/blob/HEAD/LICENSE.md"
+    },
+    {
+      "effectId": "compact-svg-shape-tween",
+      "projectId": "thednp-kute-js",
+      "sourceType": "demo",
+      "originUrl": "https://github.com/thednp/kute.js",
+      "demoSourcePath": "demo/preview-demos/compact-svg-shape-tween.html",
+      "libraryVersion": "kute.js@2.2.6",
+      "generatedAt": "2026-07-17",
+      "outputPath": "demo/gifs/captured/compact-svg-shape-tween.gif",
+      "usageBasis": "local demo capture using the pinned KUTE.js package; verify license https://github.com/thednp/kute.js/blob/HEAD/LICENSE"
+    },
+    {
       "effectId": "filterable-grid-reflow",
       "projectId": "metafizzy-isotope",
       "sourceType": "demo",

@@ -1,9 +1,15 @@
 # Real preview demos
 
-These pages are the capture sources for 12 catalog previews across WebGL, DOM, SVG, and Canvas. Each page imports and runs the library named by the catalog entry; none is a hand-drawn approximation or a shared placeholder scene.
+These pages are the capture sources for catalog previews across WebGL, DOM, SVG, and Canvas. Each page imports and runs the library named by the catalog entry; none is a hand-drawn approximation or a shared placeholder scene.
 
 | Effect id | Runtime used by the page | What the demo proves |
 | --- | --- | --- |
+| `visually-authored-keyframe-sequence` | `@theatre/core` | A saved Theatre project state drives a real sheet, object, and five-pose keyframe sequence through its runtime playhead. |
+| `staggered-transform-choreography` | `animejs` | Anime.js transforms eight DOM tiles with a real `stagger()` delay function and a seekable animation instance. |
+| `render-agnostic-value-tween` | `@tweenjs/tween.js` | One renderer-independent Tween.js value object drives position, rotation, progress, and a numeric DOM readout. |
+| `motion-graphics-burst` | `@mojs/core` | Two real Mo.js `Burst` instances, a shockwave, and a core shape share one deterministically seeked timeline. |
+| `functional-value-pipeline` | `popmotion` | Popmotion `animate()` emits one scalar through real `pipe()`, clamp, easing, and interpolation functions into multiple DOM outputs. |
+| `compact-svg-shape-tween` | `kute.js` | KUTE.js normalizes and interpolates one live SVG path between angular and curved silhouettes. |
 | `functional-webgl-draw-commands` | `regl` | Reusable regl draw commands render a GPU point flow and energy core. |
 | `dom-synced-shader-planes` | `curtainsjs` | A Curtains `Plane` follows the live bounds of a moving DOM card. |
 | `accessible-interactive-3d-product-view` | `@google/model-viewer` | The real web component loads a GLB and exposes orbit, zoom, pointer, and keyboard controls. |
@@ -11,6 +17,8 @@ These pages are the capture sources for 12 catalog previews across WebGL, DOM, S
 | `vue-declarative-three-js` | Vue + `@tresjs/core` | A Vue SFC describes and animates a component-based Three.js sculpture. |
 | `svelte-declarative-three-js` | Svelte + `@threlte/core` | Svelte components describe and animate an orbital Three.js scene. |
 | `scroll-scrubbed-master-timeline` | `gsap` + ScrollTrigger | Real scroll progress controls one sequenced GSAP timeline. |
+| `pinned-horizontal-scroll-scene` | `gsap` + ScrollTrigger | A pinned viewport maps vertical scroll distance to a four-panel horizontal story track. |
+| `shared-layout-spring-morph` | `motion` | One persistent DOM card uses Motion's physics spring to morph between compact and expanded layout slots. |
 | `filterable-grid-reflow` | `isotope-layout` | Isotope filters, sorts, and lays out the same DOM grid items. |
 | `perspective-tilt-and-glare` | `vanilla-tilt` | Pointer coordinates drive the library's perspective transform and glare layer. |
 | `svg-stroke-drawing` | `vivus` | Vivus measures and reveals the actual SVG paths one by one. |

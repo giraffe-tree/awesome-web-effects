@@ -74,6 +74,23 @@ def main() -> int:
             rows = page.locator("#effect-list .effect-row")
             expect(rows).to_have_count(242)
 
+            migrated_preview_ids = [
+                "pinned-horizontal-scroll-scene",
+                "shared-layout-spring-morph",
+                "staggered-transform-choreography",
+                "render-agnostic-value-tween",
+                "motion-graphics-burst",
+                "visually-authored-keyframe-sequence",
+                "functional-value-pipeline",
+                "compact-svg-shape-tween",
+            ]
+            for effect_id in migrated_preview_ids:
+                migrated_row = page.locator(f"#{effect_id}")
+                expect(migrated_row.locator(".row-preview img")).to_have_attribute(
+                    "src", f"./gifs/captured/{effect_id}.gif"
+                )
+                expect(migrated_row.locator(".preview-demo-link")).to_have_count(1)
+
             real_row = page.locator("#scroll-scrubbed-master-timeline")
             real_row.locator(".effect-cell").click()
             modal = page.locator("#effect-modal")
@@ -91,11 +108,11 @@ def main() -> int:
             expect(modal).to_be_hidden()
             assert page.evaluate("document.activeElement?.id") == "scroll-scrubbed-master-timeline"
 
-            unavailable_row = page.locator("#pinned-horizontal-scroll-scene")
+            unavailable_row = rows.filter(has=page.locator(".paused-preview")).first
             unavailable_row.locator(".effect-cell").click()
             expect(modal.locator(".modal-preview-unavailable")).to_be_visible()
             expect(modal.locator(".modal-preview img")).to_have_count(0)
-            expect(modal.locator(".modal-code-card code")).to_contain_text("ScrollTrigger")
+            expect(modal.locator(".modal-code-card code")).to_be_visible()
             page.keyboard.press("Escape")
 
             prompt_button = unavailable_row.locator(".prompt-button")

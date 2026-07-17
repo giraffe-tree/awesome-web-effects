@@ -9,7 +9,13 @@ const demoIds = [
   'accessible-interactive-3d-product-view',
   'declarative-html-3d-scene',
   'vue-declarative-three-js',
-  'svelte-declarative-three-js'
+  'svelte-declarative-three-js',
+  'scroll-scrubbed-master-timeline',
+  'filterable-grid-reflow',
+  'perspective-tilt-and-glare',
+  'svg-stroke-drawing',
+  'sketch-style-creative-coding-loop',
+  'anchored-popover-flip-and-shift'
 ];
 
 export default defineConfig({

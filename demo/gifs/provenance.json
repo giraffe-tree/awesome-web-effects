@@ -154,6 +154,72 @@
       "generatedAt": "2026-07-17",
       "outputPath": "demo/gifs/img-comparison-slider.gif",
       "usageBasis": "upstream repository/project material; verify license https://github.com/sneas/img-comparison-slider/blob/HEAD/LICENSE"
+    },
+    {
+      "effectId": "scroll-scrubbed-master-timeline",
+      "projectId": "greensock-gsap",
+      "sourceType": "demo",
+      "originUrl": "https://github.com/greensock/GSAP",
+      "demoSourcePath": "demo/preview-demos/scroll-scrubbed-master-timeline.html",
+      "libraryVersion": "gsap@3.15.0",
+      "generatedAt": "2026-07-17",
+      "outputPath": "demo/gifs/captured/scroll-scrubbed-master-timeline.gif",
+      "usageBasis": "local demo capture using the pinned GSAP package; verify license https://github.com/greensock/GSAP/blob/HEAD/LICENSE.md"
+    },
+    {
+      "effectId": "filterable-grid-reflow",
+      "projectId": "metafizzy-isotope",
+      "sourceType": "demo",
+      "originUrl": "https://github.com/metafizzy/isotope",
+      "demoSourcePath": "demo/preview-demos/filterable-grid-reflow.html",
+      "libraryVersion": "isotope-layout@3.0.6",
+      "generatedAt": "2026-07-17",
+      "outputPath": "demo/gifs/captured/filterable-grid-reflow.gif",
+      "usageBasis": "local demo capture using the pinned Isotope package; verify license https://github.com/metafizzy/isotope/blob/HEAD/license.md"
+    },
+    {
+      "effectId": "perspective-tilt-and-glare",
+      "projectId": "micku7zu-vanilla-tilt-js",
+      "sourceType": "demo",
+      "originUrl": "https://github.com/micku7zu/vanilla-tilt.js",
+      "demoSourcePath": "demo/preview-demos/perspective-tilt-and-glare.html",
+      "libraryVersion": "vanilla-tilt@1.8.1",
+      "generatedAt": "2026-07-17",
+      "outputPath": "demo/gifs/captured/perspective-tilt-and-glare.gif",
+      "usageBasis": "local demo capture using the pinned VanillaTilt package; verify license https://github.com/micku7zu/vanilla-tilt.js/blob/HEAD/LICENSE"
+    },
+    {
+      "effectId": "svg-stroke-drawing",
+      "projectId": "maxwellito-vivus",
+      "sourceType": "demo",
+      "originUrl": "https://github.com/maxwellito/vivus",
+      "demoSourcePath": "demo/preview-demos/svg-stroke-drawing.html",
+      "libraryVersion": "vivus@0.4.6",
+      "generatedAt": "2026-07-17",
+      "outputPath": "demo/gifs/captured/svg-stroke-drawing.gif",
+      "usageBasis": "local demo capture using the pinned Vivus package; verify license https://github.com/maxwellito/vivus/blob/HEAD/LICENSE"
+    },
+    {
+      "effectId": "sketch-style-creative-coding-loop",
+      "projectId": "processing-p5-js",
+      "sourceType": "demo",
+      "originUrl": "https://github.com/processing/p5.js",
+      "demoSourcePath": "demo/preview-demos/sketch-style-creative-coding-loop.html",
+      "libraryVersion": "p5@2.3.0",
+      "generatedAt": "2026-07-17",
+      "outputPath": "demo/gifs/captured/sketch-style-creative-coding-loop.gif",
+      "usageBasis": "local demo capture using the pinned p5.js package; verify license https://github.com/processing/p5.js/blob/HEAD/license.txt"
+    },
+    {
+      "effectId": "anchored-popover-flip-and-shift",
+      "projectId": "floating-ui-floating-ui",
+      "sourceType": "demo",
+      "originUrl": "https://github.com/floating-ui/floating-ui",
+      "demoSourcePath": "demo/preview-demos/anchored-popover-flip-and-shift.html",
+      "libraryVersion": "@floating-ui/dom@1.8.0",
+      "generatedAt": "2026-07-17",
+      "outputPath": "demo/gifs/captured/anchored-popover-flip-and-shift.gif",
+      "usageBasis": "local demo capture using the pinned Floating UI package; verify license https://github.com/floating-ui/floating-ui/blob/HEAD/LICENSE"
     }
   ]
 }

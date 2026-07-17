@@ -101,7 +101,7 @@ def encode_gif(frame_root: Path, output: Path, fps: int) -> None:
         raise RuntimeError(f"Encoded GIF is unexpectedly small: {output}")
 
 
-def live_webgl_check(page) -> dict:
+def live_surface_check(page) -> dict:
     return page.evaluate(
         """() => {
           const canvases = [];
@@ -112,11 +112,18 @@ def live_webgl_check(page) -> dict:
             });
           };
           visit(document);
-          const contexts = canvases.map(canvas => {
+          const webglContexts = canvases.map(canvas => {
             const gl = canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
             return gl && !gl.isContextLost();
           });
-          return { canvasCount: canvases.length, liveContextCount: contexts.filter(Boolean).length };
+          const canvas2dContexts = canvases.map(canvas => Boolean(canvas.getContext('2d')));
+          return {
+            canvasCount: canvases.length,
+            liveWebglContextCount: webglContexts.filter(Boolean).length,
+            liveCanvas2dContextCount: canvas2dContexts.filter(Boolean).length,
+            svgCount: document.querySelectorAll('svg').length,
+            domMechanismCount: document.querySelectorAll('[data-preview-mechanism]').length
+          };
         }"""
     )
 
@@ -133,11 +140,29 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
         raise RuntimeError(f"{demo['id']} emitted a page error:\n" + "\n".join(errors))
 
     metadata = page.evaluate("window.__PREVIEW_META__")
-    if metadata.get("id") != demo["id"] or metadata.get("library") != demo["library"]:
+    if (
+        metadata.get("id") != demo["id"]
+        or metadata.get("library") != demo["library"]
+        or metadata.get("renderer") != demo.get("renderer", "webgl")
+    ):
         raise RuntimeError(f"{demo['id']} metadata mismatch: {metadata!r}")
-    webgl = live_webgl_check(page)
-    if webgl["liveContextCount"] < 1:
-        raise RuntimeError(f"{demo['id']} has no live WebGL context: {webgl!r}")
+    surface = live_surface_check(page)
+    renderer = demo.get("renderer", "webgl")
+    valid_surface = (
+        renderer == "webgl" and surface["liveWebglContextCount"] >= 1
+        or renderer == "canvas2d" and surface["liveCanvas2dContextCount"] >= 1
+        or renderer == "svg" and surface["svgCount"] >= 1
+        or renderer == "dom" and surface["domMechanismCount"] >= 1
+    )
+    if not valid_surface:
+        raise RuntimeError(f"{demo['id']} has no live {renderer} preview surface: {surface!r}")
+    if demo.get("runtimeAssertion"):
+        runtime_assertion = page.evaluate(
+            """async () => typeof window.__PREVIEW_RUNTIME_ASSERT__ === 'function'
+              && Boolean(await window.__PREVIEW_RUNTIME_ASSERT__())"""
+        )
+        if not runtime_assertion:
+            raise RuntimeError(f"{demo['id']} failed its library-specific runtime assertion")
 
     frame_count = max(2, round(args.duration * args.fps))
     hashes: set[str] = set()

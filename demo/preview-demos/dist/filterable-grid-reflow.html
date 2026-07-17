@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Isotope — Filterable Grid Reflow</title>
+    <style>
+      :root { --preview-background: #f5f1e8; color-scheme: light; }
+      .filters { position: absolute; z-index: 4; top: 39px; left: 12px; display: flex; gap: 5px; }
+      .filter-pill { padding: 4px 7px; border: 0; border-radius: 999px; background: #ded9cf; color: #625d54; font-size: 7px; font-weight: 800; text-transform: uppercase; }
+      .filter-pill.active { background: #171815; color: white; }
+      .grid { position: absolute; top: 66px; left: 12px; right: 10px; height: 103px; }
+      .grid-item { width: 54px; height: 44px; margin: 0 5px 5px 0; border-radius: 9px; color: #fff; box-shadow: 0 6px 12px #4a423424; }
+      .grid-item::before { content: attr(data-label); position: absolute; left: 8px; bottom: 7px; font-size: 7px; font-weight: 900; letter-spacing: .05em; }
+      .grid-item::after { content: ''; position: absolute; top: 7px; left: 8px; width: 15px; height: 3px; border-radius: 4px; background: #ffffffa8; }
+      .warm { background: linear-gradient(140deg, #ff775c, #d53662); }
+      .cool { background: linear-gradient(140deg, #48d6c8, #3676d2); }
+      .featured { outline: 2px solid #171815; outline-offset: -3px; }
+      .library-badge { color: #25241f; background: #ffffffe0; border-color: #29282120; }
+      .scene-caption { color: #5f5a50; }
+    </style>
+    <script type="module" crossorigin src="./assets/filterable-grid-reflow-UMvXWAY5.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
+    <link rel="modulepreload" crossorigin href="./assets/shared-C4iZKo3w.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main class="preview-stage" aria-label="A real Isotope grid filtering and reflowing its items">
+      <div class="filters" aria-hidden="true">
+        <span class="filter-pill active" data-filter-label="all">All</span>
+        <span class="filter-pill" data-filter-label="warm">Warm</span>
+        <span class="filter-pill" data-filter-label="cool">Cool</span>
+        <span class="filter-pill" data-filter-label="featured">Featured</span>
+      </div>
+      <div class="grid" id="isotope-grid" data-preview-mechanism="isotope-layout">
+        <div class="grid-item warm featured" data-label="A"></div><div class="grid-item cool" data-label="B"></div>
+        <div class="grid-item warm" data-label="C"></div><div class="grid-item cool featured" data-label="D"></div>
+        <div class="grid-item cool" data-label="E"></div><div class="grid-item warm featured" data-label="F"></div>
+        <div class="grid-item warm" data-label="G"></div><div class="grid-item cool" data-label="H"></div>
+        <div class="grid-item warm featured" data-label="I"></div><div class="grid-item cool" data-label="J"></div>
+      </div>
+      <span class="library-badge">Isotope · filter + layout</span>
+      <span class="scene-caption">items filter, sort, and occupy new cells</span>
+    </main>
+  </body>
+</html>

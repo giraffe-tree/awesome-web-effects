@@ -1262,5 +1262,23 @@ export const additionalEffectSeeds = [
     "difference": "The live pixels of an ordinary looping video become a heavily blurred oversized light source beneath a blend wash. The image-palette effect derives one color from still media, while shader backdrops synthesize pixels instead of reusing live footage.",
     "sourceUrl": "https://replicate.com/",
     "verifiedAt": "2026-07-17"
+  },
+  {
+    "name": "Hysteretic scroll-threshold header restyle",
+    "nameZh": "带滞回的滚动阈值页头改色",
+    "category": "scroll",
+    "projectName": "Awesome Web Effects",
+    "repo": "giraffe-tree/awesome-web-effects",
+    "stars": 0,
+    "snippet": "<header class=\"site-header\">Threshold-stable navigation</header><main class=\"page\"></main>\n<style>.site-header{position:fixed;inset:0 0 auto;z-index:10;padding:24px 5vw;color:#fff;transition:background .24s,color .24s,box-shadow .24s}.site-header.scrolled{background:#fff;color:#17191f;box-shadow:0 1px 18px #161a241c}.page{min-height:220vh;background:linear-gradient(#635bff 0 35vh,#f6f4ee 35vh)}@media(prefers-reduced-motion:reduce){.site-header{transition:none}}</style>\n<script>const header=document.querySelector('.site-header');let scrolled=false;addEventListener('scroll',()=>{const y=scrollY;if(!scrolled&&y>60)scrolled=true;else if(scrolled&&y<40)scrolled=false;header.classList.toggle('scrolled',scrolled)},{passive:true})</script>",
+    "behavior": {
+      "trigger": "crossing separate scroll-depth enter and exit thresholds",
+      "response": "the fixed header switches between transparent light-on-dark and solid dark-on-light treatments without boundary flicker",
+      "timing": "240 ms style transition; enter at 60 px and exit at 40 px",
+      "layer": "fixed navigation"
+    },
+    "difference": "Two unequal thresholds add hysteresis, so tiny scroll oscillations near the boundary cannot rapidly toggle the navigation style. Existing sticky headers hide according to scroll direction or merely pin content without this stable state boundary.",
+    "sourceUrl": "https://www.llamaindex.ai/",
+    "verifiedAt": "2026-07-17"
   }
 ];

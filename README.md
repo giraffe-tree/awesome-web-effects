@@ -2,7 +2,7 @@
 
 [中文文档](README.zh-CN.md) · [Live demo](https://giraffe-tree.github.io/awesome-interaction/)
 
-An **effect-first** atlas of open-source interactions for the web. It catalogs **232 distinct effects across 10 categories**, backed by **154 source projects**. Each effect is one row with a stable semantic key, a GIF preview, copyable minimal code, and a one-click implementation prompt for Codex or Claude Code. English is the default interface and documentation language.
+An **effect-first** atlas of open-source interactions for the web. It catalogs **233 distinct effects across 10 categories**, backed by **154 source projects**. Each effect is one row with a stable semantic key, a GIF preview, copyable minimal code, and a one-click implementation prompt for Codex or Claude Code. English is the default interface and documentation language.
 
 ## Effect-first model
 
@@ -13,14 +13,14 @@ An **effect-first** atlas of open-source interactions for the web. It catalogs *
 
 ## Catalog snapshot
 
-- 232 effect rows, including 20 baseline effects.
-- 111 independently researched effects were added in the latest effect-level expansion.
+- 233 effect rows, including 20 baseline effects.
+- 112 independently researched effects were added in the latest effect-level expansion.
 - 154 unique GitHub source projects; 101 were added during the 2026 expansion.
-- 232 source-specific GIF previews: 8 official captures and 224 labeled editorial recreations.
-- 232 one-click implementation prompts, one for every effect.
+- 233 source-specific GIF previews: 8 official captures and 225 labeled editorial recreations.
+- 233 one-click implementation prompts, one for every effect.
 - 14 useful older sources are marked **Legacy**; no archived repository is included.
 - Stars are a snapshot from **2026-07-17**, not a live counter.
-- The referenced, optimized GIF set is **10.02 MiB**; each preview is 320×180, at most three seconds, and below 1 MiB.
+- The referenced, optimized GIF set is **10.04 MiB**; each preview is 320×180, at most three seconds, and below 1 MiB.
 
 ## Selection rules
 
@@ -35,7 +35,7 @@ An **effect-first** atlas of open-source interactions for the web. It catalogs *
 | Category | Effects | Source projects | Visible result |
 | --- | ---: | ---: | --- |
 | [Motion & choreography](#animation) | 22 | 14 | Timelines, springs, tweens, class animation, and framework-native motion. |
-| [Scroll & reveal](#scroll) | 24 | 17 | Smooth scrolling, scroll-linked scenes, reveals, parallax, and snap navigation. |
+| [Scroll & reveal](#scroll) | 25 | 18 | Smooth scrolling, scroll-linked scenes, reveals, parallax, and snap navigation. |
 | [Page & layout](#transition) | 24 | 16 | Page transitions, FLIP motion, filtering, packing, and animated reflow. |
 | [Navigation & overlays](#carousel) | 22 | 14 | Carousel, lightbox, menus, tours, notifications, drag overlays, and spatial navigation. |
 | [Pointer & hover](#pointer) | 23 | 14 | Tilt, depth, custom cursors, magnetic motion, and image distortion. |
@@ -110,6 +110,7 @@ Smooth scrolling, scroll-linked scenes, reveals, parallax, and snap navigation.
 | [Scroll-direction auto-hiding header](https://giraffe-tree.github.io/awesome-interaction/#scroll-direction-auto-hiding-header) | [Motion](https://github.com/motiondivision/motion) | 32,819 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#scroll-direction-auto-hiding-header) |
 | [Scroll-controlled video scrubbing](https://giraffe-tree.github.io/awesome-interaction/#scroll-controlled-video-scrubbing) | [Motion](https://github.com/motiondivision/motion) | 32,819 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#scroll-controlled-video-scrubbing) |
 | [Scroll-scrubbed document generation playback](https://giraffe-tree.github.io/awesome-interaction/#scroll-scrubbed-document-generation-playback) | [GSAP](https://github.com/greensock/GSAP) | 26,600 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#scroll-scrubbed-document-generation-playback) |
+| [Hysteretic scroll-threshold header restyle](https://giraffe-tree.github.io/awesome-interaction/#hysteretic-scroll-threshold-header-restyle) | [Awesome Web Effects](https://github.com/giraffe-tree/awesome-web-effects) | 0 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#hysteretic-scroll-threshold-header-restyle) |
 
 <a id="transition"></a>
 

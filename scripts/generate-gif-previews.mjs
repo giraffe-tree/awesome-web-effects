@@ -135,6 +135,17 @@ function scrollScene(frame, time, accent, secondary, mode) {
     const cursorY = 38 + Math.min(6, Math.floor(time * 8)) * 20 - scrollOffset;
     rect(frame, 76, cursorY, 3, 12, secondary, .95);
     rect(frame, 248, 30 + time * 92, 4, 26, accent, .7);
+  } else if (mode === 7) {
+    const scrolled = time > .32 && time < .84;
+    const pageY = time < .6 ? time * 176 : (1 - time) * 176;
+    rect(frame, 0, 0, width, height, scrolled ? [246, 244, 238] : [60, 55, 116]);
+    for (let index = 0; index < 5; index += 1) {
+      rect(frame, 44, 56 + index * 34 - pageY, 232, 18, index % 2 ? mix(accent, [255, 255, 255], .7) : mix(secondary, [255, 255, 255], .75), .82);
+    }
+    rect(frame, 0, 0, width, 43, scrolled ? [255, 255, 255] : [60, 55, 116], scrolled ? .98 : .96);
+    rect(frame, 22, 17, 68, 8, scrolled ? [33, 36, 44] : [255, 255, 255], .9);
+    for (let index = 0; index < 3; index += 1) rect(frame, 208 + index * 29, 18, 18, 6, scrolled ? [33, 36, 44] : [255, 255, 255], .72);
+    if (scrolled) rect(frame, 0, 42, width, 2, accent, .16);
   } else {
     for (let index = 0; index < 3; index += 1) rect(frame, 36, 24 + index * 52, 230, 42, index === Math.floor(time * 3) % 3 ? accent : [255, 255, 255], index === Math.floor(time * 3) % 3 ? .85 : 1);
   }
@@ -362,7 +373,7 @@ function mediaScene(frame, time, accent, secondary, mode) {
 
 const modeRules = {
   animation: [[/stagger/, 1], [/morph|shape/, 2], [/burst/, 3], [/spring|bounce/, 4], [/timeline|sequence|keyframe/, 5]],
-  scroll: [[/document generation|generation playback/, 6], [/horizontal/, 0], [/scrollbar|container/, 1], [/parallax|3d/, 2], [/reveal|viewport/, 3], [/infinite|million|virtual|append/, 4], [/snap|section|split/, 5]],
+  scroll: [[/hysteretic|threshold header/, 7], [/document generation|generation playback/, 6], [/horizontal/, 0], [/scrollbar|container/, 1], [/parallax|3d/, 2], [/reveal|viewport/, 3], [/infinite|million|virtual|append/, 4], [/snap|section|split/, 5]],
   transition: [[/dropdown promo sweep|promo sweep/, 7], [/self-inverting|blend-mode/, 6], [/page|route/, 0], [/grid|masonry|pack|reflow/, 1], [/shared|flip|morph/, 2], [/drawer/, 3], [/split|resize/, 4], [/filter|enter|exit/, 5]],
   carousel: [[/carousel|slide|deck/, 0], [/modal|lightbox|alert/, 1], [/command|menu/, 2], [/toast|notification/, 3], [/popover|tour|spotlight/, 4], [/drag|drop|pinch/, 5]],
   pointer: [[/crop marks|four-corner/, 6], [/cursor|trail|particle/, 0], [/tilt|depth|parallax|glare/, 1], [/magnetic|attracted|button/, 2], [/hover|overlay|card/, 3], [/hotspot|region|point/, 4], [/distortion|gooey|displacement/, 5]],

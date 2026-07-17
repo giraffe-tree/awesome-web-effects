@@ -299,6 +299,20 @@ function vectorScene(frame, time, accent, secondary, mode) {
     if (time < .62) rect(frame, 48 + visible * 13, 69, 3, 21, accent, .9);
     const chipScale = time < .86 ? 1 : ease(clamp((time - .86) / .14, 0, 1));
     rect(frame, 48, 112, 72 * chipScale, 24, secondary, .78);
+  } else if (mode === 8) {
+    const erasing = time < .46;
+    const pause = time >= .46 && time < .58;
+    const writingProgress = clamp((time - .58) / .34, 0, 1);
+    const eraseProgress = clamp(time / .46, 0, 1);
+    const count = erasing ? 8 - Math.floor(eraseProgress * 8) : pause ? 0 : Math.floor(writingProgress * 7);
+    const dotX = erasing ? 228 - eraseProgress * 126 : pause ? 102 : 102 + writingProgress * 110;
+    rect(frame, 40, 64, 76, 9, [54, 58, 68], .48);
+    rect(frame, 40, 82, 62, 9, [54, 58, 68], .82);
+    for (let index = 0; index < count; index += 1) {
+      const x = erasing ? 102 + index * 16 : 102 + index * 16;
+      rect(frame, x, 82, 10, 18, index % 2 ? accent : secondary, .88);
+    }
+    circle(frame, dotX, 108, 6, accent, .96);
   }
 }
 
@@ -456,7 +470,7 @@ const modeRules = {
   transition: [[/dropdown promo sweep|promo sweep/, 7], [/self-inverting|blend-mode/, 6], [/page|route/, 0], [/grid|masonry|pack|reflow/, 1], [/shared|flip|morph/, 2], [/drawer/, 3], [/split|resize/, 4], [/filter|enter|exit/, 5]],
   carousel: [[/carousel|slide|deck/, 0], [/modal|lightbox|alert/, 1], [/command|menu/, 2], [/toast|notification/, 3], [/popover|tour|spotlight/, 4], [/drag|drop|pinch/, 5]],
   pointer: [[/interaction-history|hiring badge/, 9], [/opposed diagonal|offset cta/, 8], [/metadata-to-cta|role swap/, 7], [/crop marks|four-corner/, 6], [/cursor|trail|particle/, 0], [/tilt|depth|parallax|glare/, 1], [/magnetic|attracted|button/, 2], [/hover|overlay|card/, 3], [/hotspot|region|point/, 4], [/distortion|gooey|displacement/, 5]],
-  vector: [[/type-select|select-replace/, 7], [/text-path|curved text/, 6], [/draw|stroke|path/, 0], [/type|split|character css/, 1], [/flip|ticker|mechanical/, 2], [/morph|shape/, 3], [/hand|rough|letter/, 4], [/scramble|decode|random/, 5]],
+  vector: [[/traveling-dot|eraser-writer/, 8], [/type-select|select-replace/, 7], [/text-path|curved text/, 6], [/draw|stroke|path/, 0], [/type|split|character css/, 1], [/flip|ticker|mechanical/, 2], [/morph|shape/, 3], [/hand|rough|letter/, 4], [/scramble|decode|random/, 5]],
   canvas: [[/fish flock|dom-aware/, 7], [/multi-chart|telemetry boot/, 6], [/generative|particle|sprite/, 0], [/physics|game|rigid/, 1], [/draw|sketch/, 2], [/object|node|drag|layer/, 3], [/geometry|primitive|illustration/, 4], [/infinite|grid|surface/, 5]],
   webgl: [[/mesh|object|react|vue|svelte/, 0], [/particle|sphere/, 1], [/shader|plane|functional|minimal/, 2], [/bloom|post/, 3], [/product|model|orbit|camera/, 4], [/scene|webgl|3d/, 5]],
   background: [[/video ambience|blurred autoplay/, 7], [/starfield/, 6], [/fluid|gradient|vanta/, 0], [/particle|swarm|link/, 1], [/confetti/, 2], [/gradient|backdrop/, 3], [/mesh|poly|grid|surface/, 4], [/firework|ribbon|trail/, 5]],

@@ -1370,5 +1370,23 @@ export const additionalEffectSeeds = [
     "difference": "The response depends on accumulated interaction history, not just the current hover state, so the interface appears to notice repeated curiosity. Existing hover badges and tooltips are stateless and repeat identical content on every entry.",
     "sourceUrl": "https://www.clay.com/",
     "verifiedAt": "2026-07-17"
+  },
+  {
+    "name": "Traveling-dot headline eraser-writer",
+    "nameZh": "旅行圆点擦写标题",
+    "category": "vector",
+    "projectName": "Awesome Web Effects",
+    "repo": "giraffe-tree/awesome-web-effects",
+    "stars": 0,
+    "snippet": "<h2 class=\"rewrite\">Voice AI that feels <span class=\"word\">natural</span><i class=\"dot\"></i></h2>\n<style>.rewrite{position:relative;display:inline-block}.word{display:inline-flex;min-width:7ch}.word>span{display:inline-block;transition:opacity .025s ease}.dot{position:absolute;bottom:-.25rem;width:.55rem;height:.55rem;border-radius:50%;background:#ff5a36;transition:transform .35s ease-in-out}@media(prefers-reduced-motion:reduce){.dot{display:none}}</style>\n<script>const words=['natural','helpful','human'],host=document.querySelector('.word'),dot=document.querySelector('.dot'),wait=ms=>new Promise(r=>setTimeout(r,ms));let index=0;const paint=text=>host.innerHTML=[...text].map(c=>`<span>${c}</span>`).join('');paint(words[0]);(async function loop(){await wait(2000);for(const char of [...host.children].reverse()){char.style.opacity=0;await wait(30)}index=(index+1)%words.length;paint(words[index]);dot.style.transform=`translateX(${host.offsetWidth}px)`;await wait(250);for(const char of host.children)char.style.opacity=0;for(const char of host.children){char.style.opacity=1;await wait(30)}dot.style.transform='translateX(0)';loop()})()</script>",
+    "behavior": {
+      "trigger": "page load and repeating headline timeline",
+      "response": "a colored dot travels across the word while reverse-order characters erase, then writes the replacement word forward",
+      "timing": "2 s hold, 30 ms character stagger, 250 ms hidden beat",
+      "layer": "headline foreground and spatial marker"
+    },
+    "difference": "The moving dot gives the letter transition a spatial cause: it visibly erases in one direction and writes in the other. Existing rotating word slots swap a bounded label without a marker that traverses and explains the character sequence.",
+    "sourceUrl": "https://poly.ai/",
+    "verifiedAt": "2026-07-17"
   }
 ];

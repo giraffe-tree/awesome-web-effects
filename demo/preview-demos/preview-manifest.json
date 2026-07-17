@@ -1,0 +1,48 @@
+{
+  "kind": "local-demo-capture",
+  "captureScript": "scripts/capture-real-preview-gifs.py",
+  "demos": [
+    {
+      "id": "functional-webgl-draw-commands",
+      "library": "regl@2.1.1",
+      "demoPath": "preview-demos/dist/functional-webgl-draw-commands.html",
+      "demoSourcePath": "preview-demos/functional-webgl-draw-commands.html",
+      "gifPath": "gifs/captured/functional-webgl-draw-commands.gif"
+    },
+    {
+      "id": "dom-synced-shader-planes",
+      "library": "curtainsjs@8.1.6",
+      "demoPath": "preview-demos/dist/dom-synced-shader-planes.html",
+      "demoSourcePath": "preview-demos/dom-synced-shader-planes.html",
+      "gifPath": "gifs/captured/dom-synced-shader-planes.gif"
+    },
+    {
+      "id": "accessible-interactive-3d-product-view",
+      "library": "@google/model-viewer@4.3.1",
+      "demoPath": "preview-demos/dist/accessible-interactive-3d-product-view.html",
+      "demoSourcePath": "preview-demos/accessible-interactive-3d-product-view.html",
+      "gifPath": "gifs/captured/accessible-interactive-3d-product-view.gif"
+    },
+    {
+      "id": "declarative-html-3d-scene",
+      "library": "aframe@1.8.0",
+      "demoPath": "preview-demos/dist/declarative-html-3d-scene.html",
+      "demoSourcePath": "preview-demos/declarative-html-3d-scene.html",
+      "gifPath": "gifs/captured/declarative-html-3d-scene.gif"
+    },
+    {
+      "id": "vue-declarative-three-js",
+      "library": "@tresjs/core@5.8.3 + vue@3.5.40",
+      "demoPath": "preview-demos/dist/vue-declarative-three-js.html",
+      "demoSourcePath": "preview-demos/vue-declarative-three-js.html",
+      "gifPath": "gifs/captured/vue-declarative-three-js.gif"
+    },
+    {
+      "id": "svelte-declarative-three-js",
+      "library": "@threlte/core@8.5.16 + svelte@5.56.6",
+      "demoPath": "preview-demos/dist/svelte-declarative-three-js.html",
+      "demoSourcePath": "preview-demos/svelte-declarative-three-js.html",
+      "gifPath": "gifs/captured/svelte-declarative-three-js.gif"
+    }
+  ]
+}

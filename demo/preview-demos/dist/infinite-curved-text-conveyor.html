@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Motion — Infinite Curved Text Conveyor</title>
+    <style>
+      :root { --preview-background: #0b241d; }
+      .curve-stage {
+        background:
+          radial-gradient(circle at 15% 15%, rgba(245, 255, 155, .16), transparent 34%),
+          linear-gradient(145deg, #071a15, #0b3125 55%, #051611);
+      }
+      .curve-stage::after {
+        content: "CURVED / TYPE / STUDY";
+        position: absolute;
+        right: 15px;
+        bottom: 11px;
+        color: rgba(231, 255, 199, .44);
+        font-size: 6px;
+        font-weight: 900;
+        letter-spacing: .13em;
+      }
+      .curve-svg { position: absolute; inset: 21px 0 0; width: 100%; height: calc(100% - 21px); overflow: visible; }
+      .curve-rail { fill: none; stroke: rgba(218, 255, 177, .28); stroke-width: 1; stroke-dasharray: 3 6; }
+      .curve-rail--hot { stroke: rgba(255, 137, 203, .42); }
+      .curve-copy { fill: #eaffbc; font-size: 14px; font-weight: 900; letter-spacing: .055em; text-transform: uppercase; }
+      .curve-copy--accent { fill: #ff9ed5; font-size: 11px; letter-spacing: .09em; }
+      .curve-orb { fill: rgba(230,255,190,.13); stroke: rgba(230,255,190,.38); }
+      .curve-control {
+        position: absolute;
+        z-index: 10;
+        left: 13px;
+        bottom: 9px;
+        height: 23px;
+        padding: 0 9px;
+        border: 1px solid rgba(226,255,190,.22);
+        border-radius: 99px;
+        background: rgba(5,22,17,.68);
+        color: #dcffb4;
+        font-size: 6px;
+        font-weight: 900;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+      .curve-control:hover { border-color: #ff9ed5; color: #ffbde2; }
+      .curve-stage .scene-caption { display: none; }
+    </style>
+    <script type="module" crossorigin src="./assets/infinite-curved-text-conveyor-CfZKDBS0.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-C4iZKo3w.js">
+    <link rel="modulepreload" crossorigin href="./assets/animate-BF7PFydr.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main class="preview-stage curve-stage" aria-label="Two lines of type flow infinitely along authored SVG curves">
+      <svg class="curve-svg" viewBox="0 0 320 159" role="img" aria-label="Curved text conveyor on two crossing paths" data-preview-mechanism="motion-svg-text-path-conveyor">
+        <defs>
+          <path id="curve-upper" d="M -80 105 C 18 8 150 18 222 72 S 342 138 420 42" />
+          <path id="curve-lower" d="M -70 52 C 36 142 164 148 239 92 S 353 19 418 105" />
+        </defs>
+        <circle class="curve-orb" cx="265" cy="35" r="24" />
+        <circle class="curve-orb" cx="47" cy="124" r="15" />
+        <path class="curve-rail" id="upper-rail" d="M -80 105 C 18 8 150 18 222 72 S 342 138 420 42" />
+        <path class="curve-rail curve-rail--hot" id="lower-rail" d="M -70 52 C 36 142 164 148 239 92 S 353 19 418 105" />
+        <g id="upper-copy" aria-hidden="true">
+          <text class="curve-copy"><textPath class="flow-text flow-text--upper" href="#curve-upper">IMAGINE · BEND · RELEASE ·</textPath></text>
+          <text class="curve-copy"><textPath class="flow-text flow-text--upper" href="#curve-upper">IMAGINE · BEND · RELEASE ·</textPath></text>
+          <text class="curve-copy"><textPath class="flow-text flow-text--upper" href="#curve-upper">IMAGINE · BEND · RELEASE ·</textPath></text>
+        </g>
+        <g id="lower-copy" aria-hidden="true">
+          <text class="curve-copy curve-copy--accent"><textPath class="flow-text flow-text--lower" href="#curve-lower">WORDS FOLLOW THE SHAPE ·</textPath></text>
+          <text class="curve-copy curve-copy--accent"><textPath class="flow-text flow-text--lower" href="#curve-lower">WORDS FOLLOW THE SHAPE ·</textPath></text>
+          <text class="curve-copy curve-copy--accent"><textPath class="flow-text flow-text--lower" href="#curve-lower">WORDS FOLLOW THE SHAPE ·</textPath></text>
+        </g>
+      </svg>
+      <button class="curve-control" id="curve-control" type="button" aria-pressed="false">Reverse flow</button>
+      <span class="library-badge">Motion · SVG text paths</span>
+      <span class="scene-caption">copy moves on native curves rather than a straight marquee</span>
+    </main>
+  </body>
+</html>

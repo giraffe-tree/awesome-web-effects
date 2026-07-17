@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Motion — Self-inverting Fixed Navigation</title>
+    <style>
+      :root { --preview-background: #0c1220; }
+      .contrast-viewport { position: absolute; inset: 0; overflow: hidden; touch-action: pan-y; }
+      .contrast-track { position: absolute; inset: 0 0 auto; height: 360px; will-change: transform; }
+      .contrast-panel { position: relative; height: 180px; overflow: hidden; }
+      .contrast-panel h1 { position: absolute; left: 18px; top: 65px; width: 210px; margin: 0; font: 950 30px/.78 system-ui, sans-serif; letter-spacing: -.075em; }
+      .contrast-panel p { position: absolute; left: 20px; top: 127px; margin: 0; font: 750 6px/1.3 ui-monospace, monospace; letter-spacing: .12em; text-transform: uppercase; }
+      .panel-dark { color: #f4f5ed; background: radial-gradient(circle at 76% 44%, #5e4ad8 0 7%, transparent 8%), radial-gradient(circle at 73% 46%, #243685 0 20%, transparent 38%), linear-gradient(145deg, #071019, #18243a); }
+      .panel-dark::before { content: ''; position: absolute; right: 19px; top: 45px; width: 88px; height: 88px; border: 1px solid #8c9fff70; border-radius: 50%; box-shadow: inset 0 0 0 13px #7181ff0a, inset 0 0 0 28px #7181ff0b; }
+      .panel-dark::after { content: ''; position: absolute; right: 56px; top: 82px; width: 14px; height: 14px; border-radius: 50%; background: #efecff; box-shadow: 0 0 24px #a698ff; }
+      .panel-light { color: #151612; background-color: #f1efdf; background-image: linear-gradient(#1d23170f 1px, transparent 1px), linear-gradient(90deg, #1d23170f 1px, transparent 1px); background-size: 18px 18px; }
+      .panel-light h1 { color: #1d2119; }
+      .panel-light p { color: #4a4b40; }
+      .panel-light::before { content: ''; position: absolute; right: -12px; top: 36px; width: 108px; height: 108px; border-radius: 46% 54% 38% 62%; background: #ff6d44; rotate: 18deg; box-shadow: -40px 24px 0 -15px #d9ce52, -73px -5px 0 -27px #2caa78; }
+      .fixed-nav { position: absolute; z-index: 20; left: 12px; right: 12px; top: 10px; height: 30px; display: flex; align-items: center; justify-content: space-between; padding: 0 7px 0 10px; border: 1px solid currentColor; border-radius: 99px; color: #fff; background: transparent; mix-blend-mode: difference; }
+      .nav-brand { display: inline-flex; align-items: center; gap: 6px; padding: 0; border: 0; color: inherit; background: none; font: 950 7px/1 system-ui, sans-serif; letter-spacing: .04em; cursor: pointer; }
+      .nav-brand::before { content: ''; width: 7px; height: 7px; border-radius: 2px 50% 50%; background: currentColor; rotate: 45deg; }
+      .nav-links { display: flex; align-items: center; gap: 10px; font: 800 6px/1 system-ui, sans-serif; }
+      .nav-links a { color: inherit; text-decoration: none; }
+      .nav-cta { padding: 6px 8px; border: 1px solid currentColor; border-radius: 99px; }
+      .contrast-meter { position: absolute; z-index: 15; right: 13px; bottom: 11px; width: 66px; color: #fff; font: 750 5.5px/1 ui-monospace, monospace; letter-spacing: .1em; text-align: right; mix-blend-mode: difference; }
+      .contrast-meter::after { content: ''; display: block; width: 100%; height: 2px; margin-top: 4px; background: #fff3; border-radius: 4px; }
+      .contrast-meter i { position: absolute; right: 0; bottom: 0; width: 100%; height: 2px; background: white; border-radius: 4px; transform: scaleX(var(--contrast-progress, 0)); transform-origin: left; }
+      .preview-stage > .library-badge { top: auto; bottom: 9px; background: #0d131eb0; }
+      .scene-caption { display: none; }
+    </style>
+    <script type="module" crossorigin src="./assets/self-inverting-fixed-navigation-DIac-9as.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-C4iZKo3w.js">
+    <link rel="modulepreload" crossorigin href="./assets/animate-BF7PFydr.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main class="preview-stage" aria-label="A Motion-powered fixed navigation that inverts its colors as contrasting content scrolls underneath">
+      <div class="contrast-viewport" id="contrast-viewport" tabindex="0" aria-label="Scroll or use arrow keys to move between dark and light sections">
+        <div class="contrast-track" id="contrast-track">
+          <section class="contrast-panel panel-dark"><h1>DARK<br />SIGNAL</h1><p>Navigation stays bright above night.</p></section>
+          <section class="contrast-panel panel-light"><h1>LIGHT<br />FIELD</h1><p>The same navigation turns to ink.</p></section>
+        </div>
+      </div>
+      <nav class="fixed-nav" id="fixed-nav" data-preview-mechanism="motion-self-inverting-nav" aria-label="Preview navigation">
+        <button class="nav-brand" id="nav-brand" type="button">PARALLAX</button>
+        <span class="nav-links"><a href="#work">WORK</a><a class="nav-cta" href="#start">START</a></span>
+      </nav>
+      <div class="contrast-meter" id="contrast-meter" aria-hidden="true">CONTRAST SAMPLE<i></i></div>
+      <span class="library-badge">Motion · fixed contrast</span>
+    </main>
+  </body>
+</html>

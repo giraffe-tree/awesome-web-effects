@@ -2,30 +2,30 @@
 
 [English (default)](README.md) · [在线 Demo](https://giraffe-tree.github.io/awesome-web-effects/)
 
-一个**以效果为先、经过策展评分**的开源 Web 交互图鉴。当前发布 **7 个有效分类中的 15 种效果**，背后有 **14 个来源项目**。每个发布条目都有真实预览和不低于 **80/100** 的明确评分，并提供可复制的最小代码与可一键交给 Codex 或 Claude Code 的实现提示词。
+一个**以效果为先、经过策展评分**的开源 Web 交互图鉴。当前发布 **7 个有效分类中的 26 种效果**，背后有 **14 个来源项目**。每个发布条目都有真实预览和不低于 **80/100** 的明确评分，并提供可复制的最小代码与可一键交给 Codex 或 Claude Code 的实现提示词。
 
 ## 效果优先模型
 
 - **效果是目录主键。** 锚点、搜索结果、行、分类与代码示例都从用户看得见的交互出发，而不是从仓库出发。
-- **项目是实现来源。** 一个项目可以实现多种不同效果；当前种子目录已有 1 个来源项目明确展示这种关系。
+- **项目是实现来源。** 一个项目可以实现多种不同效果；当前种子目录已有 3 个来源项目明确展示这种关系。
 - **一种效果可以有多个实现。** 每个来源关系拥有自己的最小代码和预览状态，因此替代方案可以放在同一行中比较，不必复制效果行。
 - **去重发生在可见效果层。** 候选按触发方式、视觉变化、时间关系和页面层级比较；更新、维护更好、文档更清楚的实现成为推荐来源。
 
 ## 目录快照
 
-- 已审计 242 个候选；**15 个通过**，**227 个已从发布目录移除**。
-- 15 行入选效果，其中 8 种为基线效果。
-- 最近一次效果级扩展独立调研并新增 0 种效果。
+- 已审计 315 个候选；**26 个通过**，**289 个已从发布目录移除**。
+- 26 行入选效果，其中 8 种为基线效果。
+- 最近一次效果级扩展独立调研并新增 11 种效果。
 - 14 个唯一 GitHub 来源项目；2026 扩展阶段新增 7 个。
-- 15 个与具体来源对应的真实 GIF：2 个官方素材捕获，13 个来自可运行本地 Demo 的录制。
+- 26 个与具体来源对应的真实 GIF：2 个官方素材捕获，24 个来自可运行本地 Demo 的录制。
 - 发布目录中有 0 个来源关系缺少已核验预览；准入门禁要求该数字始终为零。
-- 15 份一键实现提示词，每种效果都有一份。
-- 已把 7 条有证据的 AI 官网参考整合进 4 个原有特效行，共覆盖 7 家公司；每种特效最多展示 3 家代表公司。
+- 26 份一键实现提示词，每种效果都有一份。
+- 已把 18 条有证据的 AI 官网参考整合进 15 个原有特效行，共覆盖 18 家公司；每种特效最多展示 3 家代表公司。
 - 2 个较旧但仍有参考价值的来源标记为“经典旧版”；不包含已归档仓库。
-- Stars 是 **2026-07-17** 的快照，不是实时计数器。
-- 已核验 GIF 优化后总计 **3.56 MiB**；每个发布预览均为 320×180、最长三秒且小于 1 MiB。
+- Stars 是 **2026-07-18** 的快照，不是实时计数器。
+- 已核验 GIF 优化后总计 **5.99 MiB**；每个发布预览均为 320×180、最长三秒且小于 1 MiB。
 
-“推荐实现”和“在哪家公司官网观察到”是两种不同关系，现在会在同一个特效行中同时展示。先阅读 [Demo 准入评分体系与 242 个候选的完整审计](research/demo-admission-audit-2026-07-17.md)。完整官网观察记录见 [100 家 AI 公司主页特效调研](research/ai-native-homepages-100.md)。
+“推荐实现”和“在哪家公司官网观察到”是两种不同关系，现在会在同一个特效行中同时展示。先阅读 [Demo 准入评分体系与 315 个候选的当前审计](research/demo-admission-audit-2026-07-18.md)。完整官网观察记录见 [100 家 AI 公司主页特效调研](research/ai-native-homepages-100.md)。
 
 ## 收录与去重规则
 
@@ -40,12 +40,12 @@
 
 | 分类 | 效果数 | 来源项目 | 关注结果 |
 | --- | ---: | ---: | --- |
-| [动画与编排](#animation) | 6 | 6 | 时间线、弹簧、补间、类动画与框架原生动效。 |
-| [滚动与揭示](#scroll) | 1 | 1 | 平滑滚动、滚动关联场景、进入揭示、视差与整屏吸附。 |
-| [页面与布局](#transition) | 1 | 1 | 页面转场、FLIP 动画、筛选、紧密排布与布局重排。 |
+| [动画与编排](#animation) | 7 | 6 | 时间线、弹簧、补间、类动画与框架原生动效。 |
+| [滚动与揭示](#scroll) | 3 | 3 | 平滑滚动、滚动关联场景、进入揭示、视差与整屏吸附。 |
+| [页面与布局](#transition) | 3 | 2 | 页面转场、FLIP 动画、筛选、紧密排布与布局重排。 |
 | [指针与悬停](#pointer) | 3 | 3 | 倾斜、景深、自定义光标、磁性运动与图像扭曲。 |
-| [文本与 SVG](#vector) | 1 | 1 | 打字、文字拆分、矢量绘制、手写与 SVG 变形。 |
-| [Canvas 与 2D](#canvas) | 1 | 1 | 场景图、创意编程、物理、绘图工具与 2D 渲染器。 |
+| [文本与 SVG](#vector) | 4 | 2 | 打字、文字拆分、矢量绘制、手写与 SVG 变形。 |
+| [Canvas 与 2D](#canvas) | 4 | 1 | 场景图、创意编程、物理、绘图工具与 2D 渲染器。 |
 | [3D 与 WebGL](#webgl) | 2 | 2 | 3D 引擎、声明式渲染器、着色器图层与后期处理。 |
 
 ## 效果目录
@@ -64,6 +64,7 @@
 | [动态图形爆发](https://giraffe-tree.github.io/awesome-web-effects/#motion-graphics-burst) | [Mo.js](https://github.com/mojs/mojs) | **92/100** | — | 18,728 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#motion-graphics-burst) |
 | [可视化编排关键帧序列](https://giraffe-tree.github.io/awesome-web-effects/#visually-authored-keyframe-sequence) | [Theatre.js](https://github.com/theatre-js/theatre) | **84/100** | — | 12,541 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#visually-authored-keyframe-sequence) |
 | [轻量 SVG 形状补间](https://giraffe-tree.github.io/awesome-web-effects/#compact-svg-shape-tween) | [KUTE.js](https://github.com/thednp/kute.js) | **89/100** | — | 2,639 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#compact-svg-shape-tween) |
+| [自主 Agent 光标星座](https://giraffe-tree.github.io/awesome-web-effects/#autonomous-agent-cursor-constellation) | [Motion](https://github.com/motiondivision/motion) | **95/100** | [InVideo](https://invideo.io/) | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#autonomous-agent-cursor-constellation) |
 
 <a id="scroll"></a>
 
@@ -74,6 +75,8 @@
 | 效果 | 推荐实现 | 策展评分 | AI 官网参考（最多 3 家） | Stars | 实现数 | 状态 | 实现 |
 | --- | --- | ---: | --- | ---: | ---: | --- | --- |
 | [固定式横向滚动场景](https://giraffe-tree.github.io/awesome-web-effects/#pinned-horizontal-scroll-scene) | [GSAP](https://github.com/greensock/GSAP) | **96/100** | — | 26,600 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#pinned-horizontal-scroll-scene) |
+| [滚动联动多层星空](https://giraffe-tree.github.io/awesome-web-effects/#scroll-linked-multilayer-starfield) | [p5.js](https://github.com/processing/p5.js) | **94/100** | [Fathom](https://fathom.video/) | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#scroll-linked-multilayer-starfield) |
+| [自动反色的固定导航](https://giraffe-tree.github.io/awesome-web-effects/#self-inverting-fixed-navigation) | [Motion](https://github.com/motiondivision/motion) | **92/100** | [Luma AI](https://lumalabs.ai/) | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#self-inverting-fixed-navigation) |
 
 <a id="transition"></a>
 
@@ -84,6 +87,8 @@
 | 效果 | 推荐实现 | 策展评分 | AI 官网参考（最多 3 家） | Stars | 实现数 | 状态 | 实现 |
 | --- | --- | ---: | --- | ---: | ---: | --- | --- |
 | [可筛选网格重排](https://giraffe-tree.github.io/awesome-web-effects/#filterable-grid-reflow) | [Isotope](https://github.com/metafizzy/isotope) | **85/100** | [Ideogram](https://ideogram.ai/) | 11,103 | 1 | 经典旧版 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#filterable-grid-reflow) |
+| [多层同步场景换幕](https://giraffe-tree.github.io/awesome-web-effects/#synchronized-scenario-scene-handoff) | [Motion](https://github.com/motiondivision/motion) | **98/100** | [Vapi](https://vapi.ai/) | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#synchronized-scenario-scene-handoff) |
+| [延迟触发的下拉推广扫光](https://giraffe-tree.github.io/awesome-web-effects/#delayed-dropdown-promo-sweep) | [Motion](https://github.com/motiondivision/motion) | **92/100** | [Glean](https://www.glean.com/) | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#delayed-dropdown-promo-sweep) |
 
 <a id="pointer"></a>
 
@@ -106,6 +111,9 @@
 | 效果 | 推荐实现 | 策展评分 | AI 官网参考（最多 3 家） | Stars | 实现数 | 状态 | 实现 |
 | --- | --- | ---: | --- | ---: | ---: | --- | --- |
 | [SVG 描边绘制](https://giraffe-tree.github.io/awesome-web-effects/#svg-stroke-drawing) | [Vivus](https://github.com/maxwellito/vivus) | **86/100** | — | 15,479 | 1 | 经典旧版 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#svg-stroke-drawing) |
+| [输入—选中—替换提示词循环](https://giraffe-tree.github.io/awesome-web-effects/#prompt-select-replace-loop) | [Motion](https://github.com/motiondivision/motion) | **97/100** | [Granola](https://www.granola.ai/) | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#prompt-select-replace-loop) |
+| [旅行圆点擦写标题](https://giraffe-tree.github.io/awesome-web-effects/#traveling-dot-headline-rewriter) | [Motion](https://github.com/motiondivision/motion) | **97/100** | [PolyAI](https://poly.ai/) | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#traveling-dot-headline-rewriter) |
+| [无限曲线文字传送带](https://giraffe-tree.github.io/awesome-web-effects/#infinite-curved-text-conveyor) | [Motion](https://github.com/motiondivision/motion) | **96/100** | [Wispr Flow](https://wisprflow.ai/) | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#infinite-curved-text-conveyor) |
 
 <a id="canvas"></a>
 
@@ -116,6 +124,9 @@
 | 效果 | 推荐实现 | 策展评分 | AI 官网参考（最多 3 家） | Stars | 实现数 | 状态 | 实现 |
 | --- | --- | ---: | --- | ---: | ---: | --- | --- |
 | [草图式创意编程循环](https://giraffe-tree.github.io/awesome-web-effects/#sketch-style-creative-coding-loop) | [p5.js](https://github.com/processing/p5.js) | **91/100** | [Hume AI](https://www.hume.ai/) | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#sketch-style-creative-coding-loop) |
+| [景深分层顺序模糊溶解](https://giraffe-tree.github.io/awesome-web-effects/#depth-layer-blur-dissolve) | [p5.js](https://github.com/processing/p5.js) | **96/100** | [Black Forest Labs](https://bfl.ai/) | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#depth-layer-blur-dissolve) |
+| [拖拽生成且避让 DOM 的鱼群](https://giraffe-tree.github.io/awesome-web-effects/#dom-aware-drag-spawned-fish-flock) | [p5.js](https://github.com/processing/p5.js) | **98/100** | [Sakana AI](https://sakana.ai/) | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#dom-aware-drag-spawned-fish-flock) |
+| [交错多图表遥测启动](https://giraffe-tree.github.io/awesome-web-effects/#staggered-multichart-telemetry-boot) | [p5.js](https://github.com/processing/p5.js) | **95/100** | [Pinecone](https://www.pinecone.io/) | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#staggered-multichart-telemetry-boot) |
 
 <a id="webgl"></a>
 

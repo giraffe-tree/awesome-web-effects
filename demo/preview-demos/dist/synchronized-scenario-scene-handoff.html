@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Motion — Synchronized Scenario Scene Handoff</title>
+    <style>
+      :root { --preview-background: #090b11; }
+      .handoff-stage { background: #090b11; perspective: 640px; }
+      .scene-plane { position: absolute; inset: 0; overflow: hidden; }
+      .scene-plane::before { content: ''; position: absolute; inset: -20%; background: var(--scene-art); transform: rotate(-8deg) scale(1.15); }
+      #scene-a { --scene-art: radial-gradient(circle at 72% 32%, #ffbe6b 0 8%, transparent 9%), linear-gradient(125deg, #3a1651, #c34d6f 48%, #f1a56d); }
+      #scene-b { --scene-art: radial-gradient(circle at 28% 28%, #b6faff 0 7%, transparent 8%), linear-gradient(128deg, #081c34, #137d8a 52%, #8ed8b8); opacity: 0; }
+      .scene-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,.07) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.07) 1px, transparent 1px); background-size: 28px 28px; mix-blend-mode: overlay; }
+      .handoff-copy { position: absolute; z-index: 5; left: 20px; top: 56px; width: 176px; color: white; }
+      .handoff-copy p { margin: 0 0 7px; color: rgba(255,255,255,.7); font: 800 7px/1 ui-monospace, monospace; letter-spacing: .12em; text-transform: uppercase; }
+      .handoff-copy h1 { margin: 0; font: 900 30px/.86 Georgia, serif; letter-spacing: -.06em; text-wrap: balance; }
+      .scenario-label { position: absolute; z-index: 7; right: 15px; bottom: 24px; width: 88px; height: 37px; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.5); border-radius: 3px; background: rgba(5,8,13,.76); box-shadow: 0 14px 28px rgba(0,0,0,.35); color: white; font: 900 8px/1 ui-monospace, monospace; letter-spacing: .08em; text-transform: uppercase; transform-origin: 50% 100%; }
+      .handoff-overlay { position: absolute; z-index: 4; inset: 0; background: linear-gradient(90deg, rgba(7,8,13,.78), transparent 72%); }
+    </style>
+    <script type="module" crossorigin src="./assets/synchronized-scenario-scene-handoff-Bp28xYbe.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-C4iZKo3w.js">
+    <link rel="modulepreload" crossorigin href="./assets/animate-BF7PFydr.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main class="preview-stage handoff-stage" aria-label="One scenario state change synchronizes background, overlay, content and a perspective label">
+      <div class="scene-plane" id="scene-a"><span class="scene-grid"></span></div>
+      <div class="scene-plane" id="scene-b"><span class="scene-grid"></span></div>
+      <div class="handoff-overlay" id="handoff-overlay"></div>
+      <section class="handoff-copy" id="handoff-copy" data-preview-mechanism="motion-synchronized-handoff">
+        <p id="scenario-kicker">01 · support</p>
+        <h1 id="scenario-title">Answer with empathy.</h1>
+      </section>
+      <div class="scenario-label" id="scenario-label">Support</div>
+      <span class="library-badge">Motion · coordinated state</span>
+      <span class="scene-caption">one state · four synchronized planes</span>
+    </main>
+  </body>
+</html>

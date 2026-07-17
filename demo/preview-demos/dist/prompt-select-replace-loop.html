@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Motion — Prompt Select Replace Loop</title>
+    <style>
+      :root { --preview-background: #160b21; }
+      .prompt-stage {
+        background:
+          radial-gradient(circle at 86% 15%, rgba(255, 112, 194, .2), transparent 35%),
+          radial-gradient(circle at 13% 92%, rgba(111, 221, 255, .15), transparent 42%),
+          linear-gradient(145deg, #140a20, #24102d 54%, #101827);
+      }
+      .prompt-shell {
+        position: absolute;
+        inset: 35px 15px 18px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, .16);
+        border-radius: 18px;
+        background: rgba(14, 8, 24, .76);
+        box-shadow: 0 20px 45px rgba(4, 2, 12, .48), inset 0 1px rgba(255, 255, 255, .08);
+      }
+      .prompt-toolbar {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        height: 27px;
+        padding: 0 10px;
+        border-bottom: 1px solid rgba(255, 255, 255, .08);
+        color: rgba(255, 255, 255, .52);
+        font-size: 6px;
+        font-weight: 800;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+      }
+      .prompt-toolbar::before {
+        content: "";
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #ff74c9;
+        box-shadow: 12px 0 #ffd36e, 24px 0 #7aebff;
+        margin-right: 23px;
+      }
+      .prompt-editor {
+        position: absolute;
+        inset: 38px 12px 30px;
+        padding: 15px 14px;
+        border: 1px solid rgba(255, 255, 255, .1);
+        border-radius: 13px;
+        background: linear-gradient(140deg, rgba(255,255,255,.07), rgba(255,255,255,.025));
+        cursor: pointer;
+      }
+      .prompt-label { color: #f4bedf; font-size: 7px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }
+      .prompt-line { position: relative; height: 26px; margin-top: 8px; color: white; font-size: 13px; font-weight: 650; letter-spacing: -.018em; white-space: nowrap; }
+      .phrase-layer { position: absolute; left: 0; top: 0; z-index: 3; }
+      .phrase-layer span { display: inline-block; min-width: .18em; }
+      .selection-wash {
+        position: absolute;
+        z-index: 2;
+        left: -3px;
+        top: -3px;
+        width: 184px;
+        height: 22px;
+        border-radius: 4px;
+        background: linear-gradient(90deg, rgba(92, 189, 255, .64), rgba(176, 92, 255, .54));
+        box-shadow: 0 0 20px rgba(92, 189, 255, .22);
+        transform-origin: left center;
+      }
+      .prompt-caret {
+        position: absolute;
+        z-index: 5;
+        top: -1px;
+        width: 1px;
+        height: 18px;
+        background: #fff;
+        box-shadow: 0 0 8px #fff;
+      }
+      .model-chip {
+        position: absolute;
+        left: 14px;
+        bottom: 10px;
+        padding: 5px 8px;
+        border: 1px solid rgba(123, 229, 255, .38);
+        border-radius: 99px;
+        background: rgba(67, 157, 180, .16);
+        color: #b9f6ff;
+        font-size: 6px;
+        font-weight: 900;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+      }
+      .prompt-status { position: absolute; right: 12px; bottom: 11px; color: rgba(255,255,255,.48); font-size: 6px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+      .prompt-stage .scene-caption { display: none; }
+      @media (prefers-reduced-motion: reduce) { .prompt-editor { cursor: default; } }
+    </style>
+    <script type="module" crossorigin src="./assets/prompt-select-replace-loop-COF6pbbs.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-C4iZKo3w.js">
+    <link rel="modulepreload" crossorigin href="./assets/animate-BF7PFydr.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main class="preview-stage prompt-stage" aria-label="A prompt is typed, semantically selected, and replaced in a deterministic loop">
+      <section class="prompt-shell" data-preview-mechanism="motion-type-select-replace">
+        <header class="prompt-toolbar">Prompt composer · live edit</header>
+        <button class="prompt-editor" id="prompt-editor" type="button" aria-label="Advance the prompt editing sequence">
+          <span class="prompt-label">Describe the atmosphere</span>
+          <span class="prompt-line" aria-live="polite">
+            <span class="selection-wash" id="selection-wash" aria-hidden="true"></span>
+            <span class="phrase-layer" id="old-phrase">paint silence in neon</span>
+            <span class="phrase-layer" id="new-phrase">make memory feel liquid</span>
+            <span class="prompt-caret" id="prompt-caret" aria-hidden="true"></span>
+          </span>
+          <span class="model-chip" id="model-chip">atmosphere · v2</span>
+          <span class="prompt-status" id="prompt-status">typing</span>
+        </button>
+      </section>
+      <span class="library-badge">Motion · semantic edit loop</span>
+      <span class="scene-caption">type, select and replace one authored prompt</span>
+    </main>
+  </body>
+</html>

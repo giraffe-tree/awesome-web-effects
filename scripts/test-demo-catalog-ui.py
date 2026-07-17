@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import os
+import json
 import shutil
 import socket
 import subprocess
@@ -54,6 +55,11 @@ def wait_for_server(url: str, server: subprocess.Popen) -> None:
 
 
 def main() -> int:
+    provenance = json.loads((DEMO_ROOT / "gifs" / "provenance.json").read_text())
+    expected_effect_count = len(provenance["records"])
+    admitted_local_preview_ids = [
+        record["effectId"] for record in provenance["records"] if record["sourceType"] == "demo"
+    ]
     port = available_port()
     origin = f"http://127.0.0.1:{port}"
     server = subprocess.Popen(
@@ -69,26 +75,13 @@ def main() -> int:
             context = browser.new_context(viewport={"width": 1440, "height": 960})
             context.grant_permissions(["clipboard-read", "clipboard-write"], origin=origin)
             page = context.new_page()
+            page_errors: list[str] = []
+            page.on("pageerror", lambda error: page_errors.append(str(error)))
             page.goto(f"{origin}/", wait_until="networkidle")
 
             rows = page.locator("#effect-list .effect-row")
-            expect(rows).to_have_count(15)
+            expect(rows).to_have_count(expected_effect_count)
 
-            admitted_local_preview_ids = [
-                "scroll-scrubbed-master-timeline",
-                "pinned-horizontal-scroll-scene",
-                "shared-layout-spring-morph",
-                "staggered-transform-choreography",
-                "motion-graphics-burst",
-                "visually-authored-keyframe-sequence",
-                "compact-svg-shape-tween",
-                "filterable-grid-reflow",
-                "perspective-tilt-and-glare",
-                "svg-stroke-drawing",
-                "sketch-style-creative-coding-loop",
-                "functional-webgl-draw-commands",
-                "dom-synced-shader-planes",
-            ]
             for effect_id in admitted_local_preview_ids:
                 migrated_row = page.locator(f"#{effect_id}")
                 expect(migrated_row.locator(".row-preview img")).to_have_attribute(
@@ -130,6 +123,8 @@ def main() -> int:
             screenshot.parent.mkdir(parents=True, exist_ok=True)
             page.screenshot(path=str(screenshot), full_page=False)
 
+            assert not page_errors, "Catalog emitted page errors:\n" + "\n".join(page_errors)
+
             context.close()
             browser.close()
     finally:
@@ -140,7 +135,7 @@ def main() -> int:
             server.kill()
             server.wait()
 
-    print("Catalog UI verified: 15 admitted demos, visible scores, real previews, copy actions, focus, and mobile layout.")
+    print(f"Catalog UI verified: {expected_effect_count} admitted demos, visible scores, real previews, copy actions, focus, and mobile layout.")
     return 0
 
 

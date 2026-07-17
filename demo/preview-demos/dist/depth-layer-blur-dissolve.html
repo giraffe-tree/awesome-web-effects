@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>p5.js — Depth-layer Blur Dissolve</title>
+    <style>
+      :root { --preview-background: #0a1020; }
+      #depth-stage { position: absolute; inset: 0; }
+      #depth-stage canvas { width: 100% !important; height: 100% !important; }
+      .depth-scale { position: absolute; z-index: 8; right: 13px; top: 14px; display: grid; gap: 3px; width: 46px; }
+      .depth-scale span { height: 3px; border-radius: 99px; background: rgba(255,255,255,.18); }
+      .depth-scale span:nth-child(2) { width: 78%; }
+      .depth-scale span:nth-child(3) { width: 55%; }
+      .depth-scale b { color: rgba(255,255,255,.62); font: 700 6px/1 ui-monospace, monospace; letter-spacing: .08em; text-transform: uppercase; }
+    </style>
+    <script type="module" crossorigin src="./assets/depth-layer-blur-dissolve-2Zutig6Q.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-C4iZKo3w.js">
+    <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
+    <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main class="preview-stage" aria-label="A landscape dissolves into another in depth order, with each layer blurring as it hands off">
+      <div id="depth-stage" data-preview-mechanism="p5-depth-layer-compositor"></div>
+      <div class="depth-scale" aria-hidden="true"><b>near → far</b><span></span><span></span><span></span></div>
+      <span class="library-badge">p5.js · ordered compositor</span>
+      <span class="scene-caption">depth map orders blur, dissolve and reveal</span>
+    </main>
+  </body>
+</html>

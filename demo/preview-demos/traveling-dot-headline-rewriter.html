@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Motion — Traveling Dot Headline Rewriter</title>
+    <link rel="stylesheet" href="./shared.css" />
+    <style>
+      :root { --preview-background: #f2eeda; color-scheme: light; }
+      .rewrite-stage {
+        background:
+          radial-gradient(circle at 83% 18%, rgba(255, 94, 86, .25), transparent 30%),
+          linear-gradient(142deg, #f6f1dd, #e9e1c2 70%, #d7e4dd);
+        color: #171a18;
+      }
+      .rewrite-stage::before {
+        content: "";
+        position: absolute;
+        inset: 18px;
+        border: 1px solid rgba(20, 26, 22, .14);
+        border-radius: 24px;
+      }
+      .headline-kicker { position: absolute; left: 30px; top: 42px; font-size: 7px; font-weight: 900; letter-spacing: .16em; text-transform: uppercase; }
+      .headline-kicker::after { content: ""; display: inline-block; width: 34px; height: 1px; margin: 0 0 2px 8px; background: currentColor; opacity: .3; }
+      .headline-row { position: absolute; left: 29px; top: 66px; width: 250px; height: 50px; }
+      .headline-prefix { display: block; font-family: Georgia, serif; font-size: 26px; font-style: italic; letter-spacing: -.05em; line-height: .9; }
+      .word-stage { position: relative; display: block; width: 190px; height: 31px; margin-top: 2px; overflow: visible; font-size: 28px; font-weight: 950; letter-spacing: -.065em; line-height: 1; text-transform: uppercase; }
+      .rewrite-word { position: absolute; left: 0; top: 0; white-space: nowrap; }
+      .rewrite-word span { display: inline-block; }
+      .traveling-dot {
+        position: absolute;
+        z-index: 5;
+        left: -1px;
+        top: 8px;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: #ff4338;
+        box-shadow: 0 0 0 5px rgba(255, 67, 56, .16), 0 5px 15px rgba(166, 39, 32, .22);
+      }
+      .traveling-dot::after { content: ""; position: absolute; inset: 4px; border-radius: 50%; background: #fff3d5; }
+      .motion-trace { position: absolute; left: 4px; top: 14px; width: 170px; height: 2px; border-radius: 99px; background: linear-gradient(90deg, #ff4338, rgba(255,67,56,0)); transform-origin: left center; }
+      .rewrite-readout { position: absolute; right: 31px; bottom: 31px; color: rgba(23,26,24,.52); font-size: 6px; font-weight: 900; letter-spacing: .11em; text-transform: uppercase; }
+      .rewrite-button {
+        position: absolute;
+        left: 29px;
+        bottom: 25px;
+        height: 24px;
+        padding: 0 10px;
+        border: 1px solid rgba(23,26,24,.2);
+        border-radius: 99px;
+        background: rgba(255,255,255,.35);
+        color: #171a18;
+        font-size: 6px;
+        font-weight: 900;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+      .rewrite-button:hover { background: #ff5b50; color: white; }
+      .rewrite-stage .library-badge { color: #171a18; border-color: rgba(23,26,24,.16); background: rgba(246,241,221,.72); }
+      .rewrite-stage .scene-caption { display: none; }
+    </style>
+  </head>
+  <body>
+    <main class="preview-stage rewrite-stage" aria-label="A traveling red dot erases one word and writes another">
+      <span class="headline-kicker">Spatial typography study</span>
+      <section class="headline-row" data-preview-mechanism="motion-traveling-dot-rewriter">
+        <span class="headline-prefix">Turn the ordinary</span>
+        <span class="word-stage" id="word-stage">
+          <span class="motion-trace" id="motion-trace" aria-hidden="true"></span>
+          <span class="rewrite-word" id="word-old">STATIC</span>
+          <span class="rewrite-word" id="word-new">ALIVE</span>
+          <span class="traveling-dot" id="traveling-dot" aria-hidden="true"></span>
+        </span>
+      </section>
+      <button class="rewrite-button" id="rewrite-button" type="button">Rewrite now</button>
+      <span class="rewrite-readout" id="rewrite-readout">erase → travel → write</span>
+      <span class="library-badge">Motion · measured word edges</span>
+      <span class="scene-caption">a spatial marker acts as both eraser and writer</span>
+    </main>
+    <script type="module" src="./src/traveling-dot-headline-rewriter-demo.js"></script>
+  </body>
+</html>

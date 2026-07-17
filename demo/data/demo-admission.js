@@ -18,12 +18,12 @@ export const admissionPolicy = {
 };
 
 export const admissionAuditSummary = {
-  auditedAt: '2026-07-17',
-  candidateCount: 242,
-  reviewedPreviewCount: 28,
-  missingPreviewCount: 214,
-  admittedCount: 15,
-  rejectedCount: 227
+  auditedAt: '2026-07-18',
+  candidateCount: 315,
+  reviewedPreviewCount: 39,
+  missingPreviewCount: 276,
+  admittedCount: 26,
+  rejectedCount: 289
 };
 
 // Human visual review of every catalog entry that had a verifiable preview on
@@ -142,6 +142,50 @@ export const reviewedDemoScores = {
   'drag-to-reveal-image-comparison': {
     creativity: 10, artDirection: 12, motion: 14, clarity: 15, inspiration: 12, evidence: 8,
     rationaleZh: '拖拽前后对比非常清楚，但属于常规功能控件，创意和艺术性未达到策展门槛。'
+  },
+  'depth-layer-blur-dissolve': {
+    creativity: 19, artDirection: 19, motion: 19, clarity: 14, inspiration: 15, evidence: 10,
+    rationaleZh: '原创近中远景观以真实分层次序交接，模糊峰值和色彩换幕清楚显示了“深度决定消失顺序”的核心机制。'
+  },
+  'dom-aware-drag-spawned-fish-flock': {
+    creativity: 20, artDirection: 18, motion: 20, clarity: 15, inspiration: 15, evidence: 10,
+    rationaleZh: '鱼群轨迹、拖拽指示和会呼吸的真实 DOM 障碍形成同一空间，分流再汇合的物理意图在缩略图中仍然清楚。'
+  },
+  'synchronized-scenario-scene-handoff': {
+    creativity: 19, artDirection: 19, motion: 20, clarity: 15, inspiration: 15, evidence: 10,
+    rationaleZh: '背景材质、遮罩、排版与立体标签在同一节拍原子换幕，视觉叙事完整且不同层的职责都能被辨认。'
+  },
+  'prompt-select-replace-loop': {
+    creativity: 19, artDirection: 18, motion: 20, clarity: 15, inspiration: 15, evidence: 10,
+    rationaleZh: '输入、真实选择态、覆盖替换和光标落位构成完整编辑语义，区别于普通打字机，短循环也能读懂行为。'
+  },
+  'traveling-dot-headline-rewriter': {
+    creativity: 19, artDirection: 18, motion: 20, clarity: 15, inspiration: 15, evidence: 10,
+    rationaleZh: '圆点是擦除与写入的可见因果主体，字符级方向、停顿和新词着色形成鲜明的标题级视觉签名。'
+  },
+  'infinite-curved-text-conveyor': {
+    creativity: 18, artDirection: 19, motion: 19, clarity: 15, inspiration: 15, evidence: 10,
+    rationaleZh: '两条真实曲线路径承载反向流动的排版，并通过交汇遮挡建立前后关系，和直线跑马灯有明确视觉差异。'
+  },
+  'autonomous-agent-cursor-constellation': {
+    creativity: 18, artDirection: 18, motion: 19, clarity: 15, inspiration: 15, evidence: 10,
+    rationaleZh: '多名具名光标拥有不同轨迹、停靠目标和批注角色，清楚表达并行 Agent 协作而不是用户指针跟随。'
+  },
+  'scroll-linked-multilayer-starfield': {
+    creativity: 17, artDirection: 19, motion: 19, clarity: 14, inspiration: 15, evidence: 10,
+    rationaleZh: '固定海报标题提供参照，近中远三层星点在密度、尺寸和速度上同时分级，滚动纵深一眼可辨。'
+  },
+  'staggered-multichart-telemetry-boot': {
+    creativity: 18, artDirection: 18, motion: 19, clarity: 15, inspiration: 15, evidence: 10,
+    rationaleZh: '多种图表经历加载、刻度、曲线和实时光点四段上线，序列关系明确，避免退化成普通卡片错峰入场。'
+  },
+  'delayed-dropdown-promo-sweep': {
+    creativity: 16, artDirection: 18, motion: 19, clarity: 15, inspiration: 14, evidence: 10,
+    rationaleZh: '菜单展开、节奏停顿、重点卡片单次扫光和关闭复位构成明确的导航导视语义，画面层级完整。'
+  },
+  'self-inverting-fixed-navigation': {
+    creativity: 18, artDirection: 17, motion: 17, clarity: 15, inspiration: 15, evidence: 10,
+    rationaleZh: '同一固定导航穿越明暗、荧光和网格区域时由真实混合模式连续反相，无需主题类，机制纯粹且构图清楚。'
   }
 };
 

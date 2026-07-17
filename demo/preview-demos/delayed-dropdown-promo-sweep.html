@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Motion — Delayed Dropdown Promo Sweep</title>
+    <link rel="stylesheet" href="./shared.css" />
+    <style>
+      :root { --preview-background: #f2efe7; color-scheme: light; }
+      .site-bar { position: absolute; z-index: 15; left: 13px; right: 13px; top: 11px; display: flex; align-items: center; justify-content: space-between; }
+      .site-wordmark { color: #25231f; font: 950 10px/1 system-ui, sans-serif; letter-spacing: -.04em; }
+      .products-trigger { display: inline-flex; align-items: center; gap: 5px; min-height: 25px; padding: 0 9px; border: 1px solid #302c2528; border-radius: 999px; color: #27241f; background: #fffdf8; font: 800 7px/1 system-ui, sans-serif; cursor: pointer; box-shadow: 0 6px 18px #493c2410; }
+      .products-trigger::after { content: '⌄'; translate: 0 -1px; transition: rotate .2s ease; }
+      .products-trigger[aria-expanded='true']::after { rotate: 180deg; }
+      .menu-shell { position: absolute; z-index: 10; left: 13px; right: 13px; top: 45px; height: 116px; display: grid; grid-template-columns: 1fr 1.06fr; gap: 5px; padding: 5px; border: 1px solid #29251d1f; border-radius: 15px; background: #fffdf8; box-shadow: 0 20px 45px #493c2424; transform-origin: 80% 0; overflow: hidden; opacity: 0; }
+      .menu-list { display: flex; flex-direction: column; padding: 8px 7px; }
+      .menu-list small { margin-bottom: 7px; color: #26231e66; font: 800 6px/1 ui-monospace, monospace; letter-spacing: .14em; }
+      .menu-item { display: grid; grid-template-columns: 18px 1fr; gap: 7px; align-items: center; min-height: 27px; color: #25221e; text-decoration: none; }
+      .menu-icon { width: 18px; height: 18px; display: grid; place-items: center; border-radius: 6px; background: #ece7dc; color: #645a4e; font: 900 7px/1 ui-monospace, monospace; }
+      .menu-item strong { display: block; font: 850 7px/1.1 system-ui, sans-serif; }
+      .menu-item span { display: block; margin-top: 3px; color: #39332c7a; font: 650 5.5px/1.1 system-ui, sans-serif; }
+      .promo-card { position: relative; overflow: hidden; border-radius: 11px; color: white; background: radial-gradient(circle at 88% 15%, #e1ff95 0 9%, transparent 10%), linear-gradient(140deg, #6b3ef2, #ca46cb 58%, #ff765c); }
+      .promo-grid { position: absolute; inset: 0; opacity: .18; background-image: linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px); background-size: 17px 17px; transform: perspective(100px) rotateX(32deg) scale(1.4); }
+      .promo-copy { position: absolute; z-index: 3; left: 11px; right: 11px; bottom: 11px; }
+      .promo-copy i { display: inline-block; margin-bottom: 6px; padding: 3px 5px; border: 1px solid #ffffff63; border-radius: 99px; font: 800 5px/1 ui-monospace, monospace; letter-spacing: .1em; }
+      .promo-copy strong { display: block; max-width: 92px; font: 900 13px/.9 ui-serif, Georgia, serif; letter-spacing: -.035em; }
+      .promo-sweep { position: absolute; z-index: 2; top: -28px; bottom: -28px; width: 44px; left: 0; background: linear-gradient(90deg, transparent, #ffffffb8, #d7ff92ba, transparent); filter: blur(2px); rotate: 14deg; transform: translateX(-120%); mix-blend-mode: screen; }
+      .promo-orbit { position: absolute; z-index: 1; right: -13px; top: -18px; width: 82px; height: 82px; border: 1px solid #ffffff70; border-radius: 50%; box-shadow: inset 0 0 0 15px #ffffff0d, inset 0 0 0 26px #ffffff0a; }
+      .preview-stage > .library-badge { top: auto; bottom: 9px; color: #393127; background: #fffdf0d9; border-color: #332b221f; }
+      .scene-caption { left: auto; right: 13px; color: #39312782; }
+    </style>
+  </head>
+  <body>
+    <main class="preview-stage" aria-label="A Motion-powered product dropdown whose promotional card waits before a colored light sweep crosses it">
+      <header class="site-bar">
+        <span class="site-wordmark">NORTH/AI</span>
+        <button class="products-trigger" id="products-trigger" type="button" aria-expanded="false" aria-controls="product-menu">Products</button>
+      </header>
+      <section class="menu-shell" id="product-menu" data-preview-mechanism="motion-delayed-dropdown" aria-label="Product navigation">
+        <nav class="menu-list" aria-label="Product links">
+          <small>BUILD WITH US</small>
+          <a class="menu-item" href="#studio"><b class="menu-icon">01</b><span><strong>Studio</strong><span>Compose intelligent flows</span></span></a>
+          <a class="menu-item" href="#signal"><b class="menu-icon">02</b><span><strong>Signal</strong><span>Read every customer cue</span></span></a>
+          <a class="menu-item" href="#atlas"><b class="menu-icon">03</b><span><strong>Atlas</strong><span>Map your knowledge</span></span></a>
+        </nav>
+        <article class="promo-card">
+          <div class="promo-grid"></div><div class="promo-orbit"></div><div class="promo-sweep" id="promo-sweep"></div>
+          <div class="promo-copy"><i id="promo-chip">NEW RELEASE</i><strong>Agents that see the whole picture.</strong></div>
+        </article>
+      </section>
+      <span class="library-badge">Motion · delayed reveal</span>
+      <span class="scene-caption">menu first · chromatic sweep second</span>
+    </main>
+    <script type="module" src="./src/delayed-dropdown-promo-sweep-demo.js"></script>
+  </body>
+</html>

@@ -30,7 +30,7 @@
       "originUrl": "https://github.com/regl-project/regl",
       "demoSourcePath": "demo/preview-demos/functional-webgl-draw-commands.html",
       "libraryVersion": "regl@2.1.1",
-      "generatedAt": "2026-07-17",
+      "generatedAt": "2026-07-18",
       "outputPath": "demo/gifs/captured/functional-webgl-draw-commands.gif",
       "usageBasis": "upstream repository/project material; verify license https://github.com/regl-project/regl/blob/HEAD/LICENSE"
     },
@@ -41,7 +41,7 @@
       "originUrl": "https://github.com/martinlaxenaire/curtainsjs",
       "demoSourcePath": "demo/preview-demos/dom-synced-shader-planes.html",
       "libraryVersion": "curtainsjs@8.1.6",
-      "generatedAt": "2026-07-17",
+      "generatedAt": "2026-07-18",
       "outputPath": "demo/gifs/captured/dom-synced-shader-planes.gif",
       "usageBasis": "upstream repository/project material; verify license https://github.com/martinlaxenaire/curtainsjs/blob/HEAD/LICENSE.txt"
     },
@@ -52,7 +52,7 @@
       "originUrl": "https://github.com/greensock/GSAP",
       "demoSourcePath": "demo/preview-demos/scroll-scrubbed-master-timeline.html",
       "libraryVersion": "gsap@3.15.0",
-      "generatedAt": "2026-07-17",
+      "generatedAt": "2026-07-18",
       "outputPath": "demo/gifs/captured/scroll-scrubbed-master-timeline.gif",
       "usageBasis": "local demo capture using the pinned GSAP package; verify license https://github.com/greensock/GSAP/blob/HEAD/LICENSE.md"
     },
@@ -63,7 +63,7 @@
       "originUrl": "https://github.com/greensock/GSAP",
       "demoSourcePath": "demo/preview-demos/pinned-horizontal-scroll-scene.html",
       "libraryVersion": "gsap@3.15.0",
-      "generatedAt": "2026-07-17",
+      "generatedAt": "2026-07-18",
       "outputPath": "demo/gifs/captured/pinned-horizontal-scroll-scene.gif",
       "usageBasis": "local demo capture using the pinned GSAP package; verify license https://github.com/greensock/GSAP/blob/HEAD/LICENSE.md"
     },
@@ -74,7 +74,7 @@
       "originUrl": "https://github.com/motiondivision/motion",
       "demoSourcePath": "demo/preview-demos/shared-layout-spring-morph.html",
       "libraryVersion": "motion@12.42.2",
-      "generatedAt": "2026-07-17",
+      "generatedAt": "2026-07-18",
       "outputPath": "demo/gifs/captured/shared-layout-spring-morph.gif",
       "usageBasis": "local demo capture using the pinned Motion package; verify license https://github.com/motiondivision/motion/blob/HEAD/LICENSE.md"
     },
@@ -85,7 +85,7 @@
       "originUrl": "https://github.com/juliangarnier/anime",
       "demoSourcePath": "demo/preview-demos/staggered-transform-choreography.html",
       "libraryVersion": "animejs@4.5.0",
-      "generatedAt": "2026-07-17",
+      "generatedAt": "2026-07-18",
       "outputPath": "demo/gifs/captured/staggered-transform-choreography.gif",
       "usageBasis": "local demo capture using the pinned Anime.js package; verify license https://github.com/juliangarnier/anime/blob/HEAD/LICENSE.md"
     },
@@ -96,7 +96,7 @@
       "originUrl": "https://github.com/theatre-js/theatre",
       "demoSourcePath": "demo/preview-demos/visually-authored-keyframe-sequence.html",
       "libraryVersion": "@theatre/core@0.7.2",
-      "generatedAt": "2026-07-17",
+      "generatedAt": "2026-07-18",
       "outputPath": "demo/gifs/captured/visually-authored-keyframe-sequence.gif",
       "usageBasis": "local demo capture using the pinned Theatre.js core package; verify license https://github.com/theatre-js/theatre/blob/HEAD/LICENSE"
     },
@@ -107,7 +107,7 @@
       "originUrl": "https://github.com/mojs/mojs",
       "demoSourcePath": "demo/preview-demos/motion-graphics-burst.html",
       "libraryVersion": "@mojs/core@1.7.1",
-      "generatedAt": "2026-07-17",
+      "generatedAt": "2026-07-18",
       "outputPath": "demo/gifs/captured/motion-graphics-burst.gif",
       "usageBasis": "local demo capture using the pinned Mo.js package; verify license https://github.com/mojs/mojs/blob/HEAD/LICENSE.md"
     },
@@ -118,7 +118,7 @@
       "originUrl": "https://github.com/thednp/kute.js",
       "demoSourcePath": "demo/preview-demos/compact-svg-shape-tween.html",
       "libraryVersion": "kute.js@2.2.6",
-      "generatedAt": "2026-07-17",
+      "generatedAt": "2026-07-18",
       "outputPath": "demo/gifs/captured/compact-svg-shape-tween.gif",
       "usageBasis": "local demo capture using the pinned KUTE.js package; verify license https://github.com/thednp/kute.js/blob/HEAD/LICENSE"
     },
@@ -129,7 +129,7 @@
       "originUrl": "https://github.com/metafizzy/isotope",
       "demoSourcePath": "demo/preview-demos/filterable-grid-reflow.html",
       "libraryVersion": "isotope-layout@3.0.6",
-      "generatedAt": "2026-07-17",
+      "generatedAt": "2026-07-18",
       "outputPath": "demo/gifs/captured/filterable-grid-reflow.gif",
       "usageBasis": "local demo capture using the pinned Isotope package; verify license https://github.com/metafizzy/isotope/blob/HEAD/license.md"
     },
@@ -140,7 +140,7 @@
       "originUrl": "https://github.com/micku7zu/vanilla-tilt.js",
       "demoSourcePath": "demo/preview-demos/perspective-tilt-and-glare.html",
       "libraryVersion": "vanilla-tilt@1.8.1",
-      "generatedAt": "2026-07-17",
+      "generatedAt": "2026-07-18",
       "outputPath": "demo/gifs/captured/perspective-tilt-and-glare.gif",
       "usageBasis": "local demo capture using the pinned VanillaTilt package; verify license https://github.com/micku7zu/vanilla-tilt.js/blob/HEAD/LICENSE"
     },
@@ -151,7 +151,7 @@
       "originUrl": "https://github.com/maxwellito/vivus",
       "demoSourcePath": "demo/preview-demos/svg-stroke-drawing.html",
       "libraryVersion": "vivus@0.4.6",
-      "generatedAt": "2026-07-17",
+      "generatedAt": "2026-07-18",
       "outputPath": "demo/gifs/captured/svg-stroke-drawing.gif",
       "usageBasis": "local demo capture using the pinned Vivus package; verify license https://github.com/maxwellito/vivus/blob/HEAD/LICENSE"
     },
@@ -162,9 +162,130 @@
       "originUrl": "https://github.com/processing/p5.js",
       "demoSourcePath": "demo/preview-demos/sketch-style-creative-coding-loop.html",
       "libraryVersion": "p5@2.3.0",
-      "generatedAt": "2026-07-17",
+      "generatedAt": "2026-07-18",
       "outputPath": "demo/gifs/captured/sketch-style-creative-coding-loop.gif",
       "usageBasis": "local demo capture using the pinned p5.js package; verify license https://github.com/processing/p5.js/blob/HEAD/license.txt"
+    },
+    {
+      "effectId": "depth-layer-blur-dissolve",
+      "projectId": "processing-p5-js",
+      "sourceType": "demo",
+      "originUrl": "https://github.com/processing/p5.js",
+      "demoSourcePath": "demo/preview-demos/depth-layer-blur-dissolve.html",
+      "libraryVersion": "p5@2.3.0",
+      "generatedAt": "2026-07-18",
+      "outputPath": "demo/gifs/captured/depth-layer-blur-dissolve.gif",
+      "usageBasis": "original local mechanism demo using the pinned p5.js package; verify license https://github.com/processing/p5.js/blob/HEAD/license.txt"
+    },
+    {
+      "effectId": "dom-aware-drag-spawned-fish-flock",
+      "projectId": "processing-p5-js",
+      "sourceType": "demo",
+      "originUrl": "https://github.com/processing/p5.js",
+      "demoSourcePath": "demo/preview-demos/dom-aware-drag-spawned-fish-flock.html",
+      "libraryVersion": "p5@2.3.0",
+      "generatedAt": "2026-07-18",
+      "outputPath": "demo/gifs/captured/dom-aware-drag-spawned-fish-flock.gif",
+      "usageBasis": "original local mechanism demo using the pinned p5.js package; verify license https://github.com/processing/p5.js/blob/HEAD/license.txt"
+    },
+    {
+      "effectId": "synchronized-scenario-scene-handoff",
+      "projectId": "motiondivision-motion",
+      "sourceType": "demo",
+      "originUrl": "https://github.com/motiondivision/motion",
+      "demoSourcePath": "demo/preview-demos/synchronized-scenario-scene-handoff.html",
+      "libraryVersion": "motion@12.42.2",
+      "generatedAt": "2026-07-18",
+      "outputPath": "demo/gifs/captured/synchronized-scenario-scene-handoff.gif",
+      "usageBasis": "original local mechanism demo using the pinned Motion package; verify license https://github.com/motiondivision/motion/blob/HEAD/LICENSE.md"
+    },
+    {
+      "effectId": "prompt-select-replace-loop",
+      "projectId": "motiondivision-motion",
+      "sourceType": "demo",
+      "originUrl": "https://github.com/motiondivision/motion",
+      "demoSourcePath": "demo/preview-demos/prompt-select-replace-loop.html",
+      "libraryVersion": "motion@12.42.2",
+      "generatedAt": "2026-07-18",
+      "outputPath": "demo/gifs/captured/prompt-select-replace-loop.gif",
+      "usageBasis": "original local mechanism demo using the pinned Motion package; verify license https://github.com/motiondivision/motion/blob/HEAD/LICENSE.md"
+    },
+    {
+      "effectId": "traveling-dot-headline-rewriter",
+      "projectId": "motiondivision-motion",
+      "sourceType": "demo",
+      "originUrl": "https://github.com/motiondivision/motion",
+      "demoSourcePath": "demo/preview-demos/traveling-dot-headline-rewriter.html",
+      "libraryVersion": "motion@12.42.2",
+      "generatedAt": "2026-07-18",
+      "outputPath": "demo/gifs/captured/traveling-dot-headline-rewriter.gif",
+      "usageBasis": "original local mechanism demo using the pinned Motion package; verify license https://github.com/motiondivision/motion/blob/HEAD/LICENSE.md"
+    },
+    {
+      "effectId": "infinite-curved-text-conveyor",
+      "projectId": "motiondivision-motion",
+      "sourceType": "demo",
+      "originUrl": "https://github.com/motiondivision/motion",
+      "demoSourcePath": "demo/preview-demos/infinite-curved-text-conveyor.html",
+      "libraryVersion": "motion@12.42.2",
+      "generatedAt": "2026-07-18",
+      "outputPath": "demo/gifs/captured/infinite-curved-text-conveyor.gif",
+      "usageBasis": "original local mechanism demo using the pinned Motion package; verify license https://github.com/motiondivision/motion/blob/HEAD/LICENSE.md"
+    },
+    {
+      "effectId": "autonomous-agent-cursor-constellation",
+      "projectId": "motiondivision-motion",
+      "sourceType": "demo",
+      "originUrl": "https://github.com/motiondivision/motion",
+      "demoSourcePath": "demo/preview-demos/autonomous-agent-cursor-constellation.html",
+      "libraryVersion": "motion@12.42.2",
+      "generatedAt": "2026-07-18",
+      "outputPath": "demo/gifs/captured/autonomous-agent-cursor-constellation.gif",
+      "usageBasis": "original local mechanism demo using the pinned Motion package; verify license https://github.com/motiondivision/motion/blob/HEAD/LICENSE.md"
+    },
+    {
+      "effectId": "scroll-linked-multilayer-starfield",
+      "projectId": "processing-p5-js",
+      "sourceType": "demo",
+      "originUrl": "https://github.com/processing/p5.js",
+      "demoSourcePath": "demo/preview-demos/scroll-linked-multilayer-starfield.html",
+      "libraryVersion": "p5@2.3.0",
+      "generatedAt": "2026-07-18",
+      "outputPath": "demo/gifs/captured/scroll-linked-multilayer-starfield.gif",
+      "usageBasis": "original local mechanism demo using the pinned p5.js package; verify license https://github.com/processing/p5.js/blob/HEAD/license.txt"
+    },
+    {
+      "effectId": "staggered-multichart-telemetry-boot",
+      "projectId": "processing-p5-js",
+      "sourceType": "demo",
+      "originUrl": "https://github.com/processing/p5.js",
+      "demoSourcePath": "demo/preview-demos/staggered-multichart-telemetry-boot.html",
+      "libraryVersion": "p5@2.3.0",
+      "generatedAt": "2026-07-18",
+      "outputPath": "demo/gifs/captured/staggered-multichart-telemetry-boot.gif",
+      "usageBasis": "original local mechanism demo using the pinned p5.js package; verify license https://github.com/processing/p5.js/blob/HEAD/license.txt"
+    },
+    {
+      "effectId": "delayed-dropdown-promo-sweep",
+      "projectId": "motiondivision-motion",
+      "sourceType": "demo",
+      "originUrl": "https://github.com/motiondivision/motion",
+      "demoSourcePath": "demo/preview-demos/delayed-dropdown-promo-sweep.html",
+      "libraryVersion": "motion@12.42.2",
+      "generatedAt": "2026-07-18",
+      "outputPath": "demo/gifs/captured/delayed-dropdown-promo-sweep.gif",
+      "usageBasis": "original local mechanism demo using the pinned Motion package; verify license https://github.com/motiondivision/motion/blob/HEAD/LICENSE.md"
+    },
+    {
+      "effectId": "self-inverting-fixed-navigation",
+      "projectId": "motiondivision-motion",
+      "sourceType": "demo",
+      "originUrl": "https://github.com/motiondivision/motion",
+      "demoSourcePath": "demo/preview-demos/self-inverting-fixed-navigation.html",
+      "libraryVersion": "motion@12.42.2",
+      "generatedAt": "2026-07-18",
+      "outputPath": "demo/gifs/captured/self-inverting-fixed-navigation.gif",
+      "usageBasis": "original local mechanism demo using Motion plus CSS difference compositing; verify license https://github.com/motiondivision/motion/blob/HEAD/LICENSE.md"
     }
   ]
 }

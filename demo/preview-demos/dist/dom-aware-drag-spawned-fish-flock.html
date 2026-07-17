@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>p5.js — DOM-aware Drag-spawned Fish Flock</title>
+    <style>
+      :root { --preview-background: #07191d; }
+      #flock-stage { position: absolute; inset: 0; }
+      #flock-stage canvas { width: 100% !important; height: 100% !important; }
+      .flock-obstacle { position: absolute; z-index: 8; left: 111px; top: 61px; width: 98px; height: 58px; display: grid; place-items: center; border: 1px solid rgba(172,255,224,.42); border-radius: 50%; background: radial-gradient(circle at 45% 38%, rgba(96,229,196,.22), rgba(7,25,29,.92)); box-shadow: 0 0 28px rgba(73,223,185,.16); color: #d7fff3; font: 800 8px/1.2 ui-monospace, monospace; letter-spacing: .08em; text-align: center; text-transform: uppercase; animation: breathe 1.8s ease-in-out infinite; }
+      .flock-obstacle small { display: block; margin-top: 4px; color: rgba(215,255,243,.5); font-size: 5px; }
+      @keyframes breathe { 50% { transform: scale(1.06); box-shadow: 0 0 42px rgba(73,223,185,.27); } }
+    </style>
+    <script type="module" crossorigin src="./assets/dom-aware-drag-spawned-fish-flock-QMkuVQGQ.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-C4iZKo3w.js">
+    <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
+    <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main class="preview-stage" aria-label="A school of fish is spawned by a drag gesture and curves around a measured HTML obstacle">
+      <div id="flock-stage" data-preview-mechanism="p5-dom-aware-flocking"></div>
+      <div class="flock-obstacle" id="flock-obstacle">Join the school<small>live DOM obstacle</small></div>
+      <span class="library-badge">p5.js · flocking field</span>
+      <span class="scene-caption">drag spawns fish · the school senses HTML</span>
+    </main>
+  </body>
+</html>

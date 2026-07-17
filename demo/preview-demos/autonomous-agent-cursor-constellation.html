@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Motion — Autonomous Agent Cursor Constellation</title>
+    <link rel="stylesheet" href="./shared.css" />
+    <style>
+      :root { --preview-background: #08111f; }
+      .agents-stage {
+        background:
+          radial-gradient(circle at 50% 42%, rgba(83, 129, 255, .18), transparent 38%),
+          linear-gradient(145deg, #070c16, #0b1830 58%, #090b18);
+      }
+      .work-surface {
+        position: absolute;
+        inset: 30px 24px 21px;
+        overflow: hidden;
+        border: 1px solid rgba(157, 190, 255, .16);
+        border-radius: 17px;
+        background:
+          linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px),
+          rgba(7, 14, 28, .76);
+        background-size: 18px 18px;
+        box-shadow: 0 18px 40px rgba(0,0,0,.35);
+      }
+      .work-card {
+        position: absolute;
+        left: 86px;
+        top: 30px;
+        width: 100px;
+        height: 67px;
+        padding: 10px;
+        border: 1px solid rgba(255,255,255,.14);
+        border-radius: 13px;
+        background: linear-gradient(145deg, rgba(102,137,255,.17), rgba(255,108,195,.08));
+      }
+      .work-card strong { display: block; color: #f2f5ff; font-size: 8px; letter-spacing: .04em; }
+      .work-card span { display: block; height: 4px; margin-top: 7px; border-radius: 99px; background: rgba(255,255,255,.16); }
+      .work-card span:nth-child(3) { width: 72%; }
+      .work-card span:nth-child(4) { width: 48%; }
+      .agent-hotspot { position: absolute; width: 7px; height: 7px; border: 1px solid rgba(175,210,255,.45); border-radius: 50%; box-shadow: 0 0 12px rgba(110,168,255,.35); }
+      .agent-hotspot:nth-of-type(2) { left: 34px; top: 30px; }
+      .agent-hotspot:nth-of-type(3) { right: 38px; top: 22px; }
+      .agent-hotspot:nth-of-type(4) { left: 45px; bottom: 22px; }
+      .agent-hotspot:nth-of-type(5) { right: 48px; bottom: 26px; }
+      .agent-cursor { position: absolute; z-index: 8; left: 0; top: 0; width: max-content; pointer-events: none; will-change: transform, opacity; }
+      .agent-cursor svg { display: block; width: 14px; height: 18px; filter: drop-shadow(0 3px 6px rgba(0,0,0,.42)); }
+      .agent-label { display: block; margin: -2px 0 0 10px; padding: 3px 5px; border-radius: 5px; color: #07101d; font-size: 5px; font-weight: 950; letter-spacing: .06em; white-space: nowrap; text-transform: uppercase; }
+      .agent-cursor:nth-child(6) { color: #86f6ff; }
+      .agent-cursor:nth-child(6) .agent-label { background: #86f6ff; }
+      .agent-cursor:nth-child(7) { color: #ff8ed4; }
+      .agent-cursor:nth-child(7) .agent-label { background: #ff8ed4; }
+      .agent-cursor:nth-child(8) { color: #ffe37d; }
+      .agent-cursor:nth-child(8) .agent-label { background: #ffe37d; }
+      .agent-cursor:nth-child(9) { color: #9cff9a; }
+      .agent-cursor:nth-child(9) .agent-label { background: #9cff9a; }
+      .agent-cursor:nth-child(10) { color: #b3a4ff; }
+      .agent-cursor:nth-child(10) .agent-label { background: #b3a4ff; }
+      .agent-status { position: absolute; left: 35px; bottom: 29px; color: rgba(220,232,255,.48); font-size: 6px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+      .agent-shuffle {
+        position: absolute;
+        z-index: 12;
+        right: 31px;
+        bottom: 25px;
+        height: 23px;
+        padding: 0 9px;
+        border: 1px solid rgba(177,198,255,.22);
+        border-radius: 99px;
+        background: rgba(8,17,31,.78);
+        color: #dce7ff;
+        font-size: 6px;
+        font-weight: 900;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+      .agent-shuffle:hover { background: #725ae8; }
+      .agents-stage .scene-caption { display: none; }
+    </style>
+  </head>
+  <body>
+    <main class="preview-stage agents-stage" aria-label="Five named agent cursors move autonomously around a shared work surface">
+      <section class="work-surface" id="work-surface" data-preview-mechanism="motion-autonomous-agent-cursors">
+        <article class="work-card"><strong>Campaign universe</strong><span></span><span></span><span></span></article>
+        <i class="agent-hotspot" aria-hidden="true"></i><i class="agent-hotspot" aria-hidden="true"></i><i class="agent-hotspot" aria-hidden="true"></i><i class="agent-hotspot" aria-hidden="true"></i>
+        <span class="agent-cursor" data-agent="research"><svg viewBox="0 0 16 20" aria-hidden="true"><path fill="currentColor" d="M1 1v16l4.3-4.2 3.1 6 3-1.6-3.2-5.9H14z"/></svg><b class="agent-label">Scout</b></span>
+        <span class="agent-cursor" data-agent="color"><svg viewBox="0 0 16 20" aria-hidden="true"><path fill="currentColor" d="M1 1v16l4.3-4.2 3.1 6 3-1.6-3.2-5.9H14z"/></svg><b class="agent-label">Color</b></span>
+        <span class="agent-cursor" data-agent="copy"><svg viewBox="0 0 16 20" aria-hidden="true"><path fill="currentColor" d="M1 1v16l4.3-4.2 3.1 6 3-1.6-3.2-5.9H14z"/></svg><b class="agent-label">Copy</b></span>
+        <span class="agent-cursor" data-agent="motion"><svg viewBox="0 0 16 20" aria-hidden="true"><path fill="currentColor" d="M1 1v16l4.3-4.2 3.1 6 3-1.6-3.2-5.9H14z"/></svg><b class="agent-label">Motion</b></span>
+        <span class="agent-cursor" data-agent="critic"><svg viewBox="0 0 16 20" aria-hidden="true"><path fill="currentColor" d="M1 1v16l4.3-4.2 3.1 6 3-1.6-3.2-5.9H14z"/></svg><b class="agent-label">Critic</b></span>
+      </section>
+      <span class="agent-status" id="agent-status">5 agents · independent paths</span>
+      <button class="agent-shuffle" id="agent-shuffle" type="button">Shift phase</button>
+      <span class="library-badge">Motion · autonomous actors</span>
+      <span class="scene-caption">named cursors narrate parallel agent collaboration</span>
+    </main>
+    <script type="module" src="./src/autonomous-agent-cursor-constellation-demo.js"></script>
+  </body>
+</html>

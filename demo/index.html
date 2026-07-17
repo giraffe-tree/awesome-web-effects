@@ -410,8 +410,8 @@
     </div>
 
     <script type="module">
-      import { categories, effects, projects } from './data/effects.js?v=20260717-admission-v2';
-      import { admissionPolicy } from './data/demo-admission.js?v=20260717-admission-v2';
+      import { categories, effects, projects } from './data/effects.js?v=20260718-expansion-v1';
+      import { admissionPolicy } from './data/demo-admission.js?v=20260718-expansion-v1';
 
       const copy = {
         en: {
@@ -638,7 +638,7 @@
       function openHashTarget() {
         const id = decodeURIComponent(location.hash.slice(1));
         const target = id && document.getElementById(id);
-        if (target?.classList.contains('effect-row')) {
+        if (target?.classList?.contains('effect-row')) {
           const panel = target.querySelector('.detail-panel');
           const toggle = target.querySelector('.code-button');
           panel.hidden = false;

@@ -1,5 +1,5 @@
-// Curator-approved release catalog. Rejected candidates remain documented in research/demo-admission-audit-2026-07-17.md.
-export const snapshotDate = "2026-07-17";
+// Curator-approved release catalog. Rejected candidates remain documented in the current dated admission audit.
+export const snapshotDate = "2026-07-18";
 
 export const categories = [
   {
@@ -53,7 +53,7 @@ export const categories = [
   }
 ];
 
-export const effects = [
+const existingEffects = [
   {
     "id": "scroll-scrubbed-master-timeline",
     "category": "animation",
@@ -784,6 +784,186 @@ export const effects = [
     }
   }
 ];
+
+const expansionScore = (scores, rationaleZh) => ({
+  policyVersion: '2026-07-17',
+  scores,
+  total: Object.values(scores).reduce((total, score) => total + score, 0),
+  decision: 'admit',
+  reasonCode: 'passed',
+  rationaleZh
+});
+
+const expansionPrompt = effect => `Implement the "${effect.name}" (${effect.nameZh}) web interaction effect in the current project.
+
+Use ${effect.implementationName} as the recommended implementation. Recreate this specific observed mechanism with original visual assets; do not copy the source website's branding or reduce it to a generic transition.
+
+Interaction contract:
+- Trigger: ${effect.behavior.trigger}
+- Visual response: ${effect.behavior.response}
+- Timing relationship: ${effect.behavior.timing}
+- Page layer: ${effect.behavior.layer}
+
+Requirements:
+- Preserve the defining effect signature and make its state change legible without explanatory labels.
+- Integrate with the existing design system and component structure.
+- Support keyboard and touch input whenever the interaction is actionable.
+- Respect prefers-reduced-motion with a clear non-animated fallback.
+- Avoid layout shift, scroll traps, inaccessible focus behavior, and unnecessary dependencies.
+- Keep the implementation responsive and clean up listeners, timers, media, and animation instances.
+
+Start from this minimal API shape:
+
+\`\`\`js
+${effect.snippet}
+\`\`\`
+
+Return the working code, the files changed, and a short explanation of how to tune timing, easing, geometry, and reduced-motion behavior.`;
+
+const makeExpansionEffect = spec => ({
+  id: spec.id,
+  category: spec.category,
+  name: spec.name,
+  nameZh: spec.nameZh,
+  addedIn: '2026-ai-native-expansion',
+  research: {
+    sourceUrl: spec.homepage,
+    difference: spec.difference,
+    verifiedAt: '2026-07-18'
+  },
+  behavior: spec.behavior,
+  prompt: expansionPrompt(spec),
+  sources: [{
+    projectId: spec.projectId,
+    recommended: true,
+    snippet: spec.snippet,
+    preview: `captured/${spec.id}`,
+    previewKind: 'local-demo-capture',
+    demoPath: `preview-demos/dist/${spec.id}.html`,
+    demoSourcePath: `preview-demos/${spec.id}.html`,
+    originUrl: spec.projectUrl,
+    referenceUrl: spec.referenceUrl,
+    previewRecipe: null
+  }],
+  order: spec.order,
+  relatedParties: [{ name: spec.company, url: spec.homepage, observedAs: spec.observedAs }],
+  admission: expansionScore(spec.scores, spec.rationaleZh)
+});
+
+const expansionEffects = [
+  {
+    id: 'depth-layer-blur-dissolve', category: 'canvas', name: 'Depth-layer ordered blur dissolve', nameZh: '景深分层顺序模糊溶解', order: 16,
+    company: 'Black Forest Labs', homepage: 'https://bfl.ai/', observedAs: 'Depth-map ordered blur dissolve',
+    difference: 'Depth values sequence near, middle, and far regions through separate blur and opacity handoffs instead of applying one displacement or crossfade to the whole image.',
+    behavior: { trigger: 'state change or animation frame', response: 'Near, middle, and far image layers blur and dissolve in depth order', timing: 'depth-staggered continuous handoff', layer: 'Canvas image compositor' },
+    implementationName: 'p5.js', projectId: 'processing-p5-js', projectUrl: 'https://github.com/processing/p5.js', referenceUrl: 'https://p5js.org/reference/',
+    snippet: "import p5 from 'p5';\nnew p5(p => { p.setup = () => p.createCanvas(320, 180); p.draw = () => drawDepthOrderedLayers(p, progress); });",
+    scores: { creativity: 19, artDirection: 19, motion: 19, clarity: 14, inspiration: 15, evidence: 10 },
+    rationaleZh: '原创近中远景观以真实分层次序交接，模糊峰值和色彩换幕清楚显示了“深度决定消失顺序”的核心机制。'
+  },
+  {
+    id: 'dom-aware-drag-spawned-fish-flock', category: 'canvas', name: 'DOM-aware drag-spawned fish flock', nameZh: '拖拽生成且避让 DOM 的鱼群', order: 17,
+    company: 'Sakana AI', homepage: 'https://sakana.ai/', observedAs: 'Drag-spawned DOM-aware fish flock',
+    difference: 'The flock shares a measured physics space with a live HTML obstacle and accepts drag-spawned members, unlike a decorative particle swarm or pointer trail.',
+    behavior: { trigger: 'pointer drag or animation frame', response: 'New fish join a flock that predicts and curves around a live DOM obstacle', timing: 'continuous flocking with anticipatory avoidance', layer: 'Canvas around interactive DOM' },
+    implementationName: 'p5.js', projectId: 'processing-p5-js', projectUrl: 'https://github.com/processing/p5.js', referenceUrl: 'https://p5js.org/reference/',
+    snippet: "import p5 from 'p5';\nnew p5(p => { p.mouseDragged = () => flock.add(p.mouseX, p.mouseY); p.draw = () => flock.avoid(button.getBoundingClientRect()).step(p); });",
+    scores: { creativity: 20, artDirection: 18, motion: 20, clarity: 15, inspiration: 15, evidence: 10 },
+    rationaleZh: '鱼群轨迹、拖拽指示和会呼吸的真实 DOM 障碍形成同一空间，分流再汇合的物理意图在缩略图中仍然清楚。'
+  },
+  {
+    id: 'synchronized-scenario-scene-handoff', category: 'transition', name: 'Synchronized scenario scene handoff', nameZh: '多层同步场景换幕', order: 18,
+    company: 'Vapi', homepage: 'https://vapi.ai/', observedAs: 'Synchronized scenario scene handoff',
+    difference: 'One state atomically coordinates the background, color overlay, editorial copy, and a perspective-flipping label rather than swapping a single tab panel.',
+    behavior: { trigger: 'scenario selection or timed state change', response: 'Background, overlay, copy, and perspective label hand off as one scene', timing: 'coordinated multiphase transition', layer: 'Full scene and content planes' },
+    implementationName: 'Motion', projectId: 'motiondivision-motion', projectUrl: 'https://github.com/motiondivision/motion', referenceUrl: 'https://motion.dev/docs',
+    snippet: "import { animate } from 'motion';\nanimate(['.scene', '.overlay', '.copy', '.label'], { opacity: [0, 1], rotateX: [18, 0] }, { duration: 1 });",
+    scores: { creativity: 19, artDirection: 19, motion: 20, clarity: 15, inspiration: 15, evidence: 10 },
+    rationaleZh: '背景材质、遮罩、排版与立体标签在同一节拍原子换幕，视觉叙事完整且不同层的职责都能被辨认。'
+  },
+  {
+    id: 'prompt-select-replace-loop', category: 'vector', name: 'Type-select-replace prompt loop', nameZh: '输入—选中—替换提示词循环', order: 19,
+    company: 'Granola', homepage: 'https://www.granola.ai/', observedAs: 'Type-select-replace prompt loop',
+    difference: 'The loop explicitly types, selects a semantic range, and overwrites it with a new phrase, preserving editor selection and caret states instead of deleting a typewriter string.',
+    behavior: { trigger: 'animation frame or editor action', response: 'A prompt is typed, semantically selected, and replaced in place', timing: 'phased edit loop', layer: 'Editor text surface' },
+    implementationName: 'Motion', projectId: 'motiondivision-motion', projectUrl: 'https://github.com/motiondivision/motion', referenceUrl: 'https://motion.dev/docs',
+    snippet: "import { animate } from 'motion';\nconst selection = animate('.selection', { scaleX: [0, 1] });\nselection.finished.then(() => replacePromptText());",
+    scores: { creativity: 19, artDirection: 18, motion: 20, clarity: 15, inspiration: 15, evidence: 10 },
+    rationaleZh: '输入、真实选择态、覆盖替换和光标落位构成完整编辑语义，区别于普通打字机，短循环也能读懂行为。'
+  },
+  {
+    id: 'traveling-dot-headline-rewriter', category: 'vector', name: 'Traveling-dot headline eraser-writer', nameZh: '旅行圆点擦写标题', order: 20,
+    company: 'PolyAI', homepage: 'https://poly.ai/', observedAs: 'Traveling-dot headline eraser-writer',
+    difference: 'A spatial marker crosses measured glyph positions to erase the old word and write the new word in opposing directions instead of fading or scrambling text in place.',
+    behavior: { trigger: 'animation frame', response: 'A traveling dot erases one headline word and writes the next along its measured path', timing: 'bidirectional sequenced rewrite', layer: 'Headline typography' },
+    implementationName: 'Motion', projectId: 'motiondivision-motion', projectUrl: 'https://github.com/motiondivision/motion', referenceUrl: 'https://motion.dev/docs',
+    snippet: "import { animate, stagger } from 'motion';\nanimate('.travel-dot', { x: [0, wordWidth] });\nanimate('.glyph', { opacity: [1, 0] }, { delay: stagger(.04) });",
+    scores: { creativity: 19, artDirection: 18, motion: 20, clarity: 15, inspiration: 15, evidence: 10 },
+    rationaleZh: '圆点是擦除与写入的可见因果主体，字符级方向、停顿和新词着色形成鲜明的标题级视觉签名。'
+  },
+  {
+    id: 'infinite-curved-text-conveyor', category: 'vector', name: 'Infinite curved text-path conveyor', nameZh: '无限曲线文字传送带', order: 21,
+    company: 'Wispr Flow', homepage: 'https://wisprflow.ai/', observedAs: 'Infinite curved text-path conveyor',
+    difference: 'Repeated text is laid out by real SVG paths and circulates along intersecting curves with front-back depth, rather than translating a straight marquee rail.',
+    behavior: { trigger: 'animation frame', response: 'Repeated phrases travel continuously along crossing curved SVG paths', timing: 'seamless counter-moving loop', layer: 'SVG typography field' },
+    implementationName: 'Motion', projectId: 'motiondivision-motion', projectUrl: 'https://github.com/motiondivision/motion', referenceUrl: 'https://motion.dev/docs',
+    snippet: "import { animate } from 'motion';\nanimate('#curve-a textPath', { attr: { startOffset: ['0%', '100%'] } }, { duration: 8, repeat: Infinity, ease: 'linear' });",
+    scores: { creativity: 18, artDirection: 19, motion: 19, clarity: 15, inspiration: 15, evidence: 10 },
+    rationaleZh: '两条真实曲线路径承载反向流动的排版，并通过交汇遮挡建立前后关系，和直线跑马灯有明确视觉差异。'
+  },
+  {
+    id: 'autonomous-agent-cursor-constellation', category: 'animation', name: 'Autonomous agent-cursor constellation', nameZh: '自主 Agent 光标星座', order: 22,
+    company: 'InVideo', homepage: 'https://invideo.io/', observedAs: 'Autonomous agent-cursor constellation',
+    difference: 'Several named cursors act as autonomous narrative collaborators with independent routes and annotations, unlike the single visitor-controlled contextual cursor already published.',
+    behavior: { trigger: 'animation frame', response: 'Named agent cursors independently orbit tasks, pause, and leave annotations', timing: 'continuous asynchronous choreography', layer: 'Collaborative workspace overlay' },
+    implementationName: 'Motion', projectId: 'motiondivision-motion', projectUrl: 'https://github.com/motiondivision/motion', referenceUrl: 'https://motion.dev/docs',
+    snippet: "import { animate, stagger } from 'motion';\nanimate('.agent-cursor', { offsetDistance: ['0%', '100%'] }, { delay: stagger(.3), duration: 5, repeat: Infinity });",
+    scores: { creativity: 18, artDirection: 18, motion: 19, clarity: 15, inspiration: 15, evidence: 10 },
+    rationaleZh: '多名具名光标拥有不同轨迹、停靠目标和批注角色，清楚表达并行 Agent 协作而不是用户指针跟随。'
+  },
+  {
+    id: 'scroll-linked-multilayer-starfield', category: 'scroll', name: 'Scroll-linked multilayer starfield drift', nameZh: '滚动联动多层星空', order: 23,
+    company: 'Fathom', homepage: 'https://fathom.video/', observedAs: 'Scroll-linked multilayer starfield drift',
+    difference: 'Three independently sampled star layers move at separate progress-linked rates around fixed editorial content, creating measurable depth instead of a single parallax background.',
+    behavior: { trigger: 'scroll progress', response: 'Near, middle, and far star layers drift at distinct rates around a fixed title', timing: 'continuous progress-linked parallax', layer: 'Canvas background layers' },
+    implementationName: 'p5.js', projectId: 'processing-p5-js', projectUrl: 'https://github.com/processing/p5.js', referenceUrl: 'https://p5js.org/reference/',
+    snippet: "import p5 from 'p5';\nnew p5(p => { p.draw = () => layers.forEach((stars, depth) => drawStars(p, stars, progress * speeds[depth])); });",
+    scores: { creativity: 17, artDirection: 19, motion: 19, clarity: 14, inspiration: 15, evidence: 10 },
+    rationaleZh: '固定海报标题提供参照，近中远三层星点在密度、尺寸和速度上同时分级，滚动纵深一眼可辨。'
+  },
+  {
+    id: 'staggered-multichart-telemetry-boot', category: 'canvas', name: 'Staggered multi-chart telemetry boot', nameZh: '交错多图表遥测启动', order: 24,
+    company: 'Pinecone', homepage: 'https://www.pinecone.io/', observedAs: 'Staggered multi-chart telemetry boot',
+    difference: 'Independent chart loaders resolve in sequence and each real data trace progressively draws online, rather than moving generic DOM elements through a staggered entrance.',
+    behavior: { trigger: 'dashboard mount or restart', response: 'Loaders resolve and distinct telemetry charts progressively draw online in sequence', timing: 'staggered multi-stage boot', layer: 'Canvas dashboard panels' },
+    implementationName: 'p5.js', projectId: 'processing-p5-js', projectUrl: 'https://github.com/processing/p5.js', referenceUrl: 'https://p5js.org/reference/',
+    snippet: "import p5 from 'p5';\nnew p5(p => { p.draw = () => charts.forEach((chart, i) => chart.draw(p, clamp(progress * 4 - i * .45, 0, 1))); });",
+    scores: { creativity: 18, artDirection: 18, motion: 19, clarity: 15, inspiration: 15, evidence: 10 },
+    rationaleZh: '多种图表经历加载、刻度、曲线和实时光点四段上线，序列关系明确，避免退化成普通卡片错峰入场。'
+  },
+  {
+    id: 'delayed-dropdown-promo-sweep', category: 'transition', name: 'Delayed dropdown promo sweep', nameZh: '延迟触发的下拉推广扫光', order: 25,
+    company: 'Glean', homepage: 'https://www.glean.com/', observedAs: 'Delayed dropdown promo sweep',
+    difference: 'The navigation opens first, then a one-shot color beam traverses only the promoted row after a semantic delay and resets on close, rather than looping as decoration.',
+    behavior: { trigger: 'dropdown open', response: 'A delayed chromatic beam sweeps once behind a promoted navigation card', timing: 'open, pause, one-shot sweep, reset', layer: 'Navigation overlay' },
+    implementationName: 'Motion', projectId: 'motiondivision-motion', projectUrl: 'https://github.com/motiondivision/motion', referenceUrl: 'https://motion.dev/docs',
+    snippet: "import { animate } from 'motion';\nawait animate('.menu', { height: [0, 140], opacity: [0, 1] }).finished;\nanimate('.promo-beam', { x: ['-120%', '120%'] }, { delay: .2, duration: 1.3 });",
+    scores: { creativity: 16, artDirection: 18, motion: 19, clarity: 15, inspiration: 14, evidence: 10 },
+    rationaleZh: '菜单展开、节奏停顿、重点卡片单次扫光和关闭复位构成明确的导航导视语义，画面层级完整。'
+  },
+  {
+    id: 'self-inverting-fixed-navigation', category: 'scroll', name: 'Self-inverting fixed navigation', nameZh: '自动反色的固定导航', order: 26,
+    company: 'Luma AI', homepage: 'https://lumalabs.ai/', observedAs: 'Self-inverting fixed navigation',
+    difference: 'A single fixed navigation surface continuously derives contrast from the actual pixels below it through compositing, instead of listening for sections and switching theme classes.',
+    behavior: { trigger: 'scroll or background movement', response: 'One fixed navigation automatically inverts over changing light and dark sections', timing: 'continuous compositing response', layer: 'Fixed navigation over page content' },
+    implementationName: 'Motion', projectId: 'motiondivision-motion', projectUrl: 'https://github.com/motiondivision/motion', referenceUrl: 'https://motion.dev/docs',
+    snippet: "import { animate } from 'motion';\ndocument.querySelector('nav').style.mixBlendMode = 'difference';\nanimate('.section-track', { y: [0, -360] }, { duration: 4, repeat: Infinity });",
+    scores: { creativity: 18, artDirection: 17, motion: 17, clarity: 15, inspiration: 15, evidence: 10 },
+    rationaleZh: '同一固定导航穿越明暗、荧光和网格区域时由真实混合模式连续反相，无需主题类，机制纯粹且构图清楚。'
+  }
+].map(makeExpansionEffect);
+
+export const effects = [...existingEffects, ...expansionEffects];
 
 export const projects = [
   {

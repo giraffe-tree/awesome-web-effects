@@ -130,7 +130,7 @@ def live_surface_check(page) -> dict:
 
 def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Namespace) -> tuple[int, int]:
     errors: list[str] = []
-    page.on("pageerror", lambda error: errors.append(str(error)))
+    page.on("pageerror", lambda error: errors.append(f"{error}\n{getattr(error, 'stack', '')}"))
     page.goto(url, wait_until="load", timeout=45_000)
     page.wait_for_function("window.__PREVIEW_READY__ === true || Boolean(window.__PREVIEW_ERROR__)", timeout=30_000)
     failure = page.evaluate("window.__PREVIEW_ERROR__ || null")
@@ -246,19 +246,21 @@ def main() -> int:
                 device_scale_factor=1,
                 reduced_motion="no-preference",
             )
-            page = context.new_page()
-
             for demo in demos:
-                if persistent_frames:
-                    frame_root = persistent_frames / demo["id"]
-                    frame_root.mkdir()
-                    frame_count, unique_count = capture_demo(page, demo_url(demo), demo, frame_root, args)
-                    encode_gif(frame_root, OUTPUT_ROOT / f"{demo['id']}.gif", args.fps)
-                else:
-                    with tempfile.TemporaryDirectory(prefix=f"{demo['id']}-") as temporary:
-                        frame_root = Path(temporary)
+                page = context.new_page()
+                try:
+                    if persistent_frames:
+                        frame_root = persistent_frames / demo["id"]
+                        frame_root.mkdir()
                         frame_count, unique_count = capture_demo(page, demo_url(demo), demo, frame_root, args)
                         encode_gif(frame_root, OUTPUT_ROOT / f"{demo['id']}.gif", args.fps)
+                    else:
+                        with tempfile.TemporaryDirectory(prefix=f"{demo['id']}-") as temporary:
+                            frame_root = Path(temporary)
+                            frame_count, unique_count = capture_demo(page, demo_url(demo), demo, frame_root, args)
+                            encode_gif(frame_root, OUTPUT_ROOT / f"{demo['id']}.gif", args.fps)
+                finally:
+                    page.close()
                 size_kib = (OUTPUT_ROOT / f"{demo['id']}.gif").stat().st_size / 1024
                 print(f"Captured {demo['id']}: {frame_count} frames, {unique_count} unique, {size_kib:.1f} KiB", flush=True)
 

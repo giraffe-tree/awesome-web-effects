@@ -114,6 +114,105 @@
       "demoPath": "preview-demos/dist/sketch-style-creative-coding-loop.html",
       "demoSourcePath": "preview-demos/sketch-style-creative-coding-loop.html",
       "gifPath": "gifs/captured/sketch-style-creative-coding-loop.gif"
+    },
+    {
+      "id": "depth-layer-blur-dissolve",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/depth-layer-blur-dissolve.html",
+      "demoSourcePath": "preview-demos/depth-layer-blur-dissolve.html",
+      "gifPath": "gifs/captured/depth-layer-blur-dissolve.gif"
+    },
+    {
+      "id": "dom-aware-drag-spawned-fish-flock",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/dom-aware-drag-spawned-fish-flock.html",
+      "demoSourcePath": "preview-demos/dom-aware-drag-spawned-fish-flock.html",
+      "gifPath": "gifs/captured/dom-aware-drag-spawned-fish-flock.gif"
+    },
+    {
+      "id": "synchronized-scenario-scene-handoff",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/synchronized-scenario-scene-handoff.html",
+      "demoSourcePath": "preview-demos/synchronized-scenario-scene-handoff.html",
+      "gifPath": "gifs/captured/synchronized-scenario-scene-handoff.gif"
+    },
+    {
+      "id": "prompt-select-replace-loop",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/prompt-select-replace-loop.html",
+      "demoSourcePath": "preview-demos/prompt-select-replace-loop.html",
+      "gifPath": "gifs/captured/prompt-select-replace-loop.gif"
+    },
+    {
+      "id": "traveling-dot-headline-rewriter",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/traveling-dot-headline-rewriter.html",
+      "demoSourcePath": "preview-demos/traveling-dot-headline-rewriter.html",
+      "gifPath": "gifs/captured/traveling-dot-headline-rewriter.gif"
+    },
+    {
+      "id": "infinite-curved-text-conveyor",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/infinite-curved-text-conveyor.html",
+      "demoSourcePath": "preview-demos/infinite-curved-text-conveyor.html",
+      "gifPath": "gifs/captured/infinite-curved-text-conveyor.gif"
+    },
+    {
+      "id": "autonomous-agent-cursor-constellation",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/autonomous-agent-cursor-constellation.html",
+      "demoSourcePath": "preview-demos/autonomous-agent-cursor-constellation.html",
+      "gifPath": "gifs/captured/autonomous-agent-cursor-constellation.gif"
+    },
+    {
+      "id": "scroll-linked-multilayer-starfield",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/scroll-linked-multilayer-starfield.html",
+      "demoSourcePath": "preview-demos/scroll-linked-multilayer-starfield.html",
+      "gifPath": "gifs/captured/scroll-linked-multilayer-starfield.gif"
+    },
+    {
+      "id": "staggered-multichart-telemetry-boot",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/staggered-multichart-telemetry-boot.html",
+      "demoSourcePath": "preview-demos/staggered-multichart-telemetry-boot.html",
+      "gifPath": "gifs/captured/staggered-multichart-telemetry-boot.gif"
+    },
+    {
+      "id": "delayed-dropdown-promo-sweep",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/delayed-dropdown-promo-sweep.html",
+      "demoSourcePath": "preview-demos/delayed-dropdown-promo-sweep.html",
+      "gifPath": "gifs/captured/delayed-dropdown-promo-sweep.gif"
+    },
+    {
+      "id": "self-inverting-fixed-navigation",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/self-inverting-fixed-navigation.html",
+      "demoSourcePath": "preview-demos/self-inverting-fixed-navigation.html",
+      "gifPath": "gifs/captured/self-inverting-fixed-navigation.gif"
     }
   ]
 }

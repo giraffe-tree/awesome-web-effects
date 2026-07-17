@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>p5.js — Scroll-linked Multilayer Starfield</title>
+    <link rel="stylesheet" href="./shared.css" />
+    <style>
+      :root { --preview-background: #020712; }
+      #starfield-stage { position: absolute; inset: 0; cursor: ns-resize; }
+      #starfield-stage canvas { width: 100% !important; height: 100% !important; }
+      .depth-scale { position: absolute; z-index: 5; right: 12px; top: 48px; width: 3px; height: 82px; border-radius: 99px; background: #ffffff20; }
+      .depth-scale::before { content: ''; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(#80f0ff, #826cff, #ff80cb); transform: scaleY(var(--depth, 0)); transform-origin: top; box-shadow: 0 0 12px #8275ff; }
+      .depth-label { position: absolute; z-index: 6; right: 20px; top: 47px; color: #d8eaff80; font: 700 6px/1.3 ui-monospace, monospace; letter-spacing: .12em; text-align: right; }
+      .depth-label span { display: block; margin-bottom: 28px; }
+      .starfield-title { position: absolute; z-index: 4; left: 18px; top: 54px; width: 145px; margin: 0; color: #eef7ff; font: 800 20px/.9 ui-serif, Georgia, serif; letter-spacing: -.045em; text-shadow: 0 4px 22px #020712; }
+      .starfield-title small { display: block; margin-top: 8px; color: #93b5d7; font: 700 7px/1.4 ui-monospace, monospace; letter-spacing: .1em; text-transform: uppercase; }
+      .library-badge { background: #030817c9; }
+    </style>
+  </head>
+  <body>
+    <main class="preview-stage" aria-label="A live p5.js starfield whose near and far layers drift at different rates as scroll progress changes">
+      <div id="starfield-stage" data-preview-mechanism="p5-scroll-starfield" tabindex="0" aria-label="Scroll or use the arrow keys to change starfield depth"></div>
+      <h1 class="starfield-title">A sky with<br />memory.<small>Three depths · one scroll signal</small></h1>
+      <div class="depth-label" aria-hidden="true"><span>FAR</span><span>MID</span><span>NEAR</span></div>
+      <div class="depth-scale" id="depth-scale" aria-hidden="true"></div>
+      <span class="library-badge">p5.js · seeded layers</span>
+      <span class="scene-caption">scroll depth separates the stellar planes</span>
+    </main>
+    <script type="module" src="./src/scroll-linked-multilayer-starfield-demo.js"></script>
+  </body>
+</html>

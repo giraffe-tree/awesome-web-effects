@@ -1,21 +1,9 @@
 import { resolve } from 'node:path';
+import { readFileSync } from 'node:fs';
 import { defineConfig } from 'vite';
 
-const demoIds = [
-  'visually-authored-keyframe-sequence',
-  'staggered-transform-choreography',
-  'motion-graphics-burst',
-  'compact-svg-shape-tween',
-  'functional-webgl-draw-commands',
-  'dom-synced-shader-planes',
-  'scroll-scrubbed-master-timeline',
-  'pinned-horizontal-scroll-scene',
-  'shared-layout-spring-morph',
-  'filterable-grid-reflow',
-  'perspective-tilt-and-glare',
-  'svg-stroke-drawing',
-  'sketch-style-creative-coding-loop'
-];
+const manifest = JSON.parse(readFileSync(new URL('./preview-manifest.json', import.meta.url), 'utf8'));
+const demoIds = manifest.demos.map(demo => demo.id);
 
 export default defineConfig({
   base: './',

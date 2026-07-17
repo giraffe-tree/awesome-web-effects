@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>A-Frame — Declarative HTML 3D Scene</title>
+    <link rel="stylesheet" href="./shared.css" />
+    <style>
+      a-scene { width: 100%; height: 100%; }
+      .a-enter-vr, .a-enter-ar, .a-orientation-modal { display: none !important; }
+    </style>
+  </head>
+  <body>
+    <main class="preview-stage" aria-label="A live declarative A-Frame neon city scene">
+      <a-scene id="aframe-scene" embedded renderer="antialias: true; colorManagement: true" background="color: #070514" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
+        <a-entity id="camera-rig" position="0 1.15 0">
+          <a-camera id="scene-camera" position="0 0 5.8" fov="52" look-controls="enabled: false" wasd-controls="enabled: false"></a-camera>
+        </a-entity>
+
+        <a-entity light="type: ambient; color: #6d78af; intensity: 0.85"></a-entity>
+        <a-entity light="type: point; color: #35f2ff; intensity: 5; distance: 12" position="-2 4 3"></a-entity>
+        <a-entity light="type: point; color: #ff4dc4; intensity: 4; distance: 10" position="3 2 1"></a-entity>
+
+        <a-entity id="city" position="0 -.1 0">
+          <a-plane rotation="-90 0 0" width="16" height="16" color="#090d1f" material="roughness: .75; metalness: .3"></a-plane>
+          <a-ring rotation="-90 0 0" radius-inner="2.18" radius-outer="2.24" color="#32ecff" material="emissive: #0a8599; emissiveIntensity: 2"></a-ring>
+          <a-ring rotation="-90 0 0" radius-inner="3.25" radius-outer="3.29" color="#ff4dc4" material="emissive: #8d155f; emissiveIntensity: 2"></a-ring>
+          <a-box position="-2 .7 -1.3" width=".75" height="1.4" depth=".75" color="#15274a" material="metalness: .65; emissive: #0e4468; emissiveIntensity: .45"></a-box>
+          <a-box position="2 1 -1.7" width=".8" height="2" depth=".8" color="#321849" material="metalness: .65; emissive: #701b67; emissiveIntensity: .45"></a-box>
+          <a-box position="-1.35 .45 1.65" width=".6" height=".9" depth=".6" color="#162947"></a-box>
+          <a-cylinder position="1.4 .8 1.3" radius=".42" height="1.6" color="#19345a" material="metalness: .7"></a-cylinder>
+          <a-entity id="holo" position="0 1.05 0">
+            <a-octahedron radius=".78" color="#4eeaff" material="wireframe: true; emissive: #16c6dc; emissiveIntensity: 2"></a-octahedron>
+            <a-sphere radius=".2" color="#fff" material="emissive: #bafaff; emissiveIntensity: 3"></a-sphere>
+          </a-entity>
+        </a-entity>
+      </a-scene>
+      <span class="library-badge">A-Frame · HTML entities</span>
+      <span class="scene-caption">scene assembled declaratively</span>
+    </main>
+    <script type="module" src="./src/aframe-demo.js"></script>
+  </body>
+</html>

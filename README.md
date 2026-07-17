@@ -2,13 +2,13 @@
 
 [中文文档](README.zh-CN.md) · [Live demo](https://giraffe-tree.github.io/awesome-web-effects/)
 
-An **effect-first** atlas of open-source interactions for the web. It catalogs **242 distinct effects across 10 categories**, backed by **154 source projects**. Each effect is one row with a stable semantic key, a GIF preview, copyable minimal code, and a one-click implementation prompt for Codex or Claude Code. English is the default interface and documentation language.
+An **effect-first** atlas of open-source interactions for the web. It catalogs **242 distinct effects across 10 categories**, backed by **154 source projects**. Each effect is one row with a stable semantic key, an honest preview status, copyable minimal code, and a one-click implementation prompt for Codex or Claude Code. Verified GIFs appear only when backed by official footage or a runnable local demo. English is the default interface and documentation language.
 
 ## Effect-first model
 
 - **Effect is the catalog key.** Anchors, search results, rows, categories, and code examples begin with the visible interaction—not the repository.
 - **Projects are implementation sources.** One project may power several distinct effects; 12 source projects currently demonstrate this relation in the catalog.
-- **An effect may have multiple implementations.** Each source relation owns its own minimal snippet and GIF preview, so alternatives can be compared without duplicating the effect row.
+- **An effect may have multiple implementations.** Each source relation owns its own minimal snippet and preview status, so alternatives can be compared without duplicating the effect row.
 - **Deduplication happens at the visible-effect level.** Candidates are compared by trigger, visual change, time relationship, and page layer; the newer, maintained, better-documented implementation becomes the recommended source.
 
 ## Catalog snapshot
@@ -16,12 +16,13 @@ An **effect-first** atlas of open-source interactions for the web. It catalogs *
 - 242 effect rows, including 20 baseline effects.
 - 121 independently researched effects were added in the latest effect-level expansion.
 - 154 unique GitHub source projects; 101 were added during the 2026 expansion.
-- 242 source-specific GIF previews: 8 official captures and 234 labeled editorial recreations.
+- 14 verified source-specific GIF previews: 8 official captures and 6 captures from runnable local demos.
+- 228 source relations currently have no verified preview; the site explicitly displays **No real preview** instead of loading a placeholder.
 - 242 one-click implementation prompts, one for every effect.
 - 117 source-backed AI homepage references are integrated into 68 existing effect rows, covering 94 companies; each effect shows at most three representative companies.
 - 14 useful older sources are marked **Legacy**; no archived repository is included.
 - Stars are a snapshot from **2026-07-17**, not a live counter.
-- The referenced, optimized GIF set is **10.55 MiB**; each preview is 320×180, at most three seconds, and below 1 MiB.
+- The verified, optimized GIF set is **2.97 MiB**; each published preview is 320×180, at most three seconds, and below 1 MiB.
 
 The implementation source and the website where an effect was observed are separate relationships. See the [Chinese-first 100-company audit](research/ai-native-homepages-100.md) for all observations, including common patterns that were not duplicated as new effect rows.
 
@@ -31,7 +32,7 @@ The implementation source and the website where an effect was observed are separ
 2. Every effect needs a stable bilingual name, a semantic effect ID, a category, and at least one verifiable source.
 3. Repository duplication across different effect rows is valid; duplicate effect IDs or effect names are not.
 4. Every effect has exactly one recommended source. Alternatives belong inside the same row instead of creating duplicate effects.
-5. Minimal code and preview media belong to the effect–source relation, because implementations differ by project.
+5. Minimal code and preview provenance belong to the effect–source relation, because implementations differ by project. Missing media stays explicitly unavailable until a real preview is captured.
 
 ## Categories
 
@@ -384,7 +385,7 @@ Comparison, pan-and-zoom, cropping, filters, lens zoom, and shader transitions.
 
 ## Demo
 
-The demo is dependency-free static HTML, CSS, JavaScript modules, and GIF assets. It supports effect search, category filtering, effect-first sorting, English/Chinese UI, stable effect anchors, visible mobile previews, expandable source details, copyable minimal code, and one-click prompts for coding agents.
+The demo is dependency-free static HTML, CSS, JavaScript modules, and verified GIF assets. It supports effect search, category filtering, effect-first sorting, English/Chinese UI, stable effect anchors, real mobile previews when available, explicit unavailable states, expandable source details, copyable minimal code, and one-click prompts for coding agents.
 
 ```bash
 python3 -m http.server 4173 --directory demo
@@ -392,16 +393,20 @@ python3 -m http.server 4173 --directory demo
 
 Open [http://localhost:4173](http://localhost:4173). A local HTTP server is required because the catalog is loaded as an ES module.
 
-## GIF optimization
+## Real GIF capture and optimization
 
-Generate missing editorial preview concepts, then normalize imported source GIFs:
+First build a runnable, reusable HTML demo in `demo/preview-demos/` and verify that it uses the named implementation. Capture the running browser output, then normalize verified official GIFs:
 
 ```bash
-node scripts/generate-gif-previews.mjs
+npm ci --prefix demo/preview-demos
+npm run build --prefix demo/preview-demos
+python3 scripts/capture-real-preview-gifs.py --built --skip-install
 node scripts/normalize-gif-previews.mjs
 ```
 
-Both scripts use deterministic rendering or bounded FFmpeg compression. The validator checks unique content hashes, dimensions, duration, frame count, decodability, and the per-file size budget.
+The capture step records the real local demo; normalization only processes source-verified official media. The validator checks provenance state, demo and GIF existence, unique content hashes, dimensions, duration, frame count, decodability, and the per-file size budget. If a source has neither a verified official asset nor a runnable captured demo, leave it unavailable.
+
+See the [preview authenticity migration report](research/preview-authenticity-migration-2026-07-17.md) and the machine-readable [preview provenance manifest](demo/gifs/provenance.json).
 
 ## GitHub Pages
 

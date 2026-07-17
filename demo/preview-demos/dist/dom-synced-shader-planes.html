@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Curtains.js — DOM-synced Shader Plane</title>
+    <style>
+      :root { --preview-background: radial-gradient(circle at 15% 20%, #273b67 0, #0a1020 42%, #050811 100%); }
+      #curtains-canvas { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
+      .dom-track { position: absolute; inset: 38px 18px 24px; z-index: 2; border: 1px dashed rgba(126, 183, 255, .3); border-radius: 18px; }
+      .shader-card { position: absolute; width: 132px; height: 88px; left: 18px; top: 48px; z-index: 3; border: 1px solid rgba(255,255,255,.45); border-radius: 16px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,.34); will-change: transform; }
+      .card-copy { position: absolute; inset: 0; z-index: 4; display: flex; flex-direction: column; justify-content: flex-end; padding: 11px; color: white; pointer-events: none; text-shadow: 0 1px 8px #000; }
+      .card-copy strong { font-size: 11px; letter-spacing: .04em; }
+      .card-copy small { margin-top: 2px; color: rgba(255,255,255,.72); font-size: 7px; }
+      .sync-line { position: absolute; z-index: 5; left: 22px; right: 22px; top: 145px; height: 2px; background: linear-gradient(90deg, #65d8ff, transparent); opacity: .7; }
+    </style>
+    <script type="module" crossorigin src="./assets/dom-synced-shader-planes-DfxWlzl-.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-elT6vGV-.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main class="preview-stage" aria-label="A live Curtains.js shader plane synchronized to a moving DOM card">
+      <div id="curtains-canvas"></div>
+      <div class="dom-track" aria-hidden="true"></div>
+      <div class="shader-card plane" id="shader-card">
+        <div class="card-copy"><strong>DOM → GPU</strong><small>one element, one shader plane</small></div>
+      </div>
+      <div class="sync-line" aria-hidden="true"></div>
+      <span class="library-badge">Curtains.js · Plane</span>
+      <span class="scene-caption">DOM bounds stay shader-synced</span>
+    </main>
+  </body>
+</html>

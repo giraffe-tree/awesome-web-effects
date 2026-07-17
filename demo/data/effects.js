@@ -20,26 +20,29 @@ const code = (...lines) => lines.join('\n');
 const slugify = value => value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const projectRegistry = new Map();
 
-const previewOrigins = {
-  aos: ['editorial-recreation', 'https://michalsnik.github.io/aos/'],
-  'gl-transitions': ['editorial-recreation', 'https://gl-transitions.com/'],
-  'gsap-scrolltrigger': ['editorial-recreation', 'https://gsap.com/scrolltrigger/'],
-  'hover-effect': ['official-capture', 'https://github.com/robin-dela/hover-effect/blob/master/gifs/alex_brown.gif'],
-  'img-comparison-slider': ['official-capture', 'https://github.com/sneas/img-comparison-slider/blob/master/docs/example.gif'],
-  isotope: ['editorial-recreation', 'https://isotope.metafizzy.co/'],
-  lenis: ['official-capture', 'https://assets.darkroom.engineering/lenis/banner.gif'],
-  'lottie-web': ['official-capture', 'https://github.com/airbnb/lottie-web/blob/master/gifs/Example1.gif'],
-  motion: ['editorial-recreation', 'https://motion.dev/docs'],
-  'mouse-follower': ['official-capture', 'https://user-images.githubusercontent.com/11841379/162477170-5dd33ecd-0e72-4fe4-9053-53d7b5557637.gif'],
-  parallax: ['editorial-recreation', 'http://wagerfield.github.io/parallax/'],
-  photoswipe: ['editorial-recreation', 'https://photoswipe.com/getting-started/'],
-  'react-three-fiber': ['official-capture', 'https://github.com/pmndrs/react-three-fiber/blob/master/docs/basic-app.gif'],
-  scrollama: ['official-capture', 'https://pudding.cool/process/how-to-implement-scrollytelling/'],
-  swiper: ['editorial-recreation', 'https://swiperjs.com/demos'],
-  tsparticles: ['official-capture', 'https://github.com/tsparticles/tsparticles/blob/main/demo/vanilla/public/images/gifs/connect.gif'],
-  'vanilla-tilt': ['editorial-recreation', 'https://micku7zu.github.io/vanilla-tilt.js/'],
-  vivus: ['editorial-recreation', 'https://github.com/maxwellito/vivus#principles'],
-  'webgl-fluid': ['editorial-recreation', 'https://paveldogreat.github.io/WebGL-Fluid-Simulation/']
+const officialPreviewOrigins = {
+  'hover-effect': 'https://github.com/robin-dela/hover-effect/blob/master/gifs/alex_brown.gif',
+  'img-comparison-slider': 'https://github.com/sneas/img-comparison-slider/blob/master/docs/example.gif',
+  lenis: 'https://assets.darkroom.engineering/lenis/banner.gif',
+  'lottie-web': 'https://github.com/airbnb/lottie-web/blob/master/gifs/Example1.gif',
+  'mouse-follower': 'https://user-images.githubusercontent.com/11841379/162477170-5dd33ecd-0e72-4fe4-9053-53d7b5557637.gif',
+  'react-three-fiber': 'https://github.com/pmndrs/react-three-fiber/blob/master/docs/basic-app.gif',
+  scrollama: 'https://pudding.cool/process/how-to-implement-scrollytelling/',
+  tsparticles: 'https://github.com/tsparticles/tsparticles/blob/main/demo/vanilla/public/images/gifs/connect.gif'
+};
+
+const implementationReferences = {
+  aos: 'https://michalsnik.github.io/aos/',
+  'gl-transitions': 'https://gl-transitions.com/',
+  'gsap-scrolltrigger': 'https://gsap.com/scrolltrigger/',
+  isotope: 'https://isotope.metafizzy.co/',
+  motion: 'https://motion.dev/docs',
+  parallax: 'http://wagerfield.github.io/parallax/',
+  photoswipe: 'https://photoswipe.com/getting-started/',
+  swiper: 'https://swiperjs.com/demos',
+  'vanilla-tilt': 'https://micku7zu.github.io/vanilla-tilt.js/',
+  vivus: 'https://github.com/maxwellito/vivus#principles',
+  'webgl-fluid': 'https://paveldogreat.github.io/WebGL-Fluid-Simulation/'
 };
 
 const inferBehavior = (name, category) => {
@@ -108,7 +111,10 @@ const effect = (projectName, repo, category, name, nameZh, stars, snippet, optio
   const source = registerProject(projectName, repo, stars, options);
   const id = options.id || slugify(name);
   const behavior = options.behavior || inferBehavior(name, category);
-  const origin = options.preview ? previewOrigins[options.preview] : null;
+  const officialOriginUrl = options.preview ? officialPreviewOrigins[options.preview] : null;
+  const referenceUrl = options.preview ? implementationReferences[options.preview] : null;
+  const hasLocalDemo = Boolean(options.localDemo || options.demoSourcePath);
+  const hasOfficialPreview = Boolean(officialOriginUrl);
   return {
     id,
     category,
@@ -122,10 +128,13 @@ const effect = (projectName, repo, category, name, nameZh, stars, snippet, optio
       projectId: source.id,
       recommended: true,
       snippet,
-      preview: options.preview || `generated/${id}`,
-      previewKind: origin?.[0] || 'editorial-recreation',
-      originUrl: origin?.[1] || null,
-      previewRecipe: options.preview ? null : id
+      preview: hasLocalDemo ? `captured/${id}` : hasOfficialPreview ? options.preview : null,
+      previewKind: hasLocalDemo ? 'local-demo-capture' : hasOfficialPreview ? 'official-capture' : 'unavailable',
+      demoPath: options.localDemo || null,
+      demoSourcePath: options.demoSourcePath || null,
+      originUrl: hasLocalDemo ? source.url : officialOriginUrl || null,
+      referenceUrl: referenceUrl || null,
+      previewRecipe: null
     }]
   };
 };
@@ -236,12 +245,12 @@ const coreEffects = [
   effect('Babylon.js', 'BabylonJS/Babylon.js', 'webgl', 'Batteries-included 3D engine', '功能齐全 3D 引擎', 25806, code("import { Engine, Scene, ArcRotateCamera, HemisphericLight } from '@babylonjs/core';", "const engine = new Engine(canvas); const scene = new Scene(engine);", "new ArcRotateCamera('camera', 0, 1, 5, undefined, scene); new HemisphericLight('light', undefined, scene); engine.runRenderLoop(() => scene.render());")),
   effect('PlayCanvas Engine', 'playcanvas/engine', 'webgl', 'Entity-component 3D runtime', '实体组件 3D 运行时', 16245, code("import * as pc from 'playcanvas';", "const app = new pc.Application(canvas); app.start();", "const camera = new pc.Entity(); camera.addComponent('camera'); app.root.addChild(camera);")),
   effect('OGL', 'oframe/ogl', 'webgl', 'Minimal WebGL abstraction', '极简 WebGL 抽象', 4582, code("import { Renderer, Geometry, Program, Mesh } from 'ogl';", "const renderer = new Renderer();", "const mesh = new Mesh(renderer.gl, { geometry: new Geometry(renderer.gl), program: new Program(renderer.gl, { vertex, fragment }) });")),
-  effect('regl', 'regl-project/regl', 'webgl', 'Functional WebGL draw commands', '函数式 WebGL 绘制命令', 5557, code("import createREGL from 'regl';", "const regl = createREGL();", "regl({ frag, vert, count: 3 })();")),
-  effect('Curtains.js', 'martinlaxenaire/curtainsjs', 'webgl', 'DOM-synced shader planes', '与 DOM 同步的着色器平面', 1823, code("import { Curtains, Plane } from 'curtainsjs';", "const curtains = new Curtains({ container: 'canvas' });", "new Plane(curtains, document.querySelector('.plane'), { vertexShader, fragmentShader });")),
-  effect('<model-viewer>', 'google/model-viewer', 'webgl', 'Accessible interactive 3D product view', '无障碍交互式 3D 商品查看', 8161, code("import '@google/model-viewer';", "// <model-viewer src=\"shoe.glb\" camera-controls auto-rotate></model-viewer>")),
-  effect('A-Frame', 'aframevr/aframe', 'webgl', 'Declarative HTML 3D scene', '声明式 HTML 3D 场景', 17586, code("import 'aframe';", "// <a-scene><a-box position=\"0 1 -3\" color=\"#b7ff56\"></a-box></a-scene>")),
-  effect('TresJS', 'Tresjs/tres', 'webgl', 'Vue declarative Three.js', 'Vue 声明式 Three.js', 3625, code("import { TresCanvas } from '@tresjs/core';", "// <TresCanvas><TresMesh><TresBoxGeometry /><TresMeshNormalMaterial /></TresMesh></TresCanvas>")),
-  effect('Threlte', 'threlte/threlte', 'webgl', 'Svelte declarative Three.js', 'Svelte 声明式 Three.js', 3300, code("import { Canvas } from '@threlte/core';", "// <Canvas><T.Mesh><T.BoxGeometry /><T.MeshNormalMaterial /></T.Mesh></Canvas>")),
+  effect('regl', 'regl-project/regl', 'webgl', 'Functional WebGL draw commands', '函数式 WebGL 绘制命令', 5557, code("import createREGL from 'regl';", "const regl = createREGL();", "regl({ frag, vert, count: 3 })();"), { localDemo: 'preview-demos/dist/functional-webgl-draw-commands.html', demoSourcePath: 'preview-demos/functional-webgl-draw-commands.html' }),
+  effect('Curtains.js', 'martinlaxenaire/curtainsjs', 'webgl', 'DOM-synced shader planes', '与 DOM 同步的着色器平面', 1823, code("import { Curtains, Plane } from 'curtainsjs';", "const curtains = new Curtains({ container: 'canvas' });", "new Plane(curtains, document.querySelector('.plane'), { vertexShader, fragmentShader });"), { localDemo: 'preview-demos/dist/dom-synced-shader-planes.html', demoSourcePath: 'preview-demos/dom-synced-shader-planes.html' }),
+  effect('<model-viewer>', 'google/model-viewer', 'webgl', 'Accessible interactive 3D product view', '无障碍交互式 3D 商品查看', 8161, code("import '@google/model-viewer';", "// <model-viewer src=\"shoe.glb\" camera-controls auto-rotate></model-viewer>"), { localDemo: 'preview-demos/dist/accessible-interactive-3d-product-view.html', demoSourcePath: 'preview-demos/accessible-interactive-3d-product-view.html' }),
+  effect('A-Frame', 'aframevr/aframe', 'webgl', 'Declarative HTML 3D scene', '声明式 HTML 3D 场景', 17586, code("import 'aframe';", "// <a-scene><a-box position=\"0 1 -3\" color=\"#b7ff56\"></a-box></a-scene>"), { localDemo: 'preview-demos/dist/declarative-html-3d-scene.html', demoSourcePath: 'preview-demos/declarative-html-3d-scene.html' }),
+  effect('TresJS', 'Tresjs/tres', 'webgl', 'Vue declarative Three.js', 'Vue 声明式 Three.js', 3625, code("import { TresCanvas } from '@tresjs/core';", "// <TresCanvas><TresMesh><TresBoxGeometry /><TresMeshNormalMaterial /></TresMesh></TresCanvas>"), { localDemo: 'preview-demos/dist/vue-declarative-three-js.html', demoSourcePath: 'preview-demos/vue-declarative-three-js.html' }),
+  effect('Threlte', 'threlte/threlte', 'webgl', 'Svelte declarative Three.js', 'Svelte 声明式 Three.js', 3300, code("import { Canvas } from '@threlte/core';", "// <Canvas><T.Mesh><T.BoxGeometry /><T.MeshNormalMaterial /></T.Mesh></Canvas>"), { localDemo: 'preview-demos/dist/svelte-declarative-three-js.html', demoSourcePath: 'preview-demos/svelte-declarative-three-js.html' }),
   effect('postprocessing', 'pmndrs/postprocessing', 'webgl', 'Merged real-time bloom pass', '合并式实时辉光后期', 2811, code("import { EffectComposer, EffectPass, BloomEffect } from 'postprocessing';", "const composer = new EffectComposer(renderer);", "composer.addPass(new EffectPass(camera, new BloomEffect())); composer.render();")),
 
   // Background and particles

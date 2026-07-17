@@ -14,6 +14,7 @@ const errors = [];
 const assert = (condition, message) => { if (!condition) errors.push(message); };
 const duplicates = values => [...new Set(values.filter((value, index) => values.indexOf(value) !== index))];
 const execFileAsync = promisify(execFile);
+const realPreviewKinds = new Set(['official-capture', 'local-demo-capture']);
 
 assert(effects.length >= 221, `Expected at least 221 effects; received ${effects.length}.`);
 assert(projects.length >= 120, `Expected at least 120 source projects; received ${projects.length}.`);
@@ -70,14 +71,48 @@ for (const effect of effects) {
     const project = projectById.get(source.projectId);
     assert(project, `${effect.id}: unknown source project ${source.projectId}.`);
     assert(source.snippet?.trim().length >= 12 && !/TODO|placeholder/i.test(source.snippet), `${effect.id}/${source.projectId}: incomplete minimal snippet.`);
-    assert(source.preview, `${effect.id}/${source.projectId}: missing GIF preview reference.`);
-    assert(['official-capture', 'library-local-capture', 'editorial-recreation', 'legacy-unverified'].includes(source.previewKind), `${effect.id}/${source.projectId}: invalid preview kind.`);
-    if (source.previewKind === 'official-capture') assert(/^https?:\/\//.test(source.originUrl), `${effect.id}/${source.projectId}: official preview requires an origin URL.`);
-    if (source.previewKind === 'editorial-recreation') assert(source.originUrl || source.previewRecipe, `${effect.id}/${source.projectId}: editorial preview requires an origin or recipe.`);
-    try {
-      await access(resolve(root, 'demo', 'gifs', `${source.preview}.gif`));
-    } catch {
-      errors.push(`${effect.id}/${source.projectId}: missing GIF demo/gifs/${source.preview}.gif.`);
+    assert(['official-capture', 'local-demo-capture', 'unavailable'].includes(source.previewKind), `${effect.id}/${source.projectId}: invalid preview kind.`);
+    assert(source.referenceUrl === null || /^https?:\/\//.test(source.referenceUrl), `${effect.id}/${source.projectId}: invalid implementation reference URL.`);
+    if (source.previewKind === 'official-capture') {
+      assert(Boolean(source.preview), `${effect.id}/${source.projectId}: official preview requires a GIF reference.`);
+      assert(/^https?:\/\//.test(source.originUrl), `${effect.id}/${source.projectId}: official preview requires an origin URL.`);
+      assert(source.demoPath === null, `${effect.id}/${source.projectId}: official preview must not claim a local demo.`);
+      assert(source.demoSourcePath === null, `${effect.id}/${source.projectId}: official preview must not claim local demo source code.`);
+      assert(source.previewRecipe === null, `${effect.id}/${source.projectId}: official preview must not use an editorial recipe.`);
+    }
+    if (source.previewKind === 'local-demo-capture') {
+      assert(Boolean(source.preview), `${effect.id}/${source.projectId}: local demo requires a GIF reference.`);
+      assert(source.preview === `captured/${effect.id}`, `${effect.id}/${source.projectId}: local demo preview must be captured/${effect.id}.`);
+      assert(/^preview-demos\/dist\/[a-z0-9-]+\.html$/.test(source.demoPath || ''), `${effect.id}/${source.projectId}: local demo requires a safe preview-demos/dist/*.html publish path.`);
+      assert(source.demoPath === `preview-demos/dist/${effect.id}.html`, `${effect.id}/${source.projectId}: published local demo filename must match the effect id.`);
+      assert(/^preview-demos\/[a-z0-9-]+\.html$/.test(source.demoSourcePath || ''), `${effect.id}/${source.projectId}: local demo requires a safe preview-demos/*.html source path.`);
+      assert(source.demoSourcePath === `preview-demos/${effect.id}.html`, `${effect.id}/${source.projectId}: local demo source filename must match the effect id.`);
+      assert(source.originUrl === project?.url, `${effect.id}/${source.projectId}: local demo origin must point to the recommended project URL.`);
+      assert(source.previewRecipe === null, `${effect.id}/${source.projectId}: local demo preview must not use an editorial recipe.`);
+      try {
+        await access(resolve(root, 'demo', source.demoPath || ''));
+      } catch {
+        errors.push(`${effect.id}/${source.projectId}: missing published demo/${source.demoPath || '(unset)'}.`);
+      }
+      try {
+        await access(resolve(root, 'demo', source.demoSourcePath || ''));
+      } catch {
+        errors.push(`${effect.id}/${source.projectId}: missing reusable demo source demo/${source.demoSourcePath || '(unset)'}.`);
+      }
+    }
+    if (source.previewKind === 'unavailable') {
+      assert(source.preview === null, `${effect.id}/${source.projectId}: unavailable preview must not reference a GIF.`);
+      assert(source.demoPath === null, `${effect.id}/${source.projectId}: unavailable preview must not claim a local demo.`);
+      assert(source.demoSourcePath === null, `${effect.id}/${source.projectId}: unavailable preview must not claim local demo source code.`);
+      assert(source.previewRecipe === null, `${effect.id}/${source.projectId}: unavailable preview must not retain an editorial recipe.`);
+      assert(source.originUrl === null, `${effect.id}/${source.projectId}: unavailable preview must not claim a preview origin.`);
+    }
+    if (realPreviewKinds.has(source.previewKind)) {
+      try {
+        await access(resolve(root, 'demo', 'gifs', `${source.preview}.gif`));
+      } catch {
+        errors.push(`${effect.id}/${source.projectId}: missing GIF demo/gifs/${source.preview}.gif.`);
+      }
     }
   }
 }
@@ -106,16 +141,21 @@ assert(readmeZh.includes('research/ai-native-homepages-100.md'), 'Chinese README
 assert(!`${html}\n${readme}\n${readmeZh}`.includes('giraffe-tree/awesome-interaction'), 'Stale awesome-interaction repository or Pages link detected.');
 
 try {
-  const { stdout } = await execFileAsync(process.execPath, [resolve(root, 'scripts', 'generate-gif-previews.mjs'), '--audit']);
-  const coverage = stdout.match(/Matched (\d+)\/(\d+) generated previews to a semantic scene rule\./);
-  assert(coverage && coverage[1] === coverage[2], 'Generated GIF previews must all use a semantic scene rule; random fallback previews are not allowed.');
+  const { stdout } = await execFileAsync(
+    process.execPath,
+    [resolve(root, 'scripts', 'audit-preview-authenticity.mjs'), '--json'],
+    { maxBuffer: 10 * 1024 * 1024 }
+  );
+  const authenticityAudit = JSON.parse(stdout);
+  assert(authenticityAudit.summary?.blockingIssues === 0, 'Preview authenticity audit reported blocking issues.');
 } catch (error) {
-  errors.push(`Semantic GIF audit failed (${error.message}).`);
+  errors.push(`Preview authenticity audit failed (${error.message}).`);
 }
 
 const previewRecords = [];
 for (const effect of effects) {
   for (const source of effect.sources) {
+    if (!realPreviewKinds.has(source.previewKind)) continue;
     const path = resolve(root, 'demo', 'gifs', `${source.preview}.gif`);
     try {
       const bytes = await readFile(path);

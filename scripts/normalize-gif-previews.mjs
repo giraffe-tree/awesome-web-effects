@@ -8,7 +8,9 @@ import { once } from 'node:events';
 import { effects } from '../demo/data/effects.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const sources = effects.flatMap(effect => effect.sources).filter(source => !source.previewRecipe);
+const sources = effects
+  .flatMap(effect => effect.sources)
+  .filter(source => source.previewKind === 'official-capture' && source.preview);
 let beforeBytes = 0;
 let afterBytes = 0;
 let changed = 0;

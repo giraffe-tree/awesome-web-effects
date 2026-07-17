@@ -144,6 +144,8 @@
       .row-preview img { display: block; width: 100%; height: 100%; object-fit: cover; }
       .paused-preview { position: absolute; inset: 0; display: grid; place-items: center; color: var(--quiet); background: #ececf0; font-size: 10px; font-weight: 650; }
       .preview-kind { position: absolute; left: 7px; bottom: 7px; padding: 4px 6px; border-radius: 7px; color: white; background: rgba(0,0,0,.58); backdrop-filter: blur(8px); font-size: 8px; font-weight: 650; text-transform: uppercase; letter-spacing: .04em; }
+      .preview-demo-link { position: absolute; top: 7px; right: 7px; padding: 4px 6px; border-radius: 7px; color: white; background: rgba(0, 113, 227, .9); font-size: 8px; font-weight: 700; text-decoration: none; }
+      .preview-demo-link:hover { background: var(--blue-hover); }
       .effect-cell, .source-cell { min-width: 0; }
       .category-label { display: flex; align-items: center; gap: 7px; margin: 0 0 7px; color: var(--blue); font-size: 10px; font-weight: 650; letter-spacing: .05em; text-transform: uppercase; }
       .category-label::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--category-color); }
@@ -272,7 +274,7 @@
       <div class="shell">
         <p class="hero-kicker" id="hero-kicker">The effect-first interaction atlas</p>
         <h1 id="hero-title">Find the effect.<br />Ship the feeling.</h1>
-        <p class="hero-copy" id="hero-copy">Every interaction comes with a visual preview, minimal code, and a ready-to-copy prompt for Codex or Claude Code.</p>
+        <p class="hero-copy" id="hero-copy">Verified visual previews are shown when available, alongside minimal code and a ready-to-copy prompt for Codex or Claude Code.</p>
         <div class="hero-actions">
           <a class="primary-action" href="#catalog" id="browse-action">Browse effects</a>
           <a class="secondary-action" href="https://github.com/giraffe-tree/awesome-web-effects" target="_blank" rel="noreferrer" id="repo-action">View repository</a>
@@ -280,7 +282,7 @@
         <div class="hero-metrics">
           <div class="metric"><strong id="effect-count">0</strong><span id="effect-label">Effects</span></div>
           <div class="metric"><strong id="source-count">0</strong><span id="source-label">Source projects</span></div>
-          <div class="metric"><strong id="gif-count">0</strong><span id="gif-label">GIF previews</span></div>
+          <div class="metric"><strong id="gif-count">0</strong><span id="gif-label">Verified GIFs</span></div>
           <div class="metric"><strong id="prompt-count">0</strong><span id="prompt-label">Agent prompts</span></div>
         </div>
       </div>
@@ -288,7 +290,7 @@
 
     <section class="features shell" aria-label="Catalog coverage">
       <div class="feature-grid">
-        <article class="feature-card"><h2 id="feature-visual-title">See it before you build it.</h2><p id="feature-visual-copy">Every row has a compact visual reference, with generated concepts clearly separated from project footage.</p><div class="feature-visual visual-gif" aria-hidden="true"></div></article>
+        <article class="feature-card"><h2 id="feature-visual-title">See the real demo before you build it.</h2><p id="feature-visual-copy">Published previews come from verified official footage or runnable local demos. Entries still awaiting a real capture say so plainly.</p><div class="feature-visual visual-gif" aria-hidden="true"></div></article>
         <article class="feature-card"><h2 id="feature-code-title">Start from working code.</h2><p id="feature-code-copy">Open any effect to copy the smallest useful implementation for its recommended source.</p><div class="feature-visual visual-code" aria-hidden="true"><span style="--w:44%;--o:.8"></span><span style="--w:86%"></span><span style="--w:68%;--o:.35"></span><span style="--w:76%"></span></div></article>
         <article class="feature-card"><h2 id="feature-prompt-title">Hand it to your coding agent.</h2><p id="feature-prompt-copy">One click copies a scoped prompt with accessibility, responsive, cleanup, and reduced-motion requirements.</p><div class="feature-visual visual-prompt" aria-hidden="true"><span class="prompt-dot"></span><div class="prompt-lines"><span style="--w:88%"></span><span style="--w:72%"></span><span style="--w:54%"></span></div></div></article>
       </div>
@@ -332,36 +334,36 @@
         en: {
           language: '中文', languageLabel: 'Switch to Chinese', navCatalog: 'Catalog',
           kicker: 'The effect-first interaction atlas', title: 'Find the effect.<br />Ship the feeling.',
-          hero: 'Every interaction comes with a visual preview, minimal code, and a ready-to-copy prompt for Codex or Claude Code.', browse: 'Browse effects', repo: 'View repository',
-          effects: 'Effects', sources: 'Source projects', gifs: 'GIF previews', prompts: 'Agent prompts',
-          visualTitle: 'See it before you build it.', visualCopy: 'Every row has a compact visual reference, with generated concepts clearly separated from project footage.',
+          hero: 'Verified visual previews are shown when available, alongside minimal code and a ready-to-copy prompt for Codex or Claude Code.', browse: 'Browse effects', repo: 'View repository',
+          effects: 'Effects', sources: 'Source projects', gifs: 'Verified GIFs', prompts: 'Agent prompts',
+          visualTitle: 'See the real demo before you build it.', visualCopy: 'Published previews come from verified official footage or runnable local demos. Entries still awaiting a real capture say so plainly.',
           codeTitle: 'Start from working code.', codeCopy: 'Open any effect to copy the smallest useful implementation for its recommended source.',
           promptTitle: 'Hand it to your coding agent.', promptCopy: 'One click copies a scoped prompt with accessibility, responsive, cleanup, and reduced-motion requirements.',
           section: 'Interaction catalog', catalogTitle: 'Choose the behavior first. Choose the tool second.',
           search: 'Search effect, source project, or keyword…', searchLabel: 'Search effects', filterLabel: 'Effect categories', sortLabel: 'Sort effects',
           curated: 'Curated effect order', stars: 'Recommended source stars', name: 'Effect: A–Z', sourcesSort: 'Most implementations', all: 'All',
           resultEffects: 'effects', resultSources: 'source projects', note: 'GIF · Effect key · Implementation · AI homepage references · Prompt · Code', empty: 'No matching effects. Try a shorter keyword.',
-          previewOfficial: 'Official', previewEditorial: 'Concept', previewPaused: 'Preview paused', headPreview: 'Preview', headEffect: 'Effect', headSource: 'Recommended source', headAction: 'Actions',
+          previewOfficial: 'Official', previewLocal: 'Local demo', previewUnavailable: 'No real preview', previewPaused: 'Preview paused', openDemo: 'Open demo ↗', headPreview: 'Preview', headEffect: 'Effect', headSource: 'Recommended source', headAction: 'Actions',
           recommended: 'Recommended implementation', observedOn: 'Observed on AI homepages', legacy: 'Legacy', implementations: 'implementations', implementation: 'implementation', copyPrompt: 'Copy agent prompt', promptCopied: 'Prompt copied',
           showCode: 'View minimal code', hideCode: 'Hide code', copyCode: 'Copy', codeCopied: 'Copied', copyFailed: 'Select text', definition: 'Effect', permalink: 'Effect link',
-          repositoryLabel: 'on GitHub (opens in a new tab)', previewSource: 'Preview source ↗', footer: 'Effect-first, bilingual, and built for implementation. Project names and previews remain the property of their respective authors.', back: 'Back to top ↑'
+          repositoryLabel: 'on GitHub (opens in a new tab)', previewSource: 'Preview source ↗', referenceSource: 'Implementation reference ↗', footer: 'Effect-first, bilingual, and built for implementation. Project names and previews remain the property of their respective authors.', back: 'Back to top ↑'
         },
         zh: {
           language: 'EN', languageLabel: '切换到英文', navCatalog: '效果目录',
           kicker: '以效果为先的交互图鉴', title: '先找到效果。<br />再实现体验。',
-          hero: '每种交互都有视觉预览、最小代码，以及可直接交给 Codex 或 Claude Code 的实现 Prompt。', browse: '浏览效果', repo: '查看仓库',
-          effects: '种效果', sources: '来源项目', gifs: 'GIF 预览', prompts: 'Agent Prompt',
-          visualTitle: '动手之前，先看见效果。', visualCopy: '每一行都有紧凑的视觉参考，并明确区分项目实拍与生成的概念预览。',
+          hero: '有可靠来源时展示真实视觉预览，并提供最小代码和可直接交给 Codex 或 Claude Code 的实现 Prompt。', browse: '浏览效果', repo: '查看仓库',
+          effects: '种效果', sources: '来源项目', gifs: '真实 GIF', prompts: 'Agent Prompt',
+          visualTitle: '动手之前，先看真实 Demo。', visualCopy: '发布预览只来自已核验的官方素材或可运行的本地 Demo；尚未完成真实录制的条目会如实注明。',
           codeTitle: '从可用的最小代码开始。', codeCopy: '展开任意效果，即可复制推荐来源最小而有用的实现。',
           promptTitle: '把任务直接交给编程 Agent。', promptCopy: '一键复制包含无障碍、响应式、清理和减少动态要求的完整 Prompt。',
           section: '交互效果目录', catalogTitle: '先选交互行为，再选实现工具。',
           search: '搜索效果、来源项目或关键词…', searchLabel: '搜索效果', filterLabel: '效果分类', sortLabel: '效果排序',
           curated: '效果策展顺序', stars: '推荐来源 Stars', name: '效果名称 A–Z', sourcesSort: '实现来源最多', all: '全部',
           resultEffects: '种效果', resultSources: '个来源项目', note: 'GIF · 效果 Key · 推荐实现 · AI 官网参考 · Prompt · 代码', empty: '没有匹配的效果，请尝试更短的关键词。',
-          previewOfficial: '官方素材', previewEditorial: '概念重制', previewPaused: '已减少动态', headPreview: '预览', headEffect: '效果', headSource: '推荐来源', headAction: '操作',
+          previewOfficial: '官方素材', previewLocal: '真实 Demo', previewUnavailable: '暂无真实预览', previewPaused: '已减少动态', openDemo: '打开 Demo ↗', headPreview: '预览', headEffect: '效果', headSource: '推荐来源', headAction: '操作',
           recommended: '推荐实现', observedOn: '观察到该效果的 AI 官网', legacy: '经典旧版', implementations: '个实现', implementation: '个实现', copyPrompt: '复制 Agent Prompt', promptCopied: 'Prompt 已复制',
           showCode: '查看最小代码', hideCode: '收起代码', copyCode: '复制', codeCopied: '已复制', copyFailed: '请选中文本', definition: '效果', permalink: '效果链接',
-          repositoryLabel: 'GitHub 仓库（在新标签页打开）', previewSource: '预览来源 ↗', footer: '以效果为先，提供双语内容，并面向真实实现。项目名称与预览素材权利归各自作者所有。', back: '回到顶部 ↑'
+          repositoryLabel: 'GitHub 仓库（在新标签页打开）', previewSource: '预览来源 ↗', referenceSource: '实现参考 ↗', footer: '以效果为先，提供双语内容，并面向真实实现。项目名称与预览素材权利归各自作者所有。', back: '回到顶部 ↑'
         }
       };
 
@@ -380,6 +382,7 @@
       const labelFor = category => language === 'zh' ? category.labelZh : category.label;
       const effectName = effect => language === 'zh' ? effect.nameZh : effect.name;
       const recommendedSource = effect => effect.sources.find(source => source.recommended) || effect.sources[0];
+      const hasRealPreview = source => ['official-capture', 'local-demo-capture'].includes(source.previewKind) && Boolean(source.preview);
 
       async function copyText(button, text, successText, defaultText) {
         try {
@@ -417,7 +420,7 @@
         document.querySelector('#repo-action').textContent = t.repo;
         document.querySelector('#effect-count').textContent = effects.length;
         document.querySelector('#source-count').textContent = projects.length;
-        document.querySelector('#gif-count').textContent = effects.flatMap(effect => effect.sources).filter(source => source.preview).length;
+        document.querySelector('#gif-count').textContent = effects.flatMap(effect => effect.sources).filter(hasRealPreview).length;
         document.querySelector('#prompt-count').textContent = effects.filter(effect => effect.prompt).length;
         document.querySelector('#effect-label').textContent = t.effects;
         document.querySelector('#source-label').textContent = t.sources;
@@ -500,19 +503,26 @@
           const category = categoryById.get(effect.category);
           const primary = recommendedSource(effect);
           const primaryProject = projectById.get(primary.projectId);
-          const previewMedia = matchMedia('(prefers-reduced-motion: reduce)').matches
-            ? `<span class="paused-preview">${t.previewPaused}</span>`
-            : `<img src="./gifs/${escapeHTML(primary.preview)}.gif" alt="${escapeHTML(effectName(effect))}" loading="lazy" decoding="async" />`;
+          const realPreview = hasRealPreview(primary);
+          const previewMedia = !realPreview
+            ? `<span class="paused-preview">${t.previewUnavailable}</span>`
+            : matchMedia('(prefers-reduced-motion: reduce)').matches
+              ? `<span class="paused-preview">${t.previewPaused}</span>`
+              : `<img src="./gifs/${escapeHTML(primary.preview)}.gif" alt="${escapeHTML(effectName(effect))}" loading="lazy" decoding="async" />`;
+          const previewLabel = primary.previewKind === 'official-capture' ? t.previewOfficial
+            : primary.previewKind === 'local-demo-capture' ? t.previewLocal
+              : t.previewUnavailable;
+          const demoLink = primary.demoPath ? `<a class="preview-demo-link" href="./${escapeHTML(primary.demoPath)}" target="_blank" rel="noreferrer">${t.openDemo}</a>` : '';
           const row = document.createElement('article');
           row.className = 'effect-row';
           row.id = effect.id;
           row.dataset.category = effect.category;
           const implementations = effect.sources.map(source => {
             const project = projectById.get(source.projectId);
-            return `<section class="implementation"><div class="implementation-meta">${source.recommended ? `<span class="recommendation">${t.recommended}</span>` : ''}<h4>${escapeHTML(project.name)}</h4><a class="repo-link" href="${escapeHTML(project.url)}" target="_blank" rel="noreferrer" aria-label="${escapeHTML(project.name)} ${t.repositoryLabel}">${escapeHTML(project.repo)} ↗</a>${source.originUrl ? `<a class="origin-link" href="${escapeHTML(source.originUrl)}" target="_blank" rel="noreferrer">${t.previewSource}</a>` : ''}<div class="source-meta"><span>★ ${project.stars.toLocaleString('en-US')}</span>${project.legacy ? `<span class="legacy-tag">${t.legacy}</span>` : ''}</div></div><div class="code-wrap"><pre><code>${escapeHTML(source.snippet)}</code></pre><button class="copy-code" type="button">${t.copyCode}</button></div></section>`;
+            return `<section class="implementation"><div class="implementation-meta">${source.recommended ? `<span class="recommendation">${t.recommended}</span>` : ''}<h4>${escapeHTML(project.name)}</h4><a class="repo-link" href="${escapeHTML(project.url)}" target="_blank" rel="noreferrer" aria-label="${escapeHTML(project.name)} ${t.repositoryLabel}">${escapeHTML(project.repo)} ↗</a>${source.demoPath ? `<a class="origin-link" href="./${escapeHTML(source.demoPath)}" target="_blank" rel="noreferrer">${t.openDemo}</a>` : source.originUrl ? `<a class="origin-link" href="${escapeHTML(source.originUrl)}" target="_blank" rel="noreferrer">${t.previewSource}</a>` : source.referenceUrl ? `<a class="origin-link" href="${escapeHTML(source.referenceUrl)}" target="_blank" rel="noreferrer">${t.referenceSource}</a>` : ''}<div class="source-meta"><span>★ ${project.stars.toLocaleString('en-US')}</span>${project.legacy ? `<span class="legacy-tag">${t.legacy}</span>` : ''}</div></div><div class="code-wrap"><pre><code>${escapeHTML(source.snippet)}</code></pre><button class="copy-code" type="button">${t.copyCode}</button></div></section>`;
           }).join('');
           const relatedParties = effect.relatedParties.map(party => `<a class="party-link" href="${escapeHTML(party.url)}" target="_blank" rel="noreferrer" title="${escapeHTML(party.observedAs)}">${escapeHTML(party.name)} ↗</a>`).join('');
-          row.innerHTML = `<div class="effect-main"><span class="row-number">${String(effect.order).padStart(3, '0')}</span><div class="row-preview">${previewMedia}<span class="preview-kind">${primary.previewKind === 'official-capture' ? t.previewOfficial : t.previewEditorial}</span></div><div class="effect-cell"><p class="category-label">${escapeHTML(labelFor(category))}</p><h3>${escapeHTML(effectName(effect))}</h3><span class="effect-key">effect:${escapeHTML(effect.id)}</span></div><div class="source-cell"><span class="source-label">${t.recommended}</span><a class="source-name" href="${escapeHTML(primaryProject.url)}" target="_blank" rel="noreferrer">${escapeHTML(primaryProject.name)} ↗</a><span class="source-meta"><span>★ ${primaryProject.stars.toLocaleString('en-US')}</span><span>${effect.sources.length} ${effect.sources.length === 1 ? t.implementation : t.implementations}</span>${primaryProject.legacy ? `<span class="legacy-tag">${t.legacy}</span>` : ''}</span>${relatedParties ? `<span class="source-label party-label">${t.observedOn}</span><span class="party-list">${relatedParties}</span>` : ''}</div><div class="row-actions"><button class="action-button prompt-button" type="button">${t.copyPrompt}</button><button class="action-button code-button" type="button" aria-expanded="false" aria-controls="detail-${escapeHTML(effect.id)}">${t.showCode}</button></div></div><div class="detail-panel" id="detail-${escapeHTML(effect.id)}" hidden><div class="detail-top"><p><strong>${t.definition}:</strong> ${escapeHTML(effectName(effect))}. ${effect.sources.length} ${effect.sources.length === 1 ? t.implementation : t.implementations}.</p><a class="permalink" href="#${escapeHTML(effect.id)}"># ${t.permalink}</a></div><div class="implementations">${implementations}</div></div>`;
+          row.innerHTML = `<div class="effect-main"><span class="row-number">${String(effect.order).padStart(3, '0')}</span><div class="row-preview">${previewMedia}${demoLink}<span class="preview-kind">${previewLabel}</span></div><div class="effect-cell"><p class="category-label">${escapeHTML(labelFor(category))}</p><h3>${escapeHTML(effectName(effect))}</h3><span class="effect-key">effect:${escapeHTML(effect.id)}</span></div><div class="source-cell"><span class="source-label">${t.recommended}</span><a class="source-name" href="${escapeHTML(primaryProject.url)}" target="_blank" rel="noreferrer">${escapeHTML(primaryProject.name)} ↗</a><span class="source-meta"><span>★ ${primaryProject.stars.toLocaleString('en-US')}</span><span>${effect.sources.length} ${effect.sources.length === 1 ? t.implementation : t.implementations}</span>${primaryProject.legacy ? `<span class="legacy-tag">${t.legacy}</span>` : ''}</span>${relatedParties ? `<span class="source-label party-label">${t.observedOn}</span><span class="party-list">${relatedParties}</span>` : ''}</div><div class="row-actions"><button class="action-button prompt-button" type="button">${t.copyPrompt}</button><button class="action-button code-button" type="button" aria-expanded="false" aria-controls="detail-${escapeHTML(effect.id)}">${t.showCode}</button></div></div><div class="detail-panel" id="detail-${escapeHTML(effect.id)}" hidden><div class="detail-top"><p><strong>${t.definition}:</strong> ${escapeHTML(effectName(effect))}. ${effect.sources.length} ${effect.sources.length === 1 ? t.implementation : t.implementations}.</p><a class="permalink" href="#${escapeHTML(effect.id)}"># ${t.permalink}</a></div><div class="implementations">${implementations}</div></div>`;
 
           const promptButton = row.querySelector('.prompt-button');
           promptButton.addEventListener('click', () => copyText(promptButton, effect.prompt, t.promptCopied, t.copyPrompt));

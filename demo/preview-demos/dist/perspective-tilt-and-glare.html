@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VanillaTilt — Perspective Tilt and Glare</title>
+    <style>
+      :root { --preview-background: radial-gradient(circle at 80% 18%, #264157, #0a111b 55%, #05080d); }
+      .tilt-wrap { position: absolute; inset: 28px 28px 17px; display: grid; place-items: center; perspective: 750px; }
+      .tilt-card { position: relative; width: 174px; height: 112px; transform-style: preserve-3d; border: 1px solid #ffffff50; border-radius: 19px; overflow: hidden; background: linear-gradient(145deg, #173c52, #572f75 58%, #d4567f); box-shadow: 0 24px 55px #000b; }
+      .tilt-grid { position: absolute; inset: 0; opacity: .3; background-image: linear-gradient(#fff2 1px, transparent 1px), linear-gradient(90deg, #fff2 1px, transparent 1px); background-size: 18px 18px; }
+      .tilt-orb { position: absolute; top: 22px; right: 24px; width: 52px; height: 52px; border-radius: 50%; transform: translateZ(34px); background: radial-gradient(circle at 35% 30%, #fff, #66f2ff 24%, #7b4aff 68%); box-shadow: 0 0 28px #65dfff9c; }
+      .tilt-copy { position: absolute; left: 17px; bottom: 17px; transform: translateZ(44px); color: white; }
+      .tilt-copy strong { display: block; font-size: 13px; letter-spacing: .03em; }
+      .tilt-copy small { font-size: 7px; color: #ffffffb0; text-transform: uppercase; letter-spacing: .12em; }
+      .pointer-dot { position: fixed; z-index: 30; width: 8px; height: 8px; margin: -4px; border: 1px solid #fff; border-radius: 50%; box-shadow: 0 0 10px #fff; pointer-events: none; }
+      .js-tilt-glare { border-radius: inherit; }
+    </style>
+    <script type="module" crossorigin src="./assets/perspective-tilt-and-glare-CbJJ28QN.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-C4iZKo3w.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main class="preview-stage" aria-label="A real VanillaTilt card responding with perspective and glare">
+      <div class="tilt-wrap" data-preview-mechanism="vanilla-tilt">
+        <article class="tilt-card" id="tilt-card">
+          <div class="tilt-grid"></div><div class="tilt-orb"></div>
+          <div class="tilt-copy"><small>pointer mapped</small><strong>DEPTH / LIGHT</strong></div>
+        </article>
+      </div>
+      <span class="pointer-dot" id="pointer-dot"></span>
+      <span class="library-badge">VanillaTilt · glare</span>
+      <span class="scene-caption">pointer position becomes perspective + light</span>
+    </main>
+  </body>
+</html>

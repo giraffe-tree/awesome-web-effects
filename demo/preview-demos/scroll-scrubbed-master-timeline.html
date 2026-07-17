@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GSAP — Scroll-scrubbed Master Timeline</title>
+    <link rel="stylesheet" href="./shared.css" />
+    <style>
+      :root { --preview-background: #0b0d13; }
+      #scrollport { position: absolute; inset: 0; overflow-y: auto; scrollbar-width: none; }
+      #scrollport::-webkit-scrollbar { display: none; }
+      .scroll-scene { height: 760px; }
+      .timeline-stage { position: sticky; top: 0; height: 180px; overflow: hidden; background: radial-gradient(circle at 50% 120%, #27224f, transparent 60%); }
+      .timeline-rail { position: absolute; left: 22px; right: 22px; top: 44px; height: 2px; background: #ffffff1d; }
+      .timeline-progress { width: 100%; height: 100%; transform: scaleX(0); transform-origin: left; background: linear-gradient(90deg, #58e6ff, #9d5cff, #ff5c91); box-shadow: 0 0 12px #7f68ff; }
+      .timeline-dot { position: absolute; top: -4px; width: 10px; height: 10px; border-radius: 50%; background: white; box-shadow: 0 0 12px #74e9ff; }
+      .timeline-card { position: absolute; top: 72px; width: 70px; height: 64px; border: 1px solid #ffffff38; border-radius: 12px; opacity: 0; transform-origin: 50% 100%; box-shadow: 0 14px 30px #0008; }
+      .timeline-card::before { content: attr(data-step); position: absolute; top: 9px; left: 10px; color: #ffffffb8; font-size: 7px; font-weight: 800; letter-spacing: .12em; }
+      .timeline-card::after { content: ''; position: absolute; left: 10px; right: 22px; bottom: 12px; height: 5px; border-radius: 9px; background: #ffffffbd; }
+      .card-a { left: 32px; background: linear-gradient(145deg, #186b8d, #15304f); }
+      .card-b { left: 125px; background: linear-gradient(145deg, #6944bb, #28204e); }
+      .card-c { left: 218px; background: linear-gradient(145deg, #b53673, #441d3b); }
+      .scroll-cue { position: absolute; right: 12px; top: 12px; color: #ffffff73; font-size: 8px; font-weight: 800; }
+    </style>
+  </head>
+  <body>
+    <main class="preview-stage" aria-label="A real GSAP ScrollTrigger master timeline scrubbed by scroll progress">
+      <div id="scrollport" data-preview-mechanism="gsap-scrolltrigger">
+        <section class="scroll-scene" id="timeline-scene">
+          <div class="timeline-stage">
+            <div class="timeline-rail"><div class="timeline-progress" id="timeline-progress"></div><div class="timeline-dot" id="timeline-dot"></div></div>
+            <div class="timeline-card card-a" data-step="01 · ENTER"></div>
+            <div class="timeline-card card-b" data-step="02 · SHIFT"></div>
+            <div class="timeline-card card-c" data-step="03 · SETTLE"></div>
+            <span class="scroll-cue">SCROLL ↕</span>
+          </div>
+        </section>
+      </div>
+      <span class="library-badge">GSAP · ScrollTrigger</span>
+      <span class="scene-caption">scroll progress scrubs one master timeline</span>
+    </main>
+    <script type="module" src="./src/gsap-scroll-timeline-demo.js"></script>
+  </body>
+</html>

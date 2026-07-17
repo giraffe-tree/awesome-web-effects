@@ -1,9 +1,9 @@
-export function installPreviewController({ id, library, render, ready }) {
+export function installPreviewController({ id, library, renderer = 'webgl', render, ready }) {
   let manualTime = false;
   let start = performance.now();
   let animationFrame = 0;
 
-  window.__PREVIEW_META__ = { id, library, capture: 'real-demo' };
+  window.__PREVIEW_META__ = { id, library, renderer, capture: 'real-demo' };
   window.__setPreviewTime = async seconds => {
     manualTime = true;
     await render(Number(seconds) || 0, true);

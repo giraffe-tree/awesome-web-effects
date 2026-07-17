@@ -139,6 +139,8 @@
       .effect-row:target { box-shadow: inset 4px 0 0 var(--blue); }
       .effect-main { min-height: 126px; padding: 18px 22px; transition: background .18s ease; }
       .effect-main:hover { background: #fafafa; }
+      .effect-card-trigger { cursor: pointer; }
+      .effect-card-trigger:focus-visible { position: relative; z-index: 1; border-radius: 16px; outline-offset: -4px; }
       .row-number { align-self: start; padding-top: 5px; color: #aeaeb2; font: 600 12px/1 ui-monospace, SFMono-Regular, Menlo, monospace; }
       .row-preview { position: relative; width: 144px; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 15px; background: #ececf0; }
       .row-preview img { display: block; width: 100%; height: 100%; object-fit: cover; }
@@ -184,6 +186,54 @@
       .copy-code { position: absolute; top: 13px; right: 13px; min-height: 34px; padding: 0 11px; border: 1px solid rgba(255,255,255,.18); border-radius: 99px; color: white; background: rgba(255,255,255,.1); cursor: pointer; font-size: 10px; }
       .copy-code:hover { background: rgba(255,255,255,.18); }
       .empty { margin: 0; padding: 90px 28px; color: var(--muted); font-size: 20px; }
+
+      body.modal-open { overflow: hidden; }
+      .effect-modal[hidden] { display: none; }
+      .effect-modal { position: fixed; z-index: 100; inset: 0; display: grid; place-items: center; padding: 24px; }
+      .effect-modal-backdrop { position: absolute; inset: 0; background: rgba(20, 20, 24, .58); backdrop-filter: blur(14px); animation: modal-fade .18s ease-out; }
+      .effect-modal-dialog { position: relative; width: min(980px, 100%); max-height: calc(100dvh - 48px); overflow: auto; border: 1px solid rgba(255,255,255,.55); border-radius: 28px; background: var(--surface); box-shadow: 0 32px 100px rgba(0,0,0,.3); animation: modal-rise .22s ease-out; }
+      .effect-modal-close { position: sticky; z-index: 4; top: 14px; float: right; display: grid; place-items: center; width: 38px; height: 38px; margin: 14px 14px -52px 0; border: 1px solid rgba(255,255,255,.45); border-radius: 50%; color: white; background: rgba(0,0,0,.52); backdrop-filter: blur(12px); cursor: pointer; font-size: 24px; line-height: 1; }
+      .effect-modal-close:hover { background: rgba(0,0,0,.72); }
+      .modal-preview { position: relative; display: grid; place-items: center; min-height: 360px; overflow: hidden; color: white; background: #111216; }
+      .modal-preview img { display: block; width: 100%; max-height: min(58vh, 540px); object-fit: contain; image-rendering: auto; }
+      .modal-preview-unavailable { display: grid; place-items: center; width: 100%; min-height: 360px; padding: 70px 30px; text-align: center; background: radial-gradient(circle at 50% 30%, #343944, #17181d 68%); }
+      .modal-preview-unavailable > div > span { display: block; font-size: 48px; }
+      .modal-preview-unavailable strong { display: block; margin-top: 16px; font-size: clamp(24px, 4vw, 38px); letter-spacing: -.04em; }
+      .modal-preview-unavailable p { max-width: 560px; margin: 12px auto 0; color: #c7c7cc; font-size: 14px; line-height: 1.55; }
+      .modal-preview-status { position: absolute; left: 18px; bottom: 18px; padding: 7px 10px; border-radius: 9px; color: white; background: rgba(0,0,0,.62); backdrop-filter: blur(10px); font-size: 10px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
+      .modal-content-body { padding: 32px; }
+      .modal-category { margin: 0 0 10px; color: var(--blue); font-size: 11px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
+      .modal-title { margin: 0; padding-right: 48px; font-size: clamp(34px, 5vw, 60px); line-height: .98; letter-spacing: -.055em; }
+      .modal-title-secondary { margin: 9px 0 0; color: var(--muted); font-size: clamp(19px, 2.4vw, 28px); line-height: 1.15; letter-spacing: -.025em; }
+      .modal-description { max-width: 790px; margin: 22px 0 0; color: var(--muted); font-size: 16px; line-height: 1.6; }
+      .modal-facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 26px; }
+      .modal-fact { min-width: 0; padding: 15px; border: 1px solid var(--line); border-radius: 15px; background: #fafafa; }
+      .modal-fact span { display: block; color: var(--quiet); font-size: 9px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+      .modal-fact strong { display: block; margin-top: 7px; font-size: 13px; line-height: 1.35; overflow-wrap: anywhere; }
+      .modal-detail-grid { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: 14px; margin-top: 14px; }
+      .modal-detail-card { min-width: 0; padding: 20px; border: 1px solid var(--line); border-radius: 18px; }
+      .modal-detail-label { margin: 0; color: var(--quiet); font-size: 9px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+      .modal-project-name { margin: 9px 0 0; font-size: 23px; letter-spacing: -.035em; }
+      .modal-project-meta { margin: 7px 0 0; color: var(--muted); font-size: 12px; }
+      .modal-provenance-text { margin: 9px 0 0; color: var(--muted); font-size: 13px; line-height: 1.55; overflow-wrap: anywhere; }
+      .modal-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+      .modal-link { display: inline-flex; align-items: center; min-height: 34px; padding: 0 11px; border-radius: 99px; color: var(--blue); background: #eaf3fc; font-size: 10px; font-weight: 650; text-decoration: none; }
+      .modal-link:hover { color: white; background: var(--blue); }
+      .modal-no-demo { margin: 14px 0 0; color: var(--quiet); font-size: 11px; }
+      .modal-code-card { margin-top: 14px; overflow: hidden; border: 1px solid var(--line); border-radius: 18px; background: #1d1d1f; }
+      .modal-code-header { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 16px 18px; color: white; border-bottom: 1px solid rgba(255,255,255,.12); }
+      .modal-code-heading { min-width: 0; }
+      .modal-code-heading p { margin: 0; }
+      .modal-code-heading .modal-detail-label { color: #aeaeb2; }
+      .modal-code-note { margin-top: 6px !important; color: #c7c7cc; font-size: 11px; line-height: 1.45; }
+      .modal-copy-code { flex: 0 0 auto; min-height: 36px; padding: 0 12px; border: 1px solid rgba(255,255,255,.22); border-radius: 99px; color: white; background: rgba(255,255,255,.11); cursor: pointer; font-size: 11px; font-weight: 650; }
+      .modal-copy-code:hover { background: rgba(255,255,255,.2); }
+      .modal-code-card pre { min-height: 0; max-height: 290px; padding: 20px; }
+      .modal-actions { display: flex; justify-content: flex-end; margin-top: 22px; }
+      .modal-prompt-button { min-height: 44px; padding: 0 18px; border: 0; border-radius: 99px; color: white; background: var(--blue); cursor: pointer; font-size: 13px; font-weight: 650; }
+      .modal-prompt-button:hover { background: var(--blue-hover); }
+      @keyframes modal-fade { from { opacity: 0; } }
+      @keyframes modal-rise { from { opacity: 0; transform: translateY(14px) scale(.985); } }
 
       footer { padding: 58px 0; color: var(--muted); background: #f5f5f7; }
       .footer-inner { display: flex; justify-content: space-between; gap: 28px; align-items: center; }
@@ -249,11 +299,23 @@
         pre { padding-top: 60px; padding-right: 18px; }
         .footer-inner { display: block; }
         .footer-link { display: inline-block; margin-top: 16px; }
+        .effect-modal { align-items: end; padding: 0; }
+        .effect-modal-dialog { width: 100%; max-height: 94dvh; border-radius: 24px 24px 0 0; }
+        .effect-modal-close { top: 10px; margin: 10px 10px -48px 0; }
+        .modal-preview, .modal-preview-unavailable { min-height: 220px; }
+        .modal-preview img { max-height: 42vh; }
+        .modal-preview-status { left: 12px; bottom: 12px; }
+        .modal-content-body { padding: 24px 18px 30px; }
+        .modal-facts, .modal-detail-grid { grid-template-columns: 1fr; }
+        .modal-code-header { align-items: flex-start; }
+        .modal-actions { justify-content: stretch; }
+        .modal-prompt-button { width: 100%; }
       }
       @media (prefers-reduced-motion: reduce) {
         html { scroll-behavior: auto; }
         .hero-orb, .visual-gif::before, .visual-gif::after { animation: none; }
         .effect-main { transition: none; }
+        .effect-modal-backdrop, .effect-modal-dialog { animation: none; }
       }
     </style>
   </head>
@@ -327,6 +389,14 @@
     </footer>
     <span class="sr-only" id="copy-status" role="status" aria-live="polite"></span>
 
+    <div class="effect-modal" id="effect-modal" hidden>
+      <div class="effect-modal-backdrop" data-modal-close></div>
+      <section class="effect-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-description" tabindex="-1">
+        <button class="effect-modal-close" type="button" data-modal-close aria-label="Close details">×</button>
+        <div id="effect-modal-content"></div>
+      </section>
+    </div>
+
     <script type="module">
       import { categories, effects, projects } from './data/effects.js';
 
@@ -346,7 +416,11 @@
           previewOfficial: 'Official', previewLocal: 'Local demo', previewUnavailable: 'No real preview', previewPaused: 'Preview paused', openDemo: 'Open demo ↗', headPreview: 'Preview', headEffect: 'Effect', headSource: 'Recommended source', headAction: 'Actions',
           recommended: 'Recommended implementation', observedOn: 'Observed on AI homepages', legacy: 'Legacy', implementations: 'implementations', implementation: 'implementation', copyPrompt: 'Copy agent prompt', promptCopied: 'Prompt copied',
           showCode: 'View minimal code', hideCode: 'Hide code', copyCode: 'Copy', codeCopied: 'Copied', copyFailed: 'Select text', definition: 'Effect', permalink: 'Effect link',
-          repositoryLabel: 'on GitHub (opens in a new tab)', previewSource: 'Preview source ↗', referenceSource: 'Implementation reference ↗', footer: 'Effect-first, bilingual, and built for implementation. Project names and previews remain the property of their respective authors.', back: 'Back to top ↑'
+          repositoryLabel: 'on GitHub (opens in a new tab)', previewSource: 'Preview source ↗', referenceSource: 'Implementation reference ↗', footer: 'Effect-first, bilingual, and built for implementation. Project names and previews remain the property of their respective authors.', back: 'Back to top ↑',
+          openDetails: 'View effect details', closeDetails: 'Close details', detailsLabel: 'Effect details', triggerLabel: 'Trigger', timingLabel: 'Timing', layerLabel: 'Layer', implementationLabel: 'Implementation project', provenanceLabel: 'Preview provenance',
+          officialDetail: 'Verified official media', localDetail: 'Captured local demo', unavailableDetail: 'No real preview', officialProvenance: 'This GIF is a verified official asset linked to its upstream source.', localProvenance: 'This GIF is a browser capture of the runnable published demo and is backed by reusable local source code.', unavailableProvenance: 'A real preview has not been completed. This entry deliberately loads no generated or placeholder GIF.', unavailableHelp: 'The implementation details remain available while a verifiable preview is being prepared.',
+          viewProject: 'Open project ↗', viewPreviewSource: 'Open preview source ↗', viewReference: 'Open implementation reference ↗', viewDemoSource: 'View demo source ↗', noRunnableDemo: 'No runnable local demo is published for this entry.',
+          minimalCodeLabel: 'Recommended source · minimal integration code', minimalCodeHelp: 'This is the smallest useful integration snippet. The runnable demo and recorded GIF are separate, linked evidence.', minimalCodeUnavailableHelp: 'This is a minimal integration snippet only—not a runnable or recorded demo.', copyMinimalCode: 'Copy code'
         },
         zh: {
           language: 'EN', languageLabel: '切换到英文', navCatalog: '效果目录',
@@ -363,7 +437,11 @@
           previewOfficial: '官方素材', previewLocal: '真实 Demo', previewUnavailable: '暂无真实预览', previewPaused: '已减少动态', openDemo: '打开 Demo ↗', headPreview: '预览', headEffect: '效果', headSource: '推荐来源', headAction: '操作',
           recommended: '推荐实现', observedOn: '观察到该效果的 AI 官网', legacy: '经典旧版', implementations: '个实现', implementation: '个实现', copyPrompt: '复制 Agent Prompt', promptCopied: 'Prompt 已复制',
           showCode: '查看最小代码', hideCode: '收起代码', copyCode: '复制', codeCopied: '已复制', copyFailed: '请选中文本', definition: '效果', permalink: '效果链接',
-          repositoryLabel: 'GitHub 仓库（在新标签页打开）', previewSource: '预览来源 ↗', referenceSource: '实现参考 ↗', footer: '以效果为先，提供双语内容，并面向真实实现。项目名称与预览素材权利归各自作者所有。', back: '回到顶部 ↑'
+          repositoryLabel: 'GitHub 仓库（在新标签页打开）', previewSource: '预览来源 ↗', referenceSource: '实现参考 ↗', footer: '以效果为先，提供双语内容，并面向真实实现。项目名称与预览素材权利归各自作者所有。', back: '回到顶部 ↑',
+          openDetails: '查看效果详情', closeDetails: '关闭详情', detailsLabel: '效果详情', triggerLabel: '触发方式', timingLabel: '时间关系', layerLabel: '呈现层级', implementationLabel: '实现项目', provenanceLabel: '真实预览来源',
+          officialDetail: '已核验官方素材', localDetail: '真实本地 Demo 录制', unavailableDetail: '暂无真实预览', officialProvenance: '此 GIF 是已经核验并可追溯到上游来源的官方素材。', localProvenance: '此 GIF 由浏览器录制可运行的发布 Demo，并有可复用的本地源码作为依据。', unavailableProvenance: '真实预览尚未完成；此条目不会加载生成动画或占位 GIF。', unavailableHelp: '在准备可核验预览期间，仍可查看实现信息并复制 Agent Prompt。',
+          viewProject: '打开项目 ↗', viewPreviewSource: '打开预览来源 ↗', viewReference: '打开实现参考 ↗', viewDemoSource: '查看 Demo 源码 ↗', noRunnableDemo: '此条目尚未发布可运行的本地 Demo。',
+          minimalCodeLabel: '推荐来源 · 最小集成代码', minimalCodeHelp: '这是最小可用的集成片段；可运行 Demo 与录制 GIF 是另外列出的独立证据。', minimalCodeUnavailableHelp: '这只是最小集成片段，不是可运行 Demo，也不是已录制效果。', copyMinimalCode: '一键复制代码'
         }
       };
 
@@ -375,14 +453,84 @@
       const sort = document.querySelector('#sort');
       const resultCount = document.querySelector('#result-count');
       const copyStatus = document.querySelector('#copy-status');
+      const modal = document.querySelector('#effect-modal');
+      const modalDialog = modal.querySelector('.effect-modal-dialog');
+      const modalContent = document.querySelector('#effect-modal-content');
+      const modalClose = modal.querySelector('.effect-modal-close');
       let language = localStorage.getItem('awesome-effects-language') === 'zh' ? 'zh' : 'en';
       let activeCategory = 'all';
+      let modalTrigger = null;
 
       const escapeHTML = value => String(value).replace(/[&<>"]/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[character]);
       const labelFor = category => language === 'zh' ? category.labelZh : category.label;
       const effectName = effect => language === 'zh' ? effect.nameZh : effect.name;
       const recommendedSource = effect => effect.sources.find(source => source.recommended) || effect.sources[0];
       const hasRealPreview = source => ['official-capture', 'local-demo-capture'].includes(source.previewKind) && Boolean(source.preview);
+      const interactiveSelector = 'a, button, input, select, textarea, pre, code';
+
+      function modalLink(href, label) {
+        return `<a class="modal-link" href="${escapeHTML(href)}" target="_blank" rel="noreferrer">${label}</a>`;
+      }
+
+      function closeEffectModal() {
+        if (modal.hidden) return;
+        modal.hidden = true;
+        document.body.classList.remove('modal-open');
+        modalContent.replaceChildren();
+        const trigger = modalTrigger;
+        modalTrigger = null;
+        if (trigger?.isConnected) trigger.focus();
+      }
+
+      function openEffectModal(effect, trigger) {
+        const t = copy[language];
+        const category = categoryById.get(effect.category);
+        const source = recommendedSource(effect);
+        const project = projectById.get(source.projectId);
+        const realPreview = hasRealPreview(source);
+        const previewStatus = source.previewKind === 'official-capture' ? t.officialDetail
+          : source.previewKind === 'local-demo-capture' ? t.localDetail
+            : t.unavailableDetail;
+        const provenance = source.previewKind === 'official-capture' ? t.officialProvenance
+          : source.previewKind === 'local-demo-capture' ? t.localProvenance
+            : t.unavailableProvenance;
+        const description = language === 'zh'
+          ? `${effect.nameZh}由“${effect.behavior.trigger}”触发，以“${effect.behavior.timing}”的时间关系呈现在“${effect.behavior.layer}”层。${category.descriptionZh}`
+          : `${effect.name} is triggered by ${effect.behavior.trigger}, uses ${effect.behavior.timing} timing, and appears on the ${effect.behavior.layer} layer. ${category.description}`;
+        const preview = realPreview
+          ? `<div class="modal-preview"><img src="./gifs/${escapeHTML(source.preview)}.gif" alt="${escapeHTML(`${effect.name} / ${effect.nameZh}`)}" decoding="async" /><span class="modal-preview-status">${previewStatus}</span></div>`
+          : `<div class="modal-preview modal-preview-unavailable"><div><span aria-hidden="true">◎</span><strong>${t.unavailableDetail}</strong><p>${t.unavailableHelp}</p></div><span class="modal-preview-status">${previewStatus}</span></div>`;
+        const links = [modalLink(project.url, t.viewProject)];
+        if (source.demoPath) links.push(modalLink(`./${source.demoPath}`, t.openDemo));
+        if (source.originUrl && source.originUrl !== project.url) links.push(modalLink(source.originUrl, t.viewPreviewSource));
+        if (source.referenceUrl) links.push(modalLink(source.referenceUrl, t.viewReference));
+        if (source.demoSourcePath) links.push(modalLink(`./${source.demoSourcePath}`, t.viewDemoSource));
+        const provenancePaths = source.previewKind === 'local-demo-capture'
+          ? `<br><code>demo/${escapeHTML(source.demoPath)}</code><br><code>demo/${escapeHTML(source.demoSourcePath)}</code>`
+          : source.previewKind === 'official-capture' ? `<br><code>demo/gifs/${escapeHTML(source.preview)}.gif</code>` : '';
+        const primaryName = language === 'zh' ? effect.nameZh : effect.name;
+        const secondaryName = language === 'zh' ? effect.name : effect.nameZh;
+        const minimalCodeNote = source.demoPath ? t.minimalCodeHelp : t.minimalCodeUnavailableHelp;
+        const codeSection = `<section class="modal-code-card modal-code-block"><div class="modal-code-header"><div class="modal-code-heading"><p class="modal-detail-label">${t.minimalCodeLabel}</p><p class="modal-code-note">${minimalCodeNote}</p></div><button class="modal-copy-code" data-modal-copy-code type="button">${t.copyMinimalCode}</button></div><pre><code>${escapeHTML(source.snippet)}</code></pre></section>`;
+
+        modalTrigger = trigger || document.activeElement;
+        modalClose.setAttribute('aria-label', t.closeDetails);
+        modalContent.innerHTML = `${preview}<div class="modal-content-body"><p class="modal-category">${escapeHTML(category.label)} / ${escapeHTML(category.labelZh)}</p><h2 class="modal-title" id="modal-title">${escapeHTML(primaryName)}</h2><p class="modal-title-secondary">${escapeHTML(secondaryName)}</p><p class="modal-description" id="modal-description">${escapeHTML(description)}</p><div class="modal-facts"><div class="modal-fact"><span>${t.triggerLabel}</span><strong>${escapeHTML(effect.behavior.trigger)}</strong></div><div class="modal-fact"><span>${t.timingLabel}</span><strong>${escapeHTML(effect.behavior.timing)}</strong></div><div class="modal-fact"><span>${t.layerLabel}</span><strong>${escapeHTML(effect.behavior.layer)}</strong></div></div><div class="modal-detail-grid"><section class="modal-detail-card"><p class="modal-detail-label">${t.implementationLabel}</p><h3 class="modal-project-name">${escapeHTML(project.name)}</h3><p class="modal-project-meta">${escapeHTML(project.repo)} · ★ ${project.stars.toLocaleString('en-US')}</p><div class="modal-links">${links.join('')}</div>${source.demoPath ? '' : `<p class="modal-no-demo">${t.noRunnableDemo}</p>`}</section><section class="modal-detail-card"><p class="modal-detail-label">${t.provenanceLabel}</p><h3 class="modal-project-name">${previewStatus}</h3><p class="modal-provenance-text">${provenance}${provenancePaths}</p></section></div>${codeSection}<div class="modal-actions"><button class="modal-prompt-button" type="button">${t.copyPrompt}</button></div></div>`;
+        const promptButton = modalContent.querySelector('.modal-prompt-button');
+        promptButton.addEventListener('click', event => {
+          event.stopPropagation();
+          copyText(promptButton, effect.prompt, t.promptCopied, t.copyPrompt);
+        });
+        const codeButton = modalContent.querySelector('.modal-copy-code');
+        codeButton.addEventListener('click', event => {
+          event.stopPropagation();
+          copyText(codeButton, source.snippet, t.codeCopied, t.copyMinimalCode);
+        });
+        modal.hidden = false;
+        document.body.classList.add('modal-open');
+        modalDialog.scrollTop = 0;
+        requestAnimationFrame(() => modalClose.focus());
+      }
 
       async function copyText(button, text, successText, defaultText) {
         try {
@@ -524,11 +672,26 @@
           const relatedParties = effect.relatedParties.map(party => `<a class="party-link" href="${escapeHTML(party.url)}" target="_blank" rel="noreferrer" title="${escapeHTML(party.observedAs)}">${escapeHTML(party.name)} ↗</a>`).join('');
           row.innerHTML = `<div class="effect-main"><span class="row-number">${String(effect.order).padStart(3, '0')}</span><div class="row-preview">${previewMedia}${demoLink}<span class="preview-kind">${previewLabel}</span></div><div class="effect-cell"><p class="category-label">${escapeHTML(labelFor(category))}</p><h3>${escapeHTML(effectName(effect))}</h3><span class="effect-key">effect:${escapeHTML(effect.id)}</span></div><div class="source-cell"><span class="source-label">${t.recommended}</span><a class="source-name" href="${escapeHTML(primaryProject.url)}" target="_blank" rel="noreferrer">${escapeHTML(primaryProject.name)} ↗</a><span class="source-meta"><span>★ ${primaryProject.stars.toLocaleString('en-US')}</span><span>${effect.sources.length} ${effect.sources.length === 1 ? t.implementation : t.implementations}</span>${primaryProject.legacy ? `<span class="legacy-tag">${t.legacy}</span>` : ''}</span>${relatedParties ? `<span class="source-label party-label">${t.observedOn}</span><span class="party-list">${relatedParties}</span>` : ''}</div><div class="row-actions"><button class="action-button prompt-button" type="button">${t.copyPrompt}</button><button class="action-button code-button" type="button" aria-expanded="false" aria-controls="detail-${escapeHTML(effect.id)}">${t.showCode}</button></div></div><div class="detail-panel" id="detail-${escapeHTML(effect.id)}" hidden><div class="detail-top"><p><strong>${t.definition}:</strong> ${escapeHTML(effectName(effect))}. ${effect.sources.length} ${effect.sources.length === 1 ? t.implementation : t.implementations}.</p><a class="permalink" href="#${escapeHTML(effect.id)}"># ${t.permalink}</a></div><div class="implementations">${implementations}</div></div>`;
 
+          row.classList.add('effect-card-trigger');
+          row.tabIndex = 0;
+          row.setAttribute('role', 'group');
+          row.setAttribute('aria-haspopup', 'dialog');
+          row.setAttribute('aria-label', `${t.openDetails}: ${effectName(effect)}`);
+          row.addEventListener('click', event => {
+            if (event.target.closest(interactiveSelector)) return;
+            openEffectModal(effect, row);
+          });
+          row.addEventListener('keydown', event => {
+            if (event.target !== row || !['Enter', ' '].includes(event.key)) return;
+            event.preventDefault();
+            openEffectModal(effect, row);
+          });
+
           const promptButton = row.querySelector('.prompt-button');
-          promptButton.addEventListener('click', () => copyText(promptButton, effect.prompt, t.promptCopied, t.copyPrompt));
+          promptButton.addEventListener('click', event => { event.stopPropagation(); copyText(promptButton, effect.prompt, t.promptCopied, t.copyPrompt); });
           const codeButton = row.querySelector('.code-button');
           const panel = row.querySelector('.detail-panel');
-          codeButton.addEventListener('click', () => { const nextOpen = panel.hidden; panel.hidden = !nextOpen; codeButton.setAttribute('aria-expanded', String(nextOpen)); codeButton.textContent = nextOpen ? t.hideCode : t.showCode; });
+          codeButton.addEventListener('click', event => { event.stopPropagation(); const nextOpen = panel.hidden; panel.hidden = !nextOpen; codeButton.setAttribute('aria-expanded', String(nextOpen)); codeButton.textContent = nextOpen ? t.hideCode : t.showCode; });
           row.querySelectorAll('.copy-code').forEach((button, index) => button.addEventListener('click', () => copyText(button, effect.sources[index].snippet, t.codeCopied, t.copyCode)));
           list.append(row);
         });
@@ -539,6 +702,30 @@
       search.addEventListener('input', render);
       sort.addEventListener('change', render);
       window.addEventListener('hashchange', openHashTarget);
+      modal.addEventListener('click', event => {
+        if (event.target.closest('[data-modal-close]')) closeEffectModal();
+      });
+      document.addEventListener('keydown', event => {
+        if (modal.hidden) return;
+        if (event.key === 'Escape') {
+          event.preventDefault();
+          closeEffectModal();
+          return;
+        }
+        if (event.key !== 'Tab') return;
+        const focusable = [...modalDialog.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])')]
+          .filter(element => element.getClientRects().length > 0);
+        if (!focusable.length) { event.preventDefault(); modalDialog.focus(); return; }
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && (document.activeElement === first || !modal.contains(document.activeElement))) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && (document.activeElement === last || !modal.contains(document.activeElement))) {
+          event.preventDefault();
+          first.focus();
+        }
+      });
       setLanguage(language);
     </script>
   </body>

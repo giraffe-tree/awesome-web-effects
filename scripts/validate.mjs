@@ -131,6 +131,24 @@ assert(html.includes("./data/effects.js"), 'Demo does not load the canonical eff
 assert(html.includes('type="module"'), 'Demo catalog must load as an ES module.');
 assert(html.includes('prompt-button') && html.includes('copyPrompt'), 'Demo does not expose one-click agent prompts.');
 assert(html.includes('copy-code') && html.includes('source.snippet'), 'Demo does not expose copyable minimal code.');
+
+const modalRendererStart = html.indexOf('function openEffectModal');
+const modalRendererEnd = modalRendererStart < 0 ? -1 : html.indexOf('async function copyText', modalRendererStart);
+const modalRenderer = modalRendererStart >= 0 && modalRendererEnd > modalRendererStart
+  ? html.slice(modalRendererStart, modalRendererEnd)
+  : '';
+assert(Boolean(modalRenderer), 'Demo is missing the effect-detail modal renderer.');
+assert(/class="effect-modal-dialog"[^>]*role="dialog"[^>]*aria-modal="true"/.test(html), 'Effect details must use an accessible dialog container.');
+assert(/row\.setAttribute\(\s*['"]aria-haspopup['"]\s*,\s*['"]dialog['"]\s*\)/.test(html), 'Effect cards must expose dialog-opening semantics.');
+assert((html.match(/openEffectModal\(\s*effect\s*,\s*row\s*\)/g) || []).length >= 2, 'Effect cards must open details from both pointer and keyboard handlers.');
+assert(modalRenderer.includes('source.snippet'), 'Effect-detail modal must render the selected source snippet.');
+assert(/<pre[^>]*>\s*<code[^>]*>\$\{escapeHTML\(source\.snippet\)\}<\/code>\s*<\/pre>/.test(modalRenderer), 'Effect-detail modal must display source.snippet in a code block.');
+assert(/(?:class="[^"]*modal-copy-code|data-modal-copy-code)/.test(modalRenderer), 'Effect-detail modal must expose a dedicated copy-code button.');
+assert(/copyText\(\s*[^,]+\s*,\s*source\.snippet\s*,/.test(modalRenderer), 'Effect-detail copy-code button must copy source.snippet independently.');
+assert(modalRenderer.includes('hasRealPreview(source)') && /realPreview\s*\?/.test(modalRenderer), 'Effect-detail modal must branch on verified preview availability.');
+assert(/<img[^>]*source\.preview[^>]*\.gif/.test(modalRenderer), 'Effect-detail modal must render the selected real GIF when available.');
+assert(modalRenderer.includes('modal-preview-unavailable'), 'Effect-detail modal must render an explicit unavailable-preview state.');
+
 assert(readme.includes('| Effect | Recommended implementation | AI homepage references (max 3) |'), 'English README is not effect-first or lacks integrated homepage references.');
 assert(readmeZh.includes('| 效果 | 推荐实现 | AI 官网参考（最多 3 家） |'), 'Chinese README is not effect-first or lacks integrated homepage references.');
 const liveDemo = 'https://giraffe-tree.github.io/awesome-web-effects/';

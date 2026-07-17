@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Floating UI — Anchored Popover Flip and Shift</title>
+    <style>
+      :root { --preview-background: #eef4f7; color-scheme: light; }
+      .collision-boundary { position: absolute; inset: 35px 15px 18px; overflow: hidden; border: 1px dashed #68809266; border-radius: 18px; background: linear-gradient(135deg, #fff, #dbe8ed); }
+      .boundary-label { position: absolute; left: 9px; bottom: 7px; color: #6f8189; font-size: 7px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
+      .anchor-button { position: fixed; z-index: 3; width: 30px; height: 30px; border: 0; border-radius: 50%; background: #126f82; color: white; box-shadow: 0 7px 15px #0a586552; font-size: 13px; }
+      .popover { position: fixed; z-index: 5; width: 112px; padding: 8px 10px; border-radius: 10px; background: #172127; color: white; box-shadow: 0 12px 28px #1c303d4d; font-size: 8px; }
+      .popover strong { display: block; margin-bottom: 2px; font-size: 9px; }
+      .placement { color: #79e9f1; font-weight: 800; text-transform: uppercase; }
+      .popover-arrow { position: absolute; width: 8px; height: 8px; transform: rotate(45deg); background: #172127; }
+      .library-badge { color: #19323b; background: #ffffffe5; border-color: #243d4620; }
+      .scene-caption { color: #506772; }
+    </style>
+    <script type="module" crossorigin src="./assets/anchored-popover-flip-and-shift-DvtARUf2.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-C4iZKo3w.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main class="preview-stage" aria-label="A real Floating UI popover flipping and shifting to remain visible">
+      <div class="collision-boundary" data-preview-mechanism="floating-ui-middleware"><span class="boundary-label">viewport collision boundary</span></div>
+      <button class="anchor-button" id="anchor" aria-describedby="popover">+</button>
+      <div class="popover" id="popover" role="tooltip"><strong>Anchored popover</strong><span class="placement" id="placement">top</span><span> · flip + shift</span><div class="popover-arrow" id="popover-arrow"></div></div>
+      <span class="library-badge">Floating UI · middleware</span>
+      <span class="scene-caption">popover changes side before it clips</span>
+    </main>
+  </body>
+</html>

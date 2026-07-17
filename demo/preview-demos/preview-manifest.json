@@ -43,6 +43,60 @@
       "demoPath": "preview-demos/dist/svelte-declarative-three-js.html",
       "demoSourcePath": "preview-demos/svelte-declarative-three-js.html",
       "gifPath": "gifs/captured/svelte-declarative-three-js.gif"
+    },
+    {
+      "id": "scroll-scrubbed-master-timeline",
+      "library": "gsap@3.15.0",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/scroll-scrubbed-master-timeline.html",
+      "demoSourcePath": "preview-demos/scroll-scrubbed-master-timeline.html",
+      "gifPath": "gifs/captured/scroll-scrubbed-master-timeline.gif"
+    },
+    {
+      "id": "filterable-grid-reflow",
+      "library": "isotope-layout@3.0.6",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/filterable-grid-reflow.html",
+      "demoSourcePath": "preview-demos/filterable-grid-reflow.html",
+      "gifPath": "gifs/captured/filterable-grid-reflow.gif"
+    },
+    {
+      "id": "perspective-tilt-and-glare",
+      "library": "vanilla-tilt@1.8.1",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/perspective-tilt-and-glare.html",
+      "demoSourcePath": "preview-demos/perspective-tilt-and-glare.html",
+      "gifPath": "gifs/captured/perspective-tilt-and-glare.gif"
+    },
+    {
+      "id": "svg-stroke-drawing",
+      "library": "vivus@0.4.6",
+      "renderer": "svg",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/svg-stroke-drawing.html",
+      "demoSourcePath": "preview-demos/svg-stroke-drawing.html",
+      "gifPath": "gifs/captured/svg-stroke-drawing.gif"
+    },
+    {
+      "id": "sketch-style-creative-coding-loop",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/sketch-style-creative-coding-loop.html",
+      "demoSourcePath": "preview-demos/sketch-style-creative-coding-loop.html",
+      "gifPath": "gifs/captured/sketch-style-creative-coding-loop.gif"
+    },
+    {
+      "id": "anchored-popover-flip-and-shift",
+      "library": "@floating-ui/dom@1.8.0",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/anchored-popover-flip-and-shift.html",
+      "demoSourcePath": "preview-demos/anchored-popover-flip-and-shift.html",
+      "gifPath": "gifs/captured/anchored-popover-flip-and-shift.gif"
     }
   ]
 }

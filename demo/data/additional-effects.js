@@ -1160,5 +1160,17 @@ export const additionalEffectSeeds = [
     "difference": "The prompt is typed character by character, pauses with a caret, becomes a full text-selection highlight, then swaps together with a springing category chip. A conventional typewriter only types and erases glyphs; it does not model the editor-like select-and-replace phase.",
     "sourceUrl": "https://www.granola.ai/",
     "verifiedAt": "2026-07-17"
+  },
+  {
+    "name": "Device-silhouette masked video",
+    "nameZh": "设备轮廓蒙版视频",
+    "category": "media",
+    "projectName": "Awesome Web Effects",
+    "repo": "giraffe-tree/awesome-web-effects",
+    "stars": 0,
+    "snippet": "<div class=\"device-film\"><video autoplay muted loop playsinline poster=\"poster.webp\" src=\"demo.webm\"></video></div>\n<style>\n.device-film { width:min(72vw,420px); aspect-ratio:9/19; }\n.device-film video { width:100%; height:100%; object-fit:cover; -webkit-mask:url('/phone-silhouette.png') center / 98% 98% no-repeat; mask:url('/phone-silhouette.png') center / 98% 98% no-repeat; transition:opacity .3s ease; }\n@media (prefers-reduced-motion:reduce) { .device-film video { display:none; } .device-film { background:url('poster.webp') center / cover; -webkit-mask:url('/phone-silhouette.png') center / 98% 98% no-repeat; mask:url('/phone-silhouette.png') center / 98% 98% no-repeat; } }\n</style>",
+    "difference": "A continuously playing HTML video is clipped by an arbitrary alpha silhouette instead of a rectangular media box. Existing entries cover crop tools, comparison sliders, zoom, filters, and transition masks, but not a persistent non-rectangular video surface.",
+    "sourceUrl": "https://pika.art/",
+    "verifiedAt": "2026-07-17"
   }
 ];

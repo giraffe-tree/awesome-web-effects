@@ -294,6 +294,15 @@ function mediaScene(frame, time, accent, secondary, mode) {
     circle(frame, 102, 78, 42 + (1 - middle) * 7, mix([94, 120, 158], secondary, middle), .8 * middle);
     rect(frame, 150 - (1 - middle) * 5, 48, 104 + (1 - middle) * 10, 76, mix([235, 145, 105], accent, middle), .78 * middle);
     circle(frame, 204, 104, 29 + (1 - near) * 9, mix([45, 56, 76], [255, 255, 255], near), .92 * near);
+  } else if (mode === 7) {
+    rect(frame, 116, 26, 88, 128, [31, 35, 47]);
+    circle(frame, 160, 28, 44, [31, 35, 47]);
+    circle(frame, 160, 152, 44, [31, 35, 47]);
+    rect(frame, 122, 34, 76, 112, mix(accent, secondary, wave(time)), .82);
+    circle(frame, 160, 36, 38, mix(accent, secondary, wave(time)), .82);
+    circle(frame, 160, 144, 38, mix(accent, secondary, wave(time)), .82);
+    for (let index = 0; index < 4; index += 1) circle(frame, 138 + index * 16, 74 + Math.sin(time * 7 + index) * 24, 7 + index, index % 2 ? [255, 255, 255] : secondary, .72);
+    rect(frame, 148, 34, 24, 4, [31, 35, 47], .9);
   }
   else { circle(frame, 160, 90, 26, accent, .85); line(frame, 152, 76, 178, 90, [255,255,255], 3); line(frame, 178, 90, 152, 104, [255,255,255], 3); rect(frame, 68, 138, 184, 5, secondary, .25); rect(frame, 68, 138, 184 * time, 5, secondary, .9); }
 }
@@ -308,7 +317,7 @@ const modeRules = {
   canvas: [[/generative|particle|sprite/, 0], [/physics|game|rigid/, 1], [/draw|sketch/, 2], [/object|node|drag|layer/, 3], [/geometry|primitive|illustration/, 4], [/infinite|grid|surface/, 5]],
   webgl: [[/mesh|object|react|vue|svelte/, 0], [/particle|sphere/, 1], [/shader|plane|functional|minimal/, 2], [/bloom|post/, 3], [/product|model|orbit|camera/, 4], [/scene|webgl|3d/, 5]],
   background: [[/starfield/, 6], [/fluid|gradient|vanta/, 0], [/particle|swarm|link/, 1], [/confetti/, 2], [/gradient|backdrop/, 3], [/mesh|poly|grid|surface/, 4], [/firework|ribbon|trail/, 5]],
-  media: [[/comparison|reveal/, 0], [/zoom|magnif|lens/, 1], [/depth|dissolve/, 6], [/pan|deep/, 2], [/crop/, 3], [/filter|editor/, 4], [/media|control|upload|preview/, 5]]
+  media: [[/device-silhouette|silhouette masked/, 7], [/comparison|reveal/, 0], [/zoom|magnif|lens/, 1], [/depth|dissolve/, 6], [/pan|deep/, 2], [/crop/, 3], [/filter|editor/, 4], [/media|control|upload|preview/, 5]]
 };
 
 function modeFor(effect, seed) {

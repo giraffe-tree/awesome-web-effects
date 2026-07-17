@@ -1280,5 +1280,23 @@ export const additionalEffectSeeds = [
     "difference": "Two unequal thresholds add hysteresis, so tiny scroll oscillations near the boundary cannot rapidly toggle the navigation style. Existing sticky headers hide according to scroll direction or merely pin content without this stable state boundary.",
     "sourceUrl": "https://www.llamaindex.ai/",
     "verifiedAt": "2026-07-17"
+  },
+  {
+    "name": "Card metadata-to-CTA role swap",
+    "nameZh": "卡片元数据到 CTA 角色互换",
+    "category": "pointer",
+    "projectName": "Awesome Web Effects",
+    "repo": "giraffe-tree/awesome-web-effects",
+    "stars": 0,
+    "snippet": "<a class=\"story-card\" href=\"#\"><strong>Build with open models</strong><span class=\"meta\">By the research team</span><span class=\"cta\">Read the story <b>→</b></span></a>\n<style>.story-card{position:relative;display:grid;align-content:end;min-height:240px;padding:28px;overflow:hidden;color:#151821;background:#f0eee9;text-decoration:none}.story-card::before{content:\"\";position:absolute;inset:0;background:linear-gradient(145deg,#ffa8df,#7e72ff);opacity:0;transition:opacity .3s}.story-card>*{position:relative}.meta,.cta{grid-area:2/1;margin-top:12px;transition:opacity .24s,transform .24s}.cta{opacity:0;transform:translateY(10px)}.story-card:is(:hover,:focus-visible)::before{opacity:.82}.story-card:is(:hover,:focus-visible) .meta{opacity:0;transform:translateY(-10px)}.story-card:is(:hover,:focus-visible) .cta{opacity:1;transform:none}@media(prefers-reduced-motion:reduce){.story-card::before,.meta,.cta{transition:none}}</style>",
+    "behavior": {
+      "trigger": "card hover or keyboard focus",
+      "response": "a gradient wash appears while passive author metadata exits and an action-oriented CTA enters in the same slot",
+      "timing": "240–300 ms coordinated fade and vertical shift",
+      "layer": "card content and background overlay"
+    },
+    "difference": "The same card slot changes semantic role from attribution to action as interaction intent arrives, rather than merely revealing an overlay or moving an already-visible button. The focus-visible path preserves the complete transformation for keyboard users.",
+    "sourceUrl": "https://www.together.ai/",
+    "verifiedAt": "2026-07-17"
   }
 ];

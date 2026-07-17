@@ -2,7 +2,7 @@
 
 [中文文档](README.zh-CN.md) · [Live demo](https://giraffe-tree.github.io/awesome-interaction/)
 
-An **effect-first** atlas of open-source interactions for the web. It catalogs **237 distinct effects across 10 categories**, backed by **154 source projects**. Each effect is one row with a stable semantic key, a GIF preview, copyable minimal code, and a one-click implementation prompt for Codex or Claude Code. English is the default interface and documentation language.
+An **effect-first** atlas of open-source interactions for the web. It catalogs **238 distinct effects across 10 categories**, backed by **154 source projects**. Each effect is one row with a stable semantic key, a GIF preview, copyable minimal code, and a one-click implementation prompt for Codex or Claude Code. English is the default interface and documentation language.
 
 ## Effect-first model
 
@@ -13,14 +13,14 @@ An **effect-first** atlas of open-source interactions for the web. It catalogs *
 
 ## Catalog snapshot
 
-- 237 effect rows, including 20 baseline effects.
-- 116 independently researched effects were added in the latest effect-level expansion.
+- 238 effect rows, including 20 baseline effects.
+- 117 independently researched effects were added in the latest effect-level expansion.
 - 154 unique GitHub source projects; 101 were added during the 2026 expansion.
-- 237 source-specific GIF previews: 8 official captures and 229 labeled editorial recreations.
-- 237 one-click implementation prompts, one for every effect.
+- 238 source-specific GIF previews: 8 official captures and 230 labeled editorial recreations.
+- 238 one-click implementation prompts, one for every effect.
 - 14 useful older sources are marked **Legacy**; no archived repository is included.
 - Stars are a snapshot from **2026-07-17**, not a live counter.
-- The referenced, optimized GIF set is **10.15 MiB**; each preview is 320×180, at most three seconds, and below 1 MiB.
+- The referenced, optimized GIF set is **10.17 MiB**; each preview is 320×180, at most three seconds, and below 1 MiB.
 
 ## Selection rules
 
@@ -38,7 +38,7 @@ An **effect-first** atlas of open-source interactions for the web. It catalogs *
 | [Scroll & reveal](#scroll) | 25 | 18 | Smooth scrolling, scroll-linked scenes, reveals, parallax, and snap navigation. |
 | [Page & layout](#transition) | 24 | 16 | Page transitions, FLIP motion, filtering, packing, and animated reflow. |
 | [Navigation & overlays](#carousel) | 22 | 14 | Carousel, lightbox, menus, tours, notifications, drag overlays, and spatial navigation. |
-| [Pointer & hover](#pointer) | 25 | 14 | Tilt, depth, custom cursors, magnetic motion, and image distortion. |
+| [Pointer & hover](#pointer) | 26 | 14 | Tilt, depth, custom cursors, magnetic motion, and image distortion. |
 | [Text & SVG](#vector) | 24 | 19 | Typing, text splitting, vector drawing, handwriting, and SVG morphing. |
 | [Canvas & 2D](#canvas) | 24 | 20 | Scene graphs, creative coding, physics, drawing tools, and 2D renderers. |
 | [3D & WebGL](#webgl) | 22 | 20 | 3D engines, declarative renderers, shader layers, and post-processing. |
@@ -209,6 +209,7 @@ Tilt, depth, custom cursors, magnetic motion, and image distortion.
 | [Four-corner hover crop marks](https://giraffe-tree.github.io/awesome-interaction/#four-corner-hover-crop-marks) | [Awesome Web Effects](https://github.com/giraffe-tree/awesome-web-effects) | 0 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#four-corner-hover-crop-marks) |
 | [Card metadata-to-CTA role swap](https://giraffe-tree.github.io/awesome-interaction/#card-metadata-to-cta-role-swap) | [Awesome Web Effects](https://github.com/giraffe-tree/awesome-web-effects) | 0 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#card-metadata-to-cta-role-swap) |
 | [Opposed diagonal offset CTA](https://giraffe-tree.github.io/awesome-interaction/#opposed-diagonal-offset-cta) | [Awesome Web Effects](https://github.com/giraffe-tree/awesome-web-effects) | 0 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#opposed-diagonal-offset-cta) |
+| [Interaction-history hiring badge](https://giraffe-tree.github.io/awesome-interaction/#interaction-history-hiring-badge) | [Awesome Web Effects](https://github.com/giraffe-tree/awesome-web-effects) | 0 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#interaction-history-hiring-badge) |
 
 <a id="vector"></a>
 

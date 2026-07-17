@@ -1352,5 +1352,23 @@ export const additionalEffectSeeds = [
     "difference": "The flock accepts drag-spawned members and treats a live, scaling HTML control as a predictive collision obstacle. Existing attraction-repulsion swarms coordinate particles only with each other and do not share geometry with a semantic DOM element.",
     "sourceUrl": "https://sakana.ai/",
     "verifiedAt": "2026-07-17"
+  },
+  {
+    "name": "Interaction-history hiring badge",
+    "nameZh": "交互历史驱动招聘徽章",
+    "category": "pointer",
+    "projectName": "Awesome Web Effects",
+    "repo": "giraffe-tree/awesome-web-effects",
+    "stars": 0,
+    "snippet": "<a class=\"jobs\" href=\"#\">Jobs</a>\n<style>.jobs::after{content:\"We are hiring!\";display:inline-block;margin-left:.4rem;padding:.25rem .4rem;border-radius:.35rem;background:#eaff62;color:#111}.jobs:hover::after{animation:badge-wiggle .15s ease 2}.jobs.third::after{content:\"Stop hovering, come join us!\"}@keyframes badge-wiggle{50%{transform:rotate(-4deg)}}@media(prefers-reduced-motion:reduce){.jobs:hover::after{animation:none}}</style>\n<script>const jobs=document.querySelector('.jobs');let enters=0;jobs.addEventListener('pointerenter',()=>{enters=enters%4+1;jobs.classList.toggle('third',enters===3)})</script>",
+    "behavior": {
+      "trigger": "successive pointer entries on a Jobs link",
+      "response": "the badge wiggles each time and changes from a hiring notice to conversational recruitment copy on the third entry",
+      "timing": "150 ms wiggle repeated twice; state resets after the fourth entry",
+      "layer": "link-attached badge pseudo-element"
+    },
+    "difference": "The response depends on accumulated interaction history, not just the current hover state, so the interface appears to notice repeated curiosity. Existing hover badges and tooltips are stateless and repeat identical content on every entry.",
+    "sourceUrl": "https://www.clay.com/",
+    "verifiedAt": "2026-07-17"
   }
 ];

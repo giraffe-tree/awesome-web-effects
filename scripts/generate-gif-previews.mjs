@@ -202,6 +202,18 @@ function pointerScene(frame, time, accent, secondary, mode) {
   else if (mode === 2) { const bx = 104 + (cx - 160) * .16; const by = 67 + (cy - 90) * .16; rect(frame, bx, by, 112, 46, accent, .9); circle(frame, cx, cy, 5, secondary); }
   else if (mode === 3) { rect(frame, 58, 38, 204, 104, secondary, .3); rect(frame, 58, 38, clamp(cx - 58, 0, 204), 104, accent, .78); circle(frame, cx, cy, 5, [255, 255, 255]); }
   else if (mode === 4) { rect(frame, 48, 35, 224, 110, [255, 255, 255]); for (let index = 0; index < 5; index += 1) circle(frame, 78 + index * 42, 64 + (index % 2) * 48, 7 + (Math.abs(cx - (78 + index * 42)) < 30 ? 8 : 0), index % 2 ? accent : secondary); }
+  else if (mode === 6) {
+    rect(frame, 60, 30, 200, 120, mix(secondary, [255, 255, 255], .68));
+    circle(frame, 118, 88, 34, accent, .28);
+    rect(frame, 154, 58, 72, 58, secondary, .42);
+    const opacity = ease(wave(time));
+    const corners = [[56, 26, 1, 1], [264, 26, -1, 1], [56, 154, 1, -1], [264, 154, -1, -1]];
+    corners.forEach(([x, y, dx, dy]) => {
+      line(frame, x, y, x + dx * 18, y, accent, 2, opacity);
+      line(frame, x, y, x, y + dy * 18, accent, 2, opacity);
+    });
+    circle(frame, cx, cy, 4, [34, 38, 46], .7);
+  }
   else { for (let index = 0; index < 12; index += 1) line(frame, 30 + index * 24, 48, 30 + index * 24 + Math.sin(time * Math.PI * 2 + index) * 18, 132, index % 2 ? accent : secondary, 2, .7); circle(frame, cx, cy, 5, [20, 24, 32]); }
 }
 
@@ -333,7 +345,7 @@ const modeRules = {
   scroll: [[/document generation|generation playback/, 6], [/horizontal/, 0], [/scrollbar|container/, 1], [/parallax|3d/, 2], [/reveal|viewport/, 3], [/infinite|million|virtual|append/, 4], [/snap|section|split/, 5]],
   transition: [[/dropdown promo sweep|promo sweep/, 7], [/self-inverting|blend-mode/, 6], [/page|route/, 0], [/grid|masonry|pack|reflow/, 1], [/shared|flip|morph/, 2], [/drawer/, 3], [/split|resize/, 4], [/filter|enter|exit/, 5]],
   carousel: [[/carousel|slide|deck/, 0], [/modal|lightbox|alert/, 1], [/command|menu/, 2], [/toast|notification/, 3], [/popover|tour|spotlight/, 4], [/drag|drop|pinch/, 5]],
-  pointer: [[/cursor|trail|particle/, 0], [/tilt|depth|parallax|glare/, 1], [/magnetic|attracted|button/, 2], [/hover|overlay|card/, 3], [/hotspot|region|point/, 4], [/distortion|gooey|displacement/, 5]],
+  pointer: [[/crop marks|four-corner/, 6], [/cursor|trail|particle/, 0], [/tilt|depth|parallax|glare/, 1], [/magnetic|attracted|button/, 2], [/hover|overlay|card/, 3], [/hotspot|region|point/, 4], [/distortion|gooey|displacement/, 5]],
   vector: [[/type-select|select-replace/, 7], [/text-path|curved text/, 6], [/draw|stroke|path/, 0], [/type|split|character css/, 1], [/flip|ticker|mechanical/, 2], [/morph|shape/, 3], [/hand|rough|letter/, 4], [/scramble|decode|random/, 5]],
   canvas: [[/generative|particle|sprite/, 0], [/physics|game|rigid/, 1], [/draw|sketch/, 2], [/object|node|drag|layer/, 3], [/geometry|primitive|illustration/, 4], [/infinite|grid|surface/, 5]],
   webgl: [[/mesh|object|react|vue|svelte/, 0], [/particle|sphere/, 1], [/shader|plane|functional|minimal/, 2], [/bloom|post/, 3], [/product|model|orbit|camera/, 4], [/scene|webgl|3d/, 5]],

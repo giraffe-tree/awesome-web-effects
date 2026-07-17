@@ -1208,5 +1208,23 @@ export const additionalEffectSeeds = [
     "difference": "The highlight is a one-shot delayed orientation cue bound to a menu-open event, travels behind one promotional row, parks off-screen, and resets for the next open. Existing shine effects decorate continuously or sweep through text rather than responding to navigation state.",
     "sourceUrl": "https://www.glean.com/",
     "verifiedAt": "2026-07-17"
+  },
+  {
+    "name": "Four-corner hover crop marks",
+    "nameZh": "四角裁切标记悬停显现",
+    "category": "pointer",
+    "projectName": "Awesome Web Effects",
+    "repo": "giraffe-tree/awesome-web-effects",
+    "stars": 0,
+    "snippet": "<a class=\"crop-card\" href=\"#\"><img src=\"story.jpg\" alt=\"Story\"><i></i><i></i><i></i><i></i></a>\n<style>.crop-card{position:relative;display:block;color:#ff5a36}.crop-card img{display:block;width:100%}.crop-card i{position:absolute;width:4px;height:14px;background:currentColor;opacity:0;transition:opacity .18s ease}.crop-card i:nth-of-type(1){top:0;left:0}.crop-card i:nth-of-type(2){top:0;right:0}.crop-card i:nth-of-type(3){bottom:0;left:0}.crop-card i:nth-of-type(4){bottom:0;right:0}.crop-card:hover i,.crop-card:focus-visible i{opacity:1}</style>",
+    "behavior": {
+      "trigger": "card hover or keyboard focus",
+      "response": "four independent editorial crop marks appear at the media corners",
+      "timing": "180 ms eased reveal",
+      "layer": "media overlay"
+    },
+    "difference": "The four crop marks belong to the card and appear only on interaction intent, giving still media a tool-like focus state. The existing target reticle follows the cursor, while the focus-window headline moves a frame between words.",
+    "sourceUrl": "https://cognition.com/",
+    "verifiedAt": "2026-07-17"
   }
 ];

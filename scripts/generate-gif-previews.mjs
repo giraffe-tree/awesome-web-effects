@@ -226,6 +226,19 @@ function backgroundScene(frame, time, accent, secondary, mode, seed) {
     for (let index = 0; index < 32; index += 1) { const x = (seed + index * 83) % width; const y = ((index * 29 + time * 210) % 230) - 20; rect(frame, x, y, 4 + index % 7, 8 + index % 10, index % 2 ? accent : secondary, .85); }
   } else if (mode === 4) {
     for (let y = 18; y < height; y += 24) for (let x = 12; x < width; x += 28) { const shift = Math.sin(time * 4 + x + y) * 7; line(frame, x, y, x + 22, y + shift, (x + y) % 3 ? accent : secondary, 1, .35); }
+  } else if (mode === 6) {
+    rect(frame, 0, 0, width, height, [18, 25, 45], .96);
+    [
+      { count: 12, speed: 32, radius: 1, color: [125, 151, 190] },
+      { count: 18, speed: 58, radius: 2, color: secondary },
+      { count: 24, speed: 92, radius: 3, color: accent }
+    ].forEach((layer, layerIndex) => {
+      for (let index = 0; index < layer.count; index += 1) {
+        const x = 12 + ((seed + index * (67 + layerIndex * 12)) % 296);
+        const y = ((seed * (layerIndex + 3) + index * 41 + time * layer.speed) % 214) - 17;
+        circle(frame, x, y, layer.radius, layer.color, .45 + layerIndex * .2);
+      }
+    });
   } else {
     for (let burst = 0; burst < 3; burst += 1) { const progress = (time * 1.6 + burst * .32) % 1; const cx = 76 + burst * 84; const cy = 58 + (burst % 2) * 34; for (let ray = 0; ray < 12; ray += 1) { const angle = ray / 12 * Math.PI * 2; line(frame, cx + Math.cos(angle) * progress * 12, cy + Math.sin(angle) * progress * 12, cx + Math.cos(angle) * progress * 56, cy + Math.sin(angle) * progress * 56, burst % 2 ? accent : secondary, 2, 1 - progress); } }
   }
@@ -263,7 +276,7 @@ const modeRules = {
   vector: [[/draw|stroke|path/, 0], [/type|split|character css/, 1], [/flip|ticker|mechanical/, 2], [/morph|shape/, 3], [/hand|rough|letter/, 4], [/scramble|decode|random/, 5]],
   canvas: [[/generative|particle|sprite/, 0], [/physics|game|rigid/, 1], [/draw|sketch/, 2], [/object|node|drag|layer/, 3], [/geometry|primitive|illustration/, 4], [/infinite|grid|surface/, 5]],
   webgl: [[/mesh|object|react|vue|svelte/, 0], [/particle|sphere/, 1], [/shader|plane|functional|minimal/, 2], [/bloom|post/, 3], [/product|model|orbit|camera/, 4], [/scene|webgl|3d/, 5]],
-  background: [[/fluid|gradient|vanta/, 0], [/particle|swarm|link/, 1], [/confetti/, 2], [/gradient|backdrop/, 3], [/mesh|poly|grid|surface/, 4], [/firework|ribbon|trail/, 5]],
+  background: [[/starfield/, 6], [/fluid|gradient|vanta/, 0], [/particle|swarm|link/, 1], [/confetti/, 2], [/gradient|backdrop/, 3], [/mesh|poly|grid|surface/, 4], [/firework|ribbon|trail/, 5]],
   media: [[/comparison|reveal/, 0], [/zoom|magnif|lens/, 1], [/depth|dissolve/, 6], [/pan|deep/, 2], [/crop/, 3], [/filter|editor/, 4], [/media|control|upload|preview/, 5]]
 };
 

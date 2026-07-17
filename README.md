@@ -2,7 +2,7 @@
 
 [中文文档](README.zh-CN.md) · [Live demo](https://giraffe-tree.github.io/awesome-interaction/)
 
-An **effect-first** atlas of open-source interactions for the web. It catalogs **222 distinct effects across 10 categories**, backed by **153 source projects**. Each effect is one row with a stable semantic key, a GIF preview, copyable minimal code, and a one-click implementation prompt for Codex or Claude Code. English is the default interface and documentation language.
+An **effect-first** atlas of open-source interactions for the web. It catalogs **223 distinct effects across 10 categories**, backed by **153 source projects**. Each effect is one row with a stable semantic key, a GIF preview, copyable minimal code, and a one-click implementation prompt for Codex or Claude Code. English is the default interface and documentation language.
 
 ## Effect-first model
 
@@ -13,14 +13,14 @@ An **effect-first** atlas of open-source interactions for the web. It catalogs *
 
 ## Catalog snapshot
 
-- 222 effect rows, including 20 baseline effects.
-- 101 independently researched effects were added in the latest effect-level expansion.
+- 223 effect rows, including 20 baseline effects.
+- 102 independently researched effects were added in the latest effect-level expansion.
 - 153 unique GitHub source projects; 101 were added during the 2026 expansion.
-- 222 source-specific GIF previews: 8 official captures and 214 labeled editorial recreations.
-- 222 one-click implementation prompts, one for every effect.
+- 223 source-specific GIF previews: 8 official captures and 215 labeled editorial recreations.
+- 223 one-click implementation prompts, one for every effect.
 - 14 useful older sources are marked **Legacy**; no archived repository is included.
 - Stars are a snapshot from **2026-07-17**, not a live counter.
-- The referenced, optimized GIF set is **9.75 MiB**; each preview is 320×180, at most three seconds, and below 1 MiB.
+- The referenced, optimized GIF set is **9.79 MiB**; each preview is 320×180, at most three seconds, and below 1 MiB.
 
 ## Selection rules
 
@@ -42,7 +42,7 @@ An **effect-first** atlas of open-source interactions for the web. It catalogs *
 | [Text & SVG](#vector) | 22 | 18 | Typing, text splitting, vector drawing, handwriting, and SVG morphing. |
 | [Canvas & 2D](#canvas) | 22 | 19 | Scene graphs, creative coding, physics, drawing tools, and 2D renderers. |
 | [3D & WebGL](#webgl) | 22 | 20 | 3D engines, declarative renderers, shader layers, and post-processing. |
-| [Background & particles](#background) | 22 | 13 | Fluid, particles, gradients, confetti, meshes, ribbons, and fireworks. |
+| [Background & particles](#background) | 23 | 14 | Fluid, particles, gradients, confetti, meshes, ribbons, and fireworks. |
 | [Media & image](#media) | 23 | 22 | Comparison, pan-and-zoom, cropping, filters, lens zoom, and shader transitions. |
 
 ## Effect catalog
@@ -326,6 +326,7 @@ Fluid, particles, gradients, confetti, meshes, ribbons, and fireworks.
 | [Interactive hyperspeed highway](https://giraffe-tree.github.io/awesome-interaction/#interactive-hyperspeed-highway) | [React Bits](https://github.com/DavidHDev/react-bits) | 43,496 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#interactive-hyperspeed-highway) |
 | [Pointer-warped Balatro plasma](https://giraffe-tree.github.io/awesome-interaction/#pointer-warped-balatro-plasma) | [React Bits](https://github.com/DavidHDev/react-bits) | 43,496 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#pointer-warped-balatro-plasma) |
 | [CRT faulty-terminal pixel field](https://giraffe-tree.github.io/awesome-interaction/#crt-faulty-terminal-pixel-field) | [React Bits](https://github.com/DavidHDev/react-bits) | 43,496 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#crt-faulty-terminal-pixel-field) |
+| [Scroll-linked multilayer starfield drift](https://giraffe-tree.github.io/awesome-interaction/#scroll-linked-multilayer-starfield-drift) | [GSAP](https://github.com/greensock/GSAP) | 26,600 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#scroll-linked-multilayer-starfield-drift) |
 
 <a id="media"></a>
 

@@ -1112,5 +1112,17 @@ export const additionalEffectSeeds = [
     "difference": "The grayscale depth texture schedules which image regions blur and resolve first during a carousel change. Existing depth-map portrait parallax offsets sampling from pointer movement; it does not use scene depth as the temporal order of a media transition.",
     "sourceUrl": "https://blackforestlabs.ai/",
     "verifiedAt": "2026-07-17"
+  },
+  {
+    "name": "Scroll-linked multilayer starfield drift",
+    "nameZh": "滚动联动多层星野漂移",
+    "category": "background",
+    "projectName": "GSAP",
+    "repo": "greensock/GSAP",
+    "stars": 26600,
+    "snippet": "import { gsap } from 'gsap';\nimport { ScrollTrigger } from 'gsap/ScrollTrigger';\ngsap.registerPlugin(ScrollTrigger);\ndocument.querySelectorAll('.star-layer').forEach((canvas, index) => {\n  drawSeededStars(canvas, { count: [120, 90, 60][index], radius: [1.4, 1.8, 2.2][index] });\n  gsap.to(canvas, { yPercent: [-12, -24, -40][index], ease: 'none', scrollTrigger: { trigger: '.star-scene', start: 'top bottom', end: 'bottom top', scrub: true } });\n});",
+    "difference": "Multiple transparent star canvases with different densities and point sizes travel at different rates as the page scrolls, creating background depth. Existing particle fields loop on their own, while pointer parallax responds to cursor position rather than document progress.",
+    "sourceUrl": "https://fathom.video/",
+    "verifiedAt": "2026-07-17"
   }
 ];

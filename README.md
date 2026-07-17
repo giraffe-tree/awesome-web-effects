@@ -2,7 +2,7 @@
 
 [中文文档](README.zh-CN.md) · [Live demo](https://giraffe-tree.github.io/awesome-interaction/)
 
-An **effect-first** atlas of open-source interactions for the web. It catalogs **231 distinct effects across 10 categories**, backed by **154 source projects**. Each effect is one row with a stable semantic key, a GIF preview, copyable minimal code, and a one-click implementation prompt for Codex or Claude Code. English is the default interface and documentation language.
+An **effect-first** atlas of open-source interactions for the web. It catalogs **232 distinct effects across 10 categories**, backed by **154 source projects**. Each effect is one row with a stable semantic key, a GIF preview, copyable minimal code, and a one-click implementation prompt for Codex or Claude Code. English is the default interface and documentation language.
 
 ## Effect-first model
 
@@ -13,14 +13,14 @@ An **effect-first** atlas of open-source interactions for the web. It catalogs *
 
 ## Catalog snapshot
 
-- 231 effect rows, including 20 baseline effects.
-- 110 independently researched effects were added in the latest effect-level expansion.
+- 232 effect rows, including 20 baseline effects.
+- 111 independently researched effects were added in the latest effect-level expansion.
 - 154 unique GitHub source projects; 101 were added during the 2026 expansion.
-- 231 source-specific GIF previews: 8 official captures and 223 labeled editorial recreations.
-- 231 one-click implementation prompts, one for every effect.
+- 232 source-specific GIF previews: 8 official captures and 224 labeled editorial recreations.
+- 232 one-click implementation prompts, one for every effect.
 - 14 useful older sources are marked **Legacy**; no archived repository is included.
 - Stars are a snapshot from **2026-07-17**, not a live counter.
-- The referenced, optimized GIF set is **9.94 MiB**; each preview is 320×180, at most three seconds, and below 1 MiB.
+- The referenced, optimized GIF set is **10.02 MiB**; each preview is 320×180, at most three seconds, and below 1 MiB.
 
 ## Selection rules
 
@@ -42,7 +42,7 @@ An **effect-first** atlas of open-source interactions for the web. It catalogs *
 | [Text & SVG](#vector) | 24 | 19 | Typing, text splitting, vector drawing, handwriting, and SVG morphing. |
 | [Canvas & 2D](#canvas) | 22 | 19 | Scene graphs, creative coding, physics, drawing tools, and 2D renderers. |
 | [3D & WebGL](#webgl) | 22 | 20 | 3D engines, declarative renderers, shader layers, and post-processing. |
-| [Background & particles](#background) | 23 | 14 | Fluid, particles, gradients, confetti, meshes, ribbons, and fireworks. |
+| [Background & particles](#background) | 24 | 15 | Fluid, particles, gradients, confetti, meshes, ribbons, and fireworks. |
 | [Media & image](#media) | 25 | 23 | Comparison, pan-and-zoom, cropping, filters, lens zoom, and shader transitions. |
 
 ## Effect catalog
@@ -333,6 +333,7 @@ Fluid, particles, gradients, confetti, meshes, ribbons, and fireworks.
 | [Pointer-warped Balatro plasma](https://giraffe-tree.github.io/awesome-interaction/#pointer-warped-balatro-plasma) | [React Bits](https://github.com/DavidHDev/react-bits) | 43,496 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#pointer-warped-balatro-plasma) |
 | [CRT faulty-terminal pixel field](https://giraffe-tree.github.io/awesome-interaction/#crt-faulty-terminal-pixel-field) | [React Bits](https://github.com/DavidHDev/react-bits) | 43,496 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#crt-faulty-terminal-pixel-field) |
 | [Scroll-linked multilayer starfield drift](https://giraffe-tree.github.io/awesome-interaction/#scroll-linked-multilayer-starfield-drift) | [GSAP](https://github.com/greensock/GSAP) | 26,600 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#scroll-linked-multilayer-starfield-drift) |
+| [Blurred autoplay video ambience](https://giraffe-tree.github.io/awesome-interaction/#blurred-autoplay-video-ambience) | [Awesome Web Effects](https://github.com/giraffe-tree/awesome-web-effects) | 0 | 1 | Recommended | [Code + prompt](https://giraffe-tree.github.io/awesome-interaction/#blurred-autoplay-video-ambience) |
 
 <a id="media"></a>
 

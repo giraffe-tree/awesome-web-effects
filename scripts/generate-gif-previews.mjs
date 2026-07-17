@@ -303,6 +303,13 @@ function backgroundScene(frame, time, accent, secondary, mode, seed) {
         circle(frame, x, y, layer.radius, layer.color, .45 + layerIndex * .2);
       }
     });
+  } else if (mode === 7) {
+    rect(frame, 0, 0, width, height, mix([225, 219, 238], [198, 220, 235], wave(time)), .94);
+    circle(frame, 74 + time * 190, 56 + Math.sin(time * 6) * 18, 72, accent, .18);
+    circle(frame, 246 - time * 168, 128 + Math.cos(time * 5) * 16, 86, secondary, .2);
+    circle(frame, 160 + Math.sin(time * 4) * 54, 88, 58, mix(accent, secondary, time), .22);
+    rect(frame, 48, 62, 224, 56, [255, 255, 255], .38);
+    for (let index = 0; index < 3; index += 1) rect(frame, 72, 76 + index * 13, 92 + index * 28, 5, [41, 45, 55], .64);
   } else {
     for (let burst = 0; burst < 3; burst += 1) { const progress = (time * 1.6 + burst * .32) % 1; const cx = 76 + burst * 84; const cy = 58 + (burst % 2) * 34; for (let ray = 0; ray < 12; ray += 1) { const angle = ray / 12 * Math.PI * 2; line(frame, cx + Math.cos(angle) * progress * 12, cy + Math.sin(angle) * progress * 12, cx + Math.cos(angle) * progress * 56, cy + Math.sin(angle) * progress * 56, burst % 2 ? accent : secondary, 2, 1 - progress); } }
   }
@@ -362,7 +369,7 @@ const modeRules = {
   vector: [[/type-select|select-replace/, 7], [/text-path|curved text/, 6], [/draw|stroke|path/, 0], [/type|split|character css/, 1], [/flip|ticker|mechanical/, 2], [/morph|shape/, 3], [/hand|rough|letter/, 4], [/scramble|decode|random/, 5]],
   canvas: [[/generative|particle|sprite/, 0], [/physics|game|rigid/, 1], [/draw|sketch/, 2], [/object|node|drag|layer/, 3], [/geometry|primitive|illustration/, 4], [/infinite|grid|surface/, 5]],
   webgl: [[/mesh|object|react|vue|svelte/, 0], [/particle|sphere/, 1], [/shader|plane|functional|minimal/, 2], [/bloom|post/, 3], [/product|model|orbit|camera/, 4], [/scene|webgl|3d/, 5]],
-  background: [[/starfield/, 6], [/fluid|gradient|vanta/, 0], [/particle|swarm|link/, 1], [/confetti/, 2], [/gradient|backdrop/, 3], [/mesh|poly|grid|surface/, 4], [/firework|ribbon|trail/, 5]],
+  background: [[/video ambience|blurred autoplay/, 7], [/starfield/, 6], [/fluid|gradient|vanta/, 0], [/particle|swarm|link/, 1], [/confetti/, 2], [/gradient|backdrop/, 3], [/mesh|poly|grid|surface/, 4], [/firework|ribbon|trail/, 5]],
   media: [[/duration-aware|film handoff|layered hero film/, 8], [/device-silhouette|silhouette masked/, 7], [/comparison|reveal/, 0], [/zoom|magnif|lens/, 1], [/depth|dissolve/, 6], [/pan|deep/, 2], [/crop/, 3], [/filter|editor/, 4], [/media|control|upload|preview/, 5]]
 };
 

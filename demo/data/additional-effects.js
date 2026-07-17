@@ -1244,5 +1244,23 @@ export const additionalEffectSeeds = [
     "difference": "This is a cinematic playlist built from stacked native videos, each with its own editorial range, just-in-time loading of the next clip, and a short opacity handoff. Existing media entries use one loop, scroll timecodes, or a two-texture shader transition.",
     "sourceUrl": "https://kling.ai/",
     "verifiedAt": "2026-07-17"
+  },
+  {
+    "name": "Blurred autoplay video ambience",
+    "nameZh": "模糊自播视频氛围层",
+    "category": "background",
+    "projectName": "Awesome Web Effects",
+    "repo": "giraffe-tree/awesome-web-effects",
+    "stars": 0,
+    "snippet": "<div class=\"ambient-video\" aria-hidden=\"true\"><video autoplay muted loop playsinline src=\"demo.mp4\"></video><i></i></div><main class=\"foreground\">Live pixels become ambient light.</main>\n<style>.ambient-video{position:fixed;inset:0;overflow:hidden;background:#ddd}.ambient-video video{width:120%;height:120%;object-fit:cover;transform:scale(1.12);filter:blur(48px) saturate(1.35);opacity:.75}.ambient-video i{position:absolute;inset:0;background:#b9a6ff;opacity:.28;mix-blend-mode:multiply}.foreground{position:relative;z-index:1;padding:12vh 8vw}@media(prefers-reduced-motion:reduce){.ambient-video video{display:none}}</style>",
+    "behavior": {
+      "trigger": "page load",
+      "response": "oversized live video pixels become a heavily blurred blended ambient light field",
+      "timing": "continuous native video loop",
+      "layer": "background"
+    },
+    "difference": "The live pixels of an ordinary looping video become a heavily blurred oversized light source beneath a blend wash. The image-palette effect derives one color from still media, while shader backdrops synthesize pixels instead of reusing live footage.",
+    "sourceUrl": "https://replicate.com/",
+    "verifiedAt": "2026-07-17"
   }
 ];

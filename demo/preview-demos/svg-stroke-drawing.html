@@ -3,33 +3,306 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vivus — SVG Stroke Drawing</title>
+    <title>Vivus — Field Itinerary Approval</title>
     <link rel="stylesheet" href="./shared.css" />
     <style>
-      :root { --preview-background: #fbf8f1; color-scheme: light; }
-      .drawing-wrap { position: absolute; inset: 29px 26px 20px; border-radius: 18px; background: #fff; box-shadow: 0 12px 35px #45382617; }
-      #line-art { width: 100%; height: 100%; overflow: visible; }
-      #line-art path, #line-art circle { fill: none; stroke-linecap: round; stroke-linejoin: round; }
-      .ink-main { stroke: #19202a; stroke-width: 4; }
-      .ink-accent { stroke: #ff5a64; stroke-width: 3; }
-      .ink-soft { stroke: #45b9c4; stroke-width: 2.5; }
-      .library-badge { color: #242018; background: #ffffffe8; border-color: #3327111f; }
-      .scene-caption { color: #6a6256; }
+      :root {
+        --preview-background: #0c211f;
+        --ink: #efe6d2;
+        --muted: #93aaa3;
+        --line: #31514b;
+        --signal: #f47349;
+        --aqua: #8ed1c5;
+        color-scheme: dark;
+      }
+
+      button { font: inherit; }
+
+      .route-shell {
+        position: absolute;
+        inset: 28px 22px 21px;
+        display: grid;
+        grid-template-columns: minmax(104px, .76fr) minmax(0, 1.72fr);
+        gap: 12px;
+        min-height: 0;
+      }
+
+      .brief {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-width: 0;
+        padding: 12px 2px 2px 0;
+      }
+
+      .eyebrow,
+      .route-code,
+      .route-status,
+      .place-label {
+        letter-spacing: .12em;
+        text-transform: uppercase;
+      }
+
+      .eyebrow {
+        margin: 0 0 6px;
+        color: var(--aqua);
+        font-size: clamp(6px, 2.2vw, 8px);
+        font-weight: 850;
+      }
+
+      h1 {
+        max-width: 220px;
+        margin: 0;
+        color: var(--ink);
+        font-family: Iowan Old Style, Baskerville, "Times New Roman", serif;
+        font-size: clamp(17px, 5.8vw, 34px);
+        font-weight: 600;
+        letter-spacing: -.045em;
+        line-height: .93;
+      }
+
+      .route-code {
+        margin: 8px 0 0;
+        color: var(--muted);
+        font-size: clamp(5px, 1.6vw, 7px);
+        font-weight: 800;
+        line-height: 1.45;
+      }
+
+      .route-code strong { color: var(--ink); }
+
+      .brief-controls {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+      }
+
+      .trace-button,
+      .clear-button {
+        min-height: 27px;
+        border-radius: 999px;
+        cursor: pointer;
+        font-size: 7px;
+        font-weight: 900;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        touch-action: manipulation;
+      }
+
+      .trace-button {
+        flex: 0 0 auto;
+        padding: 0 11px;
+        border: 1px solid var(--signal);
+        background: var(--signal);
+        color: #171a17;
+        box-shadow: 0 7px 18px #0006;
+      }
+
+      .clear-button {
+        width: 27px;
+        padding: 0;
+        border: 1px solid #75908766;
+        background: #132b28;
+        color: var(--muted);
+      }
+
+      .clear-button:disabled {
+        cursor: default;
+        opacity: .36;
+      }
+
+      .trace-button:focus-visible,
+      .clear-button:focus-visible,
+      .route-map:focus-visible {
+        outline: 2px solid var(--ink);
+        outline-offset: 3px;
+      }
+
+      .route-status {
+        position: absolute;
+        right: 8px;
+        bottom: 7px;
+        z-index: 5;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        max-width: 58%;
+        color: #c4d1cc;
+        font-size: 6px;
+        font-weight: 850;
+        white-space: nowrap;
+      }
+
+      .route-status::before {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--muted);
+        content: "";
+      }
+
+      .preview-stage[data-phase="drawing"] .route-status::before {
+        background: var(--signal);
+        box-shadow: 0 0 0 3px #f4734930;
+      }
+
+      .preview-stage[data-phase="complete"] .route-status::before { background: var(--aqua); }
+
+      .route-map {
+        position: relative;
+        min-width: 0;
+        min-height: 0;
+        overflow: clip;
+        border: 1px solid #78918940;
+        border-radius: 18px;
+        background:
+          radial-gradient(circle at 76% 26%, #24453f 0 1px, transparent 1.5px),
+          linear-gradient(145deg, #17332f, #102725 73%);
+        box-shadow: 0 18px 40px #0005, inset 0 1px #ffffff0c;
+        cursor: pointer;
+        touch-action: manipulation;
+      }
+
+      .route-map::after {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: linear-gradient(90deg, transparent, #ffffff05 50%, transparent);
+        content: "";
+      }
+
+      .map-base,
+      #line-art {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+      }
+
+      #line-art { opacity: 0; }
+      .preview-stage[data-route-visible="true"] #line-art { opacity: 1; }
+
+      .map-base .grid { stroke: #7ba09715; stroke-width: .8; }
+      .map-base .coast { fill: #1d3d38; stroke: #64847c44; stroke-width: 1.1; }
+      .map-base .contour { fill: none; stroke: #87a9a125; stroke-width: .9; }
+      .map-base .ghost-leg { fill: none; stroke: #a8c5bc26; stroke-width: 1.3; stroke-dasharray: 3 5; }
+      .map-base .ghost-node { fill: #102725; stroke: #a9c1b94d; stroke-width: 1; }
+      .map-base .map-label { fill: #9fb4ad; font-size: 5px; font-weight: 800; letter-spacing: .12em; }
+      .map-base .map-label.destination { fill: #efe6d2; }
+      .map-base .north { fill: #8ed1c5; font-size: 6px; font-weight: 900; }
+
+      #line-art path {
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        vector-effect: non-scaling-stroke;
+      }
+
+      #line-art [data-route-step="origin"] { stroke: var(--aqua); stroke-width: 2; }
+      #line-art [data-route-step^="leg"] { stroke: var(--signal); stroke-width: 3.2; }
+      #line-art [data-route-step="waypoint"] { stroke: var(--ink); stroke-width: 1.8; }
+      #line-art [data-route-step="destination"] { stroke: var(--ink); stroke-width: 2.4; }
+      #line-art [data-route-step="approval"] { stroke: var(--aqua); stroke-width: 2.6; }
+
+      .library-badge {
+        color: #dceae5;
+        background: #102825df;
+        border-color: #7590873d;
+      }
+
+      .scene-caption { color: #91a8a1; }
+
+      @media (max-width: 260px), (max-height: 135px) {
+        .route-shell { inset: 7px; grid-template-columns: 74px minmax(0, 1fr); gap: 6px; }
+        .brief { padding-top: 5px; }
+        .eyebrow { margin-bottom: 3px; font-size: 5px; }
+        h1 { font-size: 13px; line-height: .9; }
+        .route-code { margin-top: 4px; font-size: 4px; }
+        .trace-button { min-height: 20px; padding: 0 7px; font-size: 5px; }
+        .clear-button { width: 20px; min-height: 20px; font-size: 5px; }
+        .route-map { border-radius: 9px; }
+        .route-status { right: 4px; bottom: 4px; font-size: 4px; }
+        .route-status::before { width: 3px; height: 3px; }
+        .library-badge, .scene-caption { display: none; }
+      }
+
+      @media (max-width: 175px) {
+        .route-shell { display: block; inset: 4px; }
+        .brief {
+          position: absolute;
+          inset: 3px auto 3px 2px;
+          z-index: 6;
+          width: 39px;
+          padding: 0;
+          pointer-events: none;
+        }
+        .eyebrow, .route-code { display: none; }
+        h1 { width: 39px; font-size: 10px; line-height: .88; }
+        .brief-controls { gap: 2px; pointer-events: auto; }
+        .trace-button { min-height: 16px; padding: 0 4px; font-size: 4px; letter-spacing: .04em; }
+        .clear-button { width: 16px; min-height: 16px; font-size: 4px; }
+        .route-map { position: absolute; inset: 0 0 0 43px; }
+        .route-status { display: none; }
+        .map-base .map-label:not(.destination), .map-base .north { display: none; }
+        .map-base .map-label.destination { font-size: 4px; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .trace-button, .clear-button { scroll-behavior: auto; }
+      }
     </style>
   </head>
   <body>
-    <main class="preview-stage" aria-label="A real Vivus animation drawing an SVG illustration path by path">
-      <div class="drawing-wrap">
-        <svg id="line-art" data-preview-mechanism="vivus-stroke-drawing" viewBox="0 0 280 120" role="img" aria-label="A paper plane drawing a looping flight path">
-          <path class="ink-soft" d="M18 90 C52 110 65 63 99 82 S151 111 176 77 S224 43 260 65" />
-          <path class="ink-main" d="M85 61 L207 19 L164 91 L137 67 L111 83 Z" />
-          <path class="ink-accent" d="M137 67 L207 19 M137 67 L142 98 L164 91" />
-          <circle class="ink-accent" cx="28" cy="44" r="7" />
-          <path class="ink-soft" d="M17 44 H4 M28 33 V19 M39 44 H53" />
-        </svg>
-      </div>
-      <span class="library-badge">Vivus · path timing</span>
-      <span class="scene-caption">real path lengths reveal one stroke at a time</span>
+    <main id="route-stage" class="preview-stage" data-phase="idle" aria-label="Interactive Vivus field itinerary approval">
+      <section class="route-shell" aria-labelledby="route-title">
+        <div class="brief">
+          <div>
+            <p class="eyebrow">Field itinerary · 04</p>
+            <h1 id="route-title">Trace the coast.</h1>
+            <p class="route-code"><strong>74 km</strong> · basalt headland<br />supply window 06:40</p>
+          </div>
+          <div class="brief-controls">
+            <button id="trace-route" class="trace-button" type="button">Draw route</button>
+            <button id="clear-route" class="clear-button" type="button" aria-label="Clear route" title="Clear route" disabled>↺</button>
+          </div>
+        </div>
+
+        <div id="route-map" class="route-map" role="button" tabindex="0" aria-label="Draw the route from field depot to basalt headland">
+          <svg class="map-base" viewBox="0 0 260 144" aria-hidden="true">
+            <g class="grid">
+              <path d="M0 36H260 M0 72H260 M0 108H260" />
+              <path d="M52 0V144 M104 0V144 M156 0V144 M208 0V144" />
+            </g>
+            <path class="coast" d="M154 -5 C165 9 162 19 176 28 C193 39 187 52 207 61 C224 69 216 82 236 91 C251 98 249 118 269 128 L269 -5 Z" />
+            <path class="contour" d="M174 1 C182 16 178 25 193 34 S200 55 220 62 S228 86 248 92" />
+            <path class="contour" d="M190 4 C197 18 196 29 211 37 S218 57 238 66" />
+            <path class="contour" d="M202 78 C218 79 220 96 240 99 S246 120 262 121" />
+            <path class="ghost-leg" d="M34 110 C66 96 62 69 96 76 C125 82 137 52 172 61 C198 67 202 39 224 35" />
+            <circle class="ghost-node" cx="34" cy="110" r="5" />
+            <circle class="ghost-node" cx="96" cy="76" r="4" />
+            <circle class="ghost-node" cx="224" cy="35" r="5" />
+            <text class="map-label" x="18" y="128">FIELD DEPOT</text>
+            <text class="map-label" x="80" y="68">CACHE 02</text>
+            <text class="map-label destination" x="187" y="20">HEADLAND</text>
+            <text class="north" x="238" y="126">N ↑</text>
+          </svg>
+
+          <svg id="line-art" data-preview-mechanism="vivus-semantic-route-drawing" viewBox="0 0 260 144" role="img" aria-label="A field route drawn in semantic itinerary order">
+            <path data-route-step="origin" d="M29 110 A5 5 0 1 1 39 110 A5 5 0 1 1 29 110" />
+            <path data-route-step="leg-one" d="M39 108 C66 96 63 69 96 76" />
+            <path data-route-step="waypoint" d="M92 76 A4 4 0 1 1 100 76 A4 4 0 1 1 92 76" />
+            <path data-route-step="leg-two" d="M100 76 C126 81 138 52 172 61 C199 67 202 40 220 36" />
+            <path data-route-step="destination" d="M224 26 C218 26 214 30 214 36 C214 44 224 53 224 53 C224 53 234 44 234 36 C234 30 230 26 224 26 M220 36 A4 4 0 1 1 228 36 A4 4 0 1 1 220 36" />
+            <path data-route-step="approval" d="M216 58 L222 64 L234 53" />
+          </svg>
+          <output id="route-status" class="route-status" aria-live="polite">Route awaiting approval</output>
+        </div>
+      </section>
+      <span class="library-badge">Vivus · semantic path order</span>
+      <span class="scene-caption">click the map or press enter to trace the itinerary</span>
     </main>
     <script type="module" src="./src/vivus-stroke-demo.js"></script>
   </body>

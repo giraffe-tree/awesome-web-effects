@@ -607,17 +607,17 @@ const existingEffects = [
     "addedIn": "baseline",
     "research": null,
     "behavior": {
-      "trigger": "mount or viewport entry",
-      "response": "SVG stroke drawing",
-      "timing": "eased transition",
-      "layer": "content"
+      "trigger": "real Draw route/map click or focused Enter/Space, with Escape/R/Clear to reset",
+      "response": "Draw a six-part field itinerary from depot to headland in semantic route order and retain an approved result",
+      "timing": "human-owned oneByOne Vivus trace; restartable, interruptible, and never automatic on mount or preview time",
+      "layer": "field itinerary brief, real SVG map geometry, ordered route paths, approval state, and accessible controls"
     },
-    "prompt": "Implement the \"SVG stroke drawing\" (SVG 描边绘制) web interaction effect in the current project.\n\nUse Vivus (maxwellito/vivus) as the recommended implementation unless the existing stack makes a dependency-free equivalent more appropriate. Recreate this specific vector interaction, not a generic animation.\n\nInteraction contract:\n- Trigger: mount or viewport entry\n- Visual response: SVG stroke drawing\n- Timing relationship: eased transition\n- Page layer: content\n\nRequirements:\n- Integrate with the existing design system and component structure.\n- Support keyboard and touch input whenever the interaction is actionable.\n- Respect prefers-reduced-motion with a clear non-animated fallback.\n- Avoid layout shift, scroll traps, inaccessible focus behavior, and unnecessary dependencies.\n- Keep the implementation responsive and clean up listeners, timers, and animation instances.\n\nStart from this minimal API shape:\n\n```js\nimport Vivus from 'vivus';\nnew Vivus('logo', { duration: 120, type: 'oneByOne' });\n```\n\nReturn the working code, the files changed, and a short explanation of how to tune timing, easing, distance, and reduced-motion behavior.",
+    "prompt": "Implement the \"SVG stroke drawing\" (SVG 描边绘制) as a user-approved semantic route, not an autoplaying paper-plane outline.\n\nUse Vivus (maxwellito/vivus) in manual `oneByOne` mode to draw a real itinerary whose DOM path order has meaning: origin, first leg, waypoint, second leg, destination, then approval. Keep the base map visible before interaction, hide the active route at time zero, and preserve a legible approved result after drawing completes.\n\nInteraction contract:\n- Trigger: real Draw route button or map click/tap; focused Enter/Space draws; Escape, R, or Clear resets\n- Visual response: trace six SVG geometry paths in semantic travel order, update progress/status during drawing, and retain destination plus approval evidence\n- Timing relationship: human-owned manual Vivus playback, restartable and interruptible; no mount autoplay, automatic replay, preview-clock trigger, or synthetic event\n- Page layer: field itinerary brief, live SVG map, ordered route paths, status, and reset controls\n\nRequirements:\n- Start strictly idle with the route layer hidden, zero Vivus progress, and no trigger or completion.\n- Use real `SVGGeometryElement` paths with measurable length and validate both DOM and Vivus map order.\n- Support pointer, touch, pen, keyboard drawing, retracing, interruption, reset, 320×180 and 144×81 previews, and prefers-reduced-motion direct completion.\n- Keep route visibility, phase, progress, current frame, trigger target, status, and accessible pressed/disabled state synchronized.\n- Export runtime state that proves semantic path order, geometry evidence, real input counts, interruption/reset, initial stillness, and absence of automatic playback.\n\nStart from this minimal API shape:\n\n```js\nimport Vivus from 'vivus';\nconst drawing = new Vivus('route-svg', { start: 'manual', type: 'oneByOne', duration: 108 });\ndrawing.stop().reset();\n```\n\nReturn the working code, the files changed, and a short explanation of how to tune path order, duration allocation, easing, interruption, route visibility, and reduced motion.",
     "sources": [
       {
         "projectId": "maxwellito-vivus",
         "recommended": true,
-        "snippet": "import Vivus from 'vivus';\nnew Vivus('logo', { duration: 120, type: 'oneByOne' });",
+        "snippet": "import Vivus from 'vivus';\nconst drawing = new Vivus('route-svg', { start: 'manual', type: 'oneByOne', duration: 108 });\ndrawing.stop().reset();",
         "preview": "captured/svg-stroke-drawing",
         "previewKind": "local-demo-capture",
         "demoPath": "preview-demos/dist/svg-stroke-drawing.html",
@@ -642,7 +642,7 @@ const existingEffects = [
       "total": 86,
       "decision": "admit",
       "reasonCode": "passed",
-      "rationaleZh": "路径逐笔显现并完成纸飞机图形，动作含义、时序和缩略图辨识度都可靠。"
+      "rationaleZh": "真实行程由起点、两段路线、途经点、目的地和审批勾按语义顺序绘制；点击、键盘、打断与清理均可核验，首帧不会自动描边。"
     }
   },
   {

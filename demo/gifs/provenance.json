@@ -151,7 +151,7 @@
       "originUrl": "https://github.com/maxwellito/vivus",
       "demoSourcePath": "demo/preview-demos/svg-stroke-drawing.html",
       "libraryVersion": "vivus@0.4.6",
-      "generatedAt": "2026-07-18",
+      "generatedAt": "2026-07-21",
       "outputPath": "demo/gifs/captured/svg-stroke-drawing.gif",
       "usageBasis": "local demo capture using the pinned Vivus package; verify license https://github.com/maxwellito/vivus/blob/HEAD/LICENSE"
     },

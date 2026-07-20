@@ -381,6 +381,38 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.locator('#save-control').click()
             elif index == 35:
                 page.wait_for_timeout(750)
+        elif demo["id"] == "svg-stroke-drawing":
+            if index == 3:
+                page.locator('#trace-route').click()
+            elif index == 4:
+                page.wait_for_timeout(700)
+            elif index == 5:
+                page.wait_for_timeout(1_300)
+            elif index == 10:
+                page.locator('#route-map').click()
+            elif index == 11:
+                page.wait_for_timeout(400)
+            elif index == 12:
+                page.locator('#trace-route').click()
+            elif index == 13:
+                page.wait_for_timeout(2_000)
+            elif index == 18:
+                page.keyboard.press("Escape")
+            elif index == 21:
+                page.locator('#route-map').focus()
+                page.keyboard.press("Enter")
+            elif index == 22:
+                page.wait_for_timeout(2_000)
+            elif index == 27:
+                page.locator('#clear-route').click()
+            elif index == 30:
+                page.locator('#trace-route').click()
+            elif index == 31:
+                page.wait_for_timeout(700)
+            elif index == 32:
+                page.locator('#route-map').click()
+            elif index == 33:
+                page.wait_for_timeout(2_000)
         elif demo["id"] == "blurhash-to-photo-progressive-reveal":
             pointer_x = 230 if .5 <= preview_time < 2.25 else 32
             page.mouse.move(pointer_x, 90)
@@ -917,6 +949,37 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["lastInput"] != "pointer:mouse"
         ):
             raise RuntimeError(f"{demo['id']} did not capture a real KUTE.js shortlist decision across pointer and keyboard input: {interaction!r}")
+    elif demo["id"] == "svg-stroke-drawing":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            interaction["automaticFallback"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticReplay"]
+            or interaction["automaticTrigger"]
+            or interaction["syntheticInputDispatch"]
+            or not interaction["eventOwnedTimeline"]
+            or not interaction["userInitiated"]
+            or interaction["acceptedInputs"] != ["mouse", "touch", "pen", "keyboard"]
+            or interaction["inputCount"] < 8
+            or interaction["lastInputTrusted"] is not True
+            or interaction["triggerCount"] < 6
+            or interaction["playCount"] != interaction["triggerCount"]
+            or interaction["completionCount"] < 4
+            or interaction["pointerTriggerCount"] < 5
+            or interaction["keyboardTriggerCount"] < 1
+            or interaction["resetCount"] < 2
+            or interaction["interruptionCount"] < 2
+            or interaction["semanticOrder"] != ["origin", "leg-one", "waypoint", "leg-two", "destination", "approval"]
+            or interaction["expectedPathCount"] != 6
+            or interaction["vivusMapCount"] != 6
+            or interaction["lastTriggerTarget"] != "route-map"
+            or not interaction["routeVisible"]
+            or interaction["phase"] != "complete"
+            or interaction["isDrawing"]
+            or interaction["progress"] != 1
+            or interaction["currentFrame"] != interaction["frameLength"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a real semantic Vivus route draw, interruption, keyboard trigger, and reset: {interaction!r}")
     elif demo["id"] == "blurhash-to-photo-progressive-reveal":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__()")
         if interaction["pointerEvents"] < 3 or interaction["pointerOverPhoto"]:

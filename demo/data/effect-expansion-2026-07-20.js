@@ -1131,16 +1131,16 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "velocity-aware-swipe-drawer",
-    "name": "Velocity-aware swipe drawer",
-    "nameZh": "速度感知抽屉回弹",
+    "name": "Velocity-aware cycle-route drawer",
+    "nameZh": "速度感知骑行路线抽屉",
     "category": "transition",
     "sourceUrl": "https://github.com/emilkowalski/vaul",
     "difference": "抽屉跟手、根据释放速度跨越吸附点并让背景同步缩放；与菜单帘幕的离散开合不同。",
     "behavior": {
-      "trigger": "touch/pointer drag",
-      "response": "Follow the gesture, infer velocity, and settle at semantic snap points",
-      "timing": "gesture-continuous spring settling",
-      "layer": "bottom drawer overlay"
+      "trigger": "trusted mouse/touch drag and release, route-details buttons, or slider keyboard controls",
+      "response": "Follow the gesture on a responsive side/bottom axis, resolve real release velocity into route preview, summary, or full-route snaps, and start live guidance from the complete state",
+      "timing": "gesture-continuous tracking followed by interruptible 460 ms settling; reduced motion lands directly",
+      "layer": "full route map with desktop side drawer, compact bottom drawer, overlay, and live-guidance result"
     },
     "implementation": {
       "projectId": "motiondivision-motion",
@@ -1159,10 +1159,10 @@ export const effectExpansion100Specs = [
       "evidence": 9,
       "total": 85
     },
-    "rationaleZh": "速度与吸附点能形成清楚手势反馈，但艺术余量需靠场景设计。",
+    "rationaleZh": "把抽象吸附演示变成低车流骑行路线：慢拉、快甩和键盘分别到达有意义的预览、摘要、完整路线，只有完整路线才能启动导航。",
     "batch": "B",
-    "demo": "三段式声音混音台抽屉，背景舞台随抽屉高度缩小。",
-    "capture": "慢拖至第二 snap→快速甩至全屏→向下轻扫关闭。",
+    "demo": "Wayfinder 低车流骑行地图包含 6.8 km 路线、ETA、爬升与三步指引；抽屉在宽屏为横向侧栏、紧凑预览为纵向底栏，真实释放速度决定三个语义 snap。",
+    "capture": "真实慢拖到路线摘要、键盘 End 到完整路线并启动导航，再快甩关闭、按钮打开、键盘退回摘要、快甩全开并显式关闭；断言可信事件、速度带、目标 snap、指针释放与导航结果。",
     "risk": {
       "level": "medium",
       "detail": "正式评分余量仅 85；焦点回收和触摸滚动冲突必须解决。"

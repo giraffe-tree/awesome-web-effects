@@ -1035,6 +1035,71 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("Escape")
             elif index == 35:
                 page.wait_for_timeout(500)
+        elif demo["id"] == "velocity-aware-swipe-drawer":
+            if index == 2:
+                handle_box = page.locator('#drawer-handle').bounding_box()
+                slow_x = handle_box["x"] + handle_box["width"] * .5
+                slow_y = handle_box["y"] + handle_box["height"] * .5
+                page.mouse.move(slow_x, slow_y)
+                page.mouse.down()
+            elif index == 3:
+                page.mouse.move(slow_x, slow_y - 17)
+                page.wait_for_timeout(95)
+            elif index == 4:
+                page.mouse.move(slow_x, slow_y - 34)
+                page.wait_for_timeout(95)
+            elif index == 5:
+                page.mouse.move(slow_x, slow_y - 50)
+                page.wait_for_timeout(95)
+            elif index == 6:
+                page.mouse.up()
+            elif index == 7:
+                page.wait_for_timeout(520)
+            elif index == 10:
+                page.locator('#drawer-handle').focus()
+                page.keyboard.press("End")
+            elif index == 11:
+                page.wait_for_timeout(520)
+            elif index == 13:
+                page.locator('#start-route').click()
+            elif index == 14:
+                page.wait_for_timeout(520)
+            elif index == 17:
+                handle_box = page.locator('#drawer-handle').bounding_box()
+                fast_x = handle_box["x"] + handle_box["width"] * .5
+                fast_y = handle_box["y"] + handle_box["height"] * .5
+                page.mouse.move(fast_x, fast_y)
+                page.mouse.down()
+            elif index == 18:
+                page.mouse.move(fast_x, 177)
+                page.mouse.up()
+            elif index == 19:
+                page.wait_for_timeout(520)
+            elif index == 21:
+                page.locator('#details-toggle').click()
+            elif index == 22:
+                page.wait_for_timeout(520)
+            elif index == 24:
+                page.locator('#drawer-handle').focus()
+                page.keyboard.press("ArrowRight")
+            elif index == 25:
+                page.wait_for_timeout(520)
+            elif index == 28:
+                handle_box = page.locator('#drawer-handle').bounding_box()
+                fast_x = handle_box["x"] + handle_box["width"] * .5
+                fast_y = handle_box["y"] + handle_box["height"] * .5
+                page.mouse.move(fast_x, fast_y)
+                page.mouse.down()
+            elif index == 29:
+                page.mouse.move(fast_x, 3)
+                page.mouse.up()
+            elif index == 30:
+                page.wait_for_timeout(520)
+            elif index == 32:
+                page.locator('#drawer-handle').focus()
+                page.keyboard.press("Home")
+            elif index == 33:
+                page.wait_for_timeout(520)
         elif demo["id"] == "spatial-slide-deck-navigation":
             if index == 2:
                 page.locator('.control-button[data-direction="right"]').click()
@@ -2416,6 +2481,54 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["lastTrustedEvent"] != "escape-reset"
         ):
             raise RuntimeError(f"{demo['id']} did not capture human drag extraction, five-story repair, keyboard reorder/repack, snap-back, and explicit reset: {interaction!r}")
+    elif demo["id"] == "velocity-aware-swipe-drawer":
+        page.wait_for_function("!window.__PREVIEW_INTERACTION_STATE__.motionActive && !window.__PREVIEW_INTERACTION_STATE__.dragging", timeout=2_000)
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["claimedLibrary"] != "motion@12.42.2"
+            or interaction["renderer"] != "dom"
+            or interaction["mechanism"] != "velocity-aware-responsive-drawer"
+            or interaction["layout"] != "bottom"
+            or interaction["axis"] != "y"
+            or interaction["openingDirection"] != -1
+            or interaction["inputAdapters"] != ["pointer", "touch", "button", "keyboard"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["previewClockDrivesDrawer"]
+            or not interaction["initialStaticConfirmed"]
+            or not interaction["motionControlsCreated"]
+            or interaction["inputCount"] < 8
+            or interaction["dragCount"] < 3
+            or interaction["releaseCount"] < 3
+            or interaction["steadyReleaseCount"] < 1
+            or interaction["fastReleaseCount"] < 2
+            or interaction["keyboardCount"] < 3
+            or interaction["buttonCount"] < 2
+            or interaction["settleCount"] < 8
+            or interaction["resultCount"] != 1
+            or len(interaction["releaseHistory"]) < 3
+            or not all(item["trusted"] for item in interaction["releaseHistory"])
+            or [item["speedBand"] for item in interaction["releaseHistory"][:3]] != ["steady", "fast", "fast"]
+            or [item["targetName"] for item in interaction["releaseHistory"][:3]] != ["summary", "preview", "full route"]
+            or interaction["lastInputTrusted"] is not True
+            or interaction["lastInput"] != "keyboard:Home"
+            or interaction["routeState"] != "active"
+            or interaction["resultCount"] != 1
+            or interaction["progress"] != 0
+            or interaction["targetProgress"] != 0
+            or interaction["snapIndex"] != 0
+            or interaction["phase"] != "preview"
+            or interaction["motionActive"]
+            or interaction["dragging"]
+            or interaction["pointerCaptured"]
+            or interaction["travelDistance"] < 100
+            or interaction["speedBand"] != "steady"
+            or interaction["releaseDecision"] != "keyboard → preview"
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture trusted slow/fast velocity snaps, responsive bottom-drawer keyboard control, route start, and exact collapsed recovery: {interaction!r}")
     elif demo["id"] == "spatial-slide-deck-navigation":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         if (

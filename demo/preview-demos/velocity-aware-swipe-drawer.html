@@ -1,2 +1,585 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Motion — Velocity-aware Swipe Drawer</title><link rel="stylesheet" href="./shared.css"><style>
-:root{--preview-background:#10161e}.phone{position:absolute;left:64px;top:23px;width:192px;height:146px;overflow:hidden;border:1px solid #ffffff40;border-radius:22px;background:linear-gradient(145deg,#182330,#23364b);box-shadow:0 22px 45px #0007;touch-action:none}.phone-header{padding:15px;color:#dbe7f2;font:800 7px/1 ui-monospace;letter-spacing:.12em}.phone-map{position:absolute;inset:39px 12px 12px;border-radius:14px;background:radial-gradient(circle at 70% 38%,#55d6b5 0 3%,transparent 4%),linear-gradient(25deg,transparent 48%,#ffffff13 49% 51%,transparent 52%),#31465b}.drawer-overlay{position:absolute;inset:0;background:#02050999;opacity:0}.swipe-drawer{position:absolute;left:0;right:0;bottom:0;height:103px;padding:11px 14px;border-radius:17px 17px 0 0;background:#f5f1e7;color:#1e251f;transform:translateY(83px);cursor:ns-resize}.drawer-handle{width:30px;height:3px;margin:0 auto 10px;border-radius:9px;background:#25312840}.swipe-drawer small{font:800 6px/1 ui-monospace;letter-spacing:.11em}.swipe-drawer h1{margin:8px 0 0;font:950 17px/.9 system-ui;letter-spacing:-.05em}.velocity-readout{position:absolute;right:12px;top:14px;color:#59645c;font:750 6px/1 ui-monospace}.library-badge{background:#0e151dc7}.scene-caption{left:auto;right:12px}</style></head><body><main class="preview-stage"><div class="phone" id="phone" data-preview-mechanism="motion-velocity-drawer" tabindex="0" aria-label="Swipe the drawer or use arrow keys"><div class="phone-header">ROUTE / SAN FRANCISCO</div><div class="phone-map"></div><div class="drawer-overlay" id="drawer-overlay"></div><section class="swipe-drawer" id="swipe-drawer"><div class="drawer-handle"></div><span class="velocity-readout" id="velocity-readout">0.00 px/ms</span><small>NEXT STOP / 02</small><h1>Arrive with momentum.</h1></section></div><span class="library-badge">Motion · velocity drawer</span><span class="scene-caption">release speed chooses the resting snap</span></main><script type="module" src="./src/velocity-aware-swipe-drawer-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Motion — Velocity-aware Route Drawer</title>
+    <link rel="stylesheet" href="./shared.css" />
+    <style>
+      :root {
+        --preview-background: #d9e1d4;
+        --ink: #10241d;
+        --muted: #64756e;
+        --paper: #f5f1e7;
+        --forest: #14382e;
+        --mint: #a9efc7;
+        --lime: #d7ef7e;
+        color-scheme: light;
+      }
+
+      button { font: inherit; }
+
+      .route-stage {
+        background:
+          linear-gradient(90deg, rgba(16, 36, 29, .045) 1px, transparent 1px),
+          linear-gradient(rgba(16, 36, 29, .045) 1px, transparent 1px),
+          #dbe3d7;
+        background-size: 25px 25px;
+        color: var(--ink);
+      }
+
+      .route-header {
+        position: absolute;
+        top: 14px;
+        left: 17px;
+        right: 17px;
+        z-index: 3;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        pointer-events: none;
+      }
+
+      .route-brand,
+      .route-mode,
+      .route-kicker,
+      .route-status,
+      .route-stats dt,
+      .route-stats dd,
+      .route-point,
+      .drawer-eyebrow,
+      .drawer-snap,
+      .velocity-readout,
+      .step-number,
+      .step-meta,
+      .result-copy,
+      .drawer-peek-label {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        text-transform: uppercase;
+      }
+
+      .route-brand {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        font-size: 7px;
+        font-weight: 900;
+        letter-spacing: .14em;
+      }
+
+      .route-brand::before {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--forest);
+        box-shadow: inset 0 0 0 3px var(--lime);
+        content: "";
+      }
+
+      .route-mode {
+        color: var(--muted);
+        font-size: 6px;
+        font-weight: 850;
+        letter-spacing: .12em;
+      }
+
+      .route-map {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        overflow: hidden;
+      }
+
+      .route-map svg { width: 100%; height: 100%; }
+
+      .route-map .terrain {
+        fill: none;
+        stroke: rgba(20, 56, 46, .11);
+        stroke-width: 1.2;
+      }
+
+      .route-map .road {
+        fill: none;
+        stroke: rgba(20, 56, 46, .23);
+        stroke-width: 1.4;
+        stroke-linecap: round;
+      }
+
+      .route-map .active-route {
+        fill: none;
+        stroke: var(--forest);
+        stroke-width: 4;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .route-map .active-route-highlight {
+        fill: none;
+        stroke: var(--lime);
+        stroke-width: 1.2;
+        stroke-dasharray: 4 6;
+      }
+
+      .route-overview {
+        position: absolute;
+        top: 68px;
+        left: 18px;
+        z-index: 3;
+        width: 220px;
+        pointer-events: none;
+      }
+
+      .route-kicker {
+        margin: 0 0 9px;
+        color: #53675f;
+        font-size: 6px;
+        font-weight: 850;
+        letter-spacing: .14em;
+      }
+
+      .route-overview h1 {
+        margin: 0;
+        font: 640 43px/.82 Inter, ui-sans-serif, system-ui, sans-serif;
+        letter-spacing: -.065em;
+      }
+
+      .route-stats {
+        display: grid;
+        grid-template-columns: repeat(3, max-content);
+        gap: 22px;
+        margin: 17px 0 0;
+      }
+
+      .route-stats div { display: grid; gap: 4px; }
+      .route-stats dt { color: #75847e; font-size: 5px; font-weight: 800; letter-spacing: .1em; }
+      .route-stats dd { margin: 0; font-size: 7px; font-weight: 900; letter-spacing: .08em; }
+
+      .route-point {
+        position: absolute;
+        z-index: 3;
+        display: flex;
+        gap: 6px;
+        align-items: center;
+        color: #304b41;
+        font-size: 5px;
+        font-weight: 900;
+        letter-spacing: .1em;
+        pointer-events: none;
+      }
+
+      .route-point::before {
+        width: 9px;
+        height: 9px;
+        border: 3px solid var(--forest);
+        border-radius: 50%;
+        background: var(--paper);
+        content: "";
+      }
+
+      .route-point.start { left: 44%; top: 65%; }
+      .route-point.end { left: 70%; top: 29%; }
+      .route-point.end::before { background: var(--lime); }
+
+      .route-status {
+        position: absolute;
+        top: 43px;
+        left: 50%;
+        z-index: 4;
+        display: flex;
+        gap: 7px;
+        align-items: center;
+        padding: 7px 10px;
+        border: 1px solid rgba(16, 36, 29, .16);
+        border-radius: 99px;
+        background: rgba(245, 241, 231, .88);
+        color: #52645d;
+        font-size: 5px;
+        font-weight: 900;
+        letter-spacing: .1em;
+        opacity: 0;
+        pointer-events: none;
+        transform: translateX(-50%) translateY(-5px);
+      }
+
+      .route-status::before {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: #2f8b62;
+        content: "";
+        box-shadow: 0 0 0 3px rgba(47, 139, 98, .12);
+      }
+
+      .details-toggle {
+        position: absolute;
+        z-index: 5;
+        top: 42px;
+        right: 82px;
+        min-height: 29px;
+        padding: 0 12px;
+        border: 1px solid rgba(16, 36, 29, .28);
+        border-radius: 99px;
+        background: rgba(245, 241, 231, .9);
+        color: var(--ink);
+        cursor: pointer;
+        font: 900 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        transition: right 180ms ease, background 180ms ease, color 180ms ease;
+      }
+
+      .details-toggle:hover { background: var(--forest); color: var(--paper); }
+      .details-toggle:focus-visible, .start-route:focus-visible, .drawer-handle:focus-visible { outline: 2px solid #e46d4d; outline-offset: 2px; }
+
+      .drawer-overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 5;
+        background: rgba(8, 25, 19, .42);
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .swipe-drawer {
+        position: absolute;
+        z-index: 6;
+        overflow: hidden;
+        background: var(--paper);
+        color: var(--ink);
+        box-shadow: -18px 0 52px rgba(12, 36, 28, .18);
+        cursor: grab;
+        touch-action: none;
+        user-select: none;
+        will-change: transform;
+      }
+
+      .swipe-drawer:active { cursor: grabbing; }
+
+      .drawer-peek {
+        position: absolute;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--forest);
+        color: var(--paper);
+      }
+
+      .drawer-grip {
+        flex: 0 0 auto;
+        border-radius: 99px;
+        background: rgba(245, 241, 231, .42);
+      }
+
+      .drawer-peek-label {
+        font-size: 6px;
+        font-weight: 900;
+        letter-spacing: .12em;
+      }
+
+      .drawer-content {
+        position: absolute;
+        overflow: hidden;
+      }
+
+      .drawer-topline {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .drawer-eyebrow,
+      .drawer-snap,
+      .velocity-readout {
+        font-size: 5px;
+        font-weight: 850;
+        letter-spacing: .11em;
+      }
+
+      .drawer-eyebrow { color: #67776f; }
+      .drawer-snap { color: #517063; }
+
+      .drawer-content h2 {
+        margin: 9px 0 0;
+        font: 650 25px/.88 Inter, ui-sans-serif, system-ui, sans-serif;
+        letter-spacing: -.055em;
+      }
+
+      .drawer-deck {
+        margin: 8px 0 0;
+        color: #607169;
+        font: 500 7px/1.4 Inter, ui-sans-serif, system-ui, sans-serif;
+      }
+
+      .velocity-panel {
+        display: grid;
+        gap: 5px;
+        margin-top: 12px;
+        padding: 7px 8px;
+        border: 1px solid rgba(16, 36, 29, .12);
+        background: #e8eadf;
+      }
+
+      .velocity-readout { color: #4f625a; }
+
+      .velocity-track {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 3px;
+      }
+
+      .velocity-track span { height: 3px; border-radius: 99px; background: rgba(20, 56, 46, .12); }
+      .swipe-drawer[data-speed="steady"] .velocity-track span:first-child,
+      .swipe-drawer[data-speed="medium"] .velocity-track span:nth-child(-n + 2),
+      .swipe-drawer[data-speed="fast"] .velocity-track span { background: #e46d4d; }
+
+      .route-steps {
+        display: grid;
+        margin-top: 11px;
+        border-top: 1px solid rgba(16, 36, 29, .14);
+      }
+
+      .route-step {
+        display: grid;
+        grid-template-columns: 18px minmax(0, 1fr) auto;
+        gap: 8px;
+        align-items: center;
+        min-height: 35px;
+        border-bottom: 1px solid rgba(16, 36, 29, .12);
+      }
+
+      .step-number { color: #7c8983; font-size: 5px; font-weight: 850; }
+      .route-step strong { font: 700 9px/1.1 Inter, ui-sans-serif, system-ui, sans-serif; }
+      .step-meta { color: #687970; font-size: 5px; font-weight: 800; letter-spacing: .08em; }
+
+      .drawer-actions {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 8px;
+        align-items: center;
+        margin-top: 12px;
+      }
+
+      .result-copy {
+        color: #6c7a74;
+        font-size: 5px;
+        font-weight: 800;
+        line-height: 1.45;
+        letter-spacing: .08em;
+      }
+
+      .start-route {
+        min-height: 31px;
+        padding: 0 13px;
+        border: 0;
+        border-radius: 99px;
+        background: var(--forest);
+        color: var(--paper);
+        cursor: pointer;
+        font: 900 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+      }
+
+      .start-route[aria-pressed="true"] { background: #2f8b62; }
+      .start-route:disabled { cursor: default; opacity: .42; }
+
+      .drawer-handle {
+        position: absolute;
+        z-index: 4;
+        border: 0;
+        background: transparent;
+        cursor: grab;
+        touch-action: none;
+      }
+
+      .route-stage[data-layout="side"] .swipe-drawer {
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: min(340px, 48vw);
+        border-left: 1px solid rgba(16, 36, 29, .16);
+        border-radius: 24px 0 0 24px;
+      }
+
+      .route-stage[data-layout="side"] .drawer-peek { top: 0; bottom: 0; left: 0; width: 65px; flex-direction: column; gap: 18px; }
+      .route-stage[data-layout="side"] .drawer-grip { width: 3px; height: 30px; }
+      .route-stage[data-layout="side"] .drawer-peek-label { writing-mode: vertical-rl; transform: rotate(180deg); }
+      .route-stage[data-layout="side"] .drawer-content { inset: 20px 17px 14px 82px; }
+      .route-stage[data-layout="side"] .drawer-handle { top: 0; bottom: 0; left: 0; width: 72px; }
+      .route-stage[data-layout="side"][data-drawer-expanded="true"] .details-toggle { right: calc(min(340px, 48vw) + 12px); }
+      .route-stage[data-layout="side"] .swipe-drawer[data-snap="summary"] .drawer-content { right: auto; width: 112px; }
+      .route-stage[data-layout="side"] .swipe-drawer[data-snap="summary"] .drawer-content h2 { font-size: 17px; }
+      .route-stage[data-layout="side"] .swipe-drawer[data-snap="summary"] .drawer-deck,
+      .route-stage[data-layout="side"] .swipe-drawer[data-snap="summary"] .velocity-panel,
+      .route-stage[data-layout="side"] .swipe-drawer[data-snap="summary"] .route-steps,
+      .route-stage[data-layout="side"] .swipe-drawer[data-snap="summary"] .drawer-actions { display: none; }
+
+      .route-stage[data-layout="bottom"] .swipe-drawer {
+        right: 0;
+        bottom: 0;
+        left: 0;
+        height: min(154px, 84vh);
+        border-top: 1px solid rgba(16, 36, 29, .16);
+        border-radius: 20px 20px 0 0;
+        box-shadow: 0 -18px 50px rgba(12, 36, 28, .17);
+      }
+
+      .route-stage[data-layout="bottom"] .drawer-peek { top: 0; right: 0; left: 0; height: 42px; gap: 10px; }
+      .route-stage[data-layout="bottom"] .drawer-grip { width: 28px; height: 3px; }
+      .route-stage[data-layout="bottom"] .drawer-content { inset: 49px 11px 7px; }
+      .route-stage[data-layout="bottom"] .drawer-handle { top: 0; right: 0; left: 0; height: 45px; }
+      .route-stage[data-layout="bottom"] .drawer-content h2 { display: none; }
+      .route-stage[data-layout="bottom"] .drawer-deck { display: none; }
+      .route-stage[data-layout="bottom"] .velocity-panel { position: absolute; top: 0; right: 0; width: 122px; margin: 0; padding: 5px 6px; }
+      .route-stage[data-layout="bottom"] .route-steps { width: calc(100% - 132px); margin-top: 8px; }
+      .route-stage[data-layout="bottom"] .route-step { min-height: 24px; }
+      .route-stage[data-layout="bottom"] .drawer-actions { position: absolute; right: 0; bottom: 0; width: 122px; grid-template-columns: 1fr; gap: 5px; margin: 0; }
+
+      .library-badge, .scene-caption { display: none; }
+
+      @media (max-width: 520px), (max-height: 260px) {
+        .route-header { top: 7px; left: 10px; right: 10px; }
+        .route-brand { gap: 5px; font-size: 5px; }
+        .route-brand::before { width: 7px; height: 7px; box-shadow: inset 0 0 0 2px var(--lime); }
+        .route-mode { display: none; }
+        .route-overview { top: 36px; left: 10px; width: 135px; }
+        .route-kicker { margin-bottom: 5px; font-size: 4px; }
+        .route-overview h1 { font-size: 27px; }
+        .route-stats { gap: 13px; margin-top: 9px; }
+        .route-stats dt { font-size: 3.5px; }
+        .route-stats dd { font-size: 5px; }
+        .route-point { font-size: 3.5px; }
+        .route-point::before { width: 6px; height: 6px; border-width: 2px; }
+        .details-toggle { top: 24px; right: 9px; min-height: 23px; padding: 0 8px; font-size: 4.5px; }
+        .route-status { top: 25px; left: 55%; padding: 5px 7px; font-size: 4px; }
+        .drawer-topline { padding-right: 130px; }
+        .drawer-eyebrow, .drawer-snap, .velocity-readout { font-size: 4px; }
+        .route-step { grid-template-columns: 12px minmax(0, 1fr) auto; gap: 4px; }
+        .route-step strong { font-size: 7px; }
+        .step-number, .step-meta { font-size: 3.5px; }
+        .result-copy { font-size: 3.7px; }
+        .start-route { min-height: 21px; padding: 0 8px; font-size: 4px; }
+      }
+
+      @media (max-width: 190px), (max-height: 110px) {
+        .route-header { top: 4px; left: 5px; right: 5px; }
+        .route-brand { font-size: 3px; }
+        .route-brand::before { width: 5px; height: 5px; }
+        .route-overview { top: 18px; left: 5px; width: 70px; }
+        .route-kicker { margin-bottom: 2px; font-size: 2.5px; }
+        .route-overview h1 { font-size: 14px; }
+        .route-stats, .route-point { display: none; }
+        .details-toggle { top: 3px; right: 4px; min-height: 16px; padding: 0 5px; font-size: 3px; }
+        .route-status { top: 21px; left: 48%; padding: 3px 4px; font-size: 2.5px; }
+        .route-status::before { width: 3px; height: 3px; box-shadow: none; }
+        .route-stage[data-layout="bottom"] .swipe-drawer { height: min(70px, 88vh); border-radius: 11px 11px 0 0; }
+        .route-stage[data-layout="bottom"] .drawer-peek { height: 18px; gap: 5px; }
+        .route-stage[data-layout="bottom"] .drawer-grip { width: 14px; height: 2px; }
+        .route-stage[data-layout="bottom"] .drawer-peek-label { font-size: 3px; }
+        .route-stage[data-layout="bottom"] .drawer-handle { height: 20px; }
+        .route-stage[data-layout="bottom"] .drawer-content { inset: 21px 5px 3px; }
+        .drawer-topline { padding-right: 54px; }
+        .drawer-eyebrow, .drawer-snap, .velocity-readout { font-size: 2.5px; }
+        .route-stage[data-layout="bottom"] .velocity-panel { width: 50px; padding: 3px; gap: 2px; }
+        .velocity-track { gap: 1px; }
+        .velocity-track span { height: 2px; }
+        .route-stage[data-layout="bottom"] .route-steps { width: calc(100% - 55px); margin-top: 3px; }
+        .route-stage[data-layout="bottom"] .route-step { min-height: 12px; grid-template-columns: 7px minmax(0, 1fr); gap: 2px; }
+        .route-step strong { overflow: hidden; font-size: 4.5px; text-overflow: ellipsis; white-space: nowrap; }
+        .step-number { font-size: 2.5px; }
+        .step-meta, .result-copy { display: none; }
+        .route-stage[data-layout="bottom"] .drawer-actions { width: 50px; }
+        .start-route { min-height: 13px; padding: 0 3px; font-size: 2.7px; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .details-toggle { transition: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="preview-stage route-stage" data-preview-mechanism="motion-velocity-drawer" data-layout="side" data-route-state="planning">
+      <header class="route-header" aria-hidden="true">
+        <span class="route-brand">Wayfinder / 07</span>
+        <span class="route-mode">Low-traffic cycle route · live grade</span>
+      </header>
+
+      <div class="route-map" id="route-map" aria-hidden="true">
+        <svg viewBox="0 0 720 405" preserveAspectRatio="none">
+          <path class="terrain" d="M-20 80C90 30 170 142 286 80S510 20 760 88M-40 162C95 104 167 219 304 152S520 83 760 174M-35 259C92 202 210 302 332 235S557 187 770 263M-30 346C122 290 227 380 354 321S569 278 752 346" />
+          <path class="road" d="M82 -18C111 72 198 99 230 174S249 315 345 431M434 -20C396 88 425 167 526 201S646 295 618 430M-28 224C130 233 203 182 330 196S552 270 748 228" />
+          <path class="road" d="M14 374C120 292 143 140 272 126S465 157 510 -20M120 430C145 331 292 328 371 245S488 79 683 22" />
+          <path class="active-route" d="M308 275C340 254 361 257 385 226C409 195 424 189 455 184C491 178 490 139 522 121" />
+          <path class="active-route-highlight" d="M308 275C340 254 361 257 385 226C409 195 424 189 455 184C491 178 490 139 522 121" />
+        </svg>
+      </div>
+
+      <section class="route-overview" aria-live="polite">
+        <p class="route-kicker">Bay loop · Route 07</p>
+        <h1>Ride the<br />quiet side.</h1>
+        <dl class="route-stats">
+          <div><dt>Arrival</dt><dd id="arrival-value">12:42</dd></div>
+          <div><dt>Distance</dt><dd>6.8 km</dd></div>
+          <div><dt>Climb</dt><dd>+84 m</dd></div>
+        </dl>
+      </section>
+
+      <span class="route-point start" aria-hidden="true">Harbor</span>
+      <span class="route-point end" aria-hidden="true">North Head</span>
+      <div class="route-status" id="route-status" role="status" aria-hidden="true" hidden>Guidance active · left in 220 m</div>
+
+      <button class="details-toggle" id="details-toggle" type="button" aria-controls="swipe-drawer" aria-expanded="false">Route details</button>
+      <div class="drawer-overlay" id="drawer-overlay"></div>
+
+      <aside class="swipe-drawer" id="swipe-drawer" aria-label="Route details" data-speed="steady" data-snap="peek">
+        <div class="drawer-peek" aria-hidden="true">
+          <span class="drawer-grip"></span>
+          <span class="drawer-peek-label" id="drawer-peek-label">18 min · pull for route</span>
+        </div>
+        <div
+          class="drawer-handle"
+          id="drawer-handle"
+          role="slider"
+          tabindex="0"
+          aria-label="Route details drawer"
+          aria-valuemin="0"
+          aria-valuemax="2"
+          aria-valuenow="0"
+          aria-valuetext="Route preview"
+          aria-orientation="horizontal"
+          aria-controls="swipe-drawer"
+        ></div>
+
+        <div class="drawer-content" id="drawer-content" aria-hidden="true" inert>
+          <div class="drawer-topline">
+            <span class="drawer-eyebrow">Bay loop / Route 07</span>
+            <span class="drawer-snap" id="drawer-snap">Preview</span>
+          </div>
+          <h2>18 minutes to<br />North Head.</h2>
+          <p class="drawer-deck">A quieter waterfront route with protected lanes for 72% of the ride.</p>
+
+          <div class="velocity-panel" aria-live="polite">
+            <span class="velocity-readout" id="velocity-readout">Ready · drag the edge</span>
+            <span class="velocity-track" aria-hidden="true"><span></span><span></span><span></span></span>
+          </div>
+
+          <div class="route-steps" aria-label="Route steps">
+            <div class="route-step"><span class="step-number">01</span><strong>Harbor greenway</strong><span class="step-meta">2.1 km</span></div>
+            <div class="route-step"><span class="step-number">02</span><strong>Left at Salt House</strong><span class="step-meta">4 min</span></div>
+            <div class="route-step"><span class="step-number">03</span><strong>Climb to North Head</strong><span class="step-meta">+42 m</span></div>
+          </div>
+
+          <div class="drawer-actions">
+            <span class="result-copy" id="result-copy">Release speed chooses preview, summary or full route.</span>
+            <button class="start-route" id="start-route" type="button" aria-pressed="false" disabled>Start guidance</button>
+          </div>
+        </div>
+      </aside>
+
+      <span class="library-badge">Motion · velocity drawer</span>
+      <span class="scene-caption">Real release velocity chooses a semantic route-details snap point.</span>
+    </main>
+    <script type="module" src="./src/velocity-aware-swipe-drawer-demo.js"></script>
+  </body>
+</html>

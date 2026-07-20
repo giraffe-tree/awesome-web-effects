@@ -173,7 +173,39 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
     hashes: set[str] = set()
     for index in range(frame_count):
         preview_time = index / args.fps
-        if demo["id"] == "blurhash-to-photo-progressive-reveal":
+        if demo["id"] == "scroll-scrubbed-master-timeline":
+            if index == 2:
+                page.mouse.move(244, 92)
+            elif index in (3, 6):
+                page.mouse.wheel(0, 120)
+            elif index == 10:
+                page.mouse.move(220, 136)
+                page.mouse.down()
+            elif 11 <= index <= 14:
+                progress = (index - 11) / 3
+                page.mouse.move(220, 136 - 64 * progress)
+            elif index == 15:
+                page.mouse.up()
+            elif index == 18:
+                page.mouse.click(244, 92)
+                page.keyboard.press("End")
+            elif index == 19:
+                page.wait_for_timeout(420)
+            elif index == 22:
+                page.mouse.wheel(0, 120)
+            elif index == 25:
+                page.keyboard.press("PageUp")
+            elif index == 26:
+                page.wait_for_timeout(420)
+            elif index == 29:
+                page.keyboard.press("Home")
+            elif index == 30:
+                page.wait_for_timeout(420)
+            elif index == 33:
+                page.keyboard.press("End")
+            elif index == 34:
+                page.wait_for_timeout(420)
+        elif demo["id"] == "blurhash-to-photo-progressive-reveal":
             pointer_x = 230 if .5 <= preview_time < 2.25 else 32
             page.mouse.move(pointer_x, 90)
         elif demo["id"] == "pointer-following-displacement-ripple":
@@ -499,7 +531,36 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
         page.screenshot(path=str(frame_path), type="png")
         hashes.add(hashlib.sha256(frame_path.read_bytes()).hexdigest())
 
-    if demo["id"] == "blurhash-to-photo-progressive-reveal":
+    if demo["id"] == "scroll-scrubbed-master-timeline":
+        page.wait_for_function(
+            "window.__PREVIEW_INTERACTION_STATE__.timelineProgress === 1 && !window.__PREVIEW_INTERACTION_STATE__.motionActive",
+            timeout=2_000,
+        )
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            interaction["automaticFallback"]
+            or interaction["automaticPlayback"]
+            or interaction["syntheticInputDispatch"]
+            or not interaction["initialStaticConfirmed"]
+            or not interaction["masterTimelinePaused"]
+            or interaction["wheelBoundaryPolicy"] != "release-at-bounds"
+            or interaction["inputAdapters"] != ["wheel", "vertical-drag", "keyboard"]
+            or interaction["inputCount"] < 9
+            or interaction["wheelCount"] < 3
+            or interaction["dragMoveCount"] < 4
+            or interaction["keyboardCount"] < 4
+            or interaction["boundaryReleaseCount"] < 1
+            or interaction["timelineProgress"] != 1
+            or interaction["phase"] != "settle"
+            or interaction["phaseIndex"] != 2
+            or interaction["cardStates"] != {"brief": "accepted", "prototype": "verified", "release": "ready"}
+            or interaction["evidence"]["release"] != "18/18 checks · rollback 41s"
+            or interaction["owners"]["release"] != "Release Captain"
+            or interaction["pointerCaptured"]
+            or interaction["motionActive"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture human-owned causal timeline scrubbing and boundary release: {interaction!r}")
+    elif demo["id"] == "blurhash-to-photo-progressive-reveal":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__()")
         if interaction["pointerEvents"] < 3 or interaction["pointerOverPhoto"]:
             raise RuntimeError(f"{demo['id']} did not capture a real pointer enter/leave sequence: {interaction!r}")

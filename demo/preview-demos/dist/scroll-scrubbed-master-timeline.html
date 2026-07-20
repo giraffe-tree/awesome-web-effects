@@ -1,46 +1,559 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GSAP — Scroll-scrubbed Master Timeline</title>
+    <title>GSAP — Scroll-scrubbed Release Timeline</title>
     <style>
-      :root { --preview-background: #0b0d13; }
-      #scrollport { position: absolute; inset: 0; overflow-y: auto; scrollbar-width: none; }
-      #scrollport::-webkit-scrollbar { display: none; }
-      .scroll-scene { height: 760px; }
-      .timeline-stage { position: sticky; top: 0; height: 180px; overflow: hidden; background: radial-gradient(circle at 50% 120%, #27224f, transparent 60%); }
-      .timeline-rail { position: absolute; left: 22px; right: 22px; top: 44px; height: 2px; background: #ffffff1d; }
-      .timeline-progress { width: 100%; height: 100%; transform: scaleX(0); transform-origin: left; background: linear-gradient(90deg, #58e6ff, #9d5cff, #ff5c91); box-shadow: 0 0 12px #7f68ff; }
-      .timeline-dot { position: absolute; top: -4px; width: 10px; height: 10px; border-radius: 50%; background: white; box-shadow: 0 0 12px #74e9ff; }
-      .timeline-card { position: absolute; top: 72px; width: 70px; height: 64px; border: 1px solid #ffffff38; border-radius: 12px; opacity: 0; transform-origin: 50% 100%; box-shadow: 0 14px 30px #0008; }
-      .timeline-card::before { content: attr(data-step); position: absolute; top: 9px; left: 10px; color: #ffffffb8; font-size: 7px; font-weight: 800; letter-spacing: .12em; }
-      .timeline-card::after { content: ''; position: absolute; left: 10px; right: 22px; bottom: 12px; height: 5px; border-radius: 9px; background: #ffffffbd; }
-      .card-a { left: 32px; background: linear-gradient(145deg, #186b8d, #15304f); }
-      .card-b { left: 125px; background: linear-gradient(145deg, #6944bb, #28204e); }
-      .card-c { left: 218px; background: linear-gradient(145deg, #b53673, #441d3b); }
-      .scroll-cue { position: absolute; right: 12px; top: 12px; color: #ffffff73; font-size: 8px; font-weight: 800; }
+      :root {
+        --preview-background: #060a0d;
+        --ink: #f2f4eb;
+        --muted: #83918b;
+        --line: rgba(222, 239, 224, .13);
+        --acid: #b7f46a;
+        --cyan: #6fe6db;
+        --amber: #ffc66d;
+      }
+
+      .timeline-stage {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        grid-template-rows: auto auto minmax(0, 1fr) auto;
+        gap: clamp(7px, 2.2vh, 15px);
+        overflow: hidden;
+        padding: clamp(16px, 4.5vh, 28px) clamp(16px, 4vw, 30px) clamp(18px, 5vh, 25px);
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 20% -10%, rgba(111, 230, 219, .11), transparent 38%),
+          radial-gradient(circle at 92% 112%, rgba(183, 244, 106, .09), transparent 42%),
+          linear-gradient(145deg, #0b1113 0%, #070b0e 68%);
+        outline: none;
+        user-select: none;
+        -webkit-user-select: none;
+      }
+
+      .timeline-stage::before {
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        opacity: .17;
+        background-image:
+          linear-gradient(rgba(255, 255, 255, .06) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, .05) 1px, transparent 1px);
+        background-size: 34px 34px;
+        content: '';
+        mask-image: linear-gradient(to bottom, black, transparent 82%);
+      }
+
+      .timeline-stage:focus-visible {
+        box-shadow: inset 0 0 0 2px rgba(183, 244, 106, .75);
+      }
+
+      .board-head {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 20px;
+        min-width: 0;
+        padding-left: 112px;
+      }
+
+      .board-title { min-width: 0; }
+
+      .eyebrow,
+      .phase-readout,
+      .card-step,
+      .card-status,
+      .depends-on,
+      .scrub-percent,
+      .input-hint {
+        letter-spacing: .105em;
+        text-transform: uppercase;
+      }
+
+      .eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        margin-bottom: 5px;
+        color: var(--muted);
+        font-size: clamp(6px, 1.25vw, 9px);
+        font-weight: 760;
+      }
+
+      .eyebrow-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--acid);
+        box-shadow: 0 0 12px rgba(183, 244, 106, .85);
+      }
+
+      h1 {
+        margin: 0;
+        overflow: hidden;
+        color: var(--ink);
+        font-size: clamp(17px, 4vw, 30px);
+        font-weight: 520;
+        letter-spacing: -.045em;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .phase-readout {
+        flex: 0 0 auto;
+        max-width: 42%;
+        padding: 7px 9px;
+        border: 1px solid rgba(183, 244, 106, .28);
+        border-radius: 999px;
+        color: var(--acid);
+        background: rgba(183, 244, 106, .06);
+        font-size: clamp(6px, 1.1vw, 8px);
+        font-weight: 800;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .master-rail {
+        position: relative;
+        height: clamp(28px, 8vh, 38px);
+        margin: 0 4px;
+      }
+
+      .rail-track,
+      .rail-progress {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 9px;
+        height: 2px;
+        border-radius: 2px;
+      }
+
+      .rail-track { background: rgba(255, 255, 255, .12); }
+
+      .rail-progress {
+        right: auto;
+        width: 100%;
+        transform: scaleX(0);
+        transform-origin: 0 50%;
+        background: linear-gradient(90deg, var(--cyan), var(--acid), var(--amber));
+        box-shadow: 0 0 15px rgba(111, 230, 219, .4);
+      }
+
+      .rail-cursor {
+        position: absolute;
+        top: 4px;
+        left: 0;
+        width: 12px;
+        height: 12px;
+        transform: translateX(-1px);
+        border: 3px solid #0a1012;
+        border-radius: 50%;
+        background: var(--acid);
+        box-shadow: 0 0 0 1px rgba(183, 244, 106, .4), 0 0 16px rgba(183, 244, 106, .7);
+      }
+
+      .rail-node {
+        position: absolute;
+        top: 0;
+        display: grid;
+        gap: 6px;
+        justify-items: center;
+        transform: translateX(-50%);
+        color: #66716d;
+        font-size: clamp(5px, 1vw, 7px);
+        font-weight: 800;
+        letter-spacing: .12em;
+        transition: color .15s ease;
+      }
+
+      .rail-node::before {
+        z-index: 2;
+        width: 7px;
+        height: 7px;
+        border: 2px solid #0a1012;
+        border-radius: 50%;
+        background: #39423f;
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, .12);
+        content: '';
+      }
+
+      .rail-node:nth-of-type(1) { left: 0%; }
+      .rail-node:nth-of-type(2) { left: 50%; }
+      .rail-node:nth-of-type(3) { left: 100%; }
+      .rail-node:nth-of-type(1) { transform: none; justify-items: start; }
+      .rail-node:nth-of-type(3) { transform: translateX(-100%); justify-items: end; }
+      .rail-node[data-state='active'] { color: var(--ink); }
+      .rail-node[data-state='done'] { color: var(--acid); }
+      .rail-node[data-state='active']::before { background: var(--ink); box-shadow: 0 0 0 1px rgba(242, 244, 235, .45); }
+      .rail-node[data-state='done']::before { background: var(--acid); box-shadow: 0 0 0 1px rgba(183, 244, 106, .35); }
+
+      .release-board {
+        position: relative;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: clamp(7px, 1.8vw, 14px);
+        min-height: 0;
+        touch-action: none;
+        cursor: ns-resize;
+      }
+
+      .release-board::before,
+      .release-board::after {
+        position: absolute;
+        top: 50%;
+        z-index: 3;
+        width: clamp(11px, 2vw, 20px);
+        height: 1px;
+        background: linear-gradient(90deg, rgba(183, 244, 106, .18), rgba(183, 244, 106, .8));
+        content: '';
+        pointer-events: none;
+      }
+
+      .release-board::before { left: calc(33.333% - clamp(3px, .55vw, 5px)); }
+      .release-board::after { left: calc(66.666% - clamp(8px, 1.05vw, 10px)); }
+
+      .timeline-card {
+        position: relative;
+        display: grid;
+        grid-template-rows: auto auto minmax(0, auto) 1fr auto;
+        gap: clamp(4px, 1.6vh, 9px);
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        padding: clamp(10px, 2.5vw, 16px);
+        border: 1px solid var(--line);
+        border-radius: clamp(10px, 2vw, 17px);
+        background: linear-gradient(150deg, rgba(20, 29, 29, .96), rgba(10, 15, 17, .94));
+        box-shadow: 0 15px 34px rgba(0, 0, 0, .3);
+        transform-origin: 50% 100%;
+      }
+
+      .timeline-card::before {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        transform: scaleX(var(--card-progress, 0));
+        transform-origin: 0 50%;
+        background: var(--card-color);
+        box-shadow: 0 0 18px color-mix(in srgb, var(--card-color), transparent 55%);
+        content: '';
+      }
+
+      .timeline-card[data-state='blocked'],
+      .timeline-card[data-state='waiting'] { border-color: rgba(255, 255, 255, .075); }
+
+      .card-brief { --card-color: var(--cyan); }
+      .card-prototype { --card-color: var(--acid); }
+      .card-release { --card-color: var(--amber); }
+
+      .card-meta,
+      .owner-row,
+      .evidence-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        min-width: 0;
+      }
+
+      .card-step {
+        color: var(--muted);
+        font-size: clamp(5px, 1.1vw, 7px);
+        font-weight: 850;
+      }
+
+      .card-status {
+        overflow: hidden;
+        max-width: 58%;
+        padding: 4px 6px;
+        border: 1px solid color-mix(in srgb, var(--card-color), transparent 72%);
+        border-radius: 999px;
+        color: var(--card-color);
+        background: color-mix(in srgb, var(--card-color), transparent 94%);
+        font-size: clamp(4px, .9vw, 6px);
+        font-weight: 850;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .timeline-card h2 {
+        margin: 0;
+        overflow: hidden;
+        color: var(--ink);
+        font-size: clamp(11px, 2.45vw, 18px);
+        font-weight: 610;
+        letter-spacing: -.03em;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .card-task {
+        margin: 0;
+        color: #b3bcb7;
+        font-size: clamp(7px, 1.25vw, 9px);
+        line-height: 1.35;
+      }
+
+      .depends-on {
+        align-self: start;
+        overflow: hidden;
+        width: max-content;
+        max-width: 100%;
+        padding: 4px 5px;
+        border-radius: 4px;
+        color: #75817c;
+        background: rgba(255, 255, 255, .035);
+        font-size: clamp(4px, .82vw, 6px);
+        font-weight: 800;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .evidence-row {
+        align-items: flex-end;
+        padding-top: 7px;
+        border-top: 1px solid rgba(255, 255, 255, .075);
+      }
+
+      .field-label {
+        display: block;
+        margin-bottom: 2px;
+        color: #606b67;
+        font-size: clamp(4px, .82vw, 6px);
+        font-weight: 800;
+        letter-spacing: .11em;
+        text-transform: uppercase;
+      }
+
+      .field-value {
+        display: block;
+        overflow: hidden;
+        color: #d4dad5;
+        font-size: clamp(6px, 1.12vw, 8px);
+        font-weight: 640;
+        line-height: 1.2;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .owner-row {
+        justify-content: flex-end;
+        flex: 0 0 auto;
+      }
+
+      .owner-mark {
+        display: grid;
+        flex: 0 0 auto;
+        width: 19px;
+        height: 19px;
+        place-items: center;
+        border: 1px solid color-mix(in srgb, var(--card-color), transparent 65%);
+        border-radius: 50%;
+        color: var(--card-color);
+        background: color-mix(in srgb, var(--card-color), transparent 92%);
+        font-size: 6px;
+        font-weight: 850;
+      }
+
+      .owner-copy { min-width: 0; }
+      .owner-copy .field-label,
+      .owner-copy .field-value { text-align: right; }
+
+      .mini-outcome { display: none; }
+
+      .board-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        min-width: 0;
+      }
+
+      .input-hint {
+        overflow: hidden;
+        color: #66736e;
+        font-size: clamp(5px, 1vw, 7px);
+        font-weight: 800;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .input-hint b { color: #a4b0aa; font-weight: 850; }
+
+      .scrub-percent {
+        color: var(--ink);
+        font-size: clamp(7px, 1.2vw, 9px);
+        font-variant-numeric: tabular-nums;
+        font-weight: 850;
+      }
+
+      .library-badge { background: rgba(7, 12, 14, .8); }
+      .scene-caption { display: none; }
+
+      @media (max-width: 420px), (max-height: 260px) {
+        .timeline-stage {
+          grid-template-rows: 18px 18px minmax(0, 1fr) 9px;
+          gap: 6px;
+          padding: 9px 9px 8px;
+        }
+        .library-badge, .scene-caption, .eyebrow { display: none; }
+        .board-head { align-items: center; padding-left: 0; }
+        h1 { font-size: clamp(11px, 4.4vw, 15px); }
+        .phase-readout { max-width: 46%; padding: 4px 6px; }
+        .master-rail { height: 20px; }
+        .rail-track, .rail-progress { top: 6px; }
+        .rail-cursor { top: 2px; width: 10px; height: 10px; }
+        .rail-node { gap: 3px; }
+        .timeline-card {
+          grid-template-rows: auto auto 1fr auto;
+          gap: 4px;
+          padding: 7px;
+          border-radius: 8px;
+        }
+        .card-status { padding: 3px 4px; }
+        .card-task { display: none; }
+        .depends-on { align-self: start; padding: 3px 4px; }
+        .evidence-row { padding-top: 4px; }
+        .owner-mark { width: 14px; height: 14px; font-size: 5px; }
+        .owner-copy { display: none; }
+      }
+
+      @media (max-width: 180px), (max-height: 105px) {
+        .timeline-stage { grid-template-rows: 11px 8px minmax(0, 1fr); gap: 3px; padding: 4px; }
+        .library-badge, .scene-caption, .eyebrow, .board-title h1, .board-footer { display: none; }
+        .board-head { display: block; padding: 0; }
+        .phase-readout { display: block; width: max-content; max-width: 100%; padding: 2px 4px; font-size: 3.6px; }
+        .master-rail { height: 8px; margin: 0 1px; }
+        .rail-track, .rail-progress { top: 2px; height: 1px; }
+        .rail-cursor { top: 0; width: 5px; height: 5px; border-width: 1px; }
+        .rail-node { top: 0; gap: 0; font-size: 0; }
+        .rail-node::before { width: 4px; height: 4px; border-width: 1px; }
+        .release-board { gap: 2px; }
+        .release-board::before, .release-board::after { display: none; }
+        .timeline-card { display: block; padding: 3px; border-radius: 5px; box-shadow: none; }
+        .card-meta { display: block; }
+        .card-step { display: block; margin-bottom: 2px; font-size: 3.5px; }
+        .card-status { display: block; max-width: 100%; padding: 1px 2px; border: 0; border-radius: 2px; font-size: 3.2px; }
+        .timeline-card h2 { margin-top: 3px; font-size: 5.4px; white-space: normal; }
+        .card-task, .depends-on, .evidence-row { display: none; }
+        .mini-outcome { display: block; margin: 3px 0 0; color: #84908a; font-size: 3.4px; line-height: 1.1; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .rail-node { transition: none; }
+      }
     </style>
-    <script type="module" crossorigin src="./assets/scroll-scrubbed-master-timeline-DTIYte7W.js"></script>
+    <script type="module" crossorigin src="./assets/scroll-scrubbed-master-timeline-Brn_iOCv.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
     <link rel="modulepreload" crossorigin href="./assets/ScrollTrigger-DDi3XPDo.js">
     <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
   </head>
   <body>
-    <main class="preview-stage" aria-label="A real GSAP ScrollTrigger master timeline scrubbed by scroll progress">
-      <div id="scrollport" data-preview-mechanism="gsap-scrolltrigger">
-        <section class="scroll-scene" id="timeline-scene">
-          <div class="timeline-stage">
-            <div class="timeline-rail"><div class="timeline-progress" id="timeline-progress"></div><div class="timeline-dot" id="timeline-dot"></div></div>
-            <div class="timeline-card card-a" data-step="01 · ENTER"></div>
-            <div class="timeline-card card-b" data-step="02 · SHIFT"></div>
-            <div class="timeline-card card-c" data-step="03 · SETTLE"></div>
-            <span class="scroll-cue">SCROLL ↕</span>
+    <main class="preview-stage" aria-label="Release readiness board scrubbed by real wheel, vertical drag, or keyboard input">
+      <section
+        class="timeline-stage"
+        id="timeline-stage"
+        tabindex="0"
+        data-preview-mechanism="gsap-paused-master-timeline"
+        aria-describedby="input-hint"
+      >
+        <header class="board-head">
+          <div class="board-title">
+            <div class="eyebrow"><span class="eyebrow-dot"></span>RELEASE GATE · RC-07 · TRACEABLE DELIVERY</div>
+            <h1>Ship only what we can prove.</h1>
           </div>
+          <div class="phase-readout" id="phase-readout" aria-live="polite">ENTER · BRIEF QUEUED</div>
+        </header>
+
+        <div class="master-rail" aria-hidden="true">
+          <div class="rail-track"></div>
+          <div class="rail-progress" id="timeline-progress"></div>
+          <div class="rail-cursor" id="timeline-cursor"></div>
+          <span class="rail-node" data-node="brief" data-state="active">01 · ENTER</span>
+          <span class="rail-node" data-node="prototype" data-state="pending">02 · SHIFT</span>
+          <span class="rail-node" data-node="release" data-state="pending">03 · SETTLE</span>
+        </div>
+
+        <section class="release-board" id="release-board" aria-label="Drag vertically to scrub the release readiness timeline">
+          <article class="timeline-card card-brief" data-card="brief" data-state="queued" data-depends-on="research evidence">
+            <div class="card-meta">
+              <span class="card-step">01 / ENTER</span>
+              <span class="card-status" data-status>QUEUED</span>
+            </div>
+            <h2>Decision brief</h2>
+            <p class="card-task">Lock the release claim and explicit exclusions.</p>
+            <span class="depends-on">INPUT · RESEARCH EVIDENCE</span>
+            <div class="evidence-row">
+              <div>
+                <span class="field-label">Evidence</span>
+                <span class="field-value" data-evidence>12 interviews · 3 risk signals</span>
+              </div>
+              <div class="owner-row">
+                <span class="owner-mark" data-owner-mark>RO</span>
+                <span class="owner-copy"><span class="field-label">Owner</span><span class="field-value" data-owner>Research Operations</span></span>
+              </div>
+            </div>
+            <p class="mini-outcome" data-mini>CLAIM QUEUED</p>
+          </article>
+
+          <article class="timeline-card card-prototype" data-card="prototype" data-state="blocked" data-depends-on="accepted brief">
+            <div class="card-meta">
+              <span class="card-step">02 / SHIFT</span>
+              <span class="card-status" data-status>BLOCKED</span>
+            </div>
+            <h2>Trace prototype</h2>
+            <p class="card-task">Link every core flow back to an accepted claim.</p>
+            <span class="depends-on">NEEDS 01 · ACCEPTED BRIEF</span>
+            <div class="evidence-row">
+              <div>
+                <span class="field-label">Evidence</span>
+                <span class="field-value" data-evidence>Waiting for locked scope</span>
+              </div>
+              <div class="owner-row">
+                <span class="owner-mark" data-owner-mark>DE</span>
+                <span class="owner-copy"><span class="field-label">Owner</span><span class="field-value" data-owner>Design Engineering</span></span>
+              </div>
+            </div>
+            <p class="mini-outcome" data-mini>NEEDS BRIEF</p>
+          </article>
+
+          <article class="timeline-card card-release" data-card="release" data-state="waiting" data-depends-on="verified trace">
+            <div class="card-meta">
+              <span class="card-step">03 / SETTLE</span>
+              <span class="card-status" data-status>WAITING</span>
+            </div>
+            <h2>Verified release</h2>
+            <p class="card-task">Close access, proof, and rollback release gates.</p>
+            <span class="depends-on">NEEDS 02 · VERIFIED TRACE</span>
+            <div class="evidence-row">
+              <div>
+                <span class="field-label">Evidence</span>
+                <span class="field-value" data-evidence>Waiting for replayable flows</span>
+              </div>
+              <div class="owner-row">
+                <span class="owner-mark" data-owner-mark>RQ</span>
+                <span class="owner-copy"><span class="field-label">Owner</span><span class="field-value" data-owner>Release Quality</span></span>
+              </div>
+            </div>
+            <p class="mini-outcome" data-mini>NEEDS TRACE</p>
+          </article>
         </section>
-      </div>
-      <span class="library-badge">GSAP · ScrollTrigger</span>
-      <span class="scene-caption">scroll progress scrubs one master timeline</span>
+
+        <footer class="board-footer">
+          <span class="input-hint" id="input-hint"><b>Wheel</b> / drag vertically / Arrow · Page · Home · End</span>
+          <span class="scrub-percent" id="scrub-percent">000%</span>
+        </footer>
+      </section>
+      <span class="library-badge">GSAP · PAUSED MASTER</span>
+      <span class="scene-caption">real input scrubs one causal release timeline</span>
     </main>
   </body>
 </html>

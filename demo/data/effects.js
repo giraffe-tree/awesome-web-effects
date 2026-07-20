@@ -68,17 +68,17 @@ const existingEffects = [
     "addedIn": "baseline",
     "research": null,
     "behavior": {
-      "trigger": "scroll",
-      "response": "Scroll-scrubbed master timeline",
-      "timing": "continuous progress-linked",
-      "layer": "content"
+      "trigger": "real vertical wheel, captured vertical pointer drag, or Arrow/Page/Home/End keys",
+      "response": "Scrub one release-readiness board from decision brief through trace prototype to verified release",
+      "timing": "human-owned normalized progress; initially static with outward wheel release at both boundaries",
+      "layer": "causal task cards, accountability handoffs, evidence, gate states, and one paused GSAP master timeline"
     },
-    "prompt": "Implement the \"Scroll-scrubbed master timeline\" (滚动擦洗主时间线) web interaction effect in the current project.\n\nUse GSAP (greensock/GSAP) as the recommended implementation unless the existing stack makes a dependency-free equivalent more appropriate. Recreate this specific animation interaction, not a generic animation.\n\nInteraction contract:\n- Trigger: scroll\n- Visual response: Scroll-scrubbed master timeline\n- Timing relationship: continuous progress-linked\n- Page layer: content\n\nRequirements:\n- Integrate with the existing design system and component structure.\n- Support keyboard and touch input whenever the interaction is actionable.\n- Respect prefers-reduced-motion with a clear non-animated fallback.\n- Avoid layout shift, scroll traps, inaccessible focus behavior, and unnecessary dependencies.\n- Keep the implementation responsive and clean up listeners, timers, and animation instances.\n\nStart from this minimal API shape:\n\n```js\nimport { gsap } from 'gsap';\nimport { ScrollTrigger } from 'gsap/ScrollTrigger';\ngsap.registerPlugin(ScrollTrigger);\nconst timeline = gsap.timeline({ scrollTrigger: { trigger: '.scene', scrub: true } });\ntimeline.to('.card', { x: 80 }).to('.card', { rotate: 6 });\n```\n\nReturn the working code, the files changed, and a short explanation of how to tune timing, easing, distance, and reduced-motion behavior.",
+    "prompt": "Implement the \"Scroll-scrubbed master timeline\" (滚动擦洗主时间线) as a release-readiness workflow, not an abstract card sequence.\n\nUse GSAP (greensock/GSAP) and register ScrollTrigger for the project integration, while keeping one paused master timeline whose normalized progress is owned only by real user input. Model three causally linked tasks: decision brief, trace prototype, and verified release. As progress advances, keep task state, evidence, accountable owner, handoff, and release gates synchronized.\n\nInteraction contract:\n- Trigger: vertical wheel while the stage can advance, captured vertical pointer/touch drag, or Arrow/Page/Home/End keys\n- Visual response: progress one credible release candidate from queued research through verified trace evidence to rollback-proven readiness\n- Timing relationship: continuous human-owned normalized progress; no autoplay, capture-clock fallback, or synthetic events\n- Boundary behavior: outward wheel input at 0% and 100% must remain available to the surrounding page\n- Page layer: semantic task cards, evidence, ownership, gate status, and a single paused GSAP timeline\n\nRequirements:\n- Start strictly static at 0%; do not mutate progress without a trusted user action.\n- Use one source of truth for every visual and semantic state.\n- Support pointer capture, keyboard operation, responsive 320×180 and 144×81 previews, and prefers-reduced-motion.\n- Avoid layout shift, scroll traps, inaccessible focus behavior, synthetic dispatch, and autonomous loops.\n- Export enough interaction state to verify input counts, boundary release, paused-timeline parity, causal card states, and the final release outcome.\n\nStart from this minimal API shape:\n\n```js\nimport { gsap } from 'gsap';\nimport { ScrollTrigger } from 'gsap/ScrollTrigger';\ngsap.registerPlugin(ScrollTrigger);\nconst driver = { value: 0 };\nconst timeline = gsap.timeline({ paused: true });\ntimeline.to('.brief', { opacity: 1 }).to('.prototype', { opacity: 1 }).to('.release', { opacity: 1 });\nconst applyProgress = value => timeline.progress(gsap.utils.clamp(0, 1, value), true);\n```\n\nReturn the working code, the files changed, and a short explanation of how to tune progress thresholds, input sensitivity, easing, and reduced-motion behavior.",
     "sources": [
       {
         "projectId": "greensock-gsap",
         "recommended": true,
-        "snippet": "import { gsap } from 'gsap';\nimport { ScrollTrigger } from 'gsap/ScrollTrigger';\ngsap.registerPlugin(ScrollTrigger);\nconst timeline = gsap.timeline({ scrollTrigger: { trigger: '.scene', scrub: true } });\ntimeline.to('.card', { x: 80 }).to('.card', { rotate: 6 });",
+        "snippet": "import { gsap } from 'gsap';\nimport { ScrollTrigger } from 'gsap/ScrollTrigger';\ngsap.registerPlugin(ScrollTrigger);\nconst driver = { value: 0 };\nconst timeline = gsap.timeline({ paused: true });\ntimeline.to('.brief', { opacity: 1 }).to('.prototype', { opacity: 1 }).to('.release', { opacity: 1 });\nconst applyProgress = value => timeline.progress(gsap.utils.clamp(0, 1, value), true);",
         "preview": "captured/scroll-scrubbed-master-timeline",
         "previewKind": "local-demo-capture",
         "demoPath": "preview-demos/dist/scroll-scrubbed-master-timeline.html",
@@ -114,7 +114,7 @@ const existingEffects = [
       "total": 85,
       "decision": "admit",
       "reasonCode": "passed",
-      "rationaleZh": "滚动进度、三段卡片状态与时间线关系清楚，视觉完成度足以作为编排参考。"
+      "rationaleZh": "真实滚轮、拖拽与键盘共同控制同一暂停主时间线；三阶段任务、责任交接、证据和发布门禁形成可核验的因果链。"
     }
   },
   {

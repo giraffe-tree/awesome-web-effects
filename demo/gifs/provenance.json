@@ -52,7 +52,7 @@
       "originUrl": "https://github.com/greensock/GSAP",
       "demoSourcePath": "demo/preview-demos/scroll-scrubbed-master-timeline.html",
       "libraryVersion": "gsap@3.15.0",
-      "generatedAt": "2026-07-18",
+      "generatedAt": "2026-07-21",
       "outputPath": "demo/gifs/captured/scroll-scrubbed-master-timeline.gif",
       "usageBasis": "local demo capture using the pinned GSAP package; verify license https://github.com/greensock/GSAP/blob/HEAD/LICENSE.md"
     },

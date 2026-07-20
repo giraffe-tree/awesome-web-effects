@@ -1,8 +1,373 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>Motion — Visibility-gated Agent Terminal Replay</title><style>
-:root{--preview-background:#050909}.terminal-stage{background:radial-gradient(circle at 70% 20%,#1d513f50,transparent 40%),#040807;color:#d9ffe8}.terminal{position:absolute;inset:32px 17px 18px;overflow:hidden;border:1px solid #72ffc63a;border-radius:14px;background:#06110dda;box-shadow:0 20px 40px #000a}.terminal-head{height:25px;padding:8px 10px;border-bottom:1px solid #ffffff12;font:900 6px/1 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#75b99d}.terminal-body{padding:10px;font:700 7px/1.45 ui-monospace,monospace}.terminal-prompt{color:#fff}.terminal-prompt::before{content:"❯ ";color:#6df0b4}.terminal-log{margin-top:7px;color:#78b69b;white-space:pre-line}.terminal-status{position:absolute;right:10px;top:8px;font:900 5px/1 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase}.terminal-status::before{content:"";display:inline-block;width:5px;height:5px;margin:0 5px 0 0;border-radius:50%;background:#6df0b4;box-shadow:0 0 8px #6df0b4}.terminal-hint{position:absolute;right:12px;bottom:10px;color:#5b8c78;font:800 5px/1 ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase}.scene-caption{display:none}
-</style>  <script type="module" crossorigin src="./assets/visibility-gated-agent-terminal-replay-Xz3hZyQx.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
-  <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
-  <link rel="modulepreload" crossorigin href="./assets/batch-a-qa-CFcoNLob.js">
-  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage terminal-stage"><section class="terminal" id="terminal" tabindex="0" aria-label="Agent terminal replay; press Escape to interrupt"><header class="terminal-head">agent / visible execution<span class="terminal-status" id="terminal-status">typing · 0.0s</span></header><div class="terminal-body"><div class="terminal-prompt" id="terminal-prompt"></div><div class="terminal-log" id="terminal-log"></div></div><span class="terminal-hint">ESC interrupts · offscreen freezes</span></section><span class="library-badge">Motion · visibility-gated replay</span><span class="scene-caption">typing, tools, output and status pause when the terminal leaves view</span></main></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Motion — Visibility-gated Multi-agent Run Replay</title>
+    <style>
+      :root { --preview-background: #060b0d; }
+
+      .terminal-stage {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        min-width: 100%;
+        min-height: 100%;
+        overflow: hidden;
+        color: #dff7ea;
+        background:
+          radial-gradient(circle at 80% 12%, rgba(37, 116, 89, .32), transparent 38%),
+          #050a0c;
+        outline: none;
+      }
+
+      .terminal {
+        position: absolute;
+        inset: 6% 4% 5%;
+        overflow: hidden;
+        border: 1px solid rgba(112, 233, 181, .25);
+        border-radius: clamp(10px, 2.5vw, 20px);
+        background: rgba(5, 17, 14, .94);
+        box-shadow: 0 25px 65px rgba(0, 0, 0, .58);
+      }
+
+      .terminal-head,
+      .run-task,
+      .agent-row,
+      .terminal-log,
+      .terminal-button,
+      .terminal-status,
+      .terminal-hint {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+
+      .terminal-head {
+        position: absolute;
+        z-index: 6;
+        left: 0;
+        right: 0;
+        top: 0;
+        height: clamp(30px, 13%, 44px);
+        display: flex;
+        align-items: center;
+        padding: 0 clamp(10px, 2vw, 16px);
+        border-bottom: 1px solid rgba(255, 255, 255, .09);
+        color: #7fb69d;
+        font-size: 6px;
+        font-weight: 900;
+        letter-spacing: .11em;
+        text-transform: uppercase;
+      }
+
+      .terminal-lights { display: flex; gap: 4px; margin-right: 10px; }
+      .terminal-lights i { width: 5px; height: 5px; border-radius: 50%; background: rgba(255, 255, 255, .18); }
+      .terminal-lights i:first-child { background: #ce745e; }
+      .terminal-lights i:nth-child(2) { background: #dab15d; }
+      .terminal-lights i:last-child { background: #65b994; }
+
+      .terminal-status {
+        position: absolute;
+        right: clamp(10px, 2vw, 16px);
+        top: 50%;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        translate: 0 -50%;
+        color: rgba(255, 255, 255, .64);
+        font-size: 5px;
+        font-weight: 900;
+        letter-spacing: .08em;
+      }
+
+      .terminal-status::before {
+        content: "";
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--status-tone, #d8ac58);
+        box-shadow: 0 0 8px var(--status-tone, #d8ac58);
+      }
+
+      .terminal-controls {
+        position: absolute;
+        z-index: 8;
+        left: clamp(10px, 2vw, 16px);
+        bottom: clamp(8px, 3%, 13px);
+        display: flex;
+        gap: 6px;
+      }
+
+      .terminal-button {
+        height: 24px;
+        padding: 0 10px;
+        border: 1px solid rgba(111, 224, 173, .29);
+        border-radius: 99px;
+        color: #dcf6e8;
+        background: rgba(15, 39, 30, .7);
+        cursor: pointer;
+        font-size: 5px;
+        font-weight: 900;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+      }
+
+      .terminal-button:hover,
+      .terminal-button:focus-visible {
+        border-color: rgba(126, 239, 189, .82);
+        background: rgba(32, 77, 58, .72);
+        outline: none;
+      }
+
+      .run-task {
+        position: absolute;
+        z-index: 4;
+        left: 0;
+        right: 0;
+        top: clamp(30px, 13%, 44px);
+        height: clamp(28px, 12%, 40px);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        padding: 0 clamp(10px, 2vw, 16px);
+        border-bottom: 1px solid rgba(255, 255, 255, .08);
+        color: rgba(255, 255, 255, .72);
+        font-size: 6px;
+        font-weight: 800;
+      }
+
+      .run-task strong { color: #fff; font-weight: 900; }
+      .run-task span:last-child { color: #7ca993; white-space: nowrap; }
+
+      .terminal-content {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: calc(clamp(30px, 13%, 44px) + clamp(28px, 12%, 40px));
+        bottom: clamp(39px, 14%, 51px);
+        display: grid;
+        grid-template-columns: minmax(86px, 27%) minmax(0, 1fr);
+        min-height: 0;
+      }
+
+      .agent-roster {
+        min-width: 0;
+        padding: clamp(8px, 2vh, 12px);
+        border-right: 1px solid rgba(255, 255, 255, .08);
+        background: rgba(9, 26, 20, .48);
+      }
+
+      .agent-roster h2 {
+        margin: 0 0 8px;
+        color: rgba(255, 255, 255, .37);
+        font: 900 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+      }
+
+      .agent-row {
+        display: grid;
+        grid-template-columns: 6px minmax(0, 1fr);
+        gap: 6px;
+        align-items: center;
+        min-width: 0;
+        padding: 5px 0;
+        color: rgba(255, 255, 255, .64);
+        font-size: clamp(4px, 1vw, 6px);
+      }
+
+      .agent-dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--agent-tone, #58675f);
+        box-shadow: 0 0 7px color-mix(in srgb, var(--agent-tone) 70%, transparent);
+      }
+
+      .agent-copy { min-width: 0; }
+      .agent-name { display: block; overflow: hidden; color: #e5f4ec; font-weight: 900; text-overflow: ellipsis; white-space: nowrap; }
+      .agent-state { display: block; margin-top: 2px; overflow: hidden; color: rgba(255, 255, 255, .36); text-overflow: ellipsis; text-transform: uppercase; white-space: nowrap; }
+
+      .terminal-log {
+        position: relative;
+        min-width: 0;
+        overflow: hidden;
+        padding: clamp(8px, 2vh, 13px) clamp(10px, 2vw, 17px);
+        color: rgba(210, 240, 223, .69);
+        font-size: clamp(5px, 1.1vw, 7px);
+        font-weight: 700;
+        line-height: 1.45;
+      }
+
+      .log-lines {
+        display: grid;
+        gap: clamp(5px, 1.5vh, 8px);
+        will-change: transform;
+      }
+
+      .log-row {
+        display: grid;
+        grid-template-columns: 32px 58px minmax(0, 1fr);
+        gap: 7px;
+        min-width: 0;
+        opacity: var(--reveal, 0);
+        clip-path: inset(0 var(--conceal, 100%) 0 0);
+      }
+
+      .log-row.is-current { color: #ecfff4; }
+      .log-time { color: rgba(255, 255, 255, .28); }
+      .log-agent { overflow: hidden; color: #76c9a3; font-weight: 900; text-overflow: ellipsis; white-space: nowrap; }
+      .log-event { min-width: 0; }
+      .log-event strong { color: #fff; font-weight: 900; }
+      .log-event code { color: #d8b969; font: inherit; }
+
+      .replay-cursor {
+        position: absolute;
+        z-index: 3;
+        left: 0;
+        top: 0;
+        display: inline-block;
+        width: 5px;
+        height: 8px;
+        margin-left: 4px;
+        vertical-align: -1px;
+        background: #75d4aa;
+        opacity: var(--cursor-opacity, 1);
+        pointer-events: none;
+        will-change: transform;
+      }
+
+      .terminal-hint {
+        position: absolute;
+        z-index: 5;
+        right: clamp(10px, 2vw, 16px);
+        bottom: clamp(13px, 5%, 19px);
+        color: rgba(255, 255, 255, .32);
+        font-size: 5px;
+        font-weight: 800;
+        letter-spacing: .07em;
+        text-transform: uppercase;
+        pointer-events: none;
+      }
+
+      .terminal-progress {
+        position: absolute;
+        z-index: 9;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 2px;
+        background: rgba(255, 255, 255, .08);
+      }
+
+      .terminal-progress::after {
+        content: "";
+        display: block;
+        width: 100%;
+        height: 100%;
+        background: #68cf9f;
+        scale: var(--progress, 0) 1;
+        transform-origin: left;
+      }
+
+      .library-badge { background: rgba(5, 15, 13, .72); }
+      .scene-caption { display: none; }
+
+      @media (max-height: 240px) {
+        .terminal-head { height: 22px; }
+        .run-task { top: 22px; height: 24px; }
+        .terminal-content { top: 46px; bottom: 29px; }
+        .agent-roster { padding: 6px; }
+        .agent-roster h2 { margin-bottom: 4px; }
+        .agent-row { padding: 2px 0; font-size: 4px; }
+        .agent-state { margin-top: 1px; }
+        .terminal-log { padding: 6px 8px; font-size: 4.5px; line-height: 1.3; }
+        .log-lines { gap: 3px; }
+        .log-row { grid-template-columns: 24px 45px minmax(0, 1fr); gap: 4px; }
+        .terminal-controls { bottom: 5px; }
+        .terminal-button { height: 18px; padding-inline: 7px; }
+        .terminal-hint { bottom: 9px; font-size: 4px; }
+      }
+
+      @media (max-width: 180px), (max-height: 100px) {
+        .terminal { inset: 12px 4px 2px; border-radius: 6px; }
+        .terminal-head { height: 10px; padding: 0 5px; font-size: 3px; }
+        .terminal-lights { gap: 2px; margin-right: 4px; }
+        .terminal-lights i { width: 2px; height: 2px; }
+        .terminal-status { right: 5px; gap: 2px; font-size: 3px; }
+        .terminal-status::before { width: 2px; height: 2px; }
+        .run-task { top: 10px; height: 11px; padding: 0 5px; font-size: 3px; }
+        .run-task span:last-child { display: none; }
+        .terminal-content { top: 21px; bottom: 15px; grid-template-columns: 35px minmax(0, 1fr); }
+        .agent-roster { padding: 4px; }
+        .agent-roster h2 { display: none; }
+        .agent-row { grid-template-columns: 3px minmax(0, 1fr); gap: 3px; padding: 2px 0; font-size: 3px; }
+        .agent-dot { width: 2px; height: 2px; }
+        .agent-state { display: none; }
+        .terminal-log { padding: 4px 5px; font-size: 3px; line-height: 1.2; }
+        .log-lines { gap: 2px; }
+        .log-row { grid-template-columns: 17px 27px minmax(0, 1fr); gap: 3px; }
+        .replay-cursor { width: 2px; height: 3px; margin-left: 2px; }
+        .terminal-controls { left: 5px; bottom: 3px; gap: 3px; }
+        .terminal-button { height: 9px; padding: 0 4px; font-size: 3px; }
+        .terminal-hint { right: 5px; bottom: 5px; font-size: 3px; }
+        .library-badge { top: 4px; left: 5px; padding: 2px 4px; font-size: 4px; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .log-lines { will-change: auto; }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/visibility-gated-agent-terminal-replay-Cb8XEAJT.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+    <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
+    <link rel="modulepreload" crossorigin href="./assets/batch-c-utils-g_3IBZ2b.js">
+    <link rel="modulepreload" crossorigin href="./assets/batch-a-qa-CFcoNLob.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main class="preview-stage terminal-stage" id="terminal-stage" tabindex="0" data-preview-mechanism="motion-human-visibility-gated-agent-replay" aria-label="Multi-agent run replay. Use Play or Restart, Space or Enter, Left and Right Arrow, Home, and End.">
+      <section class="terminal" id="terminal">
+        <header class="terminal-head">
+          <span class="terminal-lights" aria-hidden="true"><i></i><i></i><i></i></span>
+          run / evidence-assistant-prototype
+          <span class="terminal-status" id="terminal-status">Paused · operator</span>
+        </header>
+        <div class="run-task"><span><strong>Task:</strong> validate demand, build the cited synthesis path, verify release gates</span><span>run_24f7 · 5 agents</span></div>
+        <div class="terminal-content">
+          <aside class="agent-roster" aria-label="Agent statuses">
+            <h2>Agents</h2>
+            <div class="agent-row" data-agent="orchestrator"><i class="agent-dot"></i><span class="agent-copy"><b class="agent-name">orchestrator</b><small class="agent-state">queued</small></span></div>
+            <div class="agent-row" data-agent="research"><i class="agent-dot"></i><span class="agent-copy"><b class="agent-name">research</b><small class="agent-state">queued</small></span></div>
+            <div class="agent-row" data-agent="analyst"><i class="agent-dot"></i><span class="agent-copy"><b class="agent-name">analyst</b><small class="agent-state">queued</small></span></div>
+            <div class="agent-row" data-agent="builder"><i class="agent-dot"></i><span class="agent-copy"><b class="agent-name">builder</b><small class="agent-state">queued</small></span></div>
+            <div class="agent-row" data-agent="verifier"><i class="agent-dot"></i><span class="agent-copy"><b class="agent-name">verifier</b><small class="agent-state">queued</small></span></div>
+          </aside>
+          <div class="terminal-log" id="terminal-log" aria-live="polite">
+            <div class="log-lines" id="log-lines">
+              <div class="log-row" data-at="0" data-phase="intake" data-outcome="A bounded objective and release gate are registered."><span class="log-time">00:00</span><span class="log-agent">orchestrator</span><span class="log-event"><strong>accepted</strong> objective; guardrail = cited claims only</span></div>
+              <div class="log-row" data-at="0.09" data-phase="research" data-outcome="Research is delegated without overlapping source ownership."><span class="log-time">00:06</span><span class="log-agent">orchestrator</span><span class="log-event">spawned research + analyst; assigned evidence ledger</span></div>
+              <div class="log-row" data-at="0.19" data-phase="research" data-outcome="Demand evidence is collected with negative signals preserved."><span class="log-time">00:17</span><span class="log-agent">research</span><span class="log-event">sampled 24 workflows; <code>8/12</code> teams lose citation context</span></div>
+              <div class="log-row" data-at="0.31" data-phase="synthesis" data-outcome="The analyst identifies both demand and a false-confidence risk."><span class="log-time">00:29</span><span class="log-agent">analyst</span><span class="log-event">coded 41 evidence units; contradiction risk = <strong>high</strong></span></div>
+              <div class="log-row" data-at="0.43" data-phase="decision" data-outcome="The orchestration decision narrows the prototype scope."><span class="log-time">00:41</span><span class="log-agent">orchestrator</span><span class="log-event">scope locked: cluster → cite → review; no autonomous verdict</span></div>
+              <div class="log-row" data-at="0.55" data-phase="build" data-outcome="A reviewable prototype is assembled against the scoped decision."><span class="log-time">00:56</span><span class="log-agent">builder</span><span class="log-event">built source-span drawer + contradiction queue</span></div>
+              <div class="log-row" data-at="0.69" data-phase="verify" data-outcome="Automated checks pass but human review remains open."><span class="log-time">01:12</span><span class="log-agent">verifier</span><span class="log-event"><code>18/18</code> interaction checks pass; audit finds 1 trace gap</span></div>
+              <div class="log-row" data-at="0.79" data-phase="repair" data-outcome="The traceability defect is repaired before release."><span class="log-time">01:23</span><span class="log-agent">builder</span><span class="log-event">patched exported claim → exact source-span backlink</span></div>
+              <div class="log-row" data-at="0.9" data-phase="verify" data-outcome="The verifier closes both product and accessibility gates."><span class="log-time">01:37</span><span class="log-agent">verifier</span><span class="log-event">recheck: trace <strong>pass</strong> · keyboard <strong>pass</strong> · contrast <strong>pass</strong></span></div>
+              <div class="log-row" data-at="1" data-phase="complete" data-outcome="The run recommends a narrow prototype rather than autonomous synthesis."><span class="log-time">01:44</span><span class="log-agent">orchestrator</span><span class="log-event"><strong>complete</strong> recommendation = assisted synthesis / gated pilot</span></div>
+            </div>
+            <i class="replay-cursor" id="replay-cursor" aria-hidden="true"></i>
+          </div>
+        </div>
+        <div class="terminal-controls" aria-label="Replay controls">
+          <button class="terminal-button" id="play-toggle" type="button" aria-pressed="false">Play</button>
+          <button class="terminal-button" id="restart" type="button">Restart</button>
+        </div>
+        <span class="terminal-hint">Space play · ← / → scrub · visibility gated</span>
+        <i class="terminal-progress" id="terminal-progress" aria-hidden="true"></i>
+      </section>
+      <span class="library-badge">Motion · truthful visibility gate</span>
+      <span class="scene-caption">A real multi-agent run advances only after user playback and while both document and terminal are actually visible.</span>
+    </main>
+  </body>
+</html>

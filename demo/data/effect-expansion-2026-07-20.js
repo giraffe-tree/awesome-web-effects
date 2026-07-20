@@ -524,12 +524,12 @@ export const effectExpansion100Specs = [
     "nameZh": "可见性门控 Agent 终端回放",
     "category": "animation",
     "sourceUrl": "https://poolside.ai/",
-    "difference": "终端具有 typing/submitted/working/done/interrupted 状态，且离屏冻结时间；不是普通打字机。",
+    "difference": "五个具名角色执行一条可核验的研究—构建—修复链；初始严格暂停，只有明确播放意图、文档可见且终端真实进入视口三者同时成立才推进。",
     "behavior": {
-      "trigger": "viewport visibility / Escape",
-      "response": "Replay an agent task with tool output, pause offscreen, and expose interruption",
-      "timing": "multi-state sequenced playback with gated clock",
-      "layer": "terminal panel"
+      "trigger": "real Play/Restart, Space/Enter, Left/Right/Home/End, plus IntersectionObserver and document visibility",
+      "response": "Replay ten consequential multi-agent events, freeze truthfully at visibility gates, and keep logs, cursor, progress, and five agent statuses synchronized",
+      "timing": "operator-owned playback clock with offscreen/tab-hidden pause and no catch-up jump",
+      "layer": "multi-agent workflow audit terminal"
     },
     "implementation": {
       "projectId": "motiondivision-motion",
@@ -550,11 +550,11 @@ export const effectExpansion100Specs = [
     },
     "rationaleZh": "Agent 状态、工具行、计时和可见性共同形成叙事，而非逐字装饰。",
     "batch": "A",
-    "demo": "终端执行“分析海报色板”任务，依次输出工具调用与完成摘要。",
-    "capture": "进入视口启动→滚出冻结→返回续播→Escape 触发 interrupted。",
+    "demo": "终端由 orchestrator、research、analyst、builder 与 verifier 共同完成一个可追溯证据助手的需求采样、范围决策、构建、缺陷修复和门控建议。",
+    "capture": "真实点击 Play/Pause、使用方向键逐事件擦洗、End 到达完整结论，再 Restart 验证可重入；断言初始静止、真实 IntersectionObserver 已报告且无自动播放或合成输入。",
     "risk": {
       "level": "medium",
-      "detail": "capture 时钟必须真冻结；仅暂停 CSS 动画但计时继续会错配。"
+      "detail": "必须由 IntersectionObserver 与 document.visibilityState 真正门控时钟，并在恢复时重置时间基准，避免离屏期间累计后瞬跳。"
     },
     "observedImplementation": {
       "projectId": "motiondivision-motion",

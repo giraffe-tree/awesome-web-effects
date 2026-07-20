@@ -393,6 +393,32 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("End")
             elif index == 33:
                 page.wait_for_timeout(500)
+        elif demo["id"] == "visibility-gated-agent-terminal-replay":
+            if index == 2:
+                page.locator("#play-toggle").click()
+            elif index in (3, 5, 7):
+                page.wait_for_timeout(650)
+            elif index == 9:
+                page.locator("#play-toggle").click()
+            elif index == 13:
+                page.mouse.click(250, 108)
+                page.keyboard.press("ArrowRight")
+            elif index == 14:
+                page.wait_for_timeout(300)
+            elif index == 18:
+                page.keyboard.press("ArrowRight")
+            elif index == 19:
+                page.wait_for_timeout(300)
+            elif index == 23:
+                page.keyboard.press("End")
+            elif index == 24:
+                page.wait_for_timeout(300)
+            elif index == 28:
+                page.locator("#restart").click()
+            elif index == 29:
+                page.wait_for_timeout(650)
+            elif index == 32:
+                page.locator("#play-toggle").click()
         page.evaluate("time => window.__setPreviewTime(time)", preview_time)
         frame_path = frame_root / f"{index:04d}.png"
         page.screenshot(path=str(frame_path), type="png")
@@ -657,6 +683,35 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or "release-at-bounds" not in interaction["wheelPolicy"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture real reversible document scrubbing and boundary release: {interaction!r}")
+    elif demo["id"] == "visibility-gated-agent-terminal-replay":
+        page.wait_for_function(
+            "window.__PREVIEW_INTERACTION_STATE__.phase === 'paused' && !window.__PREVIEW_INTERACTION_STATE__.motionActive",
+            timeout=2_000,
+        )
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            interaction["automaticFallback"]
+            or interaction["automaticPlayback"]
+            or interaction["syntheticInputDispatch"]
+            or not interaction["initialStaticConfirmed"]
+            or not interaction["intersectionKnown"]
+            or interaction["intersectionEventCount"] < 1
+            or not interaction["pageVisible"]
+            or not interaction["intersectionVisible"]
+            or interaction["visibilityGateReason"] != "none"
+            or interaction["inputCount"] < 6
+            or interaction["playToggleCount"] < 3
+            or interaction["restartCount"] < 1
+            or interaction["scrubCount"] < 3
+            or interaction["phase"] != "paused"
+            or interaction["playIntent"]
+            or interaction["canAdvance"]
+            or interaction["motionActive"]
+            or interaction["progress"] <= 0
+            or interaction["progress"] >= .3
+            or interaction["eventIndex"] > 2
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture operator-owned visible playback, scrub, and restart: {interaction!r}")
 
     minimum_unique = min(6, max(2, frame_count // 6))
     if len(hashes) < minimum_unique:

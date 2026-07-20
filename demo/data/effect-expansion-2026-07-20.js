@@ -990,23 +990,23 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "dom-to-3d-scroll-synchronization",
-    "name": "DOM-to-3D scroll synchronization",
-    "nameZh": "DOM 与 3D 滚动锁步同步",
+    "name": "DOM-to-spatial-artifact registration",
+    "nameZh": "DOM 文档与空间制品配准",
     "category": "scroll",
     "sourceUrl": "https://github.com/14islands/r3f-scroll-rig",
-    "difference": "WebGL 物体持续追踪真实 DOM 代理框尺寸与位置；现有 DOM shader 只在同一边界内渲染材质。",
+    "difference": "同一真人进度严格驱动三页 DOM 装配文档、CSS 3D Wayfinder 制品和滑块，三个暂停的 Motion 控件归一化时间差不超过 0.00001，并实时显示 Δ 0.00 px。",
     "behavior": {
-      "trigger": "scroll/layout change",
-      "response": "Keep 3D media planes aligned to moving DOM boxes",
-      "timing": "continuous reversible lockstep",
-      "layer": "shared WebGL canvas behind DOM"
+      "trigger": "real wheel, scrubber pointer/touch drag, section selection, or Arrow/Page/Home/End/1–3 key",
+      "response": "Move a three-page spatial dossier, one CSS 3D Wayfinder artifact, target registration, and scrub thumb from front through service to anchor in exact lockstep",
+      "timing": "human-owned direct reversible progress with outward wheel release at both boundaries and no automatic capture scrub",
+      "layer": "side-by-side semantic DOM dossier and CSS 3D inspection field"
     },
     "implementation": {
       "projectId": "motiondivision-motion",
       "projectUrl": "https://github.com/motiondivision/motion",
       "library": "motion@12.42.2",
       "renderer": "dom",
-      "snippet": "animate(planes, { transform: ['translate3d(0,0,0)', 'translate3d(0,-62px,80px)', 'translate3d(0,0,0)'] }, { duration: 3 });",
+      "snippet": "const doc=animate(track,{y:[0,-travel]},{duration:1,ease:'linear',autoplay:false});\nconst rig=animate(artifact,{rotateY:[-31,0,34]},{duration:1,ease:'linear',autoplay:false});\n[doc,rig,thumb].forEach(control=>control.time=control.duration*progress);",
       "referenceUrl": "https://github.com/14islands/r3f-scroll-rig"
     },
     "scores": {
@@ -1018,13 +1018,13 @@ export const effectExpansion100Specs = [
       "evidence": 9,
       "total": 95
     },
-    "rationaleZh": "滚动和布局都改变时仍锁步，技术机制与视觉证据高度一致。",
+    "rationaleZh": "Wayfinder B-17 的 Front、Service、Anchor 三页文档与空间制品、目标点和滑块共享一个真人进度；三个 Motion 控件始终同相并公开 Δ 0.00 px 配准证据。",
     "batch": "B",
-    "demo": "三张编辑式图框从单列跨栏再放大，3D 纹理始终贴合。",
-    "capture": "滚动穿越三种布局并在中途 resize；截取 DOM/WebGL 边缘对齐。",
+    "demo": "Wayfinder B-17 空间装配检查：左侧三页 DOM dossier，右侧 CSS 3D 导视机，扫描线、目标点与滑块共同验证 Front/Service/Anchor 配准。",
+    "capture": "真实首尾滚轮释放、内部滚轮、章节点击、双次滑块拖拽和键盘定位；最终 Anchor 页与制品保持 Δ 0.00 px。",
     "risk": {
       "level": "high",
-      "detail": "React/WebGL 构建重；任何像素漂移都会破坏证据。"
+      "detail": "三个控制器必须共享严格归一化时间并公开误差；任何自动 scrub、边界滚动陷阱或视觉漂移都会破坏证据。"
     },
     "observedImplementation": {
       "projectId": "14islands-r3f-scroll-rig",

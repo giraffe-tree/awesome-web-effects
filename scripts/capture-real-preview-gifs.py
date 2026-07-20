@@ -623,6 +623,55 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.move(box["x"] + box["width"] - .01, box["y"] + box["height"] * .56)
                 page.mouse.down()
                 page.mouse.up()
+        elif demo["id"] == "dom-to-3d-scroll-synchronization":
+            if index == 2:
+                box = page.locator('#sync-stage').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * .72, box["y"] + box["height"] * .56)
+                page.mouse.wheel(0, -100)
+            elif index == 4:
+                page.mouse.wheel(0, 100)
+            elif index == 6:
+                page.mouse.wheel(0, 100)
+            elif index == 8:
+                page.locator('.section-control[data-section="service"]').click()
+            elif index == 11:
+                box = page.locator('#scrub-track').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * .3, box["y"] + box["height"] * .5)
+                page.mouse.down()
+            elif index == 12:
+                box = page.locator('#scrub-track').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * .7, box["y"] + box["height"] * .5, steps=5)
+                page.mouse.up()
+            elif index == 14:
+                page.locator('.section-control[data-section="anchor"]').click()
+            elif index == 16:
+                page.mouse.wheel(0, 100)
+            elif index == 19:
+                page.mouse.wheel(0, -100)
+            elif index == 21:
+                page.locator('#sync-stage').focus()
+                page.keyboard.press("Home")
+            elif index == 23:
+                page.mouse.wheel(0, -100)
+            elif index == 25:
+                page.locator('.section-control[data-section="service"]').click()
+            elif index == 27:
+                box = page.locator('#scrub-track').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * .63, box["y"] + box["height"] * .5)
+                page.mouse.down()
+                page.mouse.up()
+            elif index == 30:
+                page.locator('#sync-stage').focus()
+                page.keyboard.press("3")
+            elif index == 31:
+                page.mouse.wheel(0, 100)
+            elif index == 33:
+                page.locator('#sync-stage').focus()
+                page.keyboard.press("ArrowLeft")
+            elif index == 34:
+                page.keyboard.press("End")
+            elif index == 35:
+                page.mouse.wheel(0, 100)
         elif demo["id"] == "blurhash-to-photo-progressive-reveal":
             pointer_x = 230 if .5 <= preview_time < 2.25 else 32
             page.mouse.move(pointer_x, 90)
@@ -1419,6 +1468,54 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["canvasHeight"] < 64
         ):
             raise RuntimeError(f"{demo['id']} did not capture a real bidirectional ASCII incident route across controls, pointer scrub, keyboard, and boundaries: {interaction!r}")
+    elif demo["id"] == "dom-to-3d-scroll-synchronization":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            interaction["automaticFallback"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticScrub"]
+            or interaction["automaticSectionAdvance"]
+            or interaction["captureClockDriven"]
+            or interaction["syntheticInputDispatch"]
+            or not interaction["userOwnedProgress"]
+            or not interaction["controlsBuiltWithoutAutoplay"]
+            or not interaction["initialFrameStatic"]
+            or interaction["initialProgress"] != 0
+            or interaction["initialPhase"] != "idle"
+            or interaction["acceptedInputs"] != ["wheel", "mouse", "touch", "pen", "keyboard"]
+            or interaction["inputCount"] < 16
+            or interaction["wheelInputCount"] < 8
+            or interaction["wheelConsumedCount"] < 3
+            or interaction["wheelNoChangeCount"] < 5
+            or interaction["boundaryReleaseCount"] < 5
+            or interaction["startBoundaryReleaseCount"] < 2
+            or interaction["endBoundaryReleaseCount"] < 3
+            or interaction["pointerInputCount"] < 5
+            or interaction["keyboardInputCount"] < 4
+            or interaction["dragSessionCount"] < 2
+            or interaction["dragUpdateCount"] < 7
+            or interaction["sectionSelectionCount"] < 3
+            or interaction["keyboardSeekCount"] < 4
+            or interaction["progressMutationCount"] < 10
+            or interaction["boundaryPolicy"] != "release-outward-wheel-at-0-and-1"
+            or interaction["progress"] != 1
+            or interaction["progressSource"] != "keyboard"
+            or interaction["selectedSection"] != "anchor"
+            or interaction["selectedSectionIndex"] != 2
+            or interaction["documentProgress"] != 1
+            or interaction["artifactProgress"] != 1
+            or interaction["thumbProgress"] != 1
+            or interaction["controlTimeSpread"] > .00001
+            or interaction["registrationErrorPx"] > .01
+            or interaction["motionControlCount"] != 3
+            or interaction["dragActive"]
+            or interaction["phase"] != "inspecting"
+            or interaction["lastBoundary"] != "end"
+            or interaction["lastWheelDefaultPrevented"]
+            or interaction["inputKind"] != "wheel"
+            or interaction["lastInputTrusted"] is not True
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture one human-owned DOM, spatial artifact, and scrubber registration signal with released boundaries: {interaction!r}")
     elif demo["id"] == "blurhash-to-photo-progressive-reveal":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__()")
         if interaction["pointerEvents"] < 3 or interaction["pointerOverPhoto"]:

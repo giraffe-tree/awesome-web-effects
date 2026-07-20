@@ -1,7 +1,589 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Motion — DOM to 3D Scroll Synchronization</title><style>
-:root{--preview-background:#e9e5d7;color-scheme:light}.sync-stage{position:absolute;inset:0;overflow:hidden;color:#171a16}.document-card{position:absolute;left:18px;top:47px;width:119px;height:99px;padding:12px;border:1px solid #273027;border-radius:10px;background:#fffdf4;box-shadow:0 12px 28px #2833241e;transform-origin:center}.document-card small,.sync-label{font:800 6px/1 ui-monospace,monospace;letter-spacing:.12em}.document-card h1{margin:12px 0 0;font:900 16px/.87 system-ui;letter-spacing:-.05em}.document-card i{display:block;width:69px;height:3px;margin-top:8px;border-radius:4px;background:#25322933}.document-card i:nth-of-type(2){width:48px}.perspective-field{position:absolute;right:18px;top:39px;width:139px;height:115px;perspective:280px;border:1px dashed #27302735;border-radius:13px}.world-plane{position:absolute;left:29px;top:22px;width:81px;height:71px;transform-style:preserve-3d}.world-face{position:absolute;inset:0;border:1px solid #16241d;background:linear-gradient(145deg,#64dca7,#3062ff);box-shadow:0 17px 30px #254d4b42}.world-face::before{content:'';position:absolute;inset:12px;border:1px solid #fff8;border-radius:50%}.world-node{position:absolute;width:9px;height:9px;border:1px solid #fff;border-radius:50%;background:#ff744f;box-shadow:0 0 0 4px #ff744f30}.world-node.a{left:10px;top:47px}.world-node.b{right:11px;top:13px}.sync-beam{position:absolute;left:136px;top:91px;width:48px;height:1px;background:#1a2b2266;transform-origin:left}.sync-beam::after{content:'';position:absolute;right:0;top:-3px;width:7px;height:7px;border-radius:50%;background:#15251d}.sync-label{position:absolute;left:145px;top:77px;color:#3b493f}.library-badge{color:#1f2a22;background:#f5f1e2d9;border-color:#20302620}.scene-caption{color:#35433a90}</style>  <script type="module" crossorigin src="./assets/dom-to-3d-scroll-synchronization-BrxDjihx.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
-  <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
-  <link rel="modulepreload" crossorigin href="./assets/batch-b-utils-CmA_lC0Z.js">
-  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage"><div class="sync-stage" id="sync-stage" data-preview-mechanism="motion-dom-3d-sync" tabindex="0" aria-label="Scroll or use arrow keys to synchronize a DOM document with a 3D plane"><article class="document-card" id="document-card"><small>DOM / DOCUMENT</small><h1>One scroll signal, two worlds.</h1><i></i><i></i></article><span class="sync-beam" id="sync-beam"></span><span class="sync-label">SYNC</span><div class="perspective-field"><div class="world-plane" id="world-plane"><div class="world-face"><i class="world-node a"></i><i class="world-node b"></i></div></div></div></div><span class="library-badge">Motion · DOM ↔ 3D</span><span class="scene-caption">scroll progress binds document and scene</span></main></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Motion — Spatial Document Registration Review</title>
+    <style>
+      :root {
+        --preview-background: #0d1719;
+        --paper: #f0eadb;
+        --ink: #172124;
+        --cyan: #72d6d2;
+        --orange: #f37a4d;
+        --lime: #b7d96b;
+        color-scheme: dark;
+      }
+
+      button { font: inherit; }
+
+      .sync-stage {
+        --section-color: var(--cyan);
+        position: absolute;
+        inset: 0;
+        overflow: clip;
+        color: #e4efed;
+        background:
+          radial-gradient(circle at 75% 46%, #31565c35, transparent 38%),
+          linear-gradient(145deg, #0c1517, #132326 66%, #0b1416);
+        touch-action: none;
+      }
+
+      .sync-stage[data-section="service"] { --section-color: var(--orange); }
+      .sync-stage[data-section="anchor"] { --section-color: var(--lime); }
+
+      .inspection-shell {
+        position: absolute;
+        inset: 28px 20px 21px;
+        display: grid;
+        grid-template-rows: 25px minmax(0, 1fr) 25px;
+        gap: 6px;
+        min-height: 0;
+      }
+
+      .inspection-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        min-width: 0;
+      }
+
+      .review-title {
+        min-width: 0;
+        color: #a9bab8;
+        font-size: 6px;
+        font-weight: 850;
+        letter-spacing: .13em;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+
+      .review-title strong { color: #edf3f1; }
+
+      .section-controls {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .section-control {
+        min-height: 21px;
+        padding: 0 8px;
+        border: 1px solid #7187864d;
+        border-radius: 99px;
+        background: #152326;
+        color: #8fa19f;
+        font-size: 5px;
+        font-weight: 900;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        cursor: pointer;
+        touch-action: manipulation;
+      }
+
+      .section-control.is-active {
+        border-color: color-mix(in srgb, var(--section-color), transparent 18%);
+        background: color-mix(in srgb, var(--section-color) 16%, #152326);
+        color: #f2f7f5;
+      }
+
+      .section-control:focus-visible,
+      .scrub-track:focus-visible,
+      .sync-stage:focus-visible {
+        outline: 2px solid #f3efe4;
+        outline-offset: 2px;
+      }
+
+      .inspection-grid {
+        position: relative;
+        display: grid;
+        grid-template-columns: minmax(106px, .88fr) minmax(0, 1.3fr);
+        gap: 10px;
+        min-height: 0;
+      }
+
+      .registration-line {
+        position: absolute;
+        right: 0;
+        left: 0;
+        top: 50%;
+        z-index: 8;
+        height: 1px;
+        pointer-events: none;
+        background: linear-gradient(90deg, var(--section-color), #ffffff55 46%, var(--section-color));
+        box-shadow: 0 0 12px color-mix(in srgb, var(--section-color), transparent 48%);
+      }
+
+      .registration-line::before,
+      .registration-line::after {
+        position: absolute;
+        top: -3px;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--section-color);
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--section-color), transparent 76%);
+        content: "";
+      }
+      .registration-line::before { left: calc(36% - 3px); }
+      .registration-line::after { right: calc(27% - 3px); }
+
+      .document-window {
+        position: relative;
+        z-index: 3;
+        min-width: 0;
+        min-height: 0;
+        overflow: clip;
+        border: 1px solid #5f706b5c;
+        border-radius: 14px;
+        background: #1a2728;
+        box-shadow: 0 16px 34px #0005;
+      }
+
+      .document-track {
+        position: absolute;
+        inset: 0 0 auto;
+        height: 300%;
+        will-change: transform;
+      }
+
+      .spec-sheet {
+        position: relative;
+        height: 33.333333%;
+        padding: 13px 14px;
+        overflow: clip;
+        border-bottom: 1px solid #24312d1f;
+        background:
+          linear-gradient(#26322d13 1px, transparent 1px),
+          var(--paper);
+        background-size: 100% 18px;
+        color: var(--ink);
+      }
+
+      .spec-sheet::after {
+        position: absolute;
+        top: calc(50% - 4px);
+        right: -4px;
+        width: 8px;
+        height: 8px;
+        border: 2px solid var(--paper);
+        border-radius: 50%;
+        background: var(--sheet-color);
+        box-shadow: 0 0 0 1px #24312d66;
+        content: "";
+      }
+
+      .spec-sheet[data-section="front"] { --sheet-color: var(--cyan); }
+      .spec-sheet[data-section="service"] { --sheet-color: var(--orange); }
+      .spec-sheet[data-section="anchor"] { --sheet-color: var(--lime); }
+
+      .sheet-index,
+      .sheet-tag,
+      .sheet-metrics,
+      .document-edge-label,
+      .artifact-view-label,
+      .sync-readout,
+      .boundary-readout {
+        letter-spacing: .11em;
+        text-transform: uppercase;
+      }
+
+      .sheet-index { color: #78827e; font-size: 5px; font-weight: 900; }
+      .spec-sheet h1 { margin: 9px 0 0; font: 650 clamp(15px, 4.6vw, 25px)/.9 Iowan Old Style, Baskerville, serif; letter-spacing: -.04em; }
+      .sheet-tag { margin: 5px 0 0; color: #69736f; font-size: 5px; font-weight: 800; }
+
+      .sheet-diagram {
+        position: absolute;
+        right: 12px;
+        bottom: 12px;
+        left: 13px;
+        height: 26px;
+        border-top: 1px solid #22302b2b;
+      }
+
+      .sheet-diagram::before,
+      .sheet-diagram::after {
+        position: absolute;
+        top: 7px;
+        height: 9px;
+        border: 1px solid #28352f6e;
+        border-radius: 2px;
+        content: "";
+      }
+      .sheet-diagram::before { left: 0; width: 34%; }
+      .sheet-diagram::after { right: 0; width: 52%; }
+
+      .sheet-metrics {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        color: #4f5a55;
+        font-size: 4px;
+        font-weight: 900;
+      }
+
+      .document-edge-label {
+        position: absolute;
+        right: 5px;
+        top: 6px;
+        z-index: 6;
+        color: #aab9b6;
+        font-size: 4px;
+        font-weight: 900;
+        writing-mode: vertical-rl;
+      }
+
+      .artifact-field {
+        position: relative;
+        z-index: 2;
+        min-width: 0;
+        min-height: 0;
+        overflow: clip;
+        border: 1px solid #637a7954;
+        border-radius: 14px;
+        background:
+          linear-gradient(#7cb5b30c 1px, transparent 1px),
+          linear-gradient(90deg, #7cb5b30c 1px, transparent 1px),
+          radial-gradient(circle at 52% 45%, #24454a, #101d20 67%);
+        background-size: 18px 18px, 18px 18px, auto;
+        perspective: 430px;
+        box-shadow: inset 0 1px #ffffff0b, 0 16px 34px #0004;
+      }
+
+      .artifact-field::after {
+        position: absolute;
+        right: 11%;
+        bottom: 11%;
+        left: 14%;
+        height: 15%;
+        border-radius: 50%;
+        background: #0008;
+        filter: blur(9px);
+        content: "";
+      }
+
+      .artifact-rig {
+        position: absolute;
+        z-index: 3;
+        left: calc(50% - 31px);
+        top: calc(50% - 47px);
+        width: 62px;
+        height: 94px;
+        transform-style: preserve-3d;
+        transform-origin: 50% 70%;
+        will-change: transform;
+      }
+
+      .kiosk-face,
+      .kiosk-side,
+      .kiosk-base {
+        position: absolute;
+        border: 1px solid #0e1716;
+        transform-style: preserve-3d;
+      }
+
+      .kiosk-face {
+        inset: 0;
+        overflow: hidden;
+        border-radius: 7px 7px 3px 3px;
+        background: linear-gradient(145deg, #d8d4c4, #8f978f);
+        box-shadow: inset 0 1px #ffffff8f, 0 16px 28px #0007;
+        transform: translateZ(9px);
+      }
+
+      .kiosk-side {
+        top: 3px;
+        right: -18px;
+        width: 18px;
+        height: 88px;
+        background: linear-gradient(90deg, #727c76, #404b47);
+        transform: rotateY(90deg);
+        transform-origin: left;
+      }
+
+      .kiosk-base {
+        right: -7px;
+        bottom: -8px;
+        left: -7px;
+        height: 15px;
+        border-radius: 3px;
+        background: #59635e;
+        transform: rotateX(76deg) translateZ(-3px);
+      }
+
+      .kiosk-screen {
+        position: absolute;
+        top: 11px;
+        right: 8px;
+        left: 8px;
+        height: 45px;
+        overflow: hidden;
+        border: 1px solid #111c1d;
+        border-radius: 4px;
+        background:
+          radial-gradient(circle at 70% 35%, var(--section-color) 0 2px, transparent 2.5px),
+          linear-gradient(145deg, #14262a, #244951);
+      }
+
+      .kiosk-screen::before {
+        position: absolute;
+        right: 6px;
+        bottom: 6px;
+        left: 6px;
+        height: 1px;
+        background: #d8f5f175;
+        box-shadow: 0 -8px #d8f5f126, 0 -16px #d8f5f126;
+        content: "";
+      }
+
+      .service-hatch {
+        position: absolute;
+        right: 11px;
+        bottom: 11px;
+        left: 11px;
+        height: 19px;
+        border: 1px solid #333e39;
+        border-radius: 2px;
+      }
+
+      .artifact-target {
+        position: absolute;
+        z-index: 5;
+        top: calc(50% - 4px);
+        width: 8px;
+        height: 8px;
+        border: 1px solid #eef8f5;
+        border-radius: 50%;
+        background: #172322;
+        opacity: .25;
+      }
+      .artifact-target[data-section="front"] { left: 6px; }
+      .artifact-target[data-section="service"] { right: 4px; }
+      .artifact-target[data-section="anchor"] { left: calc(50% - 4px); }
+      .artifact-target.is-active { background: var(--section-color); opacity: 1; box-shadow: 0 0 0 4px color-mix(in srgb, var(--section-color), transparent 72%); }
+
+      .artifact-view-label {
+        position: absolute;
+        top: 9px;
+        left: 10px;
+        z-index: 7;
+        color: #b7c8c5;
+        font-size: 5px;
+        font-weight: 900;
+      }
+
+      .registration-readout {
+        position: absolute;
+        right: 9px;
+        top: 8px;
+        z-index: 7;
+        padding: 4px 5px;
+        border: 1px solid #78908d42;
+        border-radius: 99px;
+        background: #0f1d1ee0;
+        color: var(--section-color);
+        font: 900 5px/1 ui-monospace, monospace;
+        letter-spacing: .08em;
+      }
+
+      .scrub-bar {
+        display: grid;
+        grid-template-columns: 52px minmax(0, 1fr) 72px;
+        align-items: center;
+        gap: 8px;
+        min-width: 0;
+      }
+
+      .sync-readout,
+      .boundary-readout { font-size: 5px; font-weight: 900; white-space: nowrap; }
+      .sync-readout { color: var(--section-color); }
+      .boundary-readout { color: #829592; text-align: right; }
+
+      .scrub-track {
+        position: relative;
+        height: 20px;
+        border: 1px solid #667a7752;
+        border-radius: 99px;
+        background: #101d1f;
+        cursor: ew-resize;
+        touch-action: none;
+      }
+
+      .scrub-track::before {
+        position: absolute;
+        top: 50%;
+        right: 8px;
+        left: 8px;
+        height: 1px;
+        background: linear-gradient(90deg, var(--cyan) 0 49%, var(--orange) 49% 51%, var(--lime) 51%);
+        opacity: .45;
+        content: "";
+      }
+
+      .scrub-tick {
+        position: absolute;
+        top: 4px;
+        width: 1px;
+        height: 10px;
+        background: #b8c6c36b;
+      }
+      .scrub-tick:nth-child(1) { left: 8px; }
+      .scrub-tick:nth-child(2) { left: 50%; }
+      .scrub-tick:nth-child(3) { right: 8px; }
+
+      .scrub-thumb {
+        position: absolute;
+        z-index: 3;
+        left: 3px;
+        top: 3px;
+        width: 12px;
+        height: 12px;
+        border: 2px solid #0e1718;
+        border-radius: 50%;
+        background: var(--section-color);
+        box-shadow: 0 0 0 2px #e7efec2b;
+        pointer-events: none;
+        will-change: transform;
+      }
+
+      .library-badge { color: #dce8e5; background: #101d1edb; border-color: #71878440; }
+      .scene-caption { color: #8ba09c; }
+
+      @media (max-width: 380px) and (min-height: 136px) {
+        .inspection-shell { inset: 28px 11px 19px; grid-template-rows: 22px minmax(0, 1fr) 22px; gap: 5px; }
+        .review-title { font-size: 5px; }
+        .section-control { min-height: 19px; padding: 0 6px; font-size: 4px; }
+        .inspection-grid { grid-template-columns: minmax(92px, .86fr) minmax(0, 1.28fr); gap: 6px; }
+        .document-window, .artifact-field { border-radius: 10px; }
+        .spec-sheet { padding: 9px 10px; }
+        .spec-sheet h1 { margin-top: 6px; font-size: 15px; }
+        .sheet-tag { margin-top: 3px; font-size: 4px; }
+        .sheet-diagram { right: 8px; bottom: 8px; left: 9px; height: 20px; }
+        .artifact-rig { transform: scale(.84); }
+        .scrub-bar { grid-template-columns: 40px minmax(0, 1fr) 48px; gap: 5px; }
+        .sync-readout, .boundary-readout { font-size: 4px; }
+        .scene-caption { display: none; }
+      }
+
+      @media (max-width: 260px), (max-height: 135px) {
+        .inspection-shell { inset: 4px; grid-template-rows: 15px minmax(0, 1fr) 14px; gap: 3px; }
+        .review-title { display: none; }
+        .inspection-head { justify-content: flex-end; }
+        .section-controls { width: 100%; justify-content: space-between; gap: 2px; }
+        .section-control { flex: 1; min-height: 14px; padding: 0 3px; border-radius: 5px; font-size: 3px; }
+        .inspection-grid { grid-template-columns: minmax(39px, .72fr) minmax(0, 1.42fr); gap: 3px; }
+        .document-window, .artifact-field { border-radius: 6px; }
+        .document-edge-label, .sheet-tag, .sheet-diagram { display: none; }
+        .spec-sheet { padding: 5px; }
+        .sheet-index { font-size: 3px; }
+        .spec-sheet h1 { margin-top: 3px; font-size: 8px; }
+        .artifact-rig { left: calc(50% - 19px); top: calc(50% - 29px); width: 38px; height: 58px; }
+        .kiosk-screen { top: 6px; right: 5px; left: 5px; height: 27px; }
+        .service-hatch { right: 6px; bottom: 6px; left: 6px; height: 12px; }
+        .kiosk-side { right: -11px; width: 11px; height: 54px; }
+        .kiosk-base { bottom: -5px; height: 9px; }
+        .artifact-target { width: 5px; height: 5px; }
+        .artifact-target[data-section="front"] { top: calc(50% - 2px); left: 3px; }
+        .artifact-target[data-section="service"] { top: calc(50% - 2px); right: 2px; }
+        .artifact-target[data-section="anchor"] { top: calc(50% - 2px); left: calc(50% - 2px); }
+        .artifact-view-label { top: 4px; left: 5px; font-size: 3px; }
+        .registration-readout { right: 4px; top: 3px; padding: 2px 3px; font-size: 3px; }
+        .registration-line::before, .registration-line::after { top: -2px; width: 5px; height: 5px; }
+        .scrub-bar { grid-template-columns: 24px minmax(0, 1fr) 29px; gap: 3px; }
+        .sync-readout, .boundary-readout { font-size: 3px; }
+        .scrub-track { height: 12px; }
+        .scrub-track::before { right: 5px; left: 5px; }
+        .scrub-tick { top: 2px; height: 6px; }
+        .scrub-thumb { left: 2px; top: 2px; width: 7px; height: 7px; border-width: 1px; }
+        .library-badge, .scene-caption { display: none; }
+      }
+
+      @media (max-width: 175px) {
+        .section-control { font-size: 0; }
+        .section-control::after { font-size: 4px; }
+        .section-control[data-section="front"]::after { content: "01"; }
+        .section-control[data-section="service"]::after { content: "02"; }
+        .section-control[data-section="anchor"]::after { content: "03"; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .document-track, .artifact-rig, .scrub-thumb { will-change: auto; }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/dom-to-3d-scroll-synchronization-B6lQBUa2.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+    <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main class="preview-stage" aria-label="Spatial document registration review">
+      <section id="sync-stage" class="sync-stage" data-preview-mechanism="motion-user-scrubbed-dom-3d-registration" data-section="front" data-phase="idle" tabindex="0" aria-label="Inspect a product document and its registered 3D artifact using wheel, drag, keyboard, or section controls">
+        <div class="inspection-shell">
+          <header class="inspection-head">
+            <span class="review-title"><strong>Wayfinder B-17</strong> · spatial fit review</span>
+            <nav class="section-controls" aria-label="Inspection sections">
+              <button class="section-control is-active" type="button" data-section="front" data-progress="0" aria-label="Inspect front frame section" aria-pressed="true">01 Front</button>
+              <button class="section-control" type="button" data-section="service" data-progress="0.5" aria-label="Inspect service hatch section" aria-pressed="false">02 Service</button>
+              <button class="section-control" type="button" data-section="anchor" data-progress="1" aria-label="Inspect floor anchor section" aria-pressed="false">03 Anchor</button>
+            </nav>
+          </header>
+
+          <div class="inspection-grid">
+            <span class="registration-line" aria-hidden="true"></span>
+            <div id="document-window" class="document-window" aria-label="Scrolling spatial specification document">
+              <span class="document-edge-label">DOM dossier</span>
+              <div id="document-track" class="document-track">
+                <article class="spec-sheet" data-section="front">
+                  <span class="sheet-index">01 / Front frame</span>
+                  <h1>Face alignment</h1>
+                  <p class="sheet-tag">Screen datum · 1180 mm</p>
+                  <div class="sheet-diagram"><span class="sheet-metrics">± 0.0 px</span></div>
+                </article>
+                <article class="spec-sheet" data-section="service">
+                  <span class="sheet-index">02 / Service hatch</span>
+                  <h1>Rear clearance</h1>
+                  <p class="sheet-tag">Access sweep · 420 mm</p>
+                  <div class="sheet-diagram"><span class="sheet-metrics">± 0.0 px</span></div>
+                </article>
+                <article class="spec-sheet" data-section="anchor">
+                  <span class="sheet-index">03 / Floor anchor</span>
+                  <h1>Bolt pattern</h1>
+                  <p class="sheet-tag">Base plate · 4 × M12</p>
+                  <div class="sheet-diagram"><span class="sheet-metrics">± 0.0 px</span></div>
+                </article>
+              </div>
+            </div>
+
+            <div class="artifact-field" aria-label="Registered 3D wayfinder artifact">
+              <span id="artifact-view-label" class="artifact-view-label">Front datum</span>
+              <span id="registration-readout" class="registration-readout">Δ 0.00 px</span>
+              <div id="artifact-rig" class="artifact-rig">
+                <div class="kiosk-face">
+                  <div class="kiosk-screen"></div>
+                  <div class="service-hatch"></div>
+                  <i class="artifact-target is-active" data-section="front" aria-hidden="true"></i>
+                  <i class="artifact-target" data-section="service" aria-hidden="true"></i>
+                  <i class="artifact-target" data-section="anchor" aria-hidden="true"></i>
+                </div>
+                <div class="kiosk-side"></div>
+                <div class="kiosk-base"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="scrub-bar">
+            <output id="sync-readout" class="sync-readout">00% · front</output>
+            <div id="scrub-track" class="scrub-track" role="slider" tabindex="0" aria-label="Inspection progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-valuetext="Front frame, 0 percent">
+              <i class="scrub-tick" aria-hidden="true"></i><i class="scrub-tick" aria-hidden="true"></i><i class="scrub-tick" aria-hidden="true"></i>
+              <span id="scrub-thumb" class="scrub-thumb" aria-hidden="true"></span>
+            </div>
+            <output id="boundary-readout" class="boundary-readout">Wheel captured</output>
+          </div>
+        </div>
+      </section>
+      <span class="library-badge">Motion · DOM ↔ 3D registration</span>
+      <span class="scene-caption">wheel, drag, keys, or sections drive one canonical inspection signal</span>
+    </main>
+  </body>
+</html>

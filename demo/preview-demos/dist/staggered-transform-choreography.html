@@ -1,46 +1,414 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Anime.js — Staggered Transform Choreography</title>
+    <title>Anime.js — Incident Response Choreography</title>
     <style>
-      :root { --preview-background: #0c1020; }
-      .preview-stage { background: radial-gradient(circle at 70% 45%, #2d2364 0, #141a35 35%, #0c1020 72%); }
-      .motion-lane { position: absolute; inset: 42px 18px 20px; overflow: hidden; border: 1px solid #ffffff18; border-radius: 18px; background: linear-gradient(110deg, #ffffff0b, #ffffff03); box-shadow: inset 0 0 30px #0005; }
-      .motion-lane::before { content: ''; position: absolute; top: 13px; bottom: 13px; left: 34px; width: 1px; background: #7df2ff55; box-shadow: 216px 0 0 #ff79b955; }
-      .motion-lane::after { content: 'STAGGER  ·  72 MS'; position: absolute; right: 12px; top: 9px; color: #ffffff61; font: 800 7px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .12em; }
-      .guide-line { position: absolute; left: 35px; right: 35px; top: 70px; height: 1px; background: linear-gradient(90deg, #7df2ff4d, #8d78ff82, #ff79b94d); }
-      .guide-line::before, .guide-line::after { content: ''; position: absolute; top: -3px; width: 7px; height: 7px; border: 1px solid #fff7; border-radius: 50%; background: #11172c; }
-      .guide-line::before { left: -3px; }
-      .guide-line::after { right: -3px; }
-      .choreo-node { position: absolute; z-index: 2; left: 26px; top: calc(14px + var(--i) * 10px); display: grid; width: 20px; height: 20px; place-items: center; border: 1px solid #ffffff80; border-radius: 6px; background: var(--color); color: #0a1020; box-shadow: 0 6px 16px #0007, 0 0 13px color-mix(in srgb, var(--color) 62%, transparent); font: 900 7px/1 ui-monospace, SFMono-Regular, Menlo, monospace; transform-origin: 50% 50%; will-change: transform, opacity; }
-      .node-1, .node-5 { --color: #74f5ed; }
-      .node-2, .node-6 { --color: #a891ff; }
-      .node-3, .node-7 { --color: #ff83bd; }
-      .node-4, .node-8 { --color: #ffd56f; }
-      .library-badge { border-color: #b7a8ff4a; background: #10162bd9; }
-      .scene-caption { color: #c7c3e0; }
+      :root {
+        --preview-background: #e8e2d3;
+        --paper: #f4f0e5;
+        --ink: #171812;
+        --muted: #686a60;
+        --line: rgba(23, 24, 18, .19);
+        --signal: #e54f3d;
+        --signal-dark: #8c2c22;
+        --electric: #1746cf;
+        --safe: #bfe06d;
+      }
+
+      .preview-stage {
+        color: var(--ink);
+        background:
+          linear-gradient(rgba(23, 24, 18, .045) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(23, 24, 18, .038) 1px, transparent 1px),
+          var(--preview-background);
+        background-size: 24px 24px;
+      }
+
+      .incident-board {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        grid-template-rows: auto minmax(0, 1fr) auto;
+        gap: clamp(8px, 2.2vh, 15px);
+        overflow: hidden;
+        padding: clamp(17px, 4.8vh, 28px) clamp(14px, 4vw, 30px) clamp(15px, 4.2vh, 23px);
+        outline: none;
+      }
+
+      .incident-board:focus-visible {
+        box-shadow: inset 0 0 0 3px var(--electric);
+      }
+
+      .command-head {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: end;
+        gap: clamp(9px, 3vw, 24px);
+        min-width: 0;
+        padding-left: 108px;
+      }
+
+      .incident-copy { min-width: 0; }
+
+      .incident-kicker,
+      .severity,
+      .plan-count,
+      .action-rank,
+      .action-band,
+      .action-owner,
+      .action-state,
+      .selection-readout,
+      .input-note,
+      .assemble-button {
+        font-weight: 800;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+      }
+
+      .incident-kicker {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        margin-bottom: clamp(4px, 1vh, 7px);
+        color: var(--muted);
+        font-size: clamp(6px, 1.15vw, 8px);
+      }
+
+      .signal-dot {
+        width: 7px;
+        height: 7px;
+        border: 2px solid rgba(229, 79, 61, .24);
+        border-radius: 50%;
+        background: var(--signal);
+        box-shadow: 0 0 0 1px var(--signal);
+      }
+
+      .headline-row {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        min-width: 0;
+      }
+
+      h1 {
+        margin: 0;
+        overflow: hidden;
+        color: var(--ink);
+        font-size: clamp(18px, 4.6vw, 34px);
+        font-weight: 650;
+        letter-spacing: -.055em;
+        line-height: .96;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .severity {
+        flex: 0 0 auto;
+        padding: 5px 7px;
+        border: 1px solid var(--signal);
+        border-radius: 999px;
+        color: var(--signal-dark);
+        background: rgba(229, 79, 61, .08);
+        font-size: clamp(5px, .95vw, 7px);
+      }
+
+      .command-actions {
+        display: grid;
+        justify-items: end;
+        gap: 6px;
+      }
+
+      .assemble-button {
+        min-width: 138px;
+        padding: 10px 12px;
+        border: 1px solid var(--ink);
+        border-radius: 2px;
+        color: var(--paper);
+        background: var(--ink);
+        box-shadow: 4px 4px 0 rgba(23, 70, 207, .18);
+        font: inherit;
+        font-size: clamp(6px, 1.1vw, 8px);
+        cursor: pointer;
+      }
+
+      .assemble-button:hover { background: var(--electric); }
+      .assemble-button:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 rgba(23, 70, 207, .18); }
+      .assemble-button:focus-visible { outline: 2px solid var(--electric); outline-offset: 2px; }
+
+      .plan-count {
+        color: var(--muted);
+        font-size: clamp(5px, .9vw, 6px);
+        font-variant-numeric: tabular-nums;
+      }
+
+      .action-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        grid-template-rows: repeat(2, minmax(0, 1fr));
+        gap: clamp(5px, 1.4vw, 11px);
+        min-height: 0;
+      }
+
+      .action-card {
+        position: relative;
+        display: grid;
+        grid-template-rows: auto auto minmax(0, 1fr) auto;
+        gap: clamp(4px, 1.4vh, 8px);
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        padding: clamp(8px, 2vw, 13px);
+        border: 1px solid var(--line);
+        border-radius: clamp(5px, 1vw, 9px);
+        opacity: .28;
+        color: var(--ink);
+        background: rgba(244, 240, 229, .78);
+        box-shadow: 0 0 0 rgba(23, 24, 18, 0);
+        font: inherit;
+        text-align: left;
+        transform: translateY(14px) scale(.965);
+        transform-origin: 50% 100%;
+        cursor: default;
+        will-change: transform, opacity;
+      }
+
+      .action-card::before {
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: 3px;
+        background: var(--card-accent, var(--electric));
+        content: '';
+      }
+
+      .action-card[data-band='P0'] { --card-accent: var(--signal); }
+      .action-card[data-band='P1'] { --card-accent: #d8912e; }
+      .action-card[data-band='P2'] { --card-accent: var(--electric); }
+      .action-card[data-state='ready'] { border-color: rgba(23, 24, 18, .34); cursor: pointer; box-shadow: 0 9px 20px rgba(23, 24, 18, .09); }
+      .action-card[data-state='arriving'] { border-color: color-mix(in srgb, var(--card-accent), transparent 55%); }
+      .action-card[data-selected='true'] { border-color: var(--electric); box-shadow: 0 0 0 2px var(--electric), 5px 5px 0 rgba(23, 70, 207, .12); }
+      .action-card:focus-visible { outline: 2px solid var(--electric); outline-offset: -3px; }
+
+      .action-top,
+      .action-bottom {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 5px;
+        min-width: 0;
+      }
+
+      .action-rank {
+        color: var(--ink);
+        font-size: clamp(6px, 1.1vw, 8px);
+        font-variant-numeric: tabular-nums;
+      }
+
+      .action-band {
+        padding: 3px 4px;
+        border: 1px solid color-mix(in srgb, var(--card-accent), transparent 52%);
+        border-radius: 999px;
+        color: color-mix(in srgb, var(--card-accent), var(--ink) 25%);
+        font-size: clamp(4px, .75vw, 5px);
+      }
+
+      .action-card strong {
+        display: block;
+        overflow: hidden;
+        color: var(--ink);
+        font-size: clamp(10px, 1.95vw, 14px);
+        font-weight: 690;
+        letter-spacing: -.025em;
+        line-height: 1.03;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .action-card p {
+        margin: 0;
+        overflow: hidden;
+        color: var(--muted);
+        font-size: clamp(6px, 1vw, 8px);
+        line-height: 1.35;
+      }
+
+      .action-bottom { align-items: end; }
+
+      .action-owner,
+      .action-state {
+        overflow: hidden;
+        font-size: clamp(4px, .72vw, 5px);
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .action-owner { max-width: 60%; color: #77796e; }
+      .action-state { color: var(--card-accent); }
+
+      .board-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        min-width: 0;
+      }
+
+      .selection-readout {
+        overflow: hidden;
+        color: var(--ink);
+        font-size: clamp(5px, .95vw, 7px);
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .selection-readout span { color: var(--electric); }
+
+      .input-note {
+        flex: 0 0 auto;
+        color: var(--muted);
+        font-size: clamp(4px, .8vw, 6px);
+      }
+
+      .library-badge {
+        border-color: rgba(23, 24, 18, .26);
+        color: var(--ink);
+        background: rgba(244, 240, 229, .82);
+      }
+
+      .scene-caption { display: none; }
+
+      @media (max-width: 420px), (max-height: 260px) {
+        .incident-board {
+          grid-template-rows: 35px minmax(0, 1fr) 8px;
+          gap: 5px;
+          padding: 7px 8px 6px;
+        }
+        .library-badge, .scene-caption, .incident-kicker { display: none; }
+        .command-head { align-items: center; gap: 6px; padding-left: 0; }
+        h1 { font-size: clamp(11px, 4.2vw, 15px); }
+        .severity { padding: 3px 4px; }
+        .command-actions { gap: 2px; }
+        .assemble-button { min-width: 92px; padding: 6px 7px; box-shadow: 2px 2px 0 rgba(23, 70, 207, .17); }
+        .action-grid { gap: 4px; }
+        .action-card { gap: 3px; padding: 5px 6px; border-radius: 4px; }
+        .action-card strong { font-size: clamp(7px, 2.7vw, 9px); }
+        .action-card p { display: none; }
+        .action-band { padding: 2px 3px; }
+        .action-bottom { padding-top: 2px; border-top: 1px solid rgba(23, 24, 18, .08); }
+      }
+
+      @media (max-width: 180px), (max-height: 105px) {
+        .incident-board { grid-template-rows: 16px minmax(0, 1fr); gap: 3px; padding: 3px; }
+        .command-head { gap: 3px; }
+        .headline-row { gap: 3px; }
+        h1 { font-size: 6.3px; letter-spacing: -.03em; }
+        .severity { padding: 1px 2px; border-radius: 2px; font-size: 3px; }
+        .command-actions { gap: 0; }
+        .assemble-button { min-width: 40px; padding: 3px; border-radius: 1px; box-shadow: none; font-size: 3.1px; }
+        .plan-count, .board-footer { display: none; }
+        .action-grid { gap: 2px; }
+        .action-card { display: block; padding: 2px 2px 2px 4px; border-radius: 2px; box-shadow: none; }
+        .action-card::before { width: 2px; }
+        .action-top { margin-bottom: 2px; }
+        .action-rank { font-size: 3px; }
+        .action-band { padding: 0; border: 0; font-size: 2.7px; }
+        .action-card strong { overflow: visible; font-size: 4.3px; line-height: 1; white-space: normal; }
+        .action-bottom { display: block; padding: 0; border: 0; }
+        .action-owner { display: none; }
+        .action-state { display: block; margin-top: 2px; font-size: 2.8px; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .assemble-button,
+        .action-card { transition: none; }
+      }
     </style>
-    <script type="module" crossorigin src="./assets/staggered-transform-choreography-DKvh1shG.js"></script>
+    <script type="module" crossorigin src="./assets/staggered-transform-choreography-Ds4Tdh7Z.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
     <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
   </head>
   <body>
-    <main class="preview-stage" aria-label="A real Anime.js stagger sequence choreographing transforms across eight tiles">
-      <section class="motion-lane" data-preview-mechanism="animejs-stagger">
-        <div class="guide-line" aria-hidden="true"></div>
-        <span class="choreo-node node-1" style="--i: 0">01</span>
-        <span class="choreo-node node-2" style="--i: 1">02</span>
-        <span class="choreo-node node-3" style="--i: 2">03</span>
-        <span class="choreo-node node-4" style="--i: 3">04</span>
-        <span class="choreo-node node-5" style="--i: 4">05</span>
-        <span class="choreo-node node-6" style="--i: 5">06</span>
-        <span class="choreo-node node-7" style="--i: 6">07</span>
-        <span class="choreo-node node-8" style="--i: 7">08</span>
+    <main class="preview-stage" aria-label="A real Anime.js stagger turns an incident into an ordered response plan">
+      <section
+        class="incident-board"
+        id="incident-board"
+        tabindex="0"
+        data-preview-mechanism="animejs-stagger"
+        aria-describedby="input-note"
+      >
+        <header class="command-head">
+          <div class="incident-copy">
+            <div class="incident-kicker"><span class="signal-dot"></span>INCIDENT 017 · GATEWAY / CHECKOUT · LIVE SIGNAL</div>
+            <div class="headline-row">
+              <h1>Checkout p95: 3.8s</h1>
+              <span class="severity">SEV-2</span>
+            </div>
+          </div>
+          <div class="command-actions">
+            <button class="assemble-button" id="assemble-button" type="button" aria-pressed="false">Assemble response</button>
+            <span class="plan-count" id="plan-count">00 / 08 actions ready</span>
+          </div>
+        </header>
+
+        <div class="action-grid" id="action-grid" aria-label="Ordered incident response actions">
+          <button class="action-card" type="button" data-action="freeze" data-band="P0" data-outcome="HOLDING" data-state="queued" data-selected="false" tabindex="-1">
+            <span class="action-top"><span class="action-rank">01</span><span class="action-band">P0 · COMMAND</span></span>
+            <strong>Freeze deploy lane</strong>
+            <p>Stop new checkout changes while evidence is collected.</p>
+            <span class="action-bottom"><span class="action-owner">Release captain</span><span class="action-state">QUEUED</span></span>
+          </button>
+          <button class="action-card" type="button" data-action="page" data-band="P0" data-outcome="PAGED" data-state="queued" data-selected="false" tabindex="-1">
+            <span class="action-top"><span class="action-rank">02</span><span class="action-band">P0 · OWNER</span></span>
+            <strong>Page payments</strong>
+            <p>Give the investigation one accountable on-call lead.</p>
+            <span class="action-bottom"><span class="action-owner">Payments on-call</span><span class="action-state">QUEUED</span></span>
+          </button>
+          <button class="action-card" type="button" data-action="shed" data-band="P1" data-outcome="SHED" data-state="queued" data-selected="false" tabindex="-1">
+            <span class="action-top"><span class="action-rank">03</span><span class="action-band">P1 · LOAD</span></span>
+            <strong>Shed non-core load</strong>
+            <p>Pause recommendation calls on the payment path.</p>
+            <span class="action-bottom"><span class="action-owner">Traffic control</span><span class="action-state">QUEUED</span></span>
+          </button>
+          <button class="action-card" type="button" data-action="baseline" data-band="P1" data-outcome="BASELINED" data-state="queued" data-selected="false" tabindex="-1">
+            <span class="action-top"><span class="action-rank">04</span><span class="action-band">P1 · EVIDENCE</span></span>
+            <strong>Diff safe release</strong>
+            <p>Compare gateway changes against the last green build.</p>
+            <span class="action-bottom"><span class="action-owner">Release analyst</span><span class="action-state">QUEUED</span></span>
+          </button>
+          <button class="action-card" type="button" data-action="trace" data-band="P2" data-outcome="TRACING" data-state="queued" data-selected="false" tabindex="-1">
+            <span class="action-top"><span class="action-rank">05</span><span class="action-band">P2 · TRACE</span></span>
+            <strong>Trace gateway p95</strong>
+            <p>Separate provider wait from internal queue time.</p>
+            <span class="action-bottom"><span class="action-owner">Observability</span><span class="action-state">QUEUED</span></span>
+          </button>
+          <button class="action-card" type="button" data-action="replay" data-band="P2" data-outcome="REPLAYED" data-state="queued" data-selected="false" tabindex="-1">
+            <span class="action-top"><span class="action-rank">06</span><span class="action-band">P2 · VERIFY</span></span>
+            <strong>Replay canary carts</strong>
+            <p>Verify the degraded path with known transactions.</p>
+            <span class="action-bottom"><span class="action-owner">Quality systems</span><span class="action-state">QUEUED</span></span>
+          </button>
+          <button class="action-card" type="button" data-action="rollback" data-band="P2" data-outcome="ARMED" data-state="queued" data-selected="false" tabindex="-1">
+            <span class="action-top"><span class="action-rank">07</span><span class="action-band">P2 · RECOVERY</span></span>
+            <strong>Prepare rollback</strong>
+            <p>Stage the last verified gateway image for approval.</p>
+            <span class="action-bottom"><span class="action-owner">Platform release</span><span class="action-state">QUEUED</span></span>
+          </button>
+          <button class="action-card" type="button" data-action="status" data-band="P2" data-outcome="DRAFTED" data-state="queued" data-selected="false" tabindex="-1">
+            <span class="action-top"><span class="action-rank">08</span><span class="action-band">P2 · COMMS</span></span>
+            <strong>Draft status note</strong>
+            <p>Publish impact and next update time without guessing.</p>
+            <span class="action-bottom"><span class="action-owner">Incident comms</span><span class="action-state">QUEUED</span></span>
+          </button>
+        </div>
+
+        <footer class="board-footer">
+          <span class="selection-readout" id="selection-readout"><span>Awaiting command.</span> Priority order is already resolved.</span>
+          <span class="input-note" id="input-note">CLICK / ENTER · ARROWS INSPECT · ESC RESET</span>
+        </footer>
       </section>
-      <span class="library-badge">Anime.js · transform stagger</span>
-      <span class="scene-caption">one transform, offset across the whole group</span>
+      <span class="library-badge">Anime.js · 64ms stagger</span>
+      <span class="scene-caption">priority controls arrival order</span>
     </main>
   </body>
 </html>

@@ -85,7 +85,7 @@
       "originUrl": "https://github.com/juliangarnier/anime",
       "demoSourcePath": "demo/preview-demos/staggered-transform-choreography.html",
       "libraryVersion": "animejs@4.5.0",
-      "generatedAt": "2026-07-18",
+      "generatedAt": "2026-07-21",
       "outputPath": "demo/gifs/captured/staggered-transform-choreography.gif",
       "usageBasis": "local demo capture using the pinned Anime.js package; verify license https://github.com/juliangarnier/anime/blob/HEAD/LICENSE.md"
     },

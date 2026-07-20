@@ -217,17 +217,17 @@ const existingEffects = [
     "addedIn": "2026-expansion",
     "research": null,
     "behavior": {
-      "trigger": "state change or animation frame",
-      "response": "Staggered transform choreography",
-      "timing": "sequenced",
-      "layer": "content"
+      "trigger": "real Assemble/Clear click, stage Enter/Space, Escape, or human inspection of a ready action",
+      "response": "Order eight incident-response actions by operational impact and keep every accountable result inspectable",
+      "timing": "human-owned forward/reverse Anime.js sequence with a real 64ms priority stagger",
+      "layer": "incident command header, P0/P1/P2 action grid, owners, outcomes, selection readout, and controls"
     },
-    "prompt": "Implement the \"Staggered transform choreography\" (交错变换编排) web interaction effect in the current project.\n\nUse Anime.js (juliangarnier/anime) as the recommended implementation unless the existing stack makes a dependency-free equivalent more appropriate. Recreate this specific animation interaction, not a generic animation.\n\nInteraction contract:\n- Trigger: state change or animation frame\n- Visual response: Staggered transform choreography\n- Timing relationship: sequenced\n- Page layer: content\n\nRequirements:\n- Integrate with the existing design system and component structure.\n- Support keyboard and touch input whenever the interaction is actionable.\n- Respect prefers-reduced-motion with a clear non-animated fallback.\n- Avoid layout shift, scroll traps, inaccessible focus behavior, and unnecessary dependencies.\n- Keep the implementation responsive and clean up listeners, timers, and animation instances.\n\nStart from this minimal API shape:\n\n```js\nimport { animate, stagger } from 'animejs';\nanimate('.dot', { x: 80, delay: stagger(60) });\n```\n\nReturn the working code, the files changed, and a short explanation of how to tune timing, easing, distance, and reduced-motion behavior.",
+    "prompt": "Implement the \"Staggered transform choreography\" (交错变换编排) as a credible incident-response plan, not a grid of numbered tiles.\n\nUse Anime.js (juliangarnier/anime) so operational priority owns the sequence: P0 command actions must arrive before P1 mitigation and P2 evidence/comms. Give every item a distinct task, owner, priority band, and terminal outcome that remains readable after motion stops.\n\nInteraction contract:\n- Trigger: real Assemble/Clear button click, stage Enter/Space, Escape reset, or human hover/focus/click inspection after assembly\n- Visual response: eight actions arrive in impact order under one 64ms Anime.js stagger, remain inspectable, and can reverse cleanly\n- Timing relationship: human-owned forward or reverse sequence; no autoplay, preview-clock seek, or synthetic input\n- Page layer: incident command header, accountable action grid, ready count, and selection explanation\n\nRequirements:\n- Start strictly static with all actions queued and no running animation.\n- Use one real Anime.js target set and a monotonic delay sequence; keep animation time, per-card state, ready count, selected task, and controls synchronized.\n- Support click/touch, Enter/Space, Escape, Arrow/Home/End inspection, 320×180 and 144×81 previews, and prefers-reduced-motion direct terminal states.\n- Preserve hierarchy during motion; the most consequential actions must lead visually and semantically.\n- Export runtime state that proves input ownership, stagger delays, forward/reverse lifecycle, task accountability, selection, and initial stillness.\n\nStart from this minimal API shape:\n\n```js\nimport { animate, stagger } from 'animejs';\nconst choreography = animate('.incident-action', { y: { from: 14, to: 0 }, opacity: { from: .28, to: 1 }, delay: stagger(64), autoplay: false });\n```\n\nReturn the working code, the files changed, and a short explanation of how to tune priority order, stagger interval, duration, easing, reverse behavior, and reduced motion.",
     "sources": [
       {
         "projectId": "juliangarnier-anime",
         "recommended": true,
-        "snippet": "import { animate, stagger } from 'animejs';\nanimate('.dot', { x: 80, delay: stagger(60) });",
+        "snippet": "import { animate, stagger } from 'animejs';\nconst choreography = animate('.incident-action', { y: { from: 14, to: 0 }, opacity: { from: .28, to: 1 }, delay: stagger(64), autoplay: false });",
         "preview": "captured/staggered-transform-choreography",
         "previewKind": "local-demo-capture",
         "demoPath": "preview-demos/dist/staggered-transform-choreography.html",
@@ -268,7 +268,7 @@ const existingEffects = [
       "total": 92,
       "decision": "admit",
       "reasonCode": "passed",
-      "rationaleZh": "多元素错峰、轨迹和聚散关系明确，能直接转译为“交错编排”创作描述。"
+      "rationaleZh": "八项真实事故响应动作按 P0→P1→P2 的业务优先级以 64ms 交错到达；用户负责组装、反向清理和检查负责人，首帧无自动播放。"
     }
   },
   {

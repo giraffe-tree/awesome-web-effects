@@ -255,6 +255,31 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("Space")
             elif index == 35:
                 page.wait_for_timeout(900)
+        elif demo["id"] == "staggered-transform-choreography":
+            if index == 3:
+                page.locator('#assemble-button').click()
+            elif index == 4:
+                page.wait_for_timeout(1_150)
+            elif index == 10:
+                page.locator('.action-card').nth(4).hover()
+            elif index == 14:
+                page.locator('.action-card').nth(6).click()
+            elif index == 18:
+                page.locator('#incident-board').focus()
+                page.keyboard.press("End")
+            elif index == 20:
+                page.keyboard.press("ArrowLeft")
+            elif index == 23:
+                page.locator('#assemble-button').click()
+            elif index == 24:
+                page.wait_for_timeout(1_150)
+            elif index == 28:
+                page.locator('#incident-board').focus()
+                page.keyboard.press("Enter")
+            elif index == 29:
+                page.wait_for_timeout(1_150)
+            elif index == 34:
+                page.locator('.action-card').nth(2).hover()
         elif demo["id"] == "blurhash-to-photo-progressive-reveal":
             pointer_x = 230 if .5 <= preview_time < 2.25 else 32
             page.mouse.move(pointer_x, 90)
@@ -664,6 +689,38 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["compactRectValidated"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture one shared review item opening and returning under real input: {interaction!r}")
+    elif demo["id"] == "staggered-transform-choreography":
+        page.wait_for_function(
+            "window.__PREVIEW_INTERACTION_STATE__.mode === 'armed' && !window.__PREVIEW_INTERACTION_STATE__.motionActive",
+            timeout=3_000,
+        )
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            interaction["automaticPlayback"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or not interaction["initialStaticConfirmed"]
+            or interaction["inputAdapters"] != ["click", "keyboard", "pointer-selection"]
+            or interaction["inputCount"] < 8
+            or interaction["clickCount"] < 3
+            or interaction["keyboardCount"] < 3
+            or interaction["pointerSelectionCount"] < 2
+            or interaction["focusSelectionCount"] < 1
+            or interaction["animationPlayCount"] < 2
+            or interaction["resetCount"] < 1
+            or interaction["mode"] != "armed"
+            or not interaction["assembled"]
+            or interaction["motionActive"]
+            or interaction["animationDirection"] != "idle"
+            or interaction["animationProgress"] < .999
+            or interaction["settledCount"] != 8
+            or interaction["selectedIndex"] != 2
+            or interaction["selectedTaskId"] != "shed"
+            or len(interaction["tasks"]) != 8
+            or interaction["staggerStepMs"] != 64
+            or any(value != "ready" for value in interaction["taskStates"].values())
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture real priority-ordered incident assembly, inspection, and clearing: {interaction!r}")
     elif demo["id"] == "blurhash-to-photo-progressive-reveal":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__()")
         if interaction["pointerEvents"] < 3 or interaction["pointerOverPhoto"]:

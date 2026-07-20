@@ -15,6 +15,18 @@
 
 <p align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans"><strong>查看全部 150 个实时效果 →</strong></a></p>
 
+<a id="agent-quick-start"></a>
+
+## 一句话交给任意编程 Agent
+
+无需 Skill 或安装；在目标项目中打开 Codex、Claude Code 或其他编程 Agent，点击代码块右上角复制按钮并粘贴发送。
+
+```text
+审查当前项目，并把 Awesome Web Effects 完整目录（https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans；页面不可读时改查 GitHub 仓库 https://github.com/giraffe-tree/awesome-web-effects 的 demo/data/effects.js 与 demo/preview-demos/）作为只读参考：依据产品目标、现有视觉语言、关键用户流程和技术栈选择最匹配的一个效果，仅在第二个效果明确互补且不冲突时再加入；阅读所选条目的已验证预览、可运行 Demo（如有）、最小代码和专属 Agent Prompt，然后直接在当前项目中适配实现，优先复用现有依赖并使用原创资产，不复制来源网站的品牌或专有代码、不修改参考仓库，同时保证响应式、键盘、指针与触控可用、无障碍、prefers-reduced-motion、性能和资源清理，运行现有测试与可用的浏览器检查并修复问题，最后报告所选效果、改动文件和验证结果；若两个入口均不可访问，不要臆造效果，直接说明阻塞。
+```
+
+<p align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#agent-prompt"><strong>在在线目录一键复制这句话 →</strong></a></p>
+
 ## 看见它、叫出它、实现它
 
 <table><tr><td width="25%" align="center"><strong>150</strong><br><sub>入选效果</sub></td><td width="25%" align="center"><strong>150</strong><br><sub>真实 GIF</sub></td><td width="25%" align="center"><strong>148</strong><br><sub>可运行 Demo</sub></td><td width="25%" align="center"><strong>80/100</strong><br><sub>最低准入分</sub></td></tr></table>

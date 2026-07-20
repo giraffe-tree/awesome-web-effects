@@ -89,10 +89,10 @@
       h1 { max-width: 980px; margin: 0; font-size: clamp(58px, 7.2vw, 106px); line-height: .91; letter-spacing: -.072em; text-wrap: balance; }
       .hero-copy { max-width: 650px; margin: 28px 0 0; color: var(--muted); font-size: clamp(18px, 1.8vw, 24px); line-height: 1.4; letter-spacing: -.028em; text-wrap: balance; }
       .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
-      .primary-action, .secondary-action { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 23px; border-radius: 99px; font-size: 16px; text-decoration: none; }
+      .primary-action, .secondary-action { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 23px; border-radius: 99px; font-size: 16px; text-decoration: none; cursor: pointer; }
       .primary-action { color: white; background: var(--blue); }
       .primary-action:hover { background: var(--blue-hover); }
-      .secondary-action { color: var(--blue); border: 1px solid var(--blue); }
+      .secondary-action { max-width: 100%; color: var(--blue); border: 1px solid var(--blue); background: transparent; }
       .secondary-action:hover { color: white; background: var(--blue); }
       .hero-experience {
         --pointer-x: 0px;
@@ -162,6 +162,19 @@
       .metric { min-width: 142px; padding: 14px 18px; border: 1px solid rgba(0,0,0,.06); border-radius: 18px; background: rgba(255,255,255,.72); box-shadow: 0 8px 30px rgba(0,0,0,.035); backdrop-filter: blur(12px); }
       .metric strong { display: block; font-size: 22px; letter-spacing: -.04em; }
       .metric span { display: block; margin-top: 3px; color: var(--quiet); font-size: 11px; text-transform: uppercase; letter-spacing: .06em; }
+
+      .agent-prompt-section { scroll-margin-top: 64px; padding: 18px 0 70px; }
+      .agent-prompt-card { display: grid; grid-template-columns: minmax(240px, .68fr) minmax(0, 1.32fr); gap: clamp(28px, 5vw, 68px); align-items: center; padding: clamp(30px, 5vw, 54px); border-radius: 36px; color: white; background: radial-gradient(circle at 92% 8%, rgba(0,113,227,.3), transparent 32%), #111216; box-shadow: 0 28px 80px rgba(18, 30, 55, .2); }
+      .agent-prompt-card .section-label { color: #82bfff; }
+      .agent-prompt-card h2 { max-width: 470px; margin: 14px 0 0; font-size: clamp(38px, 4.8vw, 68px); line-height: .98; letter-spacing: -.06em; text-wrap: balance; }
+      .agent-prompt-intro { max-width: 510px; margin: 18px 0 0; color: rgba(255,255,255,.64); font-size: 16px; line-height: 1.5; }
+      .agent-prompt-box { min-width: 0; }
+      .agent-prompt-text { max-height: 238px; margin: 0; overflow: auto; padding: 22px; border: 1px solid rgba(255,255,255,.14); border-radius: 20px; color: rgba(255,255,255,.8); background: rgba(255,255,255,.07); font: 12px/1.65 ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre-wrap; overflow-wrap: anywhere; scrollbar-color: rgba(130,191,255,.7) rgba(255,255,255,.08); scrollbar-gutter: stable; scrollbar-width: thin; }
+      .agent-prompt-text::-webkit-scrollbar { width: 8px; }
+      .agent-prompt-text::-webkit-scrollbar-track { background: rgba(255,255,255,.08); }
+      .agent-prompt-text::-webkit-scrollbar-thumb { border-radius: 99px; background: rgba(130,191,255,.7); }
+      .agent-prompt-action { min-height: 46px; margin-top: 16px; padding: 0 19px; border: 0; border-radius: 99px; color: #081018; background: #82bfff; cursor: pointer; font-size: 14px; font-weight: 700; }
+      .agent-prompt-action:hover { background: #a8d2ff; }
 
       .features { padding: 18px 0 110px; }
       .feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
@@ -380,6 +393,7 @@
         h1, .hero-copy { margin-inline: auto; }
         .hero-actions { justify-content: center; }
         .hero-experience { width: min(100%, 620px); margin-inline: auto; }
+        .agent-prompt-card { grid-template-columns: 1fr; }
         .feature-grid { grid-template-columns: 1fr; }
         .feature-card { min-height: 300px; }
         .catalog-intro { grid-template-columns: 1fr; gap: 18px; }
@@ -400,6 +414,7 @@
         .hero { min-height: 0; padding: 58px 0 42px; }
         h1 { font-size: clamp(54px, 16vw, 78px); }
         .hero-copy { font-size: 20px; }
+        .hero-actions > * { flex: 1 1 100%; }
         .hero-experience { min-height: 420px; padding: 14px; border-radius: 26px; }
         .hero-story-canvas { height: 218px; border-radius: 19px; }
         .hero-story-word { font-size: clamp(48px, 17vw, 72px); }
@@ -407,6 +422,9 @@
         .hero-story-step { padding-inline: 5px; font-size: 8px; }
         .hero-interaction-hint { display: none; }
         .metric { min-width: calc(50% - 8px); }
+        .agent-prompt-section { padding: 10px 0 56px; }
+        .agent-prompt-card { padding: 28px; border-radius: 26px; }
+        .agent-prompt-text { max-height: 290px; padding: 18px; }
         .features { padding-bottom: 78px; }
         .feature-card { padding: 28px; border-radius: 24px; }
         .catalog-section { padding-top: 78px; border-radius: 34px 34px 0 0; }
@@ -479,7 +497,7 @@
           <p class="hero-copy" id="hero-copy">Only visually reviewed demos scoring 80 or higher are published, each with a real preview, minimal code, and an implementation prompt.</p>
           <div class="hero-actions">
             <a class="primary-action" href="#catalog" id="browse-action">Browse effects</a>
-            <a class="secondary-action" href="https://github.com/giraffe-tree/awesome-web-effects" target="_blank" rel="noreferrer" id="repo-action">View repository</a>
+            <button class="secondary-action" type="button" id="prompt-action" aria-describedby="agent-prompt-intro">Copy one-line prompt</button>
           </div>
         </div>
 
@@ -516,6 +534,20 @@
         </div>
       </div>
     </header>
+
+    <section class="agent-prompt-section shell" id="agent-prompt" aria-labelledby="agent-prompt-title">
+      <div class="agent-prompt-card">
+        <div>
+          <p class="section-label" id="agent-prompt-label">Agent prompts</p>
+          <h2 id="agent-prompt-title">Use one prompt with any coding agent.</h2>
+          <p class="agent-prompt-intro" id="agent-prompt-intro">One click copies a single self-contained prompt for Codex, Claude Code, or another coding agent—no skill or installation required.</p>
+        </div>
+        <div class="agent-prompt-box">
+          <p class="agent-prompt-text" id="one-line-agent-prompt" lang="en" dir="ltr" tabindex="0"></p>
+          <button class="agent-prompt-action" type="button" id="agent-prompt-action" aria-describedby="agent-prompt-intro">Copy one-line prompt</button>
+        </div>
+      </div>
+    </section>
 
     <section class="features shell" aria-label="Catalog coverage">
       <div class="feature-grid">
@@ -568,6 +600,7 @@
     <script type="module">
       import { categories, effects, projects } from './data/effects.js?v=20260720-catalog-150';
       import { admissionPolicy } from './data/demo-admission.js?v=20260720-catalog-150';
+      import { getOneLineAgentPrompt } from './data/agent-prompts.js?v=20260720-one-prompt';
       import { defaultLocale, getMessages, resolveLocale, supportedLocales } from './data/locales.js?v=20260720-i18n-20';
 
 
@@ -593,6 +626,9 @@
       const heroStepCopy = document.querySelector('#hero-step-copy');
       const heroStoryToggle = document.querySelector('#hero-story-toggle');
       const heroStepButtons = [...document.querySelectorAll('[data-hero-step]')];
+      const heroPromptAction = document.querySelector('#prompt-action');
+      const agentPromptText = document.querySelector('#one-line-agent-prompt');
+      const agentPromptAction = document.querySelector('#agent-prompt-action');
       const languageSelect = document.querySelector('#language');
       const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
       let storedLanguage = '';
@@ -628,6 +664,7 @@
       const normalizeForSearch = value => String(value).normalize('NFC').toLocaleLowerCase(localeByCode.get(language)?.intlLocale || language);
       const recommendedSource = effect => effect.sources.find(source => source.recommended) || effect.sources[0];
       const hasRealPreview = source => ['official-capture', 'local-demo-capture'].includes(source.previewKind) && Boolean(source.preview);
+      const oneLinePromptActionLabel = t => language === 'zh-Hans' ? '复制一句话 Prompt' : language === 'en' ? 'Copy one-line prompt' : t.copyPrompt;
       const officialPreviewUrl = source => {
         const githubBlob = source.originUrl?.match(/^https:\/\/github\.com\/([^/]+)\/([^/]+)\/blob\/([^/]+)\/(.+)$/);
         return githubBlob
@@ -860,6 +897,7 @@
       }
 
       async function copyText(button, text, successText, defaultText) {
+        button.dataset.defaultLabel = defaultText;
         try {
           await navigator.clipboard.writeText(text);
           button.textContent = successText;
@@ -877,7 +915,12 @@
           button.textContent = copied ? successText : copy[language].copyFailed;
           copyStatus.textContent = copied ? successText : copy[language].copyFailed;
         }
-        setTimeout(() => { button.textContent = defaultText; }, 1400);
+        setTimeout(() => { button.textContent = button.dataset.defaultLabel || defaultText; }, 1400);
+      }
+
+      function copyOneLinePrompt(button) {
+        const t = copy[language];
+        copyText(button, getOneLineAgentPrompt(language), t.promptCopied, oneLinePromptActionLabel(t));
       }
 
       function setLanguage(nextLanguage) {
@@ -905,7 +948,16 @@
         renderHeroStep(false);
         updateHeroToggle();
         document.querySelector('#browse-action').textContent = t.browse;
-        document.querySelector('#repo-action').textContent = t.repo;
+        const oneLineAction = oneLinePromptActionLabel(t);
+        heroPromptAction.textContent = oneLineAction;
+        heroPromptAction.dataset.defaultLabel = oneLineAction;
+        agentPromptAction.textContent = oneLineAction;
+        agentPromptAction.dataset.defaultLabel = oneLineAction;
+        agentPromptText.textContent = getOneLineAgentPrompt(language);
+        agentPromptText.lang = language === 'zh-Hans' ? 'zh-Hans' : 'en';
+        document.querySelector('#agent-prompt-label').textContent = t.prompts;
+        document.querySelector('#agent-prompt-title').textContent = t.promptTitle;
+        document.querySelector('#agent-prompt-intro').textContent = t.promptCopy;
         document.querySelector('#effect-count').textContent = formatNumber(effects.length);
         document.querySelector('#source-count').textContent = formatNumber(projects.length);
         document.querySelector('#gif-count').textContent = formatNumber(effects.flatMap(effect => effect.sources).filter(hasRealPreview).length);
@@ -1053,6 +1105,8 @@
         if (!modal.hidden) closeEffectModal();
         setLanguage(event.target.value);
       });
+      heroPromptAction.addEventListener('click', () => copyOneLinePrompt(heroPromptAction));
+      agentPromptAction.addEventListener('click', () => copyOneLinePrompt(agentPromptAction));
       const entryReveal = document.querySelector('#entry-reveal');
       entryReveal?.addEventListener('animationend', event => {
         if (event.target === entryReveal) entryReveal.remove();

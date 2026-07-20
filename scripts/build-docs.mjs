@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 import { categories, effects, projects, snapshotDate } from '../demo/data/effects.js';
 import { admissionAuditSummary, admissionPolicy } from '../demo/data/demo-admission.js';
+import { getOneLineAgentPrompt } from '../demo/data/agent-prompts.js';
 import { getMessages, supportedLocales } from '../demo/data/locales.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -121,6 +122,39 @@ function localizedMetricStrip(locale) {
   return `<table><tr>${values.map((value, index) => `<td width="25%" align="center"><strong>${value}</strong><br><sub>${escapeHtml(labels[index])}</sub></td>`).join('')}</tr></table>`;
 }
 
+function agentQuickStart(locale) {
+  const t = getMessages(locale.code);
+  const isEnglish = locale.code === 'en';
+  const isChinese = locale.code === 'zh-Hans';
+  const title = isEnglish
+    ? 'Use with any coding agent in one prompt'
+    : isChinese
+      ? '一句话交给任意编程 Agent'
+      : t.promptTitle;
+  const copy = isEnglish
+    ? 'No skill or installation is required. Copy this single sentence into Codex, Claude Code, or another coding agent while your target project is open.'
+    : isChinese
+      ? '无需 Skill 或安装；在目标项目中打开 Codex、Claude Code 或其他编程 Agent，点击代码块右上角复制按钮并粘贴发送。'
+      : t.promptCopy;
+  const action = isEnglish
+    ? 'Copy the one-line prompt on the live site'
+    : isChinese
+      ? '在在线目录一键复制这句话'
+      : t.copyPrompt;
+
+  return `<a id="agent-quick-start"></a>
+
+## ${escapeHtml(title)}
+
+${escapeHtml(copy)}
+
+\`\`\`text
+${getOneLineAgentPrompt(locale.code)}
+\`\`\`
+
+<p align="center"><a href="${siteUrlFor(locale)}#agent-prompt"><strong>${escapeHtml(action)} →</strong></a></p>`;
+}
+
 function localizedReadme(locale) {
   const t = getMessages(locale.code);
   const siteUrl = siteUrlFor(locale);
@@ -134,6 +168,8 @@ ${languageNavigation()}
 ${visualShowcase(locale.code)}
 
 <p align="center"><a href="${siteUrl}"><strong>${escapeHtml(t.browse)} →</strong></a></p>
+
+${agentQuickStart(locale)}
 
 ## ${escapeHtml(t.section)}
 
@@ -203,6 +239,8 @@ ${languageNavigation()}
 ${visualShowcase('en')}
 
 <p align="center"><a href="${siteUrlFor(supportedLocales[0])}"><strong>Explore all ${effects.length} live effects →</strong></a></p>
+
+${agentQuickStart(supportedLocales[0])}
 
 ## See it. Name it. Build it.
 
@@ -303,6 +341,8 @@ ${languageNavigation()}
 ${visualShowcase('zh-Hans')}
 
 <p align="center"><a href="${siteUrlFor(supportedLocales[1])}"><strong>查看全部 ${effects.length} 个实时效果 →</strong></a></p>
+
+${agentQuickStart(supportedLocales[1])}
 
 ## 看见它、叫出它、实现它
 

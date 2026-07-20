@@ -8,6 +8,7 @@ import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { categories, effects, projects, snapshotDate } from '../demo/data/effects.js';
 import { admissionAuditSummary, admissionPolicy, reviewedDemoScores } from '../demo/data/demo-admission.js';
+import { getOneLineAgentPrompt, oneLineAgentPrompts } from '../demo/data/agent-prompts.js';
 import { defaultLocale, getMessages, resolveLocale, supportedLocales } from '../demo/data/locales.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -34,6 +35,42 @@ for (const locale of supportedLocales) {
   assert(Array.isArray(messages.heroSteps) && messages.heroSteps.length === 4, `${locale.code}: hero story must contain four localized steps.`);
 }
 for (const rtlLocale of ['ar', 'ur', 'arz']) assert(supportedLocales.find(locale => locale.code === rtlLocale)?.dir === 'rtl', `${rtlLocale}: expected RTL locale.`);
+
+assert(Object.keys(oneLineAgentPrompts).sort().join(',') === 'en,zh-Hans', 'One-line Agent Prompt must have canonical English and Simplified Chinese variants.');
+for (const [locale, prompt] of Object.entries(oneLineAgentPrompts)) {
+  assert(prompt.length >= 400 && prompt.length <= 2000, `${locale}: one-line Agent Prompt must remain self-contained without becoming an embedded playbook.`);
+  assert(!/[\r\n]/.test(prompt), `${locale}: one-line Agent Prompt must not contain line breaks.`);
+  assert(prompt.includes('https://giraffe-tree.github.io/awesome-web-effects/'), `${locale}: one-line Agent Prompt is missing the live catalog fallback.`);
+  assert(prompt.includes('https://github.com/giraffe-tree/awesome-web-effects'), `${locale}: one-line Agent Prompt is missing the source repository fallback.`);
+  assert(prompt.includes('demo/data/effects.js') && prompt.includes('demo/preview-demos/'), `${locale}: one-line Agent Prompt is missing machine-readable fallback paths.`);
+  assert(prompt.includes('prefers-reduced-motion'), `${locale}: one-line Agent Prompt is missing reduced-motion requirements.`);
+  assert(/read-only|只读/.test(prompt) && /modifying the reference repository|不修改/.test(prompt), `${locale}: one-line Agent Prompt must keep the reference repository read-only.`);
+  const semanticRequirements = [
+    [/current project|当前项目/, 'the current project as the implementation target'],
+    [/single effect|一个效果/, 'a single default effect'],
+    [/second only|第二个效果/, 'a conditional second effect'],
+    [/verified preview|已验证预览/, 'verified preview review'],
+    [/minimal code|最小代码/, 'minimal code review'],
+    [/Agent Prompt/, 'the per-effect Agent Prompt'],
+    [/adapt and implement|适配实现/, 'direct adaptation and implementation'],
+    [/responsive|响应式/, 'responsive behavior'],
+    [/keyboard|键盘/, 'keyboard access'],
+    [/touch|触控/, 'touch access'],
+    [/performance|性能/, 'performance'],
+    [/cleanup|清理/, 'resource cleanup'],
+    [/tests|测试/, 'tests'],
+    [/browser check|浏览器检查/, 'a browser check'],
+    [/changed files|改动文件/, 'changed-file reporting'],
+    [/verification results|验证结果/, 'verification reporting'],
+    [/do not invent|不要臆造/, 'a no-invention fallback'],
+    [/blocker|阻塞/, 'blocker reporting'],
+    [/branding|品牌/, 'branding boundaries'],
+    [/proprietary|专有/, 'proprietary-code boundaries'],
+  ];
+  for (const [pattern, requirement] of semanticRequirements) {
+    assert(pattern.test(prompt), `${locale}: one-line Agent Prompt is missing ${requirement}.`);
+  }
+}
 
 assert(effects.length > 0, 'The admitted demo catalog must not be empty.');
 assert(effects.length === admissionAuditSummary.admittedCount, 'Published effect count does not match the dated admission audit.');
@@ -166,11 +203,13 @@ const readme = readmeByLocale.get('en');
 const readmeZh = readmeByLocale.get('zh-Hans');
 assert(html.includes("./data/effects.js"), 'Demo does not load the canonical effect catalog.');
 assert(html.includes("./data/locales.js"), 'Demo does not load the canonical locale catalog.');
+assert(html.includes("./data/agent-prompts.js"), 'Demo does not load the canonical one-line Agent Prompt.');
 assert(html.includes('type="module"'), 'Demo catalog must load as an ES module.');
 assert(/<select[^>]+id="language"/.test(html), 'Demo must expose a native locale selector.');
 assert(html.includes("url.searchParams.set('lang', language)"), 'Demo language selection must update a shareable lang query parameter.');
 assert(html.includes('document.documentElement.dir = locale.dir'), 'Demo must set the document direction from locale metadata.');
 assert(html.includes('prompt-button') && html.includes('copyPrompt'), 'Demo does not expose one-click agent prompts.');
+assert(html.includes('id="prompt-action"') && html.includes('id="agent-prompt-action"') && html.includes('getOneLineAgentPrompt(language)'), 'Demo does not expose the global one-line Agent Prompt copy actions.');
 assert(html.includes('copy-code') && html.includes('source.snippet'), 'Demo does not expose copyable minimal code.');
 
 const modalRendererStart = html.indexOf('function openEffectModal');
@@ -203,7 +242,10 @@ assert(readme.includes(liveDemo), 'English README does not link to the current G
 assert(readmeZh.includes(liveDemo), 'Chinese README does not link to the current GitHub Pages site.');
 for (const locale of supportedLocales) {
   const localizedReadme = readmeByLocale.get(locale.code);
+  const oneLinePrompt = getOneLineAgentPrompt(locale.code);
   assert(localizedReadme?.includes('# Awesome Web Effects'), `${locale.code}: localized README is missing its title.`);
+  assert((localizedReadme?.match(/id="agent-quick-start"/g) || []).length === 1, `${locale.code}: README must contain exactly one one-line Agent Prompt entry point.`);
+  assert(localizedReadme?.includes(`\`\`\`text\n${oneLinePrompt}\n\`\`\``), `${locale.code}: README does not expose the canonical one-line Agent Prompt in a copyable text block.`);
   assert(localizedReadme?.includes(`?lang=${encodeURIComponent(locale.code)}`), `${locale.code}: localized README does not link to its site locale.`);
   assert(localizedReadme?.includes('docs/LANGUAGES.md'), `${locale.code}: localized README does not link to the language metadata document.`);
   assert(!localizedReadme?.includes('## Languages') && !localizedReadme?.includes('## 支持语言'), `${locale.code}: language metadata must not be embedded in a README.`);

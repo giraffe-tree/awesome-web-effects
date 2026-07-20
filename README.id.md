@@ -13,6 +13,18 @@
 
 <p align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=id"><strong>Jelajahi efek →</strong></a></p>
 
+<a id="agent-quick-start"></a>
+
+## Serahkan kepada agen coding Anda.
+
+Satu klik menyalin prompt terarah dengan persyaratan aksesibilitas, responsivitas, pembersihan, dan pengurangan gerak.
+
+```text
+Inspect the current project and use the complete Awesome Web Effects catalog (https://giraffe-tree.github.io/awesome-web-effects/; if the page is unreadable, inspect demo/data/effects.js and demo/preview-demos/ in the read-only GitHub repository at https://github.com/giraffe-tree/awesome-web-effects) strictly as a reference: choose the single effect that best fits the product goal, existing visual language, key user flow, and stack, adding a second only when it provides clear complementary and non-conflicting value; study each chosen entry's verified preview, runnable demo when available, minimal code, and dedicated Agent Prompt, then adapt and implement it directly in the current project using existing dependencies where practical and original assets, without copying source-site branding or proprietary code or modifying the reference repository, while preserving responsive behavior, keyboard, pointer, and touch accessibility, prefers-reduced-motion, performance, and resource cleanup; run the existing tests and an available browser check, fix any issues, and finish by reporting the selected effects, changed files, and verification results, and if neither reference can be accessed, do not invent an effect and report the blocker.
+```
+
+<p align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=id#agent-prompt"><strong>Salin prompt agen →</strong></a></p>
+
 ## Katalog interaksi
 
 Pilih perilakunya dahulu. Pilih alatnya kemudian.

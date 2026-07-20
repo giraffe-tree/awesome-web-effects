@@ -13,6 +13,18 @@
 
 <p align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=mr"><strong>इफेक्ट पहा →</strong></a></p>
 
+<a id="agent-quick-start"></a>
+
+## हे coding agent कडे सोपवा.
+
+एका क्लिकने accessibility, responsive वर्तन, cleanup आणि reduced-motion अटी असलेला मर्यादित prompt कॉपी होतो.
+
+```text
+Inspect the current project and use the complete Awesome Web Effects catalog (https://giraffe-tree.github.io/awesome-web-effects/; if the page is unreadable, inspect demo/data/effects.js and demo/preview-demos/ in the read-only GitHub repository at https://github.com/giraffe-tree/awesome-web-effects) strictly as a reference: choose the single effect that best fits the product goal, existing visual language, key user flow, and stack, adding a second only when it provides clear complementary and non-conflicting value; study each chosen entry's verified preview, runnable demo when available, minimal code, and dedicated Agent Prompt, then adapt and implement it directly in the current project using existing dependencies where practical and original assets, without copying source-site branding or proprietary code or modifying the reference repository, while preserving responsive behavior, keyboard, pointer, and touch accessibility, prefers-reduced-motion, performance, and resource cleanup; run the existing tests and an available browser check, fix any issues, and finish by reporting the selected effects, changed files, and verification results, and if neither reference can be accessed, do not invent an effect and report the blocker.
+```
+
+<p align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=mr#agent-prompt"><strong>Agent prompt कॉपी करा →</strong></a></p>
+
 ## इंटरॅक्शन कॅटलॉग
 
 आधी वर्तन निवडा. मग साधन निवडा.

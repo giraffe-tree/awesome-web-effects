@@ -102,6 +102,45 @@ def main() -> int:
             expect(page.locator("#hero-story-eyebrow")).to_have_text("实时交互叙事")
             language_select.select_option("en")
             expect(page.locator("#hero-story-eyebrow")).to_have_text("Live interaction story")
+
+            one_line_prompt = page.locator("#one-line-agent-prompt")
+            english_prompt = one_line_prompt.text_content()
+            assert english_prompt and "\n" not in english_prompt
+            expect(one_line_prompt).to_have_attribute("tabindex", "0")
+            one_line_prompt.focus()
+            assert page.evaluate("document.activeElement.id") == "one-line-agent-prompt"
+            for requirement in [
+                "https://giraffe-tree.github.io/awesome-web-effects/",
+                "https://github.com/giraffe-tree/awesome-web-effects",
+                "read-only", "prefers-reduced-motion", "browser check",
+            ]:
+                assert requirement in english_prompt
+            hero_prompt_button = page.locator("#prompt-action")
+            expect(hero_prompt_button).to_have_text("Copy one-line prompt")
+            hero_prompt_button.click()
+            expect(hero_prompt_button).to_have_text("Prompt copied")
+            assert page.evaluate("navigator.clipboard.readText()") == english_prompt
+            expect(page.locator("#copy-status")).to_have_text("Prompt copied")
+            page.wait_for_timeout(1600)
+            hero_prompt_button.focus()
+            page.keyboard.press("Enter")
+            expect(hero_prompt_button).to_have_text("Prompt copied")
+            assert page.evaluate("navigator.clipboard.readText()") == english_prompt
+            prompt_screenshot = ROOT / "tmp" / "agent-prompt-desktop.png"
+            prompt_screenshot.parent.mkdir(parents=True, exist_ok=True)
+            page.locator("#agent-prompt").screenshot(path=str(prompt_screenshot))
+
+            language_select.select_option("zh-Hans")
+            chinese_prompt = one_line_prompt.text_content()
+            assert chinese_prompt and "\n" not in chinese_prompt and "作为只读参考" in chinese_prompt
+            expect(hero_prompt_button).to_have_text("复制一句话 Prompt")
+            page.wait_for_timeout(1600)
+            expect(hero_prompt_button).to_have_text("复制一句话 Prompt")
+            page.locator("#agent-prompt-action").click()
+            expect(page.locator("#agent-prompt-action")).to_have_text("Prompt 已复制")
+            assert page.evaluate("navigator.clipboard.readText()") == chinese_prompt
+            language_select.select_option("en")
+
             for locale, direction in locale_directions.items():
                 language_select.select_option(locale)
                 expect(page.locator("html")).to_have_attribute("lang", locale)
@@ -110,6 +149,11 @@ def main() -> int:
                 assert page.evaluate("localStorage.getItem('awesome-effects-language')") == locale
                 assert page.locator("#hero-kicker").inner_text().strip()
             language_select.select_option("en")
+            page.goto(f"{origin}/?lang=ur#agent-prompt", wait_until="networkidle")
+            anchored_section_box = page.locator("#agent-prompt").bounding_box()
+            sticky_nav_box = page.locator(".site-nav").bounding_box()
+            assert anchored_section_box and sticky_nav_box
+            assert anchored_section_box["y"] >= sticky_nav_box["height"] + 8
             page.goto(f"{origin}/?lang=ar", wait_until="networkidle")
             expect(page.locator("html")).to_have_attribute("lang", "ar")
             expect(page.locator("html")).to_have_attribute("dir", "rtl")
@@ -211,6 +255,8 @@ def main() -> int:
             expect(page.locator("html")).to_have_attribute("dir", "rtl")
             assert page.evaluate("document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1")
             page.locator("#language").select_option("en")
+            mobile_prompt_screenshot = ROOT / "tmp" / "agent-prompt-mobile.png"
+            page.locator("#agent-prompt").screenshot(path=str(mobile_prompt_screenshot))
             real_row.locator(".effect-cell").click()
             expect(modal.locator(".effect-modal-dialog")).to_be_visible()
             expect(modal.locator(".modal-preview-frame")).to_have_count(1)
@@ -232,6 +278,8 @@ def main() -> int:
             reduced_hero = reduced_page.locator("#hero-experience")
             reduced_hero.press("ArrowRight")
             expect(reduced_hero).to_have_attribute("data-step", "1")
+            reduced_page.locator("#prompt-action").click()
+            expect(reduced_page.locator("#prompt-action")).to_have_text("Prompt copied")
             reduced_page.close()
 
             context.close()
@@ -244,7 +292,7 @@ def main() -> int:
             server.kill()
             server.wait()
 
-    print(f"Catalog UI verified: 20 locales (including RTL and URL persistence), {expected_effect_count} admitted demos, interactive hero, loading/error transitions, live detail previews, native-size official GIFs, visible scores, copy actions, focus, reduced motion, and mobile layout.")
+    print(f"Catalog UI verified: 20 locales (including RTL and URL persistence), {expected_effect_count} admitted demos, one-line and per-effect Agent Prompts, interactive hero, loading/error transitions, live detail previews, native-size official GIFs, visible scores, copy actions, focus, reduced motion, and mobile layout.")
     return 0
 
 

@@ -775,6 +775,46 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.wait_for_timeout(900)
             elif index == 34:
                 page.keyboard.press("Home")
+        elif demo["id"] == "pointer-rotated-dot-matrix-globe":
+            if index == 2:
+                page.locator('#focus-button').click()
+            elif index == 5:
+                page.locator('#globe-host').focus()
+                page.keyboard.press("ArrowRight")
+            elif index == 7:
+                page.keyboard.press("ArrowDown")
+            elif index == 9:
+                page.keyboard.press("Enter")
+            elif index == 12:
+                box = page.locator('#globe-host').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * .70, box["y"] + box["height"] * .50)
+                page.mouse.down()
+            elif index == 14:
+                box = page.locator('#globe-host').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * .47, box["y"] + box["height"] * .62, steps=6)
+                page.mouse.up()
+            elif index == 16:
+                page.locator('#focus-button').click()
+            elif index == 19:
+                page.locator('#reset-button').click()
+            elif index == 22:
+                page.locator('#globe-host').focus()
+                page.keyboard.press("ArrowLeft")
+            elif index == 24:
+                page.keyboard.press("ArrowUp")
+            elif index == 26:
+                page.keyboard.press("Space")
+            elif index == 29:
+                box = page.locator('#globe-host').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * .45, box["y"] + box["height"] * .55)
+                page.mouse.down()
+            elif index == 31:
+                box = page.locator('#globe-host').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * .68, box["y"] + box["height"] * .42, steps=5)
+                page.mouse.up()
+            elif index == 33:
+                page.locator('#globe-host').focus()
+                page.keyboard.press("Home")
         elif demo["id"] == "dom-to-3d-scroll-synchronization":
             if index == 2:
                 box = page.locator('#sync-stage').bounding_box()
@@ -1803,6 +1843,44 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["renderIgnoresPreviewClock"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture a human-operated eight-column departure board with cadence, interruption, completion, and reset evidence: {interaction!r}")
+    elif demo["id"] == "pointer-rotated-dot-matrix-globe":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            interaction["claimedLibrary"] != "p5@2.3.0"
+            or not interaction["p5Instance"]
+            or interaction["renderer"] != "canvas2d"
+            or interaction["projection"] != "orthographic"
+            or interaction["inputAdapters"] != ["pointer", "touch", "click", "keyboard"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["previewClockDrivesRotation"]
+            or not interaction["initialStaticConfirmed"]
+            or interaction["initialFrameChecksum"] == 0
+            or interaction["inputCount"] < 12
+            or interaction["pointerRotations"] < 11
+            or interaction["keyboardRotations"] < 4
+            or interaction["focusCount"] < 6
+            or interaction["resetCount"] < 2
+            or interaction["dragging"]
+            or interaction["dragDistance"] <= 0
+            or interaction["lastInput"] != "keyboard:Home"
+            or abs(interaction["yaw"] + 1.5707963267948966) > .000001
+            or abs(interaction["pitch"] + .35) > .000001
+            or interaction["selectedSiteId"] is not None
+            or interaction["nearestSiteId"] is None
+            or interaction["pointCount"] != 648
+            or interaction["siteCount"] != 8
+            or interaction["routeCount"] != 0
+            or interaction["visibleSiteCount"] < 1
+            or interaction["projectedFrontCount"] < 280
+            or interaction["projectedFrontCount"] > 370
+            or interaction["spatialChecksum"] == 0
+            or interaction["siteChecksum"] == 0
+            or interaction["canvasWidth"] < 64
+            or interaction["canvasHeight"] < 64
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a human-rotated geodata globe with real nearest-node focus, routes, keyboard control, and reset: {interaction!r}")
     elif demo["id"] == "dom-to-3d-scroll-synchronization":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         if (

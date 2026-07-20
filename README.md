@@ -251,7 +251,7 @@ Scene graphs, creative coding, physics, drawing tools, and 2D renderers.
 | --- | --- | ---: | --- | ---: | ---: | --- | --- |
 | [Functional WebGL draw commands](https://giraffe-tree.github.io/awesome-web-effects/#functional-webgl-draw-commands) | [regl](https://github.com/regl-project/regl) | **96/100** | — | 5,557 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#functional-webgl-draw-commands) |
 | [DOM-bound iridescent shader plane](https://giraffe-tree.github.io/awesome-web-effects/#dom-synced-shader-planes) | [Curtains.js](https://github.com/martinlaxenaire/curtainsjs) | **94/100** | — | 1,823 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#dom-synced-shader-planes) |
-| [Pointer-rotated dot-matrix globe](https://giraffe-tree.github.io/awesome-web-effects/#pointer-rotated-dot-matrix-globe) | [p5.js](https://github.com/processing/p5.js) | **93/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#pointer-rotated-dot-matrix-globe) |
+| [Nearest-edge dot-matrix globe](https://giraffe-tree.github.io/awesome-web-effects/#pointer-rotated-dot-matrix-globe) | [p5.js](https://github.com/processing/p5.js) | **93/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#pointer-rotated-dot-matrix-globe) |
 | [Pointer-injected GPU fluid](https://giraffe-tree.github.io/awesome-web-effects/#pointer-injected-gpu-fluid) | [regl](https://github.com/regl-project/regl) | **98/100** | — | 5,557 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#pointer-injected-gpu-fluid) |
 | [Slider-controlled exploded 3D assembly](https://giraffe-tree.github.io/awesome-web-effects/#slider-controlled-exploded-3d-assembly) | [p5.js](https://github.com/processing/p5.js) | **94/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#slider-controlled-exploded-3d-assembly) |
 | [Collision-reactive 3D physics stack](https://giraffe-tree.github.io/awesome-web-effects/#collision-reactive-3d-physics-stack) | [p5.js](https://github.com/processing/p5.js) | **96/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#collision-reactive-3d-physics-stack) |
@@ -282,7 +282,7 @@ Scene graphs, creative coding, physics, drawing tools, and 2D renderers.
 - 150 verified previews: 2 official captures and 148 captures from runnable local demos; 0 missing.
 - Human review scores creativity, art direction, motion craft, legibility, creative transfer and evidence quality.
 - Admission requires 80/100 plus core-dimension minimums. Popularity never overrides the gate.
-- The verified GIF set is 24.11 MiB; every preview is 320×180, at most three seconds and below 1 MiB.
+- The verified GIF set is 24.04 MiB; every preview is 320×180, at most three seconds and below 1 MiB.
 - Stars are a 2026-07-20 snapshot. Recommendation sources and observed AI homepages remain separate relationships.
 
 Read the [current 396-candidate admission audit](research/demo-admission-audit-2026-07-20.md), the [100-company homepage research](research/ai-native-homepages-100.md), and the [preview provenance manifest](demo/gifs/provenance.json).

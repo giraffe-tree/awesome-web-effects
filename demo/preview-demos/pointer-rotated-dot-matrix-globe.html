@@ -1,3 +1,289 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>p5.js — Pointer-rotated Dot Matrix Globe</title><link rel="stylesheet" href="./shared.css"/><style>
-:root{--preview-background:#031319}.globe-stage{background:radial-gradient(circle at 71% 49%,#1c76645a,transparent 38%),linear-gradient(145deg,#031015,#042029);color:#fff}.globe-host{position:absolute;inset:0;cursor:grab;touch-action:none}.globe-host:active{cursor:grabbing}.globe-host canvas{width:100%!important;height:100%!important}.globe-copy{position:absolute;z-index:4;left:17px;top:47px;width:116px;font:900 21px/.87 Georgia,serif;letter-spacing:-.055em;pointer-events:none}.globe-copy small{display:block;margin-top:9px;color:#81bfb0;font:800 6px/1.4 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase}.globe-axis{position:absolute;z-index:4;right:14px;bottom:16px;color:#76bdae;font:800 5px/1 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase}.scene-caption{display:none}
-</style></head><body><main class="preview-stage globe-stage"><div class="globe-host" id="globe-host" tabindex="0" aria-label="Drag to rotate the dot matrix globe"></div><div class="globe-copy">A WORLD<br/>MADE OF<br/>POINTS<small>drag rotates the actual sphere</small></div><span class="globe-axis">lat 18 · lon 36</span><span class="library-badge">p5.js · projected point sphere</span><span class="scene-caption">a seeded globe rotates from pointer drag rather than a flat sprite</span></main><script type="module" src="./src/pointer-rotated-dot-matrix-globe-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>p5.js — Global Edge Coverage Explorer</title>
+    <link rel="stylesheet" href="./shared.css" />
+    <style>
+      :root {
+        --preview-background: #07100f;
+        --ink: #f1f6ea;
+        --muted: #80928a;
+        --line: rgba(213, 234, 222, .15);
+        --acid: #c6f36a;
+        --mint: #67d7b3;
+      }
+
+      button { font: inherit; }
+
+      .globe-stage {
+        background:
+          radial-gradient(circle at 71% 49%, rgba(42, 119, 91, .24), transparent 31%),
+          linear-gradient(130deg, #07100f, #091917 58%, #07100f);
+        color: var(--ink);
+      }
+
+      .globe-stage::before {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        background-image:
+          linear-gradient(rgba(198, 243, 106, .027) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(198, 243, 106, .027) 1px, transparent 1px);
+        background-size: 22px 22px;
+        content: "";
+        pointer-events: none;
+        -webkit-mask-image: linear-gradient(90deg, #000, transparent 82%);
+        mask-image: linear-gradient(90deg, #000, transparent 82%);
+      }
+
+      .globe-host {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        cursor: grab;
+        outline: none;
+        touch-action: none;
+      }
+
+      .globe-host:active { cursor: grabbing; }
+      .globe-host canvas { width: 100% !important; height: 100% !important; }
+
+      .topline,
+      .coverage-copy,
+      .orientation-readout,
+      .controls {
+        position: absolute;
+        z-index: 4;
+      }
+
+      .topline {
+        top: 13px;
+        right: 16px;
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        color: var(--muted);
+        font: 750 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .15em;
+        text-transform: uppercase;
+        pointer-events: none;
+      }
+
+      .topline strong { color: var(--acid); font-weight: 850; }
+
+      .live-dot {
+        width: 5px;
+        height: 5px;
+        margin-right: -7px;
+        border-radius: 50%;
+        background: var(--acid);
+        box-shadow: 0 0 0 3px rgba(198, 243, 106, .1);
+      }
+
+      .coverage-copy {
+        top: 58px;
+        left: 18px;
+        width: 150px;
+        pointer-events: none;
+      }
+
+      .eyebrow,
+      .focus-label,
+      .metric span,
+      .orientation-readout,
+      .control-hint {
+        color: var(--muted);
+        font: 800 6px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .13em;
+        text-transform: uppercase;
+      }
+
+      .eyebrow { margin: 0 0 9px; color: var(--mint); }
+
+      .coverage-copy h1 {
+        max-width: 145px;
+        margin: 0;
+        font: 650 27px/.88 Inter, ui-sans-serif, system-ui, sans-serif;
+        letter-spacing: -.065em;
+      }
+
+      .instruction {
+        max-width: 136px;
+        margin: 10px 0 0;
+        color: #9aaba4;
+        font: 500 8px/1.4 Inter, ui-sans-serif, system-ui, sans-serif;
+      }
+
+      .focus-card {
+        min-height: 65px;
+        margin-top: 14px;
+        padding: 9px 10px 8px;
+        border: 1px solid var(--line);
+        border-left-color: var(--acid);
+        background: rgba(6, 16, 14, .68);
+        box-shadow: 0 10px 26px rgba(0, 0, 0, .14);
+        backdrop-filter: blur(9px);
+        transition: border-color 180ms ease, background 180ms ease;
+      }
+
+      .focus-label { display: block; margin-bottom: 6px; }
+
+      .focus-place {
+        display: block;
+        min-height: 14px;
+        overflow: hidden;
+        color: var(--ink);
+        font: 800 11px/1 Inter, ui-sans-serif, system-ui, sans-serif;
+        letter-spacing: -.025em;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .focus-place .site-code { color: var(--acid); }
+
+      .metrics {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-top: 8px;
+      }
+
+      .metric { display: grid; gap: 2px; }
+      .metric span { font-size: 5px; }
+      .metric strong { color: #c9d4cf; font: 750 8px/1 ui-monospace, SFMono-Regular, Menlo, monospace; }
+
+      .orientation-readout {
+        right: 16px;
+        bottom: 16px;
+        color: #7f9890;
+        text-align: right;
+        pointer-events: none;
+      }
+
+      .orientation-readout strong {
+        display: block;
+        margin-top: 4px;
+        color: #c9d5d0;
+        font-size: 7px;
+        letter-spacing: .08em;
+      }
+
+      .controls {
+        left: 18px;
+        bottom: 16px;
+        display: flex;
+        gap: 6px;
+        align-items: center;
+      }
+
+      .control-button {
+        position: relative;
+        z-index: 6;
+        min-height: 25px;
+        padding: 0 10px;
+        border: 1px solid rgba(223, 239, 230, .2);
+        border-radius: 999px;
+        background: rgba(11, 27, 23, .86);
+        color: #cad7d1;
+        cursor: pointer;
+        font: 800 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        transition: transform 160ms ease, border-color 160ms ease, color 160ms ease;
+      }
+
+      .control-button.primary { border-color: rgba(198, 243, 106, .58); color: var(--acid); }
+      .control-button:hover { border-color: var(--acid); color: var(--ink); transform: translateY(-1px); }
+      .control-button:focus-visible { outline: 2px solid var(--acid); outline-offset: 2px; }
+      .control-hint { margin-left: 3px; color: #60736c; white-space: nowrap; }
+      .library-badge, .scene-caption { display: none; }
+
+      @media (max-width: 420px) {
+        .coverage-copy { top: 42px; left: 12px; width: 104px; }
+        .coverage-copy h1 { max-width: 100px; font-size: 20px; }
+        .instruction { max-width: 98px; font-size: 6.5px; }
+        .focus-card { min-height: 56px; margin-top: 10px; padding: 7px 8px; }
+        .focus-place { font-size: 9px; }
+        .metrics { gap: 4px; }
+        .metric strong { font-size: 6.5px; }
+        .topline { top: 10px; right: 10px; gap: 8px; }
+        .controls { left: 12px; bottom: 11px; }
+        .orientation-readout { right: 10px; bottom: 12px; }
+        .control-hint { display: none; }
+      }
+
+      @media (max-width: 420px) and (max-height: 220px) {
+        .coverage-copy { top: 29px; width: 140px; }
+        .coverage-copy h1 { max-width: 138px; font-size: 18px; }
+        .instruction { display: none; }
+        .focus-card { min-height: 46px; margin-top: 8px; padding: 6px 8px; }
+        .focus-label { margin-bottom: 4px; }
+        .metrics { margin-top: 6px; }
+        .controls { bottom: 7px; }
+      }
+
+      @media (max-width: 190px), (max-height: 110px) {
+        .topline { left: 7px; right: auto; top: 7px; }
+        .topline span:last-child, .live-dot { display: none; }
+        .coverage-copy { display: none; }
+        .controls { left: 7px; bottom: 7px; gap: 4px; }
+        .control-button { min-height: 18px; padding: 0 6px; font-size: 4.5px; }
+        .orientation-readout { right: 7px; bottom: 8px; font-size: 4px; }
+        .orientation-readout strong { margin-top: 2px; font-size: 4.5px; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .focus-card, .control-button { transition: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="preview-stage globe-stage" data-preview-mechanism="p5-orthographic-geodata">
+      <div
+        class="globe-host"
+        id="globe-host"
+        tabindex="0"
+        role="application"
+        aria-describedby="instruction"
+        aria-label="Global edge coverage globe. Drag to rotate, use arrow keys to rotate, Enter to focus the nearest visible node, and Escape to reset."
+      ></div>
+
+      <div class="topline" aria-hidden="true">
+        <span class="live-dot"></span>
+        <strong>8 regions online</strong>
+        <span>Anycast edge / Q3</span>
+      </div>
+
+      <section class="coverage-copy" aria-live="polite">
+        <p class="eyebrow">Global delivery atlas</p>
+        <h1>Find the nearest edge.</h1>
+        <p class="instruction" id="instruction">Rotate the network, then focus the node nearest the crosshair.</p>
+        <div class="focus-card" id="focus-card">
+          <span class="focus-label" id="focus-label">Awaiting focus</span>
+          <strong class="focus-place" id="focus-place">No region selected</strong>
+          <div class="metrics">
+            <div class="metric"><span>P95 latency</span><strong id="latency-value">—</strong></div>
+            <div class="metric"><span>Coverage</span><strong id="coverage-value">Global</strong></div>
+          </div>
+        </div>
+      </section>
+
+      <div class="controls">
+        <button class="control-button primary" id="focus-button" type="button">Focus nearest</button>
+        <button class="control-button" id="reset-button" type="button">Reset view</button>
+        <span class="control-hint">Drag · arrows · enter</span>
+      </div>
+
+      <div class="orientation-readout" aria-hidden="true">
+        View center
+        <strong id="orientation-value">00°N · 000°E</strong>
+      </div>
+
+      <span class="library-badge">p5.js · orthographic geodata</span>
+      <span class="scene-caption">A real point field becomes a network coverage task through direct rotation and node focus.</span>
+    </main>
+    <script type="module" src="./src/pointer-rotated-dot-matrix-globe-demo.js"></script>
+  </body>
+</html>

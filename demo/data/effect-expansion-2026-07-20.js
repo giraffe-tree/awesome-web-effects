@@ -896,23 +896,23 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "pointer-rotated-dot-matrix-globe",
-    "name": "Pointer-rotated dot-matrix globe",
-    "nameZh": "指针旋转点阵地球",
+    "name": "Nearest-edge dot-matrix globe",
+    "nameZh": "最近边缘节点点阵地球",
     "category": "webgl",
     "sourceUrl": "https://github.com/shuding/cobe",
-    "difference": "专用点阵地球带标记和拖拽惯性；不是通用 3D orbit，也不同于地图相机飞行。",
+    "difference": "一个确定性的 648 点正交球面承载 SFO、GRU、LHR、FRA、BOM、SIN、HND、SYD 八个真实经纬度节点；真人旋转后，准星聚焦最近可见 edge，并绘制该节点的真实大圆 peer routes 与延迟/覆盖率。",
     "behavior": {
-      "trigger": "pointer drag / time",
-      "response": "Rotate a sampled dot globe and keep geographic markers anchored",
-      "timing": "continuous inertial rotation",
-      "layer": "WebGL globe"
+      "trigger": "real pointer/touch drag, arrow-key rotation, Enter/Space or Focus nearest, and Escape/Home/Reset",
+      "response": "Rotate a sampled geodata globe, focus the node nearest the crosshair, and reveal its regional latency, availability, and great-circle peers",
+      "timing": "human-owned direct rotation and discrete focus; static initial frame with no automatic drift or capture-clock path",
+      "layer": "full-frame p5 Canvas coverage explorer with semantic network metrics"
     },
     "implementation": {
       "projectId": "processing-p5-js",
       "projectUrl": "https://github.com/processing/p5.js",
       "library": "p5@2.3.0",
       "renderer": "canvas2d",
-      "snippet": "screenX = cx + cos(phi) * cos(theta + dragYaw) * radius; screenY = cy + rotatedY * radius;",
+      "snippet": "const p=projectGeo(site.lat,site.lon,yaw,pitch); const nearest=visible.sort((a,b)=>(a.x*a.x+a.y*a.y)-(b.x*b.x+b.y*b.y))[0]; drawGreatCircle(nearest,nearest.peers);",
       "referenceUrl": "https://github.com/shuding/cobe"
     },
     "scores": {
@@ -924,13 +924,13 @@ export const effectExpansion100Specs = [
       "evidence": 9,
       "total": 93
     },
-    "rationaleZh": "轻量点阵材质与地理标记形成精致、可复现的 3D 互动。",
+    "rationaleZh": "Global Edge Coverage Explorer 把优秀的球体轮廓转化为明确的“寻找最近 edge”任务；点阵、站点、正交投影、最近节点、大圆路由和指标都来自同一可核验空间模型。",
     "batch": "A",
-    "demo": "深色点阵地球连接上海、雷克雅未克和圣保罗三个信号点。",
-    "capture": "自动慢转→真实拖拽半圈→释放惯性→停在标记脉冲。",
+    "demo": "648 点 p5 正交地球显示八个全球 edge；拖拽或方向键改变视角，Focus/Enter 选择准星最近节点，并显示 P95 延迟、覆盖率和 peer 大圆路由。",
+    "capture": "真实按钮聚焦、方向键旋转、两次 pointer drag、Enter/Space 再聚焦，以及按钮与 Home 双次复位；不录任何自动旋转。",
     "risk": {
       "level": "low",
-      "detail": "固定 DPR 和 mapSamples，避免高分屏录制过重。"
+      "detail": "必须固定点阵采样和 DPR，并保证站点锚定真实经纬度；自动旋转、平面假路由或拖拽后不更新 nearest focus 都会削弱证据。"
     },
     "observedImplementation": {
       "projectId": "shuding-cobe",

@@ -602,7 +602,7 @@
       "originUrl": "https://github.com/regl-project/regl",
       "demoSourcePath": "demo/preview-demos/pointer-following-displacement-ripple.html",
       "libraryVersion": "regl@2.1.1",
-      "generatedAt": "2026-07-20",
+      "generatedAt": "2026-07-21",
       "outputPath": "demo/gifs/captured/pointer-following-displacement-ripple.gif",
       "usageBasis": "original local mechanism demo using regl@2.1.1; verify license https://github.com/regl-project/regl/blob/HEAD/LICENSE"
     },

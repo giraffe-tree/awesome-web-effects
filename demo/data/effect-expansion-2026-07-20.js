@@ -1328,7 +1328,7 @@ export const effectExpansion100Specs = [
       "trigger": "pointer move",
       "response": "Move a displacement texture under the pointer and let the image surface recover",
       "timing": "continuous local deformation with decay",
-      "layer": "PixiJS image surface"
+      "layer": "WebGL image surface"
     },
     "implementation": {
       "projectId": "regl-project-regl",
@@ -1349,11 +1349,11 @@ export const effectExpansion100Specs = [
     },
     "rationaleZh": "触发、连续性与媒体关系都不同于现有两图切换。",
     "batch": "B",
-    "demo": "原创棋盘花窗在指针下形成局部水波，离开后弹性回稳。",
-    "capture": "pointer 画 S 轨迹→快速离开→录下波纹衰减。",
+    "demo": "真实指针、触控或方向键在海岸建筑照片上产生局部 UV 折射，波前扩张并弹性回稳。",
+    "capture": "真实移动指针穿过窗框与池底网格→录下两次折射波前→停留到完全复原。",
     "risk": {
       "level": "medium",
-      "detail": "必须使用真实 filter 和本地位移贴图；CSS blur 假变形不合格。"
+      "detail": "必须使用真实 WebGL UV 位移和本地图像纹理；CSS blur 假变形不合格。"
     },
     "observedImplementation": {
       "projectId": "pixijs-pixijs",

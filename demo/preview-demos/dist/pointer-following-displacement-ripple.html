@@ -1,8 +1,186 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>regl — Pointer-following Displacement Ripple</title><style>
-:root{--preview-background:#081019}#ripple-canvas{position:absolute;inset:0;width:100%;height:100%;cursor:crosshair}.ripple-frame{position:absolute;z-index:3;left:17px;right:17px;top:36px;bottom:20px;border:1px solid #ffffff42;border-radius:15px;pointer-events:none}.ripple-copy{position:absolute;z-index:4;left:29px;bottom:33px;color:white;pointer-events:none}.ripple-copy small{font:800 6px/1 ui-monospace;letter-spacing:.13em}.ripple-copy h1{margin:8px 0 0;font:950 19px/.85 system-ui;letter-spacing:-.055em}.ripple-ring{position:absolute;z-index:5;width:35px;height:35px;border:1px solid #fff9;border-radius:50%;translate:-50% -50%;pointer-events:none;box-shadow:0 0 0 8px #fff1}.library-badge{background:#071018c4}.scene-caption{left:auto;right:12px}</style>  <script type="module" crossorigin src="./assets/pointer-following-displacement-ripple-DYMvDvHd.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
-  <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
-  <link rel="modulepreload" crossorigin href="./assets/regl-B2Y2V2F1.js">
-  <link rel="modulepreload" crossorigin href="./assets/batch-b-utils-CmA_lC0Z.js">
-  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage" data-preview-mechanism="regl-displacement-ripple"><canvas id="ripple-canvas" tabindex="0" aria-label="Move the pointer or arrow keys to move the displacement ripple"></canvas><div class="ripple-frame"></div><section class="ripple-copy"><small>MEDIA / REFRACTION</small><h1>RIPPLE THE IMAGE.</h1></section><i class="ripple-ring" id="ripple-ring"></i><span class="library-badge">regl · displacement field</span><span class="scene-caption">a moving lens warps the image coordinates</span></main></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>regl — Pointer-following Displacement Ripple</title>
+    <style>
+      :root { --preview-background: #15211f; }
+
+      .ripple-stage {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        background: #15211f;
+      }
+
+      #ripple-canvas {
+        position: absolute;
+        inset: 0;
+        display: block;
+        width: 100%;
+        height: 100%;
+        cursor: crosshair;
+        touch-action: none;
+      }
+
+      .ripple-shade {
+        position: absolute;
+        z-index: 2;
+        inset: 0;
+        pointer-events: none;
+        background:
+          linear-gradient(90deg, rgba(7, 12, 11, .62), transparent 43%),
+          linear-gradient(180deg, rgba(4, 8, 7, .18), transparent 44%, rgba(4, 8, 7, .32));
+      }
+
+      .ripple-frame {
+        position: absolute;
+        z-index: 3;
+        left: 13px;
+        right: 13px;
+        top: 34px;
+        bottom: 13px;
+        border: 1px solid rgba(255, 255, 255, .42);
+        pointer-events: none;
+      }
+
+      .ripple-frame::before,
+      .ripple-frame::after {
+        content: "";
+        position: absolute;
+        width: 11px;
+        height: 11px;
+        border-color: rgba(255, 255, 255, .86);
+      }
+
+      .ripple-frame::before {
+        left: -1px;
+        top: -1px;
+        border-left: 2px solid;
+        border-top: 2px solid;
+      }
+
+      .ripple-frame::after {
+        right: -1px;
+        bottom: -1px;
+        border-right: 2px solid;
+        border-bottom: 2px solid;
+      }
+
+      .ripple-copy {
+        position: absolute;
+        z-index: 4;
+        left: 24px;
+        bottom: 24px;
+        width: 118px;
+        color: white;
+        pointer-events: none;
+        text-shadow: 0 2px 14px rgba(0, 0, 0, .42);
+      }
+
+      .ripple-copy small {
+        color: rgba(255, 255, 255, .72);
+        font: 800 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .13em;
+        text-transform: uppercase;
+      }
+
+      .ripple-copy h1 {
+        margin: 7px 0 0;
+        font: 920 18px/.86 system-ui, sans-serif;
+        letter-spacing: -.06em;
+        text-transform: uppercase;
+      }
+
+      .ripple-copy p {
+        margin: 8px 0 0;
+        color: rgba(255, 255, 255, .76);
+        font: 650 5px/1.35 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+      }
+
+      .ripple-status {
+        position: absolute;
+        z-index: 4;
+        right: 21px;
+        top: 42px;
+        padding: 5px 7px;
+        color: rgba(255, 255, 255, .88);
+        border: 1px solid rgba(255, 255, 255, .28);
+        background: rgba(8, 15, 14, .42);
+        font: 800 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        backdrop-filter: blur(8px);
+        pointer-events: none;
+      }
+
+      .ripple-ring {
+        position: absolute;
+        z-index: 5;
+        left: 50%;
+        top: 50%;
+        width: 36px;
+        height: 36px;
+        border: 1px solid rgba(255, 255, 255, .94);
+        border-radius: 50%;
+        opacity: 0;
+        translate: -50% -50%;
+        scale: .72;
+        box-shadow: 0 0 0 7px rgba(255, 255, 255, .1), inset 0 0 15px rgba(255, 255, 255, .08);
+        transition: opacity .18s ease, scale .28s cubic-bezier(.2, .8, .2, 1);
+        pointer-events: none;
+      }
+
+      .ripple-stage[data-phase="active"] .ripple-ring,
+      .ripple-stage[data-phase="settling"] .ripple-ring {
+        opacity: 1;
+        scale: 1;
+      }
+
+      .ripple-stage[data-phase="settling"] .ripple-ring { opacity: .54; }
+
+      .library-badge {
+        background: rgba(7, 16, 15, .76);
+        border-color: rgba(255, 255, 255, .22);
+      }
+
+      .scene-caption {
+        left: auto;
+        right: 18px;
+        bottom: 18px;
+        color: rgba(255, 255, 255, .68);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .ripple-ring { transition: none; }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/pointer-following-displacement-ripple-C8_pk0xO.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
+    <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+    <link rel="modulepreload" crossorigin href="./assets/regl-B2Y2V2F1.js">
+    <link rel="modulepreload" crossorigin href="./assets/batch-b-utils-CmA_lC0Z.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main class="preview-stage">
+      <section class="ripple-stage" id="ripple-stage" data-phase="idle" data-preview-mechanism="regl-texture-displacement-ripple">
+        <canvas id="ripple-canvas" tabindex="0" aria-label="Move the pointer, touch the image, or use arrow keys to move a refractive ripple across the architecture photograph"></canvas>
+        <div class="ripple-shade" aria-hidden="true"></div>
+        <div class="ripple-frame" aria-hidden="true"></div>
+        <section class="ripple-copy" aria-hidden="true">
+          <small>Coastal pavilion / water study</small>
+          <h1>Move through the reflection.</h1>
+          <p>Pointer · touch · arrow keys</p>
+        </section>
+        <span class="ripple-status" id="ripple-status" aria-hidden="true">Still water / ready</span>
+        <i class="ripple-ring" id="ripple-ring" aria-hidden="true"></i>
+        <span class="library-badge">regl · sampled photo texture</span>
+        <span class="scene-caption">event → refract → recover</span>
+      </section>
+    </main>
+  </body>
+</html>

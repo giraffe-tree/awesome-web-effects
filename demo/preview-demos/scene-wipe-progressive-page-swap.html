@@ -1,2 +1,464 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Motion — Scene Wipe Progressive Page Swap</title><link rel="stylesheet" href="./shared.css"><style>
-:root{--preview-background:#17131c}.wipe-stage{position:absolute;inset:0;overflow:hidden;cursor:pointer}.wipe-scene{position:absolute;inset:0;padding:52px 20px 24px}.scene-night{color:#f5edff;background:radial-gradient(circle at 77% 58%,#4d2c82 0 8%,transparent 9%),linear-gradient(145deg,#17131c,#29203c)}.scene-day{color:#1c211c;background:radial-gradient(circle at 78% 59%,#f44935 0 10%,transparent 11%),#f6db75;clip-path:circle(0% at 78% 58%)}.wipe-scene small{font:800 6px/1 ui-monospace,monospace;letter-spacing:.14em}.wipe-scene h1{width:205px;margin:14px 0 0;font:950 27px/.82 system-ui;letter-spacing:-.065em}.wipe-scene p{width:145px;margin:10px 0 0;font:650 7px/1.4 system-ui;opacity:.68}.sun-grid{position:absolute;right:26px;top:54px;width:83px;height:83px;border:1px solid currentColor;border-radius:50%;opacity:.35;box-shadow:inset 0 0 0 13px transparent,inset 0 0 0 14px currentColor}.wipe-progress{position:absolute;z-index:5;left:20px;right:20px;bottom:15px;height:2px;background:#fff3}.wipe-progress i{display:block;width:100%;height:100%;background:white;transform:scaleX(0);transform-origin:left}.library-badge{background:#15111bbd}</style></head><body><main class="preview-stage"><div class="wipe-stage" id="wipe-stage" data-preview-mechanism="motion-scene-wipe" role="button" tabindex="0" aria-label="Click or press Enter to swap scenes with a progressive wipe"><section class="wipe-scene scene-night"><small>SCENE / AFTER HOURS</small><h1>Night holds the question.</h1><p>A circular reveal carries every page layer into a brighter answer.</p><span class="sun-grid"></span></section><section class="wipe-scene scene-day" id="day-scene"><small>SCENE / FIRST LIGHT</small><h1>Day reveals the system.</h1><p>One moving boundary swaps color, type, image, and atmosphere together.</p><span class="sun-grid"></span></section><div class="wipe-progress"><i id="wipe-progress"></i></div></div><span class="library-badge">Motion · clip wipe</span><span class="scene-caption">one boundary replaces the whole scene</span></main><script type="module" src="./src/scene-wipe-progressive-page-swap-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Motion — Human-triggered Cultural Program Scene Wipe</title>
+    <link rel="stylesheet" href="./shared.css" />
+    <style>
+      :root {
+        --preview-background: #e9e1d1;
+        color-scheme: light;
+      }
+
+      button { font: inherit; }
+
+      .wipe-stage {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        background: #e9e1d1;
+        outline: none;
+      }
+
+      .wipe-stage:focus-visible {
+        box-shadow: inset 0 0 0 2px #f25e48;
+      }
+
+      .program-scene {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+
+      .scene-exhibit {
+        color: #1d2927;
+        background:
+          radial-gradient(circle at 72% 42%, #e3b8aa73, transparent 28%),
+          linear-gradient(135deg, #f0eadf, #dfd7c5);
+      }
+
+      .scene-live {
+        z-index: 3;
+        color: #f1f6eb;
+        background:
+          radial-gradient(circle at 25% 48%, #c7443e38, transparent 31%),
+          linear-gradient(145deg, #111c27, #091019 70%, #101928);
+        clip-path: inset(0 100% 0 0);
+      }
+
+      .scene-nav {
+        position: absolute;
+        z-index: 2;
+        left: 20px;
+        right: 20px;
+        top: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        font-size: 5px;
+        font-weight: 850;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+      }
+
+      .exhibit-nav { color: #5b6863; }
+      .live-nav { color: #718da1; }
+
+      .venue-lockup {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        white-space: nowrap;
+      }
+
+      .venue-mark {
+        display: grid;
+        width: 16px;
+        height: 16px;
+        place-items: center;
+        border: 1px solid currentColor;
+        border-radius: 50%;
+        font: 950 5px/1 ui-monospace, monospace;
+        letter-spacing: 0;
+      }
+
+      .scene-nav strong { color: currentColor; font-weight: 950; }
+      .scene-nav-meta { opacity: .7; white-space: nowrap; }
+
+      .exhibit-layout,
+      .live-layout {
+        position: absolute;
+        left: 20px;
+        right: 20px;
+        top: 62px;
+        bottom: 31px;
+        min-height: 0;
+      }
+
+      .exhibit-layout {
+        display: grid;
+        grid-template-columns: .82fr 1.18fr;
+        align-items: stretch;
+        gap: 18px;
+      }
+
+      .exhibit-copy {
+        align-self: center;
+        z-index: 2;
+      }
+
+      .eyebrow,
+      .scene-meta,
+      .ticket-note,
+      .live-kicker,
+      .live-meta,
+      .performance-data,
+      .scene-toggle,
+      .wipe-readout {
+        text-transform: uppercase;
+      }
+
+      .eyebrow {
+        color: #77837d;
+        font: 850 5px/1 ui-monospace, monospace;
+        letter-spacing: .15em;
+      }
+
+      .exhibit-copy h1 {
+        margin: 10px 0 0;
+        color: #172321;
+        font: 500 clamp(34px, 7.5vw, 66px)/.77 Georgia, serif;
+        letter-spacing: -.075em;
+      }
+
+      .exhibit-copy h1 em { color: #cc5948; font-style: italic; }
+
+      .scene-meta {
+        display: grid;
+        grid-template-columns: repeat(2, max-content);
+        gap: 5px 13px;
+        margin-top: 13px;
+        color: #4d5b56;
+        font: 800 5px/1.35 ui-monospace, monospace;
+        letter-spacing: .08em;
+      }
+
+      .scene-meta strong { color: #1d2927; }
+
+      .exhibit-art {
+        position: relative;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        border: 1px solid #26332f2b;
+        border-radius: 50% 50% 10px 10px;
+        background: #d7aa8e;
+        box-shadow: inset 0 1px #ffffff4d, 0 18px 40px #55453424;
+      }
+
+      .exhibit-art svg,
+      .live-graphic svg {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      .art-label {
+        position: absolute;
+        left: 9px;
+        bottom: 8px;
+        color: #23302d;
+        font: 900 4px/1 ui-monospace, monospace;
+        letter-spacing: .11em;
+        text-transform: uppercase;
+      }
+
+      .ticket-note {
+        position: absolute;
+        right: 9px;
+        bottom: 8px;
+        padding: 4px 6px;
+        border-radius: 99px;
+        background: #f2e8d7ad;
+        color: #33433e;
+        font: 900 4px/1 ui-monospace, monospace;
+        letter-spacing: .09em;
+      }
+
+      .live-layout {
+        display: grid;
+        grid-template-columns: 1.05fr .95fr;
+        gap: 17px;
+        align-items: stretch;
+      }
+
+      .live-graphic {
+        position: relative;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        border: 1px solid #7890a33d;
+        border-radius: 12px;
+        background: #0b1621;
+        box-shadow: inset 0 1px #ffffff09, 0 19px 42px #0007;
+      }
+
+      .performance-data {
+        position: absolute;
+        left: 9px;
+        right: 9px;
+        bottom: 8px;
+        display: flex;
+        justify-content: space-between;
+        color: #70899b;
+        font: 850 4px/1 ui-monospace, monospace;
+        letter-spacing: .08em;
+      }
+
+      .performance-data strong { color: #f36e5e; }
+
+      .live-copy {
+        align-self: center;
+        text-align: right;
+      }
+
+      .live-kicker {
+        color: #ef6b5d;
+        font: 900 5px/1 ui-monospace, monospace;
+        letter-spacing: .15em;
+      }
+
+      .live-copy h1 {
+        margin: 10px 0 0;
+        color: #f0f3e9;
+        font: 950 clamp(30px, 6.8vw, 58px)/.78 system-ui, sans-serif;
+        letter-spacing: -.075em;
+        text-transform: uppercase;
+      }
+
+      .live-copy h1 span { color: #66d0c2; }
+
+      .live-meta {
+        margin-top: 12px;
+        color: #718b9d;
+        font: 800 5px/1.5 ui-monospace, monospace;
+        letter-spacing: .08em;
+      }
+
+      .live-meta strong { color: #eef3ea; }
+
+      .wipe-blade {
+        position: absolute;
+        z-index: 6;
+        left: -2px;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: #f4ede0;
+        box-shadow: 0 0 0 1px #17212052, 0 0 18px #f36d5e;
+        opacity: 0;
+        pointer-events: none;
+        will-change: transform;
+      }
+
+      .wipe-blade::before {
+        position: absolute;
+        left: -10px;
+        top: 0;
+        bottom: 0;
+        width: 20px;
+        background: linear-gradient(90deg, transparent, #f3665740, transparent);
+        content: "";
+      }
+
+      .wipe-rail {
+        position: absolute;
+        z-index: 7;
+        left: 20px;
+        right: 140px;
+        bottom: 17px;
+        height: 2px;
+        overflow: hidden;
+        border-radius: 99px;
+        background: #60706a35;
+      }
+
+      .wipe-rail i {
+        display: block;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, #ca5848, #67cfc1);
+        transform: scaleX(0);
+        transform-origin: left;
+      }
+
+      .wipe-readout {
+        position: absolute;
+        z-index: 8;
+        right: 20px;
+        bottom: 13px;
+        color: #68766f;
+        font: 850 4px/1 ui-monospace, monospace;
+        letter-spacing: .09em;
+        pointer-events: none;
+      }
+
+      .scene-toggle {
+        position: absolute;
+        z-index: 10;
+        right: 20px;
+        top: 61px;
+        min-height: 27px;
+        padding: 0 11px;
+        border: 1px solid #f36c5e8c;
+        border-radius: 99px;
+        background: #162329e8;
+        color: #f3eee3;
+        box-shadow: 0 8px 22px #0003;
+        font-size: 5px;
+        font-weight: 950;
+        letter-spacing: .1em;
+        cursor: pointer;
+        touch-action: manipulation;
+      }
+
+      .scene-toggle::after { content: "  →"; color: #ef6a5c; }
+      .wipe-stage[data-scene="live"] .scene-toggle::after { content: "  ←"; color: #67cfc1; }
+
+      .scene-toggle:focus-visible {
+        outline: 2px solid #f5efe2;
+        outline-offset: 2px;
+      }
+
+      .library-badge { z-index: 12; border-color: #5e6c6642; background: #111b1fe0; color: #e5eee8; }
+      .scene-caption { z-index: 12; color: #6b7871; }
+
+      @media (max-width: 380px) and (min-height: 136px) {
+        .scene-nav { left: 10px; right: 10px; top: 28px; font-size: 4px; }
+        .venue-mark { width: 12px; height: 12px; font-size: 4px; }
+        .scene-nav-meta { display: none; }
+        .exhibit-layout, .live-layout { left: 10px; right: 10px; top: 50px; bottom: 28px; gap: 7px; }
+        .exhibit-layout { grid-template-columns: .92fr 1.08fr; }
+        .eyebrow, .live-kicker { font-size: 4px; }
+        .exhibit-copy h1 { margin-top: 7px; font-size: 31px; }
+        .scene-meta { margin-top: 8px; gap: 3px 7px; font-size: 3px; }
+        .exhibit-art { border-radius: 50% 50% 7px 7px; }
+        .art-label, .ticket-note, .performance-data { font-size: 3px; }
+        .ticket-note { padding: 3px 4px; }
+        .live-copy h1 { margin-top: 7px; font-size: 26px; }
+        .live-meta { margin-top: 8px; font-size: 3px; }
+        .wipe-rail { left: 10px; right: 96px; bottom: 15px; }
+        .wipe-readout { right: 10px; bottom: 11px; font-size: 3px; }
+        .scene-toggle { right: 10px; top: 49px; min-height: 22px; padding: 0 8px; font-size: 4px; }
+        .scene-caption { display: none; }
+      }
+
+      @media (max-width: 260px), (max-height: 135px) {
+        .scene-nav { left: 4px; right: 4px; top: 4px; height: 9px; font-size: 3px; }
+        .venue-lockup { gap: 3px; }
+        .venue-mark { width: 8px; height: 8px; font-size: 3px; }
+        .scene-nav-meta { display: block; font-size: 2.5px; }
+        .exhibit-layout, .live-layout { left: 4px; right: 4px; top: 16px; bottom: 17px; gap: 4px; }
+        .exhibit-layout, .live-layout { display: block; }
+        .exhibit-copy { position: absolute; left: 0; top: 3px; width: 53%; }
+        .exhibit-art { position: absolute; right: 0; top: 0; bottom: 0; width: 43%; }
+        .live-graphic { position: absolute; left: 0; top: 0; bottom: 0; width: 42%; }
+        .live-copy { position: absolute; right: 0; top: 0; width: 55%; }
+        .eyebrow, .live-kicker { font-size: 3px; }
+        .exhibit-copy h1 { margin-top: 4px; font-size: 17px; }
+        .scene-meta { margin-top: 4px; grid-template-columns: 1fr; gap: 2px; font-size: 2.5px; }
+        .scene-meta span:nth-child(2) { display: none; }
+        .exhibit-art { border-radius: 50% 50% 4px 4px; }
+        .art-label, .ticket-note { bottom: 3px; font-size: 2px; }
+        .art-label { left: 3px; }
+        .ticket-note { right: 3px; padding: 2px 3px; }
+        .live-copy h1 { margin-top: 3px; font-size: 13px; }
+        .live-meta { margin-top: 4px; font-size: 2.5px; }
+        .performance-data { left: 3px; right: 3px; bottom: 3px; font-size: 2px; }
+        .scene-toggle { right: 4px; top: 16px; bottom: auto; width: 14px; min-height: 13px; padding: 0; font-size: 0; }
+        .scene-toggle::before { content: "↔"; font-size: 5px; }
+        .scene-toggle::after { display: none; }
+        .wipe-rail { left: 4px; right: 58px; bottom: 7px; height: 1px; }
+        .wipe-readout { display: none; }
+        .wipe-blade { width: 1px; }
+        .library-badge, .scene-caption { display: none; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .wipe-blade { display: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="preview-stage" aria-label="Morrow cultural venue program switcher">
+      <div id="wipe-stage" class="wipe-stage" data-scene="exhibit" data-phase="idle" data-preview-mechanism="motion-progressive-full-scene-wipe" role="group" tabindex="0" aria-label="Switch between the daytime exhibition page and tonight's live program">
+        <section id="exhibit-scene" class="program-scene scene-exhibit" data-theme="paper-gallery" data-layout="editorial-left" data-graphic="arched-sculpture" aria-label="Day exhibition program">
+          <header class="scene-nav exhibit-nav">
+            <span class="venue-lockup"><span class="venue-mark">M</span><strong>Morrow Museum</strong> / Exhibitions</span>
+            <span class="scene-nav-meta">Open today · 10:00—18:00 · Gallery 03</span>
+          </header>
+          <div class="exhibit-layout">
+            <article class="exhibit-copy">
+              <span class="eyebrow">Exhibition 07 · Architecture</span>
+              <h1>Form<br /><em>&amp; light</em></h1>
+              <div class="scene-meta"><span><strong>18 works</strong><br />spatial studies</span><span><strong>Free entry</strong><br />until 17:30</span></div>
+            </article>
+            <figure class="exhibit-art" aria-label="Code-authored arched light sculpture poster">
+              <svg viewBox="0 0 360 250" role="img" aria-label="Terracotta architectural arches casting geometric shadows">
+                <rect width="360" height="250" fill="#d9ad91" />
+                <circle cx="277" cy="51" r="28" fill="#f1d982" />
+                <path d="M38 229V94c0-53 43-76 91-76s91 23 91 76v135Z" fill="#263a36" />
+                <path d="M73 229V104c0-33 24-49 56-49s56 16 56 49v125Z" fill="#e9dfc9" />
+                <path d="M103 229V112c0-17 11-25 26-25s26 8 26 25v117Z" fill="#bd5949" />
+                <path d="M220 229V132c0-34 28-50 59-50s59 16 59 50v97Z" fill="#804a45" opacity=".84" />
+                <path d="m0 250 150-91 181 91Z" fill="#12231f" opacity=".17" />
+                <g stroke="#efe6d2" stroke-width="2" opacity=".52"><path d="M16 25h120"/><path d="M16 33h77"/><path d="M270 206h67"/></g>
+              </svg>
+              <span class="art-label">Study 12 / Sun chamber</span>
+              <span class="ticket-note">View exhibition</span>
+            </figure>
+          </div>
+        </section>
+
+        <section id="live-scene" class="program-scene scene-live" data-theme="midnight-stage" data-layout="telemetry-right" data-graphic="radial-signal-stage" aria-label="Tonight's live performance program">
+          <header class="scene-nav live-nav">
+            <span class="venue-lockup"><span class="venue-mark">M</span><strong>Morrow Live</strong> / Hall B</span>
+            <span class="scene-nav-meta">Doors 20:00 · Performance 20:30 · 64 minutes</span>
+          </header>
+          <div class="live-layout">
+            <figure class="live-graphic" aria-label="Code-authored spatial audio performance signal map">
+              <svg viewBox="0 0 360 250" role="img" aria-label="Radial signal lines and a live performance waveform">
+                <rect width="360" height="250" fill="#0b1621" />
+                <g fill="none" transform="translate(154 118)">
+                  <circle r="78" stroke="#243b4b" />
+                  <circle r="56" stroke="#35576a" />
+                  <circle r="34" stroke="#65cabd" stroke-width="2" />
+                  <path d="M-116 0H116M0-98V98M-82-70 82 70M82-70-82 70" stroke="#203441" />
+                  <path d="M-119 12c21-49 41 56 62 3s41 42 61-5 40 38 61-3 40 19 61-8" stroke="#f36b5d" stroke-width="5" />
+                  <circle r="8" fill="#eef1e8" />
+                </g>
+                <g fill="#67cfc1"><circle cx="55" cy="65" r="3"/><circle cx="285" cy="79" r="3"/><circle cx="309" cy="174" r="3"/></g>
+              </svg>
+              <span class="performance-data"><span><strong>Live input</strong> · 08 channels</span><span>Stage map / B</span></span>
+            </figure>
+            <article class="live-copy">
+              <span class="live-kicker">Tonight · Spatial performance</span>
+              <h1>Signal<br /><span>in transit</span></h1>
+              <p class="live-meta"><strong>Ada Rhee + Unit 04</strong><br />8-channel composition · limited seating</p>
+            </article>
+          </div>
+        </section>
+
+        <i id="wipe-blade" class="wipe-blade" aria-hidden="true"></i>
+        <div class="wipe-rail" aria-hidden="true"><i id="wipe-progress"></i></div>
+        <span id="wipe-readout" class="wipe-readout">Exhibition · ready</span>
+        <button id="scene-toggle" class="scene-toggle" type="button" aria-label="Open tonight's live program">Tonight's program</button>
+      </div>
+      <span class="library-badge">Motion · full-scene wipe</span>
+      <span class="scene-caption">one user-triggered boundary replaces theme, layout, graphic, type and atmosphere</span>
+    </main>
+    <script type="module" src="./src/scene-wipe-progressive-page-swap-demo.js"></script>
+  </body>
+</html>

@@ -1037,23 +1037,23 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "scene-wipe-progressive-page-swap",
-    "name": "Scene-wipe progressive page swap",
-    "nameZh": "场景擦除式渐进页面交换",
+    "name": "Cultural-program full-scene wipe",
+    "nameZh": "文化场馆完整场景擦除",
     "category": "transition",
     "sourceUrl": "https://github.com/swup/swup",
-    "difference": "真实路由执行 leave-fetch-enter；当前同步场景换幕只切换同页应用状态。",
+    "difference": "Morrow 场馆的日间建筑展与夜间声音演出拥有不同主题、排版方向、文案和 SVG 主视觉；同一条可逆擦除边界按真人请求逐层替换完整页面，而非在相似背景间自动循环。",
     "behavior": {
-      "trigger": "route navigation",
-      "response": "Compress the leaving scene into a slit and reveal the next route through it",
-      "timing": "staged leave/fetch/enter",
-      "layer": "page container"
+      "trigger": "real scene-button click/tap or Enter/Space/Arrow/Home/End/L/R keyboard request",
+      "response": "Replace day exhibition with tonight's live program through one shared moving boundary, or reverse from the exact interrupted progress",
+      "timing": "human-owned reversible 880 ms Motion wipe with four progress-locked controls and no automatic cycle",
+      "layer": "full-frame cultural venue pages: theme, typography, content, and code-authored graphic"
     },
     "implementation": {
       "projectId": "motiondivision-motion",
       "projectUrl": "https://github.com/motiondivision/motion",
       "library": "motion@12.42.2",
       "renderer": "dom",
-      "snippet": "animate(scene, { clipPath: ['inset(0 0 0 0)', 'inset(0 49% 0 49%)', 'inset(0 0 0 0)'] }, { duration: 3 });",
+      "snippet": "const clip=animate(live,{clipPath:['inset(0 100% 0 0)','inset(0 0% 0 0)']},{autoplay:false}); clip.time=clip.duration*progress;",
       "referenceUrl": "https://github.com/swup/swup"
     },
     "scores": {
@@ -1065,13 +1065,13 @@ export const effectExpansion100Specs = [
       "evidence": 9,
       "total": 90
     },
-    "rationaleZh": "跨路由语义和共享导航持续存在，区别于单页 tab 动画。",
+    "rationaleZh": "机制价值来自一条边界统一替换完整视觉系统：建筑展与现场演出的内容身份足够不同，快速反向又证明它是受真人控制的连续进度，不是两张截图淡入淡出。",
     "batch": "B",
-    "demo": "两个真实 HTML 路由共享一条图像裂缝作为换页入口。",
-    "capture": "点击路由链接→录下离场压缩、URL 改变、下一页展开→浏览器后退。",
+    "demo": "Morrow 文化场馆在 Form & light 日间展览与 Signal in transit 夜间演出之间完整换幕，纸张/午夜主题、左右排版、标题与两套 SVG 图形同步越过边界。",
+    "capture": "真人按钮启动并连续反向两次→稳定到夜间页→键盘往返→过渡中两次反向→按钮与键盘各完成一次完整往返，最终回到展览页。",
     "risk": {
       "level": "medium",
-      "detail": "必须用 HTTP server 与真实 route；单页隐藏 div 不合格。"
+      "detail": "两页必须在主题、排版、内容和图形上真实不同；四个 Motion 控件需严格共享同一进度，快速反向不可跳帧，首帧不得自动换幕。"
     },
     "observedImplementation": {
       "projectId": "swup-swup",

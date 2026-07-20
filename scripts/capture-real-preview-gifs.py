@@ -901,6 +901,47 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 33:
                 page.locator('#globe-host').focus()
                 page.keyboard.press("Home")
+        elif demo["id"] == "scene-wipe-progressive-page-swap":
+            if index == 2:
+                page.locator('#scene-toggle').click()
+            elif index == 3:
+                page.wait_for_timeout(120)
+            elif index == 4:
+                page.locator('#scene-toggle').click()
+                page.locator('#scene-toggle').click()
+            elif index == 5:
+                page.wait_for_timeout(100)
+            elif index == 7:
+                page.wait_for_timeout(1000)
+            elif index == 10:
+                page.locator('#wipe-stage').focus()
+                page.keyboard.press("ArrowLeft")
+            elif index == 11:
+                page.wait_for_timeout(1000)
+            elif index == 14:
+                page.keyboard.press("ArrowRight")
+            elif index == 15:
+                page.wait_for_timeout(120)
+            elif index == 16:
+                page.keyboard.press("ArrowLeft")
+                page.keyboard.press("ArrowRight")
+            elif index == 17:
+                page.wait_for_timeout(120)
+            elif index == 19:
+                page.wait_for_timeout(1000)
+            elif index == 23:
+                page.locator('#scene-toggle').click()
+            elif index == 24:
+                page.wait_for_timeout(1000)
+            elif index == 27:
+                page.locator('#wipe-stage').focus()
+                page.keyboard.press("ArrowRight")
+            elif index == 28:
+                page.wait_for_timeout(1000)
+            elif index == 31:
+                page.locator('#scene-toggle').click()
+            elif index == 32:
+                page.wait_for_timeout(1000)
         elif demo["id"] == "draggable-packed-editorial-wall":
             if index == 2:
                 box = page.locator('.story-tile[data-tile-id="night-market"]').bounding_box()
@@ -2106,6 +2147,52 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["canvasHeight"] < 64
         ):
             raise RuntimeError(f"{demo['id']} did not capture a human-rotated geodata globe with real nearest-node focus, routes, keyboard control, and reset: {interaction!r}")
+    elif demo["id"] == "scene-wipe-progressive-page-swap":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            interaction["task"] != "cultural-venue-day-to-live-program-switch"
+            or interaction["automaticFallback"]
+            or interaction["automaticCycle"]
+            or interaction["automaticPlayback"]
+            or interaction["captureClockDriven"]
+            or interaction["syntheticInputDispatch"]
+            or not interaction["userRequestRequired"]
+            or not interaction["initialFrameStatic"]
+            or not interaction["controlsBuiltWithoutAutoplay"]
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["acceptedInputs"] != ["mouse", "touch", "pen", "keyboard"]
+            or interaction["inputCount"] < 10
+            or interaction["sceneRequestCount"] < 10
+            or interaction["pointerInputCount"] < 5
+            or interaction["keyboardInputCount"] < 5
+            or interaction["completedTransitionCount"] < 6
+            or interaction["interruptedTransitionCount"] < 3
+            or interaction["maximumConcurrentTransitions"] != 1
+            or interaction["motionPlayCallCount"] < 10
+            or interaction["controlCancellationCount"] < 3
+            or interaction["displayControlCount"] != 4
+            or interaction["controlRebuildCount"] < 1
+            or interaction["layoutMeasureCount"] < 1
+            or interaction["wipeDurationSeconds"] != .88
+            or interaction["currentSceneIndex"] != 0
+            or interaction["targetSceneIndex"] is not None
+            or interaction["progress"] != 0
+            or interaction["phase"] != "settled"
+            or interaction["transitionActive"]
+            or interaction["activeTransitionCount"] != 0
+            or interaction["activeDriverCount"] != 0
+            or interaction["clipControlProgress"] != 0
+            or interaction["bladeControlProgress"] != 0
+            or interaction["railControlProgress"] != 0
+            or interaction["contentControlProgress"] != 0
+            or interaction["sceneEvidence"]["exhibit"]["theme"] == interaction["sceneEvidence"]["live"]["theme"]
+            or interaction["sceneEvidence"]["exhibit"]["layout"] == interaction["sceneEvidence"]["live"]["layout"]
+            or interaction["sceneEvidence"]["exhibit"]["graphic"] == interaction["sceneEvidence"]["live"]["graphic"]
+            or interaction["lastInputKind"] != "mouse"
+            or interaction["lastInputTrusted"] is not True
+            or interaction["lastRequestSource"] != "toggle-button"
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a human-operated, fully replaced, reversible two-scene cultural-program wipe: {interaction!r}")
     elif demo["id"] == "draggable-packed-editorial-wall":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         if (

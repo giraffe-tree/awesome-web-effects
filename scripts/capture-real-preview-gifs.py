@@ -463,6 +463,37 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("ArrowLeft")
             elif index == 31:
                 page.wait_for_timeout(600)
+        elif demo["id"] == "device-silhouette-masked-video":
+            if index == 3:
+                page.locator('[data-device-option="phone"]').click()
+            elif index == 4:
+                page.wait_for_timeout(600)
+            elif index == 8:
+                page.locator("#device-play").click()
+            elif index in (9, 12):
+                page.wait_for_timeout(800)
+            elif index == 14:
+                page.locator('[data-device-option="watch"]').click()
+            elif index == 15:
+                page.wait_for_timeout(600)
+            elif index == 19:
+                page.locator("#device-play").click()
+            elif index == 23:
+                page.mouse.click(217, 80)
+                page.keyboard.press("ArrowLeft")
+            elif index == 24:
+                page.wait_for_timeout(600)
+            elif index == 28:
+                page.mouse.move(217, 80)
+                page.mouse.down()
+                page.mouse.move(180, 80, steps=4)
+                page.mouse.up()
+            elif index == 29:
+                page.wait_for_timeout(600)
+            elif index == 33:
+                page.keyboard.press("1")
+            elif index == 34:
+                page.wait_for_timeout(500)
         page.evaluate("time => window.__setPreviewTime(time)", preview_time)
         frame_path = frame_root / f"{index:04d}.png"
         page.screenshot(path=str(frame_path), type="png")
@@ -815,6 +846,45 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["visibleCount"] != 6
         ):
             raise RuntimeError(f"{demo['id']} did not capture real Isotope filtering, sorting, and gap closure: {interaction!r}")
+    elif demo["id"] == "device-silhouette-masked-video":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            interaction["automaticFallback"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticDeviceSwitch"]
+            or interaction["syntheticInputDispatch"]
+            or not interaction["mediaDriven"]
+            or interaction["sourceKind"] != "local-video"
+            or not interaction["sourceConsistency"]["singleVideoElement"]
+            or not interaction["sourceConsistency"]["sameSourceAcrossDevices"]
+            or interaction["sourceConsistency"]["canvasDrawSourceId"] != "source-video"
+            or not interaction["metadataReady"]
+            or not interaction["firstFrameReady"]
+            or not interaction["canPlayReady"]
+            or interaction["videoWidth"] != 1280
+            or interaction["videoHeight"] != 720
+            or abs(interaction["duration"] - 5.8) > .05
+            or not interaction["initiallyPaused"]
+            or interaction["autoplayAttempted"]
+            or not interaction["userInitiated"]
+            or not interaction["userInitiatedPlayback"]
+            or interaction["inputCount"] < 7
+            or interaction["deviceSwitchCount"] < 5
+            or interaction["clickSwitchCount"] < 2
+            or interaction["keyboardSwitchCount"] < 2
+            or interaction["dragSwitchCount"] < 1
+            or interaction["playToggleCount"] < 2
+            or interaction["playCount"] < 1
+            or interaction["pauseCount"] < 1
+            or interaction["frameDrawCount"] < 2
+            or interaction["currentTime"] < 1
+            or interaction["selectedDevice"] != "desktop"
+            or interaction["currentMask"] != "desktop-alpha-mask"
+            or interaction["mediaObjectFit"] != "cover"
+            or interaction["isPlaying"]
+            or not interaction["paused"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture real same-source film playback and three device masks: {interaction!r}")
 
     minimum_unique = min(6, max(2, frame_count // 6))
     if len(hashes) < minimum_unique:

@@ -1,3 +1,454 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>Motion — Device Silhouette Masked Video</title><link rel="stylesheet" href="./shared.css"/><style>
-:root{--preview-background:#eee6d7;color-scheme:light}.device-stage{background:radial-gradient(circle at 68% 44%,#fd785c3d,transparent 34%),linear-gradient(145deg,#f2eadb,#d9d1c1);color:#1c1b19}.device-copy{position:absolute;left:19px;top:50px;width:104px}.device-copy b{font:900 21px/.87 Georgia,serif;letter-spacing:-.06em}.device-copy small{display:block;margin-top:9px;color:#74685b;font:800 6px/1.45 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase}.device{position:absolute;right:34px;top:22px;width:96px;height:142px;filter:drop-shadow(0 18px 17px #5d45375a);will-change:transform}.device canvas{width:100%;height:100%;background:#111;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 142'%3E%3Crect x='5' y='2' width='86' height='138' rx='19' fill='white'/%3E%3Crect x='35' y='4' width='26' height='8' rx='4' fill='black'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 142'%3E%3Crect x='5' y='2' width='86' height='138' rx='19' fill='white'/%3E%3Crect x='35' y='4' width='26' height='8' rx='4' fill='black'/%3E%3C/svg%3E") center/contain no-repeat}.device::after{content:"";position:absolute;inset:2px 5px;border:1px solid #ffffff8a;border-radius:19px;pointer-events:none}.device-button{position:absolute;left:19px;bottom:24px;height:23px;padding:0 9px;border:1px solid #1c1b1930;border-radius:99px;background:#ffffff70;color:#1c1b19;font:900 6px/1 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;cursor:pointer}.device-stage .library-badge{background:#f2eadbd9;border-color:#1c1b1926;color:#1c1b19}.scene-caption{display:none}
-</style></head><body><main class="preview-stage device-stage"><div class="device-copy"><b>MOTION<br/>LIVES<br/>INSIDE<br/>THE FORM</b><small>alpha silhouette · live canvas film</small></div><div class="device" id="device"><canvas id="device-film" width="192" height="284"></canvas></div><button class="device-button" id="device-button" type="button">Tilt device</button><span class="library-badge">Motion · CSS alpha mask</span><span class="scene-caption">animated pixels are defined by the device silhouette, not a rectangle</span></main><script type="module" src="./src/device-silhouette-masked-video-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Motion — Device Silhouette Masked Video</title>
+    <link rel="stylesheet" href="./shared.css" />
+    <style>
+      :root {
+        --preview-background: #111716;
+        color-scheme: dark;
+      }
+
+      .device-stage {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        min-width: 100%;
+        min-height: 100%;
+        overflow: clip;
+        color: #f4efe5;
+        background:
+          radial-gradient(circle at 69% 41%, rgba(204, 91, 42, .28), transparent 24%),
+          radial-gradient(circle at 65% 45%, rgba(85, 132, 128, .22), transparent 42%),
+          linear-gradient(145deg, #202826 0%, #111716 56%, #080c0c 100%);
+        outline: none;
+        isolation: isolate;
+      }
+
+      .device-stage::before {
+        content: "";
+        position: absolute;
+        inset: -30%;
+        z-index: -1;
+        opacity: .2;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72' viewBox='0 0 72 72'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.76' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.28'/%3E%3C/svg%3E");
+        transform: rotate(5deg);
+        pointer-events: none;
+      }
+
+      .device-stage::after {
+        content: "";
+        position: absolute;
+        left: 42%;
+        right: 4%;
+        bottom: 27px;
+        height: 1px;
+        opacity: .25;
+        background: linear-gradient(90deg, transparent, #d6c9ae, transparent);
+        pointer-events: none;
+      }
+
+      .device-copy {
+        position: absolute;
+        z-index: 4;
+        left: clamp(13px, 4.7vw, 28px);
+        top: 50%;
+        width: min(38%, 168px);
+        translate: 0 -62%;
+        pointer-events: none;
+      }
+
+      .device-kicker,
+      .device-copy p,
+      .device-status,
+      .device-note,
+      .device-control,
+      .device-device {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        text-transform: uppercase;
+      }
+
+      .device-kicker {
+        display: block;
+        color: #d98a5d;
+        font-size: clamp(5px, 1.65vw, 8px);
+        font-weight: 900;
+        letter-spacing: .17em;
+      }
+
+      .device-copy h1 {
+        margin: 7px 0 0;
+        font: 800 clamp(20px, 7vw, 38px)/.82 Georgia, serif;
+        letter-spacing: -.07em;
+        text-wrap: balance;
+      }
+
+      .device-copy p {
+        margin: 9px 0 0;
+        max-width: 142px;
+        color: rgba(244, 239, 229, .57);
+        font-size: clamp(4px, 1.35vw, 6px);
+        font-weight: 700;
+        line-height: 1.48;
+        letter-spacing: .08em;
+      }
+
+      .device-status {
+        position: absolute;
+        z-index: 7;
+        top: 14px;
+        right: 16px;
+        color: rgba(244, 239, 229, .72);
+        font-size: 6px;
+        font-weight: 800;
+        letter-spacing: .1em;
+        pointer-events: none;
+      }
+
+      .device-rig {
+        --rig-w: clamp(142px, 55vw, 420px);
+        --rig-h: clamp(85px, 33vw, 252px);
+        position: absolute;
+        z-index: 3;
+        left: 68%;
+        top: 46%;
+        width: var(--rig-w);
+        height: var(--rig-h);
+        translate: -50% -50%;
+        filter: drop-shadow(0 18px 20px rgba(0, 0, 0, .56));
+        transition: width .5s cubic-bezier(.22, 1, .36, 1), height .5s cubic-bezier(.22, 1, .36, 1), filter .5s ease;
+        touch-action: none;
+        cursor: grab;
+        will-change: width, height, transform;
+      }
+
+      .device-rig:active { cursor: grabbing; }
+
+      .device-shell {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(145deg, #4f5652, #101514 42%, #030505);
+        transition: border-radius .45s cubic-bezier(.22, 1, .36, 1), background .35s ease;
+      }
+
+      .device-media {
+        position: absolute;
+        z-index: 2;
+        overflow: hidden;
+        background: #090d0d;
+        -webkit-mask-position: center;
+        -webkit-mask-repeat: no-repeat;
+        -webkit-mask-size: 100% 100%;
+        mask-position: center;
+        mask-repeat: no-repeat;
+        mask-size: 100% 100%;
+        transition: inset .5s cubic-bezier(.22, 1, .36, 1);
+      }
+
+      .device-film {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: 50% 50%;
+        background: #090d0d;
+      }
+
+      .device-glass {
+        position: absolute;
+        z-index: 3;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+      }
+
+      .device-glass::before {
+        content: "";
+        position: absolute;
+        inset: -25%;
+        opacity: .38;
+        background: linear-gradient(118deg, rgba(255, 255, 255, .24), transparent 31%, transparent 64%, rgba(255, 255, 255, .08));
+        translate: -18% 0;
+      }
+
+      .device-shell::before,
+      .device-shell::after {
+        content: "";
+        position: absolute;
+        z-index: 1;
+        display: none;
+        background: linear-gradient(#555e5a, #111716 50%, #050706);
+      }
+
+      .source-video {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .device-stage[data-device="desktop"] .device-shell {
+        border-radius: 10px 10px 7px 7px;
+      }
+
+      .device-stage[data-device="desktop"] .device-media {
+        inset: 5px 5px 17px;
+        -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 180'%3E%3Crect x='0' y='0' width='320' height='180' rx='15' fill='white'/%3E%3C/svg%3E");
+        mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 180'%3E%3Crect x='0' y='0' width='320' height='180' rx='15' fill='white'/%3E%3C/svg%3E");
+      }
+
+      .device-stage[data-device="desktop"] .device-shell::before {
+        display: block;
+        left: 44%;
+        bottom: -12px;
+        width: 12%;
+        height: 15px;
+        clip-path: polygon(23% 0, 77% 0, 100% 100%, 0 100%);
+      }
+
+      .device-stage[data-device="desktop"] .device-shell::after {
+        display: block;
+        left: 35%;
+        bottom: -15px;
+        width: 30%;
+        height: 4px;
+        border-radius: 99px;
+      }
+
+      .device-stage[data-device="phone"] .device-rig {
+        --rig-w: clamp(66px, 22vw, 168px);
+        --rig-h: clamp(119px, 40vw, 300px);
+        filter: drop-shadow(0 19px 17px rgba(0, 0, 0, .62));
+      }
+
+      .device-stage[data-device="phone"] .device-shell {
+        border-radius: 22% / 12%;
+      }
+
+      .device-stage[data-device="phone"] .device-media {
+        inset: 4px;
+        -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 360'%3E%3Cpath fill='white' fill-rule='evenodd' d='M34 0h132c19 0 34 15 34 34v292c0 19-15 34-34 34H34C15 360 0 345 0 326V34C0 15 15 0 34 0Zm43 0h46c10 0 18 8 18 18v4c0 9-8 17-18 17H77c-10 0-18-8-18-17v-4C59 8 67 0 77 0Z'/%3E%3C/svg%3E");
+        mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 360'%3E%3Cpath fill='white' fill-rule='evenodd' d='M34 0h132c19 0 34 15 34 34v292c0 19-15 34-34 34H34C15 360 0 345 0 326V34C0 15 15 0 34 0Zm43 0h46c10 0 18 8 18 18v4c0 9-8 17-18 17H77c-10 0-18-8-18-17v-4C59 8 67 0 77 0Z'/%3E%3C/svg%3E");
+      }
+
+      .device-stage[data-device="phone"] .device-shell::after {
+        display: block;
+        right: -2px;
+        top: 25%;
+        width: 2px;
+        height: 21%;
+        border-radius: 0 2px 2px 0;
+      }
+
+      .device-stage[data-device="watch"] .device-rig {
+        --rig-w: clamp(92px, 31vw, 226px);
+        --rig-h: clamp(92px, 31vw, 226px);
+        filter: drop-shadow(0 17px 16px rgba(0, 0, 0, .62));
+      }
+
+      .device-stage[data-device="watch"] .device-shell {
+        border-radius: 29%;
+        background: linear-gradient(140deg, #737a75, #171d1b 39%, #050706 72%);
+      }
+
+      .device-stage[data-device="watch"] .device-media {
+        inset: 6px;
+        -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 240'%3E%3Crect x='0' y='0' width='240' height='240' rx='62' fill='white'/%3E%3C/svg%3E");
+        mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 240'%3E%3Crect x='0' y='0' width='240' height='240' rx='62' fill='white'/%3E%3C/svg%3E");
+      }
+
+      .device-stage[data-device="watch"] .device-shell::before {
+        display: block;
+        left: 27%;
+        top: -34%;
+        width: 46%;
+        height: 168%;
+        border-radius: 24px;
+        background: linear-gradient(90deg, #111716, #2e3734 45%, #101513);
+      }
+
+      .device-stage[data-device="watch"] .device-shell::after {
+        display: block;
+        right: -5px;
+        top: 40%;
+        width: 6px;
+        height: 20%;
+        border-radius: 0 5px 5px 0;
+        background: #555e5a;
+      }
+
+      .device-note {
+        position: absolute;
+        z-index: 6;
+        left: 49%;
+        top: 14px;
+        color: rgba(244, 239, 229, .38);
+        font-size: 5px;
+        font-weight: 800;
+        letter-spacing: .1em;
+        pointer-events: none;
+      }
+
+      .device-controls {
+        position: absolute;
+        z-index: 8;
+        left: clamp(12px, 4vw, 22px);
+        right: clamp(12px, 4vw, 22px);
+        bottom: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 9px;
+      }
+
+      .device-control,
+      .device-device {
+        height: 24px;
+        border: 1px solid rgba(244, 239, 229, .25);
+        color: #f4efe5;
+        background: rgba(6, 10, 9, .55);
+        backdrop-filter: blur(8px);
+        cursor: pointer;
+        font-size: 5px;
+        font-weight: 900;
+        letter-spacing: .09em;
+      }
+
+      .device-control {
+        min-width: 50px;
+        padding: 0 11px;
+        border-radius: 99px;
+      }
+
+      .device-selector {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        width: min(53%, 185px);
+        padding: 2px;
+        border: 1px solid rgba(244, 239, 229, .16);
+        border-radius: 99px;
+        background: rgba(6, 10, 9, .42);
+        backdrop-filter: blur(8px);
+      }
+
+      .device-device {
+        min-width: 0;
+        height: 20px;
+        padding: 0 7px;
+        overflow: hidden;
+        border: 0;
+        border-radius: 99px;
+        color: rgba(244, 239, 229, .54);
+        background: transparent;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .device-device[aria-pressed="true"] {
+        color: #1b130f;
+        background: #df7848;
+      }
+
+      .device-control:hover,
+      .device-control:focus-visible,
+      .device-device:hover,
+      .device-device:focus-visible {
+        border-color: rgba(244, 239, 229, .8);
+        color: #fff;
+        outline: none;
+      }
+
+      .device-device[aria-pressed="true"]:hover,
+      .device-device[aria-pressed="true"]:focus-visible {
+        color: #1b130f;
+      }
+
+      .library-badge {
+        background: rgba(5, 9, 8, .65);
+        border-color: rgba(244, 239, 229, .2);
+      }
+
+      .scene-caption { display: none; }
+
+      @media (prefers-reduced-motion: reduce) {
+        .device-rig,
+        .device-shell,
+        .device-media {
+          transition-duration: 0s;
+        }
+      }
+
+      @media (max-width: 220px), (max-height: 120px) {
+        .device-stage::after,
+        .device-copy,
+        .device-note,
+        .library-badge { display: none; }
+        .device-status { top: 4px; right: 5px; font-size: 3px; }
+        .device-rig { left: 50%; top: 42%; --rig-w: 84px; --rig-h: 50px; }
+        .device-stage[data-device="phone"] .device-rig { --rig-w: 32px; --rig-h: 57px; }
+        .device-stage[data-device="watch"] .device-rig { --rig-w: 46px; --rig-h: 46px; }
+        .device-controls { left: 4px; right: 4px; bottom: 3px; gap: 3px; }
+        .device-control { min-width: 27px; height: 12px; padding: 0 4px; font-size: 3px; }
+        .device-selector { width: 87px; padding: 1px; }
+        .device-device { height: 10px; padding: 0 2px; font-size: 3px; letter-spacing: 0; }
+      }
+    </style>
+  </head>
+  <body>
+    <main
+      class="preview-stage device-stage"
+      id="device-stage"
+      data-device="desktop"
+      data-preview-mechanism="human-selected-device-alpha-mask"
+      tabindex="0"
+      aria-label="Folding kayak film preview. Choose Desktop, Phone, or Watch. Press Play to start the film. Arrow keys and horizontal swipes change device."
+    >
+      <section class="device-copy" aria-hidden="true">
+        <span class="device-kicker">One film / three forms</span>
+        <h1>Pack small.<br />Go wide.</h1>
+        <p>The same field film stays full-bleed as the hardware silhouette changes.</p>
+      </section>
+
+      <span class="device-note" aria-hidden="true">Drag or use ← →</span>
+      <span class="device-status" id="device-status" aria-live="polite">Desktop · paused · 00:00</span>
+
+      <div class="device-rig" id="device-rig" aria-hidden="true">
+        <div class="device-shell" id="device-shell">
+          <div class="device-media" id="device-media">
+            <canvas class="device-film" id="device-film" width="1280" height="720"></canvas>
+            <span class="device-glass"></span>
+          </div>
+        </div>
+      </div>
+
+      <video
+        class="source-video"
+        id="source-video"
+        src="./assets/aesthetic-wave-02/device-silhouette-masked-video/folding-kayak-device-film.mp4"
+        poster="./assets/aesthetic-wave-02/device-silhouette-masked-video/folding-kayak-device-poster.jpg"
+        preload="auto"
+        muted
+        playsinline
+        loop
+        aria-hidden="true"
+      ></video>
+
+      <nav class="device-controls" aria-label="Film and device controls">
+        <button class="device-control" id="device-play" type="button" aria-pressed="false">Play</button>
+        <div class="device-selector" role="group" aria-label="Preview device">
+          <button class="device-device" type="button" data-device-option="desktop" aria-pressed="true">Desktop</button>
+          <button class="device-device" type="button" data-device-option="phone" aria-pressed="false">Phone</button>
+          <button class="device-device" type="button" data-device-option="watch" aria-pressed="false">Watch</button>
+        </div>
+      </nav>
+
+      <span class="library-badge">Motion · real video mask</span>
+      <span class="scene-caption">A single user-controlled kayak film is clipped into desktop, phone, and watch alpha masks.</span>
+    </main>
+    <script type="module" src="./src/device-silhouette-masked-video-demo.js"></script>
+  </body>
+</html>

@@ -148,19 +148,19 @@ export const effectExpansion100Specs = [
     "nameZh": "设备轮廓蒙版视频",
     "category": "animation",
     "sourceUrl": "https://pika.art/",
-    "difference": "alpha mask 决定真实可见像素，不是给矩形视频加 border-radius。",
+    "difference": "同一段可核验的本地折叠皮划艇影片被解码到唯一 Canvas，再由 Desktop、Phone、Watch 三套真实 alpha mask 决定可见像素；不是切换三张海报或给矩形视频加圆角。",
     "behavior": {
-      "trigger": "mount / mask selection",
-      "response": "Play one film through an irregular device alpha silhouette",
-      "timing": "continuous media with discrete mask changes",
-      "layer": "masked media surface"
+      "trigger": "real Play/Pause, device click, Left/Right/1–3 keys, or horizontal device drag",
+      "response": "Keep one decoded kayak film full-bleed while changing among desktop, phone, and watch alpha silhouettes",
+      "timing": "initially paused media; user-owned playback with discrete reduced-motion-aware mask transitions",
+      "layer": "single hidden video source, decoded Canvas, hardware shell, alpha-masked media, and controls"
     },
     "implementation": {
       "projectId": "motiondivision-motion",
       "projectUrl": "https://github.com/motiondivision/motion",
       "library": "motion@12.42.2",
       "renderer": "canvas2d",
-      "snippet": "film.style.maskImage = `url(${deviceAlphaMask})`; drawLiveFilm(film.getContext('2d'), t);",
+    "snippet": "ctx.drawImage(singleVideo,0,0,1280,720); maskedCanvas.dataset.device = userSelectedDevice;",
       "referenceUrl": "https://pika.art/"
     },
     "scores": {
@@ -174,11 +174,11 @@ export const effectExpansion100Specs = [
     },
     "rationaleZh": "不规则轮廓与动态内容共同形成可识别的设备内媒体材质。",
     "batch": "A",
-    "demo": "液态界面视频在三种原创设备剪影中切换并投下环境色阴影。",
-    "capture": "录制一段稳定播放，再点击切换 mask，观察像素边缘与阴影连续变化。",
+    "demo": "一段从折叠皮划艇收纳包、展开舟体、下水划行到背负离场的同源影片，可在人为选择的桌面屏、手机和手表轮廓中持续播放。",
+    "capture": "真实点击 Phone 与 Play，播放至划行段后切到 Watch 并暂停，再用键盘和水平拖拽切换设备，最终返回 Desktop；断言单视频源、真实解码帧、无自动播放或自动切换。",
     "risk": {
       "level": "medium",
-      "detail": "需自制 mask 和视频；若轮廓只是圆角矩形则拒绝。"
+      "detail": "必须核验三种形态严格共享同一视频元素和 Canvas 帧，窄形态要以 cover 填满蒙版且不能因聚焦产生内部滚动。"
     },
     "observedImplementation": {
       "projectId": "web-platform-css-mask",

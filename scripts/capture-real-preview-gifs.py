@@ -1035,6 +1035,60 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("Escape")
             elif index == 35:
                 page.wait_for_timeout(500)
+        elif demo["id"] == "spatial-slide-deck-navigation":
+            if index == 2:
+                page.locator('.control-button[data-direction="right"]').click()
+            elif index == 3:
+                page.wait_for_timeout(520)
+            elif index == 5:
+                page.locator('.control-button[data-direction="down"]').click()
+            elif index == 6:
+                page.wait_for_timeout(520)
+            elif index == 8:
+                page.locator('#spatial-stage').focus()
+                page.keyboard.press("ArrowDown")
+            elif index == 9:
+                page.wait_for_timeout(520)
+            elif index == 11:
+                page.keyboard.press("ArrowUp")
+            elif index == 12:
+                page.keyboard.press("ArrowUp")
+            elif index == 13:
+                page.wait_for_timeout(520)
+            elif index == 15:
+                page.keyboard.press("o")
+            elif index == 16:
+                page.wait_for_timeout(520)
+            elif index == 18:
+                page.locator('.slide[data-slide-id="proposal"]').click()
+            elif index == 19:
+                page.wait_for_timeout(520)
+            elif index == 21:
+                page.locator('.map-node[data-slide-id="access"]').click()
+            elif index == 22:
+                page.wait_for_timeout(520)
+            elif index == 24:
+                box = page.locator('#spatial-stage').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * .55, box["y"] + box["height"] * .42)
+                page.mouse.down()
+            elif index == 25:
+                page.mouse.move(box["x"] + box["width"] * .55, box["y"] + box["height"] * .78, steps=5)
+                page.mouse.up()
+            elif index == 26:
+                page.wait_for_timeout(520)
+            elif index == 28:
+                page.locator('#spatial-stage').focus()
+                page.keyboard.press("ArrowUp")
+            elif index == 29:
+                page.keyboard.press("ArrowRight")
+            elif index == 30:
+                page.keyboard.press("ArrowRight")
+            elif index == 31:
+                page.wait_for_timeout(520)
+            elif index == 33:
+                page.keyboard.press("o")
+            elif index == 34:
+                page.wait_for_timeout(520)
         elif demo["id"] == "dom-to-3d-scroll-synchronization":
             if index == 2:
                 box = page.locator('#sync-stage').bounding_box()
@@ -2296,6 +2350,46 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["lastTrustedEvent"] != "escape-reset"
         ):
             raise RuntimeError(f"{demo['id']} did not capture human drag extraction, five-story repair, keyboard reorder/repack, snap-back, and explicit reset: {interaction!r}")
+    elif demo["id"] == "spatial-slide-deck-navigation":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            interaction["automaticNavigation"]
+            or interaction["automaticOverview"]
+            or interaction["automaticRehearsal"]
+            or interaction["previewClockDriven"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInput"]
+            or not interaction["userInitiatedChangesOnly"]
+            or not interaction["firstFrameStatic"]
+            or not interaction["initialStaticVerified"]
+            or not interaction["assetLoaded"]
+            or interaction["inputCount"] < 14
+            or interaction["pointerInputCount"] < 6
+            or interaction["keyboardInputCount"] < 8
+            or interaction["swipeCount"] < 1
+            or interaction["buttonNavigationCount"] < 2
+            or interaction["mapSelectionCount"] < 1
+            or interaction["slideSelectionCount"] < 1
+            or interaction["overviewToggleCount"] < 2
+            or interaction["transitionCount"] < 13
+            or interaction["motionStartCount"] < 13
+            or interaction["motionCompleteCount"] < 8
+            or interaction["motionCancelCount"] < 3
+            or interaction["mode"] != "overview"
+            or interaction["currentId"] != "decision"
+            or interaction["position"] != {"x": 3, "y": 0}
+            or set(interaction["visitedIds"]) != {"brief", "site", "risk", "access", "proposal", "decision"}
+            or interaction["activeInput"]
+            or interaction["activeInputKind"] is not None
+            or interaction["pointerCaptured"]
+            or interaction["animationActive"]
+            or interaction["inputKind"] != "keyboard"
+            or interaction["lastDirection"] != "overview"
+            or interaction["lastTrustedEvent"] != "keyboard-overview"
+            or len(interaction["transitionHistory"]) != 12
+            or not all(item["trusted"] for item in interaction["transitionHistory"])
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a human-navigated six-page harbor review with 2D branches, generated-image evidence, swipe, overview selection, map jump, cancellation, and final topology: {interaction!r}")
     elif demo["id"] == "dom-to-3d-scroll-synchronization":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         if (

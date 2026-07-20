@@ -1178,23 +1178,23 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "spatial-slide-deck-navigation",
-    "name": "Spatial slide-deck navigation",
-    "nameZh": "空间化演示文稿导航",
+    "name": "Harbor review spatial deck",
+    "nameZh": "港湾评审空间演示文稿",
     "category": "transition",
     "sourceUrl": "https://github.com/hakimel/reveal.js",
-    "difference": "横向章节和纵向分支形成二维空间图；不是单轴轮播或横向固定滚动。",
+    "difference": "Harbor 07 气候适应评审把 Brief→Site→Proposal→Decision 横向主线与 Tidal risk、Public access 纵向证据分支组织成真实二维拓扑；总览、地图和滑动都操作同一六页空间。",
     "behavior": {
-      "trigger": "keyboard/swipe",
-      "response": "Navigate a two-dimensional graph of slides and reveal its overview",
-      "timing": "discrete spatial continuity",
-      "layer": "DOM 3D slide stage"
+      "trigger": "real direction/map/overview click, pointer/touch swipe, Arrow navigation, O/Escape overview, or overview-card activation",
+      "response": "Traverse a six-page climate-review graph, descend into tidal/access evidence, or zoom out to select any card from the full topology",
+      "timing": "human-owned interruptible 480 ms spatial transitions with static first frame and no automatic path",
+      "layer": "full-frame review deck, persistent topology map, and generated site-evidence photograph"
     },
     "implementation": {
       "projectId": "motiondivision-motion",
       "projectUrl": "https://github.com/motiondivision/motion",
       "library": "motion@12.42.2",
       "renderer": "dom",
-      "snippet": "animate(slide, { x: [i * 18, (i - 1) * 28, (i - 2) * 36, i * 18], rotateY: [i * 7, -8, -10, i * 7] }, { duration: 3 });",
+      "snippet": "const target=coordinateIndex.get(`${x},${y}`); animate(slide,{x:dx*w*.76,y:dy*h*.78,scale,rotateZ,opacity},{duration:.48});",
       "referenceUrl": "https://github.com/hakimel/reveal.js"
     },
     "scores": {
@@ -1206,13 +1206,13 @@ export const effectExpansion100Specs = [
       "evidence": 9,
       "total": 88
     },
-    "rationaleZh": "二维导航关系可成为叙事构图，而非框架默认页切换。",
+    "rationaleZh": "二维关系不再停留在卡片摆放：同一张港湾实地证据图在场地、潮位与公共通行页承担不同分析任务，持续可见的拓扑和总览让用户理解自己为何横移或下潜。",
     "batch": "B",
-    "demo": "星图档案先横移到星系，再下潜到两张观测子页，最后 overview。",
-    "capture": "ArrowRight→ArrowDown→Escape overview→点击目标页。",
+    "demo": "Harbor 07 港湾适应决策评审：六页横纵拓扑、常驻路线图和 Overview；生成的 1440×960 港湾照片在 Site、Tidal risk、Public access 中分别承载场地、水位与通行证据。",
+    "capture": "按钮进入 Site/Risk→键盘下潜 Access 并返回→Overview 选择 Proposal→地图跳转 Access→真实拖拽回 Risk→快速键盘推进 Decision→最终 Overview。",
     "risk": {
       "level": "medium",
-      "detail": "默认主题会低分；需原创排版且防止与普通 slide deck 混淆。"
+      "detail": "六个坐标、方向禁用态与总览焦点必须一致；生成照片需作为分析证据而非装饰，快速导航要取消旧 Motion，且页面不得自动巡航。"
     },
     "observedImplementation": {
       "projectId": "hakimel-reveal-js",

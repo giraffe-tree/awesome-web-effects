@@ -1,2 +1,689 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Motion — Spatial Slide Deck Navigation</title><link rel="stylesheet" href="./shared.css"><style>
-:root{--preview-background:#f3eee2;color-scheme:light}.deck{position:absolute;inset:0;perspective:460px;overflow:hidden;color:#1d211d}.deck-copy{position:absolute;z-index:8;left:14px;top:47px;width:70px}.deck-copy small{font:800 5px/1 ui-monospace;letter-spacing:.12em}.deck-copy h1{margin:10px 0 0;font:950 15px/.83 system-ui;letter-spacing:-.055em}.slide{position:absolute;left:101px;top:37px;width:145px;height:107px;padding:13px;border:1px solid #1b231d;border-radius:13px;transform-origin:center;box-shadow:0 17px 35px #2b362624;backface-visibility:hidden}.slide small{font:800 6px/1 ui-monospace;letter-spacing:.12em}.slide strong{display:block;width:100px;margin-top:14px;font:950 18px/.86 system-ui;letter-spacing:-.055em}.slide:nth-of-type(1){background:#ff765d}.slide:nth-of-type(2){background:#6479ff;color:white}.slide:nth-of-type(3){background:#caf074}.deck-nav{position:absolute;z-index:9;left:119px;bottom:14px;display:flex;gap:5px}.deck-nav button{width:24px;height:18px;border:1px solid #263026;border-radius:99px;background:#fff9;font:800 7px/1 ui-monospace;cursor:pointer}.library-badge{color:#202920;background:#fbf6e9d9;border-color:#20292024}.scene-caption{display:none}</style></head><body><main class="preview-stage"><div class="deck" id="deck" data-preview-mechanism="motion-spatial-deck" tabindex="0" aria-label="Use arrow keys or buttons to navigate the spatial slide deck"><section class="deck-copy"><small>DECK / 03</small><h1>Ideas occupy space.</h1></section><article class="slide"><small>01 / SIGNAL</small><strong>Find what matters.</strong></article><article class="slide"><small>02 / SHAPE</small><strong>Give it structure.</strong></article><article class="slide"><small>03 / SHIP</small><strong>Move it forward.</strong></article><nav class="deck-nav" aria-label="Slides"><button type="button">1</button><button type="button">2</button><button type="button">3</button></nav></div><span class="library-badge">Motion · spatial deck</span></main><script type="module" src="./src/spatial-slide-deck-navigation-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Motion — Spatial Slide Deck Navigation</title>
+    <link rel="stylesheet" href="./shared.css" />
+    <style>
+      :root {
+        --preview-background: #151916;
+        --ink: #16201b;
+        --paper: #ebe9df;
+        --line: rgba(19, 29, 24, .18);
+        --lime: #c9ff58;
+        --tide: #74a9c1;
+        --rust: #bc6148;
+        color-scheme: light;
+      }
+
+      * { box-sizing: border-box; }
+      button { color: inherit; font: inherit; }
+
+      .deck-stage {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        overflow: hidden;
+        place-items: center;
+        padding: clamp(8px, 2.2vw, 17px);
+        background:
+          radial-gradient(circle at 77% 16%, rgba(116, 169, 193, .12), transparent 31%),
+          #151916;
+        color: var(--ink);
+      }
+
+      .deck-shell {
+        display: grid;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        grid-template-rows: clamp(25px, 8.2vw, 38px) minmax(0, 1fr) clamp(27px, 8.5vw, 41px);
+        border: 1px solid rgba(235, 233, 223, .22);
+        border-radius: clamp(8px, 2vw, 15px);
+        background: var(--paper);
+        box-shadow: 0 25px 65px rgba(0, 0, 0, .28);
+      }
+
+      .deck-header,
+      .deck-footer,
+      .brand-lockup,
+      .header-state,
+      .route-heading,
+      .footer-copy,
+      .deck-controls,
+      .slide-head,
+      .site-stats,
+      .proposal-grid,
+      .decision-grid {
+        display: flex;
+        align-items: center;
+      }
+
+      .deck-header {
+        min-width: 0;
+        justify-content: space-between;
+        padding: 0 clamp(9px, 2.5vw, 18px);
+        border-bottom: 1px solid var(--line);
+      }
+
+      .brand-lockup { min-width: 0; gap: 8px; }
+      .brand-mark {
+        display: grid;
+        width: clamp(12px, 3.2vw, 19px);
+        aspect-ratio: 1;
+        flex: 0 0 auto;
+        place-items: center;
+        border-radius: 50%;
+        background: var(--ink);
+      }
+      .brand-mark::before {
+        width: 31%;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: var(--lime);
+        box-shadow: 5px 0 0 var(--tide);
+        content: '';
+      }
+      .brand-lockup strong {
+        font-size: clamp(6px, 1.7vw, 10px);
+        font-weight: 920;
+        letter-spacing: -.03em;
+      }
+      .brand-lockup span,
+      .header-state,
+      .route-kicker,
+      .route-coordinate,
+      .footer-copy,
+      .slide-kicker,
+      .slide-index,
+      .metric-label,
+      .photo-caption,
+      .map-label,
+      .route-hint {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-weight: 780;
+        letter-spacing: .09em;
+        text-transform: uppercase;
+      }
+      .brand-lockup span {
+        overflow: hidden;
+        color: #7c817b;
+        font-size: clamp(3px, .7vw, 5px);
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .header-state {
+        gap: 6px;
+        color: #626a64;
+        font-size: clamp(3px, .72vw, 5px);
+        white-space: nowrap;
+      }
+      .header-state::before {
+        width: 5px;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: var(--lime);
+        content: '';
+      }
+
+      .deck-workspace {
+        display: grid;
+        min-width: 0;
+        min-height: 0;
+        grid-template-columns: clamp(105px, 24vw, 168px) minmax(0, 1fr);
+      }
+
+      .route-rail {
+        position: relative;
+        min-width: 0;
+        overflow: hidden;
+        padding: clamp(10px, 2.6vw, 19px);
+        border-right: 1px solid var(--line);
+        background: #e3e0d5;
+      }
+      .route-heading { justify-content: space-between; }
+      .route-kicker,
+      .route-coordinate { color: #70766f; font-size: clamp(3px, .65vw, 5px); }
+      .route-title {
+        max-width: 9ch;
+        margin: clamp(8px, 2vw, 14px) 0 0;
+        font: 900 clamp(15px, 4vw, 28px)/.82 ui-serif, Georgia, serif;
+        letter-spacing: -.065em;
+      }
+      .route-title em { color: var(--rust); font-weight: 520; }
+
+      .deck-map {
+        position: relative;
+        width: 100%;
+        height: clamp(88px, 24vw, 150px);
+        margin-top: clamp(13px, 3vw, 23px);
+      }
+      .map-line {
+        position: absolute;
+        z-index: 0;
+        background: rgba(31, 42, 36, .2);
+      }
+      .map-line.horizontal { top: 17%; left: 9%; width: 78%; height: 1px; }
+      .map-line.vertical { top: 17%; left: 35%; width: 1px; height: 65%; }
+      .map-node {
+        position: absolute;
+        z-index: 1;
+        display: grid;
+        width: clamp(19px, 5vw, 30px);
+        aspect-ratio: 1;
+        padding: 0;
+        place-items: center;
+        border: 1px solid rgba(22, 32, 27, .28);
+        border-radius: 50%;
+        background: #ece9df;
+        cursor: pointer;
+        font: 850 clamp(4px, 1vw, 7px)/1 ui-monospace, monospace;
+        transform: translate(-50%, -50%);
+      }
+      .map-node[data-x="0"] { left: 9%; }
+      .map-node[data-x="1"] { left: 35%; }
+      .map-node[data-x="2"] { left: 61%; }
+      .map-node[data-x="3"] { left: 87%; }
+      .map-node[data-y="0"] { top: 17%; }
+      .map-node[data-y="1"] { top: 50%; }
+      .map-node[data-y="2"] { top: 82%; }
+      .map-node[data-current="true"] {
+        border-color: var(--ink);
+        background: var(--ink);
+        color: var(--lime);
+        box-shadow: 0 0 0 3px rgba(201, 255, 88, .2);
+      }
+      .map-node[data-visited="true"]::after {
+        position: absolute;
+        right: 1px;
+        bottom: 1px;
+        width: 4px;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: var(--rust);
+        content: '';
+      }
+      .map-node:focus-visible,
+      .control-button:focus-visible,
+      .overview-button:focus-visible,
+      .slide:focus-visible { outline: 2px solid var(--rust); outline-offset: 2px; }
+      .route-hint {
+        position: absolute;
+        right: clamp(10px, 2.6vw, 19px);
+        bottom: clamp(9px, 2.4vw, 17px);
+        left: clamp(10px, 2.6vw, 19px);
+        color: #777b75;
+        font-size: clamp(2px, .59vw, 4px);
+        line-height: 1.55;
+      }
+
+      .spatial-stage {
+        position: relative;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        perspective: 900px;
+        background:
+          linear-gradient(rgba(15, 29, 23, .04) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(15, 29, 23, .04) 1px, transparent 1px),
+          #d8d6cc;
+        background-size: 28px 28px;
+        touch-action: none;
+      }
+      .spatial-stage::before {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        background: radial-gradient(circle at 50% 50%, transparent 28%, rgba(18, 25, 21, .15) 120%);
+        content: '';
+        pointer-events: none;
+      }
+      .viewport-label {
+        position: absolute;
+        z-index: 20;
+        top: clamp(7px, 1.8vw, 13px);
+        right: clamp(8px, 2.1vw, 15px);
+        padding: 4px 7px;
+        border: 1px solid rgba(26, 35, 29, .16);
+        border-radius: 999px;
+        background: rgba(235, 233, 223, .86);
+        color: #687069;
+        font: 780 clamp(3px, .65vw, 5px)/1 ui-monospace, monospace;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        pointer-events: none;
+      }
+
+      .slide {
+        position: absolute;
+        z-index: 1;
+        top: 10.5%;
+        left: 11%;
+        width: min(78%, 450px);
+        height: 79%;
+        overflow: hidden;
+        padding: clamp(12px, 2.8vw, 21px);
+        border: 1px solid rgba(13, 22, 17, .54);
+        border-radius: clamp(8px, 2vw, 15px);
+        background: #f2efe5;
+        box-shadow: 0 22px 45px rgba(15, 22, 18, .2);
+        opacity: 0;
+        transform: translate3d(0, 0, 0) scale(.74);
+        transform-origin: center;
+        backface-visibility: hidden;
+        will-change: transform, opacity;
+      }
+      .slide[data-current="true"] { z-index: 8; opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+      .spatial-stage[data-mode="overview"] .slide { cursor: pointer; }
+      .slide-head { justify-content: space-between; gap: 12px; }
+      .slide-kicker,
+      .slide-index { color: #70766f; font-size: clamp(3px, .65vw, 5px); }
+      .slide h2 {
+        margin: clamp(7px, 1.7vw, 13px) 0 0;
+        font: 900 clamp(18px, 4.6vw, 34px)/.84 ui-serif, Georgia, serif;
+        letter-spacing: -.06em;
+      }
+      .slide h2 em { color: var(--rust); font-weight: 520; }
+      .slide-lede {
+        max-width: 37em;
+        margin: clamp(7px, 1.6vw, 12px) 0 0;
+        color: #57605a;
+        font-size: clamp(4px, .9vw, 7px);
+        font-weight: 680;
+        line-height: 1.45;
+      }
+
+      .cover-slide { background: #d9ff81; }
+      .cover-slide::after {
+        position: absolute;
+        right: -7%;
+        bottom: -31%;
+        width: 49%;
+        aspect-ratio: 1;
+        border: clamp(16px, 4vw, 28px) solid rgba(22, 32, 27, .1);
+        border-radius: 50%;
+        content: '';
+      }
+      .cover-title { max-width: 9ch; }
+      .cover-meta {
+        position: absolute;
+        right: clamp(12px, 3vw, 22px);
+        bottom: clamp(11px, 2.8vw, 20px);
+        color: #465047;
+        font: 780 clamp(3px, .72vw, 5px)/1.5 ui-monospace, monospace;
+        letter-spacing: .08em;
+        text-align: right;
+        text-transform: uppercase;
+      }
+
+      .site-layout,
+      .analysis-layout {
+        display: grid;
+        min-height: 0;
+        margin-top: clamp(7px, 1.8vw, 13px);
+        gap: clamp(8px, 1.9vw, 14px);
+        grid-template-columns: 1.45fr .78fr;
+      }
+      .field-photo,
+      .analysis-photo {
+        position: relative;
+        min-height: 0;
+        overflow: hidden;
+        border-radius: clamp(5px, 1.3vw, 9px);
+        background: #66736b;
+      }
+      .field-photo img,
+      .analysis-photo img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .photo-caption {
+        position: absolute;
+        right: 6px;
+        bottom: 6px;
+        left: 6px;
+        padding: 4px 5px;
+        border-radius: 3px;
+        background: rgba(15, 25, 20, .76);
+        color: #e8eadf;
+        font-size: clamp(2px, .52vw, 4px);
+      }
+      .site-stats { height: 100%; flex-direction: column; align-items: stretch; justify-content: space-between; gap: 5px; }
+      .site-stat {
+        padding-bottom: clamp(5px, 1.2vw, 9px);
+        border-bottom: 1px solid var(--line);
+      }
+      .site-stat:last-child { padding-bottom: 0; border-bottom: 0; }
+      .site-stat strong { display: block; font-size: clamp(11px, 2.7vw, 20px); line-height: .9; }
+      .metric-label { display: block; margin-top: 4px; color: #6d746e; font-size: clamp(2px, .54vw, 4px); }
+
+      .analysis-slide { background: #d9e6ea; }
+      .analysis-slide.access { background: #e9d9ce; }
+      .analysis-layout { grid-template-columns: 1.2fr .9fr; }
+      .analysis-photo img { object-position: 66% 78%; transform: scale(1.24); }
+      .access .analysis-photo img { object-position: 32% 38%; transform: scale(1.2); }
+      .risk-line,
+      .access-route {
+        position: absolute;
+        z-index: 2;
+        pointer-events: none;
+      }
+      .risk-line {
+        right: 7%;
+        bottom: 31%;
+        left: 7%;
+        height: 2px;
+        border-top: 2px dashed #ffcf56;
+      }
+      .risk-line::after {
+        position: absolute;
+        right: 0;
+        bottom: 4px;
+        padding: 3px 4px;
+        border-radius: 2px;
+        background: #ffcf56;
+        color: #21261f;
+        font: 850 clamp(2px, .54vw, 4px)/1 ui-monospace, monospace;
+        content: '+0.74 M';
+      }
+      .access-route {
+        top: 55%;
+        right: 8%;
+        left: 9%;
+        height: 3px;
+        border-radius: 99px;
+        background: var(--lime);
+        box-shadow: 0 0 0 2px rgba(22, 32, 27, .6);
+        transform: rotate(-8deg);
+      }
+      .analysis-points { display: flex; flex-direction: column; justify-content: space-between; gap: 6px; }
+      .analysis-point { padding-left: 8px; border-left: 2px solid rgba(21, 32, 27, .2); }
+      .analysis-point.active { border-color: var(--rust); }
+      .analysis-point strong { display: block; font-size: clamp(5px, 1.2vw, 9px); }
+      .analysis-point span { display: block; margin-top: 3px; color: #626963; font-size: clamp(3px, .64vw, 5px); line-height: 1.35; }
+
+      .proposal-slide { background: #23342c; color: #eef0e7; }
+      .proposal-slide .slide-kicker,
+      .proposal-slide .slide-index,
+      .proposal-slide .slide-lede { color: #aeb8af; }
+      .proposal-grid { height: 47%; margin-top: clamp(8px, 1.8vw, 14px); gap: clamp(5px, 1vw, 8px); align-items: stretch; }
+      .proposal-zone {
+        position: relative;
+        display: flex;
+        min-width: 0;
+        flex: 1;
+        align-items: flex-end;
+        padding: clamp(5px, 1.2vw, 9px);
+        border: 1px solid rgba(237, 240, 231, .22);
+        border-radius: clamp(4px, 1vw, 7px);
+        background: rgba(255, 255, 255, .04);
+        font: 760 clamp(2px, .57vw, 4px)/1.35 ui-monospace, monospace;
+        letter-spacing: .07em;
+        text-transform: uppercase;
+      }
+      .proposal-zone::before {
+        position: absolute;
+        top: 14%;
+        left: 14%;
+        width: 32%;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: var(--zone, var(--lime));
+        opacity: .88;
+        content: '';
+      }
+      .proposal-zone:nth-child(2) { --zone: var(--tide); flex: 1.18; }
+      .proposal-zone:nth-child(3) { --zone: #e5b574; flex: .84; }
+
+      .decision-slide { background: #f5e8bd; }
+      .decision-grid { margin-top: clamp(11px, 2.5vw, 18px); align-items: stretch; gap: clamp(5px, 1.2vw, 9px); }
+      .decision-metric {
+        flex: 1;
+        padding: clamp(7px, 1.6vw, 12px);
+        border: 1px solid rgba(21, 32, 27, .22);
+        border-radius: clamp(5px, 1.2vw, 9px);
+      }
+      .decision-metric strong { display: block; font-size: clamp(13px, 3.3vw, 24px); line-height: .9; letter-spacing: -.06em; }
+      .decision-metric span { display: block; margin-top: 5px; color: #686d65; font-size: clamp(2px, .56vw, 4px); font-weight: 750; line-height: 1.35; text-transform: uppercase; }
+
+      .deck-footer {
+        min-width: 0;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 0 clamp(8px, 2.2vw, 16px);
+        border-top: 1px solid var(--line);
+      }
+      .footer-copy { min-width: 0; gap: clamp(7px, 1.7vw, 12px); color: #6c726c; font-size: clamp(2px, .58vw, 4px); }
+      .footer-copy strong { color: var(--ink); font-size: clamp(4px, .9vw, 6px); }
+      .footer-instruction { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .deck-controls { flex: 0 0 auto; gap: 4px; }
+      .control-button,
+      .overview-button {
+        display: grid;
+        min-width: clamp(20px, 4.6vw, 31px);
+        height: clamp(16px, 3.8vw, 25px);
+        padding: 0 6px;
+        place-items: center;
+        border: 1px solid rgba(22, 32, 27, .3);
+        border-radius: 999px;
+        background: transparent;
+        cursor: pointer;
+        font: 850 clamp(4px, .85vw, 6px)/1 ui-monospace, monospace;
+      }
+      .overview-button { min-width: auto; background: var(--ink); color: #eef1e8; }
+      .overview-button[aria-pressed="true"] { background: var(--lime); color: var(--ink); }
+      .control-button:disabled { cursor: default; opacity: .3; }
+
+      @media (prefers-reduced-motion: reduce) {
+        .slide { will-change: auto; }
+      }
+
+      @media (max-width: 420px) {
+        .deck-stage { padding: 5px; }
+        .deck-shell { grid-template-rows: 20px minmax(0, 1fr) 22px; border-radius: 7px; }
+        .deck-header { padding: 0 7px; }
+        .brand-lockup { gap: 4px; }
+        .deck-workspace { grid-template-columns: 88px minmax(0, 1fr); }
+        .route-rail { padding: 8px; }
+        .route-title { margin-top: 6px; font-size: 13px; }
+        .deck-map { height: 69px; margin-top: 8px; }
+        .map-node { width: 15px; }
+        .route-hint { right: 8px; bottom: 6px; left: 8px; }
+        .slide { top: 7%; left: 6.5%; width: 87%; height: 86%; padding: 8px; border-radius: 6px; }
+        .slide h2 { margin-top: 4px; font-size: 16px; }
+        .slide-lede { margin-top: 4px; }
+        .site-layout,
+        .analysis-layout { margin-top: 4px; gap: 5px; }
+        .photo-caption { right: 3px; bottom: 3px; left: 3px; padding: 2px 3px; }
+        .proposal-grid { margin-top: 5px; }
+        .decision-grid { margin-top: 6px; }
+        .deck-footer { padding: 0 6px; }
+        .footer-instruction { display: none; }
+        .control-button,
+        .overview-button { min-width: 18px; height: 15px; padding: 0 4px; }
+      }
+
+      @media (max-width: 220px), (max-height: 105px) {
+        .library-badge { display: none; }
+        .deck-stage { padding: 2px; }
+        .deck-shell { grid-template-rows: 9px minmax(0, 1fr) 10px; border-radius: 4px; }
+        .deck-header { padding: 0 3px; }
+        .brand-mark { width: 5px; }
+        .brand-mark::before { box-shadow: 2px 0 0 var(--tide); }
+        .brand-lockup { gap: 2px; }
+        .brand-lockup strong { font-size: 2.4px; }
+        .brand-lockup span { display: none; }
+        .header-state { gap: 2px; font-size: 1.2px; }
+        .header-state::before { width: 2px; }
+        .deck-workspace { grid-template-columns: 1fr; }
+        .route-rail { display: none; }
+        .spatial-stage { background-size: 9px 9px; }
+        .viewport-label { top: 2px; right: 2px; padding: 1px 2px; font-size: 1px; }
+        .slide { top: 6%; left: 10%; width: 80%; height: 88%; padding: 4px; border-radius: 3px; }
+        .slide-head { gap: 3px; }
+        .slide-kicker,
+        .slide-index { font-size: 1px; }
+        .slide h2 { margin-top: 2px; font-size: 7px; }
+        .slide-lede { margin-top: 2px; font-size: 1.3px; line-height: 1.25; }
+        .cover-meta { right: 4px; bottom: 3px; font-size: 1px; }
+        .site-layout,
+        .analysis-layout { margin-top: 2px; gap: 2px; }
+        .photo-caption { right: 1px; bottom: 1px; left: 1px; padding: 1px; font-size: .8px; }
+        .site-stats { gap: 1px; }
+        .site-stat { padding-bottom: 1px; }
+        .site-stat strong { font-size: 4px; }
+        .metric-label { margin-top: 1px; font-size: .8px; }
+        .analysis-points { gap: 1px; }
+        .analysis-point { padding-left: 2px; border-left-width: 1px; }
+        .analysis-point strong { font-size: 2px; }
+        .analysis-point span { margin-top: 1px; font-size: .8px; }
+        .risk-line { height: 1px; border-top-width: 1px; }
+        .risk-line::after { bottom: 1px; padding: 1px; font-size: .7px; }
+        .access-route { height: 1px; box-shadow: 0 0 0 1px rgba(22, 32, 27, .6); }
+        .proposal-grid { height: 45%; margin-top: 2px; gap: 2px; }
+        .proposal-zone { padding: 2px; border-radius: 2px; font-size: .8px; }
+        .decision-grid { margin-top: 3px; gap: 2px; }
+        .decision-metric { padding: 2px; border-radius: 2px; }
+        .decision-metric strong { font-size: 4px; }
+        .decision-metric span { margin-top: 1px; font-size: .7px; }
+        .deck-footer { gap: 2px; padding: 0 3px; }
+        .footer-copy { gap: 2px; font-size: 1px; }
+        .footer-copy strong { font-size: 1.5px; }
+        .deck-controls { gap: 1px; }
+        .control-button,
+        .overview-button { min-width: 8px; height: 6px; padding: 0 2px; border-width: 1px; font-size: 1px; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="preview-stage deck-stage" id="deck-stage" aria-label="Interactive Harbor 07 spatial presentation">
+      <section class="deck-shell" id="deck-shell" data-preview-mechanism="motion-input-driven-spatial-slide-graph">
+        <header class="deck-header">
+          <div class="brand-lockup">
+            <span class="brand-mark" aria-hidden="true"></span>
+            <strong>Harbor 07</strong>
+            <span>Climate adaptation review · 14 Oct</span>
+          </div>
+          <span class="header-state" id="header-state">Presenting · Brief</span>
+        </header>
+
+        <div class="deck-workspace">
+          <aside class="route-rail" aria-label="Presentation topology">
+            <div class="route-heading">
+              <span class="route-kicker">Spatial route</span>
+              <span class="route-coordinate" id="route-coordinate">00 / 00</span>
+            </div>
+            <h1 class="route-title">A harbor built for the <em>next tide.</em></h1>
+            <nav class="deck-map" aria-label="Jump to a slide">
+              <span class="map-line horizontal" aria-hidden="true"></span>
+              <span class="map-line vertical" aria-hidden="true"></span>
+              <button class="map-node" type="button" data-slide-id="brief" data-x="0" data-y="0" aria-label="Brief slide">01</button>
+              <button class="map-node" type="button" data-slide-id="site" data-x="1" data-y="0" aria-label="Site slide">02</button>
+              <button class="map-node" type="button" data-slide-id="risk" data-x="1" data-y="1" aria-label="Tidal risk branch">2A</button>
+              <button class="map-node" type="button" data-slide-id="access" data-x="1" data-y="2" aria-label="Public access branch">2B</button>
+              <button class="map-node" type="button" data-slide-id="proposal" data-x="2" data-y="0" aria-label="Proposal slide">03</button>
+              <button class="map-node" type="button" data-slide-id="decision" data-x="3" data-y="0" aria-label="Decision slide">04</button>
+            </nav>
+            <p class="route-hint">Move horizontally through the review. Drop below Site for evidence branches.</p>
+          </aside>
+
+          <section class="spatial-stage" id="spatial-stage" data-mode="present" tabindex="0" aria-label="Use arrow keys, swipe, or the controls to navigate. Press O or Escape for overview.">
+            <span class="viewport-label" id="viewport-label">Present · 01 Brief</span>
+
+            <article class="slide cover-slide" data-slide-id="brief" data-x="0" data-y="0" data-current="true" tabindex="0" aria-label="Brief: Harbor 07 adaptation review">
+              <div class="slide-head"><span class="slide-kicker">Decision review · 2028 horizon</span><span class="slide-index">01 / 04</span></div>
+              <h2 class="cover-title">Keep the harbor <em>working.</em></h2>
+              <p class="slide-lede">A three-part retrofit that absorbs tide pressure while keeping the ferry and waterfront open.</p>
+              <div class="cover-meta">Council work session<br />Prepared by North Reach Studio</div>
+            </article>
+
+            <article class="slide site-slide" data-slide-id="site" data-x="1" data-y="0" tabindex="-1" aria-label="Site: existing harbor edge">
+              <div class="slide-head"><span class="slide-kicker">Existing condition</span><span class="slide-index">02 / 04</span></div>
+              <div class="site-layout">
+                <figure class="field-photo">
+                  <img src="./assets/spatial-slide-deck-navigation/harbor-edge-field-study.jpg" alt="Oblique aerial field study of a tidal marsh, ferry pier, promenade, and town edge" />
+                  <figcaption class="photo-caption">Field study · low tide · north edge</figcaption>
+                </figure>
+                <div class="site-stats">
+                  <div class="site-stat"><strong>0.74m</strong><span class="metric-label">Projected surge</span></div>
+                  <div class="site-stat"><strong>612</strong><span class="metric-label">Daily ferry riders</span></div>
+                  <div class="site-stat"><strong>2</strong><span class="metric-label">Evidence branches ↓</span></div>
+                </div>
+              </div>
+            </article>
+
+            <article class="slide analysis-slide risk" data-slide-id="risk" data-x="1" data-y="1" tabindex="-1" aria-label="Evidence branch: tidal risk">
+              <div class="slide-head"><span class="slide-kicker">Evidence branch · tide</span><span class="slide-index">02A</span></div>
+              <h2>Water arrives <em>first here.</em></h2>
+              <div class="analysis-layout">
+                <div class="analysis-photo">
+                  <img src="./assets/spatial-slide-deck-navigation/harbor-edge-field-study.jpg" alt="Cropped field image emphasizing the low marsh and ferry pier" />
+                  <span class="risk-line" aria-hidden="true"></span>
+                </div>
+                <div class="analysis-points">
+                  <div class="analysis-point active"><strong>Pier hinge</strong><span>First operational failure at +0.51m.</span></div>
+                  <div class="analysis-point"><strong>Marsh shelf</strong><span>Can receive 38% of peak volume.</span></div>
+                  <div class="analysis-point"><strong>Town edge</strong><span>Protect the route, not the whole shore.</span></div>
+                </div>
+              </div>
+            </article>
+
+            <article class="slide analysis-slide access" data-slide-id="access" data-x="1" data-y="2" tabindex="-1" aria-label="Evidence branch: public access">
+              <div class="slide-head"><span class="slide-kicker">Evidence branch · access</span><span class="slide-index">02B</span></div>
+              <h2>One route must <em>stay open.</em></h2>
+              <div class="analysis-layout">
+                <div class="analysis-photo">
+                  <img src="./assets/spatial-slide-deck-navigation/harbor-edge-field-study.jpg" alt="Cropped field image emphasizing the ferry promenade and town connection" />
+                  <span class="access-route" aria-hidden="true"></span>
+                </div>
+                <div class="analysis-points">
+                  <div class="analysis-point active"><strong>4.2m clear</strong><span>Continuous promenade width.</span></div>
+                  <div class="analysis-point"><strong>1:20 rise</strong><span>Step-free route to the ferry deck.</span></div>
+                  <div class="analysis-point"><strong>24 / 7</strong><span>Emergency access retained.</span></div>
+                </div>
+              </div>
+            </article>
+
+            <article class="slide proposal-slide" data-slide-id="proposal" data-x="2" data-y="0" tabindex="-1" aria-label="Proposal: three-part harbor retrofit">
+              <div class="slide-head"><span class="slide-kicker">Recommended intervention</span><span class="slide-index">03 / 04</span></div>
+              <h2>Absorb. Lift. <em>Connect.</em></h2>
+              <p class="slide-lede">Three targeted moves replace a continuous wall and preserve the harbor's working edge.</p>
+              <div class="proposal-grid" aria-label="Three intervention zones">
+                <div class="proposal-zone">01 · Living shelf</div>
+                <div class="proposal-zone">02 · Raised pier</div>
+                <div class="proposal-zone">03 · Dry link</div>
+              </div>
+            </article>
+
+            <article class="slide decision-slide" data-slide-id="decision" data-x="3" data-y="0" tabindex="-1" aria-label="Decision: release design development funding">
+              <div class="slide-head"><span class="slide-kicker">Requested decision</span><span class="slide-index">04 / 04</span></div>
+              <h2>Release the next <em>design phase.</em></h2>
+              <p class="slide-lede">Approve design development with a public access checkpoint before the 60% package.</p>
+              <div class="decision-grid">
+                <div class="decision-metric"><strong>$3.8m</strong><span>Phase-one cap</span></div>
+                <div class="decision-metric"><strong>11 mo</strong><span>Design + permits</span></div>
+                <div class="decision-metric"><strong>92%</strong><span>Route uptime target</span></div>
+              </div>
+            </article>
+          </section>
+        </div>
+
+        <footer class="deck-footer">
+          <div class="footer-copy"><strong id="footer-coordinate">01 · 00/00</strong><span class="footer-instruction">Arrows / swipe move in space · O or Esc reveals the map</span></div>
+          <div class="deck-controls" aria-label="Presentation controls">
+            <button class="control-button" type="button" data-direction="up" aria-label="Move up">↑</button>
+            <button class="control-button" type="button" data-direction="left" aria-label="Move left">←</button>
+            <button class="overview-button" id="overview-button" type="button" aria-pressed="false">Overview</button>
+            <button class="control-button" type="button" data-direction="right" aria-label="Move right">→</button>
+            <button class="control-button" type="button" data-direction="down" aria-label="Move down">↓</button>
+          </div>
+        </footer>
+      </section>
+    </main>
+    <span class="library-badge">Motion · spatial deck</span>
+    <script type="module" src="./src/spatial-slide-deck-navigation-demo.js"></script>
+  </body>
+</html>

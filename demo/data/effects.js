@@ -918,14 +918,14 @@ const expansionEffects = [
     rationaleZh: '两条真实曲线路径承载反向流动的排版，并通过交汇遮挡建立前后关系，和直线跑马灯有明确视觉差异。'
   },
   {
-    id: 'autonomous-agent-cursor-constellation', category: 'animation', name: 'Autonomous agent-cursor constellation', nameZh: '自主 Agent 光标星座', order: 22,
+    id: 'autonomous-agent-cursor-constellation', category: 'animation', name: 'Named-agent artifact handoff', nameZh: '具名 Agent 制品交接', order: 22,
     company: 'InVideo', homepage: 'https://invideo.io/', observedAs: 'Autonomous agent-cursor constellation',
-    difference: 'Several named cursors act as autonomous narrative collaborators with independent routes and annotations, unlike the single visitor-controlled contextual cursor already published.',
-    behavior: { trigger: 'animation frame', response: 'Named agent cursors independently orbit tasks, pause, and leave annotations', timing: 'continuous asynchronous choreography', layer: 'Collaborative workspace overlay' },
+    difference: 'One human-selected checkpoint gives a named Scout, Maker, or Critic visible ownership of the same artifact, carrying stage-specific evidence along a measured cursor path instead of filling the workspace with autonomous cursor confetti.',
+    behavior: { trigger: 'real checkpoint click/tap or keyboard activation', response: 'The selected named cursor carries its matching evidence to one shared artifact while owner, copy, receipt, socket, and status update together', timing: 'human-owned, interruptible one-shot handoff with no autoplay or capture-clock selection', layer: 'Collaborative workspace and shared artifact' },
     implementationName: 'Motion', projectId: 'motiondivision-motion', projectUrl: 'https://github.com/motiondivision/motion', referenceUrl: 'https://motion.dev/docs',
-    snippet: "import { animate, stagger } from 'motion';\nanimate('.agent-cursor', { offsetDistance: ['0%', '100%'] }, { delay: stagger(.3), duration: 5, repeat: Infinity });",
+    snippet: "import { animate } from 'motion';\nconst control = animate(selectedCursor, { x: [0, midX, socketX], y: [0, arcY, socketY] }, { duration: .76, autoplay: false });\ncheckpoint.addEventListener('click', () => control.play());",
     scores: { creativity: 18, artDirection: 18, motion: 19, clarity: 15, inspiration: 15, evidence: 10 },
-    rationaleZh: '多名具名光标拥有不同轨迹、停靠目标和批注角色，清楚表达并行 Agent 协作而不是用户指针跟随。'
+    rationaleZh: 'Scout、Maker、Critic 由用户逐一指派，光标沿实测路径把对应证据送入同一制品插槽；角色、内容、凭据与状态同步交接，且不会自动抢夺焦点。'
   },
   {
     id: 'scroll-linked-multilayer-starfield', category: 'scroll', name: 'Scroll-linked multilayer starfield drift', nameZh: '滚动联动多层星空', order: 23,

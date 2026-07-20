@@ -477,6 +477,37 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.move(box["x"] + box["width"] - 1, box["y"] + box["height"] * .58)
                 page.mouse.down()
                 page.mouse.up()
+        elif demo["id"] == "autonomous-agent-cursor-constellation":
+            if index == 3:
+                page.locator('.handoff-node[data-stage="discover"]').click()
+            elif index == 4:
+                page.wait_for_timeout(850)
+            elif index == 8:
+                page.locator('.handoff-node[data-stage="compose"]').click()
+            elif index == 9:
+                page.wait_for_timeout(850)
+            elif index == 13:
+                page.locator('.handoff-node[data-stage="verify"]').click()
+            elif index == 14:
+                page.locator('.handoff-node[data-stage="discover"]').click()
+            elif index == 15:
+                page.wait_for_timeout(850)
+            elif index == 19:
+                page.locator('#reset-handoff').click()
+            elif index == 22:
+                page.locator('.handoff-node[data-stage="discover"]').focus()
+                page.keyboard.press("End")
+                page.keyboard.press("Enter")
+            elif index == 23:
+                page.wait_for_timeout(850)
+            elif index == 27:
+                page.keyboard.press("Escape")
+            elif index == 30:
+                page.locator('.handoff-node[data-stage="discover"]').focus()
+                page.keyboard.press("ArrowDown")
+                page.keyboard.press("Enter")
+            elif index == 31:
+                page.wait_for_timeout(850)
         elif demo["id"] == "blurhash-to-photo-progressive-reveal":
             pointer_x = 230 if .5 <= preview_time < 2.25 else 32
             page.mouse.move(pointer_x, 90)
@@ -1115,6 +1146,50 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["canvasHeight"] < 64
         ):
             raise RuntimeError(f"{demo['id']} did not capture a real four-command regl cell analysis across buttons, drag, and keyboard: {interaction!r}")
+    elif demo["id"] == "autonomous-agent-cursor-constellation":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            interaction["automaticFallback"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticSelection"]
+            or interaction["automaticTrigger"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or not interaction["eventOwnedTimeline"]
+            or not interaction["controlsBuiltWithoutAutoplay"]
+            or not interaction["initialFrameStatic"]
+            or interaction["initialSelectionCount"] != 0
+            or interaction["initialPhase"] != "idle"
+            or interaction["initialOwner"] is not None
+            or interaction["acceptedInputs"] != ["mouse", "touch", "pen", "keyboard"]
+            or interaction["inputCount"] < 10
+            or interaction["selectionCount"] < 6
+            or interaction["pointerSelectionCount"] < 4
+            or interaction["keyboardSelectionCount"] < 2
+            or interaction["focusMoveCount"] < 2
+            or interaction["resetCount"] < 2
+            or interaction["interruptionCount"] < 1
+            or interaction["animatedSelectionCount"] < 6
+            or interaction["motionCompletionCount"] < 5
+            or interaction["motionControlCount"] != 5
+            or interaction["artifactUpdateCount"] != interaction["selectionCount"]
+            or interaction["stageSelectionCounts"] != {"discover": 2, "compose": 2, "verify": 2}
+            or interaction["stageOrder"] != ["discover", "compose", "verify"]
+            or interaction["agentOrder"] != ["scout", "maker", "critic"]
+            or interaction["evidenceOrder"] != ["interview-moments", "narrative-v3", "claim-checklist"]
+            or interaction["selectedStage"] != "compose"
+            or interaction["selectedAgent"] != "maker"
+            or interaction["selectedEvidence"] != "narrative-v3"
+            or interaction["previousStage"] is not None
+            or interaction["lastSelectionTarget"] != "stage-compose"
+            or interaction["phase"] != "settled"
+            or interaction["handoffActive"]
+            or interaction["handoffProgress"] != 1
+            or interaction["lastInputTrusted"] is not True
+            or interaction["activeCursorTargetError"] is None
+            or interaction["activeCursorTargetError"] > 2.5
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a real named-agent artifact handoff with interruption, reset, and keyboard ownership: {interaction!r}")
     elif demo["id"] == "blurhash-to-photo-progressive-reveal":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__()")
         if interaction["pointerEvents"] < 3 or interaction["pointerOverPhoto"]:

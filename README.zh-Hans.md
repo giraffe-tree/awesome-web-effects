@@ -64,7 +64,7 @@
 | [动态图形爆发](https://giraffe-tree.github.io/awesome-web-effects/#motion-graphics-burst) | [Mo.js](https://github.com/mojs/mojs) | **92/100** | — | 18,728 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#motion-graphics-burst) |
 | [可视化编排关键帧序列](https://giraffe-tree.github.io/awesome-web-effects/#visually-authored-keyframe-sequence) | [Theatre.js](https://github.com/theatre-js/theatre) | **84/100** | — | 12,541 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#visually-authored-keyframe-sequence) |
 | [轻量 SVG 形状补间](https://giraffe-tree.github.io/awesome-web-effects/#compact-svg-shape-tween) | [KUTE.js](https://github.com/thednp/kute.js) | **89/100** | — | 2,639 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#compact-svg-shape-tween) |
-| [自主 Agent 光标星座](https://giraffe-tree.github.io/awesome-web-effects/#autonomous-agent-cursor-constellation) | [Motion](https://github.com/motiondivision/motion) | **95/100** | [InVideo](https://invideo.io/) | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#autonomous-agent-cursor-constellation) |
+| [具名 Agent 制品交接](https://giraffe-tree.github.io/awesome-web-effects/#autonomous-agent-cursor-constellation) | [Motion](https://github.com/motiondivision/motion) | **95/100** | [InVideo](https://invideo.io/) | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#autonomous-agent-cursor-constellation) |
 | [按片段时长接力的首屏影片](https://giraffe-tree.github.io/awesome-web-effects/#duration-aware-hero-film-handoff) | [Motion](https://github.com/motiondivision/motion) | **94/100** | [Kling](https://kling.ai/) | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#duration-aware-hero-film-handoff) |
 | [悬停预演的视频风格轨](https://giraffe-tree.github.io/awesome-web-effects/#hover-rehearsed-video-style-rail) | [Motion](https://github.com/motiondivision/motion) | **95/100** | [Captions](https://captions.ai/) | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#hover-rehearsed-video-style-rail) |
 | [设备轮廓蒙版视频](https://giraffe-tree.github.io/awesome-web-effects/#device-silhouette-masked-video) | [Motion](https://github.com/motiondivision/motion) | **92/100** | [Pika](https://pika.art/) | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#device-silhouette-masked-video) |
@@ -282,7 +282,7 @@
 - 150 个已核验预览：2 个官方素材、148 个可运行本地 Demo 录制；缺失数为 0。
 - 人工评审覆盖创意、艺术完成度、动效编排、效果辨识、创作迁移和证据质量。
 - 准入要求 80/100，并同时通过核心维度最低分；流行度不能覆盖质量门槛。
-- 已核验 GIF 总计 24.64 MiB；每个预览为 320×180、最长三秒且小于 1 MiB。
+- 已核验 GIF 总计 24.57 MiB；每个预览为 320×180、最长三秒且小于 1 MiB。
 - Stars 是 2026-07-20 快照；“推荐实现”与“在哪家 AI 官网观察到”始终是两种关系。
 
 继续阅读 [396 个候选的准入审计](research/demo-admission-audit-2026-07-20.md)、[100 家 AI 公司主页特效调研](research/ai-native-homepages-100.md)与[预览来源清单](demo/gifs/provenance.json)。

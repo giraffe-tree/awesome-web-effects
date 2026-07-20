@@ -3,101 +3,475 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Motion — Autonomous Agent Cursor Constellation</title>
+    <title>Motion — Agent Artifact Handoff</title>
     <style>
-      :root { --preview-background: #08111f; }
-      .agents-stage {
+      :root {
+        --preview-background: #111716;
+        --paper: #eee8da;
+        --ink: #1a211f;
+        --muted: #75807b;
+        --line: #34413d;
+        --scout: #6ab7d8;
+        --maker: #ee7653;
+        --critic: #a3c76b;
+        color-scheme: dark;
+      }
+
+      button { font: inherit; }
+
+      .handoff-stage {
+        --active: #b7c5c0;
         background:
-          radial-gradient(circle at 50% 42%, rgba(83, 129, 255, .18), transparent 38%),
-          linear-gradient(145deg, #070c16, #0b1830 58%, #090b18);
+          radial-gradient(circle at 74% 42%, #2c4b441f, transparent 43%),
+          linear-gradient(145deg, #101716, #17211f 63%, #0f1514);
       }
-      .work-surface {
+
+      .handoff-stage[data-active-stage="discover"] { --active: var(--scout); }
+      .handoff-stage[data-active-stage="compose"] { --active: var(--maker); }
+      .handoff-stage[data-active-stage="verify"] { --active: var(--critic); }
+
+      .handoff-shell {
         position: absolute;
-        inset: 30px 24px 21px;
-        overflow: hidden;
-        border: 1px solid rgba(157, 190, 255, .16);
-        border-radius: 17px;
-        background:
-          linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px),
-          rgba(7, 14, 28, .76);
-        background-size: 18px 18px;
-        box-shadow: 0 18px 40px rgba(0,0,0,.35);
+        inset: 29px 22px 21px;
+        display: grid;
+        grid-template-columns: minmax(104px, .76fr) minmax(0, 1.66fr);
+        gap: 10px;
+        min-height: 0;
       }
-      .work-card {
+
+      .stage-rail {
+        position: relative;
+        z-index: 6;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+      }
+
+      .rail-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 22px;
+        padding: 0 4px;
+        color: #aab9b4;
+        font-size: 6px;
+        font-weight: 850;
+        letter-spacing: .13em;
+        text-transform: uppercase;
+      }
+
+      .rail-heading::after {
+        width: 23px;
+        height: 1px;
+        background: #55645f;
+        content: "";
+      }
+
+      .handoff-nodes {
+        display: grid;
+        flex: 1;
+        grid-template-rows: repeat(3, minmax(0, 1fr));
+        gap: 6px;
+        min-height: 0;
+      }
+
+      .handoff-node {
+        --agent-color: #c8d4d0;
+        position: relative;
+        display: grid;
+        grid-template-columns: 22px minmax(0, 1fr);
+        align-items: center;
+        min-width: 0;
+        min-height: 0;
+        padding: 7px 12px 7px 7px;
+        overflow: visible;
+        border: 1px solid #5e6c683b;
+        border-radius: 11px;
+        background: #18221f;
+        color: #dce5e2;
+        text-align: left;
+        cursor: pointer;
+        touch-action: manipulation;
+      }
+
+      .handoff-node[data-agent="scout"] { --agent-color: var(--scout); }
+      .handoff-node[data-agent="maker"] { --agent-color: var(--maker); }
+      .handoff-node[data-agent="critic"] { --agent-color: var(--critic); }
+
+      .handoff-node::before {
         position: absolute;
-        left: 86px;
-        top: 30px;
-        width: 100px;
-        height: 67px;
-        padding: 10px;
-        border: 1px solid rgba(255,255,255,.14);
-        border-radius: 13px;
-        background: linear-gradient(145deg, rgba(102,137,255,.17), rgba(255,108,195,.08));
+        inset: 6px auto 6px 0;
+        width: 2px;
+        border-radius: 99px;
+        background: var(--agent-color);
+        opacity: .45;
+        content: "";
       }
-      .work-card strong { display: block; color: #f2f5ff; font-size: 8px; letter-spacing: .04em; }
-      .work-card span { display: block; height: 4px; margin-top: 7px; border-radius: 99px; background: rgba(255,255,255,.16); }
-      .work-card span:nth-child(3) { width: 72%; }
-      .work-card span:nth-child(4) { width: 48%; }
-      .agent-hotspot { position: absolute; width: 7px; height: 7px; border: 1px solid rgba(175,210,255,.45); border-radius: 50%; box-shadow: 0 0 12px rgba(110,168,255,.35); }
-      .agent-hotspot:nth-of-type(2) { left: 34px; top: 30px; }
-      .agent-hotspot:nth-of-type(3) { right: 38px; top: 22px; }
-      .agent-hotspot:nth-of-type(4) { left: 45px; bottom: 22px; }
-      .agent-hotspot:nth-of-type(5) { right: 48px; bottom: 26px; }
-      .agent-cursor { position: absolute; z-index: 8; left: 0; top: 0; width: max-content; pointer-events: none; will-change: transform, opacity; }
-      .agent-cursor svg { display: block; width: 14px; height: 18px; filter: drop-shadow(0 3px 6px rgba(0,0,0,.42)); }
-      .agent-label { display: block; margin: -2px 0 0 10px; padding: 3px 5px; border-radius: 5px; color: #07101d; font-size: 5px; font-weight: 950; letter-spacing: .06em; white-space: nowrap; text-transform: uppercase; }
-      .agent-cursor:nth-child(6) { color: #86f6ff; }
-      .agent-cursor:nth-child(6) .agent-label { background: #86f6ff; }
-      .agent-cursor:nth-child(7) { color: #ff8ed4; }
-      .agent-cursor:nth-child(7) .agent-label { background: #ff8ed4; }
-      .agent-cursor:nth-child(8) { color: #ffe37d; }
-      .agent-cursor:nth-child(8) .agent-label { background: #ffe37d; }
-      .agent-cursor:nth-child(9) { color: #9cff9a; }
-      .agent-cursor:nth-child(9) .agent-label { background: #9cff9a; }
-      .agent-cursor:nth-child(10) { color: #b3a4ff; }
-      .agent-cursor:nth-child(10) .agent-label { background: #b3a4ff; }
-      .agent-status { position: absolute; left: 35px; bottom: 29px; color: rgba(220,232,255,.48); font-size: 6px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
-      .agent-shuffle {
+
+      .handoff-node:hover { border-color: #81918b80; background: #1e2b27; }
+      .handoff-node.is-active {
+        border-color: color-mix(in srgb, var(--agent-color), transparent 28%);
+        background: color-mix(in srgb, var(--agent-color) 12%, #18221f);
+        box-shadow: inset 0 0 0 1px #ffffff0a;
+      }
+      .handoff-node.is-active::before { opacity: 1; }
+
+      .handoff-node:focus-visible,
+      .reset-handoff:focus-visible {
+        outline: 2px solid var(--paper);
+        outline-offset: 2px;
+      }
+
+      .stage-index {
+        color: var(--agent-color);
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 7px;
+        font-weight: 900;
+        letter-spacing: .08em;
+      }
+
+      .node-copy { min-width: 0; }
+      .node-copy strong,
+      .node-copy span { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .node-copy strong { color: #f0f4f2; font-size: 8px; letter-spacing: .02em; }
+      .node-copy span { margin-top: 2px; color: #82928d; font-size: 5px; font-weight: 750; letter-spacing: .06em; text-transform: uppercase; }
+
+      .agent-cursor {
         position: absolute;
         z-index: 12;
-        right: 31px;
-        bottom: 25px;
-        height: 23px;
-        padding: 0 9px;
-        border: 1px solid rgba(177,198,255,.22);
-        border-radius: 99px;
-        background: rgba(8,17,31,.78);
-        color: #dce7ff;
-        font-size: 6px;
-        font-weight: 900;
-        letter-spacing: .1em;
-        text-transform: uppercase;
-        cursor: pointer;
+        right: -8px;
+        top: calc(50% - 7px);
+        display: flex;
+        align-items: flex-start;
+        width: max-content;
+        color: var(--agent-color);
+        pointer-events: none;
+        transform-origin: 2px 2px;
+        will-change: transform;
       }
-      .agent-shuffle:hover { background: #725ae8; }
-      .agents-stage .scene-caption { display: none; }
+
+      .agent-cursor svg {
+        display: block;
+        flex: 0 0 auto;
+        width: 10px;
+        height: 13px;
+        filter: drop-shadow(0 2px 4px #0008);
+      }
+
+      .agent-label {
+        margin: 7px 0 0 -1px;
+        padding: 2px 4px;
+        border-radius: 4px;
+        background: var(--agent-color);
+        color: #131917;
+        font-size: 5px;
+        font-weight: 950;
+        letter-spacing: .06em;
+        line-height: 1;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+
+      .artifact-panel {
+        position: relative;
+        z-index: 2;
+        min-width: 0;
+        min-height: 0;
+        overflow: clip;
+        padding: 16px 17px 13px;
+        border: 1px solid #fff8e4;
+        border-radius: 17px;
+        background:
+          linear-gradient(#1d25221a 1px, transparent 1px),
+          var(--paper);
+        background-size: 100% 20px;
+        color: var(--ink);
+        box-shadow: 0 18px 42px #0006, inset 0 0 0 1px #18211e0c;
+        transform-origin: 8% 50%;
+      }
+
+      .artifact-panel::after {
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: 4px;
+        background: var(--active);
+        opacity: .9;
+        content: "";
+      }
+
+      .artifact-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+      }
+
+      .artifact-kicker,
+      .owner-state,
+      .artifact-meta,
+      .receipt-label,
+      .receipt-source,
+      .handoff-status {
+        letter-spacing: .11em;
+        text-transform: uppercase;
+      }
+
+      .artifact-kicker { margin: 0; color: #68736e; font-size: 6px; font-weight: 900; }
+      .owner-state {
+        flex: 0 0 auto;
+        padding: 4px 6px;
+        border: 1px solid #24302c24;
+        border-radius: 99px;
+        color: #55615d;
+        font-size: 5px;
+        font-weight: 900;
+      }
+
+      .artifact-panel h1 {
+        margin: 9px 0 0;
+        color: #19201e;
+        font-family: Iowan Old Style, Baskerville, "Times New Roman", serif;
+        font-size: clamp(18px, 5.1vw, 31px);
+        font-weight: 600;
+        letter-spacing: -.045em;
+        line-height: .94;
+      }
+
+      .artifact-meta { margin: 5px 0 0; color: #78827e; font-size: 5px; font-weight: 800; }
+
+      .artifact-rule {
+        width: 100%;
+        height: 1px;
+        margin: 10px 0 8px;
+        background: #29332f29;
+      }
+
+      .artifact-summary {
+        max-width: 83%;
+        margin: 0;
+        color: #46514d;
+        font-size: clamp(6px, 1.75vw, 8px);
+        line-height: 1.42;
+      }
+
+      .evidence-receipt {
+        position: absolute;
+        right: 12px;
+        bottom: 11px;
+        left: 17px;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: end;
+        gap: 8px;
+        padding: 8px 9px;
+        border: 1px solid #23302b24;
+        border-radius: 10px;
+        background: #f9f5eb;
+        box-shadow: 0 7px 17px #41494313;
+        transform-origin: left center;
+      }
+
+      .receipt-copy { min-width: 0; }
+      .receipt-label { display: block; color: #7a8580; font-size: 5px; font-weight: 900; }
+      .receipt-value { display: block; overflow: hidden; margin-top: 3px; color: #202825; font-size: 9px; font-weight: 850; text-overflow: ellipsis; white-space: nowrap; }
+      .receipt-source { color: #68736e; font-size: 4px; font-weight: 850; white-space: nowrap; }
+
+      .artifact-socket {
+        position: absolute;
+        z-index: 4;
+        left: -5px;
+        width: 9px;
+        height: 9px;
+        border: 2px solid var(--paper);
+        border-radius: 50%;
+        background: #66726d;
+        box-shadow: 0 0 0 1px #24302c4d;
+      }
+      .artifact-socket[data-stage="discover"] { top: 25%; background: var(--scout); }
+      .artifact-socket[data-stage="compose"] { top: 49%; background: var(--maker); }
+      .artifact-socket[data-stage="verify"] { top: 73%; background: var(--critic); }
+
+      .handoff-footer {
+        position: absolute;
+        right: 29px;
+        bottom: 25px;
+        left: 30px;
+        z-index: 9;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        pointer-events: none;
+      }
+
+      .handoff-status {
+        overflow: hidden;
+        color: #9aacA6;
+        font-size: 6px;
+        font-weight: 850;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .handoff-status::before {
+        display: inline-block;
+        width: 5px;
+        height: 5px;
+        margin-right: 5px;
+        border-radius: 50%;
+        background: var(--active);
+        content: "";
+      }
+
+      .reset-handoff {
+        width: 24px;
+        height: 24px;
+        padding: 0;
+        border: 1px solid #71817b52;
+        border-radius: 50%;
+        background: #17201d;
+        color: #b9c7c2;
+        font-size: 8px;
+        cursor: pointer;
+        pointer-events: auto;
+      }
+      .reset-handoff:disabled { cursor: default; opacity: .34; }
+
+      .library-badge { color: #e3ece8; background: #141e1bd9; border-color: #78908845; }
+      .scene-caption { color: #8ea09a; white-space: nowrap; }
+
+      @media (max-width: 380px) and (min-height: 136px) {
+        .handoff-shell { inset: 29px 12px 21px; grid-template-columns: 94px minmax(0, 1fr); gap: 7px; }
+        .rail-heading { min-height: 17px; padding-inline: 2px; font-size: 5px; }
+        .handoff-nodes { gap: 4px; }
+        .handoff-node { grid-template-columns: 18px minmax(0, 1fr); padding: 5px 6px 5px 5px; border-radius: 8px; }
+        .stage-index { font-size: 6px; }
+        .node-copy strong { font-size: 6px; }
+        .node-copy span { margin-top: 1px; font-size: 4px; }
+        .agent-cursor { right: -5px; }
+        .agent-cursor svg { width: 8px; height: 10px; }
+        .agent-label { display: none; }
+        .artifact-panel { padding: 11px 10px 9px 12px; border-radius: 13px; }
+        .artifact-kicker { overflow: hidden; font-size: 4px; text-overflow: ellipsis; white-space: nowrap; }
+        .owner-state { padding: 3px 4px; font-size: 4px; }
+        .artifact-panel h1 { margin-top: 6px; font-size: 21px; }
+        .artifact-meta { margin-top: 3px; font-size: 4px; }
+        .artifact-rule { margin: 6px 0 5px; }
+        .artifact-summary { max-width: 100%; font-size: 5px; line-height: 1.32; }
+        .evidence-receipt { right: 8px; bottom: 7px; left: 11px; gap: 4px; padding: 6px; border-radius: 7px; }
+        .receipt-label { font-size: 4px; }
+        .receipt-value { margin-top: 2px; font-size: 7px; }
+        .receipt-source { display: none; }
+        .handoff-footer { right: 17px; bottom: 24px; left: 18px; }
+        .handoff-status { max-width: 85px; font-size: 5px; }
+        .reset-handoff { width: 20px; height: 20px; }
+        .scene-caption { display: none; }
+      }
+
+      @media (max-width: 260px), (max-height: 135px) {
+        .handoff-shell { inset: 5px; grid-template-columns: 49px minmax(0, 1fr); gap: 5px; }
+        .rail-heading { display: none; }
+        .handoff-nodes { gap: 3px; }
+        .handoff-node { grid-template-columns: 15px minmax(0, 1fr); padding: 3px 5px 3px 4px; border-radius: 6px; }
+        .stage-index { font-size: 5px; }
+        .node-copy strong { font-size: 5px; }
+        .node-copy span { display: none; }
+        .agent-cursor { right: -5px; top: calc(50% - 5px); }
+        .agent-cursor svg { width: 7px; height: 9px; }
+        .agent-label { display: none; }
+        .artifact-panel { padding: 7px 7px 6px 9px; border-radius: 9px; }
+        .artifact-kicker { font-size: 4px; }
+        .owner-state { padding: 2px 3px; font-size: 3px; }
+        .artifact-panel h1 { margin-top: 4px; font-size: 11px; }
+        .artifact-meta { margin-top: 2px; font-size: 3px; }
+        .artifact-rule { margin: 4px 0; }
+        .artifact-summary { display: none; }
+        .evidence-receipt { right: 5px; bottom: 5px; left: 8px; gap: 3px; padding: 4px; border-radius: 5px; }
+        .receipt-label { font-size: 3px; }
+        .receipt-value { margin-top: 1px; font-size: 5px; }
+        .receipt-source { display: none; }
+        .artifact-socket { left: -3px; width: 6px; height: 6px; border-width: 1px; }
+        .handoff-footer { display: none; }
+        .library-badge, .scene-caption { display: none; }
+      }
+
+      @media (max-width: 175px) {
+        .handoff-shell { grid-template-columns: 34px minmax(0, 1fr); gap: 4px; }
+        .handoff-node { display: flex; justify-content: center; padding: 2px; }
+        .node-copy { display: none; }
+        .stage-index { font-size: 6px; }
+        .artifact-panel h1 { font-size: 10px; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .agent-cursor, .artifact-panel, .evidence-receipt { will-change: auto; }
+      }
     </style>
-    <script type="module" crossorigin src="./assets/autonomous-agent-cursor-constellation-1BPpiHKF.js"></script>
+    <script type="module" crossorigin src="./assets/autonomous-agent-cursor-constellation-Cckxr3CH.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
     <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
     <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
   </head>
   <body>
-    <main class="preview-stage agents-stage" aria-label="Five named agent cursors move autonomously around a shared work surface">
-      <section class="work-surface" id="work-surface" data-preview-mechanism="motion-autonomous-agent-cursors">
-        <article class="work-card"><strong>Campaign universe</strong><span></span><span></span><span></span></article>
-        <i class="agent-hotspot" aria-hidden="true"></i><i class="agent-hotspot" aria-hidden="true"></i><i class="agent-hotspot" aria-hidden="true"></i><i class="agent-hotspot" aria-hidden="true"></i>
-        <span class="agent-cursor" data-agent="research"><svg viewBox="0 0 16 20" aria-hidden="true"><path fill="currentColor" d="M1 1v16l4.3-4.2 3.1 6 3-1.6-3.2-5.9H14z"/></svg><b class="agent-label">Scout</b></span>
-        <span class="agent-cursor" data-agent="color"><svg viewBox="0 0 16 20" aria-hidden="true"><path fill="currentColor" d="M1 1v16l4.3-4.2 3.1 6 3-1.6-3.2-5.9H14z"/></svg><b class="agent-label">Color</b></span>
-        <span class="agent-cursor" data-agent="copy"><svg viewBox="0 0 16 20" aria-hidden="true"><path fill="currentColor" d="M1 1v16l4.3-4.2 3.1 6 3-1.6-3.2-5.9H14z"/></svg><b class="agent-label">Copy</b></span>
-        <span class="agent-cursor" data-agent="motion"><svg viewBox="0 0 16 20" aria-hidden="true"><path fill="currentColor" d="M1 1v16l4.3-4.2 3.1 6 3-1.6-3.2-5.9H14z"/></svg><b class="agent-label">Motion</b></span>
-        <span class="agent-cursor" data-agent="critic"><svg viewBox="0 0 16 20" aria-hidden="true"><path fill="currentColor" d="M1 1v16l4.3-4.2 3.1 6 3-1.6-3.2-5.9H14z"/></svg><b class="agent-label">Critic</b></span>
+    <main id="handoff-stage" class="preview-stage handoff-stage" data-phase="idle" data-active-stage="none" aria-label="Interactive multi-agent artifact handoff workspace">
+      <section class="handoff-shell" aria-labelledby="artifact-title">
+        <nav class="stage-rail" aria-label="Choose a task checkpoint and evidence owner">
+          <div class="rail-heading"><span>Handoff queue</span></div>
+          <div class="handoff-nodes">
+            <button class="handoff-node" type="button" data-stage="discover" data-agent="scout" data-evidence="interview-moments" aria-label="Discover · Scout · attach 12 customer calls" aria-pressed="false">
+              <span class="stage-index">01</span>
+              <span class="node-copy"><strong>Scout · Discover</strong><span>Evidence · 12 calls</span></span>
+              <span class="agent-cursor" data-cursor-agent="scout" aria-hidden="true">
+                <svg viewBox="0 0 16 20"><path fill="currentColor" d="M1 1v16l4.3-4.2 3.1 6 3-1.6-3.2-5.9H14z" /></svg>
+                <b class="agent-label">Scout</b>
+              </span>
+            </button>
+            <button class="handoff-node" type="button" data-stage="compose" data-agent="maker" data-evidence="narrative-v3" aria-label="Compose · Maker · attach narrative v3" aria-pressed="false">
+              <span class="stage-index">02</span>
+              <span class="node-copy"><strong>Maker · Compose</strong><span>Artifact · story v3</span></span>
+              <span class="agent-cursor" data-cursor-agent="maker" aria-hidden="true">
+                <svg viewBox="0 0 16 20"><path fill="currentColor" d="M1 1v16l4.3-4.2 3.1 6 3-1.6-3.2-5.9H14z" /></svg>
+                <b class="agent-label">Maker</b>
+              </span>
+            </button>
+            <button class="handoff-node" type="button" data-stage="verify" data-agent="critic" data-evidence="claim-checklist" aria-label="Verify · Critic · attach 9 of 9 claim checks" aria-pressed="false">
+              <span class="stage-index">03</span>
+              <span class="node-copy"><strong>Critic · Verify</strong><span>Proof · 9 / 9 checks</span></span>
+              <span class="agent-cursor" data-cursor-agent="critic" aria-hidden="true">
+                <svg viewBox="0 0 16 20"><path fill="currentColor" d="M1 1v16l4.3-4.2 3.1 6 3-1.6-3.2-5.9H14z" /></svg>
+                <b class="agent-label">Critic</b>
+              </span>
+            </button>
+          </div>
+        </nav>
+
+        <article id="artifact-panel" class="artifact-panel" data-preview-mechanism="motion-user-owned-agent-handoff" data-owner="none" data-evidence="none">
+          <i class="artifact-socket" data-stage="discover" aria-hidden="true"></i>
+          <i class="artifact-socket" data-stage="compose" aria-hidden="true"></i>
+          <i class="artifact-socket" data-stage="verify" aria-hidden="true"></i>
+          <header class="artifact-head">
+            <p id="artifact-kicker" class="artifact-kicker">Shared artifact · awaiting handoff</p>
+            <span id="owner-state" class="owner-state">No owner</span>
+          </header>
+          <h1 id="artifact-title">Launch story</h1>
+          <p class="artifact-meta">Campaign system · one source of truth · v3</p>
+          <div class="artifact-rule"></div>
+          <p id="artifact-summary" class="artifact-summary">Select a checkpoint to attach its owner and evidence to this working brief.</p>
+          <div id="evidence-receipt" class="evidence-receipt">
+            <span class="receipt-copy">
+              <span id="evidence-label" class="receipt-label">Evidence packet</span>
+              <strong id="evidence-value" class="receipt-value">Choose a checkpoint</strong>
+            </span>
+            <span id="evidence-source" class="receipt-source">Not attached</span>
+          </div>
+        </article>
       </section>
-      <span class="agent-status" id="agent-status">5 agents · independent paths</span>
-      <button class="agent-shuffle" id="agent-shuffle" type="button">Shift phase</button>
-      <span class="library-badge">Motion · autonomous actors</span>
-      <span class="scene-caption">named cursors narrate parallel agent collaboration</span>
+
+      <footer class="handoff-footer">
+        <output id="handoff-status" class="handoff-status" aria-live="polite">Awaiting a real owner selection</output>
+        <button id="reset-handoff" class="reset-handoff" type="button" aria-label="Reset handoff" title="Reset handoff" disabled>↺</button>
+      </footer>
+      <span class="library-badge">Motion · user-owned handoff</span>
+      <span class="scene-caption">choose a checkpoint to hand one artifact between named agents</span>
     </main>
   </body>
 </html>

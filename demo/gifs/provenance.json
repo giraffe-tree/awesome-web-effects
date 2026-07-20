@@ -239,7 +239,7 @@
       "originUrl": "https://github.com/motiondivision/motion",
       "demoSourcePath": "demo/preview-demos/autonomous-agent-cursor-constellation.html",
       "libraryVersion": "motion@12.42.2",
-      "generatedAt": "2026-07-18",
+      "generatedAt": "2026-07-21",
       "outputPath": "demo/gifs/captured/autonomous-agent-cursor-constellation.gif",
       "usageBasis": "original local mechanism demo using the pinned Motion package; verify license https://github.com/motiondivision/motion/blob/HEAD/LICENSE.md"
     },

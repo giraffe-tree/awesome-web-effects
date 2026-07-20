@@ -3,6 +3,11 @@ export function installPreviewController({ id, library, renderer = 'webgl', rend
   let start = performance.now();
   let animationFrame = 0;
 
+  if (renderer === 'dom' && !document.querySelector('[data-preview-mechanism]')) {
+    const surface = document.querySelector('.preview-stage') || document.body;
+    surface.dataset.previewMechanism = id;
+  }
+
   window.__PREVIEW_META__ = { id, library, renderer, capture: 'real-demo' };
   window.__setPreviewTime = async seconds => {
     manualTime = true;

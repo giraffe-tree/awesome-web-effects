@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>p5.js — Live Hand Landmark Video Overlay</title>
+  <link rel="stylesheet" href="./shared.css">
+  <style>
+    :root{--preview-background:#071319}.hand-frame{position:absolute;inset:0;background:#071319}.hand-frame video,.hand-frame>canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.hand-frame video{filter:saturate(.86) contrast(1.07)}#hand-overlay{pointer-events:none}.hand-copy{position:absolute;z-index:8;left:13px;top:45px;color:#e8fff8;pointer-events:none}.hand-copy small{font:800 6px/1 ui-monospace;letter-spacing:.15em;color:#75f4cf}.hand-copy h1{width:112px;margin:8px 0 0;font:950 18px/.84 system-ui;letter-spacing:-.055em}.hand-status{position:absolute;z-index:8;right:12px;top:12px;color:#75f4cf;font:900 7px/1 ui-monospace;letter-spacing:.1em}.library-badge{background:#06151aca}.scene-caption{color:#c5e5dd}</style>
+</head>
+<body>
+  <main class="preview-stage" data-preview-mechanism="video-frame-landmark-inference">
+    <div class="hand-frame" id="hand-frame" tabindex="0" aria-label="A generated video stream is analyzed frame by frame to detect and connect 21 hand landmarks">
+      <video id="hand-video" autoplay muted playsinline></video>
+      <canvas id="hand-overlay"></canvas>
+    </div>
+    <section class="hand-copy"><small>VISION STREAM / LIVE</small><h1>GESTURE BECOMES GEOMETRY.</h1></section>
+    <output class="hand-status" id="hand-status">00 / 21</output>
+    <span class="library-badge">p5.js · video frame analysis</span>
+    <span class="scene-caption">color components → articulated landmarks</span>
+  </main>
+  <script type="module" src="./src/live-hand-landmark-video-overlay-demo.js"></script>
+</body>
+</html>

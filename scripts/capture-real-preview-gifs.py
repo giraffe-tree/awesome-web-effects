@@ -101,9 +101,9 @@ def encode_gif(frame_root: Path, output: Path, fps: int) -> None:
         raise RuntimeError(f"Encoded GIF is unexpectedly small: {output}")
 
 
-def live_surface_check(page) -> dict:
+def live_surface_check(page, renderer: str) -> dict:
     return page.evaluate(
-        """() => {
+        """renderer => {
           const canvases = [];
           const visit = root => {
             root.querySelectorAll?.('*').forEach(element => {
@@ -112,11 +112,13 @@ def live_surface_check(page) -> dict:
             });
           };
           visit(document);
-          const webglContexts = canvases.map(canvas => {
+          const webglContexts = renderer === 'webgl' ? canvases.map(canvas => {
             const gl = canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
             return gl && !gl.isContextLost();
-          });
-          const canvas2dContexts = canvases.map(canvas => Boolean(canvas.getContext('2d')));
+          }) : [];
+          const canvas2dContexts = renderer === 'canvas2d'
+            ? canvases.map(canvas => Boolean(canvas.getContext('2d')))
+            : [];
           return {
             canvasCount: canvases.length,
             liveWebglContextCount: webglContexts.filter(Boolean).length,
@@ -124,7 +126,8 @@ def live_surface_check(page) -> dict:
             svgCount: document.querySelectorAll('svg').length,
             domMechanismCount: document.querySelectorAll('[data-preview-mechanism]').length
           };
-        }"""
+        }""",
+        renderer,
     )
 
 
@@ -146,8 +149,8 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
         or metadata.get("renderer") != demo.get("renderer", "webgl")
     ):
         raise RuntimeError(f"{demo['id']} metadata mismatch: {metadata!r}")
-    surface = live_surface_check(page)
     renderer = demo.get("renderer", "webgl")
+    surface = live_surface_check(page, renderer)
     valid_surface = (
         renderer == "webgl" and surface["liveWebglContextCount"] >= 1
         or renderer == "canvas2d" and surface["liveCanvas2dContextCount"] >= 1
@@ -157,6 +160,8 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
     if not valid_surface:
         raise RuntimeError(f"{demo['id']} has no live {renderer} preview surface: {surface!r}")
     if demo.get("runtimeAssertion"):
+        if renderer == "dom":
+            page.evaluate("async () => await window.__setPreviewTime(0)")
         runtime_assertion = page.evaluate(
             """async () => typeof window.__PREVIEW_RUNTIME_ASSERT__ === 'function'
               && Boolean(await window.__PREVIEW_RUNTIME_ASSERT__())"""

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Motion — Drag-thrown Card Stack</title>
+    <style>
+      :root { --preview-background: #deff63; color-scheme: light; }
+      .throw-stage { position: absolute; inset: 0; overflow: hidden; cursor: grab; touch-action: none; }
+      .throw-stage.dragging { cursor: grabbing; }
+      .stack-shadow { position: absolute; left: 72px; top: 139px; width: 154px; height: 15px; border-radius: 50%; background: #20311e2f; filter: blur(8px); }
+      .throw-card { position: absolute; left: 88px; top: 42px; width: 144px; height: 101px; padding: 12px; border: 1px solid #18201b; border-radius: 17px; color: #18201b; box-shadow: 0 12px 0 #18201b16; transform-origin: 50% 90%; user-select: none; }
+      .throw-card:nth-of-type(1) { z-index: 1; background: #ff865c; transform: translateY(14px) scale(.91) rotate(6deg); }
+      .throw-card:nth-of-type(2) { z-index: 2; background: #7cc9ff; transform: translateY(8px) scale(.95) rotate(-4deg); }
+      .throw-card:nth-of-type(3) { z-index: 3; background: #fff9ec; }
+      .throw-card small { display: block; font: 800 6px/1 ui-monospace, monospace; letter-spacing: .13em; text-transform: uppercase; }
+      .throw-card strong { display: block; width: 105px; margin-top: 11px; font: 950 18px/.86 system-ui, sans-serif; letter-spacing: -.055em; }
+      .card-orbit { position: absolute; right: 9px; bottom: 10px; width: 31px; height: 31px; border: 1px solid currentColor; border-radius: 50%; }
+      .card-orbit::after { content: ''; position: absolute; left: 4px; top: 4px; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+      .throw-vector { position: absolute; z-index: 6; left: 238px; top: 79px; width: 65px; height: 1px; background: #18201b; transform-origin: left; }
+      .throw-vector::after { content: ''; position: absolute; right: -1px; top: -3px; width: 6px; height: 6px; border-top: 1px solid; border-right: 1px solid; rotate: 45deg; }
+      .throw-label { position: absolute; z-index: 6; left: 243px; top: 62px; color: #1d261f; font: 800 6px/1 ui-monospace, monospace; letter-spacing: .1em; }
+      .reset-wipe { position: absolute; z-index: 0; inset: 0; pointer-events: none; background: #deff63; opacity: 0; }
+      .library-badge { color: #1b251d; background: #efffaacf; border-color: #1b251d2a; }
+      .scene-caption { color: #1d261f91; }
+    </style>
+    <script type="module" crossorigin src="./assets/drag-thrown-card-stack-B8grJKRu.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+    <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main class="preview-stage">
+      <div class="throw-stage" id="throw-stage" data-preview-mechanism="motion-drag-throw" tabindex="0" aria-label="Drag the top card or press the right arrow key to throw it">
+        <div class="stack-shadow"></div>
+        <article class="throw-card"><small>Next / 03</small><strong>Make room for surprise.</strong><span class="card-orbit"></span></article>
+        <article class="throw-card" id="second-card"><small>Next / 02</small><strong>Momentum changes focus.</strong><span class="card-orbit"></span></article>
+        <article class="throw-card" id="top-card"><small>Active / 01</small><strong>Drag. Release. Discover.</strong><span class="card-orbit"></span></article>
+        <span class="throw-label">RELEASE VELOCITY</span><span class="throw-vector" id="throw-vector"></span>
+        <div class="reset-wipe" id="reset-wipe"></div>
+      </div>
+      <span class="library-badge">Motion · velocity throw</span>
+      <span class="scene-caption">drag the top card beyond the stack</span>
+    </main>
+  </body>
+</html>

@@ -93,7 +93,7 @@ An **effect-first**, curator-reviewed atlas of open-source interactions for the 
 - Stars are a snapshot from **${snapshotDate}**, not a live counter.
 - The verified, optimized GIF set is **${previewMiB} MiB**; each published preview is 320×180, at most three seconds, and below 1 MiB.
 
-The implementation source and the website where an effect was observed are separate relationships. Read the [demo admission policy and current ${admissionAuditSummary.candidateCount}-candidate audit](research/demo-admission-audit-2026-07-18.md). See the [Chinese-first 100-company audit](research/ai-native-homepages-100.md) for all observations, including common patterns that were not duplicated as new effect rows.
+The implementation source and the website where an effect was observed are separate relationships. Read the [demo admission policy and current ${admissionAuditSummary.candidateCount}-candidate audit](research/demo-admission-audit-${admissionAuditSummary.auditedAt}.md). See the [Chinese-first 100-company audit](research/ai-native-homepages-100.md) for all observations, including common patterns that were not duplicated as new effect rows.
 
 ## Selection rules
 
@@ -183,7 +183,7 @@ const chinese = `# Awesome Web Effects
 - Stars 是 **${snapshotDate}** 的快照，不是实时计数器。
 - 已核验 GIF 优化后总计 **${previewMiB} MiB**；每个发布预览均为 320×180、最长三秒且小于 1 MiB。
 
-“推荐实现”和“在哪家公司官网观察到”是两种不同关系，现在会在同一个特效行中同时展示。先阅读 [Demo 准入评分体系与 ${admissionAuditSummary.candidateCount} 个候选的当前审计](research/demo-admission-audit-2026-07-18.md)。完整官网观察记录见 [100 家 AI 公司主页特效调研](research/ai-native-homepages-100.md)。
+“推荐实现”和“在哪家公司官网观察到”是两种不同关系，现在会在同一个特效行中同时展示。先阅读 [Demo 准入评分体系与 ${admissionAuditSummary.candidateCount} 个候选的当前审计](research/demo-admission-audit-${admissionAuditSummary.auditedAt}.md)。完整官网观察记录见 [100 家 AI 公司主页特效调研](research/ai-native-homepages-100.md)。
 
 ## 收录与去重规则
 

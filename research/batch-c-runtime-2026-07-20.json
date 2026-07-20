@@ -1,0 +1,723 @@
+{
+  "generatedAt": "2026-07-20T00:00:00+08:00",
+  "batch": "C",
+  "count": 27,
+  "policy": "Runtime metadata names only dependencies and browser APIs that the local demo actually invokes; planning references are not runtime claims.",
+  "fixedDependencies": {
+    "processing-p5-js": "p5@2.3.0",
+    "motiondivision-motion": "motion@12.42.2"
+  },
+  "effects": [
+    {
+      "id": "slider-controlled-exploded-3d-assembly",
+      "projectId": "processing-p5-js",
+      "library": "p5@2.3.0",
+      "renderer": "webgl",
+      "snippet": "parts.forEach(part => translate(...part.axis.map(v => v * progress)))",
+      "loopSeconds": 3,
+      "html": "demo/preview-demos/slider-controlled-exploded-3d-assembly.html",
+      "source": "demo/preview-demos/src/slider-controlled-exploded-3d-assembly-demo.js",
+      "interactions": [
+        "range drag",
+        "pointer orbit",
+        "arrow keys"
+      ],
+      "runtimeContract": [
+        "__PREVIEW_READY__",
+        "__PREVIEW_META__",
+        "__PREVIEW_RUNTIME_ASSERT__",
+        "__setPreviewTime"
+      ],
+      "validation": {
+        "syntax": "passed",
+        "browser": "passed",
+        "interaction": "passed"
+      }
+    },
+    {
+      "id": "collision-reactive-3d-physics-stack",
+      "projectId": "processing-p5-js",
+      "library": "p5@2.3.0",
+      "renderer": "webgl",
+      "snippet": "body.vy += gravity * dt; resolveContact(body, floor, collisionImpulse)",
+      "loopSeconds": 3,
+      "html": "demo/preview-demos/collision-reactive-3d-physics-stack.html",
+      "source": "demo/preview-demos/src/collision-reactive-3d-physics-stack-demo.js",
+      "interactions": [
+        "click spawn",
+        "Space strike"
+      ],
+      "runtimeContract": [
+        "__PREVIEW_READY__",
+        "__PREVIEW_META__",
+        "__PREVIEW_RUNTIME_ASSERT__",
+        "__setPreviewTime"
+      ],
+      "validation": {
+        "syntax": "passed",
+        "browser": "passed",
+        "interaction": "passed"
+      }
+    },
+    {
+      "id": "refractive-glass-transmission-sculpture",
+      "projectId": "processing-p5-js",
+      "library": "p5@2.3.0",
+      "renderer": "webgl",
+      "snippet": "vec3 transmitted = environment(refract(ray, normal, 1.0 / 1.45));",
+      "loopSeconds": 3,
+      "html": "demo/preview-demos/refractive-glass-transmission-sculpture.html",
+      "source": "demo/preview-demos/src/refractive-glass-transmission-sculpture-demo.js",
+      "interactions": [
+        "pointer yaw",
+        "arrow keys"
+      ],
+      "runtimeContract": [
+        "__PREVIEW_READY__",
+        "__PREVIEW_META__",
+        "__PREVIEW_RUNTIME_ASSERT__",
+        "__setPreviewTime"
+      ],
+      "validation": {
+        "syntax": "passed",
+        "browser": "passed",
+        "interaction": "passed"
+      }
+    },
+    {
+      "id": "cinematic-map-camera-fly-to",
+      "projectId": "processing-p5-js",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "snippet": "context.translate(center); context.scale(zoom, zoom * (1 - pitch)); context.rotate(bearing)",
+      "loopSeconds": 3,
+      "html": "demo/preview-demos/cinematic-map-camera-fly-to.html",
+      "source": "demo/preview-demos/src/cinematic-map-camera-fly-to-demo.js",
+      "interactions": [
+        "click fly",
+        "Enter toggle"
+      ],
+      "runtimeContract": [
+        "__PREVIEW_READY__",
+        "__PREVIEW_META__",
+        "__PREVIEW_RUNTIME_ASSERT__",
+        "__setPreviewTime"
+      ],
+      "validation": {
+        "syntax": "passed",
+        "browser": "passed",
+        "interaction": "passed"
+      }
+    },
+    {
+      "id": "pickable-extruded-data-columns",
+      "projectId": "processing-p5-js",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "snippet": "active = columnPolygons.findIndex(polygon => pointInPolygon(pointer, polygon))",
+      "loopSeconds": 3,
+      "html": "demo/preview-demos/pickable-extruded-data-columns.html",
+      "source": "demo/preview-demos/src/pickable-extruded-data-columns-demo.js",
+      "interactions": [
+        "pointer pick",
+        "arrow keys"
+      ],
+      "runtimeContract": [
+        "__PREVIEW_READY__",
+        "__PREVIEW_META__",
+        "__PREVIEW_RUNTIME_ASSERT__",
+        "__setPreviewTime"
+      ],
+      "validation": {
+        "syntax": "passed",
+        "browser": "passed",
+        "interaction": "passed"
+      }
+    },
+    {
+      "id": "curved-3d-text-orbit",
+      "projectId": "processing-p5-js",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "snippet": "glyph.x = centerX + sin(angle) * radius; glyph.scale = depthToScale(cos(angle))",
+      "loopSeconds": 3,
+      "html": "demo/preview-demos/curved-3d-text-orbit.html",
+      "source": "demo/preview-demos/src/curved-3d-text-orbit-demo.js",
+      "interactions": [
+        "pointer orbit",
+        "arrow keys"
+      ],
+      "runtimeContract": [
+        "__PREVIEW_READY__",
+        "__PREVIEW_META__",
+        "__PREVIEW_RUNTIME_ASSERT__",
+        "__setPreviewTime"
+      ],
+      "validation": {
+        "syntax": "passed",
+        "browser": "passed",
+        "interaction": "passed"
+      }
+    },
+    {
+      "id": "cursor-projected-3d-surface-marker",
+      "projectId": "processing-p5-js",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "snippet": "normal = normalize([-dHeightDu, -dHeightDv, 1]); stamp(project(u, v, height(u,v)))",
+      "loopSeconds": 3,
+      "html": "demo/preview-demos/cursor-projected-3d-surface-marker.html",
+      "source": "demo/preview-demos/src/cursor-projected-3d-surface-marker-demo.js",
+      "interactions": [
+        "pointer raycast",
+        "click stamp"
+      ],
+      "runtimeContract": [
+        "__PREVIEW_READY__",
+        "__PREVIEW_META__",
+        "__PREVIEW_RUNTIME_ASSERT__",
+        "__setPreviewTime"
+      ],
+      "validation": {
+        "syntax": "passed",
+        "browser": "passed",
+        "interaction": "passed"
+      }
+    },
+    {
+      "id": "drag-resizable-audio-loop-region",
+      "projectId": "processing-p5-js",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "snippet": "loopTime = region.start + phase * (region.end - region.start)",
+      "loopSeconds": 3,
+      "html": "demo/preview-demos/drag-resizable-audio-loop-region.html",
+      "source": "demo/preview-demos/src/drag-resizable-audio-loop-region-demo.js",
+      "interactions": [
+        "drag handles",
+        "drag region",
+        "Space audio"
+      ],
+      "runtimeContract": [
+        "__PREVIEW_READY__",
+        "__PREVIEW_META__",
+        "__PREVIEW_RUNTIME_ASSERT__",
+        "__setPreviewTime"
+      ],
+      "validation": {
+        "syntax": "passed",
+        "browser": "passed",
+        "interaction": "passed"
+      }
+    },
+    {
+      "id": "streaming-line-chart-window",
+      "projectId": "processing-p5-js",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "snippet": "window = samples.slice(start, start + 60).map(interpolateIncomingSample)",
+      "loopSeconds": 3,
+      "html": "demo/preview-demos/streaming-line-chart-window.html",
+      "source": "demo/preview-demos/src/streaming-line-chart-window-demo.js",
+      "interactions": [
+        "Space freeze"
+      ],
+      "runtimeContract": [
+        "__PREVIEW_READY__",
+        "__PREVIEW_META__",
+        "__PREVIEW_RUNTIME_ASSERT__",
+        "__setPreviewTime"
+      ],
+      "validation": {
+        "syntax": "passed",
+        "browser": "passed",
+        "interaction": "passed"
+      }
+    },
+    {
+      "id": "handle-connected-animated-node-editor",
+      "projectId": "motiondivision-motion",
+      "library": "motion@12.42.2",
+      "renderer": "svg",
+      "snippet": "edge.setAttribute('d', cubicBetween(measuredOutputHandle, measuredInputHandle))",
+      "loopSeconds": 3,
+      "html": "demo/preview-demos/handle-connected-animated-node-editor.html",
+      "source": "demo/preview-demos/src/handle-connected-animated-node-editor-demo.js",
+      "interactions": [
+        "handle drag",
+        "node drag"
+      ],
+      "runtimeContract": [
+        "__PREVIEW_READY__",
+        "__PREVIEW_META__",
+        "__PREVIEW_RUNTIME_ASSERT__",
+        "__setPreviewTime"
+      ],
+      "validation": {
+        "syntax": "passed",
+        "browser": "passed",
+        "interaction": "passed"
+      }
+    },
+    {
+      "id": "bending-webgl-gallery-ribbon",
+      "projectId": "processing-p5-js",
+      "library": "p5@2.3.0",
+      "renderer": "webgl",
+      "snippet": "card.position = [sin(angle) * radius, 0, -cos(angle) * radius]",
+      "loopSeconds": 3,
+      "html": "demo/preview-demos/bending-webgl-gallery-ribbon.html",
+      "source": "demo/preview-demos/src/bending-webgl-gallery-ribbon-demo.js",
+      "interactions": [
+        "wheel inertia",
+        "pointer drag",
+        "arrow keys"
+      ],
+      "runtimeContract": [
+        "__PREVIEW_READY__",
+        "__PREVIEW_META__",
+        "__PREVIEW_RUNTIME_ASSERT__",
+        "__setPreviewTime"
+      ],
+      "validation": {
+        "syntax": "passed",
+        "browser": "passed",
+        "interaction": "passed"
+      }
+    },
+    {
+      "id": "draggable-dome-gallery",
+      "projectId": "processing-p5-js",
+      "library": "p5@2.3.0",
+      "renderer": "webgl",
+      "snippet": "tile.position = spherical(azimuth + yaw, elevation + pitch, radius)",
+      "loopSeconds": 3,
+      "html": "demo/preview-demos/draggable-dome-gallery.html",
+      "source": "demo/preview-demos/src/draggable-dome-gallery-demo.js",
+      "interactions": [
+        "pointer drag",
+        "click focus",
+        "Escape"
+      ],
+      "runtimeContract": [
+        "__PREVIEW_READY__",
+        "__PREVIEW_META__",
+        "__PREVIEW_RUNTIME_ASSERT__",
+        "__setPreviewTime"
+      ],
+      "validation": {
+        "syntax": "passed",
+        "browser": "passed",
+        "interaction": "passed"
+      }
+    },
+    {
+      "id": "animated-dom-node-connection-beam",
+      "projectId": "motiondivision-motion",
+      "library": "motion@12.42.2",
+      "renderer": "svg",
+      "snippet": "path.setAttribute('d', bezier(center(from.getBoundingClientRect()), center(to.getBoundingClientRect())))",
+      "loopSeconds": 3,
+      "html": "demo/preview-demos/animated-dom-node-connection-beam.html",
+      "source": "demo/preview-demos/src/animated-dom-node-connection-beam-demo.js",
+      "interactions": [
+        "drag anchor",
+        "responsive resize"
+      ],
+      "runtimeContract": [
+        "__PREVIEW_READY__",
+        "__PREVIEW_META__",
+        "__PREVIEW_RUNTIME_ASSERT__",
+        "__setPreviewTime"
+      ],
+      "validation": {
+        "syntax": "passed",
+        "browser": "passed",
+        "interaction": "passed"
+      }
+    },
+    {
+      "id": "clip-shape-theme-reveal",
+      "projectId": "motiondivision-motion",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "snippet": "layer.style.clipPath = `circle(${radius}% at ${origin.x}% ${origin.y}%)`",
+      "loopSeconds": 3,
+      "html": "demo/preview-demos/clip-shape-theme-reveal.html",
+      "source": "demo/preview-demos/src/clip-shape-theme-reveal-demo.js",
+      "interactions": [
+        "theme click",
+        "keyboard toggle"
+      ],
+      "runtimeContract": [
+        "__PREVIEW_READY__",
+        "__PREVIEW_META__",
+        "__PREVIEW_RUNTIME_ASSERT__",
+        "__setPreviewTime"
+      ],
+      "validation": {
+        "syntax": "passed",
+        "browser": "passed",
+        "interaction": "passed"
+      }
+    },
+    {
+      "id": "sticky-paragraph-ink-reveal",
+      "projectId": "motiondivision-motion",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "snippet": "wordControls.forEach((control,i) => control.time = clamp(progress * count - i))",
+      "loopSeconds": 3,
+      "html": "demo/preview-demos/sticky-paragraph-ink-reveal.html",
+      "source": "demo/preview-demos/src/sticky-paragraph-ink-reveal-demo.js",
+      "interactions": [
+        "internal scroll",
+        "double-click auto"
+      ],
+      "runtimeContract": [
+        "__PREVIEW_READY__",
+        "__PREVIEW_META__",
+        "__PREVIEW_RUNTIME_ASSERT__",
+        "__setPreviewTime"
+      ],
+      "validation": {
+        "syntax": "passed",
+        "browser": "passed",
+        "interaction": "passed"
+      }
+    },
+    {
+      "id": "draggable-force-directed-svg-network",
+      "projectId": "processing-p5-js",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "snippet": "force = linkSpring + inverseSquareCharge + centering; node.fixed = dragPoint",
+      "loopSeconds": 3,
+      "html": "demo/preview-demos/draggable-force-directed-svg-network.html",
+      "source": "demo/preview-demos/src/draggable-force-directed-svg-network-demo.js",
+      "interactions": [
+        "drag director"
+      ],
+      "runtimeContract": [
+        "__PREVIEW_READY__",
+        "__PREVIEW_META__",
+        "__PREVIEW_RUNTIME_ASSERT__",
+        "__setPreviewTime"
+      ],
+      "validation": {
+        "syntax": "passed",
+        "browser": "passed",
+        "interaction": "passed"
+      }
+    },
+    {
+      "id": "voronoi-nearest-point-hover-focus",
+      "projectId": "processing-p5-js",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "snippet": "cell = sites.reduce((polygon, site) => clipByBisector(polygon, focus, site), bounds)",
+      "loopSeconds": 3,
+      "html": "demo/preview-demos/voronoi-nearest-point-hover-focus.html",
+      "source": "demo/preview-demos/src/voronoi-nearest-point-hover-focus-demo.js",
+      "interactions": [
+        "pointer nearest"
+      ],
+      "runtimeContract": [
+        "__PREVIEW_READY__",
+        "__PREVIEW_META__",
+        "__PREVIEW_RUNTIME_ASSERT__",
+        "__setPreviewTime"
+      ],
+      "validation": {
+        "syntax": "passed",
+        "browser": "passed",
+        "interaction": "passed"
+      }
+    },
+    {
+      "id": "linked-brush-to-zoom-chart",
+      "projectId": "processing-p5-js",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "snippet": "focusDomain = brushSelection.map(value => value * (samples.length - 1))",
+      "loopSeconds": 3,
+      "html": "demo/preview-demos/linked-brush-to-zoom-chart.html",
+      "source": "demo/preview-demos/src/linked-brush-to-zoom-chart-demo.js",
+      "interactions": [
+        "drag brush handles",
+        "drag selection",
+        "double-click reset"
+      ],
+      "runtimeContract": [
+        "__PREVIEW_READY__",
+        "__PREVIEW_META__",
+        "__PREVIEW_RUNTIME_ASSERT__",
+        "__setPreviewTime"
+      ],
+      "validation": {
+        "syntax": "passed",
+        "browser": "passed",
+        "interaction": "passed"
+      }
+    },
+    {
+      "id": "click-to-collapse-hierarchy-branches",
+      "projectId": "motiondivision-motion",
+      "library": "motion@12.42.2",
+      "renderer": "svg",
+      "snippet": "nodeControl.time = collapseProgress; edge.d = interpolateTreeLayout(expanded, collapsed)",
+      "loopSeconds": 3,
+      "html": "demo/preview-demos/click-to-collapse-hierarchy-branches.html",
+      "source": "demo/preview-demos/src/click-to-collapse-hierarchy-branches-demo.js",
+      "interactions": [
+        "click branch",
+        "Enter toggle"
+      ],
+      "runtimeContract": [
+        "__PREVIEW_READY__",
+        "__PREVIEW_META__",
+        "__PREVIEW_RUNTIME_ASSERT__",
+        "__setPreviewTime"
+      ],
+      "validation": {
+        "syntax": "passed",
+        "browser": "passed",
+        "interaction": "passed"
+      }
+    },
+    {
+      "id": "velocity-sensitive-signature-ink",
+      "projectId": "processing-p5-js",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "snippet": "width = clamp(maxWidth - filteredPointerVelocity * weight, minWidth, maxWidth)",
+      "loopSeconds": 3,
+      "html": "demo/preview-demos/velocity-sensitive-signature-ink.html",
+      "source": "demo/preview-demos/src/velocity-sensitive-signature-ink-demo.js",
+      "interactions": [
+        "pointer draw",
+        "double-click clear"
+      ],
+      "runtimeContract": [
+        "__PREVIEW_READY__",
+        "__PREVIEW_META__",
+        "__PREVIEW_RUNTIME_ASSERT__",
+        "__setPreviewTime"
+      ],
+      "validation": {
+        "syntax": "passed",
+        "browser": "passed",
+        "interaction": "passed"
+      }
+    },
+    {
+      "id": "pressure-shaped-freehand-stroke",
+      "projectId": "processing-p5-js",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "snippet": "outline = points.flatMap(point => offsetAlongNormal(point, 2 + point.pressure * 18))",
+      "loopSeconds": 3,
+      "html": "demo/preview-demos/pressure-shaped-freehand-stroke.html",
+      "source": "demo/preview-demos/src/pressure-shaped-freehand-stroke-demo.js",
+      "interactions": [
+        "pressure pointer draw",
+        "double-click clear"
+      ],
+      "runtimeContract": [
+        "__PREVIEW_READY__",
+        "__PREVIEW_META__",
+        "__PREVIEW_RUNTIME_ASSERT__",
+        "__setPreviewTime"
+      ],
+      "validation": {
+        "syntax": "passed",
+        "browser": "passed",
+        "interaction": "passed"
+      }
+    },
+    {
+      "id": "drag-editable-bezier-curve-handles",
+      "projectId": "processing-p5-js",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "snippet": "bezier(p0.x,p0.y,c1.x,c1.y,c2.x,c2.y,p3.x,p3.y)",
+      "loopSeconds": 3,
+      "html": "demo/preview-demos/drag-editable-bezier-curve-handles.html",
+      "source": "demo/preview-demos/src/drag-editable-bezier-curve-handles-demo.js",
+      "interactions": [
+        "drag endpoints",
+        "drag controls",
+        "double-click reset"
+      ],
+      "runtimeContract": [
+        "__PREVIEW_READY__",
+        "__PREVIEW_META__",
+        "__PREVIEW_RUNTIME_ASSERT__",
+        "__setPreviewTime"
+      ],
+      "validation": {
+        "syntax": "passed",
+        "browser": "passed",
+        "interaction": "passed"
+      }
+    },
+    {
+      "id": "image-palette-ambient-color-transition",
+      "projectId": "processing-p5-js",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "snippet": "dominant = samplePixels(offscreenImage); background(lerpColor(dominantA, dominantB, t))",
+      "loopSeconds": 3,
+      "html": "demo/preview-demos/image-palette-ambient-color-transition.html",
+      "source": "demo/preview-demos/src/image-palette-ambient-color-transition-demo.js",
+      "interactions": [
+        "click image",
+        "arrow keys"
+      ],
+      "runtimeContract": [
+        "__PREVIEW_READY__",
+        "__PREVIEW_META__",
+        "__PREVIEW_RUNTIME_ASSERT__",
+        "__setPreviewTime"
+      ],
+      "validation": {
+        "syntax": "passed",
+        "browser": "passed",
+        "interaction": "passed"
+      }
+    },
+    {
+      "id": "blurhash-to-photo-progressive-reveal",
+      "projectId": "processing-p5-js",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "snippet": "pixel += basisColor[i,j] * cos(pi*x*i/w) * cos(pi*y*j/h)",
+      "loopSeconds": 3,
+      "html": "demo/preview-demos/blurhash-to-photo-progressive-reveal.html",
+      "source": "demo/preview-demos/src/blurhash-to-photo-progressive-reveal-demo.js",
+      "interactions": [
+        "Space replay"
+      ],
+      "runtimeContract": [
+        "__PREVIEW_READY__",
+        "__PREVIEW_META__",
+        "__PREVIEW_RUNTIME_ASSERT__",
+        "__setPreviewTime"
+      ],
+      "validation": {
+        "syntax": "passed",
+        "browser": "passed",
+        "interaction": "passed"
+      }
+    },
+    {
+      "id": "live-hand-landmark-video-overlay",
+      "projectId": "processing-p5-js",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "snippet": "analysis.drawImage(video); landmarks = connectedColorComponents(analysis.getImageData(...))",
+      "loopSeconds": 3,
+      "html": "demo/preview-demos/live-hand-landmark-video-overlay.html",
+      "source": "demo/preview-demos/src/live-hand-landmark-video-overlay-demo.js",
+      "interactions": [
+        "arrow-frame gesture"
+      ],
+      "runtimeContract": [
+        "__PREVIEW_READY__",
+        "__PREVIEW_META__",
+        "__PREVIEW_RUNTIME_ASSERT__",
+        "__setPreviewTime"
+      ],
+      "validation": {
+        "syntax": "passed",
+        "browser": "passed",
+        "interaction": "passed"
+      }
+    },
+    {
+      "id": "frame-by-frame-gif-scrubber",
+      "projectId": "processing-p5-js",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "snippet": "frames = await Promise.all([...Array(frameCount)].map((_,i) => decoder.decode({frameIndex:i})))",
+      "loopSeconds": 3,
+      "html": "demo/preview-demos/frame-by-frame-gif-scrubber.html",
+      "source": "demo/preview-demos/src/frame-by-frame-gif-scrubber-demo.js",
+      "interactions": [
+        "range scrub",
+        "double-click auto"
+      ],
+      "runtimeContract": [
+        "__PREVIEW_READY__",
+        "__PREVIEW_META__",
+        "__PREVIEW_RUNTIME_ASSERT__",
+        "__setPreviewTime"
+      ],
+      "validation": {
+        "syntax": "passed",
+        "browser": "passed",
+        "interaction": "passed"
+      }
+    },
+    {
+      "id": "scroll-controlled-video-scrubbing",
+      "projectId": "processing-p5-js",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "snippet": "video.currentTime = scrollProgress * (video.duration - 0.04)",
+      "loopSeconds": 3,
+      "html": "demo/preview-demos/scroll-controlled-video-scrubbing.html",
+      "source": "demo/preview-demos/src/scroll-controlled-video-scrubbing-demo.js",
+      "interactions": [
+        "wheel scrub",
+        "arrow keys",
+        "double-click auto"
+      ],
+      "runtimeContract": [
+        "__PREVIEW_READY__",
+        "__PREVIEW_META__",
+        "__PREVIEW_RUNTIME_ASSERT__",
+        "__setPreviewTime"
+      ],
+      "validation": {
+        "syntax": "passed",
+        "browser": "passed",
+        "interaction": "passed"
+      }
+    }
+  ],
+  "validatedAt": "2026-07-20T00:00:00+08:00",
+  "validation": {
+    "syntax": {
+      "passed": 27,
+      "failed": 0
+    },
+    "readyMetaAssertionSeek": {
+      "passed": 27,
+      "failed": 0,
+      "pageErrors": 0,
+      "consoleErrors": 0
+    },
+    "representativeInteraction": {
+      "passed": 27,
+      "failed": 0,
+      "pageErrors": 0
+    },
+    "handLandmarkSeek": {
+      "times": [
+        0,
+        0.5,
+        0.75,
+        1,
+        1.5,
+        2,
+        2.25,
+        2.5,
+        2.99
+      ],
+      "expected": "21 / 21",
+      "passed": 9,
+      "failed": 0
+    }
+  }
+}

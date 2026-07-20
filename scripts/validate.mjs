@@ -138,7 +138,7 @@ const [html, readme, readmeZh, admissionAudit] = await Promise.all([
   readFile(resolve(root, 'demo', 'index.html'), 'utf8'),
   readFile(resolve(root, 'README.md'), 'utf8'),
   readFile(resolve(root, 'README.zh-CN.md'), 'utf8'),
-  readFile(resolve(root, 'research', 'demo-admission-audit-2026-07-18.md'), 'utf8')
+  readFile(resolve(root, 'research', `demo-admission-audit-${admissionAuditSummary.auditedAt}.md`), 'utf8')
 ]);
 assert(html.includes("./data/effects.js"), 'Demo does not load the canonical effect catalog.');
 assert(html.includes('type="module"'), 'Demo catalog must load as an ES module.');
@@ -165,8 +165,8 @@ assert(html.includes('effect.admission.total') && html.includes('score-breakdown
 
 assert(readme.includes('| Effect | Recommended implementation | Curatorial score | AI homepage references (max 3) |'), 'English README is not effect-first or lacks scores and integrated homepage references.');
 assert(readmeZh.includes('| 效果 | 推荐实现 | 策展评分 | AI 官网参考（最多 3 家） |'), 'Chinese README is not effect-first or lacks scores and integrated homepage references.');
-assert(readme.includes('research/demo-admission-audit-2026-07-18.md'), 'English README does not link to the demo admission policy and audit.');
-assert(readmeZh.includes('research/demo-admission-audit-2026-07-18.md'), 'Chinese README does not link to the demo admission policy and audit.');
+assert(readme.includes(`research/demo-admission-audit-${admissionAuditSummary.auditedAt}.md`), 'English README does not link to the demo admission policy and audit.');
+assert(readmeZh.includes(`research/demo-admission-audit-${admissionAuditSummary.auditedAt}.md`), 'Chinese README does not link to the demo admission policy and audit.');
 assert(admissionAudit.includes(`共审计 **${admissionAuditSummary.candidateCount}** 个候选`)
   && admissionAudit.includes(`最终 **${admissionAuditSummary.admittedCount} 个入选**`)
   && admissionAudit.includes(`**${admissionAuditSummary.rejectedCount} 个拒绝**`), 'Demo admission audit is missing the complete candidate accounting.');

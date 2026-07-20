@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>p5.js — Exploded 3D Assembly</title>
+  <style>
+    :root{--preview-background:#071011}#assembly-host{position:absolute;inset:0;cursor:grab}#assembly-host:active{cursor:grabbing}#assembly-host canvas{width:100%!important;height:100%!important}.assembly-copy{position:absolute;z-index:4;left:14px;top:42px;color:#e9fff8;pointer-events:none}.assembly-copy small{font:800 6px/1 ui-monospace;letter-spacing:.18em;color:#78e6c4}.assembly-copy h1{width:112px;margin:8px 0 0;font:900 18px/.86 system-ui;letter-spacing:-.055em}.assembly-control{position:absolute;z-index:6;right:13px;bottom:13px;width:124px;display:grid;grid-template-columns:auto 1fr;gap:7px;align-items:center;color:#b9d6cc;font:800 6px/1 ui-monospace;letter-spacing:.1em}.assembly-control input{width:100%;accent-color:#78e6c4}.assembly-readout{position:absolute;z-index:4;right:13px;top:13px;color:#78e6c4;font:900 8px/1 ui-monospace}.library-badge{background:#05100ec9}.scene-caption{max-width:132px}</style>
+  <script type="module" crossorigin src="./assets/slider-controlled-exploded-3d-assembly-B4bgciY5.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+  <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
+  <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
+  <link rel="modulepreload" crossorigin href="./assets/batch-c-utils-g_3IBZ2b.js">
+  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+</head>
+<body>
+  <main class="preview-stage" data-preview-mechanism="range-mapped-3d-assembly">
+    <div id="assembly-host" tabindex="0" aria-label="Drag to orbit the assembly. Use the range slider or arrow keys to separate the parts."></div>
+    <section class="assembly-copy"><small>OPTICAL MODULE / 07</small><h1>SEE HOW THE MACHINE FITS.</h1></section>
+    <output class="assembly-readout" id="assembly-readout">00%</output>
+    <label class="assembly-control">EXPLODE <input id="assembly-range" type="range" min="0" max="100" value="0" aria-label="Assembly separation"></label>
+    <span class="library-badge">p5.js · WebGL assembly</span>
+    <span class="scene-caption">one control · seven authored assembly vectors</span>
+  </main>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Motion — Noise Cancellation Audio Comparison</title>
+  <style>
+    :root { --preview-background:#0e1321; }
+    .audio-stage { background:radial-gradient(circle at 75% 18%,#29487b80,transparent 39%),linear-gradient(145deg,#0a0e19,#111c31); }
+    .audio-shell { position:absolute; inset:35px 15px 17px; border:1px solid #b8d3ff2c; border-radius:18px; background:#080c15a8; overflow:hidden; box-shadow:0 18px 45px #0006; }
+    .audio-heading { position:absolute; left:14px; top:12px; z-index:3; color:#f5f8ff; font:900 12px/1 ui-monospace,monospace; letter-spacing:-.03em; }
+    .audio-heading small { display:block; margin-top:5px; color:#8398bd; font:800 6px/1 ui-monospace,monospace; letter-spacing:.12em; text-transform:uppercase; }
+    #audio-wave { position:absolute; left:12px; right:12px; top:48px; width:calc(100% - 24px); height:52px; }
+    .audio-divider { position:absolute; z-index:4; left:20px; top:43px; width:2px; height:62px; background:#fff; box-shadow:0 0 13px #7be8ff; pointer-events:none; }
+    .audio-divider::before { content:"A / B"; position:absolute; left:-10px; top:-13px; width:22px; color:#c9f8ff; font:900 5px/1 ui-monospace,monospace; text-align:center; }
+    .audio-controls { position:absolute; left:13px; right:13px; bottom:10px; display:flex; justify-content:space-between; align-items:center; }
+    .audio-play { height:23px; padding:0 9px; border:1px solid #8be9ff55; border-radius:99px; background:#18344a; color:#d8fbff; font:900 6px/1 ui-monospace,monospace; letter-spacing:.1em; text-transform:uppercase; cursor:pointer; }
+    .audio-play:hover { background:#1f6976; }
+    .audio-legend { color:#7287aa; font:800 6px/1 ui-monospace,monospace; letter-spacing:.09em; text-transform:uppercase; }
+    .audio-legend b:first-child { color:#ff8e91; }.audio-legend b:last-child { color:#77efff; }
+    .library-badge { background:#0a0e19d9; }
+    .scene-caption { display:none; }
+  </style>
+  <script type="module" crossorigin src="./assets/noise-cancellation-audio-comparison-CW_WKHaG.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+  <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
+  <link rel="modulepreload" crossorigin href="./assets/batch-a-qa-CFcoNLob.js">
+  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+</head>
+<body>
+  <main class="preview-stage audio-stage" aria-label="A moving divider crossfades between noisy and cleaned versions of the same synthesized audio">
+    <section class="audio-shell">
+      <div class="audio-heading">CITY SIGNAL / 01<small>same recording · two treatments</small></div>
+      <canvas id="audio-wave" width="560" height="104" aria-label="Noisy and cleaned waveform comparison"></canvas>
+      <i class="audio-divider" id="audio-divider" aria-hidden="true"></i>
+      <div class="audio-controls"><button class="audio-play" id="audio-play" type="button">Hear A/B</button><span class="audio-legend"><b>raw</b> · <b>clean</b></span></div>
+    </section>
+    <span class="library-badge">Motion · Web Audio A/B</span>
+    <span class="scene-caption">one divider controls the visible waveform and the real audio crossfade</span>
+  </main>
+</body>
+</html>

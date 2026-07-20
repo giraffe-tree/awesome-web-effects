@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Motion — Clip Shape Theme Reveal</title>
+  <style>
+    :root{--preview-background:#08111c}
+    .theme-stage,.theme-layer{position:absolute;inset:0}
+    .theme-stage{background:#08111c;color:#edf6ff}
+    .theme-layer{z-index:5;background:#f4ebd5;color:#242017;clip-path:circle(0 at 84% 22%)}
+    .theme-art{position:absolute;right:22px;bottom:19px;width:156px;height:103px;border:1px solid currentColor}
+    .theme-art:before,.theme-art:after{content:"";position:absolute;border:1px solid currentColor;border-radius:50%}
+    .theme-art:before{width:76px;height:76px;left:37px;top:13px}
+    .theme-art:after{width:112px;height:33px;left:19px;top:34px}
+    .theme-copy{position:absolute;z-index:4;left:14px;top:49px;pointer-events:none}
+    .theme-copy small{font:800 6px/1 ui-monospace;letter-spacing:.16em;opacity:.72}
+    .theme-copy h1{width:108px;margin:8px 0 0;font:950 18px/.84 system-ui;letter-spacing:-.055em}
+    .theme-layer .theme-copy{color:#242017}
+    .theme-layer .theme-copy small{color:#705c3f;opacity:1}
+    .theme-toggle{position:absolute;z-index:8;right:22px;top:18px;width:31px;height:31px;border:1px solid currentColor;border-radius:50%;background:transparent;color:inherit;font-size:13px;cursor:pointer}
+    .library-badge{background:#08111ccc}
+  </style>
+  <script type="module" crossorigin src="./assets/clip-shape-theme-reveal-DeA-56Xb.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+  <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
+  <link rel="modulepreload" crossorigin href="./assets/batch-c-utils-g_3IBZ2b.js">
+  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+</head>
+<body>
+  <main class="preview-stage theme-stage" id="theme-stage" data-preview-mechanism="origin-aware-clip-theme-reveal">
+    <section class="theme-copy"><small>THEME TRANSITION / ORIGIN</small><h1>DAYLIGHT EXPANDS FROM THE CLICK.</h1></section>
+    <div class="theme-art"></div>
+    <div class="theme-layer" id="theme-layer">
+      <section class="theme-copy"><small>THEME TRANSITION / ORIGIN</small><h1>DAYLIGHT EXPANDS FROM THE CLICK.</h1></section>
+      <div class="theme-art"></div>
+    </div>
+    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">☼</button>
+    <span class="library-badge">Motion · clip-path theme reveal</span>
+    <span class="scene-caption">circle radius expands from invocation point</span>
+  </main>
+</body>
+</html>

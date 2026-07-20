@@ -93,7 +93,17 @@ def main() -> int:
             real_row.locator(".effect-cell").click()
             modal = page.locator("#effect-modal")
             expect(modal).to_be_visible()
-            expect(modal.locator(".modal-preview img")).to_have_count(1)
+            live_preview = modal.locator(".modal-preview-frame")
+            expect(live_preview).to_have_count(1)
+            expect(live_preview).to_have_attribute(
+                "src", "./preview-demos/dist/scroll-scrubbed-master-timeline.html"
+            )
+            expect(modal.locator(".modal-preview img")).to_have_count(0)
+            live_frame = page.frame(url=lambda url: url.endswith("/preview-demos/dist/scroll-scrubbed-master-timeline.html"))
+            assert live_frame is not None, "Runnable detail preview iframe did not load."
+            live_frame.wait_for_function("window.__PREVIEW_READY__ === true || Boolean(window.__PREVIEW_ERROR__)")
+            assert not live_frame.evaluate("window.__PREVIEW_ERROR__ || null")
+            assert live_preview.bounding_box()["width"] > 640
             expect(modal.locator(".modal-score-total")).to_contain_text("85")
             expect(modal.locator(".score-dimension")).to_have_count(6)
             expect(modal.locator(".modal-code-card code")).to_contain_text("gsap.registerPlugin")
@@ -108,6 +118,43 @@ def main() -> int:
             expect(modal).to_be_hidden()
             assert page.evaluate("document.activeElement?.id") == "scroll-scrubbed-master-timeline"
 
+            official_preview_expectations = {
+                "context-aware-custom-cursor": (
+                    "https://user-images.githubusercontent.com/11841379/162477170-5dd33ecd-0e72-4fe4-9053-53d7b5557637.gif",
+                    "./gifs/mouse-follower.gif",
+                ),
+                "displacement-map-image-hover": (
+                    "https://raw.githubusercontent.com/robin-dela/hover-effect/master/gifs/alex_brown.gif",
+                    "./gifs/hover-effect.gif",
+                ),
+            }
+            for effect_id, (upstream_url, fallback_url) in official_preview_expectations.items():
+                official_row = page.locator(f"#{effect_id}")
+                official_row.locator(".effect-cell").click()
+                expect(modal).to_be_visible()
+                expect(modal.locator(".modal-preview-frame")).to_have_count(0)
+                official_preview = modal.locator(".modal-preview-official img")
+                expect(official_preview).to_have_count(1)
+                expect(official_preview).to_have_attribute("data-upstream-src", upstream_url)
+                expect(official_preview).to_have_attribute("data-fallback-src", fallback_url)
+                official_dimensions = official_preview.evaluate(
+                    "image => ({ naturalWidth: image.naturalWidth, naturalHeight: image.naturalHeight, width: image.getBoundingClientRect().width, height: image.getBoundingClientRect().height })"
+                )
+                if not official_preview.evaluate("image => image.classList.contains('is-local-fallback')"):
+                    assert official_dimensions["naturalWidth"] >= official_dimensions["width"]
+                    assert official_dimensions["naturalHeight"] >= official_dimensions["height"]
+                official_preview.evaluate("image => image.dispatchEvent(new Event('error'))")
+                expect(official_preview).to_have_attribute("src", fallback_url)
+                expect(official_preview).to_have_class("is-local-fallback")
+                page.wait_for_function(
+                    "image => image.complete && image.naturalWidth === 320 && image.naturalHeight === 180",
+                    arg=official_preview.element_handle(),
+                )
+                official_fallback_box = official_preview.bounding_box()
+                assert official_fallback_box["width"] <= 320 and official_fallback_box["height"] <= 180
+                page.keyboard.press("Escape")
+                expect(modal).to_be_hidden()
+
             expect(page.locator("#effect-list .paused-preview")).to_have_count(0)
             prompt_button = real_row.locator(".prompt-button")
             prompt_button.click()
@@ -117,6 +164,9 @@ def main() -> int:
             page.set_viewport_size({"width": 390, "height": 844})
             real_row.locator(".effect-cell").click()
             expect(modal.locator(".effect-modal-dialog")).to_be_visible()
+            expect(modal.locator(".modal-preview-frame")).to_have_count(1)
+            mobile_preview_box = modal.locator(".modal-preview-frame").bounding_box()
+            assert mobile_preview_box["width"] > 360
             expect(modal.locator(".modal-copy-code")).to_be_visible()
             page.wait_for_timeout(250)
             screenshot = ROOT / "tmp" / "catalog-detail-mobile.png"
@@ -135,7 +185,7 @@ def main() -> int:
             server.kill()
             server.wait()
 
-    print(f"Catalog UI verified: {expected_effect_count} admitted demos, visible scores, real previews, copy actions, focus, and mobile layout.")
+    print(f"Catalog UI verified: {expected_effect_count} admitted demos, live detail previews, native-size official GIFs, visible scores, copy actions, focus, and mobile layout.")
     return 0
 
 

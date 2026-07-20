@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>p5.js — ASCII Orchestration Signal Sweep</title>
+  <style>
+    :root { --preview-background: #06100e; }
+    #ascii-field { position:absolute; inset:0; cursor:crosshair; }
+    #ascii-field canvas { width:100% !important; height:100% !important; }
+    .ascii-copy { position:absolute; z-index:4; left:18px; top:48px; width:145px; color:#efffd8; pointer-events:none; }
+    .ascii-copy b { display:block; font:900 20px/.9 ui-monospace,monospace; letter-spacing:-.07em; }
+    .ascii-copy span { display:block; margin-top:9px; color:#8dbbac; font:700 6px/1.45 ui-monospace,monospace; letter-spacing:.13em; text-transform:uppercase; }
+    .signal-key { position:absolute; z-index:4; right:14px; bottom:12px; color:#b8e5d5; font:700 6px/1 ui-monospace,monospace; letter-spacing:.1em; }
+    .signal-key::before { content:""; display:inline-block; width:28px; height:2px; margin:0 6px 2px 0; background:linear-gradient(90deg,transparent,#d8ff57,transparent); box-shadow:0 0 10px #d8ff57; }
+    .library-badge { background:#06100ed9; border-color:#baff7538; color:#efffd8; }
+    .scene-caption { display:none; }
+  </style>
+  <script type="module" crossorigin src="./assets/ascii-orchestration-signal-sweep-juQM0X6z.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+  <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
+  <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
+  <link rel="modulepreload" crossorigin href="./assets/batch-a-qa-CFcoNLob.js">
+  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+</head>
+<body>
+  <main class="preview-stage" aria-label="A traveling signal reveals an orchestration topology inside a seeded ASCII field">
+    <div id="ascii-field" tabindex="0" aria-label="Move the pointer to bend the signal front and click to reverse it"></div>
+    <div class="ascii-copy"><b>SIGNAL<br/>FINDS<br/>STRUCTURE</b><span>ambient glyphs → orchestration map</span></div>
+    <span class="signal-key">11s source · 3s study</span>
+    <span class="library-badge">p5.js · seeded ASCII field</span>
+    <span class="scene-caption">a traveling intensity front reveals hidden architecture</span>
+  </main>
+</body>
+</html>

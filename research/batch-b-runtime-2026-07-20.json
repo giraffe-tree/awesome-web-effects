@@ -1,0 +1,191 @@
+[
+  {
+    "id": "interactive-vector-state-machine",
+    "projectId": "motiondivision-motion",
+    "library": "motion@12.42.2",
+    "renderer": "svg",
+    "snippet": "const control = animate(paths, { pathLength: [0.18, 1, 0.62, 0.18] }, { duration: 3 }); control.pause();"
+  },
+  {
+    "id": "dom-to-3d-scroll-synchronization",
+    "projectId": "motiondivision-motion",
+    "library": "motion@12.42.2",
+    "renderer": "dom",
+    "snippet": "animate(planes, { transform: ['translate3d(0,0,0)', 'translate3d(0,-62px,80px)', 'translate3d(0,0,0)'] }, { duration: 3 });"
+  },
+  {
+    "id": "scene-wipe-progressive-page-swap",
+    "projectId": "motiondivision-motion",
+    "library": "motion@12.42.2",
+    "renderer": "dom",
+    "snippet": "animate(scene, { clipPath: ['inset(0 0 0 0)', 'inset(0 49% 0 49%)', 'inset(0 0 0 0)'] }, { duration: 3 });"
+  },
+  {
+    "id": "draggable-packed-editorial-wall",
+    "projectId": "motiondivision-motion",
+    "library": "motion@12.42.2",
+    "renderer": "dom",
+    "snippet": "const controls = cards.map((card, i) => animate(card, { x: [0, offsets[i], 0], y: [0, shifts[i], 0] }, { duration: 3 }));"
+  },
+  {
+    "id": "velocity-aware-swipe-drawer",
+    "projectId": "motiondivision-motion",
+    "library": "motion@12.42.2",
+    "renderer": "dom",
+    "snippet": "animate(drawer, { y: ['78%', '42%', '5%', '78%'] }, { duration: 3, ease: 'linear' });"
+  },
+  {
+    "id": "spatial-slide-deck-navigation",
+    "projectId": "motiondivision-motion",
+    "library": "motion@12.42.2",
+    "renderer": "dom",
+    "snippet": "animate(slide, { x: [i * 18, (i - 1) * 28, (i - 2) * 36, i * 18], rotateY: [i * 7, -8, -10, i * 7] }, { duration: 3 });"
+  },
+  {
+    "id": "pointer-driven-multilayer-depth-stage",
+    "projectId": "motiondivision-motion",
+    "library": "motion@12.42.2",
+    "renderer": "dom",
+    "snippet": "layers.forEach(({ node, depth }) => animate(node, { x: pointerX * depth, y: pointerY * depth }, { duration: 0.24 }));"
+  },
+  {
+    "id": "svg-filter-gooey-text-hover",
+    "projectId": "motiondivision-motion",
+    "library": "motion@12.42.2",
+    "renderer": "svg",
+    "snippet": "animate(blobs, { cx: clusteredX, cy: clusteredY, r: [5, 11, 5] }, { duration: 3, ease: 'linear' });"
+  },
+  {
+    "id": "pointer-following-displacement-ripple",
+    "projectId": "regl-project-regl",
+    "library": "regl@2.1.1",
+    "renderer": "webgl",
+    "snippet": "const draw = regl({ frag: displacementFragment, uniforms: { pointer: regl.prop('pointer'), time: regl.prop('time') }, count: 3 });"
+  },
+  {
+    "id": "draggable-rigid-body-poster-pile",
+    "projectId": "processing-p5-js",
+    "library": "p5@2.3.0",
+    "renderer": "canvas2d",
+    "snippet": "new p5(p => { p.setup = () => p.createCanvas(innerWidth, innerHeight); p.draw = () => stepPosterBodies(p); });"
+  },
+  {
+    "id": "point-constructed-generative-corolla",
+    "projectId": "processing-p5-js",
+    "library": "p5@2.3.0",
+    "renderer": "canvas2d",
+    "snippet": "for (let ring = 0; ring < 4; ring++) drawCorollaPoints(p, center, ring, phase, pointer);"
+  },
+  {
+    "id": "pointer-injected-gpu-fluid",
+    "projectId": "regl-project-regl",
+    "library": "regl@2.1.1",
+    "renderer": "webgl",
+    "snippet": "const drawFluid = regl({ frag: fluidFragment, uniforms: { time: regl.prop('time'), pointer: regl.prop('pointer') }, count: 3 });"
+  },
+  {
+    "id": "emergent-particle-life-colonies",
+    "projectId": "processing-p5-js",
+    "library": "p5@2.3.0",
+    "renderer": "canvas2d",
+    "snippet": "particles.forEach(a => particles.forEach(b => applyAttractionRule(a, b, matrix[a.kind][b.kind])));"
+  },
+  {
+    "id": "sticky-card-stack-accumulation",
+    "projectId": "motiondivision-motion",
+    "library": "motion@12.42.2",
+    "renderer": "dom",
+    "snippet": "animate(card, { y: [i * 22, i * 8, i * 22], scale: [1, 1 - i * 0.035, 1] }, { duration: 3 });"
+  },
+  {
+    "id": "velocity-reactive-marquee",
+    "projectId": "motiondivision-motion",
+    "library": "motion@12.42.2",
+    "renderer": "dom",
+    "snippet": "animate(rail, { x: ['0%', '-50%'] }, { duration: 3 / velocity, ease: 'linear', repeat: Infinity });"
+  },
+  {
+    "id": "scrubbed-word-blur-rotate-reveal",
+    "projectId": "motiondivision-motion",
+    "library": "motion@12.42.2",
+    "renderer": "dom",
+    "snippet": "animate(word, { opacity: [0.1, 1], filter: ['blur(8px)', 'blur(0px)'], rotate: [5, 0] }, { duration: 3 });"
+  },
+  {
+    "id": "pixel-grid-content-dissolve",
+    "projectId": "processing-p5-js",
+    "library": "p5@2.3.0",
+    "renderer": "canvas2d",
+    "snippet": "cells.forEach(cell => drawCell(p, cell, smoothstep(cell.delay, cell.delay + 0.22, progress)));"
+  },
+  {
+    "id": "bubble-to-navigation-morph",
+    "projectId": "motiondivision-motion",
+    "library": "motion@12.42.2",
+    "renderer": "dom",
+    "snippet": "animate(bubbles, { scale: [0.2, 1, 18], borderRadius: ['50%', '50%', '0%'] }, { duration: 3 });"
+  },
+  {
+    "id": "neighbor-magnifying-navigation-dock",
+    "projectId": "motiondivision-motion",
+    "library": "motion@12.42.2",
+    "renderer": "dom",
+    "snippet": "items.forEach((item, i) => animate(item, { scale: proximityScale(i, activeIndex) }, { duration: 0.22 }));"
+  },
+  {
+    "id": "layered-staggered-full-screen-menu",
+    "projectId": "motiondivision-motion",
+    "library": "motion@12.42.2",
+    "renderer": "dom",
+    "snippet": "panels.forEach((panel, i) => animate(panel, { x: ['-102%', '0%', '102%'] }, { duration: 3, delay: i * 0.08 }));"
+  },
+  {
+    "id": "hover-activated-image-marquee-menu",
+    "projectId": "motiondivision-motion",
+    "library": "motion@12.42.2",
+    "renderer": "dom",
+    "snippet": "animate(activeRail, { x: ['0%', '-50%'] }, { duration: 3, ease: 'linear', repeat: Infinity });"
+  },
+  {
+    "id": "drag-thrown-card-stack",
+    "projectId": "motiondivision-motion",
+    "library": "motion@12.42.2",
+    "renderer": "dom",
+    "snippet": "animate(topCard, { x: [0, 18, 188, 225], y: [0, -5, -34, -48], rotate: [0, 2, 18, 25] }, { duration: 1.15 });"
+  },
+  {
+    "id": "metaball-blob-cursor",
+    "projectId": "motiondivision-motion",
+    "library": "motion@12.42.2",
+    "renderer": "svg",
+    "snippet": "blobs.forEach((blob, i) => animate(blob, { cx: trail[i].x, cy: trail[i].y }, { duration: 0.18 + i * 0.08 }));"
+  },
+  {
+    "id": "velocity-spaced-image-trail",
+    "projectId": "processing-p5-js",
+    "library": "p5@2.3.0",
+    "renderer": "canvas2d",
+    "snippet": "if (distance(pointer, previousSpawn) > velocitySpacing) cards.push(makeTrailCard(pointer, phase));"
+  },
+  {
+    "id": "gooey-pixel-cursor-wake",
+    "projectId": "processing-p5-js",
+    "library": "p5@2.3.0",
+    "renderer": "canvas2d",
+    "snippet": "grid[cellIndex(pointer)].energy = 1; grid.forEach(cell => cell.energy *= 0.91);"
+  },
+  {
+    "id": "snapping-target-reticle-cursor",
+    "projectId": "motiondivision-motion",
+    "library": "motion@12.42.2",
+    "renderer": "dom",
+    "snippet": "animate(reticle, boundsToReticle(target.getBoundingClientRect()), { type: 'spring', stiffness: 420, damping: 32 });"
+  },
+  {
+    "id": "pointer-reactive-cell-grid",
+    "projectId": "processing-p5-js",
+    "library": "p5@2.3.0",
+    "renderer": "canvas2d",
+    "snippet": "cells.forEach(cell => drawReactiveCell(p, cell, pointerDistance(cell, pointer), clickPulse));"
+  }
+]

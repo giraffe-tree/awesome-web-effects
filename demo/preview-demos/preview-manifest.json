@@ -213,6 +213,672 @@
       "demoPath": "preview-demos/dist/self-inverting-fixed-navigation.html",
       "demoSourcePath": "preview-demos/self-inverting-fixed-navigation.html",
       "gifPath": "gifs/captured/self-inverting-fixed-navigation.gif"
+    },
+    {
+      "id": "scroll-scrubbed-document-generation-playback",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/scroll-scrubbed-document-generation-playback.html",
+      "demoSourcePath": "preview-demos/scroll-scrubbed-document-generation-playback.html",
+      "gifPath": "gifs/captured/scroll-scrubbed-document-generation-playback.gif"
+    },
+    {
+      "id": "duration-aware-hero-film-handoff",
+      "library": "motion@12.42.2",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/duration-aware-hero-film-handoff.html",
+      "demoSourcePath": "preview-demos/duration-aware-hero-film-handoff.html",
+      "gifPath": "gifs/captured/duration-aware-hero-film-handoff.gif"
+    },
+    {
+      "id": "hover-rehearsed-video-style-rail",
+      "library": "motion@12.42.2",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/hover-rehearsed-video-style-rail.html",
+      "demoSourcePath": "preview-demos/hover-rehearsed-video-style-rail.html",
+      "gifPath": "gifs/captured/hover-rehearsed-video-style-rail.gif"
+    },
+    {
+      "id": "device-silhouette-masked-video",
+      "library": "motion@12.42.2",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/device-silhouette-masked-video.html",
+      "demoSourcePath": "preview-demos/device-silhouette-masked-video.html",
+      "gifPath": "gifs/captured/device-silhouette-masked-video.gif"
+    },
+    {
+      "id": "four-corner-hover-crop-marks",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/four-corner-hover-crop-marks.html",
+      "demoSourcePath": "preview-demos/four-corner-hover-crop-marks.html",
+      "gifPath": "gifs/captured/four-corner-hover-crop-marks.gif"
+    },
+    {
+      "id": "interaction-history-hiring-badge",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/interaction-history-hiring-badge.html",
+      "demoSourcePath": "preview-demos/interaction-history-hiring-badge.html",
+      "gifPath": "gifs/captured/interaction-history-hiring-badge.gif"
+    },
+    {
+      "id": "card-metadata-to-cta-role-swap",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/card-metadata-to-cta-role-swap.html",
+      "demoSourcePath": "preview-demos/card-metadata-to-cta-role-swap.html",
+      "gifPath": "gifs/captured/card-metadata-to-cta-role-swap.gif"
+    },
+    {
+      "id": "opposed-diagonal-offset-cta",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/opposed-diagonal-offset-cta.html",
+      "demoSourcePath": "preview-demos/opposed-diagonal-offset-cta.html",
+      "gifPath": "gifs/captured/opposed-diagonal-offset-cta.gif"
+    },
+    {
+      "id": "blurred-autoplay-video-ambience",
+      "library": "motion@12.42.2",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/blurred-autoplay-video-ambience.html",
+      "demoSourcePath": "preview-demos/blurred-autoplay-video-ambience.html",
+      "gifPath": "gifs/captured/blurred-autoplay-video-ambience.gif"
+    },
+    {
+      "id": "ascii-orchestration-signal-sweep",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/ascii-orchestration-signal-sweep.html",
+      "demoSourcePath": "preview-demos/ascii-orchestration-signal-sweep.html",
+      "gifPath": "gifs/captured/ascii-orchestration-signal-sweep.gif"
+    },
+    {
+      "id": "inertial-vertical-capability-rail",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/inertial-vertical-capability-rail.html",
+      "demoSourcePath": "preview-demos/inertial-vertical-capability-rail.html",
+      "gifPath": "gifs/captured/inertial-vertical-capability-rail.gif"
+    },
+    {
+      "id": "visibility-gated-agent-terminal-replay",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/visibility-gated-agent-terminal-replay.html",
+      "demoSourcePath": "preview-demos/visibility-gated-agent-terminal-replay.html",
+      "gifPath": "gifs/captured/visibility-gated-agent-terminal-replay.gif"
+    },
+    {
+      "id": "clip-path-menu-curtain",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/clip-path-menu-curtain.html",
+      "demoSourcePath": "preview-demos/clip-path-menu-curtain.html",
+      "gifPath": "gifs/captured/clip-path-menu-curtain.gif"
+    },
+    {
+      "id": "playable-brand-minesweeper-footer",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/playable-brand-minesweeper-footer.html",
+      "demoSourcePath": "preview-demos/playable-brand-minesweeper-footer.html",
+      "gifPath": "gifs/captured/playable-brand-minesweeper-footer.gif"
+    },
+    {
+      "id": "noise-cancellation-audio-comparison",
+      "library": "motion@12.42.2",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/noise-cancellation-audio-comparison.html",
+      "demoSourcePath": "preview-demos/noise-cancellation-audio-comparison.html",
+      "gifPath": "gifs/captured/noise-cancellation-audio-comparison.gif"
+    },
+    {
+      "id": "track-card-play-state-handoff",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/track-card-play-state-handoff.html",
+      "demoSourcePath": "preview-demos/track-card-play-state-handoff.html",
+      "gifPath": "gifs/captured/track-card-play-state-handoff.gif"
+    },
+    {
+      "id": "audio-equalizer-typography",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/audio-equalizer-typography.html",
+      "demoSourcePath": "preview-demos/audio-equalizer-typography.html",
+      "gifPath": "gifs/captured/audio-equalizer-typography.gif"
+    },
+    {
+      "id": "animated-hand-drawn-semantic-annotation",
+      "library": "motion@12.42.2",
+      "renderer": "svg",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/animated-hand-drawn-semantic-annotation.html",
+      "demoSourcePath": "preview-demos/animated-hand-drawn-semantic-annotation.html",
+      "gifPath": "gifs/captured/animated-hand-drawn-semantic-annotation.gif"
+    },
+    {
+      "id": "mechanical-split-flap-character-change",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/mechanical-split-flap-character-change.html",
+      "demoSourcePath": "preview-demos/mechanical-split-flap-character-change.html",
+      "gifPath": "gifs/captured/mechanical-split-flap-character-change.gif"
+    },
+    {
+      "id": "pointer-rotated-dot-matrix-globe",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/pointer-rotated-dot-matrix-globe.html",
+      "demoSourcePath": "preview-demos/pointer-rotated-dot-matrix-globe.html",
+      "gifPath": "gifs/captured/pointer-rotated-dot-matrix-globe.gif"
+    },
+    {
+      "id": "interactive-vector-state-machine",
+      "library": "motion@12.42.2",
+      "renderer": "svg",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/interactive-vector-state-machine.html",
+      "demoSourcePath": "preview-demos/interactive-vector-state-machine.html",
+      "gifPath": "gifs/captured/interactive-vector-state-machine.gif"
+    },
+    {
+      "id": "dom-to-3d-scroll-synchronization",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/dom-to-3d-scroll-synchronization.html",
+      "demoSourcePath": "preview-demos/dom-to-3d-scroll-synchronization.html",
+      "gifPath": "gifs/captured/dom-to-3d-scroll-synchronization.gif"
+    },
+    {
+      "id": "scene-wipe-progressive-page-swap",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/scene-wipe-progressive-page-swap.html",
+      "demoSourcePath": "preview-demos/scene-wipe-progressive-page-swap.html",
+      "gifPath": "gifs/captured/scene-wipe-progressive-page-swap.gif"
+    },
+    {
+      "id": "draggable-packed-editorial-wall",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/draggable-packed-editorial-wall.html",
+      "demoSourcePath": "preview-demos/draggable-packed-editorial-wall.html",
+      "gifPath": "gifs/captured/draggable-packed-editorial-wall.gif"
+    },
+    {
+      "id": "velocity-aware-swipe-drawer",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/velocity-aware-swipe-drawer.html",
+      "demoSourcePath": "preview-demos/velocity-aware-swipe-drawer.html",
+      "gifPath": "gifs/captured/velocity-aware-swipe-drawer.gif"
+    },
+    {
+      "id": "spatial-slide-deck-navigation",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/spatial-slide-deck-navigation.html",
+      "demoSourcePath": "preview-demos/spatial-slide-deck-navigation.html",
+      "gifPath": "gifs/captured/spatial-slide-deck-navigation.gif"
+    },
+    {
+      "id": "pointer-driven-multilayer-depth-stage",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/pointer-driven-multilayer-depth-stage.html",
+      "demoSourcePath": "preview-demos/pointer-driven-multilayer-depth-stage.html",
+      "gifPath": "gifs/captured/pointer-driven-multilayer-depth-stage.gif"
+    },
+    {
+      "id": "svg-filter-gooey-text-hover",
+      "library": "motion@12.42.2",
+      "renderer": "svg",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/svg-filter-gooey-text-hover.html",
+      "demoSourcePath": "preview-demos/svg-filter-gooey-text-hover.html",
+      "gifPath": "gifs/captured/svg-filter-gooey-text-hover.gif"
+    },
+    {
+      "id": "pointer-following-displacement-ripple",
+      "library": "regl@2.1.1",
+      "renderer": "webgl",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/pointer-following-displacement-ripple.html",
+      "demoSourcePath": "preview-demos/pointer-following-displacement-ripple.html",
+      "gifPath": "gifs/captured/pointer-following-displacement-ripple.gif"
+    },
+    {
+      "id": "draggable-rigid-body-poster-pile",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/draggable-rigid-body-poster-pile.html",
+      "demoSourcePath": "preview-demos/draggable-rigid-body-poster-pile.html",
+      "gifPath": "gifs/captured/draggable-rigid-body-poster-pile.gif"
+    },
+    {
+      "id": "point-constructed-generative-corolla",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/point-constructed-generative-corolla.html",
+      "demoSourcePath": "preview-demos/point-constructed-generative-corolla.html",
+      "gifPath": "gifs/captured/point-constructed-generative-corolla.gif"
+    },
+    {
+      "id": "pointer-injected-gpu-fluid",
+      "library": "regl@2.1.1",
+      "renderer": "webgl",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/pointer-injected-gpu-fluid.html",
+      "demoSourcePath": "preview-demos/pointer-injected-gpu-fluid.html",
+      "gifPath": "gifs/captured/pointer-injected-gpu-fluid.gif"
+    },
+    {
+      "id": "emergent-particle-life-colonies",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/emergent-particle-life-colonies.html",
+      "demoSourcePath": "preview-demos/emergent-particle-life-colonies.html",
+      "gifPath": "gifs/captured/emergent-particle-life-colonies.gif"
+    },
+    {
+      "id": "sticky-card-stack-accumulation",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/sticky-card-stack-accumulation.html",
+      "demoSourcePath": "preview-demos/sticky-card-stack-accumulation.html",
+      "gifPath": "gifs/captured/sticky-card-stack-accumulation.gif"
+    },
+    {
+      "id": "velocity-reactive-marquee",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/velocity-reactive-marquee.html",
+      "demoSourcePath": "preview-demos/velocity-reactive-marquee.html",
+      "gifPath": "gifs/captured/velocity-reactive-marquee.gif"
+    },
+    {
+      "id": "scrubbed-word-blur-rotate-reveal",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/scrubbed-word-blur-rotate-reveal.html",
+      "demoSourcePath": "preview-demos/scrubbed-word-blur-rotate-reveal.html",
+      "gifPath": "gifs/captured/scrubbed-word-blur-rotate-reveal.gif"
+    },
+    {
+      "id": "pixel-grid-content-dissolve",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/pixel-grid-content-dissolve.html",
+      "demoSourcePath": "preview-demos/pixel-grid-content-dissolve.html",
+      "gifPath": "gifs/captured/pixel-grid-content-dissolve.gif"
+    },
+    {
+      "id": "bubble-to-navigation-morph",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/bubble-to-navigation-morph.html",
+      "demoSourcePath": "preview-demos/bubble-to-navigation-morph.html",
+      "gifPath": "gifs/captured/bubble-to-navigation-morph.gif"
+    },
+    {
+      "id": "neighbor-magnifying-navigation-dock",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/neighbor-magnifying-navigation-dock.html",
+      "demoSourcePath": "preview-demos/neighbor-magnifying-navigation-dock.html",
+      "gifPath": "gifs/captured/neighbor-magnifying-navigation-dock.gif"
+    },
+    {
+      "id": "layered-staggered-full-screen-menu",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/layered-staggered-full-screen-menu.html",
+      "demoSourcePath": "preview-demos/layered-staggered-full-screen-menu.html",
+      "gifPath": "gifs/captured/layered-staggered-full-screen-menu.gif"
+    },
+    {
+      "id": "hover-activated-image-marquee-menu",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/hover-activated-image-marquee-menu.html",
+      "demoSourcePath": "preview-demos/hover-activated-image-marquee-menu.html",
+      "gifPath": "gifs/captured/hover-activated-image-marquee-menu.gif"
+    },
+    {
+      "id": "drag-thrown-card-stack",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/drag-thrown-card-stack.html",
+      "demoSourcePath": "preview-demos/drag-thrown-card-stack.html",
+      "gifPath": "gifs/captured/drag-thrown-card-stack.gif"
+    },
+    {
+      "id": "metaball-blob-cursor",
+      "library": "motion@12.42.2",
+      "renderer": "svg",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/metaball-blob-cursor.html",
+      "demoSourcePath": "preview-demos/metaball-blob-cursor.html",
+      "gifPath": "gifs/captured/metaball-blob-cursor.gif"
+    },
+    {
+      "id": "velocity-spaced-image-trail",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/velocity-spaced-image-trail.html",
+      "demoSourcePath": "preview-demos/velocity-spaced-image-trail.html",
+      "gifPath": "gifs/captured/velocity-spaced-image-trail.gif"
+    },
+    {
+      "id": "gooey-pixel-cursor-wake",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/gooey-pixel-cursor-wake.html",
+      "demoSourcePath": "preview-demos/gooey-pixel-cursor-wake.html",
+      "gifPath": "gifs/captured/gooey-pixel-cursor-wake.gif"
+    },
+    {
+      "id": "snapping-target-reticle-cursor",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/snapping-target-reticle-cursor.html",
+      "demoSourcePath": "preview-demos/snapping-target-reticle-cursor.html",
+      "gifPath": "gifs/captured/snapping-target-reticle-cursor.gif"
+    },
+    {
+      "id": "pointer-reactive-cell-grid",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/pointer-reactive-cell-grid.html",
+      "demoSourcePath": "preview-demos/pointer-reactive-cell-grid.html",
+      "gifPath": "gifs/captured/pointer-reactive-cell-grid.gif"
+    },
+    {
+      "id": "slider-controlled-exploded-3d-assembly",
+      "library": "p5@2.3.0",
+      "renderer": "webgl",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/slider-controlled-exploded-3d-assembly.html",
+      "demoSourcePath": "preview-demos/slider-controlled-exploded-3d-assembly.html",
+      "gifPath": "gifs/captured/slider-controlled-exploded-3d-assembly.gif"
+    },
+    {
+      "id": "collision-reactive-3d-physics-stack",
+      "library": "p5@2.3.0",
+      "renderer": "webgl",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/collision-reactive-3d-physics-stack.html",
+      "demoSourcePath": "preview-demos/collision-reactive-3d-physics-stack.html",
+      "gifPath": "gifs/captured/collision-reactive-3d-physics-stack.gif"
+    },
+    {
+      "id": "refractive-glass-transmission-sculpture",
+      "library": "p5@2.3.0",
+      "renderer": "webgl",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/refractive-glass-transmission-sculpture.html",
+      "demoSourcePath": "preview-demos/refractive-glass-transmission-sculpture.html",
+      "gifPath": "gifs/captured/refractive-glass-transmission-sculpture.gif"
+    },
+    {
+      "id": "cinematic-map-camera-fly-to",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/cinematic-map-camera-fly-to.html",
+      "demoSourcePath": "preview-demos/cinematic-map-camera-fly-to.html",
+      "gifPath": "gifs/captured/cinematic-map-camera-fly-to.gif"
+    },
+    {
+      "id": "pickable-extruded-data-columns",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/pickable-extruded-data-columns.html",
+      "demoSourcePath": "preview-demos/pickable-extruded-data-columns.html",
+      "gifPath": "gifs/captured/pickable-extruded-data-columns.gif"
+    },
+    {
+      "id": "curved-3d-text-orbit",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/curved-3d-text-orbit.html",
+      "demoSourcePath": "preview-demos/curved-3d-text-orbit.html",
+      "gifPath": "gifs/captured/curved-3d-text-orbit.gif"
+    },
+    {
+      "id": "cursor-projected-3d-surface-marker",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/cursor-projected-3d-surface-marker.html",
+      "demoSourcePath": "preview-demos/cursor-projected-3d-surface-marker.html",
+      "gifPath": "gifs/captured/cursor-projected-3d-surface-marker.gif"
+    },
+    {
+      "id": "drag-resizable-audio-loop-region",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/drag-resizable-audio-loop-region.html",
+      "demoSourcePath": "preview-demos/drag-resizable-audio-loop-region.html",
+      "gifPath": "gifs/captured/drag-resizable-audio-loop-region.gif"
+    },
+    {
+      "id": "streaming-line-chart-window",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/streaming-line-chart-window.html",
+      "demoSourcePath": "preview-demos/streaming-line-chart-window.html",
+      "gifPath": "gifs/captured/streaming-line-chart-window.gif"
+    },
+    {
+      "id": "handle-connected-animated-node-editor",
+      "library": "motion@12.42.2",
+      "renderer": "svg",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/handle-connected-animated-node-editor.html",
+      "demoSourcePath": "preview-demos/handle-connected-animated-node-editor.html",
+      "gifPath": "gifs/captured/handle-connected-animated-node-editor.gif"
+    },
+    {
+      "id": "bending-webgl-gallery-ribbon",
+      "library": "p5@2.3.0",
+      "renderer": "webgl",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/bending-webgl-gallery-ribbon.html",
+      "demoSourcePath": "preview-demos/bending-webgl-gallery-ribbon.html",
+      "gifPath": "gifs/captured/bending-webgl-gallery-ribbon.gif"
+    },
+    {
+      "id": "draggable-dome-gallery",
+      "library": "p5@2.3.0",
+      "renderer": "webgl",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/draggable-dome-gallery.html",
+      "demoSourcePath": "preview-demos/draggable-dome-gallery.html",
+      "gifPath": "gifs/captured/draggable-dome-gallery.gif"
+    },
+    {
+      "id": "animated-dom-node-connection-beam",
+      "library": "motion@12.42.2",
+      "renderer": "svg",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/animated-dom-node-connection-beam.html",
+      "demoSourcePath": "preview-demos/animated-dom-node-connection-beam.html",
+      "gifPath": "gifs/captured/animated-dom-node-connection-beam.gif"
+    },
+    {
+      "id": "clip-shape-theme-reveal",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/clip-shape-theme-reveal.html",
+      "demoSourcePath": "preview-demos/clip-shape-theme-reveal.html",
+      "gifPath": "gifs/captured/clip-shape-theme-reveal.gif"
+    },
+    {
+      "id": "sticky-paragraph-ink-reveal",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/sticky-paragraph-ink-reveal.html",
+      "demoSourcePath": "preview-demos/sticky-paragraph-ink-reveal.html",
+      "gifPath": "gifs/captured/sticky-paragraph-ink-reveal.gif"
+    },
+    {
+      "id": "draggable-force-directed-svg-network",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/draggable-force-directed-svg-network.html",
+      "demoSourcePath": "preview-demos/draggable-force-directed-svg-network.html",
+      "gifPath": "gifs/captured/draggable-force-directed-svg-network.gif"
+    },
+    {
+      "id": "voronoi-nearest-point-hover-focus",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/voronoi-nearest-point-hover-focus.html",
+      "demoSourcePath": "preview-demos/voronoi-nearest-point-hover-focus.html",
+      "gifPath": "gifs/captured/voronoi-nearest-point-hover-focus.gif"
+    },
+    {
+      "id": "linked-brush-to-zoom-chart",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/linked-brush-to-zoom-chart.html",
+      "demoSourcePath": "preview-demos/linked-brush-to-zoom-chart.html",
+      "gifPath": "gifs/captured/linked-brush-to-zoom-chart.gif"
+    },
+    {
+      "id": "click-to-collapse-hierarchy-branches",
+      "library": "motion@12.42.2",
+      "renderer": "svg",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/click-to-collapse-hierarchy-branches.html",
+      "demoSourcePath": "preview-demos/click-to-collapse-hierarchy-branches.html",
+      "gifPath": "gifs/captured/click-to-collapse-hierarchy-branches.gif"
+    },
+    {
+      "id": "velocity-sensitive-signature-ink",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/velocity-sensitive-signature-ink.html",
+      "demoSourcePath": "preview-demos/velocity-sensitive-signature-ink.html",
+      "gifPath": "gifs/captured/velocity-sensitive-signature-ink.gif"
+    },
+    {
+      "id": "pressure-shaped-freehand-stroke",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/pressure-shaped-freehand-stroke.html",
+      "demoSourcePath": "preview-demos/pressure-shaped-freehand-stroke.html",
+      "gifPath": "gifs/captured/pressure-shaped-freehand-stroke.gif"
+    },
+    {
+      "id": "drag-editable-bezier-curve-handles",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/drag-editable-bezier-curve-handles.html",
+      "demoSourcePath": "preview-demos/drag-editable-bezier-curve-handles.html",
+      "gifPath": "gifs/captured/drag-editable-bezier-curve-handles.gif"
+    },
+    {
+      "id": "image-palette-ambient-color-transition",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/image-palette-ambient-color-transition.html",
+      "demoSourcePath": "preview-demos/image-palette-ambient-color-transition.html",
+      "gifPath": "gifs/captured/image-palette-ambient-color-transition.gif"
+    },
+    {
+      "id": "blurhash-to-photo-progressive-reveal",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/blurhash-to-photo-progressive-reveal.html",
+      "demoSourcePath": "preview-demos/blurhash-to-photo-progressive-reveal.html",
+      "gifPath": "gifs/captured/blurhash-to-photo-progressive-reveal.gif"
+    },
+    {
+      "id": "live-hand-landmark-video-overlay",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/live-hand-landmark-video-overlay.html",
+      "demoSourcePath": "preview-demos/live-hand-landmark-video-overlay.html",
+      "gifPath": "gifs/captured/live-hand-landmark-video-overlay.gif"
+    },
+    {
+      "id": "frame-by-frame-gif-scrubber",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/frame-by-frame-gif-scrubber.html",
+      "demoSourcePath": "preview-demos/frame-by-frame-gif-scrubber.html",
+      "gifPath": "gifs/captured/frame-by-frame-gif-scrubber.gif"
+    },
+    {
+      "id": "scroll-controlled-video-scrubbing",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/scroll-controlled-video-scrubbing.html",
+      "demoSourcePath": "preview-demos/scroll-controlled-video-scrubbing.html",
+      "gifPath": "gifs/captured/scroll-controlled-video-scrubbing.gif"
     }
   ]
 }

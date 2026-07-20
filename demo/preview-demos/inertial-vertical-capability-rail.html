@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Motion — Inertial Vertical Capability Rail</title>
+  <link rel="stylesheet" href="./shared.css" />
+  <style>
+    :root { --preview-background:#f4efe5; color-scheme:light; }
+    .rail-stage { background:linear-gradient(135deg,#f7f2e8,#e5ddcb); color:#151817; }
+    .rail-title { position:absolute; left:18px; top:44px; width:110px; margin:0; font:900 22px/.92 Georgia,serif; letter-spacing:-.055em; }
+    .rail-title small { display:block; margin-top:8px; font:800 6px/1.4 ui-monospace,monospace; letter-spacing:.12em; text-transform:uppercase; color:#775d50; }
+    .rail-window { position:absolute; right:16px; top:25px; width:157px; height:137px; overflow:hidden; border:1px solid #251d1730; border-radius:17px; background:#191c1b; box-shadow:0 20px 34px #5e4c3e42; touch-action:none; cursor:grab; }
+    .rail-window:active { cursor:grabbing; }
+    .capability-rail { position:absolute; inset:0 8px auto; display:grid; gap:7px; padding:10px 0 70px; will-change:transform; }
+    .capability-card { position:relative; height:50px; padding:9px 10px; overflow:hidden; border:1px solid #ffffff18; border-radius:11px; background:linear-gradient(135deg,#2b302e,#191c1b); color:#f9f1e6; }
+    .capability-card::after { content:""; position:absolute; right:-14px; top:-18px; width:58px; height:58px; border-radius:50%; background:var(--tone); filter:blur(1px); opacity:.72; }
+    .capability-card b { position:relative; z-index:2; display:block; font:900 8px/1 ui-monospace,monospace; letter-spacing:.08em; text-transform:uppercase; }
+    .capability-card span { position:relative; z-index:2; display:block; margin-top:7px; width:75%; height:3px; border-radius:9px; background:#ffffff35; }
+    .rail-gesture { position:absolute; z-index:5; right:7px; top:56px; width:2px; height:32px; border-radius:9px; background:#ffffff20; }
+    .rail-gesture::before { content:""; position:absolute; inset:0; border-radius:inherit; background:#ffbf47; transform:scaleY(var(--velocity,.3)); transform-origin:top; }
+    .rail-mode { position:absolute; left:19px; bottom:24px; font:900 6px/1 ui-monospace,monospace; letter-spacing:.12em; color:#715e52; text-transform:uppercase; }
+    .rail-stage .library-badge { background:#f7f2e8d8; border-color:#251d172b; color:#151817; }
+    .scene-caption { display:none; }
+  </style>
+</head>
+<body>
+  <main class="preview-stage rail-stage" aria-label="A vertical capability rail can be thrown with inertia before resuming a slow automatic drift">
+    <h1 class="rail-title">THROW<br/>THE<br/>INDEX<small>grab · release · decay · resume</small></h1>
+    <div class="rail-window" id="rail-window" tabindex="0" aria-label="Drag vertically to throw the capability rail">
+      <div class="capability-rail" id="capability-rail">
+        <article class="capability-card" style="--tone:#ff6b54"><b>Signal mapping</b><span></span><span></span></article>
+        <article class="capability-card" style="--tone:#66d6ba"><b>Scene synthesis</b><span></span><span></span></article>
+        <article class="capability-card" style="--tone:#8d78ff"><b>Spatial memory</b><span></span><span></span></article>
+        <article class="capability-card" style="--tone:#ffd45a"><b>Motion direction</b><span></span><span></span></article>
+      </div>
+      <i class="rail-gesture" id="rail-gesture" aria-hidden="true"></i>
+    </div>
+    <span class="rail-mode" id="rail-mode">automatic drift</span>
+    <span class="library-badge">Motion · inertial pointer rail</span>
+    <span class="scene-caption">direct drag releases into decay, then restores a quiet drift</span>
+  </main>
+  <script type="module" src="./src/inertial-vertical-capability-rail-demo.js"></script>
+</body>
+</html>

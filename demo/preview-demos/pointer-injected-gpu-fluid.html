@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>regl — Pointer-injected GPU Fluid</title>
+    <link rel="stylesheet" href="./shared.css" />
+    <style>
+      :root { --preview-background: #03040a; }
+      #fluid-canvas { position: absolute; inset: 0; width: 100%; height: 100%; cursor: crosshair; }
+      .fluid-copy { position: absolute; z-index: 4; left: 14px; top: 49px; width: 105px; color: white; pointer-events: none; }
+      .fluid-copy p { margin: 0; color: #93a0c2; font: 750 6px/1.35 ui-monospace, monospace; letter-spacing: .11em; text-transform: uppercase; }
+      .fluid-copy h1 { margin: 7px 0 0; font: 900 21px/.82 system-ui, sans-serif; letter-spacing: -.065em; }
+      .inject-reticle { position: absolute; z-index: 5; width: 18px; height: 18px; border: 1px solid #fff9; border-radius: 50%; translate: -50% -50%; pointer-events: none; }
+      .inject-reticle::before, .inject-reticle::after { content: ''; position: absolute; left: 50%; top: 50%; background: white; translate: -50% -50%; }
+      .inject-reticle::before { width: 26px; height: 1px; }
+      .inject-reticle::after { width: 1px; height: 26px; }
+      .fluid-meter { position: absolute; z-index: 4; right: 12px; bottom: 13px; color: #c9d3eea6; font: 700 6px/1 ui-monospace, monospace; letter-spacing: .12em; pointer-events: none; }
+      .library-badge { background: #070914b8; }
+    </style>
+  </head>
+  <body>
+    <main class="preview-stage" data-preview-mechanism="regl-pointer-fluid">
+      <canvas id="fluid-canvas" tabindex="0" aria-label="Move the pointer or use arrow keys to inject color into the GPU fluid field"></canvas>
+      <section class="fluid-copy"><p>Velocity / dye injection</p><h1>TOUCH<br />THE FLOW</h1></section>
+      <div class="inject-reticle" id="inject-reticle" aria-hidden="true"></div>
+      <span class="fluid-meter" id="fluid-meter">CURL 0.00</span>
+      <span class="library-badge">regl · fragment field</span>
+      <span class="scene-caption">pointer pressure bends the chromatic current</span>
+    </main>
+    <script type="module" src="./src/pointer-injected-gpu-fluid-demo.js"></script>
+  </body>
+</html>

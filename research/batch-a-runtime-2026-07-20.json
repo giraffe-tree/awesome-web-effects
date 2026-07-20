@@ -1,0 +1,142 @@
+[
+  {
+    "id": "scroll-scrubbed-document-generation-playback",
+    "projectId": "motiondivision-motion",
+    "library": "motion@12.42.2",
+    "renderer": "dom",
+    "snippet": "bodyMotion.time = t; lines.forEach((line, i) => line.style.clipPath = `inset(0 ${(1 - reveal(i, t)) * 100}% 0 0)`);"
+  },
+  {
+    "id": "duration-aware-hero-film-handoff",
+    "projectId": "motiondivision-motion",
+    "library": "motion@12.42.2",
+    "renderer": "canvas2d",
+    "snippet": "const active = locate(t, durations); layers[next].style.opacity = crossfade(active.local, preloadWindow);"
+  },
+  {
+    "id": "hover-rehearsed-video-style-rail",
+    "projectId": "motiondivision-motion",
+    "library": "motion@12.42.2",
+    "renderer": "canvas2d",
+    "snippet": "card.onpointerenter = () => preview(i); card.onpointerleave = () => rewind(i); card.onclick = () => commitAndCenter(i);"
+  },
+  {
+    "id": "device-silhouette-masked-video",
+    "projectId": "motiondivision-motion",
+    "library": "motion@12.42.2",
+    "renderer": "canvas2d",
+    "snippet": "film.style.maskImage = `url(${deviceAlphaMask})`; drawLiveFilm(film.getContext('2d'), t);"
+  },
+  {
+    "id": "four-corner-hover-crop-marks",
+    "projectId": "motiondivision-motion",
+    "library": "motion@12.42.2",
+    "renderer": "dom",
+    "snippet": "marks.forEach(mark => animate(mark, { opacity: [0, 1], x: [mark.dataset.dx, 0], y: [mark.dataset.dy, 0] }));"
+  },
+  {
+    "id": "interaction-history-hiring-badge",
+    "projectId": "motiondivision-motion",
+    "library": "motion@12.42.2",
+    "renderer": "dom",
+    "snippet": "link.onpointerenter = () => applyHoverCount(count === 3 ? 0 : ++count);"
+  },
+  {
+    "id": "card-metadata-to-cta-role-swap",
+    "projectId": "motiondivision-motion",
+    "library": "motion@12.42.2",
+    "renderer": "dom",
+    "snippet": "metaMotion.time = t; ctaMotion.time = t; card.style.setProperty('--bloom', bloom(t));"
+  },
+  {
+    "id": "opposed-diagonal-offset-cta",
+    "projectId": "motiondivision-motion",
+    "library": "motion@12.42.2",
+    "renderer": "dom",
+    "snippet": "animate(front, { x: -7, y: -7 }); animate(back, { x: 7, y: 7 });"
+  },
+  {
+    "id": "blurred-autoplay-video-ambience",
+    "projectId": "motiondivision-motion",
+    "library": "motion@12.42.2",
+    "renderer": "canvas2d",
+    "snippet": "drawSource(sharpContext, t); ambientContext.drawImage(sharpCanvas, 0, 0, ambient.width, ambient.height);"
+  },
+  {
+    "id": "ascii-orchestration-signal-sweep",
+    "projectId": "processing-p5-js",
+    "library": "p5@2.3.0",
+    "renderer": "canvas2d",
+    "snippet": "const band = max(0, 1 - abs(cell.x - bentFront) / .115); text(structure && band > .18 ? '◆' : glyph, x, y);"
+  },
+  {
+    "id": "inertial-vertical-capability-rail",
+    "projectId": "motiondivision-motion",
+    "library": "motion@12.42.2",
+    "renderer": "dom",
+    "snippet": "velocity = deltaY / deltaTime; dragOffset += velocity * fixedStep; velocity *= .9;"
+  },
+  {
+    "id": "visibility-gated-agent-terminal-replay",
+    "projectId": "motiondivision-motion",
+    "library": "motion@12.42.2",
+    "renderer": "dom",
+    "snippet": "observer = new IntersectionObserver(([entry]) => visible = entry.isIntersecting); if (visible) renderTerminalState(t);"
+  },
+  {
+    "id": "clip-path-menu-curtain",
+    "projectId": "motiondivision-motion",
+    "library": "motion@12.42.2",
+    "renderer": "dom",
+    "snippet": "animate(curtain, { clipPath: ['polygon(0 0,100% 0,100% 0,0 0)', 'polygon(0 0,100% 0,100% 100%,0 100%)'] });"
+  },
+  {
+    "id": "playable-brand-minesweeper-footer",
+    "projectId": "motiondivision-motion",
+    "library": "motion@12.42.2",
+    "renderer": "dom",
+    "snippet": "cell.onclick = () => cell.dataset.state = bombs.has(index) ? 'bomb' : 'safe';"
+  },
+  {
+    "id": "noise-cancellation-audio-comparison",
+    "projectId": "motiondivision-motion",
+    "library": "motion@12.42.2",
+    "renderer": "canvas2d",
+    "snippet": "rawGain.gain.setTargetAtTime(1 - ratio, audio.currentTime, .03); cleanGain.gain.setTargetAtTime(ratio, audio.currentTime, .03);"
+  },
+  {
+    "id": "track-card-play-state-handoff",
+    "projectId": "motiondivision-motion",
+    "library": "motion@12.42.2",
+    "renderer": "dom",
+    "snippet": "cards.forEach((card, i) => card.setAttribute('aria-pressed', String(i === selected))); motions[selected].time = t;"
+  },
+  {
+    "id": "audio-equalizer-typography",
+    "projectId": "processing-p5-js",
+    "library": "p5@2.3.0",
+    "renderer": "canvas2d",
+    "snippet": "analyser.getByteFrequencyData(bins); line(x, baseline, x, baseline - (15 + bins[i] / 255 * 62));"
+  },
+  {
+    "id": "animated-hand-drawn-semantic-annotation",
+    "projectId": "motiondivision-motion",
+    "library": "motion@12.42.2",
+    "renderer": "svg",
+    "snippet": "animate(annotationPaths, { pathLength: [0, 0, 1, 1, 0] }, { delay: stagger(.09) });"
+  },
+  {
+    "id": "mechanical-split-flap-character-change",
+    "projectId": "motiondivision-motion",
+    "library": "motion@12.42.2",
+    "renderer": "dom",
+    "snippet": "animate(hinges, { rotateX: [0, -92, -180] }, { delay: stagger(.045) });"
+  },
+  {
+    "id": "pointer-rotated-dot-matrix-globe",
+    "projectId": "processing-p5-js",
+    "library": "p5@2.3.0",
+    "renderer": "canvas2d",
+    "snippet": "screenX = cx + cos(phi) * cos(theta + dragYaw) * radius; screenY = cy + rotatedY * radius;"
+  }
+]

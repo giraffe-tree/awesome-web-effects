@@ -197,7 +197,11 @@
       .effect-modal-close { position: sticky; z-index: 4; top: 14px; float: right; display: grid; place-items: center; width: 38px; height: 38px; margin: 14px 14px -52px 0; border: 1px solid rgba(255,255,255,.45); border-radius: 50%; color: white; background: rgba(0,0,0,.52); backdrop-filter: blur(12px); cursor: pointer; font-size: 24px; line-height: 1; }
       .effect-modal-close:hover { background: rgba(0,0,0,.72); }
       .modal-preview { position: relative; display: grid; place-items: center; min-height: 360px; overflow: hidden; color: white; background: #111216; }
-      .modal-preview img { display: block; width: 100%; max-height: min(58vh, 540px); object-fit: contain; image-rendering: auto; }
+      .modal-preview-live { min-height: 453px; padding: 24px; background: radial-gradient(circle at 50% 28%, #30333b, #111216 70%); }
+      .modal-preview-frame { display: block; width: min(100%, 720px); aspect-ratio: 16 / 9; border: 0; border-radius: 18px; background: #07090d; box-shadow: 0 22px 70px rgba(0,0,0,.42); }
+      .modal-preview-official { padding: 32px; }
+      .modal-preview-official img { display: block; width: auto; height: auto; max-width: 100%; max-height: min(58vh, 540px); object-fit: contain; image-rendering: auto; }
+      .modal-preview-official img.is-local-fallback { width: 320px; height: 180px; }
       .modal-preview-unavailable { display: grid; place-items: center; width: 100%; min-height: 360px; padding: 70px 30px; text-align: center; background: radial-gradient(circle at 50% 30%, #343944, #17181d 68%); }
       .modal-preview-unavailable > div > span { display: block; font-size: 48px; }
       .modal-preview-unavailable strong { display: block; margin-top: 16px; font-size: clamp(24px, 4vw, 38px); letter-spacing: -.04em; }
@@ -313,7 +317,9 @@
         .effect-modal-dialog { width: 100%; max-height: 94dvh; border-radius: 24px 24px 0 0; }
         .effect-modal-close { top: 10px; margin: 10px 10px -48px 0; }
         .modal-preview, .modal-preview-unavailable { min-height: 220px; }
-        .modal-preview img { max-height: 42vh; }
+        .modal-preview-live { min-height: 0; padding: 0; }
+        .modal-preview-frame { width: 100%; border-radius: 0; box-shadow: none; }
+        .modal-preview-official { padding: 20px; }
         .modal-preview-status { left: 12px; bottom: 12px; }
         .modal-content-body { padding: 24px 18px 30px; }
         .modal-facts, .modal-detail-grid, .modal-score-card { grid-template-columns: 1fr; }
@@ -410,8 +416,8 @@
     </div>
 
     <script type="module">
-      import { categories, effects, projects } from './data/effects.js?v=20260718-expansion-v1';
-      import { admissionPolicy } from './data/demo-admission.js?v=20260718-expansion-v1';
+      import { categories, effects, projects } from './data/effects.js?v=20260720-catalog-100';
+      import { admissionPolicy } from './data/demo-admission.js?v=20260720-catalog-100';
 
       const copy = {
         en: {
@@ -429,10 +435,10 @@
           previewOfficial: 'Official', previewLocal: 'Local demo', previewUnavailable: 'No real preview', previewPaused: 'Preview paused', openDemo: 'Open demo ↗', headPreview: 'Preview', headEffect: 'Effect', headSource: 'Recommended source', headAction: 'Actions',
           recommended: 'Recommended implementation', observedOn: 'Observed on AI homepages', legacy: 'Legacy', implementations: 'implementations', implementation: 'implementation', copyPrompt: 'Copy agent prompt', promptCopied: 'Prompt copied',
           showCode: 'View minimal code', hideCode: 'Hide code', copyCode: 'Copy', codeCopied: 'Copied', copyFailed: 'Select text', definition: 'Effect', permalink: 'Effect link',
-          repositoryLabel: 'on GitHub (opens in a new tab)', previewSource: 'Preview source ↗', referenceSource: 'Implementation reference ↗', footer: 'Effect-first, bilingual, and built for implementation. Project names and previews remain the property of their respective authors.', back: 'Back to top ↑',
+          repositoryLabel: 'on GitHub (opens in a new tab)', previewSource: 'Preview source ↗', referenceSource: 'Research / implementation reference ↗', footer: 'Effect-first, bilingual, and built for implementation. Project names and previews remain the property of their respective authors.', back: 'Back to top ↑',
           openDetails: 'View effect details', closeDetails: 'Close details', detailsLabel: 'Effect details', triggerLabel: 'Trigger', timingLabel: 'Timing', layerLabel: 'Layer', implementationLabel: 'Implementation project', provenanceLabel: 'Preview provenance',
-          officialDetail: 'Verified official media', localDetail: 'Captured local demo', unavailableDetail: 'No real preview', officialProvenance: 'This GIF is a verified official asset linked to its upstream source.', localProvenance: 'This GIF is a browser capture of the runnable published demo and is backed by reusable local source code.', unavailableProvenance: 'A real preview has not been completed. This entry deliberately loads no generated or placeholder GIF.', unavailableHelp: 'The implementation details remain available while a verifiable preview is being prepared.',
-          viewProject: 'Open project ↗', viewPreviewSource: 'Open preview source ↗', viewReference: 'Open implementation reference ↗', viewDemoSource: 'View demo source ↗', noRunnableDemo: 'No runnable local demo is published for this entry.',
+          officialDetail: 'Verified official media', localDetail: 'Captured local demo', unavailableDetail: 'No real preview', livePreview: 'Live runnable demo', officialNativePreview: 'Official preview · native size', officialProvenance: 'This GIF is a verified official asset linked to its upstream source.', localProvenance: 'This GIF is a browser capture of the runnable published demo and is backed by reusable local source code.', unavailableProvenance: 'A real preview has not been completed. This entry deliberately loads no generated or placeholder GIF.', unavailableHelp: 'The implementation details remain available while a verifiable preview is being prepared.',
+          viewProject: 'Open project ↗', viewPreviewSource: 'Open preview source ↗', viewReference: 'Open research reference ↗', viewDemoSource: 'View demo source ↗', noRunnableDemo: 'No runnable local demo is published for this entry.',
           minimalCodeLabel: 'Recommended source · minimal integration code', minimalCodeHelp: 'This is the smallest useful integration snippet. The runnable demo and recorded GIF are separate, linked evidence.', minimalCodeUnavailableHelp: 'This is a minimal integration snippet only—not a runnable or recorded demo.', copyMinimalCode: 'Copy code',
           curatorialScore: 'Curatorial admission score', scorePassed: 'Passed', scoreSummary: 'Passed the strict visual-demo admission threshold and every core-dimension minimum.', scoreOutOf: 'out of 100'
         },
@@ -451,10 +457,10 @@
           previewOfficial: '官方素材', previewLocal: '真实 Demo', previewUnavailable: '暂无真实预览', previewPaused: '已减少动态', openDemo: '打开 Demo ↗', headPreview: '预览', headEffect: '效果', headSource: '推荐来源', headAction: '操作',
           recommended: '推荐实现', observedOn: '观察到该效果的 AI 官网', legacy: '经典旧版', implementations: '个实现', implementation: '个实现', copyPrompt: '复制 Agent Prompt', promptCopied: 'Prompt 已复制',
           showCode: '查看最小代码', hideCode: '收起代码', copyCode: '复制', codeCopied: '已复制', copyFailed: '请选中文本', definition: '效果', permalink: '效果链接',
-          repositoryLabel: 'GitHub 仓库（在新标签页打开）', previewSource: '预览来源 ↗', referenceSource: '实现参考 ↗', footer: '以效果为先，提供双语内容，并面向真实实现。项目名称与预览素材权利归各自作者所有。', back: '回到顶部 ↑',
+          repositoryLabel: 'GitHub 仓库（在新标签页打开）', previewSource: '预览来源 ↗', referenceSource: '研究 / 实现参考 ↗', footer: '以效果为先，提供双语内容，并面向真实实现。项目名称与预览素材权利归各自作者所有。', back: '回到顶部 ↑',
           openDetails: '查看效果详情', closeDetails: '关闭详情', detailsLabel: '效果详情', triggerLabel: '触发方式', timingLabel: '时间关系', layerLabel: '呈现层级', implementationLabel: '实现项目', provenanceLabel: '真实预览来源',
-          officialDetail: '已核验官方素材', localDetail: '真实本地 Demo 录制', unavailableDetail: '暂无真实预览', officialProvenance: '此 GIF 是已经核验并可追溯到上游来源的官方素材。', localProvenance: '此 GIF 由浏览器录制可运行的发布 Demo，并有可复用的本地源码作为依据。', unavailableProvenance: '真实预览尚未完成；此条目不会加载生成动画或占位 GIF。', unavailableHelp: '在准备可核验预览期间，仍可查看实现信息并复制 Agent Prompt。',
-          viewProject: '打开项目 ↗', viewPreviewSource: '打开预览来源 ↗', viewReference: '打开实现参考 ↗', viewDemoSource: '查看 Demo 源码 ↗', noRunnableDemo: '此条目尚未发布可运行的本地 Demo。',
+          officialDetail: '已核验官方素材', localDetail: '真实本地 Demo 录制', unavailableDetail: '暂无真实预览', livePreview: '实时可运行 Demo', officialNativePreview: '官方预览 · 原始尺寸', officialProvenance: '此 GIF 是已经核验并可追溯到上游来源的官方素材。', localProvenance: '此 GIF 由浏览器录制可运行的发布 Demo，并有可复用的本地源码作为依据。', unavailableProvenance: '真实预览尚未完成；此条目不会加载生成动画或占位 GIF。', unavailableHelp: '在准备可核验预览期间，仍可查看实现信息并复制 Agent Prompt。',
+          viewProject: '打开项目 ↗', viewPreviewSource: '打开预览来源 ↗', viewReference: '打开研究来源 ↗', viewDemoSource: '查看 Demo 源码 ↗', noRunnableDemo: '此条目尚未发布可运行的本地 Demo。',
           minimalCodeLabel: '推荐来源 · 最小集成代码', minimalCodeHelp: '这是最小可用的集成片段；可运行 Demo 与录制 GIF 是另外列出的独立证据。', minimalCodeUnavailableHelp: '这只是最小集成片段，不是可运行 Demo，也不是已录制效果。', copyMinimalCode: '一键复制代码',
           curatorialScore: '策展准入评分', scorePassed: '已通过', scoreSummary: '已通过严格的视觉 Demo 准入总分线与全部核心维度最低分。', scoreOutOf: '满分 100'
         }
@@ -481,6 +487,12 @@
       const effectName = effect => language === 'zh' ? effect.nameZh : effect.name;
       const recommendedSource = effect => effect.sources.find(source => source.recommended) || effect.sources[0];
       const hasRealPreview = source => ['official-capture', 'local-demo-capture'].includes(source.previewKind) && Boolean(source.preview);
+      const officialPreviewUrl = source => {
+        const githubBlob = source.originUrl?.match(/^https:\/\/github\.com\/([^/]+)\/([^/]+)\/blob\/([^/]+)\/(.+)$/);
+        return githubBlob
+          ? `https://raw.githubusercontent.com/${githubBlob[1]}/${githubBlob[2]}/${githubBlob[3]}/${githubBlob[4]}`
+          : source.originUrl;
+      };
       const interactiveSelector = 'a, button, input, select, textarea, pre, code';
 
       function modalLink(href, label) {
@@ -512,9 +524,12 @@
         const description = language === 'zh'
           ? `${effect.nameZh}由“${effect.behavior.trigger}”触发，以“${effect.behavior.timing}”的时间关系呈现在“${effect.behavior.layer}”层。${category.descriptionZh}`
           : `${effect.name} is triggered by ${effect.behavior.trigger}, uses ${effect.behavior.timing} timing, and appears on the ${effect.behavior.layer} layer. ${category.description}`;
-        const preview = realPreview
-          ? `<div class="modal-preview"><img src="./gifs/${escapeHTML(source.preview)}.gif" alt="${escapeHTML(`${effect.name} / ${effect.nameZh}`)}" decoding="async" /><span class="modal-preview-status">${previewStatus}</span></div>`
-          : `<div class="modal-preview modal-preview-unavailable"><div><span aria-hidden="true">◎</span><strong>${t.unavailableDetail}</strong><p>${t.unavailableHelp}</p></div><span class="modal-preview-status">${previewStatus}</span></div>`;
+        const previewTitle = escapeHTML(`${effect.name} / ${effect.nameZh}`);
+        const preview = !realPreview
+          ? `<div class="modal-preview modal-preview-unavailable"><div><span aria-hidden="true">◎</span><strong>${t.unavailableDetail}</strong><p>${t.unavailableHelp}</p></div><span class="modal-preview-status">${previewStatus}</span></div>`
+          : source.demoPath
+            ? `<div class="modal-preview modal-preview-live"><iframe class="modal-preview-frame" src="./${escapeHTML(source.demoPath)}" title="${previewTitle}" loading="eager"></iframe><span class="modal-preview-status">${t.livePreview}</span></div>`
+            : `<div class="modal-preview modal-preview-official"><img src="${escapeHTML(officialPreviewUrl(source))}" data-official-preview data-upstream-src="${escapeHTML(officialPreviewUrl(source))}" data-fallback-src="./gifs/${escapeHTML(source.preview)}.gif" alt="${previewTitle}" decoding="async" referrerpolicy="no-referrer" /><span class="modal-preview-status">${t.officialNativePreview}</span></div>`;
         const links = [modalLink(project.url, t.viewProject)];
         if (source.demoPath) links.push(modalLink(`./${source.demoPath}`, t.openDemo));
         if (source.originUrl && source.originUrl !== project.url) links.push(modalLink(source.originUrl, t.viewPreviewSource));
@@ -543,6 +558,12 @@
         codeButton.addEventListener('click', event => {
           event.stopPropagation();
           copyText(codeButton, source.snippet, t.codeCopied, t.copyMinimalCode);
+        });
+        const officialImage = modalContent.querySelector('[data-official-preview]');
+        officialImage?.addEventListener('error', () => {
+          if (officialImage.classList.contains('is-local-fallback')) return;
+          officialImage.classList.add('is-local-fallback');
+          officialImage.src = officialImage.dataset.fallbackSrc;
         });
         modal.hidden = false;
         document.body.classList.add('modal-open');

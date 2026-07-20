@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>p5.js — Refractive Glass Transmission Sculpture</title>
+  <link rel="stylesheet" href="./shared.css">
+  <style>
+    :root{--preview-background:#090713}#glass-host{position:absolute;inset:0;cursor:ew-resize}#glass-host canvas{width:100%!important;height:100%!important}.glass-copy{position:absolute;z-index:4;left:14px;top:48px;color:#f5f0ff;pointer-events:none}.glass-copy small{font:800 6px/1 ui-monospace;letter-spacing:.16em;color:#76f4d4}.glass-copy h1{width:112px;margin:8px 0;font:950 18px/.85 system-ui;letter-spacing:-.06em}.glass-copy p{width:94px;margin:0;color:#c6bad9;font:600 6px/1.45 ui-monospace}.ior{position:absolute;z-index:4;right:12px;top:12px;color:#ffd6ed;font:900 7px/1 ui-monospace;letter-spacing:.12em}.library-badge{background:#090713b8}.scene-caption{color:#d5c8e0}</style>
+</head>
+<body>
+  <main class="preview-stage" data-preview-mechanism="raymarched-refraction">
+    <div id="glass-host" tabindex="0" aria-label="Move the pointer or use arrow keys to rotate the refractive sculpture"></div>
+    <section class="glass-copy"><small>OPTICAL STUDY / 1.45</small><h1>LIGHT BENDS AROUND FORM.</h1><p>LIVE STRIPED ENVIRONMENT · CHROMATIC TRANSMISSION</p></section>
+    <span class="ior">IOR 1.45</span>
+    <span class="library-badge">p5.js · ray-marched glass</span>
+    <span class="scene-caption">refract(ray, normal, 1 / ior)</span>
+  </main>
+  <script type="module" src="./src/refractive-glass-transmission-sculpture-demo.js"></script>
+</body>
+</html>

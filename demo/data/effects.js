@@ -1,5 +1,7 @@
+import { effectExpansion100Specs } from './effect-expansion-2026-07-20.js';
+
 // Curator-approved release catalog. Rejected candidates remain documented in the current dated admission audit.
-export const snapshotDate = "2026-07-18";
+export const snapshotDate = "2026-07-20";
 
 export const categories = [
   {
@@ -963,7 +965,98 @@ const expansionEffects = [
   }
 ].map(makeExpansionEffect);
 
-export const effects = [...existingEffects, ...expansionEffects];
+const projectNameById = {
+  'greensock-gsap': 'GSAP',
+  'juliangarnier-anime': 'Anime.js',
+  'motiondivision-motion': 'Motion',
+  'processing-p5-js': 'p5.js',
+  'regl-project-regl': 'regl'
+};
+
+const scoreDimensions = scores => ({
+  creativity: scores.creativity,
+  artDirection: scores.artDirection,
+  motion: scores.motion,
+  clarity: scores.clarity,
+  inspiration: scores.inspiration,
+  evidence: scores.evidence
+});
+
+const researchParty = spec => {
+  const url = new URL(spec.sourceUrl);
+  if (url.hostname === 'github.com') return [];
+  const hostLabel = url.hostname.replace(/^www\./, '').split('.')[0].replace(/[-_]+/g, ' ');
+  const name = hostLabel.replace(/\b\w/g, letter => letter.toUpperCase());
+  return [{ name, url: spec.sourceUrl, observedAs: spec.name }];
+};
+
+const expansion100Prompt = spec => `Implement the "${spec.name}" (${spec.nameZh}) web interaction effect in the current project.
+
+Use ${projectNameById[spec.implementation.projectId]} with the same real browser rendering mechanism used by the verified local demo. The observed source is ${spec.sourceUrl}; treat it as interaction research, not as permission to copy branding, proprietary assets, or source code.
+
+Interaction contract:
+- Trigger: ${spec.behavior.trigger}
+- Visual response: ${spec.behavior.response}
+- Timing relationship: ${spec.behavior.timing}
+- Page layer: ${spec.behavior.layer}
+
+Requirements:
+- Preserve the defining trigger, progression, rendering, and continuity signature instead of substituting a generic fade or entrance.
+- Integrate with the existing design system and component structure.
+- Support keyboard and touch input whenever the interaction is actionable.
+- Respect prefers-reduced-motion with a legible non-animated fallback.
+- Avoid layout shift, scroll traps, inaccessible focus behavior, unstable randomness, and remote runtime assets.
+- Keep capture inputs deterministic and clean up listeners, timers, media, audio, animation frames, and graphics contexts.
+
+Start from this minimal mechanism:
+
+\`\`\`js
+${spec.implementation.snippet}
+\`\`\`
+
+Return the working code, the files changed, and a short explanation of how to tune timing, geometry, interaction strength, and reduced-motion behavior.`;
+
+const expansion100Effects = effectExpansion100Specs.map((spec, index) => {
+  const scores = scoreDimensions(spec.scores);
+  return {
+    id: spec.id,
+    category: spec.category,
+    name: spec.name,
+    nameZh: spec.nameZh,
+    addedIn: '2026-effect-expansion',
+    research: {
+      sourceUrl: spec.sourceUrl,
+      difference: `${spec.difference} 本项的触发、推进、渲染与连续性签名均与现有目录不同。`,
+      verifiedAt: '2026-07-20'
+    },
+    behavior: spec.behavior,
+    prompt: expansion100Prompt(spec),
+    sources: [{
+      projectId: spec.implementation.projectId,
+      recommended: true,
+      snippet: spec.implementation.snippet,
+      preview: `captured/${spec.id}`,
+      previewKind: 'local-demo-capture',
+      demoPath: `preview-demos/dist/${spec.id}.html`,
+      demoSourcePath: `preview-demos/${spec.id}.html`,
+      originUrl: spec.implementation.projectUrl,
+      referenceUrl: spec.sourceUrl,
+      previewRecipe: null
+    }],
+    order: 27 + index,
+    relatedParties: researchParty(spec),
+    admission: {
+      policyVersion: '2026-07-17',
+      scores,
+      total: Object.values(scores).reduce((total, score) => total + score, 0),
+      decision: 'admit',
+      reasonCode: 'passed',
+      rationaleZh: spec.rationaleZh
+    }
+  };
+});
+
+export const effects = [...existingEffects, ...expansionEffects, ...expansion100Effects];
 
 export const projects = [
   {

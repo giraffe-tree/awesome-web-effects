@@ -1,3 +1,5 @@
+import { effectExpansion100Specs } from './effect-expansion-2026-07-20.js';
+
 export const admissionPolicy = {
   version: '2026-07-17',
   threshold: 80,
@@ -18,12 +20,12 @@ export const admissionPolicy = {
 };
 
 export const admissionAuditSummary = {
-  auditedAt: '2026-07-18',
-  candidateCount: 315,
-  reviewedPreviewCount: 39,
-  missingPreviewCount: 276,
-  admittedCount: 26,
-  rejectedCount: 289
+  auditedAt: '2026-07-20',
+  candidateCount: 346,
+  reviewedPreviewCount: 113,
+  missingPreviewCount: 233,
+  admittedCount: 100,
+  rejectedCount: 246
 };
 
 // Human visual review of every catalog entry that had a verifiable preview on
@@ -188,6 +190,18 @@ export const reviewedDemoScores = {
     rationaleZh: '同一固定导航穿越明暗、荧光和网格区域时由真实混合模式连续反相，无需主题类，机制纯粹且构图清楚。'
   }
 };
+
+for (const spec of effectExpansion100Specs) {
+  reviewedDemoScores[spec.id] = {
+    creativity: spec.scores.creativity,
+    artDirection: spec.scores.artDirection,
+    motion: spec.scores.motion,
+    clarity: spec.scores.clarity,
+    inspiration: spec.scores.inspiration,
+    evidence: spec.scores.evidence,
+    rationaleZh: spec.rationaleZh
+  };
+}
 
 const scoreTotal = scores => admissionPolicy.dimensions.reduce((total, dimension) => total + scores[dimension.id], 0);
 

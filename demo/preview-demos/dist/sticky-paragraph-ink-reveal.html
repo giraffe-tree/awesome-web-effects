@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Motion — Sticky Paragraph Ink Reveal</title>
+  <style>
+    :root{--preview-background:#eee9dc;color-scheme:light}
+    .ink-scroll{position:absolute;inset:0;overflow-y:auto;background:#eee9dc;color:#25231f;scrollbar-width:none}
+    .ink-scroll::-webkit-scrollbar{display:none}
+    .ink-space{height:540px;padding-top:1px}
+    .ink-sticky{position:sticky;top:43px;width:260px;margin:0 0 0 45px;padding:15px 0}
+    .ink-sticky small{display:block;margin-bottom:10px;color:#9e6a3d;font:800 6px/1 ui-monospace;letter-spacing:.17em}
+    .ink-line{margin:0;font:850 20px/.94 Georgia,serif;letter-spacing:-.04em}
+    .ink-word{display:inline-block;color:#bdb6a9;will-change:transform,color}
+    .ink-meter{position:fixed;z-index:6;right:13px;top:14px;color:#9e6a3d;font:900 7px/1 ui-monospace}
+    .library-badge{background:#eee8d8e8;color:#2a2823;border-color:#70695c55}
+    .scene-caption{color:#625d53;background:#eee9dc;padding:2px 3px 0 0}
+  </style>
+  <script type="module" crossorigin src="./assets/sticky-paragraph-ink-reveal-DFimdQbB.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+  <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
+  <link rel="modulepreload" crossorigin href="./assets/batch-c-utils-g_3IBZ2b.js">
+  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+</head>
+<body>
+  <main class="preview-stage" data-preview-mechanism="sticky-word-ink-scroll">
+    <div class="ink-scroll" id="ink-scroll" tabindex="0" aria-label="Scroll to fill the sticky paragraph word by word">
+      <div class="ink-space">
+        <section class="ink-sticky">
+          <small>MANIFESTO / READ WITH SCROLL</small>
+          <p class="ink-line" id="ink-line">Products should explain themselves before the interface asks for attention.</p>
+        </section>
+      </div>
+    </div>
+    <output class="ink-meter" id="ink-meter">INK 000%</output>
+    <span class="library-badge">Motion · sticky word reveal</span>
+    <span class="scene-caption">scroll progress fills each word in sequence</span>
+  </main>
+</body>
+</html>

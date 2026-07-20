@@ -1,54 +1,40 @@
 # Awesome Web Effects
 
-[English (default)](README.md) · [在线 Demo](https://giraffe-tree.github.io/awesome-web-effects/)
+[English (default)](README.md) · [打开在线视觉目录](https://giraffe-tree.github.io/awesome-web-effects/)
 
-一个**以效果为先、经过策展评分**的开源 Web 交互图鉴。当前发布 **7 个有效分类中的 100 种效果**，背后有 **14 个来源项目**。每个发布条目都有真实预览和不低于 **80/100** 的明确评分，并提供可复制的最小代码与可一键交给 Codex 或 Claude Code 的实现提示词。
+<p align="center"><strong>先看见效果，再知道它叫什么，最后复制代码或 Agent 提示词。</strong></p>
+<p align="center">当你脑中已经有想要的感觉，却不知道如何描述特效时，这里就是一张可直接观看的 Web 交互图鉴。</p>
 
-## 效果优先模型
+<table>
+<tr><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/#synchronized-scenario-scene-handoff"><img src="demo/gifs/captured/synchronized-scenario-scene-handoff.gif" width="320" alt="多层同步场景换幕"></a><br><sub><strong>多层同步场景换幕</strong><br>页面与布局 · 98/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/#pointer-injected-gpu-fluid"><img src="demo/gifs/captured/pointer-injected-gpu-fluid.gif" width="320" alt="指针注入 GPU 流体"></a><br><sub><strong>指针注入 GPU 流体</strong><br>3D 与 WebGL · 98/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/#dom-aware-drag-spawned-fish-flock"><img src="demo/gifs/captured/dom-aware-drag-spawned-fish-flock.gif" width="320" alt="拖拽生成且避让 DOM 的鱼群"></a><br><sub><strong>拖拽生成且避让 DOM 的鱼群</strong><br>Canvas 与 2D · 98/100</sub></td></tr>
+<tr><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/#traveling-dot-headline-rewriter"><img src="demo/gifs/captured/traveling-dot-headline-rewriter.gif" width="320" alt="旅行圆点擦写标题"></a><br><sub><strong>旅行圆点擦写标题</strong><br>文本与 SVG · 97/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/#drag-thrown-card-stack"><img src="demo/gifs/captured/drag-thrown-card-stack.gif" width="320" alt="拖拽甩出卡片堆"></a><br><sub><strong>拖拽甩出卡片堆</strong><br>指针与悬停 · 94/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/#scroll-scrubbed-document-generation-playback"><img src="demo/gifs/captured/scroll-scrubbed-document-generation-playback.gif" width="320" alt="滚动擦洗式文档生成回放"></a><br><sub><strong>滚动擦洗式文档生成回放</strong><br>滚动与揭示 · 97/100</sub></td></tr>
+<tr><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/#interactive-vector-state-machine"><img src="demo/gifs/captured/interactive-vector-state-machine.gif" width="320" alt="交互式矢量状态机"></a><br><sub><strong>交互式矢量状态机</strong><br>动画与编排 · 94/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/#live-hand-landmark-video-overlay"><img src="demo/gifs/captured/live-hand-landmark-video-overlay.gif" width="320" alt="视频手部关键点叠加"></a><br><sub><strong>视频手部关键点叠加</strong><br>Canvas 与 2D · 94/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/#refractive-glass-transmission-sculpture"><img src="demo/gifs/captured/refractive-glass-transmission-sculpture.gif" width="320" alt="折射玻璃透射雕塑"></a><br><sub><strong>折射玻璃透射雕塑</strong><br>3D 与 WebGL · 95/100</sub></td></tr>
+</table>
 
-- **效果是目录主键。** 锚点、搜索结果、行、分类与代码示例都从用户看得见的交互出发，而不是从仓库出发。
-- **项目是实现来源。** 一个项目可以实现多种不同效果；当前种子目录已有 4 个来源项目明确展示这种关系。
-- **一种效果可以有多个实现。** 每个来源关系拥有自己的最小代码和预览状态，因此替代方案可以放在同一行中比较，不必复制效果行。
-- **去重发生在可见效果层。** 候选按触发方式、视觉变化、时间关系和页面层级比较；更新、维护更好、文档更清楚的实现成为推荐来源。
+<p align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/"><strong>查看全部 100 个实时效果 →</strong></a></p>
 
-## 目录快照
+## 看见它、叫出它、实现它
 
-- 已审计 346 个候选；**100 个通过**，**246 个已从发布目录移除**。
-- 100 行入选效果，其中 8 种为基线效果。
-- 最近一次效果级扩展独立调研并新增 85 种效果。
-- 14 个唯一 GitHub 来源项目；2026 扩展阶段新增 7 个。
-- 100 个与具体来源对应的真实 GIF：2 个官方素材捕获，98 个来自可运行本地 Demo 的录制。
-- 发布目录中有 0 个来源关系缺少已核验预览；准入门禁要求该数字始终为零。
-- 100 份一键实现提示词，每种效果都有一份。
-- 已把 40 条有证据的 AI 官网参考整合进 37 个原有特效行，共覆盖 35 家公司；每种特效最多展示 3 家代表公司。
-- 2 个较旧但仍有参考价值的来源标记为“经典旧版”；不包含已归档仓库。
-- Stars 是 **2026-07-20** 的快照，不是实时计数器。
-- 已核验 GIF 优化后总计 **17.20 MiB**；每个发布预览均为 320×180、最长三秒且小于 1 MiB。
+<table><tr><td width="25%" align="center"><strong>100</strong><br><sub>入选效果</sub></td><td width="25%" align="center"><strong>100</strong><br><sub>真实 GIF</sub></td><td width="25%" align="center"><strong>98</strong><br><sub>可运行 Demo</sub></td><td width="25%" align="center"><strong>80/100</strong><br><sub>最低准入分</sub></td></tr></table>
 
-“推荐实现”和“在哪家公司官网观察到”是两种不同关系，现在会在同一个特效行中同时展示。先阅读 [Demo 准入评分体系与 346 个候选的当前审计](research/demo-admission-audit-2026-07-20.md)。完整官网观察记录见 [100 家 AI 公司主页特效调研](research/ai-native-homepages-100.md)。
+<table><tr><td width="33%"><strong>① 用眼睛找</strong><br><sub>直接浏览真实动效，不必先猜库名或技术术语。</sub></td><td width="33%"><strong>② 点开效果</strong><br><sub>查看评分、来源、行为拆解和最小实现。</sub></td><td width="33%"><strong>③ 带走方案</strong><br><sub>复制代码，或把完整提示词交给 Codex / Claude Code。</sub></td></tr></table>
 
-## 收录与去重规则
+这不是另一份仓库名称列表，而是一个**效果优先、经过人工策展评分**的视觉参考库。每个入选条目都有真实证据、不低于 **80/100** 的评分、可追溯来源、可复用代码，以及本地可运行或官方预览。
 
-1. 每一行必须有可核验的真实预览，并只描述一种能在普通网页中呈现的可见交互效果。
-2. 人工评审按创意（20）、艺术完成度（20）、动效编排（20）、效果辨识（15）、创作迁移（15）、证据质量（10）评分。
-3. 准入必须达到 80/100，并通过核心维度最低分；项目知名度和分类空缺不能降低门槛。
-4. 每种效果必须有稳定的中英文名称、语义化效果 ID、分类和至少一个可核验来源。
-5. 每种效果必须且只能有一个推荐来源；替代实现应加入同一行，不能复制效果。
-6. 被拒绝的记录只可留在可追溯的候选审计数据中，不得进入网站、README 目录或发布资产集。
-
-## 分类概览
+## 按视觉类型浏览
 
 | 分类 | 效果数 | 来源项目 | 关注结果 |
 | --- | ---: | ---: | --- |
-| [动画与编排](#animation) | 16 | 7 | 时间线、弹簧、补间、类动画与框架原生动效。 |
-| [滚动与揭示](#scroll) | 11 | 3 | 平滑滚动、滚动关联场景、进入揭示、视差与整屏吸附。 |
-| [页面与布局](#transition) | 12 | 3 | 页面转场、FLIP 动画、筛选、紧密排布与布局重排。 |
-| [指针与悬停](#pointer) | 17 | 5 | 倾斜、景深、自定义光标、磁性运动与图像扭曲。 |
-| [文本与 SVG](#vector) | 13 | 3 | 打字、文字拆分、矢量绘制、手写与 SVG 变形。 |
-| [Canvas 与 2D](#canvas) | 18 | 3 | 场景图、创意编程、物理、绘图工具与 2D 渲染器。 |
-| [3D 与 WebGL](#webgl) | 13 | 3 | 3D 引擎、声明式渲染器、着色器图层与后期处理。 |
+| [动画与编排](https://giraffe-tree.github.io/awesome-web-effects/#catalog) | 16 | 7 | 时间线、弹簧、补间、类动画与框架原生动效。 |
+| [滚动与揭示](https://giraffe-tree.github.io/awesome-web-effects/#catalog) | 11 | 3 | 平滑滚动、滚动关联场景、进入揭示、视差与整屏吸附。 |
+| [页面与布局](https://giraffe-tree.github.io/awesome-web-effects/#catalog) | 12 | 3 | 页面转场、FLIP 动画、筛选、紧密排布与布局重排。 |
+| [指针与悬停](https://giraffe-tree.github.io/awesome-web-effects/#catalog) | 17 | 5 | 倾斜、景深、自定义光标、磁性运动与图像扭曲。 |
+| [文本与 SVG](https://giraffe-tree.github.io/awesome-web-effects/#catalog) | 13 | 3 | 打字、文字拆分、矢量绘制、手写与 SVG 变形。 |
+| [Canvas 与 2D](https://giraffe-tree.github.io/awesome-web-effects/#catalog) | 18 | 3 | 场景图、创意编程、物理、绘图工具与 2D 渲染器。 |
+| [3D 与 WebGL](https://giraffe-tree.github.io/awesome-web-effects/#catalog) | 13 | 3 | 3D 引擎、声明式渲染器、着色器图层与后期处理。 |
 
-## 效果目录
+<details>
+<summary><strong>展开完整 100 项效果索引</strong> — 实现、评分、来源与直达链接</summary>
 
 <a id="animation"></a>
 
@@ -213,7 +199,33 @@
 | [弯曲 WebGL 图库丝带](https://giraffe-tree.github.io/awesome-web-effects/#bending-webgl-gallery-ribbon) | [p5.js](https://github.com/processing/p5.js) | **97/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#bending-webgl-gallery-ribbon) |
 | [可拖拽穹顶图库](https://giraffe-tree.github.io/awesome-web-effects/#draggable-dome-gallery) | [p5.js](https://github.com/processing/p5.js) | **96/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#draggable-dome-gallery) |
 
-## Demo
+</details>
+
+<details>
+<summary><strong>为什么以“效果”而不是仓库为主</strong></summary>
+
+- **效果是目录主键。** 搜索、锚点、分类和示例都从用户真正看见的交互出发。
+- **项目只是实现来源。** 一个项目可以实现多种效果；当前有 4 个来源项目明确展示这种关系。
+- **替代实现放在一起。** 同一种效果的不同实现进入同一条目，不复制效果行。
+- **去重依据视觉和行为。** 候选按触发、可见变化、时间关系与页面层级比较。
+
+</details>
+
+<details>
+<summary><strong>评分、来源与审计数据</strong></summary>
+
+- 已审计 346 个候选：**100 个入选**，**246 个拒绝**。
+- 100 个已核验预览：2 个官方素材、98 个可运行本地 Demo 录制；缺失数为 0。
+- 人工评审覆盖创意、艺术完成度、动效编排、效果辨识、创作迁移和证据质量。
+- 准入要求 80/100，并同时通过核心维度最低分；流行度不能覆盖质量门槛。
+- 已核验 GIF 总计 17.20 MiB；每个预览为 320×180、最长三秒且小于 1 MiB。
+- Stars 是 2026-07-20 快照；“推荐实现”与“在哪家 AI 官网观察到”始终是两种关系。
+
+继续阅读 [346 个候选的准入审计](research/demo-admission-audit-2026-07-20.md)、[100 家 AI 公司主页特效调研](research/ai-native-homepages-100.md)与[预览来源清单](demo/gifs/provenance.json)。
+
+</details>
+
+## 在本地运行视觉目录
 
 Demo 只使用静态 HTML、CSS、JavaScript 模块和已核验 GIF，无第三方运行依赖。它支持效果搜索、分类筛选、按评分排序、中英文切换、稳定效果锚点、评分维度明细、移动端真实预览、展开来源详情、代码复制和 Agent 提示词一键复制。
 

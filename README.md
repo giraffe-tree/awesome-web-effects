@@ -1,54 +1,40 @@
 # Awesome Web Effects
 
-[中文文档](README.zh-CN.md) · [Live demo](https://giraffe-tree.github.io/awesome-web-effects/)
+[中文文档](README.zh-CN.md) · [Open the live visual catalog](https://giraffe-tree.github.io/awesome-web-effects/)
 
-An **effect-first**, curator-reviewed atlas of open-source interactions for the web. It publishes **100 distinct effects across 7 active categories**, backed by **14 source projects**. Every published effect has a real preview and a visible score of at least **80/100**, plus copyable minimal code and a one-click implementation prompt for Codex or Claude Code. English is the default interface and documentation language.
+<p align="center"><strong>See the interaction. Learn its name. Copy the code or agent prompt.</strong></p>
+<p align="center">A visual atlas for the moment when you know the feeling you want, but not the words to describe the effect.</p>
 
-## Effect-first model
+<table>
+<tr><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/#synchronized-scenario-scene-handoff"><img src="demo/gifs/captured/synchronized-scenario-scene-handoff.gif" width="320" alt="Synchronized scenario scene handoff"></a><br><sub><strong>Synchronized scenario scene handoff</strong><br>Page &amp; layout · 98/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/#pointer-injected-gpu-fluid"><img src="demo/gifs/captured/pointer-injected-gpu-fluid.gif" width="320" alt="Pointer-injected GPU fluid"></a><br><sub><strong>Pointer-injected GPU fluid</strong><br>3D &amp; WebGL · 98/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/#dom-aware-drag-spawned-fish-flock"><img src="demo/gifs/captured/dom-aware-drag-spawned-fish-flock.gif" width="320" alt="DOM-aware drag-spawned fish flock"></a><br><sub><strong>DOM-aware drag-spawned fish flock</strong><br>Canvas &amp; 2D · 98/100</sub></td></tr>
+<tr><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/#traveling-dot-headline-rewriter"><img src="demo/gifs/captured/traveling-dot-headline-rewriter.gif" width="320" alt="Traveling-dot headline eraser-writer"></a><br><sub><strong>Traveling-dot headline eraser-writer</strong><br>Text &amp; SVG · 97/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/#drag-thrown-card-stack"><img src="demo/gifs/captured/drag-thrown-card-stack.gif" width="320" alt="Drag-thrown card stack"></a><br><sub><strong>Drag-thrown card stack</strong><br>Pointer &amp; hover · 94/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/#scroll-scrubbed-document-generation-playback"><img src="demo/gifs/captured/scroll-scrubbed-document-generation-playback.gif" width="320" alt="Scroll-scrubbed document generation playback"></a><br><sub><strong>Scroll-scrubbed document generation playback</strong><br>Scroll &amp; reveal · 97/100</sub></td></tr>
+<tr><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/#interactive-vector-state-machine"><img src="demo/gifs/captured/interactive-vector-state-machine.gif" width="320" alt="Interactive vector state machine"></a><br><sub><strong>Interactive vector state machine</strong><br>Motion &amp; choreography · 94/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/#live-hand-landmark-video-overlay"><img src="demo/gifs/captured/live-hand-landmark-video-overlay.gif" width="320" alt="Live hand-landmark video overlay"></a><br><sub><strong>Live hand-landmark video overlay</strong><br>Canvas &amp; 2D · 94/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/#refractive-glass-transmission-sculpture"><img src="demo/gifs/captured/refractive-glass-transmission-sculpture.gif" width="320" alt="Refractive glass transmission sculpture"></a><br><sub><strong>Refractive glass transmission sculpture</strong><br>3D &amp; WebGL · 95/100</sub></td></tr>
+</table>
 
-- **Effect is the catalog key.** Anchors, search results, rows, categories, and code examples begin with the visible interaction—not the repository.
-- **Projects are implementation sources.** One project may power several distinct effects; 4 source projects currently demonstrate this relation in the catalog.
-- **An effect may have multiple implementations.** Each source relation owns its own minimal snippet and preview status, so alternatives can be compared without duplicating the effect row.
-- **Deduplication happens at the visible-effect level.** Candidates are compared by trigger, visual change, time relationship, and page layer; the newer, maintained, better-documented implementation becomes the recommended source.
+<p align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/"><strong>Explore all 100 live effects →</strong></a></p>
 
-## Catalog snapshot
+## See it. Name it. Build it.
 
-- 346 candidates were audited; **100 passed** and **246 were removed from publication**.
-- 100 admitted effect rows, including 8 baseline effects.
-- 85 independently researched effects were added in the latest effect-level expansion.
-- 14 unique GitHub source projects; 7 were added during the 2026 expansion.
-- 100 verified source-specific GIF previews: 2 official captures and 98 captures from runnable local demos.
-- 0 published source relations have no verified preview. The admission gate requires this number to remain zero.
-- 100 one-click implementation prompts, one for every effect.
-- 40 source-backed AI homepage references are integrated into 37 existing effect rows, covering 35 companies; each effect shows at most three representative companies.
-- 2 useful older sources are marked **Legacy**; no archived repository is included.
-- Stars are a snapshot from **2026-07-20**, not a live counter.
-- The verified, optimized GIF set is **17.20 MiB**; each published preview is 320×180, at most three seconds, and below 1 MiB.
+<table><tr><td width="25%" align="center"><strong>100</strong><br><sub>admitted effects</sub></td><td width="25%" align="center"><strong>100</strong><br><sub>real GIFs</sub></td><td width="25%" align="center"><strong>98</strong><br><sub>runnable demos</sub></td><td width="25%" align="center"><strong>80/100</strong><br><sub>minimum score</sub></td></tr></table>
 
-The implementation source and the website where an effect was observed are separate relationships. Read the [demo admission policy and current 346-candidate audit](research/demo-admission-audit-2026-07-20.md). See the [Chinese-first 100-company audit](research/ai-native-homepages-100.md) for all observations, including common patterns that were not duplicated as new effect rows.
+<table><tr><td width="33%"><strong>① Find by sight</strong><br><sub>Scan real motion instead of guessing library names.</sub></td><td width="33%"><strong>② Open the effect</strong><br><sub>Check the score, source, behavior and minimal implementation.</sub></td><td width="33%"><strong>③ Ship the idea</strong><br><sub>Copy code or a scoped prompt for Codex / Claude Code.</sub></td></tr></table>
 
-## Selection rules
+This is an **effect-first**, curator-reviewed reference—not another repository list. Every published item has visible evidence, a score of at least **80/100**, provenance, reusable code and a runnable or official preview.
 
-1. Every row must have a verifiable real preview and describe one visible interaction effect that can appear in a normal web page.
-2. Human reviewers score creativity (20), art direction (20), motion craft (20), effect legibility (15), creative transfer (15), and evidence quality (10).
-3. Admission requires at least 80/100 plus the core-dimension minimums in the policy; a popular library or an empty category never overrides the threshold.
-4. Every effect needs a stable bilingual name, a semantic effect ID, a category, and at least one verifiable source.
-5. Every effect has exactly one recommended source. Alternatives belong inside the same row instead of creating duplicate effects.
-6. Rejected records may remain only in the audited candidate dataset for traceability; they are not exported to the website, README catalog, or release asset set.
-
-## Categories
+## Browse by visual family
 
 | Category | Effects | Source projects | Visible result |
 | --- | ---: | ---: | --- |
-| [Motion & choreography](#animation) | 16 | 7 | Timelines, springs, tweens, class animation, and framework-native motion. |
-| [Scroll & reveal](#scroll) | 11 | 3 | Smooth scrolling, scroll-linked scenes, reveals, parallax, and snap navigation. |
-| [Page & layout](#transition) | 12 | 3 | Page transitions, FLIP motion, filtering, packing, and animated reflow. |
-| [Pointer & hover](#pointer) | 17 | 5 | Tilt, depth, custom cursors, magnetic motion, and image distortion. |
-| [Text & SVG](#vector) | 13 | 3 | Typing, text splitting, vector drawing, handwriting, and SVG morphing. |
-| [Canvas & 2D](#canvas) | 18 | 3 | Scene graphs, creative coding, physics, drawing tools, and 2D renderers. |
-| [3D & WebGL](#webgl) | 13 | 3 | 3D engines, declarative renderers, shader layers, and post-processing. |
+| [Motion & choreography](https://giraffe-tree.github.io/awesome-web-effects/#catalog) | 16 | 7 | Timelines, springs, tweens, class animation, and framework-native motion. |
+| [Scroll & reveal](https://giraffe-tree.github.io/awesome-web-effects/#catalog) | 11 | 3 | Smooth scrolling, scroll-linked scenes, reveals, parallax, and snap navigation. |
+| [Page & layout](https://giraffe-tree.github.io/awesome-web-effects/#catalog) | 12 | 3 | Page transitions, FLIP motion, filtering, packing, and animated reflow. |
+| [Pointer & hover](https://giraffe-tree.github.io/awesome-web-effects/#catalog) | 17 | 5 | Tilt, depth, custom cursors, magnetic motion, and image distortion. |
+| [Text & SVG](https://giraffe-tree.github.io/awesome-web-effects/#catalog) | 13 | 3 | Typing, text splitting, vector drawing, handwriting, and SVG morphing. |
+| [Canvas & 2D](https://giraffe-tree.github.io/awesome-web-effects/#catalog) | 18 | 3 | Scene graphs, creative coding, physics, drawing tools, and 2D renderers. |
+| [3D & WebGL](https://giraffe-tree.github.io/awesome-web-effects/#catalog) | 13 | 3 | 3D engines, declarative renderers, shader layers, and post-processing. |
 
-## Effect catalog
+<details>
+<summary><strong>Open the complete 100-effect index</strong> — implementation, score, source and direct link</summary>
 
 <a id="animation"></a>
 
@@ -213,7 +199,33 @@ Scene graphs, creative coding, physics, drawing tools, and 2D renderers.
 | [Bending WebGL gallery ribbon](https://giraffe-tree.github.io/awesome-web-effects/#bending-webgl-gallery-ribbon) | [p5.js](https://github.com/processing/p5.js) | **97/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#bending-webgl-gallery-ribbon) |
 | [Draggable dome gallery](https://giraffe-tree.github.io/awesome-web-effects/#draggable-dome-gallery) | [p5.js](https://github.com/processing/p5.js) | **96/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#draggable-dome-gallery) |
 
-## Demo
+</details>
+
+<details>
+<summary><strong>Why the catalog is effect-first</strong></summary>
+
+- **Effect is the catalog key.** Search, anchors, categories and examples begin with what the user sees—not the repository name.
+- **Projects are implementation sources.** One project may power several distinct effects; 4 source projects currently demonstrate this relation.
+- **Alternatives stay together.** Multiple implementations belong inside one effect instead of duplicating rows.
+- **Deduplication is visual and behavioral.** Candidates are compared by trigger, visible change, timing and page layer.
+
+</details>
+
+<details>
+<summary><strong>Curation, provenance and audit numbers</strong></summary>
+
+- 346 candidates audited: **100 admitted**, **246 rejected**.
+- 100 verified previews: 2 official captures and 98 captures from runnable local demos; 0 missing.
+- Human review scores creativity, art direction, motion craft, legibility, creative transfer and evidence quality.
+- Admission requires 80/100 plus core-dimension minimums. Popularity never overrides the gate.
+- The verified GIF set is 17.20 MiB; every preview is 320×180, at most three seconds and below 1 MiB.
+- Stars are a 2026-07-20 snapshot. Recommendation sources and observed AI homepages remain separate relationships.
+
+Read the [current 346-candidate admission audit](research/demo-admission-audit-2026-07-20.md), the [100-company homepage research](research/ai-native-homepages-100.md), and the [preview provenance manifest](demo/gifs/provenance.json).
+
+</details>
+
+## Run the visual catalog locally
 
 The demo is dependency-free static HTML, CSS, JavaScript modules, and verified GIF assets. It supports effect search, category filtering, score sorting, English/Chinese UI, stable effect anchors, visible score breakdowns, real mobile previews, expandable source details, copyable minimal code, and one-click prompts for coding agents.
 

@@ -9,20 +9,12 @@ import { admissionAuditSummary, admissionPolicy } from '../demo/data/demo-admiss
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const liveDemo = 'https://giraffe-tree.github.io/awesome-web-effects/';
 const projectById = new Map(projects.map(project => [project.id, project]));
-const newProjectCount = projects.filter(project => project.addedIn === '2026-expansion').length;
-const baselineEffectCount = effects.filter(effect => effect.addedIn === 'baseline').length;
-const researchEffectCount = effects.filter(effect => ['2026-effect-expansion', '2026-ai-native-expansion'].includes(effect.addedIn)).length;
 const sources = effects.flatMap(effect => effect.sources);
 const officialPreviewCount = sources.filter(source => source.previewKind === 'official-capture' && source.preview).length;
 const localDemoPreviewCount = sources.filter(source => source.previewKind === 'local-demo-capture' && source.preview).length;
 const verifiedPreviewCount = officialPreviewCount + localDemoPreviewCount;
 const unavailablePreviewCount = sources.filter(source => source.previewKind === 'unavailable').length;
-const promptCount = effects.filter(effect => effect.prompt).length;
-const legacyProjectCount = projects.filter(project => project.legacy).length;
 const multiEffectProjectCount = projects.filter(project => effects.filter(effect => effect.sources.some(source => source.projectId === project.id)).length > 1).length;
-const observedEffectCount = effects.filter(effect => effect.relatedParties.length).length;
-const relatedPartyLinkCount = effects.reduce((sum, effect) => sum + effect.relatedParties.length, 0);
-const observedCompanyCount = new Set(effects.flatMap(effect => effect.relatedParties.map(party => party.name))).size;
 const previewPaths = [...new Set(sources
   .filter(source => ['official-capture', 'local-demo-capture'].includes(source.previewKind) && source.preview)
   .map(source => resolve(root, 'demo', 'gifs', `${source.preview}.gif`)))];
@@ -42,7 +34,7 @@ function categorySummary(language) {
   const rows = categories.map(category => {
     const categoryEffects = effects.filter(effect => effect.category === category.id);
     const sourceCount = new Set(categoryEffects.flatMap(effect => effect.sources.map(source => source.projectId))).size;
-    return `| [${isZh ? category.labelZh : category.label}](#${category.id}) | ${categoryEffects.length} | ${sourceCount} | ${isZh ? category.descriptionZh : category.description} |`;
+    return `| [${isZh ? category.labelZh : category.label}](${liveDemo}#catalog) | ${categoryEffects.length} | ${sourceCount} | ${isZh ? category.descriptionZh : category.description} |`;
   });
   return [headers, ...rows].join('\n');
 }
@@ -66,53 +58,107 @@ function effectTables(language) {
   }).join('\n\n');
 }
 
+const showcaseIds = [
+  'synchronized-scenario-scene-handoff',
+  'pointer-injected-gpu-fluid',
+  'dom-aware-drag-spawned-fish-flock',
+  'traveling-dot-headline-rewriter',
+  'drag-thrown-card-stack',
+  'scroll-scrubbed-document-generation-playback',
+  'interactive-vector-state-machine',
+  'live-hand-landmark-video-overlay',
+  'refractive-glass-transmission-sculpture',
+];
+const categoryById = new Map(categories.map(category => [category.id, category]));
+const escapeHtml = value => String(value)
+  .replaceAll('&', '&amp;')
+  .replaceAll('<', '&lt;')
+  .replaceAll('>', '&gt;')
+  .replaceAll('"', '&quot;');
+
+function visualShowcase(language) {
+  const isZh = language === 'zh';
+  const cards = showcaseIds.map(id => {
+    const effect = effects.find(item => item.id === id);
+    if (!effect) throw new Error(`Missing README showcase effect: ${id}`);
+    const source = recommendedSource(effect);
+    if (!source.preview) throw new Error(`README showcase effect has no preview: ${id}`);
+    const category = categoryById.get(effect.category);
+    const name = isZh ? effect.nameZh : effect.name;
+    const label = isZh ? category.labelZh : category.label;
+    return `<td width="33%" align="center"><a href="${liveDemo}#${effect.id}"><img src="demo/gifs/${source.preview}.gif" width="320" alt="${escapeHtml(name)}"></a><br><sub><strong>${escapeHtml(name)}</strong><br>${escapeHtml(label)} · ${effect.admission.total}/100</sub></td>`;
+  });
+  const rows = [];
+  for (let index = 0; index < cards.length; index += 3) {
+    rows.push(`<tr>${cards.slice(index, index + 3).join('')}</tr>`);
+  }
+  return `<table>\n${rows.join('\n')}\n</table>`;
+}
+
+function metricStrip(language) {
+  const isZh = language === 'zh';
+  const labels = isZh
+    ? ['入选效果', '真实 GIF', '可运行 Demo', '最低准入分']
+    : ['admitted effects', 'real GIFs', 'runnable demos', 'minimum score'];
+  const values = [effects.length, verifiedPreviewCount, localDemoPreviewCount, `${admissionPolicy.threshold}/100`];
+  return `<table><tr>${values.map((value, index) => `<td width="25%" align="center"><strong>${value}</strong><br><sub>${labels[index]}</sub></td>`).join('')}</tr></table>`;
+}
+
 const english = `# Awesome Web Effects
 
-[中文文档](README.zh-CN.md) · [Live demo](${liveDemo})
+[中文文档](README.zh-CN.md) · [Open the live visual catalog](${liveDemo})
 
-An **effect-first**, curator-reviewed atlas of open-source interactions for the web. It publishes **${effects.length} distinct effects across ${categories.length} active categories**, backed by **${projects.length} source projects**. Every published effect has a real preview and a visible score of at least **${admissionPolicy.threshold}/100**, plus copyable minimal code and a one-click implementation prompt for Codex or Claude Code. English is the default interface and documentation language.
+<p align="center"><strong>See the interaction. Learn its name. Copy the code or agent prompt.</strong></p>
+<p align="center">A visual atlas for the moment when you know the feeling you want, but not the words to describe the effect.</p>
 
-## Effect-first model
+${visualShowcase('en')}
 
-- **Effect is the catalog key.** Anchors, search results, rows, categories, and code examples begin with the visible interaction—not the repository.
-- **Projects are implementation sources.** One project may power several distinct effects; ${multiEffectProjectCount} source projects currently demonstrate this relation in the catalog.
-- **An effect may have multiple implementations.** Each source relation owns its own minimal snippet and preview status, so alternatives can be compared without duplicating the effect row.
-- **Deduplication happens at the visible-effect level.** Candidates are compared by trigger, visual change, time relationship, and page layer; the newer, maintained, better-documented implementation becomes the recommended source.
+<p align="center"><a href="${liveDemo}"><strong>Explore all ${effects.length} live effects →</strong></a></p>
 
-## Catalog snapshot
+## See it. Name it. Build it.
 
-- ${admissionAuditSummary.candidateCount} candidates were audited; **${effects.length} passed** and **${admissionAuditSummary.rejectedCount} were removed from publication**.
-- ${effects.length} admitted effect rows, including ${baselineEffectCount} baseline effects.
-- ${researchEffectCount} independently researched effects were added in the latest effect-level expansion.
-- ${projects.length} unique GitHub source projects; ${newProjectCount} were added during the 2026 expansion.
-- ${verifiedPreviewCount} verified source-specific GIF previews: ${officialPreviewCount} official captures and ${localDemoPreviewCount} captures from runnable local demos.
-- ${unavailablePreviewCount} published source relations have no verified preview. The admission gate requires this number to remain zero.
-- ${promptCount} one-click implementation prompts, one for every effect.
-- ${relatedPartyLinkCount} source-backed AI homepage references are integrated into ${observedEffectCount} existing effect rows, covering ${observedCompanyCount} companies; each effect shows at most three representative companies.
-- ${legacyProjectCount} useful older sources are marked **Legacy**; no archived repository is included.
-- Stars are a snapshot from **${snapshotDate}**, not a live counter.
-- The verified, optimized GIF set is **${previewMiB} MiB**; each published preview is 320×180, at most three seconds, and below 1 MiB.
+${metricStrip('en')}
 
-The implementation source and the website where an effect was observed are separate relationships. Read the [demo admission policy and current ${admissionAuditSummary.candidateCount}-candidate audit](research/demo-admission-audit-${admissionAuditSummary.auditedAt}.md). See the [Chinese-first 100-company audit](research/ai-native-homepages-100.md) for all observations, including common patterns that were not duplicated as new effect rows.
+<table><tr><td width="33%"><strong>① Find by sight</strong><br><sub>Scan real motion instead of guessing library names.</sub></td><td width="33%"><strong>② Open the effect</strong><br><sub>Check the score, source, behavior and minimal implementation.</sub></td><td width="33%"><strong>③ Ship the idea</strong><br><sub>Copy code or a scoped prompt for Codex / Claude Code.</sub></td></tr></table>
 
-## Selection rules
+This is an **effect-first**, curator-reviewed reference—not another repository list. Every published item has visible evidence, a score of at least **${admissionPolicy.threshold}/100**, provenance, reusable code and a runnable or official preview.
 
-1. Every row must have a verifiable real preview and describe one visible interaction effect that can appear in a normal web page.
-2. Human reviewers score creativity (20), art direction (20), motion craft (20), effect legibility (15), creative transfer (15), and evidence quality (10).
-3. Admission requires at least ${admissionPolicy.threshold}/100 plus the core-dimension minimums in the policy; a popular library or an empty category never overrides the threshold.
-4. Every effect needs a stable bilingual name, a semantic effect ID, a category, and at least one verifiable source.
-5. Every effect has exactly one recommended source. Alternatives belong inside the same row instead of creating duplicate effects.
-6. Rejected records may remain only in the audited candidate dataset for traceability; they are not exported to the website, README catalog, or release asset set.
-
-## Categories
+## Browse by visual family
 
 ${categorySummary('en')}
 
-## Effect catalog
+<details>
+<summary><strong>Open the complete ${effects.length}-effect index</strong> — implementation, score, source and direct link</summary>
 
 ${effectTables('en')}
 
-## Demo
+</details>
+
+<details>
+<summary><strong>Why the catalog is effect-first</strong></summary>
+
+- **Effect is the catalog key.** Search, anchors, categories and examples begin with what the user sees—not the repository name.
+- **Projects are implementation sources.** One project may power several distinct effects; ${multiEffectProjectCount} source projects currently demonstrate this relation.
+- **Alternatives stay together.** Multiple implementations belong inside one effect instead of duplicating rows.
+- **Deduplication is visual and behavioral.** Candidates are compared by trigger, visible change, timing and page layer.
+
+</details>
+
+<details>
+<summary><strong>Curation, provenance and audit numbers</strong></summary>
+
+- ${admissionAuditSummary.candidateCount} candidates audited: **${effects.length} admitted**, **${admissionAuditSummary.rejectedCount} rejected**.
+- ${verifiedPreviewCount} verified previews: ${officialPreviewCount} official captures and ${localDemoPreviewCount} captures from runnable local demos; ${unavailablePreviewCount} missing.
+- Human review scores creativity, art direction, motion craft, legibility, creative transfer and evidence quality.
+- Admission requires ${admissionPolicy.threshold}/100 plus core-dimension minimums. Popularity never overrides the gate.
+- The verified GIF set is ${previewMiB} MiB; every preview is 320×180, at most three seconds and below 1 MiB.
+- Stars are a ${snapshotDate} snapshot. Recommendation sources and observed AI homepages remain separate relationships.
+
+Read the [current ${admissionAuditSummary.candidateCount}-candidate admission audit](research/demo-admission-audit-${admissionAuditSummary.auditedAt}.md), the [100-company homepage research](research/ai-native-homepages-100.md), and the [preview provenance manifest](demo/gifs/provenance.json).
+
+</details>
+
+## Run the visual catalog locally
 
 The demo is dependency-free static HTML, CSS, JavaScript modules, and verified GIF assets. It supports effect search, category filtering, score sorting, English/Chinese UI, stable effect anchors, visible score breakdowns, real mobile previews, expandable source details, copyable minimal code, and one-click prompts for coding agents.
 
@@ -158,51 +204,59 @@ GIFs and project names are used for research, indexing, and comparison. Rights r
 
 const chinese = `# Awesome Web Effects
 
-[English (default)](README.md) · [在线 Demo](${liveDemo})
+[English (default)](README.md) · [打开在线视觉目录](${liveDemo})
 
-一个**以效果为先、经过策展评分**的开源 Web 交互图鉴。当前发布 **${categories.length} 个有效分类中的 ${effects.length} 种效果**，背后有 **${projects.length} 个来源项目**。每个发布条目都有真实预览和不低于 **${admissionPolicy.threshold}/100** 的明确评分，并提供可复制的最小代码与可一键交给 Codex 或 Claude Code 的实现提示词。
+<p align="center"><strong>先看见效果，再知道它叫什么，最后复制代码或 Agent 提示词。</strong></p>
+<p align="center">当你脑中已经有想要的感觉，却不知道如何描述特效时，这里就是一张可直接观看的 Web 交互图鉴。</p>
 
-## 效果优先模型
+${visualShowcase('zh')}
 
-- **效果是目录主键。** 锚点、搜索结果、行、分类与代码示例都从用户看得见的交互出发，而不是从仓库出发。
-- **项目是实现来源。** 一个项目可以实现多种不同效果；当前种子目录已有 ${multiEffectProjectCount} 个来源项目明确展示这种关系。
-- **一种效果可以有多个实现。** 每个来源关系拥有自己的最小代码和预览状态，因此替代方案可以放在同一行中比较，不必复制效果行。
-- **去重发生在可见效果层。** 候选按触发方式、视觉变化、时间关系和页面层级比较；更新、维护更好、文档更清楚的实现成为推荐来源。
+<p align="center"><a href="${liveDemo}"><strong>查看全部 ${effects.length} 个实时效果 →</strong></a></p>
 
-## 目录快照
+## 看见它、叫出它、实现它
 
-- 已审计 ${admissionAuditSummary.candidateCount} 个候选；**${effects.length} 个通过**，**${admissionAuditSummary.rejectedCount} 个已从发布目录移除**。
-- ${effects.length} 行入选效果，其中 ${baselineEffectCount} 种为基线效果。
-- 最近一次效果级扩展独立调研并新增 ${researchEffectCount} 种效果。
-- ${projects.length} 个唯一 GitHub 来源项目；2026 扩展阶段新增 ${newProjectCount} 个。
-- ${verifiedPreviewCount} 个与具体来源对应的真实 GIF：${officialPreviewCount} 个官方素材捕获，${localDemoPreviewCount} 个来自可运行本地 Demo 的录制。
-- 发布目录中有 ${unavailablePreviewCount} 个来源关系缺少已核验预览；准入门禁要求该数字始终为零。
-- ${promptCount} 份一键实现提示词，每种效果都有一份。
-- 已把 ${relatedPartyLinkCount} 条有证据的 AI 官网参考整合进 ${observedEffectCount} 个原有特效行，共覆盖 ${observedCompanyCount} 家公司；每种特效最多展示 3 家代表公司。
-- ${legacyProjectCount} 个较旧但仍有参考价值的来源标记为“经典旧版”；不包含已归档仓库。
-- Stars 是 **${snapshotDate}** 的快照，不是实时计数器。
-- 已核验 GIF 优化后总计 **${previewMiB} MiB**；每个发布预览均为 320×180、最长三秒且小于 1 MiB。
+${metricStrip('zh')}
 
-“推荐实现”和“在哪家公司官网观察到”是两种不同关系，现在会在同一个特效行中同时展示。先阅读 [Demo 准入评分体系与 ${admissionAuditSummary.candidateCount} 个候选的当前审计](research/demo-admission-audit-${admissionAuditSummary.auditedAt}.md)。完整官网观察记录见 [100 家 AI 公司主页特效调研](research/ai-native-homepages-100.md)。
+<table><tr><td width="33%"><strong>① 用眼睛找</strong><br><sub>直接浏览真实动效，不必先猜库名或技术术语。</sub></td><td width="33%"><strong>② 点开效果</strong><br><sub>查看评分、来源、行为拆解和最小实现。</sub></td><td width="33%"><strong>③ 带走方案</strong><br><sub>复制代码，或把完整提示词交给 Codex / Claude Code。</sub></td></tr></table>
 
-## 收录与去重规则
+这不是另一份仓库名称列表，而是一个**效果优先、经过人工策展评分**的视觉参考库。每个入选条目都有真实证据、不低于 **${admissionPolicy.threshold}/100** 的评分、可追溯来源、可复用代码，以及本地可运行或官方预览。
 
-1. 每一行必须有可核验的真实预览，并只描述一种能在普通网页中呈现的可见交互效果。
-2. 人工评审按创意（20）、艺术完成度（20）、动效编排（20）、效果辨识（15）、创作迁移（15）、证据质量（10）评分。
-3. 准入必须达到 ${admissionPolicy.threshold}/100，并通过核心维度最低分；项目知名度和分类空缺不能降低门槛。
-4. 每种效果必须有稳定的中英文名称、语义化效果 ID、分类和至少一个可核验来源。
-5. 每种效果必须且只能有一个推荐来源；替代实现应加入同一行，不能复制效果。
-6. 被拒绝的记录只可留在可追溯的候选审计数据中，不得进入网站、README 目录或发布资产集。
-
-## 分类概览
+## 按视觉类型浏览
 
 ${categorySummary('zh')}
 
-## 效果目录
+<details>
+<summary><strong>展开完整 ${effects.length} 项效果索引</strong> — 实现、评分、来源与直达链接</summary>
 
 ${effectTables('zh')}
 
-## Demo
+</details>
+
+<details>
+<summary><strong>为什么以“效果”而不是仓库为主</strong></summary>
+
+- **效果是目录主键。** 搜索、锚点、分类和示例都从用户真正看见的交互出发。
+- **项目只是实现来源。** 一个项目可以实现多种效果；当前有 ${multiEffectProjectCount} 个来源项目明确展示这种关系。
+- **替代实现放在一起。** 同一种效果的不同实现进入同一条目，不复制效果行。
+- **去重依据视觉和行为。** 候选按触发、可见变化、时间关系与页面层级比较。
+
+</details>
+
+<details>
+<summary><strong>评分、来源与审计数据</strong></summary>
+
+- 已审计 ${admissionAuditSummary.candidateCount} 个候选：**${effects.length} 个入选**，**${admissionAuditSummary.rejectedCount} 个拒绝**。
+- ${verifiedPreviewCount} 个已核验预览：${officialPreviewCount} 个官方素材、${localDemoPreviewCount} 个可运行本地 Demo 录制；缺失数为 ${unavailablePreviewCount}。
+- 人工评审覆盖创意、艺术完成度、动效编排、效果辨识、创作迁移和证据质量。
+- 准入要求 ${admissionPolicy.threshold}/100，并同时通过核心维度最低分；流行度不能覆盖质量门槛。
+- 已核验 GIF 总计 ${previewMiB} MiB；每个预览为 320×180、最长三秒且小于 1 MiB。
+- Stars 是 ${snapshotDate} 快照；“推荐实现”与“在哪家 AI 官网观察到”始终是两种关系。
+
+继续阅读 [${admissionAuditSummary.candidateCount} 个候选的准入审计](research/demo-admission-audit-${admissionAuditSummary.auditedAt}.md)、[100 家 AI 公司主页特效调研](research/ai-native-homepages-100.md)与[预览来源清单](demo/gifs/provenance.json)。
+
+</details>
+
+## 在本地运行视觉目录
 
 Demo 只使用静态 HTML、CSS、JavaScript 模块和已核验 GIF，无第三方运行依赖。它支持效果搜索、分类筛选、按评分排序、中英文切换、稳定效果锚点、评分维度明细、移动端真实预览、展开来源详情、代码复制和 Agent 提示词一键复制。
 

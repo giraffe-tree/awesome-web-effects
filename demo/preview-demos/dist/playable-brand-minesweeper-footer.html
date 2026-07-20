@@ -1,8 +1,500 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>Motion — Playable Brand Minesweeper Footer</title><style>
-:root{--preview-background:#1b1650}.mine-stage{background:linear-gradient(145deg,#21185e,#482a79);color:#fff}.mine-copy{position:absolute;left:17px;top:46px;width:102px;font:900 20px/.87 Georgia,serif;letter-spacing:-.05em}.mine-copy small{display:block;margin-top:8px;font:800 6px/1.4 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#c3b2e7}.mine-board{position:absolute;right:16px;top:30px;width:176px;display:grid;grid-template-columns:repeat(8,1fr);gap:3px}.mine-cell{aspect-ratio:1;border:1px solid #ffffff25;border-radius:4px;background:#ffffff16;color:#fff;font:900 7px/1 ui-monospace,monospace;cursor:pointer;transform-style:preserve-3d}.mine-cell[data-state="safe"]{background:#78e4c2;color:#151135}.mine-cell[data-state="bomb"]{background:#ff6c73}.mine-cell[data-state="safe"]::after{content:attr(data-near)}.mine-cell[data-state="bomb"]::after{content:"✦"}.mine-reset{position:absolute;left:17px;bottom:24px;height:23px;padding:0 9px;border:1px solid #ffffff3a;border-radius:99px;background:#17123d;color:#fff;font:900 6px/1 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;cursor:pointer}.scene-caption{display:none}
-</style>  <script type="module" crossorigin src="./assets/playable-brand-minesweeper-footer-BUWBu54u.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
-  <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
-  <link rel="modulepreload" crossorigin href="./assets/batch-a-qa-CFcoNLob.js">
-  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage mine-stage"><div class="mine-copy">PLAY THE<br/>LAST<br/>THING<br/>ON THE PAGE<small>a footer that answers back</small></div><div class="mine-board" id="mine-board" role="grid" aria-label="Playable brand minesweeper"></div><button class="mine-reset" id="mine-reset" type="button">New field</button><span class="library-badge">Motion · playable footer grid</span><span class="scene-caption">cell reveal, loss and reset stay inside a compact brand interaction</span></main></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Motion — Morrow Supply Footer Field</title>
+    <style>
+      :root {
+        --preview-background: #171712;
+        --paper: #e8e4d7;
+        --ink: #1b1c18;
+        --violet: #6354b6;
+        --acid: #d8f06b;
+        --coral: #f2765c;
+        color-scheme: dark;
+      }
+
+      button,
+      a { font: inherit; color: inherit; }
+
+      .mine-stage {
+        padding: clamp(5px, 2.2vw, 16px);
+        background:
+          radial-gradient(circle at 86% 18%, rgba(216, 240, 107, .08), transparent 27%),
+          #171712;
+      }
+
+      .brand-footer {
+        display: grid;
+        width: 100%;
+        height: 100%;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        border: 1px solid rgba(240, 237, 222, .18);
+        border-radius: clamp(7px, 2.2vw, 18px);
+        background: var(--paper);
+        color: var(--ink);
+        grid-template-rows: clamp(30px, 10vh, 41px) minmax(0, 1fr) clamp(27px, 8.5vh, 35px);
+        box-shadow: 0 25px 70px rgba(0, 0, 0, .3);
+      }
+
+      .footer-top,
+      .footer-bottom {
+        display: flex;
+        min-width: 0;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 clamp(9px, 2.5vw, 20px);
+      }
+
+      .footer-top { border-bottom: 1px solid rgba(27, 28, 24, .18); }
+      .footer-bottom { border-top: 1px solid rgba(27, 28, 24, .18); }
+
+      .brand-lockup,
+      .return-marker,
+      .footer-links,
+      .footer-meta,
+      .game-toolbar,
+      .game-actions,
+      .reward-line {
+        display: flex;
+        min-width: 0;
+        align-items: center;
+      }
+
+      .brand-lockup { gap: clamp(5px, 1.2vw, 9px); }
+
+      .brand-mark {
+        display: grid;
+        width: clamp(13px, 2.6vw, 20px);
+        aspect-ratio: 1;
+        flex: 0 0 auto;
+        place-items: center;
+        border-radius: 50% 50% 50% 10%;
+        rotate: -45deg;
+        background: var(--ink);
+      }
+
+      .brand-mark::after {
+        width: 30%;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: var(--acid);
+        content: '';
+      }
+
+      .brand-lockup strong {
+        font-size: clamp(7px, 1.55vw, 12px);
+        letter-spacing: -.035em;
+        white-space: nowrap;
+      }
+
+      .brand-lockup span,
+      .return-marker,
+      .eyebrow,
+      .reward-label,
+      .game-kicker,
+      .mine-counter,
+      .game-status,
+      .game-instructions,
+      .footer-links,
+      .footer-meta,
+      .mode-button,
+      .reset-button {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        text-transform: uppercase;
+      }
+
+      .brand-lockup span,
+      .return-marker {
+        color: #74766d;
+        font-size: clamp(3px, .72vw, 5px);
+        font-weight: 820;
+        letter-spacing: .12em;
+        white-space: nowrap;
+      }
+
+      .return-marker { gap: clamp(4px, .8vw, 6px); }
+      .return-marker::before {
+        width: clamp(4px, .72vw, 6px);
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: var(--coral);
+        content: '';
+      }
+
+      .footer-main {
+        display: grid;
+        min-width: 0;
+        min-height: 0;
+        grid-template-columns: minmax(130px, .9fr) minmax(300px, 1.15fr);
+      }
+
+      .brand-ending {
+        display: flex;
+        min-width: 0;
+        min-height: 0;
+        flex-direction: column;
+        padding: clamp(12px, 3.2vw, 26px);
+        border-right: 1px solid rgba(27, 28, 24, .18);
+      }
+
+      .eyebrow {
+        color: #77796f;
+        font-size: clamp(3px, .76vw, 6px);
+        font-weight: 850;
+        letter-spacing: .13em;
+      }
+
+      .ending-title {
+        margin: clamp(11px, 2.5vw, 20px) 0 0;
+        font: 900 clamp(27px, 6vw, 48px)/.78 ui-serif, Georgia, serif;
+        letter-spacing: -.073em;
+      }
+
+      .ending-title em {
+        display: block;
+        color: #9f4936;
+        font-weight: 500;
+      }
+
+      .ending-copy {
+        max-width: 33em;
+        margin: clamp(12px, 2.5vw, 20px) 0 0;
+        color: #66685f;
+        font-size: clamp(5px, 1.05vw, 8px);
+        line-height: 1.48;
+      }
+
+      .reward-card {
+        display: grid;
+        min-width: 0;
+        margin-top: auto;
+        padding: clamp(7px, 1.5vw, 11px);
+        border: 1px solid rgba(28, 30, 24, .22);
+        border-radius: clamp(5px, 1.2vw, 9px);
+        background: rgba(255, 255, 255, .22);
+        grid-template-columns: auto minmax(0, 1fr);
+        gap: clamp(6px, 1.3vw, 10px);
+      }
+
+      .reward-seal {
+        display: grid;
+        width: clamp(24px, 5vw, 39px);
+        aspect-ratio: 1;
+        place-items: center;
+        border: 1px solid rgba(28, 30, 24, .35);
+        border-radius: 50%;
+        background: var(--ink);
+        color: var(--acid);
+        font: 900 clamp(6px, 1.2vw, 9px)/1 ui-serif, Georgia, serif;
+        transition: background .2s ease, color .2s ease;
+      }
+
+      .reward-card[data-unlocked="true"] .reward-seal { background: var(--acid); color: var(--ink); }
+
+      .reward-label {
+        color: #6c6e65;
+        font-size: clamp(3px, .68vw, 5px);
+        font-weight: 830;
+        letter-spacing: .1em;
+      }
+
+      .reward-name {
+        overflow: hidden;
+        margin: 4px 0 0;
+        font-size: clamp(6px, 1.25vw, 10px);
+        font-weight: 850;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .game-panel {
+        position: relative;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        padding: clamp(10px, 2.7vw, 22px);
+        background:
+          linear-gradient(rgba(239, 236, 220, .04) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(239, 236, 220, .04) 1px, transparent 1px),
+          #26231f;
+        background-size: clamp(16px, 3.3vw, 25px) clamp(16px, 3.3vw, 25px);
+        color: #f0eddf;
+      }
+
+      .game-panel::after {
+        position: absolute;
+        right: -5%;
+        bottom: -36%;
+        width: 47%;
+        aspect-ratio: 1;
+        border: 1px solid rgba(216, 240, 107, .12);
+        border-radius: 50%;
+        content: '';
+        pointer-events: none;
+      }
+
+      .game-toolbar { justify-content: space-between; gap: 8px; }
+
+      .game-kicker,
+      .mine-counter,
+      .game-status,
+      .game-instructions {
+        font-size: clamp(3px, .72vw, 6px);
+        font-weight: 840;
+        letter-spacing: .1em;
+      }
+
+      .game-kicker { color: #b6b2a8; }
+      .mine-counter { color: var(--acid); white-space: nowrap; }
+
+      .mine-board {
+        position: relative;
+        z-index: 2;
+        display: grid;
+        width: 100%;
+        min-width: 0;
+        margin-top: clamp(8px, 1.8vw, 14px);
+        grid-template-columns: repeat(8, minmax(0, 1fr));
+        gap: clamp(2px, .65vw, 5px);
+      }
+
+      .mine-cell {
+        display: grid;
+        min-width: 0;
+        aspect-ratio: 1;
+        padding: 0;
+        place-items: center;
+        border: 1px solid rgba(240, 237, 223, .18);
+        border-radius: clamp(2px, .72vw, 5px);
+        background: #4f477d;
+        color: #f6f2df;
+        cursor: pointer;
+        font: 900 clamp(4px, 1vw, 8px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        box-shadow: inset 0 -3px 0 rgba(22, 19, 17, .17);
+      }
+
+      .mine-cell:hover { background: #5d5490; }
+      .mine-cell:focus-visible {
+        position: relative;
+        z-index: 4;
+        outline: 2px solid var(--acid);
+        outline-offset: 1px;
+      }
+
+      .mine-cell[data-state="safe"] {
+        border-color: rgba(28, 30, 24, .14);
+        background: #ddd9ca;
+        color: #454b82;
+        box-shadow: none;
+      }
+
+      .mine-cell[data-state="safe"][data-near="0"] { color: transparent; }
+      .mine-cell[data-state="safe"][data-near="2"] { color: #8f513e; }
+      .mine-cell[data-state="safe"][data-near="3"],
+      .mine-cell[data-state="safe"][data-near="4"] { color: #9d3340; }
+
+      .mine-cell[data-state="flagged"] {
+        background: var(--coral);
+        color: #251d1a;
+      }
+
+      .mine-cell[data-state="bomb"] {
+        border-color: var(--coral);
+        background: #181713;
+        color: var(--coral);
+      }
+
+      .mine-cell[data-state="wrong"] {
+        background: #eee9d9;
+        color: #aa382e;
+        text-decoration: line-through;
+      }
+
+      .game-footer {
+        position: relative;
+        z-index: 2;
+        display: grid;
+        min-width: 0;
+        margin-top: clamp(8px, 1.8vw, 14px);
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: end;
+        gap: 8px;
+      }
+
+      .game-status { color: #e7e1d1; }
+      .game-instructions { margin-top: 5px; color: #918e84; line-height: 1.45; }
+      .game-actions { gap: clamp(4px, .8vw, 7px); }
+
+      .mode-button,
+      .reset-button {
+        padding: clamp(4px, .85vw, 7px) clamp(6px, 1.2vw, 9px);
+        border: 1px solid rgba(240, 237, 223, .25);
+        border-radius: 999px;
+        background: transparent;
+        color: #ded9cc;
+        cursor: pointer;
+        font-size: clamp(3px, .68vw, 5px);
+        font-weight: 850;
+        letter-spacing: .08em;
+        white-space: nowrap;
+      }
+
+      .mode-button[aria-pressed="true"] {
+        border-color: var(--coral);
+        background: var(--coral);
+        color: #251d1a;
+      }
+
+      .mode-button:focus-visible,
+      .reset-button:focus-visible,
+      .footer-link:focus-visible {
+        outline: 2px solid var(--acid);
+        outline-offset: 2px;
+      }
+
+      .footer-links { gap: clamp(8px, 2vw, 16px); }
+      .footer-link {
+        color: #55574f;
+        font-size: clamp(3px, .68vw, 5px);
+        font-weight: 830;
+        letter-spacing: .09em;
+        text-decoration: none;
+      }
+      .footer-link:hover { color: #8d4334; }
+
+      .footer-meta {
+        color: #74766d;
+        font-size: clamp(3px, .65vw, 5px);
+        font-weight: 800;
+        letter-spacing: .09em;
+        white-space: nowrap;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .reward-seal { transition: none; }
+      }
+
+      @media (max-width: 420px) {
+        .mine-stage { padding: 5px; }
+        .brand-footer { border-radius: 7px; grid-template-rows: 21px minmax(0, 1fr) 18px; }
+        .footer-top,
+        .footer-bottom { padding: 0 7px; }
+        .footer-main { grid-template-columns: 99px minmax(0, 1fr); }
+        .brand-ending { padding: 9px 7px; }
+        .ending-title { margin-top: 7px; font-size: 20px; }
+        .ending-copy { margin-top: 7px; font-size: 4px; }
+        .reward-card { padding: 5px; gap: 4px; }
+        .reward-seal { width: 22px; }
+        .game-panel { padding: 8px; }
+        .mine-board { margin-top: 6px; gap: 3px; }
+        .game-footer { margin-top: 6px; }
+        .game-instructions { font-size: 3px; }
+      }
+
+      @media (max-width: 220px), (max-height: 105px) {
+        .mine-stage { padding: 2px; }
+        .brand-footer { border-radius: 4px; grid-template-rows: 10px minmax(0, 1fr) 9px; }
+        .footer-top,
+        .footer-bottom { padding: 0 3px; }
+        .brand-lockup { gap: 2px; }
+        .brand-mark { width: 5px; }
+        .brand-lockup strong { font-size: 3px; }
+        .brand-lockup span { display: none; }
+        .return-marker { font-size: 1.4px; gap: 2px; }
+        .return-marker::before { width: 2px; }
+        .footer-main { grid-template-columns: 36px minmax(0, 1fr); }
+        .brand-ending { padding: 4px 3px; }
+        .eyebrow { font-size: 1.3px; }
+        .ending-title { margin-top: 3px; font-size: 7px; }
+        .ending-copy { display: none; }
+        .reward-card { margin-top: auto; padding: 2px; border-radius: 2px; gap: 2px; }
+        .reward-seal { width: 8px; font-size: 2px; }
+        .reward-label { font-size: 1.1px; }
+        .reward-name { margin-top: 1px; font-size: 1.5px; }
+        .game-panel { padding: 3px; background-size: 9px 9px; }
+        .game-kicker,
+        .mine-counter,
+        .game-status,
+        .game-instructions { font-size: 1.3px; }
+        .mine-board { width: 80%; margin-top: 2px; gap: 1px; }
+        .mine-cell { border-radius: 1px; font-size: 2px; box-shadow: none; }
+        .game-footer { width: 100%; margin-top: 2px; gap: 2px; }
+        .game-instructions { display: none; }
+        .game-actions { gap: 1px; }
+        .mode-button,
+        .reset-button { padding: 1px 2px; font-size: 1.2px; }
+        .footer-links { gap: 4px; }
+        .footer-link,
+        .footer-meta { font-size: 1.2px; }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/playable-brand-minesweeper-footer-DHKvklb4.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+    <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main class="preview-stage mine-stage" id="mine-stage" aria-label="Morrow Supply brand footer with a playable return-visit reward">
+      <footer class="brand-footer" id="brand-footer" data-preview-mechanism="motion-playable-minesweeper-footer">
+        <header class="footer-top">
+          <div class="brand-lockup">
+            <i class="brand-mark" aria-hidden="true"></i>
+            <strong>Morrow Supply</strong>
+            <span>Objects for unhurried days</span>
+          </div>
+          <span class="return-marker">Return visit 03 · reward waiting</span>
+        </header>
+
+        <div class="footer-main">
+          <section class="brand-ending">
+            <span class="eyebrow">You reached the footer</span>
+            <h1 class="ending-title">Thanks for<br />looking <em>closely.</em></h1>
+            <p class="ending-copy">A small field for people who stay to the end. Clear it to unlock our Field Notes wallpaper.</p>
+
+            <div class="reward-card" id="reward-card" data-unlocked="false">
+              <span class="reward-seal" id="reward-seal" aria-hidden="true">03</span>
+              <div>
+                <span class="reward-label">Return-visit reward</span>
+                <p class="reward-name" id="reward-name">Field Notes wallpaper · Locked</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="game-panel" aria-label="Playable footer reward">
+            <div class="game-toolbar">
+              <span class="game-kicker">Footer field / 04 mines</span>
+              <span class="mine-counter" id="mine-counter">04 flags left</span>
+            </div>
+
+            <div class="mine-board" id="mine-board" role="grid" aria-label="Minesweeper reward field, 4 rows by 8 columns" aria-rowcount="4" aria-colcount="8"></div>
+
+            <div class="game-footer">
+              <div>
+                <div class="game-status" id="game-status" role="status" aria-live="polite">Field ready · choose a square</div>
+                <div class="game-instructions">Tap/click reveal · Flag mode for touch · Arrows move · Enter reveals · F flags</div>
+              </div>
+              <div class="game-actions">
+                <button class="mode-button" id="flag-mode" type="button" aria-pressed="false">Flag mode</button>
+                <button class="reset-button" id="mine-reset" type="button">New field</button>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <nav class="footer-bottom" aria-label="Footer navigation">
+          <div class="footer-links">
+            <a class="footer-link" href="#work">Work</a>
+            <a class="footer-link" href="#notes">Notes</a>
+            <a class="footer-link" href="#stockists">Stockists</a>
+            <a class="footer-link" href="mailto:hello@example.com">Hello</a>
+          </div>
+          <span class="footer-meta">© 2026 · Studio hours 09–17 CET</span>
+        </nav>
+      </footer>
+    </main>
+  </body>
+</html>

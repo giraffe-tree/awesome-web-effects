@@ -623,6 +623,52 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.move(box["x"] + box["width"] - .01, box["y"] + box["height"] * .56)
                 page.mouse.down()
                 page.mouse.up()
+        elif demo["id"] == "playable-brand-minesweeper-footer":
+            if index == 2:
+                page.locator('.mine-cell[data-index="0"]').click()
+            elif index == 3:
+                page.wait_for_timeout(360)
+            elif index == 6:
+                page.locator('.mine-cell[data-index="5"]').click(button="right")
+            elif index == 7:
+                page.wait_for_timeout(280)
+            elif index == 9:
+                page.locator('#flag-mode').click()
+            elif index == 11:
+                page.locator('.mine-cell[data-index="13"]').click()
+            elif index == 12:
+                page.wait_for_timeout(280)
+            elif index == 14:
+                page.locator('#flag-mode').click()
+            elif index == 16:
+                page.locator('.mine-cell[data-index="7"]').click()
+            elif index == 17:
+                page.wait_for_timeout(520)
+            elif index == 20:
+                page.locator('#mine-reset').click()
+            elif index == 21:
+                page.wait_for_timeout(320)
+            elif index == 23:
+                page.locator('.mine-cell[data-index="18"]').click()
+            elif index == 24:
+                page.wait_for_timeout(520)
+            elif index == 27:
+                page.locator('#mine-reset').click()
+            elif index == 28:
+                page.locator('.mine-cell[data-index="0"]').focus()
+                page.keyboard.press("ArrowRight")
+            elif index == 29:
+                page.keyboard.press("f")
+            elif index == 30:
+                page.keyboard.press("f")
+            elif index == 31:
+                page.keyboard.press("Enter")
+            elif index == 32:
+                page.wait_for_timeout(360)
+            elif index == 34:
+                page.keyboard.press("Escape")
+            elif index == 35:
+                page.wait_for_timeout(320)
         elif demo["id"] == "noise-cancellation-audio-comparison":
             if index == 2:
                 page.locator('#audio-play').click()
@@ -1717,6 +1763,51 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["canvasHeight"] < 64
         ):
             raise RuntimeError(f"{demo['id']} did not capture a real bidirectional ASCII incident route across controls, pointer scrub, keyboard, and boundaries: {interaction!r}")
+    elif demo["id"] == "playable-brand-minesweeper-footer":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            interaction["automaticSeededPlay"]
+            or interaction["automaticRehearsal"]
+            or interaction["previewClockDriven"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInput"]
+            or not interaction["userInitiatedChangesOnly"]
+            or not interaction["semanticGridValidated"]
+            or not interaction["initialStaticVerified"]
+            or interaction["bombIndices"] != [5, 13, 18, 26]
+            or interaction["inputCount"] < 14
+            or interaction["pointerInputCount"] < 9
+            or interaction["keyboardInputCount"] < 5
+            or interaction["cellActionCount"] < 8
+            or interaction["revealActionCount"] < 4
+            or interaction["flagActionCount"] < 4
+            or interaction["contextFlagCount"] < 1
+            or interaction["modeToggleCount"] < 2
+            or interaction["resetButtonCount"] < 2
+            or interaction["escapeResetCount"] < 1
+            or interaction["resetCount"] < 3
+            or interaction["keyboardNavigationCount"] < 1
+            or interaction["keyboardRevealCount"] < 1
+            or interaction["keyboardFlagCount"] < 2
+            or interaction["cascadeCellRevealCount"] < 40
+            or interaction["gameStartCount"] < 3
+            or interaction["winCount"] < 1
+            or interaction["lossCount"] < 1
+            or interaction["motionStartCount"] < 8
+            or interaction["motionCompleteCount"] < 7
+            or interaction["phase"] != "ready"
+            or interaction["mode"] != "reveal"
+            or interaction["focusedIndex"] != 0
+            or interaction["revealedIndices"] != []
+            or interaction["flaggedIndices"] != []
+            or interaction["remainingSafeCount"] != 28
+            or interaction["minesRemaining"] != 4
+            or interaction["rewardUnlocked"]
+            or interaction["animationActive"]
+            or interaction["inputKind"] != "keyboard"
+            or interaction["lastTrustedEvent"] != "escape-reset"
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture human reveal cascades, two flag paths, win/reward, loss, keyboard play, and explicit reset: {interaction!r}")
     elif demo["id"] == "noise-cancellation-audio-comparison":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         if (

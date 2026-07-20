@@ -614,23 +614,23 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "playable-brand-minesweeper-footer",
-    "name": "Playable brand minesweeper footer",
-    "nameZh": "可玩的品牌扫雷页脚",
+    "name": "Return-visit reward minesweeper",
+    "nameZh": "回访奖励扫雷页脚",
     "category": "pointer",
     "sourceUrl": "https://www.tavus.io/",
-    "difference": "格子具有揭示、标记、炸弹、胜负与重置状态；不是静态像素网格背景。",
+    "difference": "Morrow Supply 的真实品牌页脚内嵌一个语义化 4×8 扫雷奖励：揭示、扩散、标旗、失败、通关与奖励解锁都来自真人输入，而非自动播片。",
     "behavior": {
-      "trigger": "click/right-click/keyboard",
-      "response": "Play a bounded minesweeper whose end state resolves into the brand lockup",
-      "timing": "persistent game-state transitions",
-      "layer": "footer grid"
+      "trigger": "real click/tap, context flag, touch-friendly flag mode, keyboard grid navigation, or explicit reset",
+      "response": "Reveal a deterministic field, flag suspected mines, survive or fail, and unlock a named return-visit reward",
+      "timing": "human-owned persistent game state with short interruptible Motion feedback and no seeded autoplay",
+      "layer": "full-frame semantic brand footer and 4×8 ARIA grid"
     },
     "implementation": {
       "projectId": "motiondivision-motion",
       "projectUrl": "https://github.com/motiondivision/motion",
       "library": "motion@12.42.2",
       "renderer": "dom",
-      "snippet": "cell.onclick = () => cell.dataset.state = bombs.has(index) ? 'bomb' : 'safe';",
+      "snippet": "cell.addEventListener('click',event=>event.isTrusted&&revealCell(index)); board.setAttribute('aria-rowcount','4');",
       "referenceUrl": "https://www.tavus.io/"
     },
     "scores": {
@@ -642,13 +642,13 @@ export const effectExpansion100Specs = [
       "evidence": 9,
       "total": 90
     },
-    "rationaleZh": "小游戏状态与品牌收束形成可描述的页脚互动，但必须控制范围。",
+    "rationaleZh": "把小游戏嵌回品牌收束与回访奖励，玩家的判断会真实改变 32 个网格状态并决定奖励是否解锁，因此既保留扫雷机制，也说明它为何出现在页脚。",
     "batch": "A",
-    "demo": "8×5 页脚扫雷，通关后未揭格重排成站名，失败时出现像素烟尘。",
-    "capture": "自动点击一条安全路径→标旗→触发胜利；另录一次炸弹峰值用于验收。",
+    "demo": "Morrow Supply 页脚中的 4×8 扫雷回访奖励；真人揭示会扩散安全区，右键或 Flag mode 标旗，通关解锁 Field Notes wallpaper。",
+    "capture": "真人点击安全区→右键与 Flag mode 标旗→完成通关并显示奖励→显式重置→触雷失败→键盘导航、标旗、揭示与 Escape 复位。",
     "risk": {
       "level": "high",
-      "detail": "不要膨胀成完整游戏；确定性雷区与键盘可用性是捕获前提。"
+      "detail": "需保持确定性雷区、ARIA 网格、触屏标旗、键盘漫游焦点与静态首帧；禁止把录制脚本变成页面内自动玩家。"
     },
     "observedImplementation": {
       "projectId": "web-platform-grid",

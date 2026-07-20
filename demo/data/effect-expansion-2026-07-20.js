@@ -1084,23 +1084,23 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "draggable-packed-editorial-wall",
-    "name": "Draggable packed editorial wall",
-    "nameZh": "可拖拽紧密编辑墙",
+    "name": "Issue-wall extraction and repair",
+    "nameZh": "杂志选题墙抽离与修复",
     "category": "transition",
     "sourceUrl": "https://github.com/haltu/muuri",
-    "difference": "抓起卡片时邻项实时避让并重新装箱；现有筛选网格由过滤条件驱动而非直接操纵。",
+    "difference": "Afterlight Issue 07 的六张不同层级 story tile 具有真实标题、栏目标记与编辑权重；真人拖出一张后，它进入 holding bay，其余五张依照另一套明确 slot 立即修复版面，返回或键盘重排仍保留语义顺序。",
     "behavior": {
-      "trigger": "pointer drag",
-      "response": "Lift, reorder, and repack unequal editorial cards around the active item",
-      "timing": "gesture-driven packing with persistent order",
-      "layer": "DOM grid"
+      "trigger": "real pointer/touch drag and release, Arrow-key reorder, Enter/Space extraction, Repack/Reset, or Escape",
+      "response": "Extract one editorial story into a holding bay, repair the remaining five-card rhythm, or reorder and return stories while preserving the issue model",
+      "timing": "human-owned direct drag followed by interruptible 380 ms measured layout repair; no automatic packing rehearsal",
+      "layer": "full-frame semantic magazine issue wall with six unequal DOM tiles"
     },
     "implementation": {
       "projectId": "motiondivision-motion",
       "projectUrl": "https://github.com/motiondivision/motion",
       "library": "motion@12.42.2",
       "renderer": "dom",
-      "snippet": "const controls = cards.map((card, i) => animate(card, { x: [0, offsets[i], 0], y: [0, shifts[i], 0] }, { duration: 3 }));",
+      "snippet": "const slots=extracted?packedSlots.concat(holdingSlot):initialSlots; cards.map((card,i)=>animate(card,{left:slots[i].left,top:slots[i].top,width:slots[i].width,height:slots[i].height},{duration:.38}));",
       "referenceUrl": "https://github.com/haltu/muuri"
     },
     "scores": {
@@ -1112,13 +1112,13 @@ export const effectExpansion100Specs = [
       "evidence": 9,
       "total": 88
     },
-    "rationaleZh": "直接操纵、避让和落位构成完整编辑墙行为。",
+    "rationaleZh": "不等高卡片不再是编号物理样块，而是一期杂志的真实选题结构；抽离、holding、五卡修复、键盘重排、短拖回弹和复位都通过真人输入与测量位置共同证明。",
     "batch": "B",
-    "demo": "不等高海报墙中，一张跨两列卡片被拖至顶端，其他卡片避让。",
-    "capture": "真实 pointerdown→拖过两处落点→释放→等待 packing 完成。",
+    "demo": "Afterlight Magazine Issue 07 的六张 story tile 组成编辑墙；拖出 Night Market 后，五张卡片修复版式，抽出项进入 holding bay，并可返回、重排或复位。",
+    "capture": "真实长拖抽离与短拖 snap-back，按钮两次返回，Arrow 键三次重排，Enter/Space 两次键盘抽离，Reset 与 Escape 双次恢复原始节奏。",
     "risk": {
       "level": "medium",
-      "detail": "录制必须派发拖拽而非直接调用 move；布局需无跳闪。"
+      "detail": "录制必须派发可信 pointer drag；六张语义卡片需始终留在 packing field 内且静止态不重叠，快速复位要取消旧布局动画而不跳闪。"
     },
     "observedImplementation": {
       "projectId": "haltu-muuri",

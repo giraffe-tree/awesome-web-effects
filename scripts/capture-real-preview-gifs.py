@@ -815,6 +815,63 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 33:
                 page.locator('#globe-host').focus()
                 page.keyboard.press("Home")
+        elif demo["id"] == "draggable-packed-editorial-wall":
+            if index == 2:
+                box = page.locator('.story-tile[data-tile-id="night-market"]').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * .5, box["y"] + box["height"] * .5)
+                page.mouse.down()
+            elif index == 4:
+                box = page.locator('#packing-field').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * .88, box["y"] + box["height"] * .5, steps=6)
+                page.mouse.up()
+            elif index == 6:
+                page.wait_for_timeout(500)
+            elif index == 8:
+                page.locator('#repack-button').click()
+            elif index == 9:
+                page.wait_for_timeout(500)
+            elif index == 11:
+                page.locator('.story-tile[data-tile-id="neon-memory"]').focus()
+                page.keyboard.press("ArrowRight")
+            elif index == 12:
+                page.wait_for_timeout(500)
+            elif index == 14:
+                page.keyboard.press("ArrowDown")
+            elif index == 15:
+                page.wait_for_timeout(500)
+            elif index == 17:
+                page.keyboard.press("Enter")
+            elif index == 18:
+                page.wait_for_timeout(500)
+            elif index == 20:
+                page.locator('#repack-button').click()
+            elif index == 21:
+                page.wait_for_timeout(500)
+            elif index == 23:
+                box = page.locator('.story-tile[data-tile-id="field-notes"]').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * .5, box["y"] + box["height"] * .5)
+                page.mouse.down()
+            elif index == 24:
+                page.mouse.move(box["x"] + box["width"] * .53, box["y"] + box["height"] * .52, steps=3)
+                page.mouse.up()
+            elif index == 25:
+                page.wait_for_timeout(500)
+            elif index == 27:
+                page.locator('.story-tile[data-tile-id="maker"]').focus()
+                page.keyboard.press("Space")
+            elif index == 28:
+                page.wait_for_timeout(500)
+            elif index == 30:
+                page.locator('#reset-button').click()
+            elif index == 31:
+                page.wait_for_timeout(500)
+            elif index == 33:
+                page.locator('.story-tile[data-tile-id="route-credits"]').focus()
+                page.keyboard.press("ArrowLeft")
+            elif index == 34:
+                page.keyboard.press("Escape")
+            elif index == 35:
+                page.wait_for_timeout(500)
         elif demo["id"] == "dom-to-3d-scroll-synchronization":
             if index == 2:
                 box = page.locator('#sync-stage').bounding_box()
@@ -1881,6 +1938,45 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["canvasHeight"] < 64
         ):
             raise RuntimeError(f"{demo['id']} did not capture a human-rotated geodata globe with real nearest-node focus, routes, keyboard control, and reset: {interaction!r}")
+    elif demo["id"] == "draggable-packed-editorial-wall":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            interaction["automaticPacking"]
+            or interaction["automaticRehearsal"]
+            or interaction["previewClockDriven"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInput"]
+            or not interaction["userInitiatedChangesOnly"]
+            or not interaction["initialPositionsValidated"]
+            or not interaction["initialStaticVerified"]
+            or interaction["inputCount"] < 13
+            or interaction["pointerInputCount"] < 7
+            or interaction["keyboardInputCount"] < 6
+            or interaction["dragStartCount"] < 2
+            or interaction["pointerMoveCount"] < 9
+            or interaction["dragReleaseCount"] < 2
+            or interaction["snapBackCount"] < 1
+            or interaction["extractCount"] < 3
+            or interaction["repackCount"] < 2
+            or interaction["keyboardMoveCount"] < 3
+            or interaction["keyboardRepackCount"] < 2
+            or interaction["buttonRepackCount"] < 2
+            or interaction["buttonResetCount"] < 1
+            or interaction["escapeResetCount"] < 1
+            or interaction["resetCount"] < 2
+            or interaction["layoutStartCount"] < 11
+            or interaction["layoutCompleteCount"] < 10
+            or interaction["layoutCancelCount"] < 1
+            or interaction["phase"] != "initial"
+            or interaction["selectedTileId"] != "route-credits"
+            or interaction["extractedTileId"] is not None
+            or interaction["activeDragTileId"] is not None
+            or interaction["order"] != ["night-market", "neon-memory", "field-notes", "return-rate", "maker", "route-credits"]
+            or interaction["layoutAnimationActive"]
+            or interaction["inputKind"] != "keyboard"
+            or interaction["lastTrustedEvent"] != "escape-reset"
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture human drag extraction, five-story repair, keyboard reorder/repack, snap-back, and explicit reset: {interaction!r}")
     elif demo["id"] == "dom-to-3d-scroll-synchronization":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         if (

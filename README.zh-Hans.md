@@ -111,7 +111,7 @@
 | [延迟触发的下拉推广扫光](https://giraffe-tree.github.io/awesome-web-effects/#delayed-dropdown-promo-sweep) | [Motion](https://github.com/motiondivision/motion) | **92/100** | [Glean](https://www.glean.com/) | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#delayed-dropdown-promo-sweep) |
 | [裁剪路径菜单帘幕](https://giraffe-tree.github.io/awesome-web-effects/#clip-path-menu-curtain) | [Motion](https://github.com/motiondivision/motion) | **89/100** | [Anthropic](https://www.anthropic.com/) | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#clip-path-menu-curtain) |
 | [场景擦除式渐进页面交换](https://giraffe-tree.github.io/awesome-web-effects/#scene-wipe-progressive-page-swap) | [Motion](https://github.com/motiondivision/motion) | **90/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#scene-wipe-progressive-page-swap) |
-| [可拖拽紧密编辑墙](https://giraffe-tree.github.io/awesome-web-effects/#draggable-packed-editorial-wall) | [Motion](https://github.com/motiondivision/motion) | **88/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#draggable-packed-editorial-wall) |
+| [杂志选题墙抽离与修复](https://giraffe-tree.github.io/awesome-web-effects/#draggable-packed-editorial-wall) | [Motion](https://github.com/motiondivision/motion) | **88/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#draggable-packed-editorial-wall) |
 | [速度感知抽屉回弹](https://giraffe-tree.github.io/awesome-web-effects/#velocity-aware-swipe-drawer) | [Motion](https://github.com/motiondivision/motion) | **85/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#velocity-aware-swipe-drawer) |
 | [空间化演示文稿导航](https://giraffe-tree.github.io/awesome-web-effects/#spatial-slide-deck-navigation) | [Motion](https://github.com/motiondivision/motion) | **88/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#spatial-slide-deck-navigation) |
 | [像素网格内容溶解](https://giraffe-tree.github.io/awesome-web-effects/#pixel-grid-content-dissolve) | [p5.js](https://github.com/processing/p5.js) | **95/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#pixel-grid-content-dissolve) |
@@ -282,7 +282,7 @@
 - 150 个已核验预览：2 个官方素材、148 个可运行本地 Demo 录制；缺失数为 0。
 - 人工评审覆盖创意、艺术完成度、动效编排、效果辨识、创作迁移和证据质量。
 - 准入要求 80/100，并同时通过核心维度最低分；流行度不能覆盖质量门槛。
-- 已核验 GIF 总计 24.04 MiB；每个预览为 320×180、最长三秒且小于 1 MiB。
+- 已核验 GIF 总计 24.02 MiB；每个预览为 320×180、最长三秒且小于 1 MiB。
 - Stars 是 2026-07-20 快照；“推荐实现”与“在哪家 AI 官网观察到”始终是两种关系。
 
 继续阅读 [396 个候选的准入审计](research/demo-admission-audit-2026-07-20.md)、[100 家 AI 公司主页特效调研](research/ai-native-homepages-100.md)与[预览来源清单](demo/gifs/provenance.json)。

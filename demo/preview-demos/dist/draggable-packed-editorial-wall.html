@@ -1,7 +1,519 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Motion — Draggable Packed Editorial Wall</title><style>
-:root{--preview-background:#eee9dd;color-scheme:light}.wall{position:absolute;inset:0;overflow:hidden;touch-action:none;color:#181b17}.wall-title{position:absolute;left:14px;top:43px;width:66px;margin:0;font:950 15px/.83 system-ui;letter-spacing:-.06em}.wall-title small{display:block;margin-bottom:8px;font:800 5px/1 ui-monospace;letter-spacing:.12em}.tile{position:absolute;border:1px solid #1f271f;border-radius:9px;box-shadow:0 7px 15px #26332119;display:flex;align-items:flex-end;padding:8px;font:850 7px/1 system-ui;cursor:grab;user-select:none}.tile.dragging{cursor:grabbing;z-index:9}.tile:nth-of-type(1){left:88px;top:36px;width:80px;height:63px;background:#ff765c}.tile:nth-of-type(2){left:174px;top:36px;width:132px;height:42px;background:#5a76ff;color:white}.tile:nth-of-type(3){left:174px;top:84px;width:58px;height:68px;background:#cff06b}.tile:nth-of-type(4){left:238px;top:84px;width:68px;height:42px;background:#f4d55d}.tile:nth-of-type(5){left:88px;top:105px;width:80px;height:47px;background:#fffdf4}.tile:nth-of-type(6){left:238px;top:132px;width:68px;height:20px;background:#cb9fff}.packing-mark{position:absolute;left:80px;top:29px;right:8px;bottom:20px;border:1px dashed #1f271f35;border-radius:12px}.library-badge{color:#202720;background:#f8f4e7d8;border-color:#222a2220}.scene-caption{display:none}</style>  <script type="module" crossorigin src="./assets/draggable-packed-editorial-wall-bYDZ-fhU.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
-  <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
-  <link rel="modulepreload" crossorigin href="./assets/batch-b-utils-CmA_lC0Z.js">
-  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage"><section class="wall" id="editorial-wall" data-preview-mechanism="motion-packed-wall" tabindex="0" aria-label="Drag a tile or use Enter to repack the editorial wall"><h1 class="wall-title"><small>ISSUE / 08</small>PACK THE STORY.</h1><div class="packing-mark"></div><article class="tile">01 / FIELD</article><article class="tile">02 / SIGNAL</article><article class="tile">03 / FORM</article><article class="tile">04 / TYPE</article><article class="tile">05 / NOTE</article><article class="tile">06</article></section><span class="library-badge">Motion · packed drag</span></main></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Motion — Night Shift Editorial Wall</title>
+    <style>
+      :root {
+        --preview-background: #161712;
+        --shell: #e7e3d6;
+        --ink: #1c1d18;
+        --line: rgba(28, 29, 24, .2);
+        --coral: #ff735b;
+        --acid: #d6f06b;
+        color-scheme: light;
+      }
+
+      button { font: inherit; color: inherit; }
+
+      .editorial-stage {
+        padding: clamp(5px, 2.2vw, 16px);
+        background:
+          radial-gradient(circle at 78% 12%, rgba(214, 240, 107, .09), transparent 30%),
+          #161712;
+      }
+
+      .editorial-shell {
+        display: grid;
+        width: 100%;
+        height: 100%;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        border: 1px solid rgba(244, 241, 225, .16);
+        border-radius: clamp(6px, 2.1vw, 17px);
+        background: var(--shell);
+        color: var(--ink);
+        grid-template-rows: clamp(30px, 10.5vh, 43px) minmax(0, 1fr);
+        box-shadow: 0 24px 70px rgba(0, 0, 0, .3);
+      }
+
+      .editorial-header {
+        display: flex;
+        min-width: 0;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 clamp(9px, 2.4vw, 19px);
+        border-bottom: 1px solid var(--line);
+      }
+
+      .masthead,
+      .header-tools,
+      .issue-state {
+        display: flex;
+        min-width: 0;
+        align-items: center;
+      }
+
+      .masthead { gap: clamp(5px, 1.2vw, 9px); }
+
+      .masthead-mark {
+        display: grid;
+        width: clamp(13px, 2.5vw, 19px);
+        aspect-ratio: 1;
+        flex: 0 0 auto;
+        place-items: center;
+        border-radius: 50%;
+        background: var(--ink);
+        color: var(--shell);
+        font: 850 clamp(4px, .8vw, 6px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+
+      .masthead strong {
+        overflow: hidden;
+        font-size: clamp(7px, 1.55vw, 12px);
+        letter-spacing: -.035em;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .masthead span,
+      .issue-state,
+      .wall-kicker,
+      .wall-instruction,
+      .tile-kicker,
+      .tile-meta,
+      .holding-label,
+      .wall-status {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        text-transform: uppercase;
+      }
+
+      .masthead span {
+        color: #76776e;
+        font-size: clamp(3px, .72vw, 5px);
+        font-weight: 800;
+        letter-spacing: .13em;
+        white-space: nowrap;
+      }
+
+      .header-tools { gap: clamp(4px, .8vw, 7px); }
+
+      .issue-state {
+        margin-right: clamp(3px, .7vw, 6px);
+        color: #696b63;
+        font-size: clamp(3px, .7vw, 5px);
+        font-weight: 820;
+        letter-spacing: .1em;
+        gap: 5px;
+        white-space: nowrap;
+      }
+
+      .issue-state::before {
+        width: clamp(4px, .7vw, 6px);
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: var(--coral);
+        content: '';
+      }
+
+      .control-button {
+        padding: clamp(3px, .72vw, 6px) clamp(6px, 1.15vw, 9px);
+        border: 1px solid rgba(28, 29, 24, .28);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, .25);
+        cursor: pointer;
+        font-size: clamp(3px, .74vw, 6px);
+        font-weight: 820;
+        white-space: nowrap;
+      }
+
+      .control-button.primary {
+        border-color: var(--ink);
+        background: var(--ink);
+        color: #f1eedf;
+      }
+
+      .control-button:focus-visible,
+      .story-tile:focus-visible,
+      .editorial-wall:focus-visible {
+        outline: 2px solid var(--coral);
+        outline-offset: 2px;
+      }
+
+      .editorial-workspace {
+        display: grid;
+        min-width: 0;
+        min-height: 0;
+        grid-template-columns: clamp(86px, 18.5vw, 142px) minmax(0, 1fr);
+      }
+
+      .wall-brief {
+        position: relative;
+        display: flex;
+        min-width: 0;
+        min-height: 0;
+        flex-direction: column;
+        padding: clamp(11px, 2.7vw, 22px) clamp(9px, 2vw, 16px);
+        border-right: 1px solid var(--line);
+      }
+
+      .wall-kicker {
+        color: #797a70;
+        font-size: clamp(3px, .74vw, 6px);
+        font-weight: 850;
+        letter-spacing: .12em;
+      }
+
+      .wall-title {
+        margin: clamp(10px, 2.4vw, 19px) 0 0;
+        font: 900 clamp(19px, 4.4vw, 35px)/.82 ui-serif, Georgia, serif;
+        letter-spacing: -.07em;
+      }
+
+      .wall-title em {
+        display: block;
+        color: #9e4936;
+        font-style: italic;
+        font-weight: 500;
+      }
+
+      .wall-instruction {
+        max-width: 17em;
+        margin-top: auto;
+        color: #74766d;
+        font-size: clamp(3px, .66vw, 5px);
+        font-weight: 760;
+        letter-spacing: .07em;
+        line-height: 1.55;
+      }
+
+      .wall-status {
+        margin-top: clamp(6px, 1.3vw, 10px);
+        color: #7c3d2d;
+        font-size: clamp(3px, .7vw, 5px);
+        font-weight: 880;
+        letter-spacing: .08em;
+      }
+
+      .editorial-wall {
+        position: relative;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        touch-action: none;
+        background:
+          linear-gradient(rgba(238, 235, 222, .055) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(238, 235, 222, .055) 1px, transparent 1px),
+          #20211c;
+        background-size: clamp(14px, 3.5vw, 27px) clamp(14px, 3.5vw, 27px);
+      }
+
+      .packing-field {
+        position: absolute;
+        inset: clamp(8px, 2.4vw, 19px);
+        min-width: 0;
+        min-height: 0;
+      }
+
+      .packing-field::before {
+        position: absolute;
+        top: 0;
+        right: 22%;
+        bottom: 0;
+        border-right: 1px dashed rgba(231, 227, 214, .22);
+        content: '';
+      }
+
+      .holding-label {
+        position: absolute;
+        z-index: 0;
+        top: 0;
+        right: 0;
+        width: 19%;
+        color: rgba(231, 227, 214, .5);
+        font-size: clamp(3px, .68vw, 5px);
+        font-weight: 820;
+        letter-spacing: .1em;
+        line-height: 1.4;
+      }
+
+      .holding-label::after {
+        display: block;
+        width: 100%;
+        margin-top: clamp(4px, 1vw, 8px);
+        border-top: 1px solid rgba(231, 227, 214, .16);
+        content: '';
+      }
+
+      .story-tile {
+        position: absolute;
+        z-index: 1;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        border: 1px solid rgba(14, 15, 12, .88);
+        border-radius: clamp(4px, 1.35vw, 10px);
+        cursor: grab;
+        user-select: none;
+        will-change: left, top, width, height, transform;
+        box-shadow: 0 10px 24px rgba(0, 0, 0, .18);
+      }
+
+      .story-tile::after {
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .16);
+        content: '';
+        pointer-events: none;
+      }
+
+      .story-tile:hover,
+      .story-tile:focus-visible { filter: brightness(1.04); }
+      .story-tile.dragging { z-index: 12; cursor: grabbing; filter: brightness(1.05); }
+      .story-tile.extracted { z-index: 7; }
+
+      .tile-inner {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        min-width: 0;
+        min-height: 0;
+        flex-direction: column;
+        padding: clamp(5px, 1.35vw, 10px);
+      }
+
+      .tile-kicker,
+      .tile-meta {
+        position: relative;
+        z-index: 2;
+        font-size: clamp(3px, .68vw, 5px);
+        font-weight: 850;
+        letter-spacing: .1em;
+      }
+
+      .tile-meta { margin-top: auto; opacity: .7; }
+
+      .tile-title {
+        position: relative;
+        z-index: 2;
+        margin: clamp(5px, 1.3vw, 10px) 0 0;
+        font-size: clamp(8px, 2.25vw, 17px);
+        line-height: .86;
+        letter-spacing: -.055em;
+      }
+
+      .lead-tile {
+        background:
+          radial-gradient(circle at 73% 33%, #f3a679 0 9%, transparent 9.5%),
+          radial-gradient(circle at 73% 55%, #d65d55 0 18%, transparent 18.5%),
+          linear-gradient(145deg, transparent 56%, rgba(255, 115, 91, .9) 57% 61%, transparent 62%),
+          #4f4d9b;
+        color: #fff9e7;
+      }
+
+      .lead-tile .tile-title {
+        margin-top: auto;
+        font-family: ui-serif, Georgia, serif;
+        font-size: clamp(10px, 2.7vw, 22px);
+      }
+
+      .quote-tile { background: #f0795d; color: #291c18; }
+      .quote-tile .tile-title { max-width: 12em; font-family: ui-serif, Georgia, serif; }
+
+      .field-tile { background: var(--acid); color: #202218; }
+      .field-tile .route {
+        position: absolute;
+        right: 9%;
+        bottom: 10%;
+        width: 46%;
+        height: 45%;
+        border: 1px solid rgba(30, 34, 24, .38);
+        border-radius: 50% 20% 55% 30%;
+        rotate: -17deg;
+      }
+      .field-tile .route::before,
+      .field-tile .route::after {
+        position: absolute;
+        width: 4px;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: #21231c;
+        content: '';
+      }
+      .field-tile .route::before { top: 12%; left: 18%; }
+      .field-tile .route::after { right: 12%; bottom: 7%; }
+
+      .data-tile { background: #f0d45f; color: #292617; }
+      .data-tile .tile-title { font-size: clamp(9px, 2.7vw, 20px); }
+
+      .portrait-tile {
+        background:
+          radial-gradient(ellipse at 65% 48%, #23241e 0 17%, transparent 17.5%),
+          radial-gradient(ellipse at 64% 94%, #34362d 0 34%, transparent 34.5%),
+          #c9a2e8;
+        color: #24201f;
+      }
+
+      .credit-tile { background: #f4f0e2; color: #24251f; }
+      .credit-tile .frames {
+        position: absolute;
+        right: 7%;
+        bottom: 12%;
+        display: grid;
+        width: 35%;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2px;
+      }
+      .credit-tile .frames i {
+        aspect-ratio: 1;
+        border-radius: 1px;
+        background: #373a30;
+      }
+      .credit-tile .frames i:nth-child(2),
+      .credit-tile .frames i:nth-child(4) { background: var(--coral); }
+
+      @media (prefers-reduced-motion: reduce) {
+        .story-tile { scroll-behavior: auto; }
+      }
+
+      @media (max-width: 420px) {
+        .editorial-stage { padding: 5px; }
+        .editorial-shell { border-radius: 7px; grid-template-rows: 22px minmax(0, 1fr); }
+        .editorial-header { padding: 0 7px; }
+        .editorial-workspace { grid-template-columns: 70px minmax(0, 1fr); }
+        .wall-brief { padding: 8px 6px; }
+        .wall-title { margin-top: 7px; font-size: 16px; }
+        .wall-instruction { font-size: 3px; }
+        .packing-field { inset: 7px; }
+        .tile-inner { padding: 5px; }
+        .tile-title { margin-top: 3px; font-size: 7px; }
+        .lead-tile .tile-title { font-size: 9px; }
+        .data-tile .tile-title { font-size: 8px; }
+      }
+
+      @media (max-width: 220px), (max-height: 105px) {
+        .editorial-stage { padding: 2px; }
+        .editorial-shell { border-radius: 4px; grid-template-rows: 11px minmax(0, 1fr); }
+        .editorial-header { padding: 0 3px; }
+        .masthead { gap: 2px; }
+        .masthead-mark { width: 5px; font-size: 1.5px; }
+        .masthead strong { font-size: 3px; }
+        .masthead span { display: none; }
+        .issue-state { margin-right: 1px; font-size: 1.4px; gap: 2px; }
+        .issue-state::before { width: 2px; }
+        .header-tools { gap: 2px; }
+        .control-button { padding: 1px 2px; font-size: 1.5px; }
+        .editorial-workspace { grid-template-columns: 32px minmax(0, 1fr); }
+        .wall-brief { padding: 4px 3px; }
+        .wall-kicker { font-size: 1.4px; }
+        .wall-title { margin-top: 3px; font-size: 7px; }
+        .wall-instruction { display: none; }
+        .wall-status { margin-top: auto; font-size: 1.2px; }
+        .editorial-wall { background-size: 9px 9px; }
+        .packing-field { inset: 3px; }
+        .holding-label { font-size: 1.2px; }
+        .holding-label::after { margin-top: 2px; }
+        .story-tile { border-radius: 2px; box-shadow: 0 2px 5px rgba(0, 0, 0, .18); }
+        .tile-inner { padding: 2px; }
+        .tile-kicker,
+        .tile-meta { font-size: 1.2px; }
+        .tile-title { margin-top: 1px; font-size: 3px; }
+        .lead-tile .tile-title,
+        .data-tile .tile-title { font-size: 3.5px; }
+        .field-tile .route::before,
+        .field-tile .route::after { width: 1px; }
+        .credit-tile .frames { gap: 1px; }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/draggable-packed-editorial-wall-C9KhJ2BX.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+    <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main class="preview-stage editorial-stage" id="editorial-stage" aria-label="Interactive editorial planning wall">
+      <section class="editorial-shell" id="editorial-shell" data-preview-mechanism="motion-packed-editorial-wall">
+        <header class="editorial-header">
+          <div class="masthead">
+            <i class="masthead-mark" aria-hidden="true">A8</i>
+            <strong>Afterlight Magazine</strong>
+            <span>Culture desk · Issue 08</span>
+          </div>
+          <div class="header-tools">
+            <span class="issue-state">6 stories · layout open</span>
+            <button class="control-button primary" id="repack-button" type="button">Repack / Enter</button>
+            <button class="control-button" id="reset-button" type="button">Reset / Esc</button>
+          </div>
+        </header>
+
+        <div class="editorial-workspace">
+          <aside class="wall-brief">
+            <span class="wall-kicker">Night shift / 08</span>
+            <h1 class="wall-title">Stories after <em>sunset.</em></h1>
+            <p class="wall-instruction">Drag a story into holding. Focus a tile and use arrows to move it; Enter repairs the wall.</p>
+            <span class="wall-status" id="wall-status" role="status" aria-live="polite">Original rhythm</span>
+          </aside>
+
+          <section class="editorial-wall" id="editorial-wall" tabindex="0" aria-label="Story asset wall. Drag a story, use arrow keys to reorder, or press Enter to repack.">
+            <div class="packing-field" id="packing-field">
+              <span class="holding-label">Holding bay<br />Next issue</span>
+
+              <article class="story-tile lead-tile" id="tile-night-market" data-tile-id="night-market" tabindex="0" role="button" aria-pressed="false" aria-label="Night Market Afterglow lead story. Drag to holding or press Enter to extract.">
+                <div class="tile-inner">
+                  <span class="tile-kicker">Cover candidate · 01</span>
+                  <h2 class="tile-title">Night Market<br />Afterglow</h2>
+                  <span class="tile-meta">Photo essay · 18 frames</span>
+                </div>
+              </article>
+
+              <article class="story-tile quote-tile" id="tile-neon-memory" data-tile-id="neon-memory" tabindex="0" role="button" aria-pressed="false" aria-label="Cities Remember in Neon interview story. Drag or use arrow keys to reorder.">
+                <div class="tile-inner">
+                  <span class="tile-kicker">Interview · 02</span>
+                  <h2 class="tile-title">Cities remember in neon.</h2>
+                  <span class="tile-meta">L. Okafor · 1,200 words</span>
+                </div>
+              </article>
+
+              <article class="story-tile field-tile" id="tile-field-notes" data-tile-id="field-notes" tabindex="0" role="button" aria-pressed="false" aria-label="Taipei field notes story. Drag or use arrow keys to reorder.">
+                <div class="tile-inner">
+                  <span class="tile-kicker">Field notes · 03</span>
+                  <h2 class="tile-title">Taipei<br />22:40</h2>
+                  <span class="tile-meta">Route 03 · 7 voices</span>
+                  <i class="route" aria-hidden="true"></i>
+                </div>
+              </article>
+
+              <article class="story-tile data-tile" id="tile-return-rate" data-tile-id="return-rate" tabindex="0" role="button" aria-pressed="false" aria-label="Street vendor return rate data card. Drag or use arrow keys to reorder.">
+                <div class="tile-inner">
+                  <span class="tile-kicker">Signal · 04</span>
+                  <h2 class="tile-title">87%</h2>
+                  <span class="tile-meta">Return after midnight</span>
+                </div>
+              </article>
+
+              <article class="story-tile portrait-tile" id="tile-maker" data-tile-id="maker" tabindex="0" role="button" aria-pressed="false" aria-label="Mina maker profile. Drag or use arrow keys to reorder.">
+                <div class="tile-inner">
+                  <span class="tile-kicker">Profile · 05</span>
+                  <h2 class="tile-title">Mina<br />Maker 12</h2>
+                  <span class="tile-meta">Portrait cleared</span>
+                </div>
+              </article>
+
+              <article class="story-tile credit-tile" id="tile-route-credits" data-tile-id="route-credits" tabindex="0" role="button" aria-pressed="false" aria-label="Route 03 photography credits. Drag or use arrow keys to reorder.">
+                <div class="tile-inner">
+                  <span class="tile-kicker">Sequence · 06</span>
+                  <h2 class="tile-title">Route 03<br />Contact sheet</h2>
+                  <span class="tile-meta">18 selects · edit B</span>
+                  <span class="frames" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span>
+                </div>
+              </article>
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

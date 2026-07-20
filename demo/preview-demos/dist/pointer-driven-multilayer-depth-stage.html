@@ -1,7 +1,242 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Motion — Pointer-driven Multilayer Depth Stage</title><style>
-:root{--preview-background:#08131a}.depth-stage{position:absolute;inset:0;overflow:hidden;cursor:crosshair;perspective:500px}.depth-layer{position:absolute;inset:-26px;will-change:transform,filter;transform-origin:center}.sky{background:radial-gradient(circle at 73% 28%,#ffd278 0 5%,transparent 5.8%),linear-gradient(#133047,#315a6a)}.mountain-back{top:60px;clip-path:polygon(0 66%,18% 22%,36% 59%,55% 17%,73% 57%,88% 29%,100% 64%,100% 100%,0 100%);background:#4c8b7b}.mountain-front{top:84px;clip-path:polygon(0 58%,15% 25%,29% 59%,45% 13%,64% 65%,80% 30%,100% 60%,100% 100%,0 100%);background:#133832}.depth-figure{position:absolute;z-index:6;left:151px;top:91px;width:17px;height:52px;border-radius:11px 11px 4px 4px;background:#ff6d55;box-shadow:0 13px 18px #0007;will-change:transform}.depth-copy{position:absolute;z-index:7;left:14px;top:49px;color:white;pointer-events:none;text-shadow:0 2px 12px #07131ac9}.depth-copy small{font:800 6px/1 ui-monospace;letter-spacing:.12em}.depth-copy h1{width:130px;margin:10px 0 0;font:950 22px/.82 system-ui;letter-spacing:-.06em}.depth-readout{position:absolute;z-index:7;right:12px;bottom:12px;color:#e1f4efb5;font:700 6px/1 ui-monospace;letter-spacing:.1em}.library-badge{background:#07131abd}</style>  <script type="module" crossorigin src="./assets/pointer-driven-multilayer-depth-stage-CUqYdhTU.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
-  <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
-  <link rel="modulepreload" crossorigin href="./assets/batch-b-utils-CmA_lC0Z.js">
-  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage"><div class="depth-stage" id="depth-stage" data-preview-mechanism="motion-pointer-depth" tabindex="0" aria-label="Move the pointer or use arrow keys to shift the depth layers"><div class="depth-layer sky"></div><div class="depth-layer mountain-back"></div><div class="depth-layer mountain-front"></div><div class="depth-figure"></div><section class="depth-copy"><small>PARALLAX / 03 PLANES</small><h1>MOVE THROUGH THE LANDSCAPE.</h1></section><span class="depth-readout" id="depth-readout">X 0.00 / Y 0.00</span></div><span class="library-badge">Motion · depth planes</span><span class="scene-caption">near layers travel farther than the horizon</span></main></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Motion — Pointer-driven Multilayer Depth Stage</title>
+    <style>
+      :root { --preview-background: #07141a; }
+
+      .depth-stage {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        min-width: 100%;
+        min-height: 100%;
+        overflow: hidden;
+        outline: none;
+        cursor: crosshair;
+        perspective: 720px;
+        touch-action: none;
+        background: #173341;
+      }
+
+      .depth-stage:focus-visible::after {
+        content: "";
+        position: absolute;
+        z-index: 20;
+        inset: 5px;
+        border: 1px solid rgba(255, 255, 255, .82);
+        pointer-events: none;
+      }
+
+      .depth-layer {
+        position: absolute;
+        inset: -15%;
+        width: 130%;
+        height: 130%;
+        will-change: transform, filter;
+        transform-origin: center;
+        pointer-events: none;
+      }
+
+      .sky {
+        background:
+          radial-gradient(circle at 74% 24%, rgba(255, 221, 147, .98) 0 3.5%, rgba(255, 205, 117, .24) 4%, transparent 10%),
+          linear-gradient(180deg, #18394d 0%, #5f8590 63%, #a0a895 100%);
+      }
+
+      .sky::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        opacity: .2;
+        background: repeating-linear-gradient(103deg, transparent 0 19px, rgba(255, 255, 255, .16) 20px, transparent 21px 42px);
+        mask-image: linear-gradient(180deg, #000, transparent 62%);
+      }
+
+      .ridge-far {
+        clip-path: polygon(0 62%, 10% 46%, 19% 55%, 31% 33%, 41% 54%, 55% 29%, 68% 55%, 80% 38%, 90% 55%, 100% 43%, 100% 100%, 0 100%);
+        background: linear-gradient(180deg, #547b71, #315a56 68%);
+      }
+
+      .ridge-far::after,
+      .ridge-near::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        opacity: .3;
+        background: repeating-radial-gradient(ellipse at 48% 110%, transparent 0 18px, rgba(220, 238, 219, .22) 19px, transparent 20px 35px);
+      }
+
+      .ridge-near {
+        clip-path: polygon(0 75%, 8% 61%, 16% 70%, 26% 46%, 36% 72%, 48% 40%, 61% 73%, 72% 54%, 83% 70%, 92% 49%, 100% 66%, 100% 100%, 0 100%);
+        background: linear-gradient(180deg, #214f48, #0e302d 78%);
+      }
+
+      .foreground {
+        clip-path: polygon(0 83%, 12% 78%, 24% 82%, 36% 73%, 48% 81%, 60% 74%, 72% 79%, 84% 70%, 100% 76%, 100% 100%, 0 100%);
+        background:
+          repeating-linear-gradient(165deg, rgba(201, 218, 180, .16) 0 1px, transparent 1px 13px),
+          #071f20;
+        box-shadow: inset 0 18px 35px rgba(0, 0, 0, .26);
+      }
+
+      .depth-route {
+        position: absolute;
+        z-index: 5;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+        pointer-events: none;
+        will-change: transform;
+      }
+
+      .depth-route path {
+        fill: none;
+        stroke: rgba(255, 227, 159, .72);
+        stroke-width: 1.25;
+        stroke-dasharray: 3 4;
+        vector-effect: non-scaling-stroke;
+      }
+
+      .depth-route circle { fill: #ffe09b; }
+
+      .depth-figure {
+        position: absolute;
+        z-index: 7;
+        left: 62%;
+        top: 63%;
+        width: clamp(8px, 3.8vw, 18px);
+        aspect-ratio: 1;
+        border: 1px solid rgba(255, 244, 204, .92);
+        border-radius: 50%;
+        background: #ff725d;
+        box-shadow: 0 0 0 5px rgba(255, 114, 93, .14), 0 9px 18px rgba(0, 0, 0, .48);
+        will-change: transform;
+        pointer-events: none;
+      }
+
+      .depth-figure::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 100%;
+        width: 1px;
+        height: clamp(9px, 4.2vw, 20px);
+        background: linear-gradient(#ffe7ad, transparent);
+      }
+
+      .depth-copy {
+        position: absolute;
+        z-index: 9;
+        left: clamp(12px, 5vw, 28px);
+        top: 28%;
+        width: min(42%, 190px);
+        color: white;
+        pointer-events: none;
+        text-shadow: 0 2px 14px rgba(2, 12, 14, .72);
+      }
+
+      .depth-copy small {
+        color: rgba(235, 249, 241, .68);
+        font: 800 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .13em;
+        text-transform: uppercase;
+      }
+
+      .depth-copy h1 {
+        margin: 7px 0 0;
+        font: 900 clamp(14px, 5.8vw, 30px)/.84 system-ui, sans-serif;
+        letter-spacing: -.06em;
+        text-transform: uppercase;
+      }
+
+      .depth-meta {
+        display: flex;
+        gap: 7px;
+        margin-top: 9px;
+        color: rgba(235, 249, 241, .66);
+        font: 750 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+      }
+
+      .depth-readout {
+        position: absolute;
+        z-index: 9;
+        right: 13px;
+        bottom: 12px;
+        color: rgba(225, 244, 239, .76);
+        font: 750 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        pointer-events: none;
+      }
+
+      .depth-reticle {
+        position: absolute;
+        z-index: 8;
+        left: 50%;
+        top: 50%;
+        width: 18px;
+        height: 18px;
+        border: 1px solid rgba(255, 255, 255, .52);
+        border-radius: 50%;
+        opacity: 0;
+        translate: -50% -50%;
+        transition: opacity .15s ease;
+        pointer-events: none;
+      }
+
+      .depth-stage[data-engaged="true"] .depth-reticle { opacity: 1; }
+      .library-badge { background: rgba(5, 18, 20, .72); }
+      .scene-caption { right: auto; left: 13px; bottom: 11px; }
+
+      @media (max-width: 180px) {
+        .depth-copy { left: 10px; top: 30%; width: 50%; }
+        .depth-copy h1 { font-size: 11px; }
+        .depth-copy small, .depth-meta, .depth-readout { font-size: 4px; }
+        .depth-meta { margin-top: 5px; }
+        .library-badge { top: 7px; left: 8px; padding: 4px 6px; font-size: 6px; }
+        .scene-caption { display: none; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .depth-reticle { transition: none; }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/pointer-driven-multilayer-depth-stage-FNnAcQUe.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+    <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
+    <link rel="modulepreload" crossorigin href="./assets/batch-b-utils-CmA_lC0Z.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main class="preview-stage">
+      <section class="depth-stage" id="depth-stage" data-preview-mechanism="motion-human-depth-parallax" data-engaged="false" tabindex="0" aria-label="Move the pointer, drag by touch, or use arrow keys to inspect a four-plane trail landscape">
+        <div class="depth-layer sky"></div>
+        <div class="depth-layer ridge-far"></div>
+        <div class="depth-layer ridge-near"></div>
+        <div class="depth-layer foreground"></div>
+        <svg class="depth-route" viewBox="0 0 320 180" aria-hidden="true">
+          <path d="M18 154 C68 132 102 162 151 137 S241 139 301 111" />
+          <circle cx="18" cy="154" r="2" />
+          <circle cx="301" cy="111" r="2" />
+        </svg>
+        <i class="depth-figure" aria-hidden="true"></i>
+        <i class="depth-reticle" id="depth-reticle" aria-hidden="true"></i>
+        <section class="depth-copy" aria-hidden="true">
+          <small>Trail atlas / live viewpoint</small>
+          <h1>Read the ridge in layers.</h1>
+          <div class="depth-meta"><span>04 planes</span><span>1,840 m</span><span>Clear</span></div>
+        </section>
+        <span class="depth-readout" id="depth-readout" aria-hidden="true">View centered / ready</span>
+      </section>
+      <span class="library-badge">Motion · human depth planes</span>
+      <span class="scene-caption">near ×1.0 · horizon ×0.08</span>
+    </main>
+  </body>
+</html>

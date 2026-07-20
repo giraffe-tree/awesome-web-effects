@@ -1231,17 +1231,17 @@ export const effectExpansion100Specs = [
     "sourceUrl": "https://github.com/wagerfield/parallax",
     "difference": "前景、主体、远景按深度系数独立位移；现有卡片倾斜高光让一个平面整体旋转。",
     "behavior": {
-      "trigger": "pointer/device orientation",
-      "response": "Offset authored layers by depth coefficients around a fixed focal point",
-      "timing": "continuous reversible parallax",
-      "layer": "layered DOM scene"
+      "trigger": "mouse hover, captured touch/pen drag, or arrow keys",
+      "response": "Offset four authored trail-atlas planes, route, beacon, and reticle by distinct depth coefficients",
+      "timing": "direct input-driven reversible parallax; centered and still when idle",
+      "layer": "full-bleed layered DOM scene"
     },
     "implementation": {
       "projectId": "motiondivision-motion",
       "projectUrl": "https://github.com/motiondivision/motion",
       "library": "motion@12.42.2",
       "renderer": "dom",
-      "snippet": "layers.forEach(({ node, depth }) => animate(node, { x: pointerX * depth, y: pointerY * depth }, { duration: 0.24 }));",
+      "snippet": "stage.onpointermove = event => layers.forEach(({ node, depth }) => { node.style.transform = `translate3d(${pointerX(event) * depth}px, ${pointerY(event) * depth}px, 0)`; });",
       "referenceUrl": "https://github.com/wagerfield/parallax"
     },
     "scores": {
@@ -1255,8 +1255,8 @@ export const effectExpansion100Specs = [
     },
     "rationaleZh": "多层相对运动而非整体变换，空间深度一眼可辨。",
     "batch": "B",
-    "demo": "原创 SVG 夜景含月亮、标题、枝叶和雾层，指针移动时分层。",
-    "capture": "pointer 走四角和中心；再触发 reduced-motion 静态降级。",
+    "demo": "原创全屏 trail-atlas 场景含天空、远岭、近岭、前景、路线与信标；鼠标、触摸拖拽和键盘真实驱动四层景深。",
+    "capture": "真实鼠标先悬停穿越四角，再按下拖拽并离开舞台归中；断言无自动路径、输入计数、捕获释放和静止终态。",
     "risk": {
       "level": "medium",
       "detail": "上游 SPDX 未断言；需核验许可并给移动端方向权限降级。"

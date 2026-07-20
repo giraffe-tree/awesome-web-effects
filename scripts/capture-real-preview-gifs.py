@@ -232,6 +232,24 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.move(319 - 318 * progress, 146)
             elif index == 34:
                 page.mouse.up()
+        elif demo["id"] == "pointer-driven-multilayer-depth-stage":
+            if index == 3:
+                page.mouse.move(35, 140)
+            elif 4 <= index <= 10:
+                progress = (index - 4) / 6
+                page.mouse.move(35 + 250 * progress, 140 - 95 * progress)
+            elif index == 12:
+                page.mouse.move(70, 50)
+            elif index == 15:
+                page.mouse.move(45, 145)
+                page.mouse.down()
+            elif 16 <= index <= 24:
+                progress = (index - 16) / 8
+                page.mouse.move(45 + 230 * progress, 145 - 110 * progress)
+            elif index == 25:
+                page.mouse.up()
+            elif index == 28:
+                page.mouse.move(330, 190)
         page.evaluate("time => window.__setPreviewTime(time)", preview_time)
         frame_path = frame_root / f"{index:04d}.png"
         page.screenshot(path=str(frame_path), type="png")
@@ -308,6 +326,19 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or min(interaction["bandCoverage"]) <= .05
         ):
             raise RuntimeError(f"{demo['id']} did not capture a real A-to-B-to-A ordinal-depth drag: {interaction!r}")
+    elif demo["id"] == "pointer-driven-multilayer-depth-stage":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            interaction["automaticPath"]
+            or interaction["inputCount"] < 15
+            or interaction["inputKind"] != "mouse"
+            or interaction["mode"] != "idle"
+            or interaction["engaged"]
+            or interaction["pointerCaptured"]
+            or abs(interaction["x"] - .5) > .001
+            or abs(interaction["y"] - .5) > .001
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture real hover, drag, release, and centered recovery: {interaction!r}")
 
     minimum_unique = min(6, max(2, frame_count // 6))
     if len(hashes) < minimum_unique:

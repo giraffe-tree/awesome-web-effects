@@ -1,3 +1,498 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>Motion — Animated Hand-drawn Semantic Annotation</title><link rel="stylesheet" href="./shared.css"/><style>
-:root{--preview-background:#f3eddc;color-scheme:light}.note-stage{background:linear-gradient(145deg,#f5efdf,#ded4bd);color:#171411}.note-copy{position:absolute;left:26px;top:54px;font:900 24px/.92 Georgia,serif;letter-spacing:-.055em}.marked-word{position:relative;display:inline-block;color:#e54f39}.annotation-svg{position:absolute;left:-15px;top:-13px;width:160px;height:52px;overflow:visible;pointer-events:none}.annotation-line{fill:none;stroke:#e54f39;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.annotation-arrow{position:absolute;left:189px;top:111px;color:#534c43;font:800 6px/1.25 ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;transform:rotate(-5deg)}.annotation-button{position:absolute;right:18px;bottom:21px;height:23px;padding:0 9px;border:1px solid #1714113a;border-radius:99px;background:#ffffff75;color:#171411;font:900 6px/1 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;cursor:pointer}.note-stage .library-badge{background:#f5efdfd9;border-color:#17141126;color:#171411}.scene-caption{display:none}
-</style></head><body><main class="preview-stage note-stage"><div class="note-copy">Make the<br/><span class="marked-word">important<svg class="annotation-svg" viewBox="0 0 160 52" aria-hidden="true"><path class="annotation-line" d="M9 30 C20 5 139 3 151 27 C158 49 21 51 7 32"/><path class="annotation-line" d="M5 35 C28 8 142 8 154 29 C148 47 19 48 5 35"/></svg></span><br/>impossible to miss.</div><span class="annotation-arrow">drawn from<br/>real text bounds ↙</span><button class="annotation-button" id="annotation-button" type="button">Replay mark</button><span class="library-badge">Motion · authored SVG annotation</span><span class="scene-caption">two imperfect strokes annotate meaning after layout is known</span></main><script type="module" src="./src/animated-hand-drawn-semantic-annotation-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Motion — Live Seminar Annotation</title>
+    <link rel="stylesheet" href="./shared.css" />
+    <style>
+      :root {
+        --preview-background: #171814;
+        --paper: #ebe7d9;
+        --ink: #1b1c18;
+        --forest: #24332c;
+        --coral: #ed684e;
+        --acid: #d3e96d;
+        color-scheme: dark;
+      }
+
+      button { font: inherit; color: inherit; }
+
+      .annotation-stage {
+        padding: clamp(5px, 2.2vw, 16px);
+        background:
+          radial-gradient(circle at 84% 17%, rgba(211, 233, 109, .08), transparent 27%),
+          #171814;
+      }
+
+      .review-shell {
+        display: grid;
+        width: 100%;
+        height: 100%;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        border: 1px solid rgba(239, 236, 220, .18);
+        border-radius: clamp(7px, 2.2vw, 18px);
+        background: var(--paper);
+        color: var(--ink);
+        grid-template-rows: clamp(30px, 10vh, 41px) minmax(0, 1fr);
+        box-shadow: 0 24px 70px rgba(0, 0, 0, .3);
+      }
+
+      .review-header {
+        display: flex;
+        min-width: 0;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 clamp(9px, 2.4vw, 19px);
+        border-bottom: 1px solid rgba(28, 29, 24, .18);
+      }
+
+      .document-lockup,
+      .review-state,
+      .document-meta,
+      .author-row,
+      .reviewer,
+      .comment-kicker,
+      .geometry-label,
+      .review-actions {
+        display: flex;
+        min-width: 0;
+        align-items: center;
+      }
+
+      .document-lockup { gap: clamp(5px, 1.1vw, 8px); }
+
+      .document-mark {
+        display: grid;
+        width: clamp(13px, 2.5vw, 19px);
+        aspect-ratio: 1;
+        flex: 0 0 auto;
+        place-items: center;
+        border-radius: 4px;
+        background: var(--ink);
+        color: var(--acid);
+        font: 900 clamp(4px, .82vw, 6px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+
+      .document-lockup strong {
+        font-size: clamp(7px, 1.5vw, 12px);
+        letter-spacing: -.035em;
+        white-space: nowrap;
+      }
+
+      .document-lockup span,
+      .review-state,
+      .document-meta,
+      .document-kicker,
+      .document-deck,
+      .author-row,
+      .reviewer,
+      .comment-kicker,
+      .comment-label,
+      .geometry-label,
+      .geometry-value,
+      .review-hint,
+      .review-button {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        text-transform: uppercase;
+      }
+
+      .document-lockup span,
+      .review-state {
+        color: #75776e;
+        font-size: clamp(3px, .7vw, 5px);
+        font-weight: 820;
+        letter-spacing: .12em;
+        white-space: nowrap;
+      }
+
+      .review-state { gap: 5px; }
+      .review-state::before {
+        width: clamp(4px, .72vw, 6px);
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: var(--coral);
+        content: '';
+      }
+
+      .review-workspace {
+        display: grid;
+        min-width: 0;
+        min-height: 0;
+        grid-template-columns: minmax(0, 1fr) clamp(150px, 27vw, 205px);
+      }
+
+      .document-page {
+        position: relative;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        padding: clamp(13px, 3.3vw, 27px) clamp(15px, 4vw, 32px);
+        background:
+          linear-gradient(rgba(28, 30, 24, .032) 1px, transparent 1px),
+          var(--paper);
+        background-size: 100% clamp(19px, 4vw, 30px);
+      }
+
+      .document-meta {
+        justify-content: space-between;
+        color: #77796f;
+        font-size: clamp(3px, .72vw, 5px);
+        font-weight: 820;
+        letter-spacing: .11em;
+      }
+
+      .document-kicker {
+        display: block;
+        margin-top: clamp(13px, 2.8vw, 22px);
+        color: #8e4333;
+        font-size: clamp(3px, .72vw, 6px);
+        font-weight: 880;
+        letter-spacing: .12em;
+      }
+
+      .document-title {
+        margin: clamp(7px, 1.7vw, 13px) 0 0;
+        font: 900 clamp(25px, 5.4vw, 43px)/.82 ui-serif, Georgia, serif;
+        letter-spacing: -.068em;
+      }
+
+      .document-deck {
+        max-width: 45em;
+        margin: clamp(9px, 1.9vw, 15px) 0 0;
+        color: #696b62;
+        font-size: clamp(4px, .78vw, 6px);
+        font-weight: 760;
+        letter-spacing: .065em;
+        line-height: 1.42;
+      }
+
+      .author-row {
+        margin-top: clamp(7px, 1.5vw, 11px);
+        color: #73756b;
+        font-size: clamp(3px, .68vw, 5px);
+        font-weight: 810;
+        letter-spacing: .08em;
+        gap: 6px;
+      }
+
+      .author-dot {
+        width: clamp(5px, 1vw, 8px);
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: var(--forest);
+      }
+
+      .document-body {
+        display: grid;
+        max-width: 52em;
+        margin-top: clamp(12px, 2.5vw, 20px);
+        color: #44463f;
+        font: 500 clamp(6px, 1.25vw, 10px)/1.62 ui-serif, Georgia, serif;
+        gap: clamp(7px, 1.5vw, 11px);
+      }
+
+      .document-body p { margin: 0; }
+
+      .selectable-phrase {
+        position: relative;
+        z-index: 3;
+        display: inline-block;
+        margin: 0;
+        padding: 0 1px;
+        border: 0;
+        border-radius: 2px;
+        background: rgba(237, 104, 78, .08);
+        color: #20221d;
+        cursor: pointer;
+        font-style: italic;
+        font-weight: 780;
+        line-height: inherit;
+      }
+
+      .selectable-phrase:hover { background: rgba(237, 104, 78, .16); }
+      .selectable-phrase[aria-pressed="true"] { background: rgba(237, 104, 78, .2); }
+      .selectable-phrase:focus-visible {
+        outline: 2px solid var(--coral);
+        outline-offset: 2px;
+      }
+
+      .annotation-overlay {
+        position: absolute;
+        z-index: 4;
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 0;
+        overflow: visible;
+        pointer-events: none;
+        visibility: hidden;
+      }
+
+      .annotation-overlay[data-active="true"] { visibility: visible; }
+
+      .annotation-stroke {
+        fill: none;
+        stroke: var(--coral);
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        vector-effect: non-scaling-stroke;
+      }
+
+      .review-rail {
+        position: relative;
+        display: flex;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        flex-direction: column;
+        padding: clamp(11px, 2.7vw, 22px);
+        background:
+          linear-gradient(rgba(233, 229, 214, .045) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(233, 229, 214, .045) 1px, transparent 1px),
+          var(--forest);
+        background-size: clamp(17px, 3.4vw, 26px) clamp(17px, 3.4vw, 26px);
+        color: #eeeade;
+      }
+
+      .reviewer { gap: clamp(5px, 1vw, 8px); }
+      .reviewer-avatar {
+        display: grid;
+        width: clamp(18px, 3.8vw, 29px);
+        aspect-ratio: 1;
+        place-items: center;
+        border-radius: 50%;
+        background: var(--acid);
+        color: #263029;
+        font: 900 clamp(4px, .82vw, 6px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+
+      .reviewer-name {
+        overflow: hidden;
+        font-size: clamp(4px, .82vw, 6px);
+        font-weight: 840;
+        letter-spacing: .09em;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .reviewer-name small {
+        display: block;
+        margin-top: 3px;
+        color: #989f96;
+        font-size: .8em;
+      }
+
+      .comment-card {
+        margin-top: clamp(14px, 3vw, 24px);
+        padding-top: clamp(10px, 2vw, 15px);
+        border-top: 1px solid rgba(236, 232, 219, .18);
+      }
+
+      .comment-kicker {
+        justify-content: space-between;
+        color: var(--acid);
+        font-size: clamp(3px, .68vw, 5px);
+        font-weight: 850;
+        letter-spacing: .11em;
+      }
+
+      .comment-label { color: #989f96; }
+
+      .comment-title {
+        margin: clamp(9px, 2vw, 15px) 0 0;
+        font: 720 clamp(10px, 2.2vw, 17px)/1.05 ui-serif, Georgia, serif;
+        letter-spacing: -.035em;
+      }
+
+      .comment-copy {
+        margin: clamp(8px, 1.7vw, 13px) 0 0;
+        color: #b9beb6;
+        font-size: clamp(4px, .82vw, 6px);
+        line-height: 1.48;
+      }
+
+      .geometry-card {
+        margin-top: clamp(12px, 2.4vw, 18px);
+        padding: clamp(7px, 1.5vw, 11px);
+        border: 1px solid rgba(236, 232, 219, .17);
+        border-radius: clamp(4px, 1.1vw, 8px);
+        background: rgba(9, 15, 12, .12);
+      }
+
+      .geometry-label {
+        justify-content: space-between;
+        color: #9ca299;
+        font-size: clamp(3px, .64vw, 5px);
+        font-weight: 820;
+        letter-spacing: .09em;
+      }
+
+      .geometry-value {
+        margin-top: 5px;
+        color: #ebe7dc;
+        font-size: clamp(4px, .84vw, 6px);
+        font-weight: 830;
+        letter-spacing: .07em;
+      }
+
+      .review-hint {
+        margin-top: auto;
+        color: #899188;
+        font-size: clamp(3px, .65vw, 5px);
+        font-weight: 760;
+        letter-spacing: .07em;
+        line-height: 1.5;
+      }
+
+      .review-actions {
+        margin-top: clamp(7px, 1.4vw, 11px);
+        gap: clamp(4px, .8vw, 7px);
+      }
+
+      .review-button {
+        padding: clamp(4px, .85vw, 7px) clamp(6px, 1.2vw, 9px);
+        border: 1px solid rgba(238, 234, 221, .25);
+        border-radius: 999px;
+        background: transparent;
+        color: #e6e2d7;
+        cursor: pointer;
+        font-size: clamp(3px, .66vw, 5px);
+        font-weight: 850;
+        letter-spacing: .08em;
+        white-space: nowrap;
+      }
+
+      .review-button.primary {
+        border-color: var(--acid);
+        background: var(--acid);
+        color: #243029;
+      }
+
+      .review-button:disabled { cursor: default; opacity: .38; }
+      .review-button:focus-visible {
+        outline: 2px solid var(--coral);
+        outline-offset: 2px;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .selectable-phrase { scroll-behavior: auto; }
+      }
+
+      @media (max-width: 420px) {
+        .annotation-stage { padding: 5px; }
+        .review-shell { border-radius: 7px; grid-template-rows: 21px minmax(0, 1fr); }
+        .review-header { padding: 0 7px; }
+        .review-workspace { grid-template-columns: minmax(0, 1fr) 89px; }
+        .document-page { padding: 10px 11px; }
+        .document-kicker { margin-top: 8px; }
+        .document-title { margin-top: 5px; font-size: 20px; }
+        .document-deck { margin-top: 6px; font-size: 3.5px; }
+        .author-row { margin-top: 5px; }
+        .document-body { margin-top: 8px; font-size: 5px; gap: 5px; }
+        .review-rail { padding: 9px 8px; }
+        .comment-card { margin-top: 9px; padding-top: 7px; }
+        .comment-title { margin-top: 6px; font-size: 9px; }
+        .comment-copy { margin-top: 5px; font-size: 3.5px; }
+        .geometry-card { margin-top: 7px; padding: 5px; }
+      }
+
+      @media (max-width: 220px), (max-height: 105px) {
+        .annotation-stage { padding: 2px; }
+        .review-shell { border-radius: 4px; grid-template-rows: 10px minmax(0, 1fr); }
+        .review-header { padding: 0 3px; }
+        .document-lockup { gap: 2px; }
+        .document-mark { width: 5px; border-radius: 1px; font-size: 1.4px; }
+        .document-lockup strong { font-size: 3px; }
+        .document-lockup span { display: none; }
+        .review-state { font-size: 1.3px; gap: 2px; }
+        .review-state::before { width: 2px; }
+        .review-workspace { grid-template-columns: minmax(0, 1fr) 38px; }
+        .document-page { padding: 4px 5px; background-size: 100% 10px; }
+        .document-meta { font-size: 1.2px; }
+        .document-kicker { margin-top: 3px; font-size: 1.3px; }
+        .document-title { margin-top: 2px; font-size: 7px; }
+        .document-deck { margin-top: 2px; font-size: 1.3px; }
+        .author-row { display: none; }
+        .document-body { margin-top: 3px; font-size: 2.1px; gap: 2px; line-height: 1.45; }
+        .selectable-phrase { padding: 0; }
+        .review-rail { padding: 4px 3px; background-size: 9px 9px; }
+        .reviewer { gap: 2px; }
+        .reviewer-avatar { width: 7px; font-size: 1.4px; }
+        .reviewer-name { font-size: 1.4px; }
+        .reviewer-name small { margin-top: 1px; }
+        .comment-card { margin-top: 4px; padding-top: 3px; }
+        .comment-kicker { font-size: 1.2px; }
+        .comment-title { margin-top: 2px; font-size: 3px; }
+        .comment-copy { margin-top: 2px; font-size: 1.25px; }
+        .geometry-card { margin-top: 3px; padding: 2px; border-radius: 2px; }
+        .geometry-label { font-size: 1.1px; }
+        .geometry-value { margin-top: 1px; font-size: 1.2px; }
+        .review-hint { display: none; }
+        .review-actions { margin-top: auto; gap: 1px; }
+        .review-button { padding: 1px 2px; font-size: 1.15px; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="preview-stage annotation-stage" id="annotation-stage" aria-label="Collaborative document review with live hand-drawn annotations">
+      <section class="review-shell" id="review-shell" data-preview-mechanism="motion-live-bounds-annotation">
+        <header class="review-header">
+          <div class="document-lockup">
+            <i class="document-mark" aria-hidden="true">MN</i>
+            <strong>Margin Notes</strong>
+            <span>Shared seminar reader</span>
+          </div>
+          <span class="review-state">Draft 03 · review open</span>
+        </header>
+
+        <div class="review-workspace">
+          <article class="document-page" id="document-page" aria-label="Seminar note with selectable phrases">
+            <div class="document-meta"><span>Seminar note 06 / Observation</span><span>482 words · 4 phrases</span></div>
+            <span class="document-kicker">Teaching draft · Week 06</span>
+            <h1 class="document-title">The Practice<br />of Noticing</h1>
+            <p class="document-deck">A short note on observation, shared language, and what changes when a group reads together.</p>
+            <div class="author-row"><i class="author-dot" aria-hidden="true"></i><span>R. Adeyemi · Learning studio</span></div>
+
+            <div class="document-body" id="document-body">
+              <p>Observation begins when <button class="selectable-phrase" id="phrase-attention" data-phrase-id="attention" data-label="careful attention" type="button" aria-pressed="false">careful attention</button> becomes a shared practice. It asks us to hold <button class="selectable-phrase" id="phrase-questions" data-phrase-id="questions" data-label="slower questions" type="button" aria-pressed="false">slower questions</button> before reaching for an answer.</p>
+              <p class="body-secondary">In a group, notes become <button class="selectable-phrase" id="phrase-evidence" data-phrase-id="evidence" data-label="shared evidence" type="button" aria-pressed="false">shared evidence</button>. The point is not to agree immediately, but to <button class="selectable-phrase" id="phrase-trace" data-phrase-id="trace" data-label="leave a trace" type="button" aria-pressed="false">leave a trace</button> another reader can return to.</p>
+            </div>
+
+            <svg class="annotation-overlay" id="annotation-overlay" data-active="false" aria-hidden="true">
+              <path class="annotation-stroke" id="annotation-stroke-a"></path>
+              <path class="annotation-stroke" id="annotation-stroke-b"></path>
+            </svg>
+          </article>
+
+          <aside class="review-rail" aria-label="Current teaching review comment">
+            <div class="reviewer">
+              <span class="reviewer-avatar">AK</span>
+              <span class="reviewer-name">Aya Kim<small>Seminar lead · now</small></span>
+            </div>
+
+            <section class="comment-card">
+              <div class="comment-kicker"><span>Teaching note</span><span class="comment-label" id="comment-label">No selection</span></div>
+              <h2 class="comment-title" id="comment-title">Choose a phrase worth returning to.</h2>
+              <p class="comment-copy" id="comment-copy">Select highlighted text in the draft. The hand-drawn mark will use that phrase’s live text rectangle.</p>
+
+              <div class="geometry-card">
+                <div class="geometry-label"><span>Live text bounds</span><span>Range rect</span></div>
+                <div class="geometry-value" id="geometry-value">Waiting for selection</div>
+              </div>
+            </section>
+
+            <p class="review-hint">Tap/click a phrase · arrows reselect · Enter selects · R redraws · Esc resets</p>
+            <div class="review-actions">
+              <button class="review-button primary" id="replay-button" type="button" disabled>Redraw / R</button>
+              <button class="review-button" id="reset-button" type="button" disabled>Reset / Esc</button>
+            </div>
+          </aside>
+        </div>
+      </section>
+    </main>
+    <script type="module" src="./src/animated-hand-drawn-semantic-annotation-demo.js"></script>
+  </body>
+</html>

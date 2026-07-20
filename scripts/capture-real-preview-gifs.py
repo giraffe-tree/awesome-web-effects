@@ -696,6 +696,45 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("Enter")
             elif index == 34:
                 page.keyboard.press("Escape")
+        elif demo["id"] == "animated-hand-drawn-semantic-annotation":
+            if index == 2:
+                page.locator('#phrase-attention').click()
+            elif index == 3:
+                page.wait_for_timeout(650)
+            elif index == 6:
+                page.locator('#phrase-questions').click()
+            elif index == 7:
+                page.wait_for_timeout(120)
+            elif index == 8:
+                page.locator('#phrase-trace').click()
+            elif index == 9:
+                page.wait_for_timeout(650)
+            elif index == 12:
+                page.locator('#replay-button').click()
+            elif index == 13:
+                page.wait_for_timeout(650)
+            elif index == 16:
+                page.locator('#phrase-trace').click()
+            elif index == 17:
+                page.wait_for_timeout(650)
+            elif index == 20:
+                page.locator('#phrase-trace').focus()
+                page.keyboard.press("ArrowLeft")
+            elif index == 21:
+                page.wait_for_timeout(650)
+            elif index == 24:
+                page.keyboard.press("r")
+            elif index == 25:
+                page.wait_for_timeout(650)
+            elif index == 28:
+                page.locator('#reset-button').click()
+            elif index == 30:
+                page.locator('#phrase-attention').focus()
+                page.keyboard.press("Enter")
+            elif index == 31:
+                page.wait_for_timeout(650)
+            elif index == 33:
+                page.keyboard.press("Escape")
         elif demo["id"] == "dom-to-3d-scroll-synchronization":
             if index == 2:
                 box = page.locator('#sync-stage').bounding_box()
@@ -1632,6 +1671,47 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["canvasHeight"] < 64
         ):
             raise RuntimeError(f"{demo['id']} did not capture a human-started real analyser materially reshaping the PULSE letterform: {interaction!r}")
+    elif demo["id"] == "animated-hand-drawn-semantic-annotation":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            interaction["automaticRehearsal"]
+            or interaction["automaticReplay"]
+            or interaction["previewClockDriven"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInput"]
+            or not interaction["userInitiatedChangesOnly"]
+            or not interaction["initialStaticVerified"]
+            or interaction["inputCount"] < 10
+            or interaction["pointerInputCount"] < 6
+            or interaction["keyboardInputCount"] < 4
+            or interaction["selectionCount"] < 2
+            or interaction["reselectionCount"] < 3
+            or interaction["sameSelectionReplayCount"] < 1
+            or interaction["replayCount"] < 3
+            or interaction["resetButtonCount"] < 1
+            or interaction["escapeResetCount"] < 1
+            or interaction["resetCount"] < 2
+            or interaction["keyboardNavigationCount"] < 1
+            or interaction["keyboardSelectCount"] < 1
+            or interaction["keyboardShortcutReplayCount"] < 1
+            or interaction["geometryMeasureCount"] < 8
+            or interaction["geometryRevision"] < 8
+            or interaction["motionStartCount"] < 8
+            or interaction["motionCompleteCount"] < 7
+            or interaction["motionCancelCount"] < 1
+            or interaction["selectedPhraseId"] is not None
+            or interaction["selectedPhraseText"] is not None
+            or interaction["selectionRect"] is not None
+            or interaction["overlayRect"] is not None
+            or interaction["geometrySource"] != "none"
+            or interaction["geometryValidated"]
+            or interaction["annotationVisible"]
+            or interaction["animationActive"]
+            or interaction["phase"] != "idle"
+            or interaction["inputKind"] != "keyboard"
+            or interaction["lastTrustedEvent"] != "escape-reset"
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture human-selected Range geometry, interruptible redraw, keyboard navigation, and explicit reset: {interaction!r}")
     elif demo["id"] == "dom-to-3d-scroll-synchronization":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         if (

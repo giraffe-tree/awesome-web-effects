@@ -802,23 +802,23 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "animated-hand-drawn-semantic-annotation",
-    "name": "Animated hand-drawn semantic annotation",
-    "nameZh": "动画手绘语义标注",
+    "name": "Live-bounds seminar annotation",
+    "nameZh": "实时文本边界研讨批注",
     "category": "vector",
     "sourceUrl": "https://github.com/rough-stuff/rough-notation",
-    "difference": "标注围绕真实 DOM 文字尺寸生成并按论证顺序出现；现有 SVG 描边只揭示预先存在的路径。",
+    "difference": "用户可在同一研讨文稿中任选四个真实短语；每次都由 Range.getBoundingClientRect() 重新测量当前字形联合边界，生成两条宽度各异的 SVG 手绘线并把 overlay 精确迁移到目标，而不是重播固定路径。",
     "behavior": {
-      "trigger": "viewport entry / button",
-      "response": "Draw semantic highlights, circles, and brackets around live text",
-      "timing": "sequenced additive annotations",
-      "layer": "DOM text with SVG overlay"
+      "trigger": "real phrase click/tap/Enter, arrow-key reselection, Redraw/R, Reset, or Escape",
+      "response": "Measure the chosen live text range, move a generated two-stroke annotation to that exact phrase, and update the reviewer comment and geometry evidence",
+      "timing": "human-owned interruptible 580 ms redraw; reduced motion resolves directly and no automatic rehearsal",
+      "layer": "responsive semantic document with one live SVG overlay"
     },
     "implementation": {
       "projectId": "motiondivision-motion",
       "projectUrl": "https://github.com/motiondivision/motion",
       "library": "motion@12.42.2",
       "renderer": "svg",
-      "snippet": "animate(annotationPaths, { pathLength: [0, 0, 1, 1, 0] }, { delay: stagger(.09) });",
+      "snippet": "const rect=range.getBoundingClientRect(); overlay.style.cssText=`left:${rect.left-page.left-pad}px;top:${rect.top-page.top-pad}px`; animate(paths,{pathLength:[0,1],opacity:[0,1]},{delay:stagger(.08)});",
       "referenceUrl": "https://github.com/rough-stuff/rough-notation"
     },
     "scores": {
@@ -830,13 +830,13 @@ export const effectExpansion100Specs = [
       "evidence": 9,
       "total": 90
     },
-    "rationaleZh": "围绕真实文字生成的语义笔迹具有直接创作迁移价值。",
+    "rationaleZh": "Margin Notes 把标注放进共享研讨文稿的真实复审任务；选择、重选、快速中断、重绘和复位都来自真人输入，Range 边界、SVG 路径长度、ARIA 选择态与 reviewer comment 可共同核验。",
     "batch": "A",
-    "demo": "一页编辑批注依次高亮主张、圈出数据、用括号关联结论。",
-    "capture": "等待字体→点击播放→录制三种标注依次完成→hide/show 复位。",
+    "demo": "在《The Practice of Noticing》教学草稿的四个短语间选择；同一双线手绘 overlay 依据实时 Range 尺寸重新生成并迁移，右侧同步显示 phrase 与 live bounds。",
+    "capture": "真实选择 attention/questions/trace，快速重选证明可中断，Redraw 与同词重选证明重播，ArrowLeft/R 证明键盘控制，Reset/Enter/Escape 完成双次复位。",
     "risk": {
       "level": "low",
-      "detail": "必须在字体加载后测量 DOM；预画死 SVG 不合格。"
+      "detail": "必须在字体加载后测量 Range，并在 resize 或重选时重算；预画死 SVG、自动重播或 overlay 未完整包住文字都不合格。"
     },
     "observedImplementation": {
       "projectId": "rough-stuff-rough-notation",

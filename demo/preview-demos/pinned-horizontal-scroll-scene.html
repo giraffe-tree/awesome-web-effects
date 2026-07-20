@@ -6,54 +6,93 @@
     <title>GSAP — Pinned Horizontal Scroll Scene</title>
     <link rel="stylesheet" href="./shared.css" />
     <style>
-      :root { --preview-background: #f4eddd; color-scheme: light; }
-      #horizontal-scrollport { position: absolute; inset: 0; overflow-y: auto; scrollbar-width: none; }
+      :root { --preview-background: #d8d2c2; color-scheme: light; }
+      #horizontal-scrollport { position: absolute; inset: 0; overflow-y: auto; overscroll-behavior: auto; scrollbar-width: none; outline: none; }
       #horizontal-scrollport::-webkit-scrollbar { display: none; }
       .horizontal-scene { height: 180px; }
-      .horizontal-stage { position: relative; height: 180px; overflow: hidden; background: #162c27; }
+      .horizontal-stage { position: relative; height: 180px; overflow: hidden; touch-action: none; user-select: none; background: #14211d; cursor: ns-resize; }
       .horizontal-track { display: flex; width: 400%; height: 100%; will-change: transform; }
-      .story-panel { position: relative; flex: 0 0 25%; height: 100%; overflow: hidden; padding: 45px 22px 30px; }
-      .story-panel::before { content: attr(data-index); position: absolute; right: 15px; top: 28px; color: currentColor; opacity: .2; font: 900 54px/.8 Georgia, serif; }
-      .story-panel h2 { position: relative; z-index: 2; max-width: 180px; margin: 0; color: currentColor; font: 900 25px/.88 Georgia, serif; letter-spacing: -.04em; }
-      .story-panel p { position: relative; z-index: 2; width: 170px; margin: 10px 0 0; color: currentColor; opacity: .68; font: 700 7px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .1em; text-transform: uppercase; }
-      .story-panel--signal { color: #17322c; background: #f6c761; }
-      .story-panel--shape { color: #f3ede3; background: #1e4b43; }
-      .story-panel--motion { color: #271d30; background: #ef7b70; }
-      .story-panel--ship { color: #17322c; background: #b8dfbf; }
-      .signal-orbit { position: absolute; right: 26px; bottom: 22px; width: 62px; height: 62px; border: 1px solid currentColor; border-radius: 50%; opacity: .72; }
+      .story-panel { position: relative; flex: 0 0 25%; height: 100%; overflow: hidden; padding: 48px 18px 28px; isolation: isolate; }
+      .story-panel::before { content: attr(data-index); position: absolute; right: 14px; top: 29px; color: currentColor; opacity: .13; font: 900 57px/.8 Georgia, serif; }
+      .story-panel h2 { position: relative; z-index: 2; max-width: 180px; margin: 2px 0 0; color: currentColor; font: 900 22px/.9 Georgia, serif; letter-spacing: -.045em; }
+      .story-kicker { position: relative; z-index: 2; margin: 0; color: currentColor; opacity: .65; font: 800 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .16em; text-transform: uppercase; }
+      .story-meta { position: relative; z-index: 2; display: flex; gap: 7px; width: 184px; margin-top: 8px; padding-top: 6px; border-top: 1px solid currentColor; color: currentColor; font: 750 6px/1.25 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .05em; text-transform: uppercase; }
+      .story-meta span:last-child { opacity: .62; }
+      .story-result { position: absolute; z-index: 3; left: 18px; bottom: 20px; display: flex; gap: 5px; align-items: center; color: currentColor; font: 800 6px/1 ui-monospace, monospace; letter-spacing: .08em; text-transform: uppercase; }
+      .story-result::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: currentColor; box-shadow: 0 0 0 3px color-mix(in srgb, currentColor 18%, transparent); }
+      .story-panel--signal { color: #26311f; background: #e5d7a7; }
+      .story-panel--shape { color: #e9e6d8; background: #23463e; }
+      .story-panel--motion { color: #291e21; background: #d88467; }
+      .story-panel--ship { color: #173229; background: #abd2ad; }
+      .signal-orbit { position: absolute; right: 24px; bottom: 28px; width: 62px; height: 62px; border: 1px solid currentColor; border-radius: 50%; opacity: .7; }
       .signal-orbit::before,
       .signal-orbit::after { content: ''; position: absolute; border-radius: 50%; background: currentColor; }
       .signal-orbit::before { width: 12px; height: 12px; left: -5px; top: 23px; }
       .signal-orbit::after { width: 7px; height: 7px; right: 7px; top: 4px; }
-      .shape-stack { position: absolute; right: 25px; bottom: 19px; width: 76px; height: 67px; }
-      .shape-stack span { position: absolute; display: block; width: 48px; height: 31px; border: 1px solid #b8dfbf; border-radius: 4px; background: #346a5f; transform: rotate(-8deg); }
-      .shape-stack span:nth-child(2) { left: 15px; top: 12px; background: #f6c761; transform: rotate(5deg); }
-      .shape-stack span:nth-child(3) { left: 28px; top: 26px; background: #ef7b70; transform: rotate(-3deg); }
-      .motion-ribbon { position: absolute; right: 19px; bottom: 22px; width: 94px; height: 53px; border: 8px solid currentColor; border-left-color: transparent; border-radius: 50%; transform: rotate(-12deg); opacity: .82; }
-      .ship-mark { position: absolute; right: 29px; bottom: 24px; width: 65px; height: 48px; border: 2px solid currentColor; border-radius: 50% 50% 46% 54%; transform: rotate(-9deg); }
+      .shape-stack { position: absolute; right: 22px; bottom: 27px; width: 76px; height: 67px; }
+      .shape-stack span { position: absolute; display: block; width: 48px; height: 31px; border: 1px solid #abd2ad; border-radius: 4px; background: #346a5f; transform: rotate(-8deg); }
+      .shape-stack span:nth-child(2) { left: 15px; top: 12px; background: #e5d7a7; transform: rotate(5deg); }
+      .shape-stack span:nth-child(3) { left: 28px; top: 26px; background: #d88467; transform: rotate(-3deg); }
+      .motion-ribbon { position: absolute; right: 18px; bottom: 31px; width: 94px; height: 53px; border: 8px solid currentColor; border-left-color: transparent; border-radius: 50%; transform: rotate(-12deg); opacity: .78; }
+      .ship-mark { position: absolute; right: 27px; bottom: 30px; width: 65px; height: 48px; border: 2px solid currentColor; border-radius: 50% 50% 46% 54%; transform: rotate(-9deg); }
       .ship-mark::after { content: '✓'; position: absolute; inset: 0; display: grid; place-items: center; font: 900 26px/1 system-ui; }
-      .viewport-marker { position: absolute; z-index: 10; left: 50%; top: 40px; bottom: 24px; width: 1px; background: #fff5; pointer-events: none; }
+      .scene-header { position: absolute; z-index: 14; left: 10px; right: 10px; top: 9px; display: flex; justify-content: space-between; align-items: center; color: #f7f0df; pointer-events: none; }
+      .scene-header strong { font: 850 8px/1 ui-monospace, monospace; letter-spacing: .1em; text-transform: uppercase; }
+      .scene-header span { opacity: .62; font: 750 6px/1 ui-monospace, monospace; letter-spacing: .08em; text-transform: uppercase; }
+      .viewport-marker { position: absolute; z-index: 10; left: 50%; top: 43px; bottom: 27px; width: 1px; background: #fff4; pointer-events: none; }
       .viewport-marker::before,
       .viewport-marker::after { content: ''; position: absolute; left: -3px; width: 7px; height: 7px; border: 1px solid #fffb; border-radius: 50%; }
       .viewport-marker::before { top: 0; }
       .viewport-marker::after { bottom: 0; }
-      .scene-progress { position: absolute; z-index: 12; left: 12px; right: 12px; bottom: 12px; height: 2px; background: #ffffff45; pointer-events: none; }
+      .scene-progress { position: absolute; z-index: 12; left: 10px; right: 10px; bottom: 8px; height: 2px; background: #ffffff45; pointer-events: none; }
       .scene-progress__fill { display: block; width: 100%; height: 100%; background: #fff; box-shadow: 0 0 8px #fff8; transform: scaleX(0); transform-origin: left; }
-      .panel-counter { position: absolute; z-index: 12; right: 13px; bottom: 17px; color: #fff; font: 800 7px/1 ui-monospace, monospace; letter-spacing: .08em; pointer-events: none; }
-      .library-badge { color: #fff; background: #112822cc; border-color: #ffffff28; }
-      .scene-caption { bottom: 18px; color: #fff; mix-blend-mode: difference; }
+      .panel-counter { position: absolute; z-index: 12; right: 11px; bottom: 14px; color: #fff; font: 800 7px/1 ui-monospace, monospace; letter-spacing: .08em; pointer-events: none; }
+      .library-badge { top: 27px; color: #fff; background: #112822cc; border-color: #ffffff28; }
+      .scene-caption { left: auto; right: 10px; top: 30px; bottom: auto; color: #fff; mix-blend-mode: difference; }
+      #horizontal-scrollport:focus-visible .horizontal-stage { box-shadow: inset 0 0 0 2px #f7f0df; }
+      @media (max-width: 200px), (max-height: 100px) {
+        .horizontal-stage, .horizontal-scene { height: 100%; min-height: 81px; }
+        .story-panel { padding: 26px 8px 14px; }
+        .story-panel::before { top: 20px; right: 5px; font-size: 29px; }
+        .story-panel h2 { max-width: 86px; margin-top: 1px; font-size: 12px; }
+        .story-kicker { font-size: 4px; }
+        .story-meta { width: 90px; margin-top: 4px; padding-top: 3px; font-size: 3.8px; }
+        .story-result { left: 8px; bottom: 9px; font-size: 4px; }
+        .signal-orbit, .shape-stack, .motion-ribbon, .ship-mark { transform: scale(.58); transform-origin: right bottom; right: 5px; bottom: 9px; }
+        .scene-header { left: 5px; right: 5px; top: 5px; }
+        .scene-header strong { font-size: 4.5px; }
+        .scene-header span { font-size: 3.5px; }
+        .library-badge { display: none; }
+        .viewport-marker { top: 25px; bottom: 14px; }
+        .scene-progress { left: 5px; right: 5px; bottom: 3px; }
+        .panel-counter { right: 6px; bottom: 7px; font-size: 4px; }
+        .scene-caption { display: none; }
+      }
     </style>
   </head>
   <body>
-    <main class="preview-stage" aria-label="A real GSAP ScrollTrigger scene pinned while a four-panel story moves horizontally">
-      <div id="horizontal-scrollport">
+    <main class="preview-stage" aria-label="A field route decision moves horizontally while real vertical input scrubs a pinned GSAP ScrollTrigger scene">
+      <div id="horizontal-scrollport" tabindex="0" aria-label="Scrub the Ridge 12 field-route dossier with vertical wheel, drag, or keyboard input">
         <section class="horizontal-scene" id="horizontal-scene">
           <div class="horizontal-stage" id="horizontal-stage">
+            <div class="scene-header"><strong>Ridge 12 · route dossier</strong><span id="scene-status">01 · question scoped</span></div>
             <div class="horizontal-track" id="horizontal-track" data-preview-mechanism="gsap-pinned-horizontal-scroll">
-              <article class="story-panel story-panel--signal" data-index="01"><h2>Find the signal.</h2><p>Vertical intent begins a horizontal narrative.</p><div class="signal-orbit"></div></article>
-              <article class="story-panel story-panel--shape" data-index="02"><h2>Shape the system.</h2><p>The viewport stays pinned while the track advances.</p><div class="shape-stack"><span></span><span></span><span></span></div></article>
-              <article class="story-panel story-panel--motion" data-index="03"><h2>Direct the motion.</h2><p>Scroll progress maps continuously to track translation.</p><div class="motion-ribbon"></div></article>
-              <article class="story-panel story-panel--ship" data-index="04"><h2>Ship the story.</h2><p>The final panel lands before vertical flow resumes.</p><div class="ship-mark"></div></article>
+              <article class="story-panel story-panel--signal" data-index="01" data-step="scope">
+                <p class="story-kicker">Decision question</p><h2>Can Ridge 12 reopen?</h2>
+                <div class="story-meta"><strong>08:40 survey</strong><span>3 disputed signals</span></div><div class="story-result">scope locked</div><div class="signal-orbit"></div>
+              </article>
+              <article class="story-panel story-panel--shape" data-index="02" data-step="observe">
+                <p class="story-kicker">Field evidence</p><h2>Trace the unstable edge.</h2>
+                <div class="story-meta"><strong>7 observations</strong><span>2 washout zones</span></div><div class="story-result">terrain mapped</div><div class="shape-stack"><span></span><span></span><span></span></div>
+              </article>
+              <article class="story-panel story-panel--motion" data-index="03" data-step="compare">
+                <p class="story-kicker">Route comparison</p><h2>Move traffic off the shelf.</h2>
+                <div class="story-meta"><strong>+11 min</strong><span>−64% exposure</span></div><div class="story-result">detour preferred</div><div class="motion-ribbon"></div>
+              </article>
+              <article class="story-panel story-panel--ship" data-index="04" data-step="approve">
+                <p class="story-kicker">Operational handoff</p><h2>Issue the safe route.</h2>
+                <div class="story-meta"><strong>18/18 checks</strong><span>ranger 04 assigned</span></div><div class="story-result">route approved</div><div class="ship-mark"></div>
+              </article>
             </div>
             <span class="viewport-marker" aria-hidden="true"></span>
             <div class="scene-progress" aria-hidden="true"><span class="scene-progress__fill" id="scene-progress"></span></div>
@@ -62,7 +101,7 @@
         </section>
       </div>
       <span class="library-badge">GSAP · ScrollTrigger</span>
-      <span class="scene-caption">vertical scroll · pinned viewport · horizontal story</span>
+      <span class="scene-caption">wheel / drag vertically · arrows · home / end</span>
     </main>
     <script type="module" src="./src/gsap-pinned-horizontal-demo.js"></script>
   </body>

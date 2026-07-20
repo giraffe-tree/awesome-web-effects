@@ -125,17 +125,17 @@ const existingEffects = [
     "addedIn": "baseline",
     "research": null,
     "behavior": {
-      "trigger": "scroll",
-      "response": "Pinned horizontal scroll scene",
-      "timing": "continuous progress-linked",
-      "layer": "content"
+      "trigger": "real vertical wheel, captured vertical drag, or Arrow/Page/Home/End keys",
+      "response": "Advance a Ridge 12 route dossier horizontally from scoped question to approved operational handoff",
+      "timing": "one-way human-owned continuous progress with outward wheel release at both boundaries",
+      "layer": "one pinned viewport, four semantic evidence panels, progress rail, and operational outcome"
     },
-    "prompt": "Implement the \"Pinned horizontal scroll scene\" (固定式横向滚动场景) web interaction effect in the current project.\n\nUse GSAP (greensock/GSAP) as the recommended implementation unless the existing stack makes a dependency-free equivalent more appropriate. Recreate this specific scroll interaction, not a generic animation.\n\nInteraction contract:\n- Trigger: scroll\n- Visual response: Pinned horizontal scroll scene\n- Timing relationship: continuous progress-linked\n- Page layer: content\n\nRequirements:\n- Integrate with the existing design system and component structure.\n- Support keyboard and touch input whenever the interaction is actionable.\n- Respect prefers-reduced-motion with a clear non-animated fallback.\n- Avoid layout shift, scroll traps, inaccessible focus behavior, and unnecessary dependencies.\n- Keep the implementation responsive and clean up listeners, timers, and animation instances.\n\nStart from this minimal API shape:\n\n```js\nimport { gsap } from 'gsap';\nimport { ScrollTrigger } from 'gsap/ScrollTrigger';\ngsap.registerPlugin(ScrollTrigger);\ngsap.to('.track', { xPercent: -75, ease: 'none', scrollTrigger: { trigger: '.gallery', pin: true, scrub: 1, end: '+=2400' } });\n```\n\nReturn the working code, the files changed, and a short explanation of how to tune timing, easing, distance, and reduced-motion behavior.",
+    "prompt": "Implement the \"Pinned horizontal scroll scene\" (固定式横向滚动场景) as a one-way evidence story, not a looping poster carousel.\n\nUse GSAP ScrollTrigger to pin one viewport while a four-panel operational dossier moves horizontally. Give every panel a distinct causal role—for example question, observation, comparison, and approval—and keep the final panel as a completed outcome rather than automatically returning to the beginning.\n\nInteraction contract:\n- Trigger: real vertical wheel, captured vertical pointer/touch drag, or Arrow/Page/Home/End keys\n- Visual response: move one semantic four-panel story horizontally while the viewport remains pinned\n- Timing relationship: continuous human-owned normalized progress; no cosine path, autoplay, synthetic events, or capture-clock mutation\n- Boundary behavior: outward wheel input at 0% and 100% must remain available to the surrounding page\n- Page layer: pinned viewport, evidence panels, progress rail, panel status, and final handoff\n\nRequirements:\n- Start strictly static on panel one and finish on panel four until another real input occurs.\n- Keep the native scroll position, ScrollTrigger progress, horizontal transform, status, and panel counter synchronized.\n- Support pointer capture, keyboard input, responsive 320×180 and 144×81 previews, and prefers-reduced-motion.\n- Avoid text selection while dragging, layout shift, scroll traps, inaccessible focus behavior, and autonomous replay.\n- Export interaction state that proves trusted input counts, pin ownership, normalized progress, boundary release, and the final semantic step.\n\nStart from this minimal API shape:\n\n```js\nimport { gsap } from 'gsap';\nimport { ScrollTrigger } from 'gsap/ScrollTrigger';\ngsap.registerPlugin(ScrollTrigger);\ngsap.to('.track', { xPercent: -75, ease: 'none', scrollTrigger: { trigger: '.story', scroller: '.scrollport', pin: '.stage', scrub: true, end: '+=960' } });\n```\n\nReturn the working code, the files changed, and a short explanation of how to tune scroll distance, input sensitivity, panel thresholds, and reduced-motion behavior.",
     "sources": [
       {
         "projectId": "greensock-gsap",
         "recommended": true,
-        "snippet": "import { gsap } from 'gsap';\nimport { ScrollTrigger } from 'gsap/ScrollTrigger';\ngsap.registerPlugin(ScrollTrigger);\ngsap.to('.track', { xPercent: -75, ease: 'none', scrollTrigger: { trigger: '.gallery', pin: true, scrub: 1, end: '+=2400' } });",
+        "snippet": "import { gsap } from 'gsap';\nimport { ScrollTrigger } from 'gsap/ScrollTrigger';\ngsap.registerPlugin(ScrollTrigger);\ngsap.to('.track', { xPercent: -75, ease: 'none', scrollTrigger: { trigger: '.story', scroller: '.scrollport', pin: '.stage', scrub: true, end: '+=960' } });",
         "preview": "captured/pinned-horizontal-scroll-scene",
         "previewKind": "local-demo-capture",
         "demoPath": "preview-demos/dist/pinned-horizontal-scroll-scene.html",
@@ -160,7 +160,7 @@ const existingEffects = [
       "total": 96,
       "decision": "admit",
       "reasonCode": "passed",
-      "rationaleZh": "编辑式构图、固定视口与横向叙事形成完整创作语言，动作和空间关系一眼可辨。"
+      "rationaleZh": "真实纵向滚轮、拖拽与键盘共同驱动固定视口中的单向证据故事；四个语义阶段、进度和最终安全路线保持同步且不自动回卷。"
     }
   },
   {

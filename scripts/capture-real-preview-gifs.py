@@ -205,6 +205,30 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("End")
             elif index == 34:
                 page.wait_for_timeout(420)
+        elif demo["id"] == "pinned-horizontal-scroll-scene":
+            if index == 2:
+                page.mouse.move(238, 96)
+            elif index in (3, 6, 9):
+                page.mouse.wheel(0, 160)
+            elif index == 12:
+                page.mouse.move(226, 138)
+                page.mouse.down()
+            elif 13 <= index <= 16:
+                progress = (index - 13) / 3
+                page.mouse.move(226, 138 - 68 * progress)
+            elif index == 17:
+                page.mouse.up()
+            elif index == 20:
+                page.mouse.click(238, 96)
+                page.keyboard.press("End")
+            elif index == 22:
+                page.mouse.wheel(0, 160)
+            elif index == 25:
+                page.keyboard.press("Home")
+            elif index == 29:
+                page.keyboard.press("PageDown")
+            elif index == 33:
+                page.keyboard.press("End")
         elif demo["id"] == "blurhash-to-photo-progressive-reveal":
             pointer_x = 230 if .5 <= preview_time < 2.25 else 32
             page.mouse.move(pointer_x, 90)
@@ -560,6 +584,30 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["motionActive"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture human-owned causal timeline scrubbing and boundary release: {interaction!r}")
+    elif demo["id"] == "pinned-horizontal-scroll-scene":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            interaction["automaticFallback"]
+            or interaction["automaticPlayback"]
+            or interaction["syntheticInputDispatch"]
+            or not interaction["nativeScrollLinked"]
+            or not interaction["pinnedElementMatches"]
+            or not interaction["scrollTriggerReady"]
+            or not interaction["initialStaticConfirmed"]
+            or interaction["wheelBoundaryPolicy"] != "release-at-bounds"
+            or interaction["inputAdapters"] != ["vertical-wheel", "vertical-drag", "keyboard"]
+            or interaction["inputCount"] < 10
+            or interaction["wheelCount"] < 4
+            or interaction["dragMoveCount"] < 4
+            or interaction["keyboardCount"] < 4
+            or interaction["boundaryReleaseCount"] < 1
+            or interaction["progress"] < .999
+            or interaction["panelIndex"] != 3
+            or interaction["currentStep"] != "approve"
+            or interaction["pointerCaptured"]
+            or interaction["triggerEnd"] <= interaction["triggerStart"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a human-owned one-way pinned route story: {interaction!r}")
     elif demo["id"] == "blurhash-to-photo-progressive-reveal":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__()")
         if interaction["pointerEvents"] < 3 or interaction["pointerOverPhoto"]:

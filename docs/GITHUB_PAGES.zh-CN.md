@@ -8,6 +8,12 @@
 
 预期线上地址：<https://giraffe-tree.github.io/awesome-web-effects/>
 
+## 语言兼容
+
+发布站点通过 `?lang=<locale>` 提供 20 种界面 locale，例如 `?lang=ja` 或 `?lang=ar`。显式 URL locale 的优先级最高，选择结果会保存在本地；首次访问且未指定时使用浏览器语言，最后回退英文。切换语言会保留 `#pointer-injected-gpu-fluid` 等效果锚点。页面同步更新 BCP-47 `lang`，阿拉伯语、乌尔都语与埃及阿拉伯语使用 `dir="rtl"`，代码、仓库路径和效果 Key 则保持从左到右隔离显示。
+
+完整目录内容仍以规范英文为主，并显示已经编写的简体中文效果名称；“20 种 locale”指界面兼容，并不代表每条技术记录已有 20 份完整翻译。
+
 ## 首次启用
 
 1. 在 GitHub 打开本仓库的 **Settings → Pages**。
@@ -25,7 +31,7 @@
 python3 -m http.server 8000 --directory demo
 ```
 
-然后打开 <http://localhost:8000/>，检查效果行、来源详情、筛选功能、脚本和 GIF 预览是否正常。部署完成后，在生产地址重复检查，并通过浏览器控制台和网络面板确认没有文件加载失败。
+然后打开 <http://localhost:8000/>，检查效果行、来源详情、筛选功能、脚本和 GIF 预览是否正常。还应分别使用 `?lang=ar` 与 `?lang=ur` 检查 RTL 布局，并确认切换语言时 URL 会更新且不会丢失当前 hash。部署完成后，在生产地址重复检查，并通过浏览器控制台和网络面板确认没有文件加载失败。
 
 ## 使用限制
 

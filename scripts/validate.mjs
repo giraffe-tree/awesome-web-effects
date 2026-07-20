@@ -8,6 +8,7 @@ import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { categories, effects, projects, snapshotDate } from '../demo/data/effects.js';
 import { admissionAuditSummary, admissionPolicy, reviewedDemoScores } from '../demo/data/demo-admission.js';
+import { defaultLocale, getMessages, resolveLocale, supportedLocales } from '../demo/data/locales.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const errors = [];
@@ -15,6 +16,23 @@ const assert = (condition, message) => { if (!condition) errors.push(message); }
 const duplicates = values => [...new Set(values.filter((value, index) => values.indexOf(value) !== index))];
 const execFileAsync = promisify(execFile);
 const realPreviewKinds = new Set(['official-capture', 'local-demo-capture']);
+
+assert(supportedLocales.length === 20, 'The website must expose exactly the top 20 total-speaker locales.');
+assert(defaultLocale === 'en', 'English must remain the default locale.');
+assert(new Set(supportedLocales.map(locale => locale.code)).size === supportedLocales.length, 'Locale codes must be unique.');
+assert(JSON.stringify(supportedLocales.map(locale => locale.rank)) === JSON.stringify(Array.from({ length: 20 }, (_, index) => index + 1)), 'Locale ranks must be continuous from 1 through 20.');
+const defaultMessageKeys = Object.keys(getMessages(defaultLocale)).sort();
+for (const locale of supportedLocales) {
+  assert(/^[a-z]{2,3}(?:-[A-Za-z]{4})?(?:-[A-Z]{2})?$/.test(locale.code), `${locale.code}: invalid BCP-47 locale shape.`);
+  assert(['ltr', 'rtl'].includes(locale.dir), `${locale.code}: invalid text direction.`);
+  assert(locale.nativeName && locale.englishName && locale.chineseName, `${locale.code}: incomplete language names.`);
+  assert(Number.isFinite(locale.speakersMillions) && locale.speakersMillions > 0, `${locale.code}: invalid total-speaker estimate.`);
+  assert(resolveLocale(locale.code) === locale.code, `${locale.code}: locale resolver does not preserve a supported locale.`);
+  const messages = getMessages(locale.code);
+  assert(JSON.stringify(Object.keys(messages).sort()) === JSON.stringify(defaultMessageKeys), `${locale.code}: message keys differ from the default locale.`);
+  assert(Array.isArray(messages.heroSteps) && messages.heroSteps.length === 4, `${locale.code}: hero story must contain four localized steps.`);
+}
+for (const rtlLocale of ['ar', 'ur', 'arz']) assert(supportedLocales.find(locale => locale.code === rtlLocale)?.dir === 'rtl', `${rtlLocale}: expected RTL locale.`);
 
 assert(effects.length > 0, 'The admitted demo catalog must not be empty.');
 assert(effects.length === admissionAuditSummary.admittedCount, 'Published effect count does not match the dated admission audit.');
@@ -141,7 +159,11 @@ const [html, readme, readmeZh, admissionAudit] = await Promise.all([
   readFile(resolve(root, 'research', `demo-admission-audit-${admissionAuditSummary.auditedAt}.md`), 'utf8')
 ]);
 assert(html.includes("./data/effects.js"), 'Demo does not load the canonical effect catalog.');
+assert(html.includes("./data/locales.js"), 'Demo does not load the canonical locale catalog.');
 assert(html.includes('type="module"'), 'Demo catalog must load as an ES module.');
+assert(/<select[^>]+id="language"/.test(html), 'Demo must expose a native locale selector.');
+assert(html.includes("url.searchParams.set('lang', language)"), 'Demo language selection must update a shareable lang query parameter.');
+assert(html.includes('document.documentElement.dir = locale.dir'), 'Demo must set the document direction from locale metadata.');
 assert(html.includes('prompt-button') && html.includes('copyPrompt'), 'Demo does not expose one-click agent prompts.');
 assert(html.includes('copy-code') && html.includes('source.snippet'), 'Demo does not expose copyable minimal code.');
 
@@ -173,6 +195,10 @@ assert(admissionAudit.includes(`共审计 **${admissionAuditSummary.candidateCou
 const liveDemo = 'https://giraffe-tree.github.io/awesome-web-effects/';
 assert(readme.includes(liveDemo), 'English README does not link to the current GitHub Pages site.');
 assert(readmeZh.includes(liveDemo), 'Chinese README does not link to the current GitHub Pages site.');
+for (const locale of supportedLocales) {
+  assert(readme.includes(locale.nativeName) && readme.includes(`?lang=${encodeURIComponent(locale.code)}`), `English README is missing locale ${locale.code}.`);
+  assert(readmeZh.includes(locale.nativeName) && readmeZh.includes(`?lang=${encodeURIComponent(locale.code)}`), `Chinese README is missing locale ${locale.code}.`);
+}
 assert(readme.includes('research/ai-native-homepages-100.md'), 'English README does not link to the homepage research summary.');
 assert(readmeZh.includes('research/ai-native-homepages-100.md'), 'Chinese README does not link to the homepage research summary.');
 assert(!`${html}\n${readme}\n${readmeZh}`.includes('giraffe-tree/awesome-interaction'), 'Stale awesome-interaction repository or Pages link detected.');

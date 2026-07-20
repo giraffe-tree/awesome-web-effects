@@ -21,6 +21,35 @@
 
 This is an **effect-first**, curator-reviewed reference—not another repository list. Every published item has visible evidence, a score of at least **80/100**, provenance, reusable code and a runnable or official preview.
 
+## Languages
+
+The site interface supports the following 20 locales with shareable `?lang=` URLs, browser-language detection, local persistence, localized numbers, and RTL layout for Arabic, Urdu, and Egyptian Arabic. Full README documentation remains available in English and Simplified Chinese; the 150 effects keep canonical English technical names, behavior fields, code, and agent prompts, with existing Chinese names shown where authored.
+
+| # | Language | Native name | Total speakers (L1 + L2) | Site locale | Direction |
+| ---: | --- | --- | ---: | --- | --- |
+| 1 | English | English | 1,493M | [`en`](https://giraffe-tree.github.io/awesome-web-effects/?lang=en) | LTR |
+| 2 | Mandarin Chinese | 简体中文 | 1,183M | [`zh-Hans`](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans) | LTR |
+| 3 | Hindi | हिन्दी | 611M | [`hi`](https://giraffe-tree.github.io/awesome-web-effects/?lang=hi) | LTR |
+| 4 | Spanish | Español | 561M | [`es`](https://giraffe-tree.github.io/awesome-web-effects/?lang=es) | LTR |
+| 5 | Modern Standard Arabic | العربية | 335M | [`ar`](https://giraffe-tree.github.io/awesome-web-effects/?lang=ar) | RTL |
+| 6 | French | Français | 334M | [`fr`](https://giraffe-tree.github.io/awesome-web-effects/?lang=fr) | LTR |
+| 7 | Bengali | বাংলা | 274M | [`bn`](https://giraffe-tree.github.io/awesome-web-effects/?lang=bn) | LTR |
+| 8 | Portuguese | Português | 269M | [`pt`](https://giraffe-tree.github.io/awesome-web-effects/?lang=pt) | LTR |
+| 9 | Indonesian | Bahasa Indonesia | 255M | [`id`](https://giraffe-tree.github.io/awesome-web-effects/?lang=id) | LTR |
+| 10 | Urdu | اردو | 246M | [`ur`](https://giraffe-tree.github.io/awesome-web-effects/?lang=ur) | RTL |
+| 11 | Russian | Русский | 210M | [`ru`](https://giraffe-tree.github.io/awesome-web-effects/?lang=ru) | LTR |
+| 12 | Standard German | Deutsch | 133M | [`de`](https://giraffe-tree.github.io/awesome-web-effects/?lang=de) | LTR |
+| 13 | Japanese | 日本語 | 126M | [`ja`](https://giraffe-tree.github.io/awesome-web-effects/?lang=ja) | LTR |
+| 14 | Nigerian Pidgin | Naijá | 121M | [`pcm`](https://giraffe-tree.github.io/awesome-web-effects/?lang=pcm) | LTR |
+| 15 | Egyptian Arabic | العربي المصري | 118M | [`arz`](https://giraffe-tree.github.io/awesome-web-effects/?lang=arz) | RTL |
+| 16 | Marathi | मराठी | 99M | [`mr`](https://giraffe-tree.github.io/awesome-web-effects/?lang=mr) | LTR |
+| 17 | Vietnamese | Tiếng Việt | 97M | [`vi`](https://giraffe-tree.github.io/awesome-web-effects/?lang=vi) | LTR |
+| 18 | Telugu | తెలుగు | 96M | [`te`](https://giraffe-tree.github.io/awesome-web-effects/?lang=te) | LTR |
+| 19 | Swahili | Kiswahili | 95M | [`sw`](https://giraffe-tree.github.io/awesome-web-effects/?lang=sw) | LTR |
+| 20 | Hausa | Hausa | 94M | [`ha`](https://giraffe-tree.github.io/awesome-web-effects/?lang=ha) | LTR |
+
+The ranking uses the individual-language, total-speaker (L1 + L2) method from [Ethnologue 200 (2026, 29th edition)](https://shop.ethnologue.com/products/2026-ethnologue-200), cross-checked against the [complete total-speaker table](https://en.wikipedia.org/wiki/List_of_languages_by_total_number_of_speakers). Counts are estimates; multilingual people appear in more than one language, Mandarin is not all Chinese varieties combined, and Modern Standard Arabic and Egyptian Arabic are counted separately.
+
 ## Browse by visual family
 
 | Category | Effects | Source projects | Visible result |
@@ -277,7 +306,7 @@ Read the [current 396-candidate admission audit](research/demo-admission-audit-2
 
 ## Run the visual catalog locally
 
-The demo is dependency-free static HTML, CSS, JavaScript modules, and verified GIF assets. It supports effect search, category filtering, score sorting, English/Chinese UI, stable effect anchors, visible score breakdowns, real mobile previews, expandable source details, copyable minimal code, and one-click prompts for coding agents.
+The demo is dependency-free static HTML, CSS, JavaScript modules, and verified GIF assets. It supports 20 localized UI locales, effect search, category filtering, score sorting, stable effect anchors, visible score breakdowns, real mobile previews, expandable source details, copyable minimal code, and one-click prompts for coding agents.
 
 ```bash
 python3 -m http.server 4173 --directory demo

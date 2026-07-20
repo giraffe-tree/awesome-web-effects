@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 import { categories, effects, projects, snapshotDate } from '../demo/data/effects.js';
 import { admissionAuditSummary, admissionPolicy } from '../demo/data/demo-admission.js';
+import { supportedLocales } from '../demo/data/locales.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const liveDemo = 'https://giraffe-tree.github.io/awesome-web-effects/';
@@ -104,6 +105,25 @@ function metricStrip(language) {
   return `<table><tr>${values.map((value, index) => `<td width="25%" align="center"><strong>${value}</strong><br><sub>${labels[index]}</sub></td>`).join('')}</tr></table>`;
 }
 
+function languageSupportSection(language) {
+  const isZh = language === 'zh';
+  const header = isZh
+    ? '| # | 语言 | 本地名称 | 总使用者（L1 + L2） | 网站 locale | 方向 |\n| ---: | --- | --- | ---: | --- | --- |'
+    : '| # | Language | Native name | Total speakers (L1 + L2) | Site locale | Direction |\n| ---: | --- | --- | ---: | --- | --- |';
+  const rows = supportedLocales.map(locale => {
+    const name = isZh ? locale.chineseName : locale.englishName;
+    const siteUrl = `${liveDemo}?lang=${encodeURIComponent(locale.code)}`;
+    return `| ${locale.rank} | ${name} | ${locale.nativeName} | ${formatStars(locale.speakersMillions)}M | [\`${locale.code}\`](${siteUrl}) | ${locale.dir.toUpperCase()} |`;
+  });
+  const intro = isZh
+    ? '网站界面支持下列 20 种 locale，包括可分享的 `?lang=` URL、浏览器语言检测、本地持久化、本地化数字，以及阿拉伯语、乌尔都语和埃及阿拉伯语的 RTL 布局。完整 README 目前提供英文与简体中文；150 个效果的技术名称、行为字段、代码和 Agent Prompt 仍以规范英文为准，已有中文名称时同时显示中文。'
+    : 'The site interface supports the following 20 locales with shareable `?lang=` URLs, browser-language detection, local persistence, localized numbers, and RTL layout for Arabic, Urdu, and Egyptian Arabic. Full README documentation remains available in English and Simplified Chinese; the 150 effects keep canonical English technical names, behavior fields, code, and agent prompts, with existing Chinese names shown where authored.';
+  const source = isZh
+    ? '排名采用 [Ethnologue 200（2026，第 29 版）](https://shop.ethnologue.com/products/2026-ethnologue-200) 的单一语言总使用者（L1 + L2）口径，并通过[完整总使用者排名](https://en.wikipedia.org/wiki/List_of_languages_by_total_number_of_speakers)交叉核对。人数为估计值；多语者会在不同语言中重复计数，普通话与全部汉语并不等同，现代标准阿拉伯语与埃及阿拉伯语也分开统计。'
+    : 'The ranking uses the individual-language, total-speaker (L1 + L2) method from [Ethnologue 200 (2026, 29th edition)](https://shop.ethnologue.com/products/2026-ethnologue-200), cross-checked against the [complete total-speaker table](https://en.wikipedia.org/wiki/List_of_languages_by_total_number_of_speakers). Counts are estimates; multilingual people appear in more than one language, Mandarin is not all Chinese varieties combined, and Modern Standard Arabic and Egyptian Arabic are counted separately.';
+  return `${intro}\n\n${header}\n${rows.join('\n')}\n\n${source}`;
+}
+
 const english = `# Awesome Web Effects
 
 [中文文档](README.zh-CN.md) · [Open the live visual catalog](${liveDemo})
@@ -122,6 +142,10 @@ ${metricStrip('en')}
 <table><tr><td width="33%"><strong>① Find by sight</strong><br><sub>Scan real motion instead of guessing library names.</sub></td><td width="33%"><strong>② Open the effect</strong><br><sub>Check the score, source, behavior and minimal implementation.</sub></td><td width="33%"><strong>③ Ship the idea</strong><br><sub>Copy code or a scoped prompt for Codex / Claude Code.</sub></td></tr></table>
 
 This is an **effect-first**, curator-reviewed reference—not another repository list. Every published item has visible evidence, a score of at least **${admissionPolicy.threshold}/100**, provenance, reusable code and a runnable or official preview.
+
+## Languages
+
+${languageSupportSection('en')}
 
 ## Browse by visual family
 
@@ -160,7 +184,7 @@ Read the [current ${admissionAuditSummary.candidateCount}-candidate admission au
 
 ## Run the visual catalog locally
 
-The demo is dependency-free static HTML, CSS, JavaScript modules, and verified GIF assets. It supports effect search, category filtering, score sorting, English/Chinese UI, stable effect anchors, visible score breakdowns, real mobile previews, expandable source details, copyable minimal code, and one-click prompts for coding agents.
+The demo is dependency-free static HTML, CSS, JavaScript modules, and verified GIF assets. It supports 20 localized UI locales, effect search, category filtering, score sorting, stable effect anchors, visible score breakdowns, real mobile previews, expandable source details, copyable minimal code, and one-click prompts for coding agents.
 
 \`\`\`bash
 python3 -m http.server 4173 --directory demo
@@ -221,6 +245,10 @@ ${metricStrip('zh')}
 
 这不是另一份仓库名称列表，而是一个**效果优先、经过人工策展评分**的视觉参考库。每个入选条目都有真实证据、不低于 **${admissionPolicy.threshold}/100** 的评分、可追溯来源、可复用代码，以及本地可运行或官方预览。
 
+## 支持语言
+
+${languageSupportSection('zh')}
+
 ## 按视觉类型浏览
 
 ${categorySummary('zh')}
@@ -258,7 +286,7 @@ ${effectTables('zh')}
 
 ## 在本地运行视觉目录
 
-Demo 只使用静态 HTML、CSS、JavaScript 模块和已核验 GIF，无第三方运行依赖。它支持效果搜索、分类筛选、按评分排序、中英文切换、稳定效果锚点、评分维度明细、移动端真实预览、展开来源详情、代码复制和 Agent 提示词一键复制。
+Demo 只使用静态 HTML、CSS、JavaScript 模块和已核验 GIF，无第三方运行依赖。它支持 20 种本地化界面、效果搜索、分类筛选、按评分排序、稳定效果锚点、评分维度明细、移动端真实预览、展开来源详情、代码复制和 Agent 提示词一键复制。
 
 \`\`\`bash
 python3 -m http.server 4173 --directory demo
@@ -305,4 +333,4 @@ await Promise.all([
   writeFile(resolve(root, 'README.zh-CN.md'), chinese)
 ]);
 
-console.log(`Generated bilingual effect-first docs for ${effects.length} effects and ${projects.length} source projects.`);
+console.log(`Generated bilingual effect-first docs with ${supportedLocales.length} site locales for ${effects.length} effects and ${projects.length} source projects.`);

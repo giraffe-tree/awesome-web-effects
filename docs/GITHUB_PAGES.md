@@ -8,6 +8,12 @@ The demo is compatible with GitHub Pages. GitHub Pages publishes static HTML, CS
 
 Expected production URL: <https://giraffe-tree.github.io/awesome-web-effects/>
 
+## Language compatibility
+
+The published site exposes 20 interface locales through `?lang=<locale>`, for example `?lang=ja` or `?lang=ar`. An explicit URL locale takes priority, the selection is then stored locally, and first-time visitors otherwise use their browser language with English as the fallback. Language changes preserve effect anchors such as `#pointer-injected-gpu-fluid`. The page updates its BCP-47 `lang` value, uses `dir="rtl"` for Arabic, Urdu, and Egyptian Arabic, and keeps code, repository paths, and effect keys isolated left-to-right.
+
+The full catalog content remains canonical English with authored Simplified Chinese effect names; “20 locales” describes localized interface compatibility, not 20 complete translations of every technical record.
+
 ## Enable it once
 
 1. On GitHub, open **Settings → Pages** for this repository.
@@ -25,7 +31,7 @@ Before pushing, serve the same directory locally instead of opening the HTML thr
 python3 -m http.server 8000 --directory demo
 ```
 
-Then open <http://localhost:8000/> and check that the effect rows, source details, filters, scripts, and GIF previews load. After deployment, confirm the same behavior at the production URL and check the browser console and network panel for missing files.
+Then open <http://localhost:8000/> and check that the effect rows, source details, filters, scripts, and GIF previews load. Also try `?lang=ar` and `?lang=ur` for RTL layout and confirm that switching languages updates the URL without losing the current hash. After deployment, confirm the same behavior at the production URL and check the browser console and network panel for missing files.
 
 ## Operational limits
 

@@ -77,7 +77,7 @@ def main() -> int:
             page = context.new_page()
             page_errors: list[str] = []
             page.on("pageerror", lambda error: page_errors.append(str(error)))
-            page.goto(f"{origin}/", wait_until="networkidle")
+            page.goto(f"{origin}/?lang=en", wait_until="networkidle")
 
             expect(page.locator("#entry-reveal")).to_have_count(0)
             hero = page.locator("#hero-experience")
@@ -90,10 +90,32 @@ def main() -> int:
             expect(hero_toggle).to_be_visible()
             hero_toggle.click()
             expect(hero_toggle).to_have_text("Play")
-            page.locator("#language").click()
+            language_select = page.locator("#language")
+            locale_directions = {
+                "en": "ltr", "zh-Hans": "ltr", "hi": "ltr", "es": "ltr", "ar": "rtl",
+                "fr": "ltr", "bn": "ltr", "pt": "ltr", "id": "ltr", "ur": "rtl",
+                "ru": "ltr", "de": "ltr", "ja": "ltr", "pcm": "ltr", "arz": "rtl",
+                "mr": "ltr", "vi": "ltr", "te": "ltr", "sw": "ltr", "ha": "ltr",
+            }
+            expect(language_select.locator("option")).to_have_count(20)
+            language_select.select_option("zh-Hans")
             expect(page.locator("#hero-story-eyebrow")).to_have_text("实时交互叙事")
-            page.locator("#language").click()
+            language_select.select_option("en")
             expect(page.locator("#hero-story-eyebrow")).to_have_text("Live interaction story")
+            for locale, direction in locale_directions.items():
+                language_select.select_option(locale)
+                expect(page.locator("html")).to_have_attribute("lang", locale)
+                expect(page.locator("html")).to_have_attribute("dir", direction)
+                assert f"lang={locale}" in page.url
+                assert page.evaluate("localStorage.getItem('awesome-effects-language')") == locale
+                assert page.locator("#hero-kicker").inner_text().strip()
+            language_select.select_option("en")
+            page.goto(f"{origin}/?lang=ar", wait_until="networkidle")
+            expect(page.locator("html")).to_have_attribute("lang", "ar")
+            expect(page.locator("html")).to_have_attribute("dir", "rtl")
+            page.reload(wait_until="networkidle")
+            expect(page.locator("#language")).to_have_value("ar")
+            page.locator("#language").select_option("en")
 
             rows = page.locator("#effect-list .effect-row")
             expect(rows).to_have_count(expected_effect_count)
@@ -185,6 +207,10 @@ def main() -> int:
             expect(prompt_button).to_have_text("Prompt copied")
 
             page.set_viewport_size({"width": 390, "height": 844})
+            page.locator("#language").select_option("ur")
+            expect(page.locator("html")).to_have_attribute("dir", "rtl")
+            assert page.evaluate("document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1")
+            page.locator("#language").select_option("en")
             real_row.locator(".effect-cell").click()
             expect(modal.locator(".effect-modal-dialog")).to_be_visible()
             expect(modal.locator(".modal-preview-frame")).to_have_count(1)
@@ -200,7 +226,7 @@ def main() -> int:
 
             reduced_page = context.new_page()
             reduced_page.emulate_media(reduced_motion="reduce")
-            reduced_page.goto(f"{origin}/", wait_until="networkidle")
+            reduced_page.goto(f"{origin}/?lang=en", wait_until="networkidle")
             expect(reduced_page.locator("#entry-reveal")).to_have_count(0)
             expect(reduced_page.locator("#hero-story-toggle")).to_be_hidden()
             reduced_hero = reduced_page.locator("#hero-experience")
@@ -218,7 +244,7 @@ def main() -> int:
             server.kill()
             server.wait()
 
-    print(f"Catalog UI verified: {expected_effect_count} admitted demos, interactive hero, loading/error transitions, live detail previews, native-size official GIFs, visible scores, copy actions, focus, reduced motion, and mobile layout.")
+    print(f"Catalog UI verified: 20 locales (including RTL and URL persistence), {expected_effect_count} admitted demos, interactive hero, loading/error transitions, live detail previews, native-size official GIFs, visible scores, copy actions, focus, reduced motion, and mobile layout.")
     return 0
 
 

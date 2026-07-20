@@ -21,6 +21,35 @@
 
 这不是另一份仓库名称列表，而是一个**效果优先、经过人工策展评分**的视觉参考库。每个入选条目都有真实证据、不低于 **80/100** 的评分、可追溯来源、可复用代码，以及本地可运行或官方预览。
 
+## 支持语言
+
+网站界面支持下列 20 种 locale，包括可分享的 `?lang=` URL、浏览器语言检测、本地持久化、本地化数字，以及阿拉伯语、乌尔都语和埃及阿拉伯语的 RTL 布局。完整 README 目前提供英文与简体中文；150 个效果的技术名称、行为字段、代码和 Agent Prompt 仍以规范英文为准，已有中文名称时同时显示中文。
+
+| # | 语言 | 本地名称 | 总使用者（L1 + L2） | 网站 locale | 方向 |
+| ---: | --- | --- | ---: | --- | --- |
+| 1 | 英语 | English | 1,493M | [`en`](https://giraffe-tree.github.io/awesome-web-effects/?lang=en) | LTR |
+| 2 | 普通话（简体书写） | 简体中文 | 1,183M | [`zh-Hans`](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans) | LTR |
+| 3 | 印地语 | हिन्दी | 611M | [`hi`](https://giraffe-tree.github.io/awesome-web-effects/?lang=hi) | LTR |
+| 4 | 西班牙语 | Español | 561M | [`es`](https://giraffe-tree.github.io/awesome-web-effects/?lang=es) | LTR |
+| 5 | 现代标准阿拉伯语 | العربية | 335M | [`ar`](https://giraffe-tree.github.io/awesome-web-effects/?lang=ar) | RTL |
+| 6 | 法语 | Français | 334M | [`fr`](https://giraffe-tree.github.io/awesome-web-effects/?lang=fr) | LTR |
+| 7 | 孟加拉语 | বাংলা | 274M | [`bn`](https://giraffe-tree.github.io/awesome-web-effects/?lang=bn) | LTR |
+| 8 | 葡萄牙语 | Português | 269M | [`pt`](https://giraffe-tree.github.io/awesome-web-effects/?lang=pt) | LTR |
+| 9 | 印度尼西亚语 | Bahasa Indonesia | 255M | [`id`](https://giraffe-tree.github.io/awesome-web-effects/?lang=id) | LTR |
+| 10 | 乌尔都语 | اردو | 246M | [`ur`](https://giraffe-tree.github.io/awesome-web-effects/?lang=ur) | RTL |
+| 11 | 俄语 | Русский | 210M | [`ru`](https://giraffe-tree.github.io/awesome-web-effects/?lang=ru) | LTR |
+| 12 | 标准德语 | Deutsch | 133M | [`de`](https://giraffe-tree.github.io/awesome-web-effects/?lang=de) | LTR |
+| 13 | 日语 | 日本語 | 126M | [`ja`](https://giraffe-tree.github.io/awesome-web-effects/?lang=ja) | LTR |
+| 14 | 尼日利亚皮钦语 | Naijá | 121M | [`pcm`](https://giraffe-tree.github.io/awesome-web-effects/?lang=pcm) | LTR |
+| 15 | 埃及阿拉伯语 | العربي المصري | 118M | [`arz`](https://giraffe-tree.github.io/awesome-web-effects/?lang=arz) | RTL |
+| 16 | 马拉地语 | मराठी | 99M | [`mr`](https://giraffe-tree.github.io/awesome-web-effects/?lang=mr) | LTR |
+| 17 | 越南语 | Tiếng Việt | 97M | [`vi`](https://giraffe-tree.github.io/awesome-web-effects/?lang=vi) | LTR |
+| 18 | 泰卢固语 | తెలుగు | 96M | [`te`](https://giraffe-tree.github.io/awesome-web-effects/?lang=te) | LTR |
+| 19 | 斯瓦希里语 | Kiswahili | 95M | [`sw`](https://giraffe-tree.github.io/awesome-web-effects/?lang=sw) | LTR |
+| 20 | 豪萨语 | Hausa | 94M | [`ha`](https://giraffe-tree.github.io/awesome-web-effects/?lang=ha) | LTR |
+
+排名采用 [Ethnologue 200（2026，第 29 版）](https://shop.ethnologue.com/products/2026-ethnologue-200) 的单一语言总使用者（L1 + L2）口径，并通过[完整总使用者排名](https://en.wikipedia.org/wiki/List_of_languages_by_total_number_of_speakers)交叉核对。人数为估计值；多语者会在不同语言中重复计数，普通话与全部汉语并不等同，现代标准阿拉伯语与埃及阿拉伯语也分开统计。
+
 ## 按视觉类型浏览
 
 | 分类 | 效果数 | 来源项目 | 关注结果 |
@@ -277,7 +306,7 @@
 
 ## 在本地运行视觉目录
 
-Demo 只使用静态 HTML、CSS、JavaScript 模块和已核验 GIF，无第三方运行依赖。它支持效果搜索、分类筛选、按评分排序、中英文切换、稳定效果锚点、评分维度明细、移动端真实预览、展开来源详情、代码复制和 Agent 提示词一键复制。
+Demo 只使用静态 HTML、CSS、JavaScript 模块和已核验 GIF，无第三方运行依赖。它支持 20 种本地化界面、效果搜索、分类筛选、按评分排序、稳定效果锚点、评分维度明细、移动端真实预览、展开来源详情、代码复制和 Agent 提示词一键复制。
 
 ```bash
 python3 -m http.server 4173 --directory demo

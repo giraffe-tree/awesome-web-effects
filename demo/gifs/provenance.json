@@ -96,7 +96,7 @@
       "originUrl": "https://github.com/theatre-js/theatre",
       "demoSourcePath": "demo/preview-demos/visually-authored-keyframe-sequence.html",
       "libraryVersion": "@theatre/core@0.7.2",
-      "generatedAt": "2026-07-18",
+      "generatedAt": "2026-07-21",
       "outputPath": "demo/gifs/captured/visually-authored-keyframe-sequence.gif",
       "usageBasis": "local demo capture using the pinned Theatre.js core package; verify license https://github.com/theatre-js/theatre/blob/HEAD/LICENSE"
     },

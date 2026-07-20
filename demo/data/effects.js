@@ -325,17 +325,17 @@ const existingEffects = [
     "addedIn": "2026-expansion",
     "research": null,
     "behavior": {
-      "trigger": "state change or animation frame",
-      "response": "Visually authored keyframe sequence",
-      "timing": "sequenced",
-      "layer": "content"
+      "trigger": "real timeline scrub, authored-pose selection, or explicit Play/Pause from pointer, touch, or keyboard",
+      "response": "Move one campaign lockup through five saved Theatre.js poses while the actor, path, markers, note, and time readout stay synchronized",
+      "timing": "human-owned direct scrub or one-shot playback across six authored property tracks; never automatic",
+      "layer": "motion-review workspace, live campaign lockup, safe frame, review note, and semantic timeline controls"
     },
-    "prompt": "Implement the \"Visually authored keyframe sequence\" (可视化编排关键帧序列) web interaction effect in the current project.\n\nUse Theatre.js (theatre-js/theatre) as the recommended implementation unless the existing stack makes a dependency-free equivalent more appropriate. Recreate this specific animation interaction, not a generic animation.\n\nInteraction contract:\n- Trigger: state change or animation frame\n- Visual response: Visually authored keyframe sequence\n- Timing relationship: sequenced\n- Page layer: content\n\nRequirements:\n- Integrate with the existing design system and component structure.\n- Support keyboard and touch input whenever the interaction is actionable.\n- Respect prefers-reduced-motion with a clear non-animated fallback.\n- Avoid layout shift, scroll traps, inaccessible focus behavior, and unnecessary dependencies.\n- Keep the implementation responsive and clean up listeners, timers, and animation instances.\n\nStart from this minimal API shape:\n\n```js\nimport { getProject } from '@theatre/core';\nconst sheet = getProject('Demo').sheet('Scene');\nconst card = sheet.object('Card', { x: 0 }); card.onValuesChange(({ x }) => element.style.translate = `${x}px`);\n```\n\nReturn the working code, the files changed, and a short explanation of how to tune timing, easing, distance, and reduced-motion behavior.",
+    "prompt": "Implement the \"Visually authored keyframe sequence\" (可视化编排关键帧序列) as a compact motion-review workspace, not an autoplaying badge.\n\nUse Theatre.js (theatre-js/theatre) with a saved project state containing five deliberately authored poses across multiple property tracks. Keep one recognisable production deliverable—for example a campaign lockup—inside a safe frame, and synchronize its live transform with a path, pose ghosts, marker selection, time readout, and pose-specific review note.\n\nInteraction contract:\n- Trigger: real range scrub, authored-pose marker click/tap, or explicit Play/Pause on the transport or actor; native range keys must work\n- Visual response: the same live actor traverses five authored positions, rotations, scales, corner shapes, and tones while all review evidence stays synchronized\n- Timing relationship: direct manipulation or interruptible one-shot playback; no autoplay, looping, preview-clock position changes, or synthetic input\n- Page layer: motion-review viewport, saved Theatre.js sequence, decision note, and accessible timeline\n\nRequirements:\n- Start strictly at time 0 in the first pose and remain unchanged until trusted human input.\n- Author at least five keyframes on each of several Theatre.js tracks and validate that the live object values match the sequence position.\n- Support pointer, touch, keyboard range input, marker selection, play, pause, cancellation, completion, 320×180 and 144×81 previews, and prefers-reduced-motion direct pose stepping.\n- Keep the actor inside the measured viewport at every authored pose and expose exactly one current marker and ghost.\n- Export runtime state that proves initial stillness, saved keyframes, trusted input counts, position/value synchronization, playback lifecycle, and absence of automatic changes.\n\nStart from this minimal API shape:\n\n```js\nimport { getProject } from '@theatre/core';\nconst project = getProject('Campaign Motion Review', { state: savedState });\nconst sheet = project.sheet('Scene');\nconst actor = sheet.object('Campaign Lockup', { x: 18, y: 70, rotation: -8, scale: .72 });\nactor.onValuesChange(values => applyLockup(values));\n```\n\nReturn the working code, the files changed, and a short explanation of how to tune keyframe positions, bezier handles, pose spacing, playback, scrubbing, and reduced motion.",
     "sources": [
       {
         "projectId": "theatre-js-theatre",
         "recommended": true,
-        "snippet": "import { getProject } from '@theatre/core';\nconst sheet = getProject('Demo').sheet('Scene');\nconst card = sheet.object('Card', { x: 0 }); card.onValuesChange(({ x }) => element.style.translate = `${x}px`);",
+        "snippet": "import { getProject } from '@theatre/core';\nconst project = getProject('Campaign Motion Review', { state: savedState });\nconst sheet = project.sheet('Scene');\nconst actor = sheet.object('Campaign Lockup', { x: 18, y: 70, rotation: -8, scale: .72 });\nactor.onValuesChange(values => applyLockup(values));",
         "preview": "captured/visually-authored-keyframe-sequence",
         "previewKind": "local-demo-capture",
         "demoPath": "preview-demos/dist/visually-authored-keyframe-sequence.html",
@@ -360,7 +360,7 @@ const existingEffects = [
       "total": 84,
       "decision": "admit",
       "reasonCode": "passed",
-      "rationaleZh": "五个关键姿态、路径和时间游标同时可见，既有表现力也能解释关键帧编排。"
+      "rationaleZh": "真实 Theatre.js 保存状态包含六条属性轨与五个关键姿态；用户可拖动、点选或显式播放，并从路径、幽灵姿态、评审批注和时间读数核验每次变化。"
     }
   },
   {

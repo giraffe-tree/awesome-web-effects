@@ -312,6 +312,40 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.locator('.burst-node[data-node-id="verify"]').click()
             elif index == 34:
                 page.wait_for_timeout(1_050)
+        elif demo["id"] == "visually-authored-keyframe-sequence":
+            if index == 3:
+                page.locator('.keyframe-button[data-index="1"]').click()
+            elif index == 6:
+                page.locator('.keyframe-button[data-index="2"]').click()
+            elif index == 9:
+                page.locator('.keyframe-button[data-index="3"]').click()
+            elif index == 12:
+                page.locator('.keyframe-button[data-index="4"]').click()
+            elif index == 15:
+                page.locator('.keyframe-button[data-index="0"]').click()
+            elif index == 18:
+                page.locator('#play-button').click()
+            elif index == 19:
+                page.wait_for_timeout(300)
+            elif index == 20:
+                page.locator('.keyframe-button[data-index="3"]').click()
+            elif index == 22:
+                page.locator('#play-button').click()
+            elif index == 23:
+                page.wait_for_timeout(900)
+            elif index == 26:
+                page.locator('.keyframe-button[data-index="1"]').click()
+                page.locator('#theatre-actor').click()
+            elif index == 27:
+                page.wait_for_timeout(150)
+                page.locator('#play-button').click()
+            elif index == 29:
+                page.locator('#theatre-actor').click()
+            elif index == 31:
+                page.locator('#sequence-scrubber').focus()
+                page.keyboard.press("End")
+            elif index == 33:
+                page.locator('.keyframe-button[data-index="2"]').click()
         elif demo["id"] == "blurhash-to-photo-progressive-reveal":
             pointer_x = 230 if .5 <= preview_time < 2.25 else 32
             page.mouse.move(pointer_x, 90)
@@ -789,6 +823,38 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["svgCount"] < 4
         ):
             raise RuntimeError(f"{demo['id']} did not capture real node-mapped Mo.js bursts, interruption, and reset: {interaction!r}")
+    elif demo["id"] == "visually-authored-keyframe-sequence":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            interaction["automaticPlayback"]
+            or interaction["automaticPositionChanges"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInput"]
+            or not interaction["userInitiatedChangesOnly"]
+            or not interaction["initialStaticVerified"]
+            or interaction["inputCount"] < 12
+            or interaction["pointerInputCount"] < 11
+            or interaction["keyboardInputCount"] < 1
+            or interaction["scrubInputCount"] < 1
+            or interaction["markerClickCount"] < 8
+            or interaction["playClickCount"] < 3
+            or interaction["pauseClickCount"] < 1
+            or interaction["playbackStartCount"] < 3
+            or interaction["playbackCompleteCount"] < 1
+            or interaction["playbackCancelCount"] < 1
+            or interaction["frameAdvanceCount"] < 3
+            or interaction["positionSetCount"] < 12
+            or not interaction["sequencePositionValidated"]
+            or not interaction["actorValuesValidated"]
+            or interaction["isPlaying"]
+            or interaction["phase"] != "pose-selected"
+            or interaction["currentTime"] != 1.5
+            or interaction["progress"] != .5
+            or interaction["activePoseIndex"] != 2
+            or interaction["activePoseId"] != "cross"
+            or interaction["lastTrustedEvent"] != "marker-3"
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture real Theatre.js marker selection, scrub, play, pause, cancellation, and completion: {interaction!r}")
     elif demo["id"] == "blurhash-to-photo-progressive-reveal":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__()")
         if interaction["pointerEvents"] < 3 or interaction["pointerOverPhoto"]:

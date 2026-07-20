@@ -3,59 +3,565 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Theatre.js — Visually Authored Keyframe Sequence</title>
+    <title>Theatre.js — Campaign Motion Review</title>
     <link rel="stylesheet" href="./shared.css" />
     <style>
-      :root { --preview-background: #e9e5dc; color-scheme: light; }
-      .editor-panel { position: absolute; inset: 37px 11px 19px; overflow: hidden; border: 1px solid #171b25; border-radius: 13px; background: #11141d; box-shadow: 0 14px 28px #2b2b3326; }
-      .sequence-viewport { position: absolute; inset: 0 0 39px; overflow: hidden; background: radial-gradient(circle at 68% 30%, #3a3155, transparent 36%), linear-gradient(135deg, #1b2030, #10131c); }
-      .sequence-viewport::before { content: ''; position: absolute; inset: 0; opacity: .24; background-image: linear-gradient(#ffffff18 1px, transparent 1px), linear-gradient(90deg, #ffffff18 1px, transparent 1px); background-size: 20px 20px; }
-      .object-label { position: absolute; z-index: 4; top: 7px; left: 9px; color: #ffffff70; font: 800 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .12em; }
-      .motion-path { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-      .motion-path path { fill: none; stroke: #d8d0ff70; stroke-width: 1; stroke-dasharray: 3 4; }
-      .pose-ghost { position: absolute; z-index: 1; width: 7px; height: 7px; margin: -4px 0 0 -4px; border: 1px solid #fff9; transform: rotate(45deg); background: #151925; box-shadow: 0 0 0 3px #ffffff0a; }
-      .actor-card { position: absolute; z-index: 3; left: 119px; top: 32px; display: grid; width: 58px; height: 42px; place-items: center; border: 1px solid #ffffffc9; color: #10131c; box-shadow: 0 10px 22px #0009, 0 0 21px hsl(var(--tone, 185) 85% 60% / .32); transform-origin: center; will-change: transform, border-radius, background-color; }
-      .actor-card::before { content: ''; position: absolute; inset: 5px; border: 1px solid #1118272c; border-radius: inherit; }
-      .actor-card::after { content: 'KEYFRAME'; position: relative; font: 900 7px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .08em; }
-      .timeline { position: absolute; left: 0; right: 0; bottom: 0; height: 39px; border-top: 1px solid #ffffff1f; background: #171b26; }
-      .time-readout { position: absolute; top: 5px; left: 9px; color: #f5f0e6; font: 800 7px/1 ui-monospace, SFMono-Regular, Menlo, monospace; }
-      .track-label { position: absolute; top: 5px; right: 9px; color: #969caf; font: 700 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .1em; }
-      .timeline-rail { position: absolute; left: 14px; right: 14px; bottom: 8px; height: 1px; background: #ffffff2c; }
-      .timeline-keyframe { position: absolute; top: -4px; width: 8px; height: 8px; margin-left: -4px; border: 1px solid #c7cada; transform: rotate(45deg); background: #272d3b; transition: none; }
-      .timeline-keyframe.passed { border-color: #ffdc84; background: #ffb55f; box-shadow: 0 0 8px #ffad4c99; }
-      .playhead { position: absolute; z-index: 5; top: 17px; bottom: 3px; width: 1px; background: #ff5f8f; box-shadow: 0 0 8px #ff5f8f; }
-      .playhead::before { content: ''; position: absolute; top: -2px; left: -3px; width: 7px; height: 5px; clip-path: polygon(0 0, 100% 0, 50% 100%); background: #ff5f8f; }
-      .library-badge { color: #1b2029; border-color: #1b20292b; background: #fffdf7dc; }
-      .scene-caption { color: #53545b; }
+      :root {
+        --preview-background: #171814;
+        --ink: #f2efe3;
+        --muted: #949789;
+        --line: rgba(237, 234, 217, .14);
+        --acid: #d9ff54;
+        color-scheme: dark;
+      }
+
+      button,
+      input { font: inherit; }
+
+      button { color: inherit; }
+
+      .review-stage {
+        background:
+          radial-gradient(circle at 78% 8%, rgba(164, 98, 50, .12), transparent 33%),
+          linear-gradient(145deg, #1b1c17, #11120f);
+      }
+
+      .review-shell {
+        position: absolute;
+        inset: clamp(5px, 2.4vw, 18px);
+        display: grid;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        border: 1px solid rgba(229, 224, 202, .19);
+        border-radius: clamp(6px, 2.2vw, 18px);
+        background: #1b1c17;
+        box-shadow: 0 24px 60px rgba(0, 0, 0, .28);
+        grid-template-rows: clamp(28px, 11vh, 44px) minmax(0, 1fr) clamp(66px, 24vh, 96px);
+      }
+
+      .review-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-width: 0;
+        padding: 0 clamp(9px, 2.5vw, 20px);
+        border-bottom: 1px solid var(--line);
+      }
+
+      .review-title,
+      .review-meta {
+        display: flex;
+        align-items: center;
+        min-width: 0;
+        gap: clamp(5px, 1.2vw, 10px);
+      }
+
+      .brand-dot {
+        width: clamp(5px, 1vw, 8px);
+        aspect-ratio: 1;
+        flex: 0 0 auto;
+        border-radius: 50%;
+        background: var(--acid);
+        box-shadow: 0 0 0 3px rgba(217, 255, 84, .09);
+      }
+
+      .review-title strong,
+      .review-meta strong {
+        overflow: hidden;
+        font-size: clamp(7px, 1.55vw, 12px);
+        letter-spacing: -.02em;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .review-title span,
+      .review-meta span {
+        color: var(--muted);
+        font: 700 clamp(5px, .9vw, 7px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+
+      .workspace {
+        display: grid;
+        min-width: 0;
+        min-height: 0;
+        grid-template-columns: minmax(0, 1fr) clamp(116px, 25vw, 184px);
+      }
+
+      .sequence-viewport {
+        position: relative;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        border-right: 1px solid var(--line);
+        background: #22231d;
+      }
+
+      .sequence-viewport::before {
+        position: absolute;
+        inset: 0;
+        content: '';
+        opacity: .18;
+        background-image:
+          linear-gradient(rgba(238, 235, 216, .16) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(238, 235, 216, .16) 1px, transparent 1px);
+        background-size: clamp(12px, 3vw, 24px) clamp(12px, 3vw, 24px);
+      }
+
+      .safe-frame {
+        position: absolute;
+        inset: 8% 7%;
+        border: 1px solid rgba(245, 241, 221, .12);
+        pointer-events: none;
+      }
+
+      .art-direction {
+        position: absolute;
+        inset: 12% 10%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        pointer-events: none;
+      }
+
+      .art-direction small {
+        color: rgba(246, 242, 221, .55);
+        font: 700 clamp(4px, .8vw, 7px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .15em;
+        text-transform: uppercase;
+      }
+
+      .art-direction strong {
+        max-width: 68%;
+        color: rgba(242, 239, 222, .93);
+        font: 860 clamp(22px, 6vw, 54px)/.78 system-ui, sans-serif;
+        letter-spacing: -.075em;
+        text-transform: uppercase;
+      }
+
+      .art-direction em {
+        align-self: flex-end;
+        color: rgba(217, 255, 84, .78);
+        font: 700 clamp(4px, .75vw, 6px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .14em;
+        text-transform: uppercase;
+      }
+
+      .motion-path {
+        position: absolute;
+        z-index: 1;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+
+      .motion-path path {
+        fill: none;
+        stroke: rgba(217, 255, 84, .36);
+        stroke-width: .55;
+        stroke-dasharray: 1.6 2.4;
+        vector-effect: non-scaling-stroke;
+      }
+
+      .pose-ghost {
+        position: absolute;
+        z-index: 2;
+        width: clamp(5px, 1.2vw, 9px);
+        aspect-ratio: 1;
+        translate: -50% -50%;
+        rotate: 45deg;
+        border: 1px solid rgba(242, 239, 224, .5);
+        background: #22231d;
+        box-shadow: 0 0 0 3px rgba(242, 239, 224, .035);
+      }
+
+      .pose-ghost[data-pose="0"] { left: 18%; top: 70%; }
+      .pose-ghost[data-pose="1"] { left: 38%; top: 33%; }
+      .pose-ghost[data-pose="2"] { left: 58%; top: 52%; }
+      .pose-ghost[data-pose="3"] { left: 76%; top: 26%; }
+      .pose-ghost[data-pose="4"] { left: 48%; top: 64%; }
+
+      .pose-ghost.is-current {
+        border-color: var(--acid);
+        background: var(--acid);
+        box-shadow: 0 0 0 4px rgba(217, 255, 84, .1), 0 0 12px rgba(217, 255, 84, .25);
+      }
+
+      .actor-card {
+        position: absolute;
+        z-index: 4;
+        left: 18%;
+        top: 70%;
+        display: flex;
+        width: clamp(64px, 16vw, 118px);
+        min-width: 0;
+        aspect-ratio: 2.15;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: space-between;
+        padding: clamp(5px, 1.2vw, 10px);
+        overflow: hidden;
+        border: 1px solid rgba(22, 24, 17, .72);
+        border-radius: 10px;
+        background: hsl(28 82% 66%);
+        color: #1b1d16;
+        cursor: pointer;
+        opacity: 0;
+        transform: translate(-50%, -50%);
+        transform-origin: center;
+        will-change: left, top, transform, border-radius, background-color;
+      }
+
+      html[data-preview-ready="true"] .actor-card { opacity: 1; }
+
+      .actor-card::after {
+        position: absolute;
+        right: -12%;
+        bottom: -52%;
+        width: 62%;
+        aspect-ratio: 1;
+        border: 1px solid rgba(22, 24, 17, .25);
+        border-radius: 50%;
+        content: '';
+      }
+
+      .actor-card:focus-visible {
+        outline: 2px solid var(--acid);
+        outline-offset: 3px;
+      }
+
+      .actor-card small,
+      .actor-card strong { position: relative; z-index: 1; }
+
+      .actor-card small {
+        font: 800 clamp(4px, .78vw, 6px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .14em;
+        text-transform: uppercase;
+      }
+
+      .actor-card strong {
+        font: 900 clamp(9px, 2vw, 16px)/.85 system-ui, sans-serif;
+        letter-spacing: -.055em;
+        text-align: left;
+        text-transform: uppercase;
+      }
+
+      .inspector {
+        display: flex;
+        min-width: 0;
+        min-height: 0;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: clamp(10px, 2.2vw, 18px);
+        background: #181914;
+      }
+
+      .inspector-kicker,
+      .note-label {
+        color: #cc7146;
+        font: 800 clamp(5px, .85vw, 7px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .13em;
+        text-transform: uppercase;
+      }
+
+      .inspector h1 {
+        margin: clamp(5px, 1vw, 8px) 0 0;
+        font-size: clamp(13px, 2.8vw, 22px);
+        line-height: .95;
+        letter-spacing: -.055em;
+      }
+
+      .pose-summary {
+        display: grid;
+        gap: clamp(5px, 1.3vw, 10px);
+      }
+
+      .pose-count {
+        color: var(--ink);
+        font: 840 clamp(7px, 1.4vw, 11px)/1 system-ui, sans-serif;
+      }
+
+      .pose-count span { color: var(--acid); }
+
+      .review-note {
+        margin: clamp(5px, 1vw, 8px) 0 0;
+        color: #aeb0a4;
+        font-size: clamp(6px, 1.08vw, 8px);
+        line-height: 1.35;
+      }
+
+      .sequence-timeline {
+        display: grid;
+        min-width: 0;
+        padding: clamp(7px, 1.4vw, 12px) clamp(10px, 2.5vw, 20px);
+        border-top: 1px solid var(--line);
+        background: #141510;
+        grid-template-rows: auto minmax(0, 1fr);
+        gap: clamp(5px, 1.2vw, 9px);
+      }
+
+      .transport {
+        display: flex;
+        align-items: center;
+        min-width: 0;
+        gap: clamp(7px, 1.5vw, 12px);
+      }
+
+      .play-button {
+        display: inline-flex;
+        align-items: center;
+        min-width: clamp(62px, 14vw, 102px);
+        justify-content: center;
+        padding: clamp(5px, 1vw, 8px) clamp(8px, 1.8vw, 14px);
+        border: 1px solid rgba(217, 255, 84, .44);
+        border-radius: 999px;
+        background: rgba(217, 255, 84, .08);
+        color: var(--acid);
+        cursor: pointer;
+        font-size: clamp(6px, 1.1vw, 8px);
+        font-weight: 820;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+      }
+
+      .play-button:focus-visible,
+      .keyframe-button:focus-visible,
+      .scrubber:focus-visible {
+        outline: 2px solid var(--acid);
+        outline-offset: 2px;
+      }
+
+      .transport-copy {
+        display: flex;
+        min-width: 0;
+        align-items: baseline;
+        gap: clamp(5px, 1vw, 8px);
+      }
+
+      .pose-name {
+        overflow: hidden;
+        color: var(--ink);
+        font-size: clamp(7px, 1.35vw, 10px);
+        font-weight: 800;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .time-readout {
+        margin-left: auto;
+        color: var(--muted);
+        font: 780 clamp(6px, 1.1vw, 8px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        white-space: nowrap;
+      }
+
+      .timeline-grid {
+        position: relative;
+        min-width: 0;
+        min-height: 0;
+        padding-top: clamp(12px, 3vw, 21px);
+      }
+
+      .marker-row {
+        position: absolute;
+        z-index: 2;
+        top: 0;
+        right: 0;
+        left: 0;
+        height: clamp(12px, 3vw, 20px);
+      }
+
+      .keyframe-button {
+        position: absolute;
+        top: 0;
+        display: flex;
+        width: clamp(16px, 3.6vw, 26px);
+        height: clamp(12px, 2.6vw, 18px);
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        translate: -50% 0;
+        border: 0;
+        background: transparent;
+        cursor: pointer;
+      }
+
+      .keyframe-button::before {
+        width: clamp(5px, 1.25vw, 8px);
+        aspect-ratio: 1;
+        rotate: 45deg;
+        border: 1px solid #8b8e80;
+        background: #24251f;
+        content: '';
+      }
+
+      .keyframe-button.is-current::before {
+        border-color: var(--acid);
+        background: var(--acid);
+        box-shadow: 0 0 8px rgba(217, 255, 84, .36);
+      }
+
+      .keyframe-button span {
+        position: absolute;
+        top: 0;
+        left: 64%;
+        color: #74776d;
+        font: 700 clamp(4px, .72vw, 5.5px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .06em;
+      }
+
+      .scrubber {
+        width: 100%;
+        height: clamp(11px, 2.8vw, 18px);
+        margin: 0;
+        cursor: ew-resize;
+        appearance: none;
+        background: transparent;
+      }
+
+      .scrubber::-webkit-slider-runnable-track {
+        height: 2px;
+        border-radius: 99px;
+        background: linear-gradient(90deg, var(--acid) 0 var(--scrub-progress, 0%), #34362e var(--scrub-progress, 0%) 100%);
+      }
+
+      .scrubber::-webkit-slider-thumb {
+        width: clamp(8px, 1.7vw, 12px);
+        height: clamp(8px, 1.7vw, 12px);
+        margin-top: calc((2px - clamp(8px, 1.7vw, 12px)) / 2);
+        border: 2px solid #141510;
+        border-radius: 50%;
+        background: var(--acid);
+        box-shadow: 0 0 0 1px rgba(217, 255, 84, .62);
+        appearance: none;
+      }
+
+      .scrubber::-moz-range-track { height: 2px; border-radius: 99px; background: #34362e; }
+      .scrubber::-moz-range-progress { height: 2px; border-radius: 99px; background: var(--acid); }
+      .scrubber::-moz-range-thumb { width: 10px; height: 10px; border: 2px solid #141510; border-radius: 50%; background: var(--acid); }
+
+      @media (prefers-reduced-motion: reduce) {
+        .actor-card,
+        .pose-ghost,
+        .keyframe-button::before { transition: none !important; }
+      }
+
+      @media (max-width: 220px), (max-height: 110px) {
+        .review-shell {
+          inset: 3px;
+          border-radius: 4px;
+          grid-template-rows: 12px minmax(0, 1fr) 22px;
+        }
+
+        .review-bar { padding: 0 4px; }
+        .review-title,
+        .review-meta { gap: 2px; }
+        .brand-dot { width: 3px; box-shadow: none; }
+        .review-title strong,
+        .review-meta strong { font-size: 3px; }
+        .review-title span,
+        .review-meta span { font-size: 2.3px; }
+        .review-meta span { display: none; }
+        .workspace { display: block; }
+        .sequence-viewport { width: 100%; height: 100%; border-right: 0; }
+        .inspector { display: none; }
+        .art-direction small,
+        .art-direction em { font-size: 2px; }
+        .art-direction strong { font-size: 8px; }
+        .pose-ghost { width: 3px; box-shadow: none; }
+        .actor-card { width: 24px; padding: 2px; border-radius: 3px; }
+        .actor-card small { font-size: 1.7px; }
+        .actor-card strong { font-size: 3.3px; }
+        .sequence-timeline { padding: 2px 4px 1px; gap: 1px; }
+        .transport { gap: 3px; }
+        .play-button { min-width: 25px; padding: 1px 3px; font-size: 2.4px; }
+        .pose-name { font-size: 2.7px; }
+        .time-readout { font-size: 2.4px; }
+        .timeline-grid { padding-top: 6px; }
+        .marker-row { height: 6px; }
+        .keyframe-button { width: 8px; height: 6px; }
+        .keyframe-button::before { width: 3px; }
+        .keyframe-button span { display: none; }
+        .scrubber { height: 6px; }
+        .scrubber::-webkit-slider-thumb { width: 5px; height: 5px; margin-top: -1.5px; border-width: 1px; }
+      }
     </style>
   </head>
   <body>
-    <main class="preview-stage" aria-label="A real Theatre.js project playing a saved visually authored keyframe sequence">
-      <section class="editor-panel" data-preview-mechanism="theatre-keyframe-sequence">
-        <div class="sequence-viewport">
-          <span class="object-label">SCENE / HERO CARD</span>
-          <svg class="motion-path" viewBox="0 0 296 87" preserveAspectRatio="none" aria-hidden="true"><path d="M62 71 C90 70 94 26 120 31 S188 76 214 63 S184 19 172 25 S105 75 62 71" /></svg>
-          <i class="pose-ghost" style="left: 62px; top: 71px"></i>
-          <i class="pose-ghost" style="left: 120px; top: 31px"></i>
-          <i class="pose-ghost" style="left: 214px; top: 63px"></i>
-          <i class="pose-ghost" style="left: 172px; top: 25px"></i>
-          <div class="actor-card" id="theatre-actor" aria-hidden="true"></div>
-        </div>
-        <div class="timeline" aria-hidden="true">
-          <span class="time-readout" id="time-readout">0.00 s</span>
-          <span class="track-label">X · Y · ROTATE · SCALE</span>
-          <div class="timeline-rail">
-            <i class="timeline-keyframe" data-position="0" style="left: 0%"></i>
-            <i class="timeline-keyframe" data-position="0.7" style="left: 23.333%"></i>
-            <i class="timeline-keyframe" data-position="1.5" style="left: 50%"></i>
-            <i class="timeline-keyframe" data-position="2.25" style="left: 75%"></i>
-            <i class="timeline-keyframe" data-position="3" style="left: 100%"></i>
+    <main class="preview-stage review-stage" id="review-stage" aria-label="Campaign motion design review with an authored five-pose Theatre.js sequence">
+      <section class="review-shell" id="review-shell" data-preview-mechanism="theatre-keyframe-sequence">
+        <header class="review-bar">
+          <div class="review-title">
+            <i class="brand-dot" aria-hidden="true"></i>
+            <strong>Motion review</strong>
+            <span>Trail Series / 06</span>
           </div>
-          <i class="playhead" id="playhead"></i>
+          <div class="review-meta">
+            <span>Version</span>
+            <strong>Campaign lockup · v12</strong>
+          </div>
+        </header>
+
+        <div class="workspace">
+          <section class="sequence-viewport" id="sequence-viewport" aria-label="Campaign artboard">
+            <i class="safe-frame" aria-hidden="true"></i>
+            <div class="art-direction" aria-hidden="true">
+              <small>Northstar Field Notes / Summer 2026</small>
+              <strong>Move<br />Light</strong>
+              <em>Launch sting · 3.00 s</em>
+            </div>
+            <svg class="motion-path" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M18 70 C25 61 29 40 38 33 S50 45 58 52 S70 40 76 26 S64 43 48 64" />
+            </svg>
+            <i class="pose-ghost is-current" data-pose="0" aria-hidden="true"></i>
+            <i class="pose-ghost" data-pose="1" aria-hidden="true"></i>
+            <i class="pose-ghost" data-pose="2" aria-hidden="true"></i>
+            <i class="pose-ghost" data-pose="3" aria-hidden="true"></i>
+            <i class="pose-ghost" data-pose="4" aria-hidden="true"></i>
+            <button class="actor-card" id="theatre-actor" type="button" aria-label="Play the campaign lockup review" aria-pressed="false">
+              <small>Field Notes 06</small>
+              <strong>Find<br />the signal</strong>
+            </button>
+          </section>
+
+          <aside class="inspector" aria-label="Motion review details">
+            <div>
+              <span class="inspector-kicker">Decision pass</span>
+              <h1>Lockup reveal</h1>
+            </div>
+            <div class="pose-summary">
+              <strong class="pose-count"><span id="pose-index">01</span> / 05 authored poses</strong>
+              <div>
+                <span class="note-label">Review note</span>
+                <p class="review-note" id="review-note">Arrival holds low so the campaign title owns the opening frame.</p>
+              </div>
+            </div>
+          </aside>
         </div>
+
+        <section class="sequence-timeline" aria-label="Authored sequence controls">
+          <div class="transport">
+            <button class="play-button" id="play-button" type="button" aria-pressed="false">Play review</button>
+            <div class="transport-copy">
+              <strong class="pose-name" id="pose-name">01 · Arrival</strong>
+              <span class="time-readout" id="time-readout">0.00 / 3.00 s</span>
+            </div>
+          </div>
+          <div class="timeline-grid">
+            <div class="marker-row" aria-label="Keyframe poses">
+              <button class="keyframe-button is-current" type="button" data-index="0" data-position="0" style="left: 0%" aria-label="Go to pose 1, Arrival"><span>01</span></button>
+              <button class="keyframe-button" type="button" data-index="1" data-position="0.7" style="left: 23.333%" aria-label="Go to pose 2, Lift"><span>02</span></button>
+              <button class="keyframe-button" type="button" data-index="2" data-position="1.5" style="left: 50%" aria-label="Go to pose 3, Cross"><span>03</span></button>
+              <button class="keyframe-button" type="button" data-index="3" data-position="2.25" style="left: 75%" aria-label="Go to pose 4, Peak"><span>04</span></button>
+              <button class="keyframe-button" type="button" data-index="4" data-position="3" style="left: 100%" aria-label="Go to pose 5, Resolve"><span>05</span></button>
+            </div>
+            <input class="scrubber" id="sequence-scrubber" type="range" min="0" max="3" step="0.01" value="0" aria-label="Scrub campaign motion sequence" aria-valuetext="0.00 seconds, Arrival" />
+          </div>
+        </section>
       </section>
-      <span class="library-badge">Theatre.js · saved sequence</span>
-      <span class="scene-caption">authored values travel through five keyed poses</span>
     </main>
     <script type="module" src="./src/theatre-keyframe-demo.js"></script>
   </body>

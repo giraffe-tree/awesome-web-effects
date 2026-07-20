@@ -250,6 +250,15 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.up()
             elif index == 28:
                 page.mouse.move(330, 190)
+        elif demo["id"] == "track-card-play-state-handoff":
+            if index == 3:
+                page.mouse.click(276, 64)
+            elif index == 11:
+                page.mouse.click(160, 120)
+            elif index == 20:
+                page.mouse.click(260, 120)
+            elif index == 29:
+                page.mouse.click(276, 64)
         page.evaluate("time => window.__setPreviewTime(time)", preview_time)
         frame_path = frame_root / f"{index:04d}.png"
         page.screenshot(path=str(frame_path), type="png")
@@ -339,6 +348,20 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or abs(interaction["y"] - .5) > .001
         ):
             raise RuntimeError(f"{demo['id']} did not capture real hover, drag, release, and centered recovery: {interaction!r}")
+    elif demo["id"] == "track-card-play-state-handoff":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            interaction["automaticHandoff"]
+            or interaction["inputCount"] < 4
+            or interaction["inputKind"] != "mouse"
+            or interaction["selected"] != 2
+            or interaction["playing"]
+            or interaction["mode"] != "paused"
+            or not interaction["coversReady"]
+            or min(interaction["progress"]) <= 0
+            or interaction["completedTracks"] != 0
+        ):
+            raise RuntimeError(f"{demo['id']} did not preserve three user-driven play-state handoffs and final pause: {interaction!r}")
 
     minimum_unique = min(6, max(2, frame_count // 6))
     if len(hashes) < minimum_unique:

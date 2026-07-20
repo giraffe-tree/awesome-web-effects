@@ -1,3 +1,265 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>Motion — Track Card Play-state Handoff</title><link rel="stylesheet" href="./shared.css"/><style>
-:root{--preview-background:#121014}.track-stage{background:linear-gradient(145deg,#151116,#281b29);color:#fff}.track-title{position:absolute;left:16px;top:42px;font:900 17px/.9 Georgia,serif;letter-spacing:-.05em}.track-title small{display:block;margin-top:6px;color:#a48ea7;font:800 6px/1 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase}.track-list{position:absolute;left:16px;right:16px;top:74px;display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.track-card{position:relative;height:76px;padding:7px;border:1px solid #ffffff1e;border-radius:12px;background:#ffffff09;color:#fff;text-align:left;cursor:pointer;overflow:hidden}.record{width:38px;height:38px;border-radius:50%;background:repeating-radial-gradient(circle,#111 0 3px,#392c3b 4px 6px);box-shadow:inset 0 0 0 10px #0004}.record::after{content:"";display:block;width:8px;height:8px;margin:15px;border-radius:50%;background:var(--tone)}.track-card b{position:absolute;left:8px;bottom:9px;font:900 6px/1 ui-monospace,monospace;letter-spacing:.07em;text-transform:uppercase}.track-progress{position:absolute;left:54px;right:7px;top:25px;height:2px;background:#ffffff17}.track-progress::after{content:"";display:block;width:100%;height:100%;background:var(--tone);transform:scaleX(var(--p,0));transform-origin:left}.track-card[aria-pressed="true"]{border-color:var(--tone);background:#ffffff12}.scene-caption{display:none}
-</style></head><body><main class="preview-stage track-stage"><div class="track-title">ONE TRACK WAKES<br/>AS ANOTHER RESTS<small>cover · control · progress hand off together</small></div><div class="track-list"><button class="track-card" style="--tone:#ff7b9b" aria-pressed="true"><i class="record"></i><i class="track-progress"></i><b>Soft current</b></button><button class="track-card" style="--tone:#71e8d1" aria-pressed="false"><i class="record"></i><i class="track-progress"></i><b>Night glass</b></button><button class="track-card" style="--tone:#f5d568" aria-pressed="false"><i class="record"></i><i class="track-progress"></i><b>Slow flare</b></button></div><span class="library-badge">Motion · coordinated play state</span><span class="scene-caption">the whole card wakes, progresses and yields to the next track</span></main><script type="module" src="./src/track-card-play-state-handoff-demo.js"></script></body></html>
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Motion — Track Card Play-state Handoff</title>
+    <link rel="stylesheet" href="./shared.css" />
+    <style>
+      :root { --preview-background: #121014; }
+
+      .track-stage {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        min-width: 100%;
+        min-height: 100%;
+        color: #fff;
+        background:
+          radial-gradient(circle at 78% 8%, rgba(117, 214, 199, .11), transparent 32%),
+          linear-gradient(145deg, #121013, #261b27);
+      }
+
+      .track-header {
+        position: absolute;
+        z-index: 8;
+        left: 16px;
+        right: 16px;
+        top: 39px;
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .track-title {
+        margin: 0;
+        font: 850 clamp(12px, 4.6vw, 22px)/.86 Georgia, serif;
+        letter-spacing: -.045em;
+      }
+
+      .track-title small {
+        display: block;
+        margin-top: 5px;
+        color: rgba(213, 192, 215, .66);
+        font: 800 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+      }
+
+      .transport-toggle {
+        flex: 0 0 auto;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        min-width: 54px;
+        padding: 5px 7px;
+        border: 1px solid rgba(255, 255, 255, .26);
+        border-radius: 999px;
+        color: #fff;
+        background: rgba(16, 12, 17, .64);
+        font: 800 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        cursor: pointer;
+        backdrop-filter: blur(10px);
+      }
+
+      .transport-toggle::before {
+        content: "▶";
+        color: var(--active-tone, #ff7b9b);
+        font-size: 6px;
+      }
+
+      .track-stage[data-playing="true"] .transport-toggle::before { content: "Ⅱ"; }
+
+      .track-list {
+        position: absolute;
+        z-index: 5;
+        left: 16px;
+        right: 16px;
+        top: 73px;
+        bottom: 13px;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: clamp(5px, 2vw, 10px);
+        min-height: 0;
+      }
+
+      .track-card {
+        position: relative;
+        display: grid;
+        grid-template-rows: minmax(0, 1fr) auto;
+        min-width: 0;
+        min-height: 0;
+        padding: 0;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, .16);
+        border-radius: clamp(8px, 3vw, 15px);
+        color: #fff;
+        background: rgba(255, 255, 255, .055);
+        text-align: left;
+        cursor: pointer;
+        isolation: isolate;
+        appearance: none;
+        transform-origin: center bottom;
+      }
+
+      .track-card:focus-visible {
+        outline: 1px solid #fff;
+        outline-offset: 2px;
+      }
+
+      .track-cover {
+        position: relative;
+        min-height: 0;
+        overflow: hidden;
+        background: #242027;
+      }
+
+      .track-cover::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, transparent 48%, rgba(10, 8, 11, .62));
+        pointer-events: none;
+      }
+
+      .track-cover img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        min-height: 100%;
+        object-fit: cover;
+        filter: saturate(.82) brightness(.82);
+        transform: scale(1.015);
+        transition: filter .18s ease, transform .32s cubic-bezier(.2, .8, .2, 1);
+        pointer-events: none;
+      }
+
+      .track-index,
+      .track-play-mark {
+        position: absolute;
+        z-index: 2;
+        top: 6px;
+        font: 850 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+      }
+
+      .track-index { left: 7px; color: rgba(255, 255, 255, .72); }
+      .track-play-mark { right: 7px; color: var(--tone); opacity: 0; }
+
+      .track-meta {
+        position: relative;
+        min-width: 0;
+        padding: 7px 7px 8px;
+        background: rgba(14, 11, 15, .92);
+      }
+
+      .track-meta b,
+      .track-meta small {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .track-meta b {
+        font: 850 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .055em;
+        text-transform: uppercase;
+      }
+
+      .track-meta small {
+        margin-top: 4px;
+        color: rgba(255, 255, 255, .5);
+        font: 650 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+      }
+
+      .track-progress {
+        position: absolute;
+        z-index: 3;
+        left: 7px;
+        right: 7px;
+        bottom: 4px;
+        height: 1px;
+        overflow: hidden;
+        background: rgba(255, 255, 255, .16);
+      }
+
+      .track-progress::after {
+        content: "";
+        display: block;
+        width: 100%;
+        height: 100%;
+        background: var(--tone);
+        scale: var(--p, 0) 1;
+        transform-origin: left;
+      }
+
+      .track-card[aria-pressed="true"] {
+        border-color: color-mix(in srgb, var(--tone) 72%, white 12%);
+        background: rgba(255, 255, 255, .11);
+        box-shadow: 0 9px 24px rgba(0, 0, 0, .24);
+      }
+
+      .track-card[aria-pressed="true"] .track-cover img {
+        filter: saturate(1.06) brightness(1.04);
+        transform: scale(1.045);
+      }
+
+      .track-card[data-playing="true"] .track-play-mark { opacity: 1; }
+      .library-badge { background: rgba(18, 13, 19, .78); }
+      .scene-caption { display: none; }
+
+      @media (max-width: 180px) {
+        .track-header { left: 7px; right: 7px; top: 28px; align-items: center; }
+        .track-title { font-size: 8px; }
+        .track-title small { display: none; }
+        .transport-toggle { min-width: 31px; padding: 3px 5px; font-size: 4px; }
+        .transport-label { display: none; }
+        .track-list { left: 7px; right: 7px; top: 42px; bottom: 5px; gap: 3px; }
+        .track-card { border-radius: 5px; }
+        .track-index, .track-play-mark { top: 3px; font-size: 3px; }
+        .track-index { left: 4px; }
+        .track-play-mark { right: 4px; }
+        .track-meta { padding: 3px 4px 5px; }
+        .track-meta b { font-size: 3.5px; }
+        .track-meta small { display: none; }
+        .track-progress { left: 4px; right: 4px; bottom: 2px; }
+        .library-badge { top: 6px; left: 7px; padding: 3px 5px; font-size: 5px; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .track-cover img { transition: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="preview-stage track-stage" id="track-stage" data-preview-mechanism="motion-human-track-state-handoff" data-playing="false" style="--active-tone:#ff7b9b">
+      <header class="track-header">
+        <h1 class="track-title">One track wakes as another rests.<small>Choose a cover · play state follows intentionally</small></h1>
+        <button class="transport-toggle" id="transport-toggle" type="button" aria-label="Play Soft Current" aria-pressed="false"><span class="transport-label">Play</span></button>
+      </header>
+      <div class="track-list" role="listbox" aria-label="Field Notes track selection">
+        <button class="track-card" style="--tone:#ff7b9b" type="button" role="option" aria-selected="true" aria-pressed="true" data-track="0">
+          <span class="track-cover"><img src="./assets/aesthetic-wave-02/track-card-play-state-handoff/soft-current-cover.jpg" alt="Pale stone banks divided by a coral current" /><i class="track-index">01 / Coast</i><i class="track-play-mark">Playing</i></span>
+          <span class="track-meta"><b>Soft Current</b><small>Tidal field recording · 09s study</small><i class="track-progress"></i></span>
+        </button>
+        <button class="track-card" style="--tone:#71e8d1" type="button" role="option" aria-selected="false" aria-pressed="false" data-track="1">
+          <span class="track-cover"><img src="./assets/aesthetic-wave-02/track-card-play-state-handoff/night-glass-cover.jpg" alt="A cyan glass pavilion reflected in dark water" /><i class="track-index">02 / Glass</i><i class="track-play-mark">Playing</i></span>
+          <span class="track-meta"><b>Night Glass</b><small>Architectural tone · 12s study</small><i class="track-progress"></i></span>
+        </button>
+        <button class="track-card" style="--tone:#f5d568" type="button" role="option" aria-selected="false" aria-pressed="false" data-track="2">
+          <span class="track-cover"><img src="./assets/aesthetic-wave-02/track-card-play-state-handoff/slow-flare-cover.jpg" alt="A stone ring aligned with the sun above a dry field" /><i class="track-index">03 / Light</i><i class="track-play-mark">Playing</i></span>
+          <span class="track-meta"><b>Slow Flare</b><small>Open-field resonance · 08s study</small><i class="track-progress"></i></span>
+        </button>
+      </div>
+      <span class="library-badge">Motion · human play-state handoff</span>
+    </main>
+    <script type="module" src="./src/track-card-play-state-handoff-demo.js"></script>
+  </body>
+</html>

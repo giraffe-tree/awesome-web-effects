@@ -714,17 +714,17 @@ export const effectExpansion100Specs = [
     "sourceUrl": "https://www.udio.com/",
     "difference": "切歌时旧卡减速休眠、新卡接棒苏醒，封面、进度、材质与播放控件作为一个状态切换。",
     "behavior": {
-      "trigger": "track selection / playback",
-      "response": "Hand off rotation, waveform, material glow, and play state between cards",
-      "timing": "coordinated exclusive playback state",
-      "layer": "track card rail"
+      "trigger": "track card click/tap or keyboard selection plus an explicit play/pause control",
+      "response": "Hand off cover emphasis, exclusive play state, control label, and independent progress between three cards",
+      "timing": "user-owned playback; selection handoff occurs only while the user has chosen to play",
+      "layer": "full-bleed responsive track card rail"
     },
     "implementation": {
       "projectId": "motiondivision-motion",
       "projectUrl": "https://github.com/motiondivision/motion",
       "library": "motion@12.42.2",
       "renderer": "dom",
-      "snippet": "cards.forEach((card, i) => card.setAttribute('aria-pressed', String(i === selected))); motions[selected].time = t;",
+      "snippet": "card.onclick = () => selectTrack(index); transport.onclick = () => setPlaying(!playing); renderProgress(selected, elapsed / durations[selected]);",
       "referenceUrl": "https://www.udio.com/"
     },
     "scores": {
@@ -738,8 +738,8 @@ export const effectExpansion100Specs = [
     },
     "rationaleZh": "需要完整材质苏醒/休眠才能超越普通播放器。",
     "batch": "A",
-    "demo": "三张唱片卡，点击新卡时旧唱片减速、新封面显色、波形接棒。",
-    "capture": "播放第一张 1s→点击第三张→停在双卡交接峰值→暂停第三张。",
+    "demo": "三张真实封面卡以独立进度保存播放状态；点击、触摸或键盘选择，显式播放后才把封面、控件、强调与进度交给新卡。",
+    "capture": "真实点击播放第一张→播放中依次选择第二、第三张→真实点击暂停；断言三条独立进度、最终选择与无自动交接。",
     "risk": {
       "level": "high",
       "detail": "创意余量仅 84；若素材与排版不足应在正式评分时删除。"

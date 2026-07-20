@@ -653,17 +653,17 @@ const existingEffects = [
     "addedIn": "2026-expansion",
     "research": null,
     "behavior": {
-      "trigger": "state change or animation frame",
-      "response": "Sketch-style creative coding loop",
-      "timing": "continuous loop",
-      "layer": "canvas or 2D surface"
+      "trigger": "real field-source drag, preset or density edit, keyboard adjustment, or explicit Run/Pause",
+      "response": "Recompose a p5 generative event poster around one movable signal source and chosen field rhythm",
+      "timing": "static-by-default direct editing plus a human-started, pausable live phase; no automatic draw loop or preview-clock mutation",
+      "layer": "credible poster canvas, typography-safe signal field, art-direction brief, presets, density control, and transport"
     },
-    "prompt": "Implement the \"Sketch-style creative coding loop\" (草图式创意编程循环) web interaction effect in the current project.\n\nUse p5.js (processing/p5.js) as the recommended implementation unless the existing stack makes a dependency-free equivalent more appropriate. Recreate this specific canvas interaction, not a generic animation.\n\nInteraction contract:\n- Trigger: state change or animation frame\n- Visual response: Sketch-style creative coding loop\n- Timing relationship: continuous loop\n- Page layer: canvas or 2D surface\n\nRequirements:\n- Integrate with the existing design system and component structure.\n- Support keyboard and touch input whenever the interaction is actionable.\n- Respect prefers-reduced-motion with a clear non-animated fallback.\n- Avoid layout shift, scroll traps, inaccessible focus behavior, and unnecessary dependencies.\n- Keep the implementation responsive and clean up listeners, timers, and animation instances.\n\nStart from this minimal API shape:\n\n```js\nimport p5 from 'p5';\nnew p5(p => { p.setup = () => p.createCanvas(320, 180); p.draw = () => p.circle(p.mouseX, p.mouseY, 40); });\n```\n\nReturn the working code, the files changed, and a short explanation of how to tune timing, easing, distance, and reduced-motion behavior.",
+    "prompt": "Implement the \"Sketch-style creative coding loop\" (草图式创意编程循环) as a useful generative-poster editor, not a self-running decorative waveform.\n\nUse p5.js (processing/p5.js) in instance mode to render a deterministic line field around a recognisable event-poster composition. Give the user a concrete art-direction task: move the field source away from critical type, choose a field rhythm, adjust line density, and optionally run or pause the live phase.\n\nInteraction contract:\n- Trigger: real pointer/touch drag on the poster, preset selection, native range input, Canvas arrow/Home keys, or explicit Run/Pause/Space\n- Visual response: redraw the same poster field from source X/Y, density, amplitude, frequency, curvature, and loop phase while typography and event details remain legible\n- Timing relationship: static direct editing by default; a live loop starts only after user intent and remains pausable; no automatic loop, preview-clock update, or synthetic event\n- Page layer: p5 Canvas poster, code-authored typography, art-direction brief, parameter evidence, presets, density, and transport\n\nRequirements:\n- Call `noLoop()` and render one verified static first frame without changing parameters or phase.\n- Use deterministic field math and expose a checksum/signature tied to the exact drawn parameters.\n- Support mouse/touch/pen drag, keyboard field movement, native range keys, presets, explicit start/pause, 320×180 and 144×81 previews, and prefers-reduced-motion discrete stepping.\n- Keep Canvas dimensions matched to its responsive surface and keep every control/readout/ARIA state synchronized.\n- Export runtime state that proves initial stillness, trusted input mix, redraw causes, loop lifecycle, field parameters/checksum, real p5 2D context, and absence of automatic changes.\n\nStart from this minimal API shape:\n\n```js\nimport p5 from 'p5';\nconst sketch = new p5(p => {\n  p.setup = () => { p.createCanvas(width, height); p.noLoop(); };\n  p.draw = () => drawPosterField(p, parameters);\n});\n```\n\nReturn the working code, the files changed, and a short explanation of how to tune density, source influence, wave frequency, curvature, loop speed, legibility, and reduced motion.",
     "sources": [
       {
         "projectId": "processing-p5-js",
         "recommended": true,
-        "snippet": "import p5 from 'p5';\nnew p5(p => { p.setup = () => p.createCanvas(320, 180); p.draw = () => p.circle(p.mouseX, p.mouseY, 40); });",
+        "snippet": "import p5 from 'p5';\nconst sketch = new p5(p => {\n  p.setup = () => { p.createCanvas(width, height); p.noLoop(); };\n  p.draw = () => drawPosterField(p, parameters);\n});",
         "preview": "captured/sketch-style-creative-coding-loop",
         "previewKind": "local-demo-capture",
         "demoPath": "preview-demos/dist/sketch-style-creative-coding-loop.html",
@@ -694,7 +694,7 @@ const existingEffects = [
       "total": 91,
       "decision": "admit",
       "reasonCode": "passed",
-      "rationaleZh": "多层波形、粒子与色彩构成稳定的生成艺术循环，既有风格也便于继续创作。"
+      "rationaleZh": "真实 p5 画布成为可编辑的活动海报信号场；用户拖动场源、切换节奏、调整密度并显式运行/暂停，首帧静止且每次绘制参数都有校验签名。"
     }
   },
   {

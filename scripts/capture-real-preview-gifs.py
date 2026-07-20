@@ -413,6 +413,47 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.locator('#route-map').click()
             elif index == 33:
                 page.wait_for_timeout(2_000)
+        elif demo["id"] == "sketch-style-creative-coding-loop":
+            if index == 3:
+                box = page.locator('#poster-surface').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * .72, box["y"] + box["height"] * .35)
+                page.mouse.down()
+            elif index == 4:
+                box = page.locator('#poster-surface').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * .31, box["y"] + box["height"] * .72, steps=5)
+            elif index == 5:
+                page.mouse.up()
+            elif index == 8:
+                page.locator('.preset-button[data-preset="surge"]').click()
+            elif index == 11:
+                page.locator('#density-control').focus()
+                page.keyboard.press("ArrowRight")
+                page.keyboard.press("ArrowRight")
+            elif index == 14:
+                page.locator('#loop-button').click()
+            elif index == 15:
+                page.wait_for_timeout(400)
+            elif index == 16:
+                page.locator('#loop-button').click()
+            elif index == 20:
+                page.locator('#p5-stage canvas').focus()
+                page.keyboard.press("ArrowLeft")
+            elif index == 21:
+                page.keyboard.press("ArrowUp")
+            elif index == 24:
+                page.keyboard.press("Space")
+            elif index == 25:
+                page.wait_for_timeout(300)
+            elif index == 26:
+                page.keyboard.press("Space")
+            elif index == 29:
+                page.locator('.preset-button[data-preset="ridge"]').click()
+            elif index == 32:
+                page.locator('#density-control').focus()
+                page.keyboard.press("End")
+            elif index == 34:
+                page.locator('#p5-stage canvas').focus()
+                page.keyboard.press("Home")
         elif demo["id"] == "blurhash-to-photo-progressive-reveal":
             pointer_x = 230 if .5 <= preview_time < 2.25 else 32
             page.mouse.move(pointer_x, 90)
@@ -980,6 +1021,41 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["currentFrame"] != interaction["frameLength"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture a real semantic Vivus route draw, interruption, keyboard trigger, and reset: {interaction!r}")
+    elif demo["id"] == "sketch-style-creative-coding-loop":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            interaction["automaticLoop"]
+            or interaction["automaticFieldChanges"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInput"]
+            or not interaction["userInitiatedChangesOnly"]
+            or not interaction["initialStaticVerified"]
+            or interaction["inputCount"] < 12
+            or interaction["pointerInputCount"] < 5
+            or interaction["keyboardInputCount"] < 7
+            or interaction["pointerDragCount"] < 1
+            or interaction["pointerMoveCount"] < 5
+            or interaction["keyboardAdjustCount"] < 3
+            or interaction["densityInputCount"] < 3
+            or interaction["presetClickCount"] < 2
+            or interaction["loopToggleCount"] < 4
+            or interaction["loopStartCount"] < 2
+            or interaction["loopPauseCount"] < 2
+            or interaction["loopFrameCount"] < 2
+            or interaction["currentPreset"] != "ridge"
+            or interaction["density"] != 22
+            or interaction["focusX"] != .5
+            or interaction["focusY"] != .5
+            or interaction["loopPhase"] <= .12
+            or interaction["isLooping"]
+            or interaction["phase"] != "edited"
+            or interaction["lastTrustedEvent"] != "field-key-adjust"
+            or not interaction["canvasSizeValidated"]
+            or not interaction["parametersValidated"]
+            or interaction["fieldChecksum"] <= 1
+            or len(interaction["fieldSignature"]) <= 16
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a real p5 poster edit across drag, presets, density, keyboard, and explicit loop transport: {interaction!r}")
     elif demo["id"] == "blurhash-to-photo-progressive-reveal":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__()")
         if interaction["pointerEvents"] < 3 or interaction["pointerOverPhoto"]:

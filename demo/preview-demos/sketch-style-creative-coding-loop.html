@@ -3,19 +3,491 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>p5.js — Sketch-style Creative Coding Loop</title>
+    <title>p5.js — Generative Poster Field Lab</title>
     <link rel="stylesheet" href="./shared.css" />
     <style>
-      :root { --preview-background: #071119; }
-      #p5-stage { position: absolute; inset: 0; }
-      #p5-stage canvas { width: 100% !important; height: 100% !important; }
+      :root {
+        --preview-background: #151611;
+        --paper: #efeede;
+        --ink: #171912;
+        --acid: #d8ff52;
+        --orange: #f06f42;
+        --line: rgba(239, 238, 222, .15);
+        color-scheme: dark;
+      }
+
+      button,
+      input { font: inherit; }
+
+      button { color: inherit; }
+
+      .poster-lab {
+        background:
+          radial-gradient(circle at 86% 10%, rgba(216, 255, 82, .08), transparent 27%),
+          linear-gradient(140deg, #191a14, #0f100c);
+      }
+
+      .lab-shell {
+        position: absolute;
+        inset: clamp(6px, 2.5vw, 18px);
+        display: grid;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        border: 1px solid rgba(240, 239, 223, .2);
+        border-radius: clamp(6px, 2.2vw, 18px);
+        background: #1a1b15;
+        box-shadow: 0 24px 64px rgba(0, 0, 0, .28);
+        grid-template-rows: clamp(30px, 11vh, 44px) minmax(0, 1fr) clamp(58px, 19vh, 74px);
+      }
+
+      .lab-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-width: 0;
+        padding: 0 clamp(10px, 2.5vw, 20px);
+        border-bottom: 1px solid var(--line);
+      }
+
+      .lab-title,
+      .lab-version {
+        display: flex;
+        min-width: 0;
+        align-items: center;
+        gap: clamp(5px, 1.2vw, 10px);
+      }
+
+      .lab-mark {
+        width: clamp(6px, 1.2vw, 9px);
+        aspect-ratio: 1;
+        flex: 0 0 auto;
+        rotate: 45deg;
+        background: var(--orange);
+      }
+
+      .lab-title strong,
+      .lab-version strong {
+        overflow: hidden;
+        font-size: clamp(7px, 1.55vw, 12px);
+        letter-spacing: -.02em;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .lab-title span,
+      .lab-version span {
+        color: #8e9185;
+        font: 700 clamp(4px, .86vw, 7px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+
+      .lab-workspace {
+        display: grid;
+        min-width: 0;
+        min-height: 0;
+        grid-template-columns: minmax(0, 1fr) clamp(132px, 27vw, 194px);
+      }
+
+      .poster-wrap {
+        min-width: 0;
+        min-height: 0;
+        padding: clamp(8px, 2vw, 16px);
+        border-right: 1px solid var(--line);
+        background: #22231c;
+      }
+
+      .poster-surface {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        border: 1px solid rgba(19, 21, 15, .52);
+        border-radius: clamp(4px, 1vw, 8px);
+        background: var(--paper);
+        cursor: crosshair;
+        touch-action: none;
+      }
+
+      .poster-surface:focus-within {
+        outline: 2px solid var(--acid);
+        outline-offset: 2px;
+      }
+
+      #p5-stage,
+      #p5-stage canvas {
+        position: absolute;
+        inset: 0;
+        display: block;
+        width: 100% !important;
+        height: 100% !important;
+      }
+
+      #p5-stage canvas {
+        outline: 0;
+        touch-action: none;
+      }
+
+      .poster-copy {
+        position: absolute;
+        z-index: 3;
+        inset: clamp(8px, 2.3vw, 18px);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        color: var(--ink);
+        pointer-events: none;
+      }
+
+      .poster-kicker,
+      .poster-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font: 820 clamp(4px, .83vw, 7px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .14em;
+        text-transform: uppercase;
+      }
+
+      .poster-title {
+        align-self: flex-start;
+        margin: 0;
+        font: 950 clamp(26px, 7.3vw, 64px)/.72 system-ui, sans-serif;
+        letter-spacing: -.085em;
+        text-transform: uppercase;
+      }
+
+      .poster-title span {
+        display: block;
+        margin-left: .52em;
+        color: transparent;
+        -webkit-text-stroke: 1px var(--ink);
+      }
+
+      .poster-mode {
+        display: inline-flex;
+        align-self: flex-end;
+        padding: clamp(4px, .9vw, 7px) clamp(6px, 1.3vw, 10px);
+        rotate: -3deg;
+        border-radius: 999px;
+        background: var(--ink);
+        color: var(--paper);
+        font: 850 clamp(4px, .9vw, 7px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .11em;
+        text-transform: uppercase;
+      }
+
+      .control-panel {
+        display: flex;
+        min-width: 0;
+        min-height: 0;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: clamp(11px, 2.4vw, 18px);
+        background: #171812;
+      }
+
+      .brief-label,
+      .control-label,
+      .parameter-name {
+        color: var(--orange);
+        font: 800 clamp(4px, .8vw, 6px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .14em;
+        text-transform: uppercase;
+      }
+
+      .control-panel h1 {
+        margin: clamp(5px, 1vw, 8px) 0 0;
+        color: #f0efe2;
+        font-size: clamp(13px, 2.8vw, 22px);
+        line-height: .95;
+        letter-spacing: -.055em;
+      }
+
+      .brief-copy {
+        max-width: 20em;
+        margin: clamp(6px, 1.2vw, 10px) 0 0;
+        color: #9ea095;
+        font-size: clamp(5px, 1vw, 8px);
+        line-height: 1.4;
+      }
+
+      .preset-group {
+        display: grid;
+        gap: clamp(5px, 1vw, 8px);
+      }
+
+      .preset-buttons {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: clamp(3px, .7vw, 5px);
+      }
+
+      .preset-button {
+        padding: clamp(5px, 1vw, 8px) 2px;
+        border: 1px solid #36382e;
+        border-radius: clamp(4px, .8vw, 7px);
+        background: #202119;
+        color: #9b9e91;
+        cursor: pointer;
+        font-size: clamp(5px, .9vw, 7px);
+        font-weight: 790;
+      }
+
+      .preset-button[aria-pressed="true"] {
+        border-color: rgba(216, 255, 82, .56);
+        background: rgba(216, 255, 82, .09);
+        color: var(--acid);
+      }
+
+      .preset-button:focus-visible,
+      .loop-button:focus-visible,
+      .density-control:focus-visible {
+        outline: 2px solid var(--acid);
+        outline-offset: 2px;
+      }
+
+      .parameter-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: clamp(4px, .8vw, 7px);
+      }
+
+      .parameter {
+        min-width: 0;
+        padding-top: clamp(5px, 1vw, 8px);
+        border-top: 1px solid #303128;
+      }
+
+      .parameter strong {
+        display: block;
+        margin-top: clamp(3px, .6vw, 5px);
+        overflow: hidden;
+        color: #f1f0e4;
+        font: 800 clamp(6px, 1.1vw, 9px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .control-strip {
+        display: grid;
+        min-width: 0;
+        align-items: center;
+        padding: clamp(8px, 1.7vw, 13px) clamp(10px, 2.5vw, 20px);
+        border-top: 1px solid var(--line);
+        background: #12130f;
+        grid-template-columns: auto minmax(110px, 1fr) auto;
+        gap: clamp(9px, 2vw, 16px);
+      }
+
+      .loop-button {
+        min-width: clamp(76px, 15vw, 108px);
+        padding: clamp(7px, 1.3vw, 10px) clamp(10px, 2vw, 16px);
+        border: 1px solid rgba(216, 255, 82, .5);
+        border-radius: 999px;
+        background: rgba(216, 255, 82, .08);
+        color: var(--acid);
+        cursor: pointer;
+        font-size: clamp(6px, 1.05vw, 8px);
+        font-weight: 840;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+      }
+
+      .density-field {
+        display: grid;
+        min-width: 0;
+        grid-template-columns: auto minmax(60px, 1fr) auto;
+        align-items: center;
+        gap: clamp(6px, 1.2vw, 10px);
+      }
+
+      .density-field label,
+      .density-value,
+      .interaction-hint,
+      .loop-state {
+        color: #93968b;
+        font: 760 clamp(5px, .9vw, 7px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .09em;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+
+      .density-value { color: #f0efe3; }
+
+      .density-control {
+        width: 100%;
+        height: clamp(14px, 2.8vw, 20px);
+        margin: 0;
+        cursor: ew-resize;
+        appearance: none;
+        background: transparent;
+      }
+
+      .density-control::-webkit-slider-runnable-track {
+        height: 2px;
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--acid) 0 var(--density-progress, 43%), #34362d var(--density-progress, 43%) 100%);
+      }
+
+      .density-control::-webkit-slider-thumb {
+        width: clamp(9px, 1.8vw, 13px);
+        height: clamp(9px, 1.8vw, 13px);
+        margin-top: calc((2px - clamp(9px, 1.8vw, 13px)) / 2);
+        border: 2px solid #12130f;
+        border-radius: 50%;
+        background: var(--acid);
+        box-shadow: 0 0 0 1px rgba(216, 255, 82, .56);
+        appearance: none;
+      }
+
+      .density-control::-moz-range-track { height: 2px; border-radius: 999px; background: #34362d; }
+      .density-control::-moz-range-progress { height: 2px; border-radius: 999px; background: var(--acid); }
+      .density-control::-moz-range-thumb { width: 10px; height: 10px; border: 2px solid #12130f; border-radius: 50%; background: var(--acid); }
+
+      .strip-meta {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: clamp(4px, .8vw, 6px);
+      }
+
+      .loop-state { color: var(--orange); }
+
+      @media (prefers-reduced-motion: reduce) {
+        .poster-mode,
+        .preset-button { transition: none !important; }
+      }
+
+      @media (max-width: 420px) {
+        .lab-shell {
+          inset: 6px;
+          grid-template-rows: 22px minmax(0, 1fr) 38px;
+        }
+
+        .lab-header { padding: 0 7px; }
+        .lab-workspace { grid-template-columns: minmax(0, 1fr) 84px; }
+        .poster-wrap { padding: 6px; }
+        .control-panel { padding: 7px; }
+        .brief-copy { display: none; }
+        .control-panel h1 { font-size: 10px; }
+        .preset-group { gap: 4px; }
+        .preset-button { padding: 4px 1px; font-size: 4px; }
+        .parameter-grid { gap: 3px; }
+        .parameter { padding-top: 4px; }
+        .parameter-name { font-size: 3px; }
+        .parameter strong { font-size: 5px; }
+        .control-strip { padding: 5px 7px; grid-template-columns: auto minmax(60px, 1fr) auto; gap: 7px; }
+        .loop-button { min-width: 57px; padding: 5px 7px; font-size: 5px; }
+        .interaction-hint { display: none; }
+      }
+
+      @media (max-width: 220px), (max-height: 105px) {
+        .lab-shell {
+          inset: 3px;
+          border-radius: 4px;
+          grid-template-rows: 11px minmax(0, 1fr) 20px;
+        }
+
+        .lab-header { padding: 0 4px; }
+        .lab-title,
+        .lab-version { gap: 2px; }
+        .lab-mark { width: 3px; }
+        .lab-title strong,
+        .lab-version strong { font-size: 3px; }
+        .lab-title span,
+        .lab-version span { font-size: 2px; }
+        .lab-version span { display: none; }
+        .lab-workspace { display: block; }
+        .poster-wrap { width: 100%; height: 100%; padding: 3px; border-right: 0; }
+        .poster-surface { border-radius: 2px; }
+        .control-panel { display: none; }
+        .poster-copy { inset: 4px; }
+        .poster-kicker,
+        .poster-footer { font-size: 1.8px; }
+        .poster-title { font-size: 9px; }
+        .poster-mode { padding: 1px 2px; font-size: 1.7px; }
+        .control-strip { padding: 2px 4px; grid-template-columns: auto minmax(30px, 1fr) auto; gap: 4px; }
+        .loop-button { min-width: 25px; padding: 2px 3px; font-size: 2.3px; }
+        .density-field { grid-template-columns: minmax(25px, 1fr) auto; gap: 3px; }
+        .density-field label { display: none; }
+        .density-value,
+        .loop-state { font-size: 2.2px; }
+        .density-control { height: 6px; }
+        .density-control::-webkit-slider-thumb { width: 5px; height: 5px; margin-top: -1.5px; border-width: 1px; }
+        .strip-meta { gap: 1px; }
+      }
     </style>
   </head>
   <body>
-    <main class="preview-stage" aria-label="A live p5.js generative creative-coding sketch">
-      <div id="p5-stage" data-preview-mechanism="p5-instance-sketch"></div>
-      <span class="library-badge">p5.js · instance sketch</span>
-      <span class="scene-caption">draw loop turns math into a living field</span>
+    <main class="preview-stage poster-lab" id="poster-lab" aria-label="Interactive p5.js generative poster field lab">
+      <section class="lab-shell" id="lab-shell" data-preview-mechanism="p5-instance-generative-poster">
+        <header class="lab-header">
+          <div class="lab-title">
+            <i class="lab-mark" aria-hidden="true"></i>
+            <strong>Field Poster Lab</strong>
+            <span>Generative system 04</span>
+          </div>
+          <div class="lab-version">
+            <span>Output</span>
+            <strong>Trail Relay · 06</strong>
+          </div>
+        </header>
+
+        <div class="lab-workspace">
+          <div class="poster-wrap">
+            <section class="poster-surface" id="poster-surface" aria-label="Generated event poster; drag to move the signal field">
+              <div id="p5-stage"></div>
+              <div class="poster-copy" aria-hidden="true">
+                <div class="poster-kicker"><span>Northstar Running Club</span><span>10.18 / Ridge Loop</span></div>
+                <h2 class="poster-title">After<span>Dark</span></h2>
+                <span class="poster-mode" id="poster-mode">Drift field</span>
+                <div class="poster-footer"><span>Trail relay 06</span><span>19:30 — 04:10</span></div>
+              </div>
+            </section>
+          </div>
+
+          <aside class="control-panel" aria-label="Poster field controls">
+            <div>
+              <span class="brief-label">Art direction task</span>
+              <h1>Balance the signal</h1>
+              <p class="brief-copy">Move the field source away from the title, then choose a rhythm that keeps the event details clear.</p>
+            </div>
+
+            <div class="preset-group">
+              <span class="control-label">Field rhythm</span>
+              <div class="preset-buttons">
+                <button class="preset-button" type="button" data-preset="drift" aria-pressed="true">Drift</button>
+                <button class="preset-button" type="button" data-preset="surge" aria-pressed="false">Surge</button>
+                <button class="preset-button" type="button" data-preset="ridge" aria-pressed="false">Ridge</button>
+              </div>
+            </div>
+
+            <div class="parameter-grid" aria-label="Current field values">
+              <div class="parameter"><span class="parameter-name">Source X</span><strong id="focus-x">66%</strong></div>
+              <div class="parameter"><span class="parameter-name">Source Y</span><strong id="focus-y">46%</strong></div>
+              <div class="parameter"><span class="parameter-name">Amplitude</span><strong id="amplitude">34</strong></div>
+            </div>
+          </aside>
+        </div>
+
+        <div class="control-strip">
+          <button class="loop-button" id="loop-button" type="button" aria-pressed="false">Run field</button>
+          <div class="density-field">
+            <label for="density-control">Line density</label>
+            <input class="density-control" id="density-control" type="range" min="8" max="22" step="1" value="14" aria-valuetext="14 contour lines" />
+            <output class="density-value" id="density-value" for="density-control">14 lines</output>
+          </div>
+          <div class="strip-meta">
+            <span class="interaction-hint">Drag field · arrows move · space runs</span>
+            <span class="loop-state" id="loop-state">Static frame</span>
+          </div>
+        </div>
+      </section>
     </main>
     <script type="module" src="./src/p5-sketch-demo.js"></script>
   </body>

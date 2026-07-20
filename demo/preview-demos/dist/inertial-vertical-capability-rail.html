@@ -1,48 +1,296 @@
 <!doctype html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Motion — Inertial Vertical Capability Rail</title>
-  <style>
-    :root { --preview-background:#f4efe5; color-scheme:light; }
-    .rail-stage { background:linear-gradient(135deg,#f7f2e8,#e5ddcb); color:#151817; }
-    .rail-title { position:absolute; left:18px; top:44px; width:110px; margin:0; font:900 22px/.92 Georgia,serif; letter-spacing:-.055em; }
-    .rail-title small { display:block; margin-top:8px; font:800 6px/1.4 ui-monospace,monospace; letter-spacing:.12em; text-transform:uppercase; color:#775d50; }
-    .rail-window { position:absolute; right:16px; top:25px; width:157px; height:137px; overflow:hidden; border:1px solid #251d1730; border-radius:17px; background:#191c1b; box-shadow:0 20px 34px #5e4c3e42; touch-action:none; cursor:grab; }
-    .rail-window:active { cursor:grabbing; }
-    .capability-rail { position:absolute; inset:0 8px auto; display:grid; gap:7px; padding:10px 0 70px; will-change:transform; }
-    .capability-card { position:relative; height:50px; padding:9px 10px; overflow:hidden; border:1px solid #ffffff18; border-radius:11px; background:linear-gradient(135deg,#2b302e,#191c1b); color:#f9f1e6; }
-    .capability-card::after { content:""; position:absolute; right:-14px; top:-18px; width:58px; height:58px; border-radius:50%; background:var(--tone); filter:blur(1px); opacity:.72; }
-    .capability-card b { position:relative; z-index:2; display:block; font:900 8px/1 ui-monospace,monospace; letter-spacing:.08em; text-transform:uppercase; }
-    .capability-card span { position:relative; z-index:2; display:block; margin-top:7px; width:75%; height:3px; border-radius:9px; background:#ffffff35; }
-    .rail-gesture { position:absolute; z-index:5; right:7px; top:56px; width:2px; height:32px; border-radius:9px; background:#ffffff20; }
-    .rail-gesture::before { content:""; position:absolute; inset:0; border-radius:inherit; background:#ffbf47; transform:scaleY(var(--velocity,.3)); transform-origin:top; }
-    .rail-mode { position:absolute; left:19px; bottom:24px; font:900 6px/1 ui-monospace,monospace; letter-spacing:.12em; color:#715e52; text-transform:uppercase; }
-    .rail-stage .library-badge { background:#f7f2e8d8; border-color:#251d172b; color:#151817; }
-    .scene-caption { display:none; }
-  </style>
-  <script type="module" crossorigin src="./assets/inertial-vertical-capability-rail-1tLVKkg_.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
-  <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
-  <link rel="modulepreload" crossorigin href="./assets/batch-a-qa-CFcoNLob.js">
-  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head>
-<body>
-  <main class="preview-stage rail-stage" aria-label="A vertical capability rail can be thrown with inertia before resuming a slow automatic drift">
-    <h1 class="rail-title">THROW<br/>THE<br/>INDEX<small>grab · release · decay · resume</small></h1>
-    <div class="rail-window" id="rail-window" tabindex="0" aria-label="Drag vertically to throw the capability rail">
-      <div class="capability-rail" id="capability-rail">
-        <article class="capability-card" style="--tone:#ff6b54"><b>Signal mapping</b><span></span><span></span></article>
-        <article class="capability-card" style="--tone:#66d6ba"><b>Scene synthesis</b><span></span><span></span></article>
-        <article class="capability-card" style="--tone:#8d78ff"><b>Spatial memory</b><span></span><span></span></article>
-        <article class="capability-card" style="--tone:#ffd45a"><b>Motion direction</b><span></span><span></span></article>
-      </div>
-      <i class="rail-gesture" id="rail-gesture" aria-hidden="true"></i>
-    </div>
-    <span class="rail-mode" id="rail-mode">automatic drift</span>
-    <span class="library-badge">Motion · inertial pointer rail</span>
-    <span class="scene-caption">direct drag releases into decay, then restores a quiet drift</span>
-  </main>
-</body>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Motion — Inertial Vertical Capability Rail</title>
+    <style>
+      :root { --preview-background: #eee9de; color-scheme: light; }
+
+      .rail-stage {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        min-width: 100%;
+        min-height: 100%;
+        overflow: hidden;
+        color: #191c1a;
+        background:
+          radial-gradient(circle at 13% 16%, rgba(255, 255, 255, .8), transparent 38%),
+          linear-gradient(135deg, #f4f0e8, #ded6c7);
+      }
+
+      .rail-intro {
+        position: absolute;
+        z-index: 3;
+        left: clamp(16px, 5vw, 38px);
+        top: 50%;
+        width: min(34%, 235px);
+        translate: 0 -55%;
+      }
+
+      .rail-eyebrow,
+      .rail-intro p,
+      .rail-mode,
+      .capability-meta,
+      .capability-tags {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        text-transform: uppercase;
+      }
+
+      .rail-eyebrow {
+        color: #8a5a43;
+        font-size: 6px;
+        font-weight: 900;
+        letter-spacing: .16em;
+      }
+
+      .rail-intro h1 {
+        margin: 8px 0 0;
+        font: 900 clamp(22px, 6.5vw, 42px)/.82 Georgia, serif;
+        letter-spacing: -.075em;
+      }
+
+      .rail-intro p {
+        margin: 12px 0 0;
+        max-width: 190px;
+        color: rgba(25, 28, 26, .58);
+        font-size: 6px;
+        font-weight: 800;
+        line-height: 1.45;
+        letter-spacing: .08em;
+      }
+
+      .rail-window {
+        position: absolute;
+        z-index: 2;
+        top: 7%;
+        right: 4%;
+        width: 55%;
+        height: 86%;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, .16);
+        border-radius: clamp(14px, 3vw, 26px);
+        color: #f7f1e7;
+        background: #171b19;
+        box-shadow: 0 24px 58px rgba(68, 50, 37, .25);
+        outline: none;
+        cursor: grab;
+        touch-action: none;
+        overscroll-behavior: contain;
+        user-select: none;
+      }
+
+      .rail-window[data-phase="dragging"] { cursor: grabbing; }
+      .rail-window:focus-visible { box-shadow: 0 0 0 2px rgba(133, 85, 61, .5), 0 24px 58px rgba(68, 50, 37, .25); }
+
+      .rail-topbar {
+        position: absolute;
+        z-index: 5;
+        left: 14px;
+        right: 14px;
+        top: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        pointer-events: none;
+      }
+
+      .rail-topbar span {
+        color: rgba(255, 255, 255, .5);
+        font: 800 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .11em;
+        text-transform: uppercase;
+      }
+
+      .capability-rail {
+        position: absolute;
+        inset: 0 13px auto;
+        display: grid;
+        gap: clamp(7px, 2vh, 11px);
+        padding: 30px 0 46px;
+        margin: 0;
+        list-style: none;
+        will-change: transform;
+      }
+
+      .capability-card {
+        position: relative;
+        min-height: clamp(62px, 22vh, 98px);
+        padding: clamp(10px, 2.8vh, 15px);
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, .11);
+        border-radius: clamp(10px, 2vw, 17px);
+        color: #f7f1e7;
+        background:
+          radial-gradient(circle at 100% 0, color-mix(in srgb, var(--tone) 48%, transparent), transparent 37%),
+          linear-gradient(145deg, #2a302d, #1c211f);
+      }
+
+      .capability-card[aria-current="true"] {
+        border-color: color-mix(in srgb, var(--tone) 70%, white);
+        background:
+          radial-gradient(circle at 100% 0, color-mix(in srgb, var(--tone) 64%, transparent), transparent 42%),
+          linear-gradient(145deg, #303733, #1e2421);
+      }
+
+      .capability-meta {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        color: rgba(255, 255, 255, .52);
+        font-size: 5px;
+        font-weight: 800;
+        letter-spacing: .11em;
+      }
+
+      .capability-card h2 {
+        margin: 9px 0 0;
+        max-width: 78%;
+        font: 850 clamp(11px, 2.6vw, 19px)/.93 system-ui, sans-serif;
+        letter-spacing: -.045em;
+      }
+
+      .capability-card p {
+        margin: 8px 0 0;
+        max-width: 83%;
+        color: rgba(255, 255, 255, .56);
+        font: 600 clamp(5px, 1.15vw, 8px)/1.4 system-ui, sans-serif;
+      }
+
+      .capability-tags {
+        display: flex;
+        gap: 5px;
+        margin-top: 10px;
+        color: color-mix(in srgb, var(--tone) 72%, white);
+        font-size: 4px;
+        font-weight: 900;
+        letter-spacing: .07em;
+      }
+
+      .rail-scrollbar {
+        position: absolute;
+        z-index: 6;
+        top: 30px;
+        right: 5px;
+        bottom: 12px;
+        width: 2px;
+        overflow: hidden;
+        border-radius: 9px;
+        background: rgba(255, 255, 255, .11);
+        pointer-events: none;
+      }
+
+      .rail-thumb {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 24%;
+        border-radius: inherit;
+        background: #e1a65f;
+        will-change: transform;
+      }
+
+      .rail-mode {
+        position: absolute;
+        z-index: 4;
+        left: clamp(16px, 5vw, 38px);
+        bottom: clamp(17px, 6vh, 30px);
+        color: rgba(61, 43, 34, .62);
+        font-size: 6px;
+        font-weight: 900;
+        letter-spacing: .12em;
+      }
+
+      .rail-stage .library-badge {
+        border-color: rgba(37, 29, 23, .15);
+        color: #191c1a;
+        background: rgba(247, 242, 232, .8);
+      }
+
+      .scene-caption { display: none; }
+
+      @media (max-width: 180px), (max-height: 100px) {
+        .rail-intro { z-index: 7; left: 7px; top: 5px; width: auto; translate: none; pointer-events: none; }
+        .rail-eyebrow, .rail-intro p { display: none; }
+        .rail-intro h1 { margin: 0; font: 900 7px/1 system-ui, sans-serif; letter-spacing: -.03em; text-transform: uppercase; }
+        .rail-window { left: 5px; right: 5px; top: 16px; bottom: 4px; width: auto; height: auto; border-radius: 7px; }
+        .rail-topbar { left: 7px; right: 7px; top: 4px; }
+        .rail-topbar span { font-size: 3px; }
+        .capability-rail { inset: 0 7px auto; gap: 4px; padding: 14px 0 23px; }
+        .capability-card { min-height: 31px; padding: 6px 7px; border-radius: 5px; }
+        .capability-meta { font-size: 3px; }
+        .capability-card h2 { margin-top: 4px; max-width: 88%; font-size: 7px; }
+        .capability-card p, .capability-tags { display: none; }
+        .rail-scrollbar { top: 14px; right: 2px; bottom: 5px; width: 1px; }
+        .rail-mode { z-index: 7; left: auto; right: 6px; top: 5px; bottom: auto; font-size: 3px; }
+        .library-badge { display: none; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .capability-rail, .rail-thumb { will-change: auto; }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/inertial-vertical-capability-rail-B6O0VgN7.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+    <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
+    <link rel="modulepreload" crossorigin href="./assets/batch-c-utils-g_3IBZ2b.js">
+    <link rel="modulepreload" crossorigin href="./assets/batch-a-qa-CFcoNLob.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main class="preview-stage rail-stage">
+      <section class="rail-intro" aria-hidden="true">
+        <span class="rail-eyebrow">Field index / 2026</span>
+        <h1>Build the capability, not the theatre.</h1>
+        <p>Drag the index. Release to coast. Use arrows for a precise scan.</p>
+      </section>
+      <section class="rail-window" id="rail-window" tabindex="0" data-preview-mechanism="motion-human-inertial-capability-index" data-phase="idle" aria-label="Capability index. Drag vertically, or use Arrow Up, Arrow Down, Home, and End." aria-activedescendant="capability-01">
+        <div class="rail-topbar" aria-hidden="true"><span>Capability / format</span><span>Outcome</span></div>
+        <ol class="capability-rail" id="capability-rail">
+          <li class="capability-card" id="capability-01" data-kind="advisory" style="--tone:#e98962" aria-current="true">
+            <div class="capability-meta"><span>01 · Advisory</span><span>2 weeks</span></div>
+            <h2>Product narrative intensive</h2>
+            <p>Turn a scattered feature set into one testable story, page hierarchy, and launch brief.</p>
+            <div class="capability-tags"><span>Positioning</span><span>·</span><span>Prototype brief</span></div>
+          </li>
+          <li class="capability-card" id="capability-02" data-kind="course" style="--tone:#68cdb0" aria-current="false">
+            <div class="capability-meta"><span>02 · Studio course</span><span>4 sessions</span></div>
+            <h2>Motion systems lab</h2>
+            <p>Design reusable timing, hierarchy, and state transitions around a working interface.</p>
+            <div class="capability-tags"><span>Motion tokens</span><span>·</span><span>Critique</span></div>
+          </li>
+          <li class="capability-card" id="capability-03" data-kind="service" style="--tone:#8e82ea" aria-current="false">
+            <div class="capability-meta"><span>03 · Delivery</span><span>3–5 weeks</span></div>
+            <h2>Interface prototype sprint</h2>
+            <p>Resolve a high-risk flow as a production-shaped prototype with evidence and handoff notes.</p>
+            <div class="capability-tags"><span>Interaction</span><span>·</span><span>User test</span></div>
+          </li>
+          <li class="capability-card" id="capability-04" data-kind="workshop" style="--tone:#e6b957" aria-current="false">
+            <div class="capability-meta"><span>04 · Team workshop</span><span>1 day</span></div>
+            <h2>Design engineering alignment</h2>
+            <p>Map visual intent to constraints, component contracts, and a shared quality threshold.</p>
+            <div class="capability-tags"><span>System map</span><span>·</span><span>Decisions</span></div>
+          </li>
+          <li class="capability-card" id="capability-05" data-kind="audit" style="--tone:#62a9cf" aria-current="false">
+            <div class="capability-meta"><span>05 · Audit</span><span>10 days</span></div>
+            <h2>Experience quality review</h2>
+            <p>Find costly inconsistencies across content, interaction, accessibility, and implementation.</p>
+            <div class="capability-tags"><span>Evidence</span><span>·</span><span>Priority plan</span></div>
+          </li>
+          <li class="capability-card" id="capability-06" data-kind="coaching" style="--tone:#ca7fa8" aria-current="false">
+            <div class="capability-meta"><span>06 · Coaching</span><span>6 weeks</span></div>
+            <h2>Creative lead office hours</h2>
+            <p>Weekly decision support for teams navigating ambiguity, critique, and launch pressure.</p>
+            <div class="capability-tags"><span>Review</span><span>·</span><span>Leadership</span></div>
+          </li>
+        </ol>
+        <span class="rail-scrollbar" aria-hidden="true"><i class="rail-thumb" id="rail-thumb"></i></span>
+      </section>
+      <span class="rail-mode" id="rail-mode">Ready · 01 / 06</span>
+      <span class="library-badge">Motion · human inertial index</span>
+      <span class="scene-caption">A real vertical throw decays into bounded rest; no movement occurs without input.</span>
+    </main>
+  </body>
 </html>

@@ -348,6 +348,27 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.wait_for_timeout(690)
             elif index == 33:
                 page.wait_for_timeout(850)
+        elif demo["id"] == "inertial-vertical-capability-rail":
+            if index == 3:
+                page.mouse.move(220, 132)
+                page.mouse.down()
+            elif 4 <= index <= 8:
+                progress = (index - 4) / 4
+                page.mouse.move(220, 132 - 92 * progress)
+            elif index == 9:
+                page.mouse.up()
+            elif index == 10:
+                page.wait_for_timeout(250)
+            elif index == 18:
+                page.mouse.click(220, 92)
+            elif index == 19:
+                page.keyboard.press("End")
+            elif index == 20:
+                page.wait_for_timeout(700)
+            elif index == 27:
+                page.keyboard.press("Home")
+            elif index == 28:
+                page.wait_for_timeout(700)
         page.evaluate("time => window.__setPreviewTime(time)", preview_time)
         frame_path = frame_root / f"{index:04d}.png"
         page.screenshot(path=str(frame_path), type="png")
@@ -561,6 +582,33 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or counts["sweepCompleted"] < 2
         ):
             raise RuntimeError(f"{demo['id']} did not capture completed, cancelled, and restarted disclosure sweeps: {interaction!r}")
+    elif demo["id"] == "inertial-vertical-capability-rail":
+        page.wait_for_function(
+            "window.__PREVIEW_INTERACTION_STATE__.phase === 'idle' && !window.__PREVIEW_INTERACTION_STATE__.motionActive",
+            timeout=2_000,
+        )
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            interaction["automaticFallback"]
+            or interaction["automaticDrift"]
+            or interaction["syntheticInputDispatch"]
+            or not interaction["initialStaticConfirmed"]
+            or interaction["inputCount"] < 4
+            or interaction["inputKind"] != "keyboard"
+            or interaction["dragMoveCount"] < 5
+            or interaction["releaseCount"] < 2
+            or interaction["keyboardCount"] < 2
+            or interaction["inertiaCount"] < 1
+            or interaction["phase"] != "idle"
+            or interaction["motionActive"]
+            or interaction["pointerCaptured"]
+            or interaction["activeIndex"] != 0
+            or interaction["selectedIndex"] != 0
+            or abs(interaction["offset"]) > 5
+            or abs(interaction["velocity"]) > .01
+            or interaction["minOffset"] >= 0
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture real throw inertia and exact keyboard boundary returns: {interaction!r}")
 
     minimum_unique = min(6, max(2, frame_count // 6))
     if len(hashes) < minimum_unique:

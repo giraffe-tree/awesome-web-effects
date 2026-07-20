@@ -477,19 +477,19 @@ export const effectExpansion100Specs = [
     "nameZh": "惯性竖向能力轨",
     "category": "scroll",
     "sourceUrl": "https://www.augmentcode.com/",
-    "difference": "指针抓取长轨后按释放速度衰减，速度耗尽才恢复慢速自动漂移；不同于页面惯性滚动。",
+    "difference": "指针抓取真实能力索引后按释放速度衰减，并在边界弹回；初始与静止状态完全不漂移，区别于页面滚动或自动轮播。",
     "behavior": {
-      "trigger": "pointer drag/release",
-      "response": "Throw a vertical card rail, decay momentum, then resume curation drift",
-      "timing": "gesture inertia followed by autonomous motion",
-      "layer": "vertical capability rail"
+      "trigger": "real pointer/touch drag and release, or Arrow/Home/End keys",
+      "response": "Throw a structured capability index, decay momentum within bounds, and spring back from overscroll",
+      "timing": "direct drag, sampled release velocity, inertia decay or boundary rebound, then static rest",
+      "layer": "six-item service and learning capability rail"
     },
     "implementation": {
       "projectId": "motiondivision-motion",
       "projectUrl": "https://github.com/motiondivision/motion",
       "library": "motion@12.42.2",
       "renderer": "dom",
-      "snippet": "velocity = deltaY / deltaTime; dragOffset += velocity * fixedStep; velocity *= .9;",
+      "snippet": "animate(offset,projected,{type:'inertia',velocity,min,max,bounceStiffness:330,bounceDamping:30});",
       "referenceUrl": "https://www.augmentcode.com/"
     },
     "scores": {
@@ -503,11 +503,11 @@ export const effectExpansion100Specs = [
     },
     "rationaleZh": "抓取、甩动、衰减、自动恢复形成完整四段运动契约。",
     "batch": "A",
-    "demo": "一列大型能力海报默认缓慢上卷，可抓住向下甩后反向滑行。",
-    "capture": "真实 pointer drag 160px→快速释放→等待速度衰减→录下自动漂移恢复。",
+    "demo": "六项可信的咨询、课程、交付、工作坊、审计与教练服务组成可甩动的竖向索引；每项都有格式、周期、成果与交付物。",
+    "capture": "真实鼠标向上甩动并等待惯性衰减，再用 End/Home 精确到达末项和首项；断言无自动漂移、无合成输入且最终静止。",
     "risk": {
       "level": "medium",
-      "detail": "需要限幅和稳定速度；短 capture 若看不到恢复阶段则效果不完整。"
+      "detail": "需要基于实测拖拽速度、稳定边界和 overscroll 回弹；自动漂移会破坏用户所有权。"
     },
     "observedImplementation": {
       "projectId": "motiondivision-motion",

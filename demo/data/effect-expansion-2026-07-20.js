@@ -1272,16 +1272,16 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "svg-filter-gooey-text-hover",
-    "name": "SVG-filter gooey text hover",
-    "nameZh": "SVG 滤镜黏液文字悬停",
+    "name": "Fresh-formula gooey blend action",
+    "nameZh": "鲜配精华黏液融合按钮",
     "category": "vector",
     "sourceUrl": "https://github.com/codrops/GooeyTextHoverEffect",
     "difference": "液滴聚合为字再散开；当前标题擦写使用移动圆点，曲线传送带移动完整字形。",
     "behavior": {
-      "trigger": "hover/focus",
-      "response": "Merge blobs through SVG filters until they resolve into glyphs",
-      "timing": "reversible material transition",
-      "layer": "headline typography"
+      "trigger": "trusted hover, focus, pointer press, click/tap, Enter/Space, or Escape",
+      "response": "Merge four ingredient droplets into the BLEND word through a live SVG goo filter, then persist ADDED and regimen state only after explicit confirmation",
+      "timing": "reversible idle-to-engaged material fusion with a persistent added result and interruptible Motion transitions",
+      "layer": "full product-formulation CTA and formula-status surface"
     },
     "implementation": {
       "projectId": "motiondivision-motion",
@@ -1300,10 +1300,10 @@ export const effectExpansion100Specs = [
       "evidence": 8,
       "total": 93
     },
-    "rationaleZh": "文字本身变成液态材质，视觉签名强。",
+    "rationaleZh": "把黏液字形从孤立滤镜样例变成鲜配精华的真实操作：成分液滴先因悬停或聚焦汇入 BLEND，再由明确确认转成持久 ADDED 与方案状态。",
     "batch": "B",
-    "demo": "LIQUID TYPE 标题由散落液滴聚成清晰字，再随离开溶散。",
-    "capture": "focus/hover 触发→停在融球峰值→清晰字→leave 复位。",
+    "demo": "Alba Lab Hydra 02 配方界面以真实 SVG blur、alpha threshold 与 blend 让四枚成分液滴汇入 BLEND；点击、触控或键盘确认后同步 ADDED、regimen 数量和配方状态。",
+    "capture": "真实 hover 预览融合、鼠标确认并移出证明状态持久，再用键盘 Focus/Enter/Escape 完成增删，最后鼠标再次增删并离开恢复 idle；断言所有转换来自可信输入且没有自动 morph。",
     "risk": {
       "level": "medium",
       "detail": "固定 filter region，防止 Safari/Chrome 裁切；需尊重上游示例许可。"

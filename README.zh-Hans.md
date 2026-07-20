@@ -169,7 +169,7 @@
 | [无限曲线文字传送带](https://giraffe-tree.github.io/awesome-web-effects/#infinite-curved-text-conveyor) | [Motion](https://github.com/motiondivision/motion) | **96/100** | [Wispr Flow](https://wisprflow.ai/) | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#infinite-curved-text-conveyor) |
 | [实时文本边界研讨批注](https://giraffe-tree.github.io/awesome-web-effects/#animated-hand-drawn-semantic-annotation) | [Motion](https://github.com/motiondivision/motion) | **90/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#animated-hand-drawn-semantic-annotation) |
 | [人工调度的发车翻页牌](https://giraffe-tree.github.io/awesome-web-effects/#mechanical-split-flap-character-change) | [Motion](https://github.com/motiondivision/motion) | **89/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#mechanical-split-flap-character-change) |
-| [SVG 滤镜黏液文字悬停](https://giraffe-tree.github.io/awesome-web-effects/#svg-filter-gooey-text-hover) | [Motion](https://github.com/motiondivision/motion) | **93/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#svg-filter-gooey-text-hover) |
+| [鲜配精华黏液融合按钮](https://giraffe-tree.github.io/awesome-web-effects/#svg-filter-gooey-text-hover) | [Motion](https://github.com/motiondivision/motion) | **93/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#svg-filter-gooey-text-hover) |
 | [手柄连线动画节点编辑器](https://giraffe-tree.github.io/awesome-web-effects/#handle-connected-animated-node-editor) | [Motion](https://github.com/motiondivision/motion) | **89/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#handle-connected-animated-node-editor) |
 | [DOM 节点连接光束](https://giraffe-tree.github.io/awesome-web-effects/#animated-dom-node-connection-beam) | [Motion](https://github.com/motiondivision/motion) | **93/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#animated-dom-node-connection-beam) |
 | [可拖拽力导向 SVG 网络](https://giraffe-tree.github.io/awesome-web-effects/#draggable-force-directed-svg-network) | [p5.js](https://github.com/processing/p5.js) | **92/100** | [D3js](https://d3js.org/d3-force) | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#draggable-force-directed-svg-network) |
@@ -282,7 +282,7 @@
 - 150 个已核验预览：2 个官方素材、148 个可运行本地 Demo 录制；缺失数为 0。
 - 人工评审覆盖创意、艺术完成度、动效编排、效果辨识、创作迁移和证据质量。
 - 准入要求 80/100，并同时通过核心维度最低分；流行度不能覆盖质量门槛。
-- 已核验 GIF 总计 24.22 MiB；每个预览为 320×180、最长三秒且小于 1 MiB。
+- 已核验 GIF 总计 24.20 MiB；每个预览为 320×180、最长三秒且小于 1 MiB。
 - Stars 是 2026-07-20 快照；“推荐实现”与“在哪家 AI 官网观察到”始终是两种关系。
 
 继续阅读 [396 个候选的准入审计](research/demo-admission-audit-2026-07-20.md)、[100 家 AI 公司主页特效调研](research/ai-native-homepages-100.md)与[预览来源清单](demo/gifs/provenance.json)。

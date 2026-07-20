@@ -1238,6 +1238,49 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 35:
                 page.locator('#depth-stage').focus()
                 page.keyboard.press("Home")
+        elif demo["id"] == "svg-filter-gooey-text-hover":
+            if index == 2:
+                page.locator('#blend-action').hover()
+            elif index == 4:
+                page.wait_for_timeout(520)
+            elif index == 6:
+                page.locator('#blend-action').click()
+            elif index == 7:
+                page.wait_for_timeout(560)
+            elif index == 10:
+                page.locator('#formula-panel').hover()
+            elif index == 12:
+                page.wait_for_timeout(360)
+            elif index == 14:
+                page.keyboard.press("Tab")
+            elif index == 16:
+                page.keyboard.press("Escape")
+            elif index == 17:
+                page.wait_for_timeout(520)
+            elif index == 19:
+                page.keyboard.press("Enter")
+            elif index == 20:
+                page.wait_for_timeout(520)
+            elif index == 22:
+                page.keyboard.press("Escape")
+            elif index == 23:
+                page.wait_for_timeout(520)
+            elif index == 24:
+                page.keyboard.press("Tab")
+            elif index == 25:
+                page.wait_for_timeout(520)
+            elif index == 27:
+                page.locator('#blend-action').hover()
+            elif index == 29:
+                page.locator('#blend-action').click()
+            elif index == 31:
+                page.locator('#formula-panel').hover()
+            elif index == 33:
+                page.locator('#blend-action').click()
+            elif index == 34:
+                page.locator('#formula-panel').hover()
+            elif index == 35:
+                page.wait_for_timeout(520)
         elif demo["id"] == "track-card-play-state-handoff":
             if index == 3:
                 page.mouse.click(276, 64)
@@ -2571,6 +2614,53 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["renderIgnoresPreviewClock"] is not True
         ):
             raise RuntimeError(f"{demo['id']} did not capture trusted viewpoint choices, keyboard inspection, pointer hover/drag, four ordered depth planes, and explicit centered recovery: {interaction!r}")
+    elif demo["id"] == "svg-filter-gooey-text-hover":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["automaticMorph"]
+            or interaction["automaticHover"]
+            or interaction["automaticRehearsal"]
+            or interaction["previewClockDriven"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInput"]
+            or not interaction["userInitiatedChangesOnly"]
+            or not interaction["firstFrameStatic"]
+            or not interaction["initialStaticVerified"]
+            or interaction["phase"] != "idle"
+            or interaction["added"]
+            or interaction["hoverInside"]
+            or interaction["focusInside"]
+            or interaction["pressed"]
+            or interaction["pointerCaptured"]
+            or interaction["activeInputKind"] is not None
+            or interaction["activePointerType"] is not None
+            or abs(interaction["mergeProgress"]) > .001
+            or abs(interaction["targetProgress"]) > .001
+            or not interaction["visualSettled"]
+            or interaction["inputCount"] < 19
+            or interaction["pointerInputCount"] < 14
+            or interaction["keyboardInputCount"] < 5
+            or interaction["hoverEnterCount"] < 3
+            or interaction["hoverLeaveCount"] < 3
+            or interaction["focusCount"] < 1
+            or interaction["blurCount"] < 1
+            or interaction["pressCount"] < 3
+            or interaction["releaseCount"] < 3
+            or interaction["activationCount"] < 3
+            or interaction["removalCount"] < 3
+            or interaction["escapeRemovalCount"] < 2
+            or interaction["transitionCount"] < 9
+            or interaction["filterEngagementCount"] < 6
+            or interaction["motionStartCount"] < 8
+            or interaction["motionCompleteCount"] < 5
+            or interaction["inputKind"] != "pointer"
+            or interaction["lastTrustedEvent"] != "mouse-hover-leave"
+            or interaction["animationActive"]
+            or not all(item["trusted"] for item in interaction["transitionHistory"])
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture trusted hover/focus/press material fusion, persistent regimen add, keyboard removal, and exact idle recovery: {interaction!r}")
     elif demo["id"] == "track-card-play-state-handoff":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         if (

@@ -1,2 +1,439 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Motion — SVG Filter Gooey Text Hover</title><link rel="stylesheet" href="./shared.css"><style>
-:root{--preview-background:#ffde4f;color-scheme:light}.goo-stage{position:absolute;inset:0;cursor:pointer}.goo-stage svg{display:block;width:100%;height:100%}.goo-copy{position:absolute;left:15px;top:46px;color:#242018;pointer-events:none}.goo-copy small{font:800 6px/1 ui-monospace;letter-spacing:.13em}.goo-copy p{width:84px;margin:9px 0 0;font:700 7px/1.4 system-ui}.goo-word{font:950 46px/1 system-ui;letter-spacing:-.08em}.goo-word-crisp{fill:#2e219e;paint-order:stroke;stroke:#2e219e;stroke-width:.45px;pointer-events:none}.goo-blob{transform-box:fill-box;transform-origin:center}.library-badge{color:#251f16;background:#fff1a6d9;border-color:#251f1620}.scene-caption{color:#392e1f91}</style></head><body><main class="preview-stage"><div class="goo-stage" id="goo-stage" data-preview-mechanism="motion-svg-gooey-text" role="button" tabindex="0" aria-label="Hover, click, or press Enter to melt the SVG word"><svg viewBox="0 0 320 180" role="img" aria-label="The word MELT joining with colorful liquid blobs"><defs><filter id="goo" filterUnits="userSpaceOnUse" x="82" y="31" width="215" height="113" color-interpolation-filters="sRGB"><feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur"/><feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 22 -9" result="goo"/><feBlend in="SourceGraphic" in2="goo" mode="normal"/></filter></defs><g filter="url(#goo)" fill="#4932d6"><text class="goo-word goo-word-fluid" x="105" y="105">MELT</text><circle class="goo-blob" id="blob-a" cx="112" cy="63" r="17" fill="#ff5d62"/><circle class="goo-blob" id="blob-b" cx="263" cy="119" r="20" fill="#4f35df"/><circle class="goo-blob" id="blob-c" cx="220" cy="57" r="12" fill="#ff5d62"/></g><text class="goo-word goo-word-crisp" x="105" y="105">MELT</text></svg><section class="goo-copy"><small>SVG FILTER / HOVER</small><p>Letters become liquid when the pointer approaches.</p></section></div><span class="library-badge">Motion · SVG goo</span><span class="scene-caption">blur + threshold joins type and droplets</span></main><script type="module" src="./src/svg-filter-gooey-text-hover-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Motion — SVG Filter Gooey Text Hover</title>
+    <link rel="stylesheet" href="./shared.css" />
+    <style>
+      :root {
+        --preview-background: #111711;
+        --ink: #182219;
+        --paper: #f1eee2;
+        --acid: #d6ff5e;
+        --violet: #6249dc;
+        --coral: #ff745c;
+        --line: rgba(24, 34, 25, .17);
+        color-scheme: light;
+      }
+
+      * { box-sizing: border-box; }
+      button { color: inherit; font: inherit; }
+
+      .blend-stage {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        overflow: hidden;
+        place-items: center;
+        padding: clamp(8px, 2.2vw, 17px);
+        background:
+          radial-gradient(circle at 18% 22%, rgba(214, 255, 94, .1), transparent 27%),
+          #111711;
+        color: var(--ink);
+      }
+
+      .blend-shell {
+        display: grid;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        grid-template-rows: clamp(25px, 8vw, 38px) minmax(0, 1fr);
+        border: 1px solid rgba(241, 238, 226, .2);
+        border-radius: clamp(8px, 2vw, 15px);
+        background: var(--paper);
+        box-shadow: 0 25px 70px rgba(0, 0, 0, .3);
+      }
+
+      .blend-header,
+      .brand-lockup,
+      .header-bag,
+      .formula-head,
+      .formula-row,
+      .action-meta,
+      .status-card,
+      .bottle-label {
+        display: flex;
+        align-items: center;
+      }
+
+      .blend-header {
+        min-width: 0;
+        justify-content: space-between;
+        padding: 0 clamp(9px, 2.5vw, 18px);
+        border-bottom: 1px solid var(--line);
+      }
+      .brand-lockup { min-width: 0; gap: 8px; }
+      .brand-mark {
+        display: grid;
+        width: clamp(12px, 3.1vw, 19px);
+        aspect-ratio: 1;
+        place-items: center;
+        border-radius: 50%;
+        background: var(--ink);
+      }
+      .brand-mark::before {
+        width: 34%;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: var(--acid);
+        box-shadow: 4px 0 0 var(--coral);
+        content: '';
+      }
+      .brand-lockup strong {
+        font-size: clamp(6px, 1.7vw, 10px);
+        font-weight: 920;
+        letter-spacing: -.03em;
+      }
+      .brand-lockup span,
+      .header-bag,
+      .scene-kicker,
+      .formula-code,
+      .formula-row span,
+      .action-meta,
+      .status-kicker,
+      .bottle-label,
+      .material-note {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-weight: 780;
+        letter-spacing: .09em;
+        text-transform: uppercase;
+      }
+      .brand-lockup span {
+        overflow: hidden;
+        color: #727971;
+        font-size: clamp(3px, .7vw, 5px);
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .header-bag {
+        gap: 6px;
+        color: #636a63;
+        font-size: clamp(3px, .7vw, 5px);
+        white-space: nowrap;
+      }
+      .bag-count {
+        display: grid;
+        width: clamp(12px, 2.7vw, 17px);
+        aspect-ratio: 1;
+        place-items: center;
+        border-radius: 50%;
+        background: var(--ink);
+        color: var(--acid);
+      }
+
+      .blend-workspace {
+        display: grid;
+        min-width: 0;
+        min-height: 0;
+        grid-template-columns: minmax(0, 1.45fr) minmax(215px, .78fr);
+      }
+
+      .blend-hero {
+        position: relative;
+        display: flex;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        flex-direction: column;
+        padding: clamp(13px, 3.3vw, 25px);
+        border-right: 1px solid var(--line);
+        background:
+          radial-gradient(circle at 82% 18%, rgba(98, 73, 220, .09), transparent 27%),
+          var(--paper);
+      }
+      .scene-kicker { color: #70766f; font-size: clamp(3px, .68vw, 5px); }
+      .blend-title {
+        max-width: 10ch;
+        margin: clamp(8px, 1.8vw, 13px) 0 0;
+        font: 900 clamp(24px, 5.8vw, 44px)/.8 ui-serif, Georgia, serif;
+        letter-spacing: -.065em;
+      }
+      .blend-title em { color: var(--coral); font-weight: 520; }
+      .blend-lede {
+        max-width: 35em;
+        margin: clamp(8px, 1.6vw, 12px) 0 0;
+        color: #626961;
+        font-size: clamp(4px, .86vw, 6px);
+        font-weight: 680;
+        line-height: 1.48;
+      }
+
+      .blend-action {
+        position: relative;
+        display: block;
+        width: min(100%, 470px);
+        min-height: 0;
+        flex: 1;
+        margin: clamp(7px, 1.5vw, 11px) auto 0;
+        padding: 0;
+        overflow: visible;
+        border: 0;
+        background: transparent;
+        cursor: pointer;
+        touch-action: none;
+      }
+      .blend-action::before {
+        position: absolute;
+        z-index: 0;
+        top: 50%;
+        left: 50%;
+        width: 58%;
+        height: 34%;
+        border: 1px solid rgba(24, 34, 25, .2);
+        border-radius: 999px;
+        content: '';
+        transform: translate(-50%, -48%);
+      }
+      .blend-action svg {
+        position: relative;
+        z-index: 1;
+        display: block;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+      }
+      .goo-word {
+        font: 950 47px/1 system-ui, sans-serif;
+        letter-spacing: -.08em;
+        text-anchor: start;
+      }
+      .goo-word-fluid { fill: var(--violet); }
+      .goo-word-crisp {
+        fill: var(--violet);
+        paint-order: stroke;
+        pointer-events: none;
+        stroke: var(--violet);
+        stroke-width: .4px;
+      }
+      .goo-blob { fill: var(--violet); }
+      .goo-blob.accent { fill: var(--coral); }
+      .blend-action[data-phase="added"] .goo-word-fluid,
+      .blend-action[data-phase="added"] .goo-word-crisp,
+      .blend-action[data-phase="added"] .goo-blob { fill: #315f42; stroke: #315f42; }
+      .blend-action:focus-visible { outline: 2px solid var(--coral); outline-offset: -2px; border-radius: 12px; }
+      .action-meta {
+        position: absolute;
+        z-index: 2;
+        right: 4%;
+        bottom: 6%;
+        left: 4%;
+        justify-content: space-between;
+        color: #70766e;
+        font-size: clamp(2px, .58vw, 4px);
+        pointer-events: none;
+      }
+      .action-state {
+        color: var(--ink);
+        font-weight: 880;
+      }
+
+      .formula-panel {
+        position: relative;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        padding: clamp(13px, 3vw, 23px);
+        background: #26312a;
+        color: #edf0e6;
+      }
+      .formula-head { justify-content: space-between; gap: 8px; }
+      .formula-code { color: #aeb7af; font-size: clamp(3px, .68vw, 5px); }
+      .formula-badge {
+        padding: 4px 7px;
+        border: 1px solid rgba(238, 240, 231, .2);
+        border-radius: 999px;
+        color: var(--acid);
+        font: 800 clamp(2px, .56vw, 4px)/1 ui-monospace, monospace;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+      }
+      .formula-orb {
+        position: relative;
+        width: clamp(92px, 22vw, 160px);
+        aspect-ratio: 1;
+        margin: clamp(12px, 3vw, 23px) auto 0;
+        border: 1px solid rgba(238, 240, 231, .18);
+        border-radius: 50%;
+        background:
+          radial-gradient(circle at 34% 31%, rgba(255, 255, 255, .36) 0 3%, transparent 4%),
+          radial-gradient(circle at 48% 42%, var(--acid) 0 14%, transparent 15%),
+          radial-gradient(circle at 67% 56%, var(--coral) 0 12%, transparent 13%),
+          radial-gradient(circle at 47% 55%, var(--violet) 0 38%, #18211b 39% 100%);
+        box-shadow: inset 0 0 0 12px rgba(255, 255, 255, .025);
+      }
+      .formula-orb::after {
+        position: absolute;
+        inset: 14%;
+        border: 1px dashed rgba(238, 240, 231, .3);
+        border-radius: 50%;
+        content: '';
+      }
+      .bottle-label {
+        position: absolute;
+        right: 17%;
+        bottom: 19%;
+        left: 17%;
+        justify-content: center;
+        padding: 6px;
+        border-radius: 3px;
+        background: rgba(237, 240, 230, .88);
+        color: #26312a;
+        font-size: clamp(2px, .56vw, 4px);
+      }
+      .formula-list { margin-top: clamp(12px, 2.6vw, 19px); }
+      .formula-row {
+        justify-content: space-between;
+        gap: 8px;
+        padding: clamp(5px, 1.2vw, 9px) 0;
+        border-bottom: 1px solid rgba(237, 240, 230, .12);
+      }
+      .formula-row span { color: #aeb7af; font-size: clamp(2px, .56vw, 4px); }
+      .formula-row strong { color: #edf0e6; font-size: clamp(4px, .9vw, 7px); }
+      .status-card {
+        position: absolute;
+        right: clamp(13px, 3vw, 23px);
+        bottom: clamp(12px, 2.8vw, 21px);
+        left: clamp(13px, 3vw, 23px);
+        justify-content: space-between;
+        gap: 8px;
+        padding-top: clamp(8px, 1.7vw, 13px);
+        border-top: 1px solid rgba(237, 240, 230, .18);
+      }
+      .status-kicker { color: #aeb7af; font-size: clamp(2px, .54vw, 4px); }
+      .formula-status { font-size: clamp(5px, 1.1vw, 8px); font-weight: 850; }
+      .status-dot {
+        width: clamp(8px, 1.9vw, 13px);
+        aspect-ratio: 1;
+        flex: 0 0 auto;
+        border: 1px solid rgba(237, 240, 230, .34);
+        border-radius: 50%;
+        background: transparent;
+      }
+      .formula-panel[data-added="true"] .status-dot { border-color: var(--acid); background: var(--acid); box-shadow: 0 0 0 4px rgba(214, 255, 94, .1); }
+      .material-note {
+        position: absolute;
+        top: 50%;
+        right: 1%;
+        color: rgba(24, 34, 25, .42);
+        font-size: clamp(2px, .54vw, 4px);
+        transform: rotate(90deg) translateX(50%);
+        transform-origin: right center;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .blend-action svg { scroll-behavior: auto; }
+      }
+
+      @media (max-width: 420px) {
+        .blend-stage { padding: 5px; }
+        .blend-shell { grid-template-rows: 20px minmax(0, 1fr); border-radius: 7px; }
+        .blend-header { padding: 0 7px; }
+        .brand-lockup { gap: 4px; }
+        .blend-workspace { grid-template-columns: minmax(0, 1.35fr) minmax(94px, .8fr); }
+        .blend-hero { padding: 8px; }
+        .blend-title { margin-top: 5px; font-size: 18px; }
+        .blend-lede { margin-top: 4px; }
+        .blend-action { margin-top: 2px; }
+        .formula-panel { padding: 8px; }
+        .formula-orb { width: 70px; margin-top: 8px; }
+        .formula-list { margin-top: 7px; }
+        .formula-row { padding: 3px 0; }
+        .status-card { right: 8px; bottom: 7px; left: 8px; padding-top: 5px; }
+      }
+
+      @media (max-width: 220px), (max-height: 105px) {
+        .library-badge { display: none; }
+        .blend-stage { padding: 2px; }
+        .blend-shell { grid-template-rows: 9px minmax(0, 1fr); border-radius: 4px; }
+        .blend-header { padding: 0 3px; }
+        .brand-mark { width: 5px; }
+        .brand-mark::before { box-shadow: 2px 0 0 var(--coral); }
+        .brand-lockup { gap: 2px; }
+        .brand-lockup strong { font-size: 2.4px; }
+        .brand-lockup span { display: none; }
+        .header-bag { gap: 2px; font-size: 1px; }
+        .bag-count { width: 5px; }
+        .blend-workspace { grid-template-columns: minmax(0, 1.65fr) minmax(40px, .75fr); }
+        .blend-hero { padding: 4px; }
+        .scene-kicker { font-size: 1px; }
+        .blend-title { margin-top: 2px; font-size: 7px; }
+        .blend-lede { width: 80%; margin-top: 2px; font-size: 1px; }
+        .blend-action { margin-top: 0; }
+        .blend-action::before { height: 39%; }
+        .goo-word { font-size: 47px; }
+        .action-meta { right: 1px; bottom: 1px; left: 1px; font-size: .8px; }
+        .formula-panel { padding: 4px; }
+        .formula-head { gap: 2px; }
+        .formula-code { font-size: .8px; }
+        .formula-badge { padding: 1px 2px; font-size: .7px; }
+        .formula-orb { width: 27px; margin-top: 4px; box-shadow: none; }
+        .bottle-label { right: 9%; bottom: 16%; left: 9%; padding: 1px; font-size: .6px; }
+        .formula-list { margin-top: 3px; }
+        .formula-row { padding: 1px 0; }
+        .formula-row span { font-size: .7px; }
+        .formula-row strong { font-size: 1px; }
+        .status-card { right: 4px; bottom: 3px; left: 4px; gap: 2px; padding-top: 2px; }
+        .status-kicker { font-size: .6px; }
+        .formula-status { font-size: 1px; }
+        .status-dot { width: 3px; }
+        .material-note { display: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="preview-stage blend-stage" id="blend-stage" aria-label="Alba Lab custom serum builder">
+      <section class="blend-shell" id="blend-shell" data-preview-mechanism="motion-input-driven-svg-gooey-text">
+        <header class="blend-header">
+          <div class="brand-lockup"><span class="brand-mark" aria-hidden="true"></span><strong>Alba Lab</strong><span>Fresh-mixed skin formulas · Berlin</span></div>
+          <span class="header-bag">Regimen <strong class="bag-count" id="bag-count">0</strong></span>
+        </header>
+
+        <div class="blend-workspace">
+          <section class="blend-hero">
+            <span class="scene-kicker">Custom formula · Hydra 02</span>
+            <h1 class="blend-title">Your daily dose, <em>blended fresh.</em></h1>
+            <p class="blend-lede">Merge three calming actives into one made-to-order serum. Explore the material, then add it to your regimen.</p>
+
+            <button class="blend-action" id="blend-action" type="button" data-phase="idle" aria-pressed="false" aria-label="Blend Hydra 02 into your regimen">
+              <svg id="goo-visual" viewBox="0 0 360 170" role="img" aria-labelledby="goo-title goo-description">
+                <title id="goo-title">Blend formula action</title>
+                <desc id="goo-description">Ingredient droplets join the word Blend through an SVG blur and alpha-threshold filter.</desc>
+                <defs>
+                  <filter id="formula-goo" filterUnits="userSpaceOnUse" x="8" y="8" width="344" height="154" color-interpolation-filters="sRGB">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="5.5" result="blur" />
+                    <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 24 -10" result="threshold" />
+                    <feBlend in="SourceGraphic" in2="threshold" mode="normal" />
+                  </filter>
+                </defs>
+                <g id="filtered-material" filter="url(#formula-goo)">
+                  <text class="goo-word goo-word-fluid" id="fluid-word" x="74" y="106">BLEND</text>
+                  <circle class="goo-blob accent" id="blob-a" cx="55" cy="58" r="16" />
+                  <circle class="goo-blob" id="blob-b" cx="305" cy="118" r="20" />
+                  <circle class="goo-blob accent" id="blob-c" cx="229" cy="37" r="12" />
+                  <circle class="goo-blob" id="blob-d" cx="132" cy="145" r="11" />
+                </g>
+                <text class="goo-word goo-word-crisp" id="crisp-word" x="74" y="106">BLEND</text>
+              </svg>
+              <span class="action-meta"><span>Hover / focus / press</span><span class="action-state" id="action-state">Ready to blend</span></span>
+            </button>
+            <span class="material-note">SVG blur + alpha threshold · live material</span>
+          </section>
+
+          <aside class="formula-panel" id="formula-panel" data-added="false" aria-label="Hydra 02 formula details">
+            <div class="formula-head"><span class="formula-code">Hydra / 02</span><span class="formula-badge">Made to order</span></div>
+            <div class="formula-orb" aria-hidden="true"><span class="bottle-label">Barrier serum · 30 ml</span></div>
+            <div class="formula-list">
+              <div class="formula-row"><span>Beta-glucan</span><strong>2.0%</strong></div>
+              <div class="formula-row"><span>Niacinamide</span><strong>4.0%</strong></div>
+              <div class="formula-row"><span>Oat lipid</span><strong>1.5%</strong></div>
+            </div>
+            <div class="status-card"><div><span class="status-kicker">Regimen status</span><div class="formula-status" id="formula-status" aria-live="polite">Not yet added</div></div><span class="status-dot" aria-hidden="true"></span></div>
+          </aside>
+        </div>
+      </section>
+    </main>
+    <span class="library-badge">Motion · SVG goo</span>
+    <script type="module" src="./src/svg-filter-gooey-text-hover-demo.js"></script>
+  </body>
+</html>

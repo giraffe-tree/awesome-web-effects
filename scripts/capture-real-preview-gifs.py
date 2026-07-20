@@ -229,6 +229,32 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("PageDown")
             elif index == 33:
                 page.keyboard.press("End")
+        elif demo["id"] == "shared-layout-spring-morph":
+            if index == 3:
+                page.locator('.queue-option[data-index="1"]').click()
+            elif index == 4:
+                page.wait_for_timeout(900)
+            elif index == 10:
+                page.locator('#shared-card').click()
+            elif index == 11:
+                page.wait_for_timeout(900)
+            elif index == 16:
+                page.locator('.queue-option[data-index="2"]').click()
+            elif index == 17:
+                page.wait_for_timeout(900)
+            elif index == 23:
+                page.keyboard.press("Escape")
+            elif index == 24:
+                page.wait_for_timeout(900)
+            elif index == 28:
+                page.locator('.queue-option[data-index="1"]').focus()
+                page.keyboard.press("Enter")
+            elif index == 29:
+                page.wait_for_timeout(900)
+            elif index == 34:
+                page.keyboard.press("Space")
+            elif index == 35:
+                page.wait_for_timeout(900)
         elif demo["id"] == "blurhash-to-photo-progressive-reveal":
             pointer_x = 230 if .5 <= preview_time < 2.25 else 32
             page.mouse.move(pointer_x, 90)
@@ -608,6 +634,36 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["triggerEnd"] <= interaction["triggerStart"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture a human-owned one-way pinned route story: {interaction!r}")
+    elif demo["id"] == "shared-layout-spring-morph":
+        page.wait_for_function(
+            "window.__PREVIEW_INTERACTION_STATE__.phase === 'compact' && window.__PREVIEW_INTERACTION_STATE__.layoutComplete && !window.__PREVIEW_INTERACTION_STATE__.animationActive",
+            timeout=3_000,
+        )
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            interaction["automaticLayoutChanges"]
+            or interaction["syntheticInput"]
+            or interaction["automaticFallback"]
+            or not interaction["sharedNodeStable"]
+            or not interaction["initialStaticVerified"]
+            or interaction["inputCount"] < 6
+            or interaction["pointerInputCount"] < 3
+            or interaction["keyboardInputCount"] < 3
+            or interaction["selectionCount"] < 3
+            or interaction["openCount"] < 3
+            or interaction["closeCount"] < 3
+            or interaction["springStartCount"] < 6
+            or interaction["springCompleteCount"] < 6
+            or interaction["springCancelCount"] != 0
+            or interaction["selectedIndex"] != 1
+            or interaction["selectedId"] != "PAY-117"
+            or interaction["expanded"]
+            or interaction["phase"] != "compact"
+            or interaction["animationActive"]
+            or not interaction["layoutComplete"]
+            or not interaction["compactRectValidated"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture one shared review item opening and returning under real input: {interaction!r}")
     elif demo["id"] == "blurhash-to-photo-progressive-reveal":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__()")
         if interaction["pointerEvents"] < 3 or interaction["pointerOverPhoto"]:

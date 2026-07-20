@@ -171,17 +171,17 @@ const existingEffects = [
     "addedIn": "baseline",
     "research": null,
     "behavior": {
-      "trigger": "state change or animation frame",
-      "response": "Shared-layout spring morph",
-      "timing": "spring or physics-based",
-      "layer": "content"
+      "trigger": "real queue-item click/tap, native Enter/Space activation, or Escape to return",
+      "response": "Move one stable release-review card between its compact queue role and a full decision workspace",
+      "timing": "human-owned interruptible Motion spring; direct placement under reduced motion",
+      "layer": "one shared DOM node, review queue, decision workspace, and semantic detail metrics"
     },
-    "prompt": "Implement the \"Shared-layout spring morph\" (共享布局弹簧变形) web interaction effect in the current project.\n\nUse Motion (motiondivision/motion) as the recommended implementation unless the existing stack makes a dependency-free equivalent more appropriate. Recreate this specific animation interaction, not a generic animation.\n\nInteraction contract:\n- Trigger: state change or animation frame\n- Visual response: Shared-layout spring morph\n- Timing relationship: spring or physics-based\n- Page layer: content\n\nRequirements:\n- Integrate with the existing design system and component structure.\n- Support keyboard and touch input whenever the interaction is actionable.\n- Respect prefers-reduced-motion with a clear non-animated fallback.\n- Avoid layout shift, scroll traps, inaccessible focus behavior, and unnecessary dependencies.\n- Keep the implementation responsive and clean up listeners, timers, and animation instances.\n\nStart from this minimal API shape:\n\n```js\nimport { animate } from 'motion';\nanimate('.card', { x: 80, borderRadius: 24 }, { type: 'spring' });\n```\n\nReturn the working code, the files changed, and a short explanation of how to tune timing, easing, distance, and reduced-motion behavior.",
+    "prompt": "Implement the \"Shared-layout spring morph\" (共享布局弹簧变形) as a credible master-detail decision workflow, not a component playground.\n\nUse Motion (motiondivision/motion) to keep one real DOM node visually continuous as it moves from a compact queue slot into a detailed workspace and back. The shared object must retain identity, selected record, status, and ownership while its measured geometry changes.\n\nInteraction contract:\n- Trigger: real queue-item click/tap or native Enter/Space; Escape or activation of the expanded card returns it\n- Visual response: the selected release-review item springs from its queue role into a full decision brief, then returns to the correct slot\n- Timing relationship: human-owned, interruptible spring; no autoplay, capture-clock loop, or synthetic input\n- Page layer: one stable shared DOM node above semantic queue and workspace slots\n\nRequirements:\n- Start strictly static in the queue with no spring started.\n- Use measured source and destination rectangles; preserve exactly one connected shared node instead of cloning the card.\n- Support Arrow/Home/End focus movement, pointer and keyboard activation, interruption, resize reconciliation, 320×180 and 144×81 previews, and prefers-reduced-motion direct placement.\n- Keep ARIA expanded/selected state, record content, target geometry, and animation phase synchronized.\n- Export runtime state that proves shared-node identity, input ownership, spring lifecycle, geometry parity, initial stillness, and final layout completion.\n\nStart from this minimal API shape:\n\n```js\nimport { animate } from 'motion';\nconst shared = document.querySelector('#shared-card');\nconst moveSharedNode = targetRect => animate(shared, { left: targetRect.left, top: targetRect.top, width: targetRect.width, height: targetRect.height }, { type: 'spring', stiffness: 235, damping: 24 });\n```\n\nReturn the working code, the files changed, and a short explanation of how to tune spring stiffness, damping, geometry tolerance, interruption, and reduced-motion behavior.",
     "sources": [
       {
         "projectId": "motiondivision-motion",
         "recommended": true,
-        "snippet": "import { animate } from 'motion';\nanimate('.card', { x: 80, borderRadius: 24 }, { type: 'spring' });",
+        "snippet": "import { animate } from 'motion';\nconst shared = document.querySelector('#shared-card');\nconst moveSharedNode = targetRect => animate(shared, { left: targetRect.left, top: targetRect.top, width: targetRect.width, height: targetRect.height }, { type: 'spring', stiffness: 235, damping: 24 });",
         "preview": "captured/shared-layout-spring-morph",
         "previewKind": "local-demo-capture",
         "demoPath": "preview-demos/dist/shared-layout-spring-morph.html",
@@ -206,7 +206,7 @@ const existingEffects = [
       "total": 94,
       "decision": "admit",
       "reasonCode": "passed",
-      "rationaleZh": "共享元素在紧凑与展开布局间连续变形，弹簧质感、层级和视觉焦点都很完整。"
+      "rationaleZh": "同一个发布审核 DOM 节点在人类选择后从队列弹簧展开到决策工作区，并能中断、返回和响应缩放；身份、内容与几何连续性均可核验。"
     }
   },
   {

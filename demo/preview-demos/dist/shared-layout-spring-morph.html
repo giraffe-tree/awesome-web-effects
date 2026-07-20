@@ -5,106 +5,309 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Motion — Shared-layout Spring Morph</title>
     <style>
-      :root { --preview-background: #080a12; }
+      :root { --preview-background: #171814; color-scheme: dark; }
+
       .morph-stage {
+        color: #f5efe3;
         background:
-          radial-gradient(circle at 74% 42%, rgba(137, 92, 255, .2), transparent 38%),
-          linear-gradient(145deg, #090b14, #111525);
+          radial-gradient(circle at 82% 12%, rgba(201, 112, 57, .13), transparent 29%),
+          linear-gradient(145deg, #171814, #22231d 60%, #151613);
       }
-      .layout-shell { position: absolute; inset: 32px 14px 16px; }
-      .source-slot,
-      .destination-slot {
-        position: absolute;
-        border: 1px dashed rgba(255,255,255,.18);
-        background: rgba(255,255,255,.025);
-      }
-      .source-slot { left: 4px; top: 16px; width: 74px; height: 72px; border-radius: 18px; }
-      .destination-slot { right: 2px; top: 2px; width: 202px; height: 122px; border-radius: 28px; }
-      .slot-label { position: absolute; left: 7px; bottom: -15px; color: #ffffff5c; font-size: 6px; font-weight: 800; letter-spacing: .11em; text-transform: uppercase; }
-      .shared-card {
-        position: absolute;
-        z-index: 4;
-        left: 4px;
-        top: 16px;
-        width: 74px;
-        height: 72px;
-        overflow: hidden;
-        border: 1px solid rgba(255,255,255,.34);
-        border-radius: 18px;
-        background: linear-gradient(145deg, #7f5cff, #3c2d89);
-        box-shadow: 0 16px 36px rgba(21, 12, 63, .58), inset 0 1px rgba(255,255,255,.24);
-        will-change: transform, width, height, border-radius;
-      }
-      .card-orb {
-        position: absolute;
-        left: 14px;
-        top: 15px;
-        width: 44px;
-        height: 44px;
-        border-radius: 50%;
-        background: radial-gradient(circle at 34% 30%, #fff 0 6%, #aef7ff 7% 18%, #5d8dff 43%, #39206f 72%);
-        box-shadow: 0 0 24px rgba(126, 214, 255, .52);
-      }
-      .card-orb::after {
+
+      .morph-stage::before {
         content: "";
         position: absolute;
-        inset: 7px -8px;
-        border: 1px solid rgba(255,255,255,.66);
-        border-radius: 50%;
-        transform: rotate(-24deg);
+        inset: 0;
+        pointer-events: none;
+        opacity: .18;
+        background-image: radial-gradient(rgba(255, 247, 231, .4) .45px, transparent .55px);
+        background-size: 4px 4px;
+        mask-image: linear-gradient(180deg, #000, transparent 72%);
       }
-      .card-copy { position: absolute; left: 78px; top: 18px; width: 102px; color: white; }
-      .card-copy strong { display: block; font-size: 13px; letter-spacing: -.035em; white-space: nowrap; }
-      .card-copy span { display: block; width: 76px; height: 4px; margin-top: 8px; border-radius: 99px; background: rgba(255,255,255,.48); }
-      .card-copy span:nth-child(3) { width: 94px; opacity: .58; }
-      .card-copy span:nth-child(4) { width: 55px; opacity: .35; }
-      .card-chip { position: absolute; left: 78px; bottom: 18px; width: 62px; height: 16px; border-radius: 99px; background: rgba(7,10,24,.35); }
-      .card-chip::after { content: "SPRING"; display: grid; place-items: center; height: 100%; color: #c8f7ff; font-size: 6px; font-weight: 900; letter-spacing: .08em; }
-      .state-readout { position: absolute; left: 6px; bottom: 7px; color: #c9c9d3; font-size: 7px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
-      .state-readout b { color: #9eeaff; }
-      .morph-toggle {
+
+      .app-bar {
         position: absolute;
-        z-index: 8;
-        right: 12px;
-        bottom: 9px;
-        min-height: 24px;
-        padding: 0 10px;
-        border: 1px solid rgba(255,255,255,.2);
-        border-radius: 99px;
-        color: white;
-        background: rgba(10,12,24,.76);
-        font-size: 7px;
-        font-weight: 800;
-        letter-spacing: .07em;
+        z-index: 9;
+        left: clamp(10px, 3vw, 22px);
+        right: clamp(10px, 3vw, 22px);
+        top: clamp(8px, 2.6vw, 17px);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .app-mark {
+        display: inline-flex;
+        align-items: center;
+        gap: clamp(5px, 1.1vw, 8px);
+        color: rgba(249, 242, 229, .86);
+        font: 870 clamp(6px, 1.25vw, 9px)/1 system-ui, sans-serif;
+        letter-spacing: -.02em;
+      }
+
+      .app-mark::before { content: ""; width: clamp(7px, 1.7vw, 12px); aspect-ratio: 1; border-radius: 35% 65% 58% 42%; background: #cb7041; rotate: 18deg; }
+      .app-state { color: rgba(248, 240, 226, .42); font: 760 clamp(4px, .9vw, 7px)/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .1em; text-transform: uppercase; }
+      .app-state b { color: #dea171; font-weight: 850; }
+
+      .layout-shell {
+        position: absolute;
+        left: clamp(8px, 2.5vw, 18px);
+        right: clamp(8px, 2.5vw, 18px);
+        top: clamp(37px, 10.5vw, 54px);
+        bottom: clamp(8px, 3vw, 17px);
+        display: grid;
+        grid-template-columns: minmax(0, .68fr) minmax(0, 1.52fr);
+        gap: clamp(6px, 1.4vw, 10px);
+      }
+
+      .queue-panel,
+      .workspace-panel {
+        position: relative;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        border: 1px solid rgba(255, 248, 233, .12);
+        border-radius: clamp(10px, 2.5vw, 18px);
+      }
+
+      .queue-panel { padding: clamp(7px, 1.7vw, 13px); background: rgba(8, 9, 8, .32); }
+      .workspace-panel {
+        padding: clamp(8px, 1.8vw, 14px);
+        background:
+          linear-gradient(90deg, transparent 49.8%, rgba(57, 54, 46, .05) 50%, transparent 50.2%),
+          #eeeadf;
+        color: #282720;
+      }
+
+      .panel-head {
+        height: clamp(26px, 7vw, 47px);
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 8px;
+      }
+
+      .panel-head small,
+      .panel-count,
+      .queue-code,
+      .queue-meta,
+      .card-code,
+      .card-status,
+      .detail-kicker,
+      .metric-label,
+      .card-action {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .1em;
         text-transform: uppercase;
+      }
+
+      .panel-head small { color: rgba(246, 239, 224, .48); font-size: clamp(4px, .82vw, 6px); font-weight: 800; }
+      .panel-head strong { display: block; margin-top: clamp(3px, .65vw, 5px); color: #f5eedf; font: 790 clamp(8px, 1.8vw, 14px)/1 system-ui, sans-serif; }
+      .workspace-panel .panel-head small { color: rgba(45, 42, 34, .44); }
+      .workspace-panel .panel-head strong { color: #29271f; }
+      .panel-count { color: #d8895f; font-size: clamp(4px, .78vw, 6px); font-weight: 850; }
+
+      .queue-list {
+        height: calc(100% - clamp(26px, 7vw, 47px));
+        display: grid;
+        grid-template-rows: repeat(3, minmax(0, 1fr));
+        gap: clamp(4px, .9vw, 7px);
+      }
+
+      .queue-option {
+        min-width: 0;
+        min-height: 0;
+        padding: clamp(6px, 1.3vw, 10px);
+        overflow: hidden;
+        border: 1px solid rgba(255, 248, 232, .11);
+        border-radius: clamp(7px, 1.7vw, 12px);
+        color: rgba(247, 240, 227, .78);
+        background: rgba(255, 255, 255, .035);
+        text-align: left;
         cursor: pointer;
       }
-      .morph-toggle:hover { background: #6650d8; }
-      .morph-stage > .scene-caption { display: none; }
+
+      .queue-option[aria-pressed="true"] { border-color: rgba(211, 117, 70, .42); background: rgba(204, 111, 64, .1); }
+      .queue-option:focus-visible { outline: 2px solid #da865e; outline-offset: 2px; }
+      .queue-row { display: flex; justify-content: space-between; gap: 5px; }
+      .queue-code { color: #d98b61; font-size: clamp(3px, .7vw, 5px); font-weight: 850; }
+      .queue-priority { width: 5px; height: 5px; flex: 0 0 auto; margin-top: 1px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent); }
+      .queue-option strong { display: block; margin-top: clamp(4px, .8vw, 6px); overflow: hidden; font: 780 clamp(6px, 1.25vw, 10px)/1.05 system-ui, sans-serif; text-overflow: ellipsis; white-space: nowrap; }
+      .queue-meta { display: block; margin-top: clamp(3px, .65vw, 5px); overflow: hidden; color: rgba(247, 240, 227, .38); font-size: clamp(3px, .62vw, 5px); font-weight: 720; text-overflow: ellipsis; white-space: nowrap; }
+
+      .workspace-grid {
+        position: absolute;
+        inset: clamp(46px, 9vw, 65px) clamp(8px, 1.8vw, 14px) clamp(8px, 1.8vw, 14px);
+        display: grid;
+        grid-template-columns: 1fr .82fr;
+        grid-template-rows: 1fr .62fr;
+        gap: clamp(5px, 1vw, 8px);
+        opacity: .72;
+      }
+
+      .workspace-grid span {
+        border: 1px solid rgba(47, 43, 34, .09);
+        border-radius: clamp(7px, 1.5vw, 11px);
+        background: rgba(255, 255, 255, .42);
+      }
+
+      .workspace-grid span:first-child { grid-row: 1 / 3; }
+      .detail-slot { position: absolute; inset: clamp(38px, 8.2vw, 59px) clamp(7px, 1.6vw, 12px) clamp(7px, 1.6vw, 12px); border-radius: clamp(8px, 2vw, 15px); pointer-events: none; }
+
+      .shared-card {
+        --accent: #cb7041;
+        position: absolute;
+        z-index: 6;
+        margin: 0;
+        padding: clamp(7px, 1.45vw, 11px);
+        overflow: hidden;
+        border: 1px solid color-mix(in srgb, var(--accent) 50%, #332d25 22%);
+        border-radius: clamp(8px, 1.8vw, 13px);
+        color: #27251e;
+        background:
+          radial-gradient(circle at 94% 9%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 28%),
+          #f6f0e4;
+        box-shadow: 0 18px 48px rgba(6, 7, 6, .28), inset 0 1px rgba(255, 255, 255, .64);
+        cursor: pointer;
+        opacity: 0;
+        transform-origin: top left;
+        will-change: left, top, width, height, border-radius;
+      }
+
+      html[data-preview-ready="true"] .shared-card { opacity: 1; }
+
+      .shared-card:focus-visible { outline: 2px solid #ef9b6f; outline-offset: 2px; }
+      .card-head { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+      .card-code { color: color-mix(in srgb, var(--accent) 86%, #402f26); font-size: clamp(3px, .7vw, 5px); font-weight: 900; }
+      .card-status { display: inline-flex; align-items: center; gap: 4px; color: rgba(42, 39, 32, .5); font-size: clamp(3px, .64vw, 5px); font-weight: 780; }
+      .card-status::before { content: ""; width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
+      .card-title { display: block; max-width: 88%; margin-top: clamp(5px, 1.05vw, 8px); overflow: hidden; font: 820 clamp(7px, 1.65vw, 13px)/.95 system-ui, sans-serif; letter-spacing: -.025em; text-overflow: ellipsis; white-space: nowrap; }
+      .card-purpose { display: block; margin-top: clamp(4px, .8vw, 6px); overflow: hidden; color: rgba(45, 41, 33, .52); font: 620 clamp(3px, .72vw, 5.5px)/1.2 system-ui, sans-serif; text-overflow: ellipsis; white-space: nowrap; }
+      .card-progress { position: absolute; left: clamp(7px, 1.45vw, 11px); right: clamp(7px, 1.45vw, 11px); bottom: clamp(7px, 1.45vw, 11px); height: 2px; overflow: hidden; border-radius: 99px; background: rgba(44, 40, 33, .1); }
+      .card-progress::after { content: ""; display: block; width: var(--progress); height: 100%; background: var(--accent); }
+
+      .card-detail {
+        margin-top: clamp(8px, 1.9vw, 15px);
+        opacity: 0;
+        translate: 0 7px;
+        transition: opacity .2s ease, translate .34s cubic-bezier(.2, .8, .2, 1);
+        pointer-events: none;
+      }
+
+      .shared-card[data-mode="expanding"] .card-detail,
+      .shared-card[data-mode="expanded"] .card-detail { opacity: 1; translate: 0 0; transition-delay: .1s; }
+      .detail-kicker { color: color-mix(in srgb, var(--accent) 84%, #4b392f); font-size: clamp(3px, .68vw, 5px); font-weight: 900; }
+      .detail-description { max-width: 48ch; margin: clamp(5px, 1vw, 8px) 0 0; color: rgba(42, 38, 31, .68); font: 610 clamp(4px, .9vw, 7px)/1.4 system-ui, sans-serif; }
+      .detail-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(5px, 1vw, 8px); margin-top: clamp(8px, 1.8vw, 14px); }
+      .detail-metric { padding: clamp(5px, 1vw, 8px); border: 1px solid rgba(45, 41, 33, .1); border-radius: clamp(5px, 1.1vw, 8px); background: rgba(255, 255, 255, .42); }
+      .metric-label { display: block; color: rgba(45, 41, 33, .4); font-size: clamp(3px, .58vw, 4.5px); font-weight: 800; }
+      .metric-value { display: block; margin-top: clamp(3px, .6vw, 5px); overflow: hidden; font: 800 clamp(5px, 1.05vw, 8px)/1 system-ui, sans-serif; text-overflow: ellipsis; white-space: nowrap; }
+      .card-action { position: absolute; right: clamp(7px, 1.45vw, 11px); bottom: clamp(12px, 2.3vw, 18px); color: color-mix(in srgb, var(--accent) 88%, #3c2c24); font-size: clamp(3px, .66vw, 5px); font-weight: 900; opacity: 0; transition: opacity .18s ease; }
+      .shared-card[data-mode="expanded"] .card-action { opacity: 1; }
+      .shared-card[data-mode="expanded"] .card-progress,
+      .shared-card[data-mode="expanding"] .card-progress { opacity: 0; }
+
+      .morph-stage > .library-badge { display: none; }
+      .scene-caption { display: none; }
+
+      @media (max-width: 180px), (max-height: 100px) {
+        .app-bar { left: 4px; right: 4px; top: 3px; }
+        .app-mark { gap: 3px; font-size: 3.8px; }
+        .app-mark::before { width: 5px; }
+        .app-state { font-size: 2.7px; }
+        .layout-shell { left: 3px; right: 3px; top: 18px; bottom: 2px; grid-template-columns: .62fr 1.38fr; gap: 3px; }
+        .queue-panel, .workspace-panel { border-radius: 5px; }
+        .queue-panel { padding: 3px; }
+        .workspace-panel { padding: 3px; }
+        .panel-head { height: 8px; }
+        .panel-head small { font-size: 2px; }
+        .panel-head strong { display: none; }
+        .panel-count { font-size: 2px; }
+        .queue-list { height: calc(100% - 8px); gap: 2px; }
+        .queue-option { padding: 3px; border-radius: 3px; }
+        .queue-code { font-size: 1.8px; }
+        .queue-priority { width: 2px; height: 2px; box-shadow: none; }
+        .queue-option strong { margin-top: 2px; font-size: 2.8px; }
+        .queue-meta { margin-top: 1px; font-size: 1.8px; }
+        .workspace-grid { inset: 11px 3px 3px; gap: 2px; }
+        .workspace-grid span { border-radius: 3px; }
+        .detail-slot { inset: 9px 2px 2px; border-radius: 4px; }
+        .shared-card { padding: 3px; border-radius: 4px; box-shadow: 0 5px 14px rgba(6, 7, 6, .24); }
+        .card-code, .card-status { font-size: 1.8px; }
+        .card-status::before { width: 2px; height: 2px; }
+        .card-title { margin-top: 2px; font-size: 3.5px; }
+        .card-purpose { margin-top: 1px; font-size: 2.2px; }
+        .card-progress { left: 3px; right: 3px; bottom: 3px; height: 1px; }
+        .card-detail { margin-top: 3px; }
+        .detail-kicker { font-size: 1.8px; }
+        .detail-description { margin-top: 2px; font-size: 2.2px; line-height: 1.2; }
+        .detail-metrics { gap: 2px; margin-top: 3px; }
+        .detail-metric { padding: 2px; border-radius: 2px; }
+        .metric-label { font-size: 1.6px; }
+        .metric-value { margin-top: 1px; font-size: 2.2px; }
+        .card-action { right: 3px; bottom: 4px; font-size: 1.8px; }
+      }
+
       @media (prefers-reduced-motion: reduce) {
-        .morph-toggle { display: none; }
+        .card-detail, .card-action { transition: none; }
       }
     </style>
-    <script type="module" crossorigin src="./assets/shared-layout-spring-morph-Da1sdmr3.js"></script>
+    <script type="module" crossorigin src="./assets/shared-layout-spring-morph-DhhdnddB.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
     <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
     <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
   </head>
   <body>
-    <main class="preview-stage morph-stage" aria-label="One shared card springs between compact and expanded layout slots">
-      <div class="layout-shell">
-        <div class="source-slot" aria-hidden="true"><span class="slot-label">compact slot</span></div>
-        <div class="destination-slot" aria-hidden="true"><span class="slot-label">expanded slot</span></div>
-        <article class="shared-card" id="shared-card" data-preview-mechanism="motion-spring">
-          <div class="card-orb" aria-hidden="true"></div>
-          <div class="card-copy" aria-hidden="true"><strong>Shared node</strong><span></span><span></span><span></span></div>
-          <div class="card-chip" aria-hidden="true"></div>
+    <main class="preview-stage morph-stage" id="morph-stage" aria-label="A release review item keeps its identity while springing from a compact queue into a detailed workspace">
+      <header class="app-bar">
+        <span class="app-mark">Northstar / Release review</span>
+        <span class="app-state">Shared item · <b id="layout-state">queue</b></span>
+      </header>
+
+      <section class="layout-shell" id="layout-shell">
+        <aside class="queue-panel" aria-label="Release review queue">
+          <header class="panel-head"><span><small>Review queue</small><strong>Needs a decision</strong></span><i class="panel-count">03 open</i></header>
+          <div class="queue-list" id="queue-list">
+            <button class="queue-option" type="button" data-index="0" aria-pressed="true" style="--accent:#cb7041"><span class="queue-row"><i class="queue-code">MAP-248</i><i class="queue-priority"></i></span><strong>Offline map sync</strong><span class="queue-meta">Field Notes 4.8 · Design ready</span></button>
+            <button class="queue-option" type="button" data-index="1" aria-pressed="false" style="--accent:#4d7c70"><span class="queue-row"><i class="queue-code">PAY-117</i><i class="queue-priority"></i></span><strong>Payment retry copy</strong><span class="queue-meta">Checkout · Needs review</span></button>
+            <button class="queue-option" type="button" data-index="2" aria-pressed="false" style="--accent:#73714b"><span class="queue-row"><i class="queue-code">RTE-092</i><i class="queue-priority"></i></span><strong>Trail export flow</strong><span class="queue-meta">Routes · Ready to ship</span></button>
+          </div>
+        </aside>
+
+        <section class="workspace-panel" aria-label="Review detail workspace">
+          <header class="panel-head"><span><small>Decision workspace</small><strong>One item, full context</strong></span><i class="panel-count">Live layout</i></header>
+          <div class="workspace-grid" aria-hidden="true"><span></span><span></span><span></span></div>
+          <div class="detail-slot" id="detail-slot" aria-hidden="true"></div>
+        </section>
+
+        <article
+          class="shared-card"
+          id="shared-card"
+          data-preview-mechanism="motion-shared-node-spring"
+          data-mode="compact"
+          role="button"
+          tabindex="0"
+          aria-expanded="false"
+          aria-controls="detail-slot"
+          aria-label="Open Offline map sync review"
+          style="--accent:#cb7041;--progress:67%"
+        >
+          <header class="card-head"><i class="card-code" id="card-code">MAP-248</i><i class="card-status" id="card-status">Design ready</i></header>
+          <strong class="card-title" id="card-title">Offline map sync</strong>
+          <span class="card-purpose" id="card-purpose">Keep downloaded trails trustworthy after edits.</span>
+          <div class="card-detail">
+            <i class="detail-kicker">Decision brief</i>
+            <p class="detail-description" id="detail-description">Resolve how local trail edits merge after a device returns online, without hiding conflicts or losing field notes.</p>
+            <div class="detail-metrics">
+              <span class="detail-metric"><i class="metric-label">Owner</i><b class="metric-value" id="metric-owner">A. Kim</b></span>
+              <span class="detail-metric"><i class="metric-label">Due</i><b class="metric-value" id="metric-due">Tue 16:00</b></span>
+              <span class="detail-metric"><i class="metric-label">Checks</i><b class="metric-value" id="metric-checks">4 / 6</b></span>
+            </div>
+          </div>
+          <span class="card-progress" aria-hidden="true"></span>
+          <i class="card-action" id="card-action">Return to queue ↙</i>
         </article>
-        <p class="state-readout" aria-live="polite">layout: <b id="layout-state">compact</b></p>
-      </div>
-      <button class="morph-toggle" id="morph-toggle" type="button" aria-pressed="false">Toggle layout</button>
-      <span class="library-badge">Motion · physics spring</span>
-      <span class="scene-caption">one DOM node changes layout with spring overshoot</span>
+      </section>
     </main>
   </body>
 </html>

@@ -86,7 +86,7 @@
 | 效果 | 推荐实现 | 策展评分 | AI 官网参考（最多 3 家） | Stars | 实现数 | 状态 | 实现 |
 | --- | --- | ---: | --- | ---: | ---: | --- | --- |
 | [固定式横向滚动场景](https://giraffe-tree.github.io/awesome-web-effects/#pinned-horizontal-scroll-scene) | [GSAP](https://github.com/greensock/GSAP) | **96/100** | — | 26,600 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#pinned-horizontal-scroll-scene) |
-| [滚动联动多层星空](https://giraffe-tree.github.io/awesome-web-effects/#scroll-linked-multilayer-starfield) | [p5.js](https://github.com/processing/p5.js) | **94/100** | [Fathom](https://fathom.video/) | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#scroll-linked-multilayer-starfield) |
+| [滚动联动天文台观测导览](https://giraffe-tree.github.io/awesome-web-effects/#scroll-linked-multilayer-starfield) | [p5.js](https://github.com/processing/p5.js) | **94/100** | [Fathom](https://fathom.video/) | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#scroll-linked-multilayer-starfield) |
 | [自动反色的固定导航](https://giraffe-tree.github.io/awesome-web-effects/#self-inverting-fixed-navigation) | [Motion](https://github.com/motiondivision/motion) | **92/100** | [Luma AI](https://lumalabs.ai/) | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#self-inverting-fixed-navigation) |
 | [滚动擦洗式文档生成回放](https://giraffe-tree.github.io/awesome-web-effects/#scroll-scrubbed-document-generation-playback) | [Motion](https://github.com/motiondivision/motion) | **97/100** | [Granola](https://www.granola.ai/) | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#scroll-scrubbed-document-generation-playback) |
 | [惯性竖向能力轨](https://giraffe-tree.github.io/awesome-web-effects/#inertial-vertical-capability-rail) | [Motion](https://github.com/motiondivision/motion) | **91/100** | [Augmentcode](https://www.augmentcode.com/) | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#inertial-vertical-capability-rail) |
@@ -282,7 +282,7 @@
 - 150 个已核验预览：2 个官方素材、148 个可运行本地 Demo 录制；缺失数为 0。
 - 人工评审覆盖创意、艺术完成度、动效编排、效果辨识、创作迁移和证据质量。
 - 准入要求 80/100，并同时通过核心维度最低分；流行度不能覆盖质量门槛。
-- 已核验 GIF 总计 24.57 MiB；每个预览为 320×180、最长三秒且小于 1 MiB。
+- 已核验 GIF 总计 24.37 MiB；每个预览为 320×180、最长三秒且小于 1 MiB。
 - Stars 是 2026-07-20 快照；“推荐实现”与“在哪家 AI 官网观察到”始终是两种关系。
 
 继续阅读 [396 个候选的准入审计](research/demo-admission-audit-2026-07-20.md)、[100 家 AI 公司主页特效调研](research/ai-native-homepages-100.md)与[预览来源清单](demo/gifs/provenance.json)。

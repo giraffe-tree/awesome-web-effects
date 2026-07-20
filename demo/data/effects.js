@@ -928,14 +928,14 @@ const expansionEffects = [
     rationaleZh: 'Scout、Maker、Critic 由用户逐一指派，光标沿实测路径把对应证据送入同一制品插槽；角色、内容、凭据与状态同步交接，且不会自动抢夺焦点。'
   },
   {
-    id: 'scroll-linked-multilayer-starfield', category: 'scroll', name: 'Scroll-linked multilayer starfield drift', nameZh: '滚动联动多层星空', order: 23,
+    id: 'scroll-linked-multilayer-starfield', category: 'scroll', name: 'Scroll-linked observatory field guide', nameZh: '滚动联动天文台观测导览', order: 23,
     company: 'Fathom', homepage: 'https://fathom.video/', observedAs: 'Scroll-linked multilayer starfield drift',
-    difference: 'Three independently sampled star layers move at separate progress-linked rates around fixed editorial content, creating measurable depth instead of a single parallax background.',
-    behavior: { trigger: 'scroll progress', response: 'Near, middle, and far star layers drift at distinct rates around a fixed title', timing: 'continuous progress-linked parallax', layer: 'Canvas background layers' },
+    difference: 'One human-owned observation progress signal moves 54 far, 34 middle, and 20 near stars at auditable 0.17/0.48/1.00 rates while four scientific chapters keep the depth change anchored to a real sky-reading task.',
+    behavior: { trigger: 'real wheel, captured vertical drag, chapter selection, or Arrow/Page/Home/End key', response: 'Far, middle, and near seeded star layers separate at distinct rates as the field guide advances from horizon lock to a logged near pass', timing: 'direct progress-linked parallax with outward wheel release at both boundaries and no automatic drift', layer: 'p5 Canvas sky below a semantic observatory guide and chapter rail' },
     implementationName: 'p5.js', projectId: 'processing-p5-js', projectUrl: 'https://github.com/processing/p5.js', referenceUrl: 'https://p5js.org/reference/',
-    snippet: "import p5 from 'p5';\nnew p5(p => { p.draw = () => layers.forEach((stars, depth) => drawStars(p, stars, progress * speeds[depth])); });",
+    snippet: "import p5 from 'p5';\nnew p5(p => { p.setup=()=>p.noLoop(); p.draw=()=>layers.forEach((stars, depth)=>drawStars(p, stars, progress*speeds[depth])); });\nviewport.addEventListener('wheel', event => { progress=clamp(progress+event.deltaY*.0011); sketch.redraw(); });",
     scores: { creativity: 17, artDirection: 19, motion: 19, clarity: 14, inspiration: 15, evidence: 10 },
-    rationaleZh: '固定海报标题提供参照，近中远三层星点在密度、尺寸和速度上同时分级，滚动纵深一眼可辨。'
+    rationaleZh: '54/34/20 颗确定性星点以 0.17/0.48/1.00 的可核验速率响应同一真人进度；四个观测章节、目标标注和纵深读数让视差服务于真实夜空判读。'
   },
   {
     id: 'staggered-multichart-telemetry-boot', category: 'canvas', name: 'Staggered multi-chart telemetry boot', nameZh: '交错多图表遥测启动', order: 24,

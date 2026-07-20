@@ -250,7 +250,7 @@
       "originUrl": "https://github.com/processing/p5.js",
       "demoSourcePath": "demo/preview-demos/scroll-linked-multilayer-starfield.html",
       "libraryVersion": "p5@2.3.0",
-      "generatedAt": "2026-07-18",
+      "generatedAt": "2026-07-21",
       "outputPath": "demo/gifs/captured/scroll-linked-multilayer-starfield.gif",
       "usageBasis": "original local mechanism demo using the pinned p5.js package; verify license https://github.com/processing/p5.js/blob/HEAD/license.txt"
     },

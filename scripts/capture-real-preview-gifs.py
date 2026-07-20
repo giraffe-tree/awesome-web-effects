@@ -508,6 +508,48 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("Enter")
             elif index == 31:
                 page.wait_for_timeout(850)
+        elif demo["id"] == "scroll-linked-multilayer-starfield":
+            if index == 2:
+                box = page.locator('#sky-viewport').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * .7, box["y"] + box["height"] * .55)
+                page.mouse.wheel(0, -100)
+            elif index == 4:
+                page.mouse.wheel(0, 100)
+            elif index == 6:
+                page.mouse.wheel(0, 100)
+            elif index == 8:
+                page.locator('.chapter-button[data-index="1"]').click()
+            elif index == 11:
+                box = page.locator('#sky-viewport').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * .78, box["y"] + box["height"] * .76)
+                page.mouse.down()
+            elif index == 12:
+                box = page.locator('#sky-viewport').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * .78, box["y"] + box["height"] * .24, steps=5)
+                page.mouse.up()
+            elif index == 15:
+                page.locator('#starfield-stage canvas').focus()
+                page.keyboard.press("Home")
+            elif index == 17:
+                page.keyboard.press("PageDown")
+            elif index == 19:
+                page.locator('.chapter-button[data-index="2"]').click()
+            elif index == 22:
+                page.locator('#starfield-stage canvas').focus()
+                page.keyboard.press("End")
+            elif index == 23:
+                box = page.locator('#sky-viewport').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * .7, box["y"] + box["height"] * .55)
+                page.mouse.wheel(0, 100)
+            elif index == 26:
+                page.mouse.wheel(0, -100)
+            elif index == 28:
+                page.locator('.chapter-button[data-index="3"]').click()
+            elif index == 31:
+                page.locator('.chapter-button[data-index="0"]').click()
+            elif index == 34:
+                page.locator('#starfield-stage canvas').focus()
+                page.keyboard.press("End")
         elif demo["id"] == "blurhash-to-photo-progressive-reveal":
             pointer_x = 230 if .5 <= preview_time < 2.25 else 32
             page.mouse.move(pointer_x, 90)
@@ -1190,6 +1232,43 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["activeCursorTargetError"] > 2.5
         ):
             raise RuntimeError(f"{demo['id']} did not capture a real named-agent artifact handoff with interruption, reset, and keyboard ownership: {interaction!r}")
+    elif demo["id"] == "scroll-linked-multilayer-starfield":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            interaction["automaticProgress"]
+            or interaction["previewClockDriven"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInput"]
+            or not interaction["userInitiatedChangesOnly"]
+            or not interaction["initialStaticVerified"]
+            or interaction["seedSignature"] != "far:54|mid:34|near:20"
+            or interaction["inputCount"] < 14
+            or interaction["wheelInputCount"] < 5
+            or interaction["wheelPreventCount"] < 3
+            or interaction["boundaryReleaseCount"] < 2
+            or interaction["pointerInputCount"] < 5
+            or interaction["pointerDragCount"] < 1
+            or interaction["pointerMoveCount"] < 5
+            or interaction["chapterClickCount"] < 4
+            or interaction["keyboardInputCount"] < 4
+            or interaction["keyboardAdjustCount"] < 4
+            or interaction["progressChangeCount"] < 10
+            or interaction["dragActive"]
+            or interaction["inputKind"] != "keyboard"
+            or interaction["lastTrustedEvent"] != "depth-keyboard"
+            or interaction["lastProgressSource"] != "trusted-end"
+            or interaction["progress"] != 1
+            or interaction["chapterIndex"] != 3
+            or interaction["chapterId"] != "near-pass"
+            or interaction["layerOffsets"] != {"far": .17, "mid": .48, "near": 1}
+            or not interaction["layersSeparatedValidated"]
+            or not interaction["canvasSizeValidated"]
+            or not interaction["progressValidated"]
+            or interaction["starChecksum"] <= 1
+            or interaction["drawCount"] <= 0
+            or interaction["renderCount"] <= 0
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture real wheel, drag, chapter, keyboard, and boundary-owned observatory depth: {interaction!r}")
     elif demo["id"] == "blurhash-to-photo-progressive-reveal":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__()")
         if interaction["pointerEvents"] < 3 or interaction["pointerOverPhoto"]:

@@ -11,11 +11,11 @@
 <tr><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/#interactive-vector-state-machine"><img src="demo/gifs/captured/interactive-vector-state-machine.gif" width="270" alt="交互式矢量状态机"></a><br><sub><strong>交互式矢量状态机</strong><br>动画与编排 · 94/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/#live-hand-landmark-video-overlay"><img src="demo/gifs/captured/live-hand-landmark-video-overlay.gif" width="270" alt="视频手部关键点叠加"></a><br><sub><strong>视频手部关键点叠加</strong><br>Canvas 与 2D · 94/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/#refractive-glass-transmission-sculpture"><img src="demo/gifs/captured/refractive-glass-transmission-sculpture.gif" width="270" alt="折射玻璃透射雕塑"></a><br><sub><strong>折射玻璃透射雕塑</strong><br>3D 与 WebGL · 95/100</sub></td></tr>
 </table>
 
-<p align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/"><strong>查看全部 100 个实时效果 →</strong></a></p>
+<p align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/"><strong>查看全部 150 个实时效果 →</strong></a></p>
 
 ## 看见它、叫出它、实现它
 
-<table><tr><td width="25%" align="center"><strong>100</strong><br><sub>入选效果</sub></td><td width="25%" align="center"><strong>100</strong><br><sub>真实 GIF</sub></td><td width="25%" align="center"><strong>98</strong><br><sub>可运行 Demo</sub></td><td width="25%" align="center"><strong>80/100</strong><br><sub>最低准入分</sub></td></tr></table>
+<table><tr><td width="25%" align="center"><strong>150</strong><br><sub>入选效果</sub></td><td width="25%" align="center"><strong>150</strong><br><sub>真实 GIF</sub></td><td width="25%" align="center"><strong>148</strong><br><sub>可运行 Demo</sub></td><td width="25%" align="center"><strong>80/100</strong><br><sub>最低准入分</sub></td></tr></table>
 
 <table><tr><td width="33%"><strong>① 用眼睛找</strong><br><sub>直接浏览真实动效，不必先猜库名或技术术语。</sub></td><td width="33%"><strong>② 点开效果</strong><br><sub>查看评分、来源、行为拆解和最小实现。</sub></td><td width="33%"><strong>③ 带走方案</strong><br><sub>复制代码，或把完整提示词交给 Codex / Claude Code。</sub></td></tr></table>
 
@@ -25,16 +25,16 @@
 
 | 分类 | 效果数 | 来源项目 | 关注结果 |
 | --- | ---: | ---: | --- |
-| [动画与编排](https://giraffe-tree.github.io/awesome-web-effects/#catalog) | 16 | 7 | 时间线、弹簧、补间、类动画与框架原生动效。 |
-| [滚动与揭示](https://giraffe-tree.github.io/awesome-web-effects/#catalog) | 11 | 3 | 平滑滚动、滚动关联场景、进入揭示、视差与整屏吸附。 |
-| [页面与布局](https://giraffe-tree.github.io/awesome-web-effects/#catalog) | 12 | 3 | 页面转场、FLIP 动画、筛选、紧密排布与布局重排。 |
-| [指针与悬停](https://giraffe-tree.github.io/awesome-web-effects/#catalog) | 17 | 5 | 倾斜、景深、自定义光标、磁性运动与图像扭曲。 |
-| [文本与 SVG](https://giraffe-tree.github.io/awesome-web-effects/#catalog) | 13 | 3 | 打字、文字拆分、矢量绘制、手写与 SVG 变形。 |
-| [Canvas 与 2D](https://giraffe-tree.github.io/awesome-web-effects/#catalog) | 18 | 3 | 场景图、创意编程、物理、绘图工具与 2D 渲染器。 |
+| [动画与编排](https://giraffe-tree.github.io/awesome-web-effects/#catalog) | 18 | 7 | 时间线、弹簧、补间、类动画与框架原生动效。 |
+| [滚动与揭示](https://giraffe-tree.github.io/awesome-web-effects/#catalog) | 12 | 3 | 平滑滚动、滚动关联场景、进入揭示、视差与整屏吸附。 |
+| [页面与布局](https://giraffe-tree.github.io/awesome-web-effects/#catalog) | 15 | 3 | 页面转场、FLIP 动画、筛选、紧密排布与布局重排。 |
+| [指针与悬停](https://giraffe-tree.github.io/awesome-web-effects/#catalog) | 24 | 5 | 倾斜、景深、自定义光标、磁性运动与图像扭曲。 |
+| [文本与 SVG](https://giraffe-tree.github.io/awesome-web-effects/#catalog) | 23 | 3 | 打字、文字拆分、矢量绘制、手写与 SVG 变形。 |
+| [Canvas 与 2D](https://giraffe-tree.github.io/awesome-web-effects/#catalog) | 45 | 3 | 场景图、创意编程、物理、绘图工具与 2D 渲染器。 |
 | [3D 与 WebGL](https://giraffe-tree.github.io/awesome-web-effects/#catalog) | 13 | 3 | 3D 引擎、声明式渲染器、着色器图层与后期处理。 |
 
 <details>
-<summary><strong>展开完整 100 项效果索引</strong> — 实现、评分、来源与直达链接</summary>
+<summary><strong>展开完整 150 项效果索引</strong> — 实现、评分、来源与直达链接</summary>
 
 <a id="animation"></a>
 
@@ -60,6 +60,8 @@
 | [交互式矢量状态机](https://giraffe-tree.github.io/awesome-web-effects/#interactive-vector-state-machine) | [Motion](https://github.com/motiondivision/motion) | **94/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#interactive-vector-state-machine) |
 | [图像取色环境色转场](https://giraffe-tree.github.io/awesome-web-effects/#image-palette-ambient-color-transition) | [p5.js](https://github.com/processing/p5.js) | **92/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#image-palette-ambient-color-transition) |
 | [BlurHash 到照片渐进揭示](https://giraffe-tree.github.io/awesome-web-effects/#blurhash-to-photo-progressive-reveal) | [p5.js](https://github.com/processing/p5.js) | **88/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#blurhash-to-photo-progressive-reveal) |
+| [动态纸折地图](https://giraffe-tree.github.io/awesome-web-effects/#kinetic-paper-fold-map) | [p5.js](https://github.com/processing/p5.js) | **96/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#kinetic-paper-fold-map) |
+| [弹簧加载翻页计数器](https://giraffe-tree.github.io/awesome-web-effects/#spring-loaded-split-flap-counter) | [Motion](https://github.com/motiondivision/motion) | **96/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#spring-loaded-split-flap-counter) |
 
 <a id="scroll"></a>
 
@@ -80,6 +82,7 @@
 | [擦洗式逐词模糊旋转揭示](https://giraffe-tree.github.io/awesome-web-effects/#scrubbed-word-blur-rotate-reveal) | [Motion](https://github.com/motiondivision/motion) | **93/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#scrubbed-word-blur-rotate-reveal) |
 | [粘性段落逐词着色](https://giraffe-tree.github.io/awesome-web-effects/#sticky-paragraph-ink-reveal) | [Motion](https://github.com/motiondivision/motion) | **91/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#sticky-paragraph-ink-reveal) |
 | [滚动控制视频擦洗](https://giraffe-tree.github.io/awesome-web-effects/#scroll-controlled-video-scrubbing) | [p5.js](https://github.com/processing/p5.js) | **95/100** | [Motion](https://motion.dev/docs/react-use-scroll) | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#scroll-controlled-video-scrubbing) |
+| [滚动拼装等轴蓝图](https://giraffe-tree.github.io/awesome-web-effects/#scroll-stitched-isometric-blueprint) | [Motion](https://github.com/motiondivision/motion) | **95/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#scroll-stitched-isometric-blueprint) |
 
 <a id="transition"></a>
 
@@ -101,6 +104,9 @@
 | [气泡到导航变形](https://giraffe-tree.github.io/awesome-web-effects/#bubble-to-navigation-morph) | [Motion](https://github.com/motiondivision/motion) | **95/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#bubble-to-navigation-morph) |
 | [分层交错全屏菜单](https://giraffe-tree.github.io/awesome-web-effects/#layered-staggered-full-screen-menu) | [Motion](https://github.com/motiondivision/motion) | **94/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#layered-staggered-full-screen-menu) |
 | [裁剪形状主题揭示](https://giraffe-tree.github.io/awesome-web-effects/#clip-shape-theme-reveal) | [Motion](https://github.com/motiondivision/motion) | **93/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#clip-shape-theme-reveal) |
+| [轨道卡片星座](https://giraffe-tree.github.io/awesome-web-effects/#orbital-card-constellation) | [p5.js](https://github.com/processing/p5.js) | **94/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#orbital-card-constellation) |
+| [手风琴图像切片](https://giraffe-tree.github.io/awesome-web-effects/#accordion-image-slices) | [p5.js](https://github.com/processing/p5.js) | **95/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#accordion-image-slices) |
+| [手风琴景深隧道导航](https://giraffe-tree.github.io/awesome-web-effects/#accordion-depth-tunnel-navigation) | [Motion](https://github.com/motiondivision/motion) | **96/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#accordion-depth-tunnel-navigation) |
 
 <a id="pointer"></a>
 
@@ -127,6 +133,13 @@
 | [黏性像素光标尾流](https://giraffe-tree.github.io/awesome-web-effects/#gooey-pixel-cursor-wake) | [p5.js](https://github.com/processing/p5.js) | **94/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#gooey-pixel-cursor-wake) |
 | [吸附目标准星光标](https://giraffe-tree.github.io/awesome-web-effects/#snapping-target-reticle-cursor) | [Motion](https://github.com/motiondivision/motion) | **94/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#snapping-target-reticle-cursor) |
 | [指针响应单元格网格](https://giraffe-tree.github.io/awesome-web-effects/#pointer-reactive-cell-grid) | [p5.js](https://github.com/processing/p5.js) | **91/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#pointer-reactive-cell-grid) |
+| [光圈孔径导航](https://giraffe-tree.github.io/awesome-web-effects/#iris-aperture-navigation) | [p5.js](https://github.com/processing/p5.js) | **96/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#iris-aperture-navigation) |
+| [指针编织彩带织机](https://giraffe-tree.github.io/awesome-web-effects/#pointer-woven-ribbon-loom) | [p5.js](https://github.com/processing/p5.js) | **98/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#pointer-woven-ribbon-loom) |
+| [群集指针避让场](https://giraffe-tree.github.io/awesome-web-effects/#boids-flock-pointer-avoidance) | [p5.js](https://github.com/processing/p5.js) | **90/100** | [Natureofcode](https://natureofcode.com/autonomous-agents/) | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#boids-flock-pointer-avoidance) |
+| [磁性轨道命令坞](https://giraffe-tree.github.io/awesome-web-effects/#magnetic-orbit-command-dock) | [Motion](https://github.com/motiondivision/motion) | **96/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#magnetic-orbit-command-dock) |
+| [可剥纸张角揭示](https://giraffe-tree.github.io/awesome-web-effects/#peelable-paper-corner-reveal) | [Motion](https://github.com/motiondivision/motion) | **96/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#peelable-paper-corner-reveal) |
+| [液态透镜卡片折射](https://giraffe-tree.github.io/awesome-web-effects/#liquid-lens-card-refraction) | [Motion](https://github.com/motiondivision/motion) | **95/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#liquid-lens-card-refraction) |
+| [手势切片图像百叶](https://giraffe-tree.github.io/awesome-web-effects/#gesture-sliced-image-shutters) | [Motion](https://github.com/motiondivision/motion) | **96/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#gesture-sliced-image-shutters) |
 
 <a id="vector"></a>
 
@@ -149,6 +162,16 @@
 | [Voronoi 最近点悬停聚焦](https://giraffe-tree.github.io/awesome-web-effects/#voronoi-nearest-point-hover-focus) | [p5.js](https://github.com/processing/p5.js) | **91/100** | [D3js](https://d3js.org/d3-delaunay) | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#voronoi-nearest-point-hover-focus) |
 | [联动框选缩放图表](https://giraffe-tree.github.io/awesome-web-effects/#linked-brush-to-zoom-chart) | [p5.js](https://github.com/processing/p5.js) | **89/100** | [D3js](https://d3js.org/d3-brush) | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#linked-brush-to-zoom-chart) |
 | [点击折叠层级分支](https://giraffe-tree.github.io/awesome-web-effects/#click-to-collapse-hierarchy-branches) | [Motion](https://github.com/motiondivision/motion) | **88/100** | [D3js](https://d3js.org/d3-hierarchy/tree) | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#click-to-collapse-hierarchy-branches) |
+| [弹性基线字母波](https://giraffe-tree.github.io/awesome-web-effects/#elastic-baseline-letter-wave) | [p5.js](https://github.com/processing/p5.js) | **95/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#elastic-baseline-letter-wave) |
+| [液态铬金属字形](https://giraffe-tree.github.io/awesome-web-effects/#liquid-chrome-letterform) | [p5.js](https://github.com/processing/p5.js) | **96/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#liquid-chrome-letterform) |
+| [排版时间裂隙](https://giraffe-tree.github.io/awesome-web-effects/#typographic-time-slit) | [p5.js](https://github.com/processing/p5.js) | **96/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#typographic-time-slit) |
+| [弹簧字形力场](https://giraffe-tree.github.io/awesome-web-effects/#kinetic-typography-letter-springs) | [p5.js](https://github.com/processing/p5.js) | **94/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#kinetic-typography-letter-springs) |
+| [模板文字扫描窗](https://giraffe-tree.github.io/awesome-web-effects/#stencil-text-scanline-window) | [Motion](https://github.com/motiondivision/motion) | **95/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#stencil-text-scanline-window) |
+| [弹性 SVG 绳索字形](https://giraffe-tree.github.io/awesome-web-effects/#elastic-svg-rope-lettering) | [Motion](https://github.com/motiondivision/motion) | **96/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#elastic-svg-rope-lettering) |
+| [径向日历时间缩放](https://giraffe-tree.github.io/awesome-web-effects/#radial-calendar-time-zoom) | [Motion](https://github.com/motiondivision/motion) | **95/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#radial-calendar-time-zoom) |
+| [SVG 融球指针分离](https://giraffe-tree.github.io/awesome-web-effects/#svg-metaball-cursor-separation) | [Motion](https://github.com/motiondivision/motion) | **95/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#svg-metaball-cursor-separation) |
+| [动态可变字体轴](https://giraffe-tree.github.io/awesome-web-effects/#kinetic-variable-font-axis) | [Motion](https://github.com/motiondivision/motion) | **96/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#kinetic-variable-font-axis) |
+| [贝塞尔路线动态制图](https://giraffe-tree.github.io/awesome-web-effects/#animated-bezier-route-cartography) | [Motion](https://github.com/motiondivision/motion) | **95/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#animated-bezier-route-cartography) |
 
 <a id="canvas"></a>
 
@@ -176,6 +199,33 @@
 | [可拖拽编辑贝塞尔曲线手柄](https://giraffe-tree.github.io/awesome-web-effects/#drag-editable-bezier-curve-handles) | [p5.js](https://github.com/processing/p5.js) | **91/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#drag-editable-bezier-curve-handles) |
 | [视频手部关键点叠加](https://giraffe-tree.github.io/awesome-web-effects/#live-hand-landmark-video-overlay) | [p5.js](https://github.com/processing/p5.js) | **94/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#live-hand-landmark-video-overlay) |
 | [逐帧 GIF 擦洗器](https://giraffe-tree.github.io/awesome-web-effects/#frame-by-frame-gif-scrubber) | [p5.js](https://github.com/processing/p5.js) | **90/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#frame-by-frame-gif-scrubber) |
+| [磁性像素排序场](https://giraffe-tree.github.io/awesome-web-effects/#magnetic-pixel-sort-field) | [p5.js](https://github.com/processing/p5.js) | **96/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#magnetic-pixel-sort-field) |
+| [雷达扫描批注揭示](https://giraffe-tree.github.io/awesome-web-effects/#radar-sweep-annotation-reveal) | [p5.js](https://github.com/processing/p5.js) | **94/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#radar-sweep-annotation-reveal) |
+| [莫尔纹隧道缩放](https://giraffe-tree.github.io/awesome-web-effects/#moire-tunnel-zoom) | [p5.js](https://github.com/processing/p5.js) | **95/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#moire-tunnel-zoom) |
+| [动态字雨活版压印](https://giraffe-tree.github.io/awesome-web-effects/#kinetic-rain-letterpress) | [p5.js](https://github.com/processing/p5.js) | **96/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#kinetic-rain-letterpress) |
+| [递归弧线森林生长](https://giraffe-tree.github.io/awesome-web-effects/#recursive-arc-forest-growth) | [p5.js](https://github.com/processing/p5.js) | **96/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#recursive-arc-forest-growth) |
+| [反应扩散生长场](https://giraffe-tree.github.io/awesome-web-effects/#reaction-diffusion-growth-field) | [p5.js](https://github.com/processing/p5.js) | **90/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#reaction-diffusion-growth-field) |
+| [泊松星座绽放](https://giraffe-tree.github.io/awesome-web-effects/#poisson-constellation-bloom) | [p5.js](https://github.com/processing/p5.js) | **90/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#poisson-constellation-bloom) |
+| [距离场霓虹融球](https://giraffe-tree.github.io/awesome-web-effects/#signed-distance-neon-metaballs) | [p5.js](https://github.com/processing/p5.js) | **92/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#signed-distance-neon-metaballs) |
+| [递归四叉树脉冲拼图](https://giraffe-tree.github.io/awesome-web-effects/#recursive-quadtree-pulse-mosaic) | [p5.js](https://github.com/processing/p5.js) | **92/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#recursive-quadtree-pulse-mosaic) |
+| [流场带状平流](https://giraffe-tree.github.io/awesome-web-effects/#flow-field-ribbon-advection) | [p5.js](https://github.com/processing/p5.js) | **93/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#flow-field-ribbon-advection) |
+| [三角网格扫光](https://giraffe-tree.github.io/awesome-web-effects/#delaunay-triangulated-light-sweep) | [p5.js](https://github.com/processing/p5.js) | **91/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#delaunay-triangulated-light-sweep) |
+| [极坐标波形日晷](https://giraffe-tree.github.io/awesome-web-effects/#polar-waveform-sundial) | [p5.js](https://github.com/processing/p5.js) | **96/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#polar-waveform-sundial) |
+| [固定种子沙堆雪崩](https://giraffe-tree.github.io/awesome-web-effects/#seeded-sandpile-avalanche) | [p5.js](https://github.com/processing/p5.js) | **96/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#seeded-sandpile-avalanche) |
+| [有符号距离霓虹都市](https://giraffe-tree.github.io/awesome-web-effects/#signed-distance-neon-metropolis) | [p5.js](https://github.com/processing/p5.js) | **96/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#signed-distance-neon-metropolis) |
+| [流场纸面大理石纹](https://giraffe-tree.github.io/awesome-web-effects/#flowfield-paper-marbling) | [p5.js](https://github.com/processing/p5.js) | **97/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#flowfield-paper-marbling) |
+| [地形波等高线揭示](https://giraffe-tree.github.io/awesome-web-effects/#topographic-wave-contour-reveal) | [p5.js](https://github.com/processing/p5.js) | **96/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#topographic-wave-contour-reveal) |
+| [指针热场晶化](https://giraffe-tree.github.io/awesome-web-effects/#cursor-heatmap-crystallization) | [p5.js](https://github.com/processing/p5.js) | **97/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#cursor-heatmap-crystallization) |
+| [字体粒子解体场](https://giraffe-tree.github.io/awesome-web-effects/#typography-particle-disassembly-field) | [p5.js](https://github.com/processing/p5.js) | **96/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#typography-particle-disassembly-field) |
+| [离线音频频谱丝带](https://giraffe-tree.github.io/awesome-web-effects/#offline-audio-spectral-ribbon) | [p5.js](https://github.com/processing/p5.js) | **97/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#offline-audio-spectral-ribbon) |
+| [重力井图标场](https://giraffe-tree.github.io/awesome-web-effects/#gravity-well-icon-field) | [p5.js](https://github.com/processing/p5.js) | **95/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#gravity-well-icon-field) |
+| [像素排序悬停擦除](https://giraffe-tree.github.io/awesome-web-effects/#pixel-sort-hover-wipe) | [p5.js](https://github.com/processing/p5.js) | **95/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#pixel-sort-hover-wipe) |
+| [元胞自动机悬停生长](https://giraffe-tree.github.io/awesome-web-effects/#cellular-automata-hover-bloom) | [p5.js](https://github.com/processing/p5.js) | **96/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#cellular-automata-hover-bloom) |
+| [焦散光卡片表面](https://giraffe-tree.github.io/awesome-web-effects/#caustic-light-card-surface) | [p5.js](https://github.com/processing/p5.js) | **96/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#caustic-light-card-surface) |
+| [指针绘制星座线](https://giraffe-tree.github.io/awesome-web-effects/#cursor-drawn-constellation-thread) | [p5.js](https://github.com/processing/p5.js) | **95/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#cursor-drawn-constellation-thread) |
+| [弹性 Voronoi 焦点马赛克](https://giraffe-tree.github.io/awesome-web-effects/#elastic-voronoi-focus-mosaic) | [p5.js](https://github.com/processing/p5.js) | **95/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#elastic-voronoi-focus-mosaic) |
+| [色彩通道拖拽肖像](https://giraffe-tree.github.io/awesome-web-effects/#chromatic-channel-drag-portrait) | [p5.js](https://github.com/processing/p5.js) | **95/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#chromatic-channel-drag-portrait) |
+| [程序化折叠万花筒](https://giraffe-tree.github.io/awesome-web-effects/#procedural-folding-kaleidoscope) | [p5.js](https://github.com/processing/p5.js) | **98/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#procedural-folding-kaleidoscope) |
 
 <a id="webgl"></a>
 
@@ -214,14 +264,14 @@
 <details>
 <summary><strong>评分、来源与审计数据</strong></summary>
 
-- 已审计 346 个候选：**100 个入选**，**246 个拒绝**。
-- 100 个已核验预览：2 个官方素材、98 个可运行本地 Demo 录制；缺失数为 0。
+- 已审计 396 个候选：**150 个入选**，**246 个拒绝**。
+- 150 个已核验预览：2 个官方素材、148 个可运行本地 Demo 录制；缺失数为 0。
 - 人工评审覆盖创意、艺术完成度、动效编排、效果辨识、创作迁移和证据质量。
 - 准入要求 80/100，并同时通过核心维度最低分；流行度不能覆盖质量门槛。
-- 已核验 GIF 总计 17.20 MiB；每个预览为 320×180、最长三秒且小于 1 MiB。
+- 已核验 GIF 总计 24.87 MiB；每个预览为 320×180、最长三秒且小于 1 MiB。
 - Stars 是 2026-07-20 快照；“推荐实现”与“在哪家 AI 官网观察到”始终是两种关系。
 
-继续阅读 [346 个候选的准入审计](research/demo-admission-audit-2026-07-20.md)、[100 家 AI 公司主页特效调研](research/ai-native-homepages-100.md)与[预览来源清单](demo/gifs/provenance.json)。
+继续阅读 [396 个候选的准入审计](research/demo-admission-audit-2026-07-20.md)、[100 家 AI 公司主页特效调研](research/ai-native-homepages-100.md)与[预览来源清单](demo/gifs/provenance.json)。
 
 </details>
 

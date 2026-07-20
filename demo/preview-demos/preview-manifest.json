@@ -879,6 +879,456 @@
       "demoPath": "preview-demos/dist/scroll-controlled-video-scrubbing.html",
       "demoSourcePath": "preview-demos/scroll-controlled-video-scrubbing.html",
       "gifPath": "gifs/captured/scroll-controlled-video-scrubbing.gif"
+    },
+    {
+      "id": "iris-aperture-navigation",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/iris-aperture-navigation.html",
+      "demoSourcePath": "preview-demos/iris-aperture-navigation.html",
+      "gifPath": "gifs/captured/iris-aperture-navigation.gif"
+    },
+    {
+      "id": "elastic-baseline-letter-wave",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/elastic-baseline-letter-wave.html",
+      "demoSourcePath": "preview-demos/elastic-baseline-letter-wave.html",
+      "gifPath": "gifs/captured/elastic-baseline-letter-wave.gif"
+    },
+    {
+      "id": "orbital-card-constellation",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/orbital-card-constellation.html",
+      "demoSourcePath": "preview-demos/orbital-card-constellation.html",
+      "gifPath": "gifs/captured/orbital-card-constellation.gif"
+    },
+    {
+      "id": "magnetic-pixel-sort-field",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/magnetic-pixel-sort-field.html",
+      "demoSourcePath": "preview-demos/magnetic-pixel-sort-field.html",
+      "gifPath": "gifs/captured/magnetic-pixel-sort-field.gif"
+    },
+    {
+      "id": "kinetic-paper-fold-map",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/kinetic-paper-fold-map.html",
+      "demoSourcePath": "preview-demos/kinetic-paper-fold-map.html",
+      "gifPath": "gifs/captured/kinetic-paper-fold-map.gif"
+    },
+    {
+      "id": "radar-sweep-annotation-reveal",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/radar-sweep-annotation-reveal.html",
+      "demoSourcePath": "preview-demos/radar-sweep-annotation-reveal.html",
+      "gifPath": "gifs/captured/radar-sweep-annotation-reveal.gif"
+    },
+    {
+      "id": "moire-tunnel-zoom",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/moire-tunnel-zoom.html",
+      "demoSourcePath": "preview-demos/moire-tunnel-zoom.html",
+      "gifPath": "gifs/captured/moire-tunnel-zoom.gif"
+    },
+    {
+      "id": "liquid-chrome-letterform",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/liquid-chrome-letterform.html",
+      "demoSourcePath": "preview-demos/liquid-chrome-letterform.html",
+      "gifPath": "gifs/captured/liquid-chrome-letterform.gif"
+    },
+    {
+      "id": "accordion-image-slices",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/accordion-image-slices.html",
+      "demoSourcePath": "preview-demos/accordion-image-slices.html",
+      "gifPath": "gifs/captured/accordion-image-slices.gif"
+    },
+    {
+      "id": "typographic-time-slit",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/typographic-time-slit.html",
+      "demoSourcePath": "preview-demos/typographic-time-slit.html",
+      "gifPath": "gifs/captured/typographic-time-slit.gif"
+    },
+    {
+      "id": "kinetic-rain-letterpress",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/kinetic-rain-letterpress.html",
+      "demoSourcePath": "preview-demos/kinetic-rain-letterpress.html",
+      "gifPath": "gifs/captured/kinetic-rain-letterpress.gif"
+    },
+    {
+      "id": "recursive-arc-forest-growth",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/recursive-arc-forest-growth.html",
+      "demoSourcePath": "preview-demos/recursive-arc-forest-growth.html",
+      "gifPath": "gifs/captured/recursive-arc-forest-growth.gif"
+    },
+    {
+      "id": "pointer-woven-ribbon-loom",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/pointer-woven-ribbon-loom.html",
+      "demoSourcePath": "preview-demos/pointer-woven-ribbon-loom.html",
+      "gifPath": "gifs/captured/pointer-woven-ribbon-loom.gif"
+    },
+    {
+      "id": "boids-flock-pointer-avoidance",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/boids-flock-pointer-avoidance.html",
+      "demoSourcePath": "preview-demos/boids-flock-pointer-avoidance.html",
+      "gifPath": "gifs/captured/boids-flock-pointer-avoidance.gif"
+    },
+    {
+      "id": "reaction-diffusion-growth-field",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/reaction-diffusion-growth-field.html",
+      "demoSourcePath": "preview-demos/reaction-diffusion-growth-field.html",
+      "gifPath": "gifs/captured/reaction-diffusion-growth-field.gif"
+    },
+    {
+      "id": "poisson-constellation-bloom",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/poisson-constellation-bloom.html",
+      "demoSourcePath": "preview-demos/poisson-constellation-bloom.html",
+      "gifPath": "gifs/captured/poisson-constellation-bloom.gif"
+    },
+    {
+      "id": "signed-distance-neon-metaballs",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/signed-distance-neon-metaballs.html",
+      "demoSourcePath": "preview-demos/signed-distance-neon-metaballs.html",
+      "gifPath": "gifs/captured/signed-distance-neon-metaballs.gif"
+    },
+    {
+      "id": "kinetic-typography-letter-springs",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/kinetic-typography-letter-springs.html",
+      "demoSourcePath": "preview-demos/kinetic-typography-letter-springs.html",
+      "gifPath": "gifs/captured/kinetic-typography-letter-springs.gif"
+    },
+    {
+      "id": "recursive-quadtree-pulse-mosaic",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/recursive-quadtree-pulse-mosaic.html",
+      "demoSourcePath": "preview-demos/recursive-quadtree-pulse-mosaic.html",
+      "gifPath": "gifs/captured/recursive-quadtree-pulse-mosaic.gif"
+    },
+    {
+      "id": "flow-field-ribbon-advection",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/flow-field-ribbon-advection.html",
+      "demoSourcePath": "preview-demos/flow-field-ribbon-advection.html",
+      "gifPath": "gifs/captured/flow-field-ribbon-advection.gif"
+    },
+    {
+      "id": "delaunay-triangulated-light-sweep",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/delaunay-triangulated-light-sweep.html",
+      "demoSourcePath": "preview-demos/delaunay-triangulated-light-sweep.html",
+      "gifPath": "gifs/captured/delaunay-triangulated-light-sweep.gif"
+    },
+    {
+      "id": "polar-waveform-sundial",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/polar-waveform-sundial.html",
+      "demoSourcePath": "preview-demos/polar-waveform-sundial.html",
+      "gifPath": "gifs/captured/polar-waveform-sundial.gif"
+    },
+    {
+      "id": "seeded-sandpile-avalanche",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/seeded-sandpile-avalanche.html",
+      "demoSourcePath": "preview-demos/seeded-sandpile-avalanche.html",
+      "gifPath": "gifs/captured/seeded-sandpile-avalanche.gif"
+    },
+    {
+      "id": "signed-distance-neon-metropolis",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/signed-distance-neon-metropolis.html",
+      "demoSourcePath": "preview-demos/signed-distance-neon-metropolis.html",
+      "gifPath": "gifs/captured/signed-distance-neon-metropolis.gif"
+    },
+    {
+      "id": "flowfield-paper-marbling",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/flowfield-paper-marbling.html",
+      "demoSourcePath": "preview-demos/flowfield-paper-marbling.html",
+      "gifPath": "gifs/captured/flowfield-paper-marbling.gif"
+    },
+    {
+      "id": "topographic-wave-contour-reveal",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/topographic-wave-contour-reveal.html",
+      "demoSourcePath": "preview-demos/topographic-wave-contour-reveal.html",
+      "gifPath": "gifs/captured/topographic-wave-contour-reveal.gif"
+    },
+    {
+      "id": "magnetic-orbit-command-dock",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/magnetic-orbit-command-dock.html",
+      "demoSourcePath": "preview-demos/magnetic-orbit-command-dock.html",
+      "gifPath": "gifs/captured/magnetic-orbit-command-dock.gif"
+    },
+    {
+      "id": "stencil-text-scanline-window",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/stencil-text-scanline-window.html",
+      "demoSourcePath": "preview-demos/stencil-text-scanline-window.html",
+      "gifPath": "gifs/captured/stencil-text-scanline-window.gif"
+    },
+    {
+      "id": "elastic-svg-rope-lettering",
+      "library": "motion@12.42.2",
+      "renderer": "svg",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/elastic-svg-rope-lettering.html",
+      "demoSourcePath": "preview-demos/elastic-svg-rope-lettering.html",
+      "gifPath": "gifs/captured/elastic-svg-rope-lettering.gif"
+    },
+    {
+      "id": "cursor-heatmap-crystallization",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/cursor-heatmap-crystallization.html",
+      "demoSourcePath": "preview-demos/cursor-heatmap-crystallization.html",
+      "gifPath": "gifs/captured/cursor-heatmap-crystallization.gif"
+    },
+    {
+      "id": "peelable-paper-corner-reveal",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/peelable-paper-corner-reveal.html",
+      "demoSourcePath": "preview-demos/peelable-paper-corner-reveal.html",
+      "gifPath": "gifs/captured/peelable-paper-corner-reveal.gif"
+    },
+    {
+      "id": "radial-calendar-time-zoom",
+      "library": "motion@12.42.2",
+      "renderer": "svg",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/radial-calendar-time-zoom.html",
+      "demoSourcePath": "preview-demos/radial-calendar-time-zoom.html",
+      "gifPath": "gifs/captured/radial-calendar-time-zoom.gif"
+    },
+    {
+      "id": "typography-particle-disassembly-field",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/typography-particle-disassembly-field.html",
+      "demoSourcePath": "preview-demos/typography-particle-disassembly-field.html",
+      "gifPath": "gifs/captured/typography-particle-disassembly-field.gif"
+    },
+    {
+      "id": "liquid-lens-card-refraction",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/liquid-lens-card-refraction.html",
+      "demoSourcePath": "preview-demos/liquid-lens-card-refraction.html",
+      "gifPath": "gifs/captured/liquid-lens-card-refraction.gif"
+    },
+    {
+      "id": "accordion-depth-tunnel-navigation",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/accordion-depth-tunnel-navigation.html",
+      "demoSourcePath": "preview-demos/accordion-depth-tunnel-navigation.html",
+      "gifPath": "gifs/captured/accordion-depth-tunnel-navigation.gif"
+    },
+    {
+      "id": "svg-metaball-cursor-separation",
+      "library": "motion@12.42.2",
+      "renderer": "svg",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/svg-metaball-cursor-separation.html",
+      "demoSourcePath": "preview-demos/svg-metaball-cursor-separation.html",
+      "gifPath": "gifs/captured/svg-metaball-cursor-separation.gif"
+    },
+    {
+      "id": "gesture-sliced-image-shutters",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/gesture-sliced-image-shutters.html",
+      "demoSourcePath": "preview-demos/gesture-sliced-image-shutters.html",
+      "gifPath": "gifs/captured/gesture-sliced-image-shutters.gif"
+    },
+    {
+      "id": "offline-audio-spectral-ribbon",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/offline-audio-spectral-ribbon.html",
+      "demoSourcePath": "preview-demos/offline-audio-spectral-ribbon.html",
+      "gifPath": "gifs/captured/offline-audio-spectral-ribbon.gif"
+    },
+    {
+      "id": "gravity-well-icon-field",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/gravity-well-icon-field.html",
+      "demoSourcePath": "preview-demos/gravity-well-icon-field.html",
+      "gifPath": "gifs/captured/gravity-well-icon-field.gif"
+    },
+    {
+      "id": "scroll-stitched-isometric-blueprint",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/scroll-stitched-isometric-blueprint.html",
+      "demoSourcePath": "preview-demos/scroll-stitched-isometric-blueprint.html",
+      "gifPath": "gifs/captured/scroll-stitched-isometric-blueprint.gif"
+    },
+    {
+      "id": "pixel-sort-hover-wipe",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/pixel-sort-hover-wipe.html",
+      "demoSourcePath": "preview-demos/pixel-sort-hover-wipe.html",
+      "gifPath": "gifs/captured/pixel-sort-hover-wipe.gif"
+    },
+    {
+      "id": "kinetic-variable-font-axis",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/kinetic-variable-font-axis.html",
+      "demoSourcePath": "preview-demos/kinetic-variable-font-axis.html",
+      "gifPath": "gifs/captured/kinetic-variable-font-axis.gif"
+    },
+    {
+      "id": "animated-bezier-route-cartography",
+      "library": "motion@12.42.2",
+      "renderer": "svg",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/animated-bezier-route-cartography.html",
+      "demoSourcePath": "preview-demos/animated-bezier-route-cartography.html",
+      "gifPath": "gifs/captured/animated-bezier-route-cartography.gif"
+    },
+    {
+      "id": "cellular-automata-hover-bloom",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/cellular-automata-hover-bloom.html",
+      "demoSourcePath": "preview-demos/cellular-automata-hover-bloom.html",
+      "gifPath": "gifs/captured/cellular-automata-hover-bloom.gif"
+    },
+    {
+      "id": "spring-loaded-split-flap-counter",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/spring-loaded-split-flap-counter.html",
+      "demoSourcePath": "preview-demos/spring-loaded-split-flap-counter.html",
+      "gifPath": "gifs/captured/spring-loaded-split-flap-counter.gif"
+    },
+    {
+      "id": "caustic-light-card-surface",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/caustic-light-card-surface.html",
+      "demoSourcePath": "preview-demos/caustic-light-card-surface.html",
+      "gifPath": "gifs/captured/caustic-light-card-surface.gif"
+    },
+    {
+      "id": "cursor-drawn-constellation-thread",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/cursor-drawn-constellation-thread.html",
+      "demoSourcePath": "preview-demos/cursor-drawn-constellation-thread.html",
+      "gifPath": "gifs/captured/cursor-drawn-constellation-thread.gif"
+    },
+    {
+      "id": "elastic-voronoi-focus-mosaic",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/elastic-voronoi-focus-mosaic.html",
+      "demoSourcePath": "preview-demos/elastic-voronoi-focus-mosaic.html",
+      "gifPath": "gifs/captured/elastic-voronoi-focus-mosaic.gif"
+    },
+    {
+      "id": "chromatic-channel-drag-portrait",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/chromatic-channel-drag-portrait.html",
+      "demoSourcePath": "preview-demos/chromatic-channel-drag-portrait.html",
+      "gifPath": "gifs/captured/chromatic-channel-drag-portrait.gif"
+    },
+    {
+      "id": "procedural-folding-kaleidoscope",
+      "library": "p5@2.3.0",
+      "renderer": "canvas2d",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/procedural-folding-kaleidoscope.html",
+      "demoSourcePath": "preview-demos/procedural-folding-kaleidoscope.html",
+      "gifPath": "gifs/captured/procedural-folding-kaleidoscope.gif"
     }
   ]
 }

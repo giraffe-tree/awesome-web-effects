@@ -79,8 +79,25 @@ def main() -> int:
             page.on("pageerror", lambda error: page_errors.append(str(error)))
             page.goto(f"{origin}/", wait_until="networkidle")
 
+            expect(page.locator("#entry-reveal")).to_have_count(0)
+            hero = page.locator("#hero-experience")
+            expect(hero).to_have_attribute("data-step", "0")
+            hero.press("ArrowRight")
+            expect(hero).to_have_attribute("data-step", "1")
+            page.locator('[data-hero-step="3"]').click()
+            expect(hero).to_have_attribute("data-step", "3")
+            hero_toggle = page.locator("#hero-story-toggle")
+            expect(hero_toggle).to_be_visible()
+            hero_toggle.click()
+            expect(hero_toggle).to_have_text("Play")
+            page.locator("#language").click()
+            expect(page.locator("#hero-story-eyebrow")).to_have_text("实时交互叙事")
+            page.locator("#language").click()
+            expect(page.locator("#hero-story-eyebrow")).to_have_text("Live interaction story")
+
             rows = page.locator("#effect-list .effect-row")
             expect(rows).to_have_count(expected_effect_count)
+            expect(page.locator("#effect-list .media-load-state[role]")).to_have_count(0)
 
             for effect_id in admitted_local_preview_ids:
                 migrated_row = page.locator(f"#{effect_id}")
@@ -103,6 +120,8 @@ def main() -> int:
             assert live_frame is not None, "Runnable detail preview iframe did not load."
             live_frame.wait_for_function("window.__PREVIEW_READY__ === true || Boolean(window.__PREVIEW_ERROR__)")
             assert not live_frame.evaluate("window.__PREVIEW_ERROR__ || null")
+            expect(modal.locator(".modal-preview-live")).to_have_attribute("data-media-state", "ready")
+            expect(modal.locator(".modal-preview-live")).to_have_attribute("aria-busy", "false")
             assert live_preview.bounding_box()["width"] > 640
             expect(modal.locator(".modal-score-total")).to_contain_text("85")
             expect(modal.locator(".score-dimension")).to_have_count(6)
@@ -150,8 +169,12 @@ def main() -> int:
                     "image => image.complete && image.naturalWidth === 320 && image.naturalHeight === 180",
                     arg=official_preview.element_handle(),
                 )
+                expect(modal.locator(".modal-preview-official")).to_have_attribute("data-media-state", "ready")
                 official_fallback_box = official_preview.bounding_box()
                 assert official_fallback_box["width"] <= 320 and official_fallback_box["height"] <= 180
+                official_preview.evaluate("image => image.dispatchEvent(new Event('error'))")
+                expect(modal.locator(".modal-preview-official")).to_have_attribute("data-media-state", "error")
+                expect(modal.locator(".modal-preview-official .media-load-state")).to_have_attribute("role", "alert")
                 page.keyboard.press("Escape")
                 expect(modal).to_be_hidden()
 
@@ -175,6 +198,16 @@ def main() -> int:
 
             assert not page_errors, "Catalog emitted page errors:\n" + "\n".join(page_errors)
 
+            reduced_page = context.new_page()
+            reduced_page.emulate_media(reduced_motion="reduce")
+            reduced_page.goto(f"{origin}/", wait_until="networkidle")
+            expect(reduced_page.locator("#entry-reveal")).to_have_count(0)
+            expect(reduced_page.locator("#hero-story-toggle")).to_be_hidden()
+            reduced_hero = reduced_page.locator("#hero-experience")
+            reduced_hero.press("ArrowRight")
+            expect(reduced_hero).to_have_attribute("data-step", "1")
+            reduced_page.close()
+
             context.close()
             browser.close()
     finally:
@@ -185,7 +218,7 @@ def main() -> int:
             server.kill()
             server.wait()
 
-    print(f"Catalog UI verified: {expected_effect_count} admitted demos, live detail previews, native-size official GIFs, visible scores, copy actions, focus, and mobile layout.")
+    print(f"Catalog UI verified: {expected_effect_count} admitted demos, interactive hero, loading/error transitions, live detail previews, native-size official GIFs, visible scores, copy actions, focus, reduced motion, and mobile layout.")
     return 0
 
 

@@ -11,11 +11,11 @@
 <tr><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/#interactive-vector-state-machine"><img src="demo/gifs/captured/interactive-vector-state-machine.gif" width="270" alt="Interactive vector state machine"></a><br><sub><strong>Interactive vector state machine</strong><br>Motion &amp; choreography · 94/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/#live-hand-landmark-video-overlay"><img src="demo/gifs/captured/live-hand-landmark-video-overlay.gif" width="270" alt="Live hand-landmark video overlay"></a><br><sub><strong>Live hand-landmark video overlay</strong><br>Canvas &amp; 2D · 94/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/#refractive-glass-transmission-sculpture"><img src="demo/gifs/captured/refractive-glass-transmission-sculpture.gif" width="270" alt="Refractive glass transmission sculpture"></a><br><sub><strong>Refractive glass transmission sculpture</strong><br>3D &amp; WebGL · 95/100</sub></td></tr>
 </table>
 
-<p align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/"><strong>Explore all 100 live effects →</strong></a></p>
+<p align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/"><strong>Explore all 150 live effects →</strong></a></p>
 
 ## See it. Name it. Build it.
 
-<table><tr><td width="25%" align="center"><strong>100</strong><br><sub>admitted effects</sub></td><td width="25%" align="center"><strong>100</strong><br><sub>real GIFs</sub></td><td width="25%" align="center"><strong>98</strong><br><sub>runnable demos</sub></td><td width="25%" align="center"><strong>80/100</strong><br><sub>minimum score</sub></td></tr></table>
+<table><tr><td width="25%" align="center"><strong>150</strong><br><sub>admitted effects</sub></td><td width="25%" align="center"><strong>150</strong><br><sub>real GIFs</sub></td><td width="25%" align="center"><strong>148</strong><br><sub>runnable demos</sub></td><td width="25%" align="center"><strong>80/100</strong><br><sub>minimum score</sub></td></tr></table>
 
 <table><tr><td width="33%"><strong>① Find by sight</strong><br><sub>Scan real motion instead of guessing library names.</sub></td><td width="33%"><strong>② Open the effect</strong><br><sub>Check the score, source, behavior and minimal implementation.</sub></td><td width="33%"><strong>③ Ship the idea</strong><br><sub>Copy code or a scoped prompt for Codex / Claude Code.</sub></td></tr></table>
 
@@ -25,16 +25,16 @@ This is an **effect-first**, curator-reviewed reference—not another repository
 
 | Category | Effects | Source projects | Visible result |
 | --- | ---: | ---: | --- |
-| [Motion & choreography](https://giraffe-tree.github.io/awesome-web-effects/#catalog) | 16 | 7 | Timelines, springs, tweens, class animation, and framework-native motion. |
-| [Scroll & reveal](https://giraffe-tree.github.io/awesome-web-effects/#catalog) | 11 | 3 | Smooth scrolling, scroll-linked scenes, reveals, parallax, and snap navigation. |
-| [Page & layout](https://giraffe-tree.github.io/awesome-web-effects/#catalog) | 12 | 3 | Page transitions, FLIP motion, filtering, packing, and animated reflow. |
-| [Pointer & hover](https://giraffe-tree.github.io/awesome-web-effects/#catalog) | 17 | 5 | Tilt, depth, custom cursors, magnetic motion, and image distortion. |
-| [Text & SVG](https://giraffe-tree.github.io/awesome-web-effects/#catalog) | 13 | 3 | Typing, text splitting, vector drawing, handwriting, and SVG morphing. |
-| [Canvas & 2D](https://giraffe-tree.github.io/awesome-web-effects/#catalog) | 18 | 3 | Scene graphs, creative coding, physics, drawing tools, and 2D renderers. |
+| [Motion & choreography](https://giraffe-tree.github.io/awesome-web-effects/#catalog) | 18 | 7 | Timelines, springs, tweens, class animation, and framework-native motion. |
+| [Scroll & reveal](https://giraffe-tree.github.io/awesome-web-effects/#catalog) | 12 | 3 | Smooth scrolling, scroll-linked scenes, reveals, parallax, and snap navigation. |
+| [Page & layout](https://giraffe-tree.github.io/awesome-web-effects/#catalog) | 15 | 3 | Page transitions, FLIP motion, filtering, packing, and animated reflow. |
+| [Pointer & hover](https://giraffe-tree.github.io/awesome-web-effects/#catalog) | 24 | 5 | Tilt, depth, custom cursors, magnetic motion, and image distortion. |
+| [Text & SVG](https://giraffe-tree.github.io/awesome-web-effects/#catalog) | 23 | 3 | Typing, text splitting, vector drawing, handwriting, and SVG morphing. |
+| [Canvas & 2D](https://giraffe-tree.github.io/awesome-web-effects/#catalog) | 45 | 3 | Scene graphs, creative coding, physics, drawing tools, and 2D renderers. |
 | [3D & WebGL](https://giraffe-tree.github.io/awesome-web-effects/#catalog) | 13 | 3 | 3D engines, declarative renderers, shader layers, and post-processing. |
 
 <details>
-<summary><strong>Open the complete 100-effect index</strong> — implementation, score, source and direct link</summary>
+<summary><strong>Open the complete 150-effect index</strong> — implementation, score, source and direct link</summary>
 
 <a id="animation"></a>
 
@@ -60,6 +60,8 @@ Timelines, springs, tweens, class animation, and framework-native motion.
 | [Interactive vector state machine](https://giraffe-tree.github.io/awesome-web-effects/#interactive-vector-state-machine) | [Motion](https://github.com/motiondivision/motion) | **94/100** | — | 32,819 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#interactive-vector-state-machine) |
 | [Image-palette ambient color transition](https://giraffe-tree.github.io/awesome-web-effects/#image-palette-ambient-color-transition) | [p5.js](https://github.com/processing/p5.js) | **92/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#image-palette-ambient-color-transition) |
 | [BlurHash-to-photo progressive reveal](https://giraffe-tree.github.io/awesome-web-effects/#blurhash-to-photo-progressive-reveal) | [p5.js](https://github.com/processing/p5.js) | **88/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#blurhash-to-photo-progressive-reveal) |
+| [Kinetic paper-fold map](https://giraffe-tree.github.io/awesome-web-effects/#kinetic-paper-fold-map) | [p5.js](https://github.com/processing/p5.js) | **96/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#kinetic-paper-fold-map) |
+| [Spring loaded split flap counter](https://giraffe-tree.github.io/awesome-web-effects/#spring-loaded-split-flap-counter) | [Motion](https://github.com/motiondivision/motion) | **96/100** | — | 32,819 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#spring-loaded-split-flap-counter) |
 
 <a id="scroll"></a>
 
@@ -80,6 +82,7 @@ Smooth scrolling, scroll-linked scenes, reveals, parallax, and snap navigation.
 | [Scrubbed word blur-and-rotate reveal](https://giraffe-tree.github.io/awesome-web-effects/#scrubbed-word-blur-rotate-reveal) | [Motion](https://github.com/motiondivision/motion) | **93/100** | — | 32,819 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#scrubbed-word-blur-rotate-reveal) |
 | [Sticky paragraph ink reveal](https://giraffe-tree.github.io/awesome-web-effects/#sticky-paragraph-ink-reveal) | [Motion](https://github.com/motiondivision/motion) | **91/100** | — | 32,819 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#sticky-paragraph-ink-reveal) |
 | [Scroll-controlled video scrubbing](https://giraffe-tree.github.io/awesome-web-effects/#scroll-controlled-video-scrubbing) | [p5.js](https://github.com/processing/p5.js) | **95/100** | [Motion](https://motion.dev/docs/react-use-scroll) | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#scroll-controlled-video-scrubbing) |
+| [Scroll stitched isometric blueprint](https://giraffe-tree.github.io/awesome-web-effects/#scroll-stitched-isometric-blueprint) | [Motion](https://github.com/motiondivision/motion) | **95/100** | — | 32,819 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#scroll-stitched-isometric-blueprint) |
 
 <a id="transition"></a>
 
@@ -101,6 +104,9 @@ Page transitions, FLIP motion, filtering, packing, and animated reflow.
 | [Bubble-to-navigation morph](https://giraffe-tree.github.io/awesome-web-effects/#bubble-to-navigation-morph) | [Motion](https://github.com/motiondivision/motion) | **95/100** | — | 32,819 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#bubble-to-navigation-morph) |
 | [Layered staggered full-screen menu](https://giraffe-tree.github.io/awesome-web-effects/#layered-staggered-full-screen-menu) | [Motion](https://github.com/motiondivision/motion) | **94/100** | — | 32,819 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#layered-staggered-full-screen-menu) |
 | [Clip-shape theme reveal](https://giraffe-tree.github.io/awesome-web-effects/#clip-shape-theme-reveal) | [Motion](https://github.com/motiondivision/motion) | **93/100** | — | 32,819 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#clip-shape-theme-reveal) |
+| [Orbital card constellation](https://giraffe-tree.github.io/awesome-web-effects/#orbital-card-constellation) | [p5.js](https://github.com/processing/p5.js) | **94/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#orbital-card-constellation) |
+| [Accordion image slices](https://giraffe-tree.github.io/awesome-web-effects/#accordion-image-slices) | [p5.js](https://github.com/processing/p5.js) | **95/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#accordion-image-slices) |
+| [Accordion depth tunnel navigation](https://giraffe-tree.github.io/awesome-web-effects/#accordion-depth-tunnel-navigation) | [Motion](https://github.com/motiondivision/motion) | **96/100** | — | 32,819 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#accordion-depth-tunnel-navigation) |
 
 <a id="pointer"></a>
 
@@ -127,6 +133,13 @@ Tilt, depth, custom cursors, magnetic motion, and image distortion.
 | [Gooey pixel cursor wake](https://giraffe-tree.github.io/awesome-web-effects/#gooey-pixel-cursor-wake) | [p5.js](https://github.com/processing/p5.js) | **94/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#gooey-pixel-cursor-wake) |
 | [Snapping target-reticle cursor](https://giraffe-tree.github.io/awesome-web-effects/#snapping-target-reticle-cursor) | [Motion](https://github.com/motiondivision/motion) | **94/100** | — | 32,819 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#snapping-target-reticle-cursor) |
 | [Pointer-reactive cell grid](https://giraffe-tree.github.io/awesome-web-effects/#pointer-reactive-cell-grid) | [p5.js](https://github.com/processing/p5.js) | **91/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#pointer-reactive-cell-grid) |
+| [Iris-aperture navigation](https://giraffe-tree.github.io/awesome-web-effects/#iris-aperture-navigation) | [p5.js](https://github.com/processing/p5.js) | **96/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#iris-aperture-navigation) |
+| [Pointer woven ribbon loom](https://giraffe-tree.github.io/awesome-web-effects/#pointer-woven-ribbon-loom) | [p5.js](https://github.com/processing/p5.js) | **98/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#pointer-woven-ribbon-loom) |
+| [Boids flock pointer avoidance](https://giraffe-tree.github.io/awesome-web-effects/#boids-flock-pointer-avoidance) | [p5.js](https://github.com/processing/p5.js) | **90/100** | [Natureofcode](https://natureofcode.com/autonomous-agents/) | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#boids-flock-pointer-avoidance) |
+| [Magnetic orbit command dock](https://giraffe-tree.github.io/awesome-web-effects/#magnetic-orbit-command-dock) | [Motion](https://github.com/motiondivision/motion) | **96/100** | — | 32,819 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#magnetic-orbit-command-dock) |
+| [Peelable paper corner reveal](https://giraffe-tree.github.io/awesome-web-effects/#peelable-paper-corner-reveal) | [Motion](https://github.com/motiondivision/motion) | **96/100** | — | 32,819 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#peelable-paper-corner-reveal) |
+| [Liquid lens card refraction](https://giraffe-tree.github.io/awesome-web-effects/#liquid-lens-card-refraction) | [Motion](https://github.com/motiondivision/motion) | **95/100** | — | 32,819 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#liquid-lens-card-refraction) |
+| [Gesture sliced image shutters](https://giraffe-tree.github.io/awesome-web-effects/#gesture-sliced-image-shutters) | [Motion](https://github.com/motiondivision/motion) | **96/100** | — | 32,819 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#gesture-sliced-image-shutters) |
 
 <a id="vector"></a>
 
@@ -149,6 +162,16 @@ Typing, text splitting, vector drawing, handwriting, and SVG morphing.
 | [Voronoi nearest-point hover focus](https://giraffe-tree.github.io/awesome-web-effects/#voronoi-nearest-point-hover-focus) | [p5.js](https://github.com/processing/p5.js) | **91/100** | [D3js](https://d3js.org/d3-delaunay) | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#voronoi-nearest-point-hover-focus) |
 | [Linked brush-to-zoom chart](https://giraffe-tree.github.io/awesome-web-effects/#linked-brush-to-zoom-chart) | [p5.js](https://github.com/processing/p5.js) | **89/100** | [D3js](https://d3js.org/d3-brush) | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#linked-brush-to-zoom-chart) |
 | [Click-to-collapse hierarchy branches](https://giraffe-tree.github.io/awesome-web-effects/#click-to-collapse-hierarchy-branches) | [Motion](https://github.com/motiondivision/motion) | **88/100** | [D3js](https://d3js.org/d3-hierarchy/tree) | 32,819 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#click-to-collapse-hierarchy-branches) |
+| [Elastic baseline letter wave](https://giraffe-tree.github.io/awesome-web-effects/#elastic-baseline-letter-wave) | [p5.js](https://github.com/processing/p5.js) | **95/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#elastic-baseline-letter-wave) |
+| [Liquid chrome letterform](https://giraffe-tree.github.io/awesome-web-effects/#liquid-chrome-letterform) | [p5.js](https://github.com/processing/p5.js) | **96/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#liquid-chrome-letterform) |
+| [Typographic time slit](https://giraffe-tree.github.io/awesome-web-effects/#typographic-time-slit) | [p5.js](https://github.com/processing/p5.js) | **96/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#typographic-time-slit) |
+| [Kinetic typography letter springs](https://giraffe-tree.github.io/awesome-web-effects/#kinetic-typography-letter-springs) | [p5.js](https://github.com/processing/p5.js) | **94/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#kinetic-typography-letter-springs) |
+| [Stencil text scanline window](https://giraffe-tree.github.io/awesome-web-effects/#stencil-text-scanline-window) | [Motion](https://github.com/motiondivision/motion) | **95/100** | — | 32,819 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#stencil-text-scanline-window) |
+| [Elastic SVG rope lettering](https://giraffe-tree.github.io/awesome-web-effects/#elastic-svg-rope-lettering) | [Motion](https://github.com/motiondivision/motion) | **96/100** | — | 32,819 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#elastic-svg-rope-lettering) |
+| [Radial calendar time zoom](https://giraffe-tree.github.io/awesome-web-effects/#radial-calendar-time-zoom) | [Motion](https://github.com/motiondivision/motion) | **95/100** | — | 32,819 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#radial-calendar-time-zoom) |
+| [SVG metaball cursor separation](https://giraffe-tree.github.io/awesome-web-effects/#svg-metaball-cursor-separation) | [Motion](https://github.com/motiondivision/motion) | **95/100** | — | 32,819 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#svg-metaball-cursor-separation) |
+| [Kinetic variable font axis](https://giraffe-tree.github.io/awesome-web-effects/#kinetic-variable-font-axis) | [Motion](https://github.com/motiondivision/motion) | **96/100** | — | 32,819 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#kinetic-variable-font-axis) |
+| [Animated Bezier route cartography](https://giraffe-tree.github.io/awesome-web-effects/#animated-bezier-route-cartography) | [Motion](https://github.com/motiondivision/motion) | **95/100** | — | 32,819 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#animated-bezier-route-cartography) |
 
 <a id="canvas"></a>
 
@@ -176,6 +199,33 @@ Scene graphs, creative coding, physics, drawing tools, and 2D renderers.
 | [Drag-editable Bézier curve handles](https://giraffe-tree.github.io/awesome-web-effects/#drag-editable-bezier-curve-handles) | [p5.js](https://github.com/processing/p5.js) | **91/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#drag-editable-bezier-curve-handles) |
 | [Live hand-landmark video overlay](https://giraffe-tree.github.io/awesome-web-effects/#live-hand-landmark-video-overlay) | [p5.js](https://github.com/processing/p5.js) | **94/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#live-hand-landmark-video-overlay) |
 | [Frame-by-frame GIF scrubber](https://giraffe-tree.github.io/awesome-web-effects/#frame-by-frame-gif-scrubber) | [p5.js](https://github.com/processing/p5.js) | **90/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#frame-by-frame-gif-scrubber) |
+| [Magnetic pixel-sort field](https://giraffe-tree.github.io/awesome-web-effects/#magnetic-pixel-sort-field) | [p5.js](https://github.com/processing/p5.js) | **96/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#magnetic-pixel-sort-field) |
+| [Radar-sweep annotation reveal](https://giraffe-tree.github.io/awesome-web-effects/#radar-sweep-annotation-reveal) | [p5.js](https://github.com/processing/p5.js) | **94/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#radar-sweep-annotation-reveal) |
+| [Moiré tunnel zoom](https://giraffe-tree.github.io/awesome-web-effects/#moire-tunnel-zoom) | [p5.js](https://github.com/processing/p5.js) | **95/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#moire-tunnel-zoom) |
+| [Kinetic rain letterpress](https://giraffe-tree.github.io/awesome-web-effects/#kinetic-rain-letterpress) | [p5.js](https://github.com/processing/p5.js) | **96/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#kinetic-rain-letterpress) |
+| [Recursive arc forest growth](https://giraffe-tree.github.io/awesome-web-effects/#recursive-arc-forest-growth) | [p5.js](https://github.com/processing/p5.js) | **96/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#recursive-arc-forest-growth) |
+| [Reaction diffusion growth field](https://giraffe-tree.github.io/awesome-web-effects/#reaction-diffusion-growth-field) | [p5.js](https://github.com/processing/p5.js) | **90/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#reaction-diffusion-growth-field) |
+| [Poisson constellation bloom](https://giraffe-tree.github.io/awesome-web-effects/#poisson-constellation-bloom) | [p5.js](https://github.com/processing/p5.js) | **90/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#poisson-constellation-bloom) |
+| [Signed distance neon metaballs](https://giraffe-tree.github.io/awesome-web-effects/#signed-distance-neon-metaballs) | [p5.js](https://github.com/processing/p5.js) | **92/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#signed-distance-neon-metaballs) |
+| [Recursive quadtree pulse mosaic](https://giraffe-tree.github.io/awesome-web-effects/#recursive-quadtree-pulse-mosaic) | [p5.js](https://github.com/processing/p5.js) | **92/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#recursive-quadtree-pulse-mosaic) |
+| [Flow field ribbon advection](https://giraffe-tree.github.io/awesome-web-effects/#flow-field-ribbon-advection) | [p5.js](https://github.com/processing/p5.js) | **93/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#flow-field-ribbon-advection) |
+| [Delaunay triangulated light sweep](https://giraffe-tree.github.io/awesome-web-effects/#delaunay-triangulated-light-sweep) | [p5.js](https://github.com/processing/p5.js) | **91/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#delaunay-triangulated-light-sweep) |
+| [Polar waveform sundial](https://giraffe-tree.github.io/awesome-web-effects/#polar-waveform-sundial) | [p5.js](https://github.com/processing/p5.js) | **96/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#polar-waveform-sundial) |
+| [Seeded sandpile avalanche](https://giraffe-tree.github.io/awesome-web-effects/#seeded-sandpile-avalanche) | [p5.js](https://github.com/processing/p5.js) | **96/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#seeded-sandpile-avalanche) |
+| [Signed distance neon metropolis](https://giraffe-tree.github.io/awesome-web-effects/#signed-distance-neon-metropolis) | [p5.js](https://github.com/processing/p5.js) | **96/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#signed-distance-neon-metropolis) |
+| [Flowfield paper marbling](https://giraffe-tree.github.io/awesome-web-effects/#flowfield-paper-marbling) | [p5.js](https://github.com/processing/p5.js) | **97/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#flowfield-paper-marbling) |
+| [Topographic wave contour reveal](https://giraffe-tree.github.io/awesome-web-effects/#topographic-wave-contour-reveal) | [p5.js](https://github.com/processing/p5.js) | **96/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#topographic-wave-contour-reveal) |
+| [Cursor heatmap crystallization](https://giraffe-tree.github.io/awesome-web-effects/#cursor-heatmap-crystallization) | [p5.js](https://github.com/processing/p5.js) | **97/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#cursor-heatmap-crystallization) |
+| [Typography particle disassembly field](https://giraffe-tree.github.io/awesome-web-effects/#typography-particle-disassembly-field) | [p5.js](https://github.com/processing/p5.js) | **96/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#typography-particle-disassembly-field) |
+| [Offline audio spectral ribbon](https://giraffe-tree.github.io/awesome-web-effects/#offline-audio-spectral-ribbon) | [p5.js](https://github.com/processing/p5.js) | **97/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#offline-audio-spectral-ribbon) |
+| [Gravity well icon field](https://giraffe-tree.github.io/awesome-web-effects/#gravity-well-icon-field) | [p5.js](https://github.com/processing/p5.js) | **95/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#gravity-well-icon-field) |
+| [Pixel sort hover wipe](https://giraffe-tree.github.io/awesome-web-effects/#pixel-sort-hover-wipe) | [p5.js](https://github.com/processing/p5.js) | **95/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#pixel-sort-hover-wipe) |
+| [Cellular automata hover bloom](https://giraffe-tree.github.io/awesome-web-effects/#cellular-automata-hover-bloom) | [p5.js](https://github.com/processing/p5.js) | **96/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#cellular-automata-hover-bloom) |
+| [Caustic light card surface](https://giraffe-tree.github.io/awesome-web-effects/#caustic-light-card-surface) | [p5.js](https://github.com/processing/p5.js) | **96/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#caustic-light-card-surface) |
+| [Cursor drawn constellation thread](https://giraffe-tree.github.io/awesome-web-effects/#cursor-drawn-constellation-thread) | [p5.js](https://github.com/processing/p5.js) | **95/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#cursor-drawn-constellation-thread) |
+| [Elastic Voronoi focus mosaic](https://giraffe-tree.github.io/awesome-web-effects/#elastic-voronoi-focus-mosaic) | [p5.js](https://github.com/processing/p5.js) | **95/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#elastic-voronoi-focus-mosaic) |
+| [Chromatic channel drag portrait](https://giraffe-tree.github.io/awesome-web-effects/#chromatic-channel-drag-portrait) | [p5.js](https://github.com/processing/p5.js) | **95/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#chromatic-channel-drag-portrait) |
+| [Procedural folding kaleidoscope](https://giraffe-tree.github.io/awesome-web-effects/#procedural-folding-kaleidoscope) | [p5.js](https://github.com/processing/p5.js) | **98/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#procedural-folding-kaleidoscope) |
 
 <a id="webgl"></a>
 
@@ -214,14 +264,14 @@ Scene graphs, creative coding, physics, drawing tools, and 2D renderers.
 <details>
 <summary><strong>Curation, provenance and audit numbers</strong></summary>
 
-- 346 candidates audited: **100 admitted**, **246 rejected**.
-- 100 verified previews: 2 official captures and 98 captures from runnable local demos; 0 missing.
+- 396 candidates audited: **150 admitted**, **246 rejected**.
+- 150 verified previews: 2 official captures and 148 captures from runnable local demos; 0 missing.
 - Human review scores creativity, art direction, motion craft, legibility, creative transfer and evidence quality.
 - Admission requires 80/100 plus core-dimension minimums. Popularity never overrides the gate.
-- The verified GIF set is 17.20 MiB; every preview is 320×180, at most three seconds and below 1 MiB.
+- The verified GIF set is 24.87 MiB; every preview is 320×180, at most three seconds and below 1 MiB.
 - Stars are a 2026-07-20 snapshot. Recommendation sources and observed AI homepages remain separate relationships.
 
-Read the [current 346-candidate admission audit](research/demo-admission-audit-2026-07-20.md), the [100-company homepage research](research/ai-native-homepages-100.md), and the [preview provenance manifest](demo/gifs/provenance.json).
+Read the [current 396-candidate admission audit](research/demo-admission-audit-2026-07-20.md), the [100-company homepage research](research/ai-native-homepages-100.md), and the [preview provenance manifest](demo/gifs/provenance.json).
 
 </details>
 

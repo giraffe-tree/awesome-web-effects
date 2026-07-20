@@ -1,4 +1,8 @@
 import { effectExpansion100Specs } from './effect-expansion-2026-07-20.js';
+import { effectExpansion150BatchA1 } from './effect-expansion-a1-2026-07-20.js';
+import { effectExpansion150BatchA2 } from './effect-expansion-a2-2026-07-20.js';
+import { effectExpansion150BatchA3 } from './effect-expansion-a3-2026-07-20.js';
+import { effectExpansion150BatchB } from './effect-expansion-b-2026-07-20.js';
 
 // Curator-approved release catalog. Rejected candidates remain documented in the current dated admission audit.
 export const snapshotDate = "2026-07-20";
@@ -1056,7 +1060,75 @@ const expansion100Effects = effectExpansion100Specs.map((spec, index) => {
   };
 });
 
-export const effects = [...existingEffects, ...expansionEffects, ...expansion100Effects];
+const expansion150Prompt = spec => `Implement the "${spec.name}" (${spec.nameZh}) web interaction effect in the current project.
+
+Use ${projectNameById[spec.implementation.projectId]} with the same real browser rendering mechanism used by the verified local demo. The research source is ${spec.sourceUrl}; use it only to understand the interaction idea, not to copy branding, assets, or proprietary source code.
+
+Interaction contract:
+- Trigger: ${spec.behavior.trigger}
+- Visual response: ${spec.behavior.response}
+- Timing relationship: ${spec.behavior.timing}
+- Page layer: ${spec.behavior.layer}
+
+Requirements:
+- Preserve the defining trigger, progression, rendering, and continuity signature instead of substituting a generic fade or entrance.
+- Integrate with the existing design system and component structure.
+- Support keyboard, pointer, and touch input whenever the interaction is actionable.
+- Respect prefers-reduced-motion with a clear, legible non-animated fallback.
+- Avoid layout shift, scroll traps, inaccessible focus behavior, unstable randomness, and remote runtime assets.
+- Wait for essential visual resources before revealing the scene, show an intentional loading transition, and clean up listeners, timers, animation frames, and graphics contexts.
+
+Start from this minimal mechanism:
+
+\`\`\`js
+${spec.implementation.snippet}
+\`\`\`
+
+Return the working code, the files changed, and a short explanation of how to tune timing, geometry, interaction strength, loading behavior, and reduced-motion behavior.`;
+
+const expansion150Effects = [...effectExpansion150BatchA1, ...effectExpansion150BatchA2, ...effectExpansion150BatchA3, ...effectExpansion150BatchB]
+  .sort((left, right) => left.order - right.order)
+  .map(spec => {
+  const scores = scoreDimensions(spec.scores);
+  return {
+    id: spec.id,
+    category: spec.category,
+    name: spec.name,
+    nameZh: spec.nameZh,
+    addedIn: '2026-effect-expansion',
+    research: {
+      sourceUrl: spec.sourceUrl,
+      difference: `${spec.difference} Its trigger, progression, renderer, and continuity signature are distinct from the existing catalog.`,
+      verifiedAt: '2026-07-20'
+    },
+    behavior: spec.behavior,
+    prompt: expansion150Prompt(spec),
+    sources: [{
+      projectId: spec.implementation.projectId,
+      recommended: true,
+      snippet: spec.implementation.snippet,
+      preview: `captured/${spec.id}`,
+      previewKind: 'local-demo-capture',
+      demoPath: `preview-demos/dist/${spec.id}.html`,
+      demoSourcePath: `preview-demos/${spec.id}.html`,
+      originUrl: spec.implementation.projectUrl,
+      referenceUrl: spec.implementation.referenceUrl || spec.sourceUrl,
+      previewRecipe: null
+    }],
+    order: spec.order,
+    relatedParties: researchParty(spec),
+    admission: {
+      policyVersion: '2026-07-17',
+      scores,
+      total: Object.values(scores).reduce((total, score) => total + score, 0),
+      decision: 'admit',
+      reasonCode: 'passed',
+      rationaleZh: spec.rationaleZh
+    }
+  };
+  });
+
+export const effects = [...existingEffects, ...expansionEffects, ...expansion100Effects, ...expansion150Effects];
 
 export const projects = [
   {

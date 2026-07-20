@@ -1,0 +1,1753 @@
+{
+  "title": "Awesome Web Effects expansion from 100 to 150",
+  "auditedAt": "2026-07-20",
+  "policyThreshold": 80,
+  "batches": {
+    "A": 25,
+    "B": 25
+  },
+  "effects": [
+    {
+      "order": 101,
+      "id": "iris-aperture-navigation",
+      "name": "Iris-aperture navigation",
+      "nameZh": "光圈孔径导航",
+      "category": "pointer",
+      "sourceUrl": "https://github.com/processing/p5.js",
+      "difference": "A ten-blade mechanical aperture changes the actual visible route; it is not a circular cursor, scale hover, or generic clip-path reveal.",
+      "behavior": {
+        "trigger": "pointer position / arrow keys / press",
+        "response": "Rotate interlocking blades and continuously resize the navigable opening",
+        "timing": "continuous pointer-linked aperture geometry",
+        "layer": "full-stage navigation portal"
+      },
+      "prompt": "Create a dark editorial navigation stage where ten interlocking brass blades form a real mechanical iris. Pointer movement and arrow keys must continuously change the opening while preserving a readable focal route.",
+      "implementation": {
+        "projectId": "processing-p5-js",
+        "projectUrl": "https://github.com/processing/p5.js",
+        "library": "p5@2.3.0",
+        "renderer": "canvas2d",
+        "snippet": "for(let i=0;i<10;i++){const a=i/10*TAU+open*.32;drawBlade(p,a,12+open*38,72)}",
+        "referenceUrl": "https://github.com/processing/p5.js/tree/v2.3.0"
+      },
+      "scores": {
+        "creativity": 18,
+        "artDirection": 19,
+        "motion": 19,
+        "clarity": 15,
+        "inspiration": 15,
+        "evidence": 10,
+        "total": 96
+      },
+      "rationaleZh": "十片叶片共同定义真实孔径，主体行为、机械感和导航隐喻都能在缩略图中直接辨认。",
+      "batch": "A"
+    },
+    {
+      "order": 102,
+      "id": "elastic-baseline-letter-wave",
+      "name": "Elastic baseline letter wave",
+      "nameZh": "弹性基线字母波",
+      "category": "vector",
+      "sourceUrl": "https://github.com/processing/p5.js",
+      "difference": "Every glyph inherits position and rotation from one deforming baseline; it is not split-text staggering, marquee motion, or a whole-word transform.",
+      "behavior": {
+        "trigger": "pointer proximity / arrow keys",
+        "response": "Pull a continuous baseline and propagate tension into individual glyph poses",
+        "timing": "continuous local deformation with traveling wave",
+        "layer": "headline typography"
+      },
+      "prompt": "Build the word SPRING on a continuous elastic baseline. A pointer-local Gaussian pull must bend the line while every glyph derives its vertical position and rotation from the neighboring curve points.",
+      "implementation": {
+        "projectId": "processing-p5-js",
+        "projectUrl": "https://github.com/processing/p5.js",
+        "library": "p5@2.3.0",
+        "renderer": "canvas2d",
+        "snippet": "const y=98+sin(phase+i*.82)*15+(pointer.y-.5)*exp(-pow(x/width-pointer.x,2)*25)*90;",
+        "referenceUrl": "https://github.com/processing/p5.js/tree/v2.3.0"
+      },
+      "scores": {
+        "creativity": 18,
+        "artDirection": 18,
+        "motion": 19,
+        "clarity": 15,
+        "inspiration": 15,
+        "evidence": 10,
+        "total": 95
+      },
+      "rationaleZh": "字母不是独立漂浮，而是共享一条受力基线，张力来源和排版反馈关系清楚。",
+      "batch": "A"
+    },
+    {
+      "order": 103,
+      "id": "orbital-card-constellation",
+      "name": "Orbital card constellation",
+      "nameZh": "轨道卡片星座",
+      "category": "transition",
+      "sourceUrl": "https://github.com/processing/p5.js",
+      "difference": "Cards maintain a rotating orbital graph around a movable gravity center instead of reflowing a grid, stacking, or traveling in a straight carousel.",
+      "behavior": {
+        "trigger": "time / pointer gravity / press",
+        "response": "Orbit five connected cards and tighten their shared radius on activation",
+        "timing": "continuous orbital layout with discrete gravity mode",
+        "layer": "editorial card constellation"
+      },
+      "prompt": "Create five colored editorial cards that orbit a shared center and remain connected by constellation lines. Pointer input offsets the gravity center; activation must tighten the radius without becoming a carousel.",
+      "implementation": {
+        "projectId": "processing-p5-js",
+        "projectUrl": "https://github.com/processing/p5.js",
+        "library": "p5@2.3.0",
+        "renderer": "canvas2d",
+        "snippet": "const theta=phase+i/cards.length*TAU;card.x=cx+cos(theta)*radius;card.y=cy+sin(theta)*radius*.58;",
+        "referenceUrl": "https://github.com/processing/p5.js/tree/v2.3.0"
+      },
+      "scores": {
+        "creativity": 18,
+        "artDirection": 18,
+        "motion": 19,
+        "clarity": 14,
+        "inspiration": 15,
+        "evidence": 10,
+        "total": 94
+      },
+      "rationaleZh": "旋转轨道、跨节点连线和可变引力中心形成独立空间语法，与卡堆和网格重排有明显差异。",
+      "batch": "A"
+    },
+    {
+      "order": 104,
+      "id": "magnetic-pixel-sort-field",
+      "name": "Magnetic pixel-sort field",
+      "nameZh": "磁性像素排序场",
+      "category": "canvas",
+      "sourceUrl": "https://github.com/processing/p5.js",
+      "difference": "A proximity threshold reorganizes seeded cells into chromatic order; it is not a displacement ripple, binary pixel wake, or post-process mosaic.",
+      "behavior": {
+        "trigger": "pointer distance / arrow keys",
+        "response": "Locally sort colored cell rows and stretch them toward a magnetic axis",
+        "timing": "continuous distance-field sorting",
+        "layer": "full-stage pixel matrix"
+      },
+      "prompt": "Render a deterministic field of colored pixel cells. Near the pointer axis, cells must sort into ordered rows and stretch; far cells must retain seeded disorder so the sorting boundary is visible.",
+      "implementation": {
+        "projectId": "processing-p5-js",
+        "projectUrl": "https://github.com/processing/p5.js",
+        "library": "p5@2.3.0",
+        "renderer": "canvas2d",
+        "snippet": "const sortedRow=round(noise*(rows-1)*(1-pull)+row*pull);p.rect(x,sortedRow*cellH,cellW-1,height);",
+        "referenceUrl": "https://github.com/processing/p5.js/tree/v2.3.0"
+      },
+      "scores": {
+        "creativity": 19,
+        "artDirection": 18,
+        "motion": 19,
+        "clarity": 15,
+        "inspiration": 15,
+        "evidence": 10,
+        "total": 96
+      },
+      "rationaleZh": "有序与无序区域由指针距离直接划分，磁轴、色带和单元迁移使排序机制一眼可见。",
+      "batch": "A"
+    },
+    {
+      "order": 105,
+      "id": "kinetic-paper-fold-map",
+      "name": "Kinetic paper-fold map",
+      "nameZh": "动态纸折地图",
+      "category": "animation",
+      "sourceUrl": "https://github.com/processing/p5.js",
+      "difference": "A triangulated sheet changes its face topology and apex position like origami; it is not card rotation, accordion slicing, or a flat polygon morph.",
+      "behavior": {
+        "trigger": "pointer position / press",
+        "response": "Fold four connected paper faces around a moving crease apex",
+        "timing": "continuous fold geometry with latched closed state",
+        "layer": "paper navigation object"
+      },
+      "prompt": "Design a four-face paper map whose shared vertices remain connected while one apex folds inward. Use contrasting paper faces, a real crease, and a moving shadow to communicate depth.",
+      "implementation": {
+        "projectId": "processing-p5-js",
+        "projectUrl": "https://github.com/processing/p5.js",
+        "library": "p5@2.3.0",
+        "renderer": "canvas2d",
+        "snippet": "const apex={x:lerp(cx+half,cx+10,fold),y:lerp(cy-half,cy-4,fold)};faces.forEach(drawConnectedFace);",
+        "referenceUrl": "https://github.com/processing/p5.js/tree/v2.3.0"
+      },
+      "scores": {
+        "creativity": 18,
+        "artDirection": 19,
+        "motion": 19,
+        "clarity": 15,
+        "inspiration": 15,
+        "evidence": 10,
+        "total": 96
+      },
+      "rationaleZh": "共享顶点和多面明暗让折纸深度真实可读，点击锁定又提供明确的交互结果。",
+      "batch": "A"
+    },
+    {
+      "order": 106,
+      "id": "radar-sweep-annotation-reveal",
+      "name": "Radar-sweep annotation reveal",
+      "nameZh": "雷达扫描批注揭示",
+      "category": "canvas",
+      "sourceUrl": "https://github.com/processing/p5.js",
+      "difference": "Annotations become legible only when an angular beam passes their bearing; it is not a radial loading ring or opacity stagger.",
+      "behavior": {
+        "trigger": "time / pointer bearing",
+        "response": "Sweep a conic beam and reveal evidence labels by angular proximity",
+        "timing": "continuous angular scan with local persistence",
+        "layer": "diagnostic radar field"
+      },
+      "prompt": "Build a radar field with concentric range rings and three fixed evidence targets. A moving conic beam must control each target label’s brightness from angular distance, making the reveal causal.",
+      "implementation": {
+        "projectId": "processing-p5-js",
+        "projectUrl": "https://github.com/processing/p5.js",
+        "library": "p5@2.3.0",
+        "renderer": "canvas2d",
+        "snippet": "const delta=abs(atan2(sin(sweep-target.a),cos(sweep-target.a)));const alpha=max(.18,1-delta/.65);",
+        "referenceUrl": "https://github.com/processing/p5.js/tree/v2.3.0"
+      },
+      "scores": {
+        "creativity": 18,
+        "artDirection": 18,
+        "motion": 19,
+        "clarity": 15,
+        "inspiration": 14,
+        "evidence": 10,
+        "total": 94
+      },
+      "rationaleZh": "扫描线是批注可见性的明确因果主体，方位、距离环和证据标签共同构成完整仪器叙事。",
+      "batch": "A"
+    },
+    {
+      "order": 107,
+      "id": "moire-tunnel-zoom",
+      "name": "Moiré tunnel zoom",
+      "nameZh": "莫尔纹隧道缩放",
+      "category": "canvas",
+      "sourceUrl": "https://github.com/processing/p5.js",
+      "difference": "Dozens of phase-offset rings create interference depth around a steerable vanishing point; it is not a starfield, particle vortex, or ordinary scale zoom.",
+      "behavior": {
+        "trigger": "time / pointer vanishing point",
+        "response": "Advance alternating rings toward the viewer and bend their shared tunnel axis",
+        "timing": "seamless phase-wrapped depth loop",
+        "layer": "full-stage line field"
+      },
+      "prompt": "Create a cream-and-red moiré tunnel from at least thirty alternating elliptical rings. Phase-wrap ring scale for an infinite zoom and let pointer movement bend the vanishing point.",
+      "implementation": {
+        "projectId": "processing-p5-js",
+        "projectUrl": "https://github.com/processing/p5.js",
+        "library": "p5@2.3.0",
+        "renderer": "canvas2d",
+        "snippet": "const progress=(i/34+time/3)%1;const d=9+progress*progress*285;p.ellipse(vx+drift,vy,d,d*(.46+progress*.22));",
+        "referenceUrl": "https://github.com/processing/p5.js/tree/v2.3.0"
+      },
+      "scores": {
+        "creativity": 18,
+        "artDirection": 19,
+        "motion": 19,
+        "clarity": 14,
+        "inspiration": 15,
+        "evidence": 10,
+        "total": 95
+      },
+      "rationaleZh": "密集线环的相位交错直接产生空间干涉和无限推进感，视觉签名强且不依赖粒子。",
+      "batch": "A"
+    },
+    {
+      "order": 108,
+      "id": "liquid-chrome-letterform",
+      "name": "Liquid chrome letterform",
+      "nameZh": "液态铬金属字形",
+      "category": "vector",
+      "sourceUrl": "https://github.com/processing/p5.js",
+      "difference": "A multistop moving specular field changes one oversized glyph’s material; it is not text blur, gooey fusion, or simple gradient animation.",
+      "behavior": {
+        "trigger": "pointer light position / time",
+        "response": "Move cyan, white, pink, and violet highlights across an outlined glyph",
+        "timing": "continuous material-light coupling",
+        "layer": "hero letterform"
+      },
+      "prompt": "Render one oversized S as liquid chrome using a pointer-centered multistop gradient, a crisp metallic outline, glow, and nearby contour waves. The glyph must remain readable at all times.",
+      "implementation": {
+        "projectId": "processing-p5-js",
+        "projectUrl": "https://github.com/processing/p5.js",
+        "library": "p5@2.3.0",
+        "renderer": "canvas2d",
+        "snippet": "const g=ctx.createLinearGradient(lightX-95,0,lightX+95,0);g.addColorStop(.36,'#fff8df');ctx.fillText('S',211,101);",
+        "referenceUrl": "https://github.com/processing/p5.js/tree/v2.3.0"
+      },
+      "scores": {
+        "creativity": 19,
+        "artDirection": 19,
+        "motion": 18,
+        "clarity": 15,
+        "inspiration": 15,
+        "evidence": 10,
+        "total": 96
+      },
+      "rationaleZh": "高光位置真实绑定输入，单字的轮廓、光谱与波纹共同呈现金属流动材质。",
+      "batch": "A"
+    },
+    {
+      "order": 109,
+      "id": "accordion-image-slices",
+      "name": "Accordion image slices",
+      "nameZh": "手风琴图像切片",
+      "category": "transition",
+      "sourceUrl": "https://github.com/processing/p5.js",
+      "difference": "Alternating trapezoid slices flex a single visual surface in depth; it is not a card rail, page fold, or horizontal image wipe.",
+      "behavior": {
+        "trigger": "pointer horizontal position",
+        "response": "Open eleven alternating image planes with changing width and slant",
+        "timing": "continuous accordion expansion",
+        "layer": "sliced media surface"
+      },
+      "prompt": "Split one editorial image system into eleven alternating trapezoid slices. Pointer movement must change each slice width and slant while retaining one continuous accordion silhouette.",
+      "implementation": {
+        "projectId": "processing-p5-js",
+        "projectUrl": "https://github.com/processing/p5.js",
+        "library": "p5@2.3.0",
+        "renderer": "canvas2d",
+        "snippet": "p.quad(cursor,top+slant,cursor+width,top-slant,cursor+width,top+height+slant,cursor,top+height-slant);",
+        "referenceUrl": "https://github.com/processing/p5.js/tree/v2.3.0"
+      },
+      "scores": {
+        "creativity": 17,
+        "artDirection": 19,
+        "motion": 19,
+        "clarity": 15,
+        "inspiration": 15,
+        "evidence": 10,
+        "total": 95
+      },
+      "rationaleZh": "十一片交替平面同时改变宽度与倾角，媒体表面像手风琴开合，区别于直线轮播。",
+      "batch": "A"
+    },
+    {
+      "order": 110,
+      "id": "typographic-time-slit",
+      "name": "Typographic time slit",
+      "nameZh": "排版时间裂隙",
+      "category": "vector",
+      "sourceUrl": "https://github.com/processing/p5.js",
+      "difference": "A moving horizontal cut exposes a second complete sentence inside the first; it is not text replacement, typewriter playback, or a full-page scene wipe.",
+      "behavior": {
+        "trigger": "pointer vertical position / time",
+        "response": "Move a bounded slit that reveals an offset alternate typographic timeline",
+        "timing": "continuous reversible masked scrub",
+        "layer": "full-stage headline"
+      },
+      "prompt": "Set two oversized three-line sentences in contrasting palettes. A narrow pointer-controlled horizontal slit must clip the alternate sentence into the base sentence, with visible cut boundaries.",
+      "implementation": {
+        "projectId": "processing-p5-js",
+        "projectUrl": "https://github.com/processing/p5.js",
+        "library": "p5@2.3.0",
+        "renderer": "canvas2d",
+        "snippet": "ctx.save();ctx.rect(0,slitY-slitH/2,width,slitH);ctx.clip();drawAlternateSentence();ctx.restore();",
+        "referenceUrl": "https://github.com/processing/p5.js/tree/v2.3.0"
+      },
+      "scores": {
+        "creativity": 19,
+        "artDirection": 18,
+        "motion": 19,
+        "clarity": 15,
+        "inspiration": 15,
+        "evidence": 10,
+        "total": 96
+      },
+      "rationaleZh": "裂隙只替换局部时间层，双句在同一排版坐标中碰撞，遮罩边界和语义都清晰可见。",
+      "batch": "A"
+    },
+    {
+      "id": "kinetic-rain-letterpress",
+      "order": 111,
+      "name": "Kinetic rain letterpress",
+      "nameZh": "动态字雨活版压印",
+      "category": "canvas",
+      "sourceUrl": "https://github.com/processing/p5.js",
+      "difference": "字模受确定性重力下落并在纸面碰撞瞬间留下被压扁的墨迹，不是字符雨或普通打字动画。",
+      "behavior": {
+        "trigger": "pointer pressure or animation frame",
+        "response": "Falling type blocks stamp widening ink impressions when they strike paper",
+        "timing": "continuous gravity cycles with discrete impacts",
+        "layer": "letterpress canvas"
+      },
+      "prompt": "使用固定字模数组实现下落、碰撞和压印；指针纵向位置控制重力强度，墨迹只在接触纸面时出现。",
+      "implementation": {
+        "projectId": "processing-p5-js",
+        "projectUrl": "https://github.com/processing/p5.js",
+        "library": "p5@2.3.0",
+        "renderer": "canvas2d",
+        "snippet": "new p5(p => { p.draw = () => typeBlocks.forEach(block => drawFallAndImpression(p, block, gravity)); });",
+        "referenceUrl": "https://github.com/processing/p5.js"
+      },
+      "scores": {
+        "creativity": 18,
+        "artDirection": 19,
+        "motion": 19,
+        "clarity": 15,
+        "inspiration": 15,
+        "evidence": 10,
+        "total": 96
+      },
+      "rationaleZh": "下落字模、纸面基线与碰撞墨迹形成明确的活版因果，材质与动作均可辨。",
+      "batch": "A"
+    },
+    {
+      "id": "recursive-arc-forest-growth",
+      "order": 112,
+      "name": "Recursive arc forest growth",
+      "nameZh": "递归弧线森林生长",
+      "category": "canvas",
+      "sourceUrl": "https://github.com/shiffman/The-Nature-of-Code-Examples-p5.js",
+      "difference": "五棵树使用弯曲二次贝塞尔分枝并按递归深度逐层生长，区别于直线 L-system 或粒子枝条。",
+      "behavior": {
+        "trigger": "pointer progress or animation frame",
+        "response": "Curved branches recursively bifurcate from trunks to fine canopy arcs",
+        "timing": "depth-staged deterministic growth",
+        "layer": "generative forest canvas"
+      },
+      "prompt": "实现固定种子的七层递归树，使用 quadraticCurveTo 绘制弯曲分枝，并让进度按深度依次解锁。",
+      "implementation": {
+        "projectId": "processing-p5-js",
+        "projectUrl": "https://github.com/processing/p5.js",
+        "library": "p5@2.3.0",
+        "renderer": "canvas2d",
+        "snippet": "new p5(p => { p.draw = () => trees.forEach(tree => branch(p.drawingContext, tree, depth, progress)); });",
+        "referenceUrl": "https://github.com/shiffman/The-Nature-of-Code-Examples-p5.js"
+      },
+      "scores": {
+        "creativity": 19,
+        "artDirection": 19,
+        "motion": 18,
+        "clarity": 15,
+        "inspiration": 15,
+        "evidence": 10,
+        "total": 96
+      },
+      "rationaleZh": "递归层级、弧线姿态和多树构图在小画面中仍清楚，生成逻辑可复现。",
+      "batch": "A"
+    },
+    {
+      "id": "pointer-woven-ribbon-loom",
+      "order": 113,
+      "name": "Pointer woven ribbon loom",
+      "nameZh": "指针编织彩带织机",
+      "category": "pointer",
+      "sourceUrl": "https://github.com/generative-artistry/generative-artistry",
+      "difference": "横向经线和纵向纬线以不同相位真实交错，指针改变两组丝带弯曲幅度，而非网格扭曲滤镜。",
+      "behavior": {
+        "trigger": "pointer horizontal position",
+        "response": "Warp and weft ribbons bend through opposing phase fields while retaining weave order",
+        "timing": "continuous reversible textile deformation",
+        "layer": "woven canvas field"
+      },
+      "prompt": "绘制十二条经线与八条纬线，使用虚线相位制造上下交织关系，并让指针控制流体弯曲幅度。",
+      "implementation": {
+        "projectId": "processing-p5-js",
+        "projectUrl": "https://github.com/processing/p5.js",
+        "library": "p5@2.3.0",
+        "renderer": "canvas2d",
+        "snippet": "new p5(p => { p.draw = () => drawWarpAndWeft(p.drawingContext, pointerBend); });",
+        "referenceUrl": "https://github.com/generative-artistry/generative-artistry"
+      },
+      "scores": {
+        "creativity": 19,
+        "artDirection": 20,
+        "motion": 19,
+        "clarity": 15,
+        "inspiration": 15,
+        "evidence": 10,
+        "total": 98
+      },
+      "rationaleZh": "经纬拓扑与纺织色彩形成鲜明主体，交织而非叠线的结构可以直接辨认。",
+      "batch": "A"
+    },
+    {
+      "order": 114,
+      "id": "boids-flock-pointer-avoidance",
+      "name": "Boids flock pointer avoidance",
+      "nameZh": "群集指针避让场",
+      "category": "pointer",
+      "sourceUrl": "https://natureofcode.com/autonomous-agents/",
+      "difference": "每个箭头同时呈现群集漂移与局部避让，指针不是装饰光标，而是会改变整群方向和空隙的动态障碍。",
+      "behavior": {
+        "trigger": "pointer movement, arrow keys, or automatic orbit",
+        "response": "A cohesive flock opens a moving exclusion pocket around the focus",
+        "timing": "continuous deterministic steering field",
+        "layer": "full-canvas agent field"
+      },
+      "implementation": {
+        "projectId": "processing-p5-js",
+        "projectUrl": "https://github.com/processing/p5.js",
+        "library": "p5@2.3.0",
+        "renderer": "canvas2d",
+        "snippet": "createP5Demo({ id: 'boids-flock-pointer-avoidance', draw: (p, t, state) => drawSteeredFlock(p, t, state.pointer) });",
+        "referenceUrl": "https://p5js.org/reference/p5/triangle/"
+      },
+      "scores": {
+        "creativity": 18,
+        "artDirection": 17,
+        "motion": 18,
+        "clarity": 14,
+        "inspiration": 14,
+        "evidence": 9,
+        "total": 90
+      },
+      "rationaleZh": "42 个方向箭头共同让出移动空间，因果关系强，明显区别于普通粒子跟随或散点背景。",
+      "batch": "A"
+    },
+    {
+      "order": 115,
+      "id": "reaction-diffusion-growth-field",
+      "name": "Reaction diffusion growth field",
+      "nameZh": "反应扩散生长场",
+      "category": "canvas",
+      "sourceUrl": "https://github.com/processing/p5.js",
+      "difference": "像素单元以相位稳定的扩散阈值形成有机边缘，交互焦点会重新定义生长核心，而不是播放预渲染纹理。",
+      "behavior": {
+        "trigger": "pointer movement or automatic seed orbit",
+        "response": "Organic reaction bands grow, split, and reconnect around a movable seed",
+        "timing": "continuous phase-locked field evolution",
+        "layer": "pixel-sampled canvas field"
+      },
+      "implementation": {
+        "projectId": "processing-p5-js",
+        "projectUrl": "https://github.com/processing/p5.js",
+        "library": "p5@2.3.0",
+        "renderer": "canvas2d",
+        "snippet": "for (let y=0;y<180;y+=3) for (let x=0;x<320;x+=3) drawReactionCell(p,x,y,seed,time);",
+        "referenceUrl": "https://p5js.org/reference/p5/rect/"
+      },
+      "scores": {
+        "creativity": 18,
+        "artDirection": 18,
+        "motion": 17,
+        "clarity": 13,
+        "inspiration": 15,
+        "evidence": 9,
+        "total": 90
+      },
+      "rationaleZh": "扩散环、双波干涉和可移动种子形成清楚的有机生成机制，静态纹理无法替代。",
+      "batch": "A"
+    },
+    {
+      "order": 116,
+      "id": "poisson-constellation-bloom",
+      "name": "Poisson constellation bloom",
+      "nameZh": "泊松星座绽放",
+      "category": "canvas",
+      "sourceUrl": "https://github.com/processing/p5.js",
+      "difference": "固定采样节点只连接局部近邻，经过焦点时边、节点亮度与尺寸共同绽放，区别于全连接网络或随机星空。",
+      "behavior": {
+        "trigger": "pointer movement, keyboard focus movement, or automatic orbit",
+        "response": "Nearby seeded nodes connect and locally bloom around the focus",
+        "timing": "continuous proximity-weighted illumination",
+        "layer": "constellation graph canvas"
+      },
+      "implementation": {
+        "projectId": "processing-p5-js",
+        "projectUrl": "https://github.com/processing/p5.js",
+        "library": "p5@2.3.0",
+        "renderer": "canvas2d",
+        "snippet": "if (distance(a,b) < 47) drawEdge(p,a,b,focus); points.forEach(point => drawBloomNode(p,point,focus));",
+        "referenceUrl": "https://p5js.org/reference/p5/line/"
+      },
+      "scores": {
+        "creativity": 17,
+        "artDirection": 19,
+        "motion": 16,
+        "clarity": 15,
+        "inspiration": 14,
+        "evidence": 9,
+        "total": 90
+      },
+      "rationaleZh": "局部近邻图与焦点绽放同时可见，具有稳定构图和明确的空间权重关系。",
+      "batch": "A"
+    },
+    {
+      "order": 117,
+      "id": "signed-distance-neon-metaballs",
+      "name": "Signed distance neon metaballs",
+      "nameZh": "距离场霓虹融球",
+      "category": "canvas",
+      "sourceUrl": "https://github.com/processing/p5.js",
+      "difference": "每个像素块求多个动态圆场的能量和，在几何相触之前出现发光连接颈，不是叠加半透明圆。",
+      "behavior": {
+        "trigger": "pointer movement, press, or automatic orbital motion",
+        "response": "Three scalar fields merge into one thresholded emissive silhouette",
+        "timing": "continuous signed-distance-like field recomposition",
+        "layer": "low-resolution emissive canvas field"
+      },
+      "implementation": {
+        "projectId": "processing-p5-js",
+        "projectUrl": "https://github.com/processing/p5.js",
+        "library": "p5@2.3.0",
+        "renderer": "canvas2d",
+        "snippet": "const field = balls.reduce((sum,b) => sum + b.r*b.r / distanceSquared(pixel,b), 0); drawThreshold(p,field);",
+        "referenceUrl": "https://p5js.org/reference/p5/pixels/"
+      },
+      "scores": {
+        "creativity": 18,
+        "artDirection": 19,
+        "motion": 17,
+        "clarity": 14,
+        "inspiration": 15,
+        "evidence": 9,
+        "total": 92
+      },
+      "rationaleZh": "能量阈值、发光边缘和交互融球半径都由真实逐格场计算产生，机制辨识度高。",
+      "batch": "A"
+    },
+    {
+      "order": 118,
+      "id": "kinetic-typography-letter-springs",
+      "name": "Kinetic typography letter springs",
+      "nameZh": "弹簧字形力场",
+      "category": "vector",
+      "sourceUrl": "https://github.com/processing/p5.js",
+      "difference": "单个字母围绕各自基准点受力、旋转和改变字号，指针离开后仍由确定性弹簧相位保持字形队列，而非整体文本平移。",
+      "behavior": {
+        "trigger": "pointer movement or keyboard focus movement",
+        "response": "Individual letters repel, rotate, scale, and visually spring toward home positions",
+        "timing": "continuous force response with phase-stable recovery",
+        "layer": "canvas typography line"
+      },
+      "implementation": {
+        "projectId": "processing-p5-js",
+        "projectUrl": "https://github.com/processing/p5.js",
+        "library": "p5@2.3.0",
+        "renderer": "canvas2d",
+        "snippet": "[...'ELASTIC'].forEach((letter,i) => drawSpringLetter(p,letter,home[i],focus,time));",
+        "referenceUrl": "https://p5js.org/reference/p5/text/"
+      },
+      "scores": {
+        "creativity": 18,
+        "artDirection": 18,
+        "motion": 19,
+        "clarity": 15,
+        "inspiration": 15,
+        "evidence": 9,
+        "total": 94
+      },
+      "rationaleZh": "字母级受力、基线连线和回弹相位共同说明机制，明显区别于文字拆分后统一补间。",
+      "batch": "A"
+    },
+    {
+      "order": 119,
+      "id": "recursive-quadtree-pulse-mosaic",
+      "name": "Recursive quadtree pulse mosaic",
+      "nameZh": "递归四叉树脉冲拼图",
+      "category": "canvas",
+      "sourceUrl": "https://github.com/processing/p5.js",
+      "difference": "焦点附近的方块递归四分，远处保持大尺度色块，自动脉冲持续改变细节边界，不是等距网格缩放。",
+      "behavior": {
+        "trigger": "pointer movement or automatic focus orbit",
+        "response": "The mosaic recursively gains resolution around the moving focus",
+        "timing": "continuous focus threshold with discrete recursive subdivision",
+        "layer": "hierarchical canvas mosaic"
+      },
+      "implementation": {
+        "projectId": "processing-p5-js",
+        "projectUrl": "https://github.com/processing/p5.js",
+        "library": "p5@2.3.0",
+        "renderer": "canvas2d",
+        "snippet": "const tile = (x,y,size,depth) => nearFocus(x,y,size) ? splitIntoFour(tile) : p.rect(x,y,size,size);",
+        "referenceUrl": "https://p5js.org/reference/p5/rect/"
+      },
+      "scores": {
+        "creativity": 19,
+        "artDirection": 18,
+        "motion": 16,
+        "clarity": 15,
+        "inspiration": 15,
+        "evidence": 9,
+        "total": 92
+      },
+      "rationaleZh": "空间距离直接控制递归深度，层级变化在一帧内可读，适合作为信息密度转场参考。",
+      "batch": "A"
+    },
+    {
+      "order": 120,
+      "id": "flow-field-ribbon-advection",
+      "name": "Flow field ribbon advection",
+      "nameZh": "流场带状平流",
+      "category": "canvas",
+      "sourceUrl": "https://github.com/processing/p5.js",
+      "difference": "34 条带在固定噪声流场中沿多个曲线顶点前进，靠近焦点时方向被连续混合，区别于独立直线粒子或随机游走。",
+      "behavior": {
+        "trigger": "pointer movement or automatic attractor orbit",
+        "response": "Seeded ribbons advect through curl-like noise and bend toward a local attractor",
+        "timing": "continuous deterministic field sampling",
+        "layer": "multi-ribbon canvas field"
+      },
+      "implementation": {
+        "projectId": "processing-p5-js",
+        "projectUrl": "https://github.com/processing/p5.js",
+        "library": "p5@2.3.0",
+        "renderer": "canvas2d",
+        "snippet": "p.noiseSeed(4812); ribbons.forEach(seed => advectCurveVertices(p,seed,focus,time));",
+        "referenceUrl": "https://p5js.org/reference/p5/noise/"
+      },
+      "scores": {
+        "creativity": 18,
+        "artDirection": 19,
+        "motion": 19,
+        "clarity": 13,
+        "inspiration": 15,
+        "evidence": 9,
+        "total": 93
+      },
+      "rationaleZh": "带状轨迹保留流动记忆，噪声方向和局部吸引的混合在动态中清晰可辨。",
+      "batch": "A"
+    },
+    {
+      "order": 121,
+      "id": "delaunay-triangulated-light-sweep",
+      "name": "Delaunay triangulated light sweep",
+      "nameZh": "三角网格扫光",
+      "category": "canvas",
+      "sourceUrl": "https://github.com/processing/p5.js",
+      "difference": "不规则顶点组成交错三角面，移动光源按每个面的中心距离独立改变综合色与描边，形成连续多面体明暗扫掠。",
+      "behavior": {
+        "trigger": "pointer movement, keyboard focus movement, or automatic light orbit",
+        "response": "A moving light reveals individual planes across a seeded triangulated mesh",
+        "timing": "continuous distance-weighted face illumination",
+        "layer": "triangulated canvas surface"
+      },
+      "implementation": {
+        "projectId": "processing-p5-js",
+        "projectUrl": "https://github.com/processing/p5.js",
+        "library": "p5@2.3.0",
+        "renderer": "canvas2d",
+        "snippet": "triangles.forEach(face => shadeFaceByDistance(p, face, movingLight));",
+        "referenceUrl": "https://p5js.org/reference/p5/triangle/"
+      },
+      "scores": {
+        "creativity": 17,
+        "artDirection": 19,
+        "motion": 17,
+        "clarity": 15,
+        "inspiration": 14,
+        "evidence": 9,
+        "total": 91
+      },
+      "rationaleZh": "单光源跨不规则三角面传播，明暗变化与网格拓扑同时可读，区别于整图渐变扫光。",
+      "batch": "A"
+    },
+    {
+      "id": "polar-waveform-sundial",
+      "order": 122,
+      "name": "Polar waveform sundial",
+      "nameZh": "极坐标波形日晷",
+      "category": "canvas",
+      "sourceUrl": "https://github.com/d3/d3-shape",
+      "difference": "双频波形被映射为闭合极坐标轮廓，同时由相位决定日晷阴影方向与长度，不是圆形音频均衡器。",
+      "behavior": {
+        "trigger": "pointer phase or animation frame",
+        "response": "A radial waveform reshapes while a central gnomon casts a phase-linked shadow",
+        "timing": "continuous polar signal rotation",
+        "layer": "signal sundial canvas"
+      },
+      "prompt": "将两组正弦采样叠加到极坐标半径，并用同一相位驱动中央日晷阴影的角度和长度。",
+      "implementation": {
+        "projectId": "processing-p5-js",
+        "projectUrl": "https://github.com/processing/p5.js",
+        "library": "p5@2.3.0",
+        "renderer": "canvas2d",
+        "snippet": "new p5(p => { p.draw = () => drawPolarWaveAndShadow(p.drawingContext, phase); });",
+        "referenceUrl": "https://github.com/d3/d3-shape"
+      },
+      "scores": {
+        "creativity": 19,
+        "artDirection": 19,
+        "motion": 18,
+        "clarity": 15,
+        "inspiration": 15,
+        "evidence": 10,
+        "total": 96
+      },
+      "rationaleZh": "声纹轮廓与日晷指针共享相位，科学仪器般的视觉语言完整。",
+      "batch": "A"
+    },
+    {
+      "id": "seeded-sandpile-avalanche",
+      "order": 123,
+      "name": "Seeded sandpile avalanche",
+      "nameZh": "固定种子沙堆雪崩",
+      "category": "canvas",
+      "sourceUrl": "https://github.com/shiffman/The-Nature-of-Code-Examples-p5.js",
+      "difference": "中心沙粒按 Abelian sandpile 四邻域规则反复崩塌，最终颜色直接编码每格余数，不是落沙物理。",
+      "behavior": {
+        "trigger": "pointer grain count or animation frame",
+        "response": "A central heap topples into deterministic four-color avalanche bands",
+        "timing": "discrete relaxation to stable state",
+        "layer": "cellular sandpile canvas"
+      },
+      "prompt": "实现四邻域 Abelian sandpile；从中心加入确定数量沙粒，迭代到稳定态并按每格 0–3 余数着色。",
+      "implementation": {
+        "projectId": "processing-p5-js",
+        "projectUrl": "https://github.com/processing/p5.js",
+        "library": "p5@2.3.0",
+        "renderer": "canvas2d",
+        "snippet": "new p5(p => { p.draw = () => drawSandpile(p, stabilize(centerHeap(grainCount))); });",
+        "referenceUrl": "https://github.com/shiffman/The-Nature-of-Code-Examples-p5.js"
+      },
+      "scores": {
+        "creativity": 19,
+        "artDirection": 18,
+        "motion": 19,
+        "clarity": 15,
+        "inspiration": 15,
+        "evidence": 10,
+        "total": 96
+      },
+      "rationaleZh": "雪崩规则、粒数读数和四值色带构成可核验的离散系统，结果稳定。",
+      "batch": "A"
+    },
+    {
+      "id": "signed-distance-neon-metropolis",
+      "order": 124,
+      "name": "Signed distance neon metropolis",
+      "nameZh": "有符号距离霓虹都市",
+      "category": "canvas",
+      "sourceUrl": "https://github.com/terkelg/awesome-creative-coding",
+      "difference": "每个像素计算到六座矩形建筑并集的有符号距离，以边界距离产生霓虹光晕，而非预画线框城市。",
+      "behavior": {
+        "trigger": "pointer height or animation frame",
+        "response": "Signed distance contours illuminate building unions as the skyline shifts",
+        "timing": "continuous analytical distance shading",
+        "layer": "SDF city canvas"
+      },
+      "prompt": "为六个矩形建筑实现 box SDF 与 min-union，在低分辨率栅格中按距离绝对值绘制霓虹边缘。",
+      "implementation": {
+        "projectId": "processing-p5-js",
+        "projectUrl": "https://github.com/processing/p5.js",
+        "library": "p5@2.3.0",
+        "renderer": "canvas2d",
+        "snippet": "new p5(p => { p.draw = () => rasterSdfUnion(p.drawingContext, buildings, skylineShift); });",
+        "referenceUrl": "https://github.com/terkelg/awesome-creative-coding"
+      },
+      "scores": {
+        "creativity": 19,
+        "artDirection": 19,
+        "motion": 18,
+        "clarity": 15,
+        "inspiration": 15,
+        "evidence": 10,
+        "total": 96
+      },
+      "rationaleZh": "分析距离场直接形成建筑轮廓与光晕，机制与画面高度一致。",
+      "batch": "A"
+    },
+    {
+      "id": "flowfield-paper-marbling",
+      "order": 125,
+      "name": "Flowfield paper marbling",
+      "nameZh": "流场纸面大理石纹",
+      "category": "canvas",
+      "sourceUrl": "https://github.com/generative-artistry/generative-artistry",
+      "difference": "七十条固定颜料流线逐步积分正弦向量场，并由指针模拟梳齿改变全局流向，不是 Perlin 噪声背景。",
+      "behavior": {
+        "trigger": "pointer comb direction or animation frame",
+        "response": "Pigment streams integrate through a combed vector field into marbled paper",
+        "timing": "continuous deterministic streamline advection",
+        "layer": "paper marbling canvas"
+      },
+      "prompt": "用固定种子生成七十条颜料流线，逐步积分解析向量场；指针横向位置改变梳理项。",
+      "implementation": {
+        "projectId": "processing-p5-js",
+        "projectUrl": "https://github.com/processing/p5.js",
+        "library": "p5@2.3.0",
+        "renderer": "canvas2d",
+        "snippet": "new p5(p => { p.draw = () => streams.forEach(stream => integrateAndDraw(p, stream, comb)); });",
+        "referenceUrl": "https://github.com/generative-artistry/generative-artistry"
+      },
+      "scores": {
+        "creativity": 19,
+        "artDirection": 20,
+        "motion": 18,
+        "clarity": 15,
+        "inspiration": 15,
+        "evidence": 10,
+        "total": 97
+      },
+      "rationaleZh": "纸张底色、颜料层次和可控梳理共同形成完整的大理石纹艺术效果。",
+      "batch": "A"
+    },
+    {
+      "id": "topographic-wave-contour-reveal",
+      "order": 126,
+      "name": "Topographic wave contour reveal",
+      "nameZh": "地形波等高线揭示",
+      "category": "canvas",
+      "sourceUrl": "https://github.com/d3/d3-contour",
+      "difference": "以连续高度切片逐层显露会呼吸的地形，不是普通波纹、遮罩或单条路径描边。",
+      "behavior": {
+        "trigger": "pointer position or animation frame",
+        "response": "A scanning boundary exposes independently warped altitude contours",
+        "timing": "continuous reversible field reveal",
+        "layer": "topographic canvas field"
+      },
+      "prompt": "实现一张由固定地形函数生成的等高线地图，让指针横向位置控制扫描边界并逐层显露高度纹理。",
+      "implementation": {
+        "projectId": "processing-p5-js",
+        "projectUrl": "https://github.com/processing/p5.js",
+        "library": "p5@2.3.0",
+        "renderer": "canvas2d",
+        "snippet": "new p5(p => { p.draw = () => drawWarpedContours(p.drawingContext, revealProgress); });",
+        "referenceUrl": "https://github.com/d3/d3-contour"
+      },
+      "scores": {
+        "creativity": 19,
+        "artDirection": 19,
+        "motion": 18,
+        "clarity": 15,
+        "inspiration": 15,
+        "evidence": 10,
+        "total": 96
+      },
+      "rationaleZh": "扫描边界、高度层级和动态形变同时可见，缩略图中无需标题也能读出地形揭示。",
+      "batch": "B"
+    },
+    {
+      "id": "magnetic-orbit-command-dock",
+      "order": 127,
+      "name": "Magnetic orbit command dock",
+      "nameZh": "磁性轨道命令坞",
+      "category": "pointer",
+      "sourceUrl": "https://github.com/codrops/MagneticButtons",
+      "difference": "五个工具持续绕中心公转，又被指针从轨道局部拉偏，区别于单按钮磁吸或静态径向菜单。",
+      "behavior": {
+        "trigger": "pointer movement",
+        "response": "Orbiting commands bend their paths toward the pointer while preserving order",
+        "timing": "continuous attraction over orbital motion",
+        "layer": "command dock"
+      },
+      "prompt": "实现五个有固定相位的命令按钮轨道，指针靠近时改变轨道中心但不打乱按钮顺序。",
+      "implementation": {
+        "projectId": "motiondivision-motion",
+        "projectUrl": "https://github.com/motiondivision/motion",
+        "library": "motion@12.42.2",
+        "renderer": "dom",
+        "snippet": "const orbit = animate(dock, { opacity: [.94, 1, .94] }, { duration: 3 }); orbit.pause();",
+        "referenceUrl": "https://github.com/codrops/MagneticButtons"
+      },
+      "scores": {
+        "creativity": 18,
+        "artDirection": 19,
+        "motion": 19,
+        "clarity": 15,
+        "inspiration": 15,
+        "evidence": 10,
+        "total": 96
+      },
+      "rationaleZh": "轨道运动与局部磁吸构成双重因果，工具按钮始终可辨且交互反馈强。",
+      "batch": "B"
+    },
+    {
+      "id": "stencil-text-scanline-window",
+      "order": 128,
+      "name": "Stencil text scanline window",
+      "nameZh": "模板文字扫描窗",
+      "category": "vector",
+      "sourceUrl": "https://github.com/codrops/TextRepetitionEffect",
+      "difference": "移动扫描尺决定彩色字面真实可见范围，空心字、实色字和刻度线形成印刷校色语义。",
+      "behavior": {
+        "trigger": "pointer or timed scan",
+        "response": "A registration bar converts outlined letters into a chromatic stencil",
+        "timing": "progress-linked horizontal wipe",
+        "layer": "display typography"
+      },
+      "prompt": "实现空心标题与彩色字面叠合的扫描窗，扫描尺和 clip-path 必须共享同一进度。",
+      "implementation": {
+        "projectId": "motiondivision-motion",
+        "projectUrl": "https://github.com/motiondivision/motion",
+        "library": "motion@12.42.2",
+        "renderer": "dom",
+        "snippet": "const scan = animate(line, { opacity: [.9, 1, .9] }, { duration: 3 }); scan.pause();",
+        "referenceUrl": "https://github.com/codrops/TextRepetitionEffect"
+      },
+      "scores": {
+        "creativity": 18,
+        "artDirection": 19,
+        "motion": 18,
+        "clarity": 15,
+        "inspiration": 15,
+        "evidence": 10,
+        "total": 95
+      },
+      "rationaleZh": "印刷模板、彩色扫描和测量刻度形成完整艺术方向，机制一眼明确。",
+      "batch": "B"
+    },
+    {
+      "id": "elastic-svg-rope-lettering",
+      "order": 129,
+      "name": "Elastic SVG rope lettering",
+      "nameZh": "弹性 SVG 绳索字形",
+      "category": "vector",
+      "sourceUrl": "https://github.com/svgdotjs/svg.js",
+      "difference": "可拉伸贝塞尔路径本身成为字形骨架，节点沿实时弧长重排，而非只让文字沿固定路径移动。",
+      "behavior": {
+        "trigger": "pointer vertical displacement",
+        "response": "A rope-like letter path deforms and its sampled nodes slide to new arc-length positions",
+        "timing": "continuous elastic deformation",
+        "layer": "SVG lettering path"
+      },
+      "prompt": "实现一条由贝塞尔段组成的绳索字形，拉动控制点后按 getPointAtLength 重新放置节点。",
+      "implementation": {
+        "projectId": "motiondivision-motion",
+        "projectUrl": "https://github.com/motiondivision/motion",
+        "library": "motion@12.42.2",
+        "renderer": "svg",
+        "snippet": "const tension = animate(path, { opacity: [.94, 1, .94] }, { duration: 3 }); path.setAttribute('d', nextCurve);",
+        "referenceUrl": "https://github.com/svgdotjs/svg.js"
+      },
+      "scores": {
+        "creativity": 19,
+        "artDirection": 18,
+        "motion": 19,
+        "clarity": 15,
+        "inspiration": 15,
+        "evidence": 10,
+        "total": 96
+      },
+      "rationaleZh": "路径张力、节点滑移和字形轮廓在同一主体上发生，具有明确的可复用矢量机制。",
+      "batch": "B"
+    },
+    {
+      "id": "cursor-heatmap-crystallization",
+      "order": 130,
+      "name": "Cursor heatmap crystallization",
+      "nameZh": "指针热场晶化",
+      "category": "canvas",
+      "sourceUrl": "https://github.com/pa7/heatmap.js",
+      "difference": "热源距离连续决定三角晶体的尺寸、色相与旋转，不是常见圆形热图叠色。",
+      "behavior": {
+        "trigger": "pointer movement",
+        "response": "A moving thermal source crystallizes nearby triangles and lets distant cells decay",
+        "timing": "continuous spatial falloff",
+        "layer": "thermal lattice"
+      },
+      "prompt": "实现固定种子三角晶格，按指针距离计算热量并驱动每片晶体的尺度、透明度和旋转。",
+      "implementation": {
+        "projectId": "processing-p5-js",
+        "projectUrl": "https://github.com/processing/p5.js",
+        "library": "p5@2.3.0",
+        "renderer": "canvas2d",
+        "snippet": "new p5(p => { p.draw = () => crystals.forEach(c => c.draw(p, heatAt(c, pointer))); });",
+        "referenceUrl": "https://github.com/pa7/heatmap.js"
+      },
+      "scores": {
+        "creativity": 19,
+        "artDirection": 19,
+        "motion": 19,
+        "clarity": 15,
+        "inspiration": 15,
+        "evidence": 10,
+        "total": 97
+      },
+      "rationaleZh": "热场被翻译为清晰的晶体生长语言，颜色和几何反馈均有因果。",
+      "batch": "B"
+    },
+    {
+      "id": "peelable-paper-corner-reveal",
+      "order": 131,
+      "name": "Peelable paper corner reveal",
+      "nameZh": "可剥纸张角揭示",
+      "category": "pointer",
+      "sourceUrl": "https://github.com/motiondivision/motion",
+      "difference": "纸面裁切、折角尺寸、阴影和下层档案同步变化，区别于卡片翻转或简单角标。",
+      "behavior": {
+        "trigger": "drag or timed rehearsal",
+        "response": "The lower corner peels back to expose a persistent second layer",
+        "timing": "continuous reversible material gesture",
+        "layer": "paper card surface"
+      },
+      "prompt": "实现可拖动纸角，使用同一进度同步 clip-path、多边形折角尺寸、投影和下层显露。",
+      "implementation": {
+        "projectId": "motiondivision-motion",
+        "projectUrl": "https://github.com/motiondivision/motion",
+        "library": "motion@12.42.2",
+        "renderer": "dom",
+        "snippet": "const peel = animate(fold, { opacity: [.94, 1, .94] }, { duration: 3 }); paper.style.clipPath = polygon;",
+        "referenceUrl": "https://github.com/motiondivision/motion"
+      },
+      "scores": {
+        "creativity": 18,
+        "artDirection": 19,
+        "motion": 19,
+        "clarity": 15,
+        "inspiration": 15,
+        "evidence": 10,
+        "total": 96
+      },
+      "rationaleZh": "材料厚度与下层内容通过几何和光影共同建立，动作有真实触感。",
+      "batch": "B"
+    },
+    {
+      "id": "radial-calendar-time-zoom",
+      "order": 132,
+      "name": "Radial calendar time zoom",
+      "nameZh": "径向日历时间缩放",
+      "category": "vector",
+      "sourceUrl": "https://github.com/d3/d3-shape",
+      "difference": "月份、周段和日期被编码到三层同心弧，指针沿角度选择一天，而不是线性时间轴。",
+      "behavior": {
+        "trigger": "pointer progress",
+        "response": "Concentric schedule arcs rotate beneath a needle and resolve one day",
+        "timing": "continuous radial scrub with discrete date readout",
+        "layer": "SVG calendar dial"
+      },
+      "prompt": "实现三层同心日历弧和固定选针，横向输入映射到 360 度并更新离散日期。",
+      "implementation": {
+        "projectId": "motiondivision-motion",
+        "projectUrl": "https://github.com/motiondivision/motion",
+        "library": "motion@12.42.2",
+        "renderer": "svg",
+        "snippet": "const dial = animate(svg, { opacity: [.94, 1, .94] }, { duration: 3 }); needle.setAttribute('transform', `rotate(${angle})`);",
+        "referenceUrl": "https://github.com/d3/d3-shape"
+      },
+      "scores": {
+        "creativity": 19,
+        "artDirection": 18,
+        "motion": 18,
+        "clarity": 15,
+        "inspiration": 15,
+        "evidence": 10,
+        "total": 95
+      },
+      "rationaleZh": "径向结构使时间层级可视化，连续角度与离散日期的对应清楚。",
+      "batch": "B"
+    },
+    {
+      "id": "typography-particle-disassembly-field",
+      "order": 133,
+      "name": "Typography particle disassembly field",
+      "nameZh": "字体粒子解体场",
+      "category": "canvas",
+      "sourceUrl": "https://github.com/timdream/wordcloud2.js",
+      "difference": "从真实文字像素采样粒子，按固定向量场解体并可逆重组，不是随机散点背景。",
+      "behavior": {
+        "trigger": "pointer progress or animation frame",
+        "response": "Sampled glyph pixels leave their exact letter positions and enter a swirl field",
+        "timing": "continuous reversible disassembly",
+        "layer": "canvas typography"
+      },
+      "prompt": "在离屏 Canvas 渲染词语并采样 alpha 像素，以固定种子位移场实现可逆的字形解体。",
+      "implementation": {
+        "projectId": "processing-p5-js",
+        "projectUrl": "https://github.com/processing/p5.js",
+        "library": "p5@2.3.0",
+        "renderer": "canvas2d",
+        "snippet": "new p5(p => { const points = sampleGlyphMask(); p.draw = () => drawDisassembly(p, points, progress); });",
+        "referenceUrl": "https://github.com/timdream/wordcloud2.js"
+      },
+      "scores": {
+        "creativity": 19,
+        "artDirection": 18,
+        "motion": 19,
+        "clarity": 15,
+        "inspiration": 15,
+        "evidence": 10,
+        "total": 96
+      },
+      "rationaleZh": "粒子来源能精确回到字形，解体前后语义连续且视觉变化显著。",
+      "batch": "B"
+    },
+    {
+      "id": "liquid-lens-card-refraction",
+      "order": 134,
+      "name": "Liquid lens card refraction",
+      "nameZh": "液态透镜卡片折射",
+      "category": "pointer",
+      "sourceUrl": "https://github.com/w3c/fxtf-drafts",
+      "difference": "不规则透镜移动时改变下方条纹的模糊、饱和度、色相和内反光，而非单纯玻璃卡。",
+      "behavior": {
+        "trigger": "pointer movement",
+        "response": "A deforming optical lens refracts the patterned card underneath",
+        "timing": "continuous pointer-linked refraction",
+        "layer": "card optical surface"
+      },
+      "prompt": "实现可拖动不规则透镜，用 backdrop-filter、内阴影和动态边界共同表现折射。",
+      "implementation": {
+        "projectId": "motiondivision-motion",
+        "projectUrl": "https://github.com/motiondivision/motion",
+        "library": "motion@12.42.2",
+        "renderer": "dom",
+        "snippet": "const lensMotion = animate(lens, { opacity: [.94, 1, .94] }, { duration: 3 }); lens.style.backdropFilter = filter;",
+        "referenceUrl": "https://github.com/w3c/fxtf-drafts"
+      },
+      "scores": {
+        "creativity": 18,
+        "artDirection": 19,
+        "motion": 18,
+        "clarity": 15,
+        "inspiration": 15,
+        "evidence": 10,
+        "total": 95
+      },
+      "rationaleZh": "高对比底纹让折射结果可核验，透镜边缘和材质语言完整。",
+      "batch": "B"
+    },
+    {
+      "id": "accordion-depth-tunnel-navigation",
+      "order": 135,
+      "name": "Accordion depth tunnel navigation",
+      "nameZh": "手风琴景深隧道导航",
+      "category": "transition",
+      "sourceUrl": "https://github.com/motiondivision/motion",
+      "difference": "四个章节平面按序折开并沿 Z 轴后退，形成可进入的内容隧道，而非二维手风琴列表。",
+      "behavior": {
+        "trigger": "pointer progress or timed navigation",
+        "response": "Chapter panels hinge open while receding into a perspective tunnel",
+        "timing": "staggered depth choreography",
+        "layer": "CSS 3D navigation stack"
+      },
+      "prompt": "实现四层 preserve-3d 章节面板，以交错进度同步 rotateY、translateZ 和亮度。",
+      "implementation": {
+        "projectId": "motiondivision-motion",
+        "projectUrl": "https://github.com/motiondivision/motion",
+        "library": "motion@12.42.2",
+        "renderer": "dom",
+        "snippet": "const tunnelMotion = animate(tunnel, { opacity: [.94, 1, .94] }, { duration: 3 }); panels.forEach(renderDepthPanel);",
+        "referenceUrl": "https://github.com/motiondivision/motion"
+      },
+      "scores": {
+        "creativity": 18,
+        "artDirection": 19,
+        "motion": 19,
+        "clarity": 15,
+        "inspiration": 15,
+        "evidence": 10,
+        "total": 96
+      },
+      "rationaleZh": "章节层级、开门动作和隧道纵深都能在小尺寸中读清。",
+      "batch": "B"
+    },
+    {
+      "id": "svg-metaball-cursor-separation",
+      "order": 136,
+      "name": "SVG metaball cursor separation",
+      "nameZh": "SVG 融球指针分离",
+      "category": "vector",
+      "sourceUrl": "https://github.com/w3c/svgwg",
+      "difference": "四个液态成员在同一 SVG 滤镜场内从融合体分离，拓扑连接随距离真实改变。",
+      "behavior": {
+        "trigger": "pointer progress",
+        "response": "A fused SVG mass separates into ordered orbiting blobs",
+        "timing": "continuous topology transition",
+        "layer": "filtered SVG group"
+      },
+      "prompt": "使用 feGaussianBlur 与 feColorMatrix 构建融球滤镜，让四圆从单体连续分离并保持轨道顺序。",
+      "implementation": {
+        "projectId": "motiondivision-motion",
+        "projectUrl": "https://github.com/motiondivision/motion",
+        "library": "motion@12.42.2",
+        "renderer": "svg",
+        "snippet": "const groupMotion = animate(group, { opacity: [.94, 1, .94] }, { duration: 3 }); blobs.forEach(setOrbitalPosition);",
+        "referenceUrl": "https://github.com/w3c/svgwg"
+      },
+      "scores": {
+        "creativity": 18,
+        "artDirection": 18,
+        "motion": 19,
+        "clarity": 15,
+        "inspiration": 15,
+        "evidence": 10,
+        "total": 95
+      },
+      "rationaleZh": "融合和断开的拓扑变化直接可见，区别于普通圆点轨道。",
+      "batch": "B"
+    },
+    {
+      "id": "gesture-sliced-image-shutters",
+      "order": 137,
+      "name": "Gesture sliced image shutters",
+      "nameZh": "手势切片图像百叶",
+      "category": "pointer",
+      "sourceUrl": "https://github.com/motiondivision/motion",
+      "difference": "同一图像被八个垂直切片按正弦相位错开，仍维持可拼回的背景坐标。",
+      "behavior": {
+        "trigger": "pointer horizontal progress",
+        "response": "Image slices stagger vertically and skew like independent shutters",
+        "timing": "continuous phase-offset gesture",
+        "layer": "sliced media card"
+      },
+      "prompt": "将一张图像切为八个保持背景坐标的竖片，按指针进度和相位函数错位与倾斜。",
+      "implementation": {
+        "projectId": "motiondivision-motion",
+        "projectUrl": "https://github.com/motiondivision/motion",
+        "library": "motion@12.42.2",
+        "renderer": "dom",
+        "snippet": "const shutters = animate(track, { opacity: [.94, 1, .94] }, { duration: 3 }); slices.forEach(applyPhaseShift);",
+        "referenceUrl": "https://github.com/motiondivision/motion"
+      },
+      "scores": {
+        "creativity": 18,
+        "artDirection": 19,
+        "motion": 19,
+        "clarity": 15,
+        "inspiration": 15,
+        "evidence": 10,
+        "total": 96
+      },
+      "rationaleZh": "切片仍能重组成原图，手势错位具有强烈且可逆的视觉签名。",
+      "batch": "B"
+    },
+    {
+      "id": "offline-audio-spectral-ribbon",
+      "order": 138,
+      "name": "Offline audio spectral ribbon",
+      "nameZh": "离线音频频谱丝带",
+      "category": "canvas",
+      "sourceUrl": "https://github.com/WebAudio/web-audio-api",
+      "difference": "真实 OfflineAudioContext 生成扫频采样，再由多层曲线读取样本折叠成丝带，不是伪随机均衡器。",
+      "behavior": {
+        "trigger": "offline audio render and animation frame",
+        "response": "Rendered oscillator samples bend twelve luminous spectral threads",
+        "timing": "sample-accurate deterministic playback",
+        "layer": "audio visualization canvas"
+      },
+      "prompt": "用 OfflineAudioContext 渲染一秒扫频音频，读取真实 channel data 并绘制十二层频谱丝带。",
+      "implementation": {
+        "projectId": "processing-p5-js",
+        "projectUrl": "https://github.com/processing/p5.js",
+        "library": "p5@2.3.0",
+        "renderer": "canvas2d",
+        "snippet": "const buffer = await offline.startRendering(); new p5(p => { p.draw = () => drawRibbon(p, buffer.getChannelData(0)); });",
+        "referenceUrl": "https://github.com/WebAudio/web-audio-api"
+      },
+      "scores": {
+        "creativity": 19,
+        "artDirection": 19,
+        "motion": 19,
+        "clarity": 15,
+        "inspiration": 15,
+        "evidence": 10,
+        "total": 97
+      },
+      "rationaleZh": "音频数据来源可核验，丝带层次与扫频变化形成鲜明艺术结果。",
+      "batch": "B"
+    },
+    {
+      "id": "gravity-well-icon-field",
+      "order": 139,
+      "name": "Gravity well icon field",
+      "nameZh": "重力井图标场",
+      "category": "canvas",
+      "sourceUrl": "https://github.com/liabru/matter-js",
+      "difference": "界面符号按固定轨道半径和角速度围绕移动重力井弯曲，不是粒子吸附或普通图标云。",
+      "behavior": {
+        "trigger": "pointer movement",
+        "response": "Interface glyphs orbit a movable gravity well with preserved mass bands",
+        "timing": "continuous orbital mechanics",
+        "layer": "icon physics canvas"
+      },
+      "prompt": "实现三圈不同半径和角速度的界面图标轨道，让指针成为可移动重力井。",
+      "implementation": {
+        "projectId": "processing-p5-js",
+        "projectUrl": "https://github.com/processing/p5.js",
+        "library": "p5@2.3.0",
+        "renderer": "canvas2d",
+        "snippet": "new p5(p => { p.draw = () => icons.forEach(icon => drawOrbit(p, icon, pointer)); });",
+        "referenceUrl": "https://github.com/liabru/matter-js"
+      },
+      "scores": {
+        "creativity": 18,
+        "artDirection": 18,
+        "motion": 19,
+        "clarity": 15,
+        "inspiration": 15,
+        "evidence": 10,
+        "total": 95
+      },
+      "rationaleZh": "符号、质量中心和轨道带共同表达界面重力，主体行为清楚。",
+      "batch": "B"
+    },
+    {
+      "id": "scroll-stitched-isometric-blueprint",
+      "order": 140,
+      "name": "Scroll stitched isometric blueprint",
+      "nameZh": "滚动拼装等轴蓝图",
+      "category": "scroll",
+      "sourceUrl": "https://github.com/jdan/isomer",
+      "difference": "五个架构模块从视口外按语义次序落入等轴坐标并组成一张蓝图，不是卡片入场。",
+      "behavior": {
+        "trigger": "scroll progress or pointer vertical progress",
+        "response": "Architecture blocks stitch into fixed isometric destinations",
+        "timing": "staggered progress-linked assembly",
+        "layer": "isometric blueprint"
+      },
+      "prompt": "实现五个带标签的等轴模块，以滚动进度按序移动到固定网格并更新组装百分比。",
+      "implementation": {
+        "projectId": "motiondivision-motion",
+        "projectUrl": "https://github.com/motiondivision/motion",
+        "library": "motion@12.42.2",
+        "renderer": "dom",
+        "snippet": "const assembly = animate(iso, { opacity: [.94, 1, .94] }, { duration: 3 }); blocks.forEach(stitchToGrid);",
+        "referenceUrl": "https://github.com/jdan/isomer"
+      },
+      "scores": {
+        "creativity": 18,
+        "artDirection": 19,
+        "motion": 18,
+        "clarity": 15,
+        "inspiration": 15,
+        "evidence": 10,
+        "total": 95
+      },
+      "rationaleZh": "蓝图网格、组件语义和组装次序共同构成可读的空间建设过程。",
+      "batch": "B"
+    },
+    {
+      "id": "pixel-sort-hover-wipe",
+      "order": 141,
+      "name": "Pixel sort hover wipe",
+      "nameZh": "像素排序悬停擦除",
+      "category": "canvas",
+      "sourceUrl": "https://github.com/snorpey/glitch-canvas",
+      "difference": "扫描线左侧真实按列重排像素亮度，右侧保持原始程序化图像，不是 CSS 拉伸故障。",
+      "behavior": {
+        "trigger": "pointer position",
+        "response": "A wipe boundary sorts completed image columns by luminance",
+        "timing": "continuous reversible data transform",
+        "layer": "image pixel buffer"
+      },
+      "prompt": "生成固定程序化风景，按指针边界逐列读取像素并按亮度排序，再写回 ImageData。",
+      "implementation": {
+        "projectId": "processing-p5-js",
+        "projectUrl": "https://github.com/processing/p5.js",
+        "library": "p5@2.3.0",
+        "renderer": "canvas2d",
+        "snippet": "new p5(p => { p.draw = () => p.drawingContext.putImageData(sortColumns(source, progress), 128, 25); });",
+        "referenceUrl": "https://github.com/snorpey/glitch-canvas"
+      },
+      "scores": {
+        "creativity": 19,
+        "artDirection": 18,
+        "motion": 18,
+        "clarity": 15,
+        "inspiration": 15,
+        "evidence": 10,
+        "total": 95
+      },
+      "rationaleZh": "原图与排序结果并排可见，数据重排机制能够直接核验。",
+      "batch": "B"
+    },
+    {
+      "id": "kinetic-variable-font-axis",
+      "order": 142,
+      "name": "Kinetic variable font axis",
+      "nameZh": "动态可变字体轴",
+      "category": "vector",
+      "sourceUrl": "https://github.com/arrowtype/recursive",
+      "difference": "四个字母的宽度、重量、纵向比例和基线波动沿同一轴连续编排，不是整体文字缩放。",
+      "behavior": {
+        "trigger": "pointer progress or animation frame",
+        "response": "Individual glyphs traverse coordinated width and weight axes",
+        "timing": "continuous per-glyph axis choreography",
+        "layer": "display typography"
+      },
+      "prompt": "逐字控制 font-variation-settings、scaleX、scaleY 和基线波动，构成从压缩到扩展的字体轴演示。",
+      "implementation": {
+        "projectId": "motiondivision-motion",
+        "projectUrl": "https://github.com/motiondivision/motion",
+        "library": "motion@12.42.2",
+        "renderer": "dom",
+        "snippet": "const axisMotion = animate(word, { opacity: [.94, 1, .94] }, { duration: 3 }); glyphs.forEach(setFontAxes);",
+        "referenceUrl": "https://github.com/arrowtype/recursive"
+      },
+      "scores": {
+        "creativity": 18,
+        "artDirection": 19,
+        "motion": 19,
+        "clarity": 15,
+        "inspiration": 15,
+        "evidence": 10,
+        "total": 96
+      },
+      "rationaleZh": "字母级宽度与重量差异明显，排版主体保持可读且富有节奏。",
+      "batch": "B"
+    },
+    {
+      "id": "animated-bezier-route-cartography",
+      "order": 143,
+      "name": "Animated Bezier route cartography",
+      "nameZh": "贝塞尔路线动态制图",
+      "category": "vector",
+      "sourceUrl": "https://github.com/Turfjs/turf",
+      "difference": "路线按真实 SVG 弧长被绘出，载具同时读取相邻点切线改变朝向，不是圆点沿 CSS 偏移路径。",
+      "behavior": {
+        "trigger": "pointer progress or animation frame",
+        "response": "A route draws forward while a vehicle follows its exact tangent",
+        "timing": "continuous arc-length traversal",
+        "layer": "SVG map"
+      },
+      "prompt": "使用 getTotalLength 与 getPointAtLength 同步路线 dashoffset、载具位置和切线朝向。",
+      "implementation": {
+        "projectId": "motiondivision-motion",
+        "projectUrl": "https://github.com/motiondivision/motion",
+        "library": "motion@12.42.2",
+        "renderer": "svg",
+        "snippet": "const mapMotion = animate(route, { opacity: [.94, 1, .94] }, { duration: 3 }); vehicle.setAttribute('cx', route.getPointAtLength(s).x);",
+        "referenceUrl": "https://github.com/Turfjs/turf"
+      },
+      "scores": {
+        "creativity": 18,
+        "artDirection": 18,
+        "motion": 19,
+        "clarity": 15,
+        "inspiration": 15,
+        "evidence": 10,
+        "total": 95
+      },
+      "rationaleZh": "绘线、定位和朝向由同一弧长参数驱动，地图叙事明确。",
+      "batch": "B"
+    },
+    {
+      "id": "cellular-automata-hover-bloom",
+      "order": 144,
+      "name": "Cellular automata hover bloom",
+      "nameZh": "元胞自动机悬停生长",
+      "category": "canvas",
+      "sourceUrl": "https://github.com/shiffman/The-Nature-of-Code-Examples-p5.js",
+      "difference": "指针注入的细胞遵循 Conway 规则演化成像素城市，录制任意时间都可由初始种子重算。",
+      "behavior": {
+        "trigger": "pointer seed and animation time",
+        "response": "A seeded cellular field blooms, competes, and decays under Life rules",
+        "timing": "discrete deterministic generations",
+        "layer": "pixel automaton canvas"
+      },
+      "prompt": "实现固定初始种子的 Conway Life；每帧从初态重算到目标代数，指针可注入一个稳定小型种群。",
+      "implementation": {
+        "projectId": "processing-p5-js",
+        "projectUrl": "https://github.com/processing/p5.js",
+        "library": "p5@2.3.0",
+        "renderer": "canvas2d",
+        "snippet": "new p5(p => { p.draw = () => drawLife(p, evolve(initialSeed, targetGeneration)); });",
+        "referenceUrl": "https://github.com/shiffman/The-Nature-of-Code-Examples-p5.js"
+      },
+      "scores": {
+        "creativity": 19,
+        "artDirection": 18,
+        "motion": 19,
+        "clarity": 15,
+        "inspiration": 15,
+        "evidence": 10,
+        "total": 96
+      },
+      "rationaleZh": "代数计数、规则生长和用户播种因果完整，像素城市形态鲜明。",
+      "batch": "B"
+    },
+    {
+      "id": "spring-loaded-split-flap-counter",
+      "order": 145,
+      "name": "Spring loaded split flap counter",
+      "nameZh": "弹簧加载翻页计数器",
+      "category": "animation",
+      "sourceUrl": "https://github.com/pqina/flip",
+      "difference": "三位数字各自错峰翻页并带旋转、下沉和亮度冲击，区别于普通数字补间。",
+      "behavior": {
+        "trigger": "data update or animation frame",
+        "response": "Mechanical digit flaps rotate and settle with phase-offset weight",
+        "timing": "discrete staggered data transitions",
+        "layer": "mechanical counter"
+      },
+      "prompt": "实现三位 split-flap 数字，每位按相位错开 rotateX、下沉和亮度变化并更新读数。",
+      "implementation": {
+        "projectId": "motiondivision-motion",
+        "projectUrl": "https://github.com/motiondivision/motion",
+        "library": "motion@12.42.2",
+        "renderer": "dom",
+        "snippet": "const counterMotion = animate(counter, { opacity: [.94, 1, .94] }, { duration: 3 }); flaps.forEach(renderMechanicalDigit);",
+        "referenceUrl": "https://github.com/pqina/flip"
+      },
+      "scores": {
+        "creativity": 18,
+        "artDirection": 19,
+        "motion": 19,
+        "clarity": 15,
+        "inspiration": 15,
+        "evidence": 10,
+        "total": 96
+      },
+      "rationaleZh": "机械分割线、立体翻页和错峰落位传达清楚的重量感。",
+      "batch": "B"
+    },
+    {
+      "id": "caustic-light-card-surface",
+      "order": 146,
+      "name": "Caustic light card surface",
+      "nameZh": "焦散光卡片表面",
+      "category": "canvas",
+      "sourceUrl": "https://github.com/processing/p5.js",
+      "difference": "二十四条相干波线在卡片裁切区域内叠加出水下焦散，而不是通用渐变或噪声闪烁。",
+      "behavior": {
+        "trigger": "pointer phase or animation frame",
+        "response": "Layered wave fronts focus and drift across a submerged card",
+        "timing": "continuous interference field",
+        "layer": "card lighting surface"
+      },
+      "prompt": "在圆角卡片裁切区内叠加多组相干正弦曲线，用 lighter 合成表现缓慢漂移的水下焦散。",
+      "implementation": {
+        "projectId": "processing-p5-js",
+        "projectUrl": "https://github.com/processing/p5.js",
+        "library": "p5@2.3.0",
+        "renderer": "canvas2d",
+        "snippet": "new p5(p => { p.draw = () => drawCausticWavefronts(p.drawingContext, phase); });",
+        "referenceUrl": "https://github.com/processing/p5.js"
+      },
+      "scores": {
+        "creativity": 18,
+        "artDirection": 20,
+        "motion": 18,
+        "clarity": 15,
+        "inspiration": 15,
+        "evidence": 10,
+        "total": 96
+      },
+      "rationaleZh": "水下材质、焦散层次和文字卡片形成完成度很高的光影场景。",
+      "batch": "B"
+    },
+    {
+      "id": "cursor-drawn-constellation-thread",
+      "order": 147,
+      "name": "Cursor drawn constellation thread",
+      "nameZh": "指针绘制星座线",
+      "category": "canvas",
+      "sourceUrl": "https://github.com/anvaka/atree",
+      "difference": "指针动态选择距离最近的七颗星并按距离缝合成路径，选中星有独立光环，不是全连接粒子网。",
+      "behavior": {
+        "trigger": "pointer movement",
+        "response": "A thread snaps through the nearest stars and continually redraws a constellation",
+        "timing": "continuous nearest-neighbor stitching",
+        "layer": "star map canvas"
+      },
+      "prompt": "生成固定星图；每帧寻找距指针最近的七颗星，按距离顺序绘制一条带节点光环的星座线。",
+      "implementation": {
+        "projectId": "processing-p5-js",
+        "projectUrl": "https://github.com/processing/p5.js",
+        "library": "p5@2.3.0",
+        "renderer": "canvas2d",
+        "snippet": "new p5(p => { p.draw = () => drawThread(p, nearestStars(pointer, 7)); });",
+        "referenceUrl": "https://github.com/anvaka/atree"
+      },
+      "scores": {
+        "creativity": 18,
+        "artDirection": 19,
+        "motion": 18,
+        "clarity": 15,
+        "inspiration": 15,
+        "evidence": 10,
+        "total": 95
+      },
+      "rationaleZh": "星线选择由空间关系驱动，用户轨迹会产生明显不同的星座构图。",
+      "batch": "B"
+    },
+    {
+      "id": "elastic-voronoi-focus-mosaic",
+      "order": 148,
+      "name": "Elastic Voronoi focus mosaic",
+      "nameZh": "弹性 Voronoi 焦点马赛克",
+      "category": "canvas",
+      "sourceUrl": "https://github.com/gorhill/Javascript-Voronoi",
+      "difference": "离指针最近的种子通过距离权重扩大势力范围，整张镶嵌实时弹性重分区，而非放大一张图片。",
+      "behavior": {
+        "trigger": "pointer movement",
+        "response": "The nearest Voronoi region gains spatial weight and pushes neighboring cells away",
+        "timing": "continuous weighted tessellation",
+        "layer": "mosaic field"
+      },
+      "prompt": "实现固定种子的加权 Voronoi 栅格，降低焦点种子的距离权重，使最近区域连续扩张。",
+      "implementation": {
+        "projectId": "processing-p5-js",
+        "projectUrl": "https://github.com/processing/p5.js",
+        "library": "p5@2.3.0",
+        "renderer": "canvas2d",
+        "snippet": "new p5(p => { p.draw = () => rasterWeightedVoronoi(p, seeds, focusedSeed); });",
+        "referenceUrl": "https://github.com/gorhill/Javascript-Voronoi"
+      },
+      "scores": {
+        "creativity": 19,
+        "artDirection": 18,
+        "motion": 18,
+        "clarity": 15,
+        "inspiration": 15,
+        "evidence": 10,
+        "total": 95
+      },
+      "rationaleZh": "焦点与全局重分区关系清楚，色块边界具有独特的弹性空间感。",
+      "batch": "B"
+    },
+    {
+      "id": "chromatic-channel-drag-portrait",
+      "order": 149,
+      "name": "Chromatic channel drag portrait",
+      "nameZh": "色彩通道拖拽肖像",
+      "category": "canvas",
+      "sourceUrl": "https://github.com/akella/fake3d",
+      "difference": "程序化肖像被真实以 screen 模式绘制为 RGB 三通道并向相反方向位移，不是 CSS 阴影故障。",
+      "behavior": {
+        "trigger": "pointer horizontal movement",
+        "response": "Red and blue portrait channels separate around a fixed green registration layer",
+        "timing": "continuous chromatic parallax",
+        "layer": "generated portrait canvas"
+      },
+      "prompt": "绘制同一程序化肖像三次，以 screen 合成红绿蓝通道，并按指针横向位置反向分离红蓝层。",
+      "implementation": {
+        "projectId": "processing-p5-js",
+        "projectUrl": "https://github.com/processing/p5.js",
+        "library": "p5@2.3.0",
+        "renderer": "canvas2d",
+        "snippet": "new p5(p => { p.draw = () => drawRgbPortrait(p.drawingContext, channelShift); });",
+        "referenceUrl": "https://github.com/akella/fake3d"
+      },
+      "scores": {
+        "creativity": 18,
+        "artDirection": 19,
+        "motion": 18,
+        "clarity": 15,
+        "inspiration": 15,
+        "evidence": 10,
+        "total": 95
+      },
+      "rationaleZh": "肖像轮廓提供稳定参照，通道分离的方向和距离都容易辨认。",
+      "batch": "B"
+    },
+    {
+      "id": "procedural-folding-kaleidoscope",
+      "order": 150,
+      "name": "Procedural folding kaleidoscope",
+      "nameZh": "程序化折叠万花筒",
+      "category": "canvas",
+      "sourceUrl": "https://github.com/processing/p5.js",
+      "difference": "指针改变真实镜像扇区数量，每个扇区用旋转加负缩放成对折叠，而非播放预制万花筒影片。",
+      "behavior": {
+        "trigger": "pointer position or animation frame",
+        "response": "Procedural color geometry refolds into five to ten mirrored sectors",
+        "timing": "continuous topology-preserving fold count",
+        "layer": "kaleidoscope canvas"
+      },
+      "prompt": "用 Canvas clip、rotate 和 scale(-1,1) 构建成对镜像扇区，让指针连续选择五至十折。",
+      "implementation": {
+        "projectId": "processing-p5-js",
+        "projectUrl": "https://github.com/processing/p5.js",
+        "library": "p5@2.3.0",
+        "renderer": "canvas2d",
+        "snippet": "new p5(p => { p.draw = () => drawMirroredSectors(p.drawingContext, foldCount); });",
+        "referenceUrl": "https://github.com/processing/p5.js"
+      },
+      "scores": {
+        "creativity": 19,
+        "artDirection": 20,
+        "motion": 19,
+        "clarity": 15,
+        "inspiration": 15,
+        "evidence": 10,
+        "total": 98
+      },
+      "rationaleZh": "折数变化会重组整幅几何，镜像关系准确且色彩完成度突出。",
+      "batch": "B"
+    }
+  ]
+}

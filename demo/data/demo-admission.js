@@ -1,4 +1,8 @@
 import { effectExpansion100Specs } from './effect-expansion-2026-07-20.js';
+import { effectExpansion150BatchA1 } from './effect-expansion-a1-2026-07-20.js';
+import { effectExpansion150BatchA2 } from './effect-expansion-a2-2026-07-20.js';
+import { effectExpansion150BatchA3 } from './effect-expansion-a3-2026-07-20.js';
+import { effectExpansion150BatchB } from './effect-expansion-b-2026-07-20.js';
 
 export const admissionPolicy = {
   version: '2026-07-17',
@@ -21,10 +25,10 @@ export const admissionPolicy = {
 
 export const admissionAuditSummary = {
   auditedAt: '2026-07-20',
-  candidateCount: 346,
-  reviewedPreviewCount: 113,
+  candidateCount: 396,
+  reviewedPreviewCount: 163,
   missingPreviewCount: 233,
-  admittedCount: 100,
+  admittedCount: 150,
   rejectedCount: 246
 };
 
@@ -192,6 +196,18 @@ export const reviewedDemoScores = {
 };
 
 for (const spec of effectExpansion100Specs) {
+  reviewedDemoScores[spec.id] = {
+    creativity: spec.scores.creativity,
+    artDirection: spec.scores.artDirection,
+    motion: spec.scores.motion,
+    clarity: spec.scores.clarity,
+    inspiration: spec.scores.inspiration,
+    evidence: spec.scores.evidence,
+    rationaleZh: spec.rationaleZh
+  };
+}
+
+for (const spec of [...effectExpansion150BatchA1, ...effectExpansion150BatchA2, ...effectExpansion150BatchA3, ...effectExpansion150BatchB]) {
   reviewedDemoScores[spec.id] = {
     creativity: spec.scores.creativity,
     artDirection: spec.scores.artDirection,

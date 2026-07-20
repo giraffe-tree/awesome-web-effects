@@ -62,6 +62,12 @@ class PlannedEffect:
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
+        "--plan",
+        type=Path,
+        default=DEFAULT_PLAN,
+        help=f"Expansion-plan JSON to inspect (default: {DEFAULT_PLAN.relative_to(REPO_ROOT)}).",
+    )
+    parser.add_argument(
         "--batch",
         choices=(*BATCHES, "all"),
         default="all",
@@ -355,7 +361,7 @@ def render_contact_sheets(
 
 def main(argv: Sequence[str] | None = None) -> int:
     args = parse_args(argv)
-    effects = load_plan(DEFAULT_PLAN)
+    effects = load_plan(args.plan)
     selected = select_effects(effects, args.batch, parse_only(args.only))
     gif_paths = validate_gifs(selected, DEFAULT_GIF_DIR)
     try:

@@ -259,6 +259,23 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.click(260, 120)
             elif index == 29:
                 page.mouse.click(276, 64)
+        elif demo["id"] == "gesture-sliced-image-shutters":
+            if index == 3:
+                page.mouse.move(75, 100)
+                page.mouse.down()
+            elif 4 <= index <= 10:
+                progress = (index - 4) / 6
+                page.mouse.move(75 + 195 * progress, 100)
+            elif index == 11:
+                page.mouse.up()
+            elif index == 16:
+                page.mouse.move(260, 100)
+                page.mouse.down()
+            elif 17 <= index <= 21:
+                progress = (index - 17) / 4
+                page.mouse.move(260 - 210 * progress, 100)
+            elif index == 22:
+                page.mouse.up()
         page.evaluate("time => window.__setPreviewTime(time)", preview_time)
         frame_path = frame_root / f"{index:04d}.png"
         page.screenshot(path=str(frame_path), type="png")
@@ -362,6 +379,27 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["completedTracks"] != 0
         ):
             raise RuntimeError(f"{demo['id']} did not preserve three user-driven play-state handoffs and final pause: {interaction!r}")
+    elif demo["id"] == "gesture-sliced-image-shutters":
+        page.wait_for_function(
+            "window.__PREVIEW_INTERACTION_STATE__.mode === 'idle' && !window.__PREVIEW_INTERACTION_STATE__.springActive",
+            timeout=2_000,
+        )
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            interaction["automaticFallback"]
+            or interaction["inputCount"] < 14
+            or interaction["inputKind"] != "mouse"
+            or interaction["releaseCount"] < 2
+            or interaction["mode"] != "idle"
+            or abs(interaction["open"]) > .001
+            or interaction["pointerCaptured"]
+            or interaction["keyboardActive"]
+            or interaction["springActive"]
+            or not interaction["imageReady"]
+            or interaction["sourceCount"] != 1
+            or not interaction["initialRegistration"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture two real signed drags and exact shared-image registration: {interaction!r}")
 
     minimum_unique = min(6, max(2, frame_count // 6))
     if len(hashes) < minimum_unique:

@@ -1,8 +1,193 @@
-<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Gesture Sliced Image Shutters</title><style>:root{--preview-background:#080d13}.copy{position:absolute;left:14px;top:49px;width:100px;color:#eef6ff}.copy small{font:800 6px monospace;letter-spacing:.14em;color:#ffcc68}.copy h1{margin:8px 0;font:950 20px/.84 system-ui;letter-spacing:-.06em}.shutters{position:absolute;left:136px;top:30px;width:168px;height:126px;display:flex;gap:3px;overflow:hidden}.slice{flex:1;background:radial-gradient(circle at 45% 38%,#ffe8a6 0 7%,transparent 8%),linear-gradient(160deg,#fa7f55 0 32%,#415a95 33% 66%,#131b33 67%);background-size:168px 126px;background-position:calc(var(--i) * -21px) 0;transform:translateY(var(--shift,0)) skewY(var(--skew,0deg));will-change:transform}.meter{position:absolute;right:16px;bottom:12px;color:#ffcc68;font:800 6px monospace}.scene-caption{display:none}</style>  <script type="module" crossorigin src="./assets/gesture-sliced-image-shutters-BR5HXr6v.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
-  <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
-  <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
-  <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
-  <link rel="modulepreload" crossorigin href="./assets/expansion-b-utils-CD_J0IHW.js">
-  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage"><section class="copy"><small>GESTURE SHUTTER</small><h1>SLICE THE HORIZON.</h1></section><div class="shutters" id="shutters" tabindex="0" aria-label="Drag to stagger image shutters"><i class="slice" style="--i:0"></i><i class="slice" style="--i:1"></i><i class="slice" style="--i:2"></i><i class="slice" style="--i:3"></i><i class="slice" style="--i:4"></i><i class="slice" style="--i:5"></i><i class="slice" style="--i:6"></i><i class="slice" style="--i:7"></i></div><span class="meter">8 SLICES / REVERSIBLE</span><span class="library-badge">Motion · sliced shutters</span></main></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Motion — Gesture Sliced Image Shutters</title>
+    <style>
+      :root { --preview-background: #071017; }
+
+      .shutter-stage {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        min-width: 100%;
+        min-height: 100%;
+        overflow: hidden;
+        color: #f5f7f2;
+        background:
+          radial-gradient(circle at 85% 18%, rgba(88, 137, 146, .24), transparent 34%),
+          #071017;
+      }
+
+      .shutters {
+        position: absolute;
+        inset: 32px 12px 11px;
+        display: grid;
+        grid-template-columns: repeat(8, minmax(0, 1fr));
+        gap: 0;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, .24);
+        border-radius: clamp(8px, 3vw, 17px);
+        outline: none;
+        cursor: ew-resize;
+        touch-action: none;
+        background: #06131a;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, .32);
+        isolation: isolate;
+      }
+
+      .shutters:focus-visible {
+        border-color: rgba(255, 255, 255, .92);
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, .22), 0 15px 35px rgba(0, 0, 0, .32);
+      }
+
+      .slice {
+        position: relative;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        will-change: transform;
+        transform-origin: center;
+        backface-visibility: hidden;
+        pointer-events: none;
+      }
+
+      .slice img {
+        position: absolute;
+        left: calc(var(--i) * -100%);
+        top: 0;
+        display: block;
+        width: 800%;
+        height: 100%;
+        max-width: none;
+        object-fit: cover;
+        pointer-events: none;
+        user-select: none;
+        -webkit-user-drag: none;
+      }
+
+      .shutter-shade {
+        position: absolute;
+        z-index: 4;
+        inset: 0;
+        pointer-events: none;
+        background:
+          linear-gradient(180deg, rgba(5, 12, 15, .05), transparent 48%, rgba(5, 12, 15, .52)),
+          linear-gradient(90deg, rgba(5, 12, 15, .48), transparent 46%);
+      }
+
+      .shutter-copy {
+        position: absolute;
+        z-index: 6;
+        left: clamp(11px, 5vw, 25px);
+        bottom: clamp(11px, 6vh, 24px);
+        width: min(42%, 170px);
+        color: white;
+        text-shadow: 0 2px 16px rgba(0, 0, 0, .68);
+        pointer-events: none;
+      }
+
+      .shutter-copy small {
+        color: rgba(255, 222, 155, .84);
+        font: 800 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .13em;
+        text-transform: uppercase;
+      }
+
+      .shutter-copy h1 {
+        margin: 6px 0 0;
+        font: 900 clamp(13px, 5.5vw, 27px)/.84 system-ui, sans-serif;
+        letter-spacing: -.06em;
+        text-transform: uppercase;
+      }
+
+      .shutter-copy p {
+        margin: 7px 0 0;
+        color: rgba(255, 255, 255, .66);
+        font: 700 4px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+      }
+
+      .shutter-meter {
+        position: absolute;
+        z-index: 6;
+        right: 10px;
+        bottom: 9px;
+        color: rgba(255, 231, 177, .76);
+        font: 800 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        pointer-events: none;
+      }
+
+      .shutter-grip {
+        position: absolute;
+        z-index: 6;
+        left: 50%;
+        top: 10px;
+        display: flex;
+        gap: 3px;
+        translate: -50% 0;
+        opacity: .58;
+        pointer-events: none;
+      }
+
+      .shutter-grip i {
+        width: 2px;
+        height: 9px;
+        border-radius: 99px;
+        background: rgba(255, 255, 255, .78);
+      }
+
+      .library-badge { background: rgba(5, 15, 20, .78); }
+      .scene-caption { display: none; }
+
+      @media (max-width: 180px) {
+        .shutters { inset: 24px 6px 5px; border-radius: 6px; }
+        .shutter-copy { left: 7px; bottom: 7px; width: 46%; }
+        .shutter-copy h1 { margin-top: 3px; font-size: 9px; }
+        .shutter-copy small { font-size: 3px; }
+        .shutter-copy p, .shutter-meter { display: none; }
+        .shutter-grip { top: 5px; gap: 2px; }
+        .shutter-grip i { width: 1px; height: 5px; }
+        .library-badge { top: 5px; left: 6px; padding: 3px 5px; font-size: 5px; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .slice { will-change: auto; }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/gesture-sliced-image-shutters-qhkLFH_2.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+    <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
+    <link rel="modulepreload" crossorigin href="./assets/batch-c-utils-g_3IBZ2b.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main class="preview-stage shutter-stage">
+      <section class="shutters" id="shutters" tabindex="0" data-preview-mechanism="motion-human-shared-image-shutters" data-mode="idle" aria-label="Press and drag horizontally to stagger eight aligned slices of one volcanic bay photograph; use Left or Right Arrow from the keyboard">
+        <span class="slice" style="--i:0"><img src="./assets/volcanic-bay-shutter-source-AYV6OI-J.jpg" alt="" draggable="false" /></span>
+        <span class="slice" style="--i:1"><img src="./assets/volcanic-bay-shutter-source-AYV6OI-J.jpg" alt="" draggable="false" /></span>
+        <span class="slice" style="--i:2"><img src="./assets/volcanic-bay-shutter-source-AYV6OI-J.jpg" alt="" draggable="false" /></span>
+        <span class="slice" style="--i:3"><img src="./assets/volcanic-bay-shutter-source-AYV6OI-J.jpg" alt="" draggable="false" /></span>
+        <span class="slice" style="--i:4"><img src="./assets/volcanic-bay-shutter-source-AYV6OI-J.jpg" alt="" draggable="false" /></span>
+        <span class="slice" style="--i:5"><img src="./assets/volcanic-bay-shutter-source-AYV6OI-J.jpg" alt="" draggable="false" /></span>
+        <span class="slice" style="--i:6"><img src="./assets/volcanic-bay-shutter-source-AYV6OI-J.jpg" alt="" draggable="false" /></span>
+        <span class="slice" style="--i:7"><img src="./assets/volcanic-bay-shutter-source-AYV6OI-J.jpg" alt="" draggable="false" /></span>
+        <div class="shutter-shade" aria-hidden="true"></div>
+        <div class="shutter-grip" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+        <section class="shutter-copy" aria-hidden="true">
+          <small>Volcanic bay / gesture study</small>
+          <h1>Pull the horizon apart.</h1>
+          <p>Press · drag · release to register</p>
+        </section>
+        <span class="shutter-meter" id="shutter-meter" aria-hidden="true">8 slices / aligned</span>
+      </section>
+      <span class="library-badge">Motion · shared-image shutters</span>
+    </main>
+  </body>
+</html>

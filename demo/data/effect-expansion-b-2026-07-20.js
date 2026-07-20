@@ -113,9 +113,9 @@ export const effectExpansion150BatchB = [
   {
     id: 'gesture-sliced-image-shutters', order: 137, name: 'Gesture sliced image shutters', nameZh: '手势切片图像百叶', category: 'pointer', sourceUrl: 'https://github.com/motiondivision/motion',
     difference: '同一图像被八个垂直切片按正弦相位错开，仍维持可拼回的背景坐标。',
-    behavior: { trigger: 'pointer horizontal progress', response: 'Image slices stagger vertically and skew like independent shutters', timing: 'continuous phase-offset gesture', layer: 'sliced media card' },
-    prompt: '将一张图像切为八个保持背景坐标的竖片，按指针进度和相位函数错位与倾斜。',
-    implementation: motionImplementation("const shutters = animate(track, { opacity: [.94, 1, .94] }, { duration: 3 }); slices.forEach(applyPhaseShift);", 'https://github.com/motiondivision/motion'),
+    behavior: { trigger: 'captured horizontal pointer/touch drag or Left/Right Arrow hold', response: 'Eight windows cut from one shared photograph stagger vertically and skew while preserving their registered source coordinates', timing: 'direct signed input with spring registration on release; no autonomous fallback', layer: 'full-bleed sliced travel media card' },
+    prompt: '把同一张旅行照片以固定背景坐标裁成八个无缝竖片；按真实水平拖拽或方向键做确定性错峰，释放后用弹簧精确拼回原图。',
+    implementation: motionImplementation("shutters.onpointermove = event => dragging && applySignedSliceOffsets(progressFrom(event)); shutters.onpointerup = () => animate(open, 0, { type: 'spring' });", 'https://github.com/motiondivision/motion'),
     scores: score(18, 19, 19, 15, 15, 10), rationaleZh: '切片仍能重组成原图，手势错位具有强烈且可逆的视觉签名。'
   },
   {

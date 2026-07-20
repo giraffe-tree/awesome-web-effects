@@ -39,6 +39,7 @@ When implementation changes an interaction contract, preserve the audit row and 
 | 016 | `depth-layer-blur-dissolve` | `complete` | W1 · complete | Two generated, macro-aligned lakeside photographs and one deterministic four-band ordinal depth map now drive a real compositor. Mouse/touch drag and keyboard controls scrub the handoff directly; each depth band dissolves on its own interval and no automatic path remains. |
 | 053 | `pointer-driven-multilayer-depth-stage` | `complete` | W1 · complete | The trail-atlas scene now fills the complete preview with four authored depth planes, route, beacon, and reticle. Mouse hover, captured touch/pen drag, and arrow keys directly drive parallax; leaving, Home, Escape, or blur restores a centered still view with no automatic path. |
 | 042 | `track-card-play-state-handoff` | `complete` | W1 · complete | Three generated cover artworks now give the tracks distinct functional identities. Click/tap and keyboard selection hand cover, emphasis, control label, and independent progress to the chosen card only when the user has explicitly pressed Play; the sequence never changes tracks automatically. |
+| 137 | `gesture-sliced-image-shutters` | `complete` | W1 · complete | One generated volcanic-bay photograph is now cut into eight code-native windows that register back into one continuous horizon. Captured pointer/touch drag and Left/Right keys create signed deterministic shutter offsets; release, cancel, blur, Home, or Escape returns every slice to exact alignment without an automatic path. |
 | 010 | `context-aware-custom-cursor` | `external-only` | WX · official-only | Official-only capture, no local runnable Demo. The cursor states are code-native and existing page imagery is incidental; this ledger does not claim a local asset or editable local implementation. |
 | 011 | `displacement-map-image-hover` | `external-only` | WX · official-only | Official-only capture, no local runnable Demo. Paired photographs and a displacement map are mechanism inputs, but the audited catalog only exposes upstream official material; the ledger does not substitute a local implementation. |
 
@@ -163,7 +164,7 @@ Audit basis: published definitions, the current 320×180 GIF mid-frame, and HTML
 | Audit rank | Catalog | Tier | Demo | State | Wave | ImageGen decision | Current expression problem | One-sentence experience | Credible product scenario | Interaction / automatic trigger (audit snapshot) | Raster judgment |
 | --- | ---: | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | C-01 | 149 | P0 | `chromatic-channel-drag-portrait` | `complete` | W1 · complete | generated and integrated | 当前“肖像”只是白色椭圆面具，RGB 分离没有真实像素、皮肤与发丝边缘可读 | 拖动人物肖像，像拆开彩色印刷套版一样看见三条颜色通道 | 创意工作室人物名片或音乐人档案封面 | 人类：水平拖拽/移动指针控制通道偏移 | 是：肖像像素就是通道运算输入 |
-| C-02 | 137 | P0 | `gesture-sliced-image-shutters` | `audited` | WB-03 · 101–150 | not selected in audit | 名称说图像百叶，实际是 CSS 三色块，切片之间没有连续照片内容 | 横向拖动，让一张旅行影像像百叶窗一样错峰打开视野 | 酒店目的地画廊或建筑项目封面 | 人类：水平拖拽控制八片位移与倾斜 | 是：同一照片必须跨切片连续 |
+| C-02 | 137 | P0 | `gesture-sliced-image-shutters` | `complete` | W1 · complete | generated and integrated | 名称说图像百叶，实际是 CSS 三色块，切片之间没有连续照片内容 | 横向拖动，让一张旅行影像像百叶窗一样错峰打开视野 | 酒店目的地画廊或建筑项目封面 | 人类：水平拖拽控制八片位移与倾斜 | 是：同一照片必须跨切片连续 |
 | C-03 | 109 | P0 | `accordion-image-slices` | `audited` | WB-03 · 101–150 | not selected in audit | 十一片目前是交替纯色几何，并非被折叠的同一图像表面 | 左右移动，把一幅展览影像压合或展开成手风琴 | 美术馆展览导览或摄影作品浏览 | 人类：水平指针/方向键控制开合 | 是：图像分片是效果主体 |
 | C-04 | 141 | P0 | `pixel-sort-hover-wipe` | `audited` | WB-03 · 101–150 | not selected in audit | 像素源是代码画出的山形渐变，原图与排序区的差异过弱，像普通数据填充 | 擦过照片，让有序画面逐列解体成按亮度排序的数据 | 摄影编辑器的故障艺术预览 | 人类：水平指针控制排序边界 | 是：真实照片像素参与列排序 |
 | C-05 | 131 | P1 | `peelable-paper-corner-reveal` | `audited` | WB-03 · 101–150 | not selected in audit | 剥角动作清楚，但底下仍是一张空白横线纸，没有“为什么揭开”的信息价值 | 掀开票据一角，立即看到背面的兑换信息 | 活动票券、优惠券或包装防伪层 | 人类：角落拖拽；自动仅用于 GIF rehearsal | 否：纸张与票据信息可代码原生 |
@@ -215,7 +216,17 @@ Audit basis: published definitions, the current 320×180 GIF mid-frame, and HTML
 
 ## ImageGen decision archive
 
-Six entries have now used built-in ImageGen in this optimization program. `not selected in audit` means no generation decision was made for that item; it does not mean raster is forbidden. Entries 067, 096, and 097 already satisfied their raster mechanism with local imagery. Entries 010 and 011 remain official-only in this scope.
+Seven entries have now used built-in ImageGen in this optimization program. `not selected in audit` means no generation decision was made for that item; it does not mean raster is forbidden. Entries 067, 096, and 097 already satisfied their raster mechanism with local imagery. Entries 010 and 011 remain official-only in this scope.
+
+### 137 · gesture-sliced-image-shutters
+
+- Decision: generated and integrated; current state `complete`.
+- Final local source: `demo/preview-demos/assets/aesthetic-wave-02/gesture-sliced-image-shutters/volcanic-bay-shutter-source.jpg`, 1280 × 960 baseline RGB JPEG.
+- SHA-256: `4850a418e965f115c0b02f7be40f61dd68521994397c7a6a5b29cfa401c4bdd1`.
+- Mechanism rule: all eight windows reference the exact same resolved local URL. At rest, each 800%-wide image is counter-offset by its slice index, so shoreline, horizon, islands, water, and sailboat reconstruct one continuous photograph with zero intentional gap.
+- Interaction rule: only a captured pointer/touch drag or held Left/Right key can open the shutters. The profile is fixed and signed; release uses a Motion spring to return to measured geometric registration, with a direct reset under reduced motion.
+- Factual-use note: the volcanic bay, islands, and single sailboat are AI-generated and fictional; they are not a documented destination, vessel, campaign, or client.
+- The complete ImageGen prompt, processing record, dimensions, checksum, and dual-scale visual verification are recorded in `demo/preview-demos/assets/aesthetic-wave-02/gesture-sliced-image-shutters/README.md`.
 
 ### 042 · track-card-play-state-handoff
 

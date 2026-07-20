@@ -1,8 +1,448 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>Motion — Scroll-scrubbed Document Generation</title><style>
-:root{--preview-background:#170f0c}.doc-stage{background:radial-gradient(circle at 18% 12%,#ffb56b2b,transparent 35%),linear-gradient(145deg,#130b09,#2b1710);color:#fff}.doc-copy{position:absolute;left:18px;top:47px;width:104px}.doc-copy b{font:900 18px/.92 Georgia,serif;letter-spacing:-.05em}.doc-copy small{display:block;margin-top:9px;color:#d9a98e;font:800 6px/1.45 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase}.paper{position:absolute;right:17px;top:27px;width:174px;height:136px;overflow:hidden;border-radius:5px;background:#f4ead9;color:#26211d;box-shadow:0 19px 40px #0007;cursor:ns-resize}.paper-head{height:24px;padding:8px 10px;border-bottom:1px solid #34291f1c;font:900 6px/1 ui-monospace,monospace;letter-spacing:.1em}.paper-body{position:absolute;left:10px;right:10px;top:32px;will-change:transform}.generated-line{height:12px;margin-bottom:5px;padding-left:8px;border-left:2px solid #ff7d49;font:700 6px/12px ui-monospace,monospace;white-space:nowrap;overflow:hidden}.generated-line:nth-child(2n){border-color:#60998b}.doc-cursor{position:absolute;z-index:4;right:9px;top:34px;width:7px;height:10px;border-radius:2px;background:#241c18;box-shadow:0 0 0 2px #f4ead9,0 0 0 3px #ff7d49}.doc-progress{position:absolute;left:18px;bottom:25px;width:93px;height:2px;background:#ffffff20}.doc-progress::after{content:"";display:block;width:100%;height:100%;background:#ff8a55;transform:scaleX(var(--p,0));transform-origin:left}.scene-caption{display:none}
-</style>  <script type="module" crossorigin src="./assets/scroll-scrubbed-document-generation-playback-BSxzXV7a.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
-  <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
-  <link rel="modulepreload" crossorigin href="./assets/batch-a-qa-CFcoNLob.js">
-  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage doc-stage"><div class="doc-copy"><b>NOTES<br/>BUILD<br/>AS YOU<br/>MOVE</b><small>outer scroll → inner page → cursor</small></div><section class="paper" id="paper" tabindex="0" aria-label="Scroll to scrub the generated document"><header class="paper-head">SYNTHESIS / FIELD NOTE</header><div class="paper-body" id="paper-body"><div class="generated-line">collect the quiet signals</div><div class="generated-line">group the recurring colors</div><div class="generated-line">name the hidden rhythm</div><div class="generated-line">open a second horizon</div><div class="generated-line">let the material answer</div><div class="generated-line">keep one edge unfinished</div><div class="generated-line">return with less certainty</div></div><i class="doc-cursor" id="doc-cursor"></i></section><i class="doc-progress" id="doc-progress"></i><span class="library-badge">Motion · nested scroll timeline</span><span class="scene-caption">one progress signal generates rows, scrolls paper and moves the cursor</span></main></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Motion — Scroll-scrubbed AI Research Brief</title>
+    <style>
+      :root { --preview-background: #10171b; }
+
+      .doc-stage {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        min-width: 100%;
+        min-height: 100%;
+        overflow: hidden;
+        color: #f4f0e8;
+        background:
+          radial-gradient(circle at 18% 12%, rgba(68, 148, 139, .18), transparent 36%),
+          linear-gradient(145deg, #0c1317, #192329);
+        outline: none;
+      }
+
+      .doc-intro {
+        position: absolute;
+        left: clamp(16px, 5vw, 38px);
+        top: clamp(34px, 12vh, 62px);
+        width: min(32%, 230px);
+      }
+
+      .doc-eyebrow,
+      .doc-intro p,
+      .chapter-button,
+      .paper-head,
+      .paper-kicker,
+      .doc-field,
+      .doc-decision,
+      .doc-status,
+      .doc-progress-label {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+
+      .doc-eyebrow {
+        color: #8fd0c0;
+        font-size: 6px;
+        font-weight: 900;
+        letter-spacing: .16em;
+        text-transform: uppercase;
+      }
+
+      .doc-intro h1 {
+        margin: 8px 0 0;
+        font: 800 clamp(20px, 5.8vw, 38px)/.84 Georgia, serif;
+        letter-spacing: -.07em;
+      }
+
+      .doc-intro p {
+        margin: 10px 0 0;
+        max-width: 190px;
+        color: rgba(255, 255, 255, .57);
+        font-size: 5px;
+        font-weight: 750;
+        line-height: 1.45;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+      }
+
+      .chapter-list {
+        position: absolute;
+        left: clamp(16px, 5vw, 38px);
+        bottom: clamp(24px, 9vh, 46px);
+        display: grid;
+        width: min(31%, 220px);
+        gap: 4px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .chapter-button {
+        position: relative;
+        display: grid;
+        grid-template-columns: 18px minmax(0, 1fr);
+        align-items: center;
+        gap: 6px;
+        min-width: 0;
+        padding: 5px 0 5px 7px;
+        overflow: hidden;
+        border: 0;
+        border-left: 1px solid rgba(255, 255, 255, .16);
+        color: rgba(255, 255, 255, .45);
+        background: transparent;
+        text-align: left;
+        cursor: pointer;
+      }
+
+      .chapter-button::before {
+        content: "";
+        position: absolute;
+        left: -1px;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: #83c8b7;
+        scale: 1 var(--fill, 0);
+        transform-origin: top;
+      }
+
+      .chapter-button span:first-child { font-size: 5px; font-weight: 900; }
+      .chapter-button span:last-child {
+        overflow: hidden;
+        font-size: 5px;
+        font-weight: 800;
+        letter-spacing: .07em;
+        text-overflow: ellipsis;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+
+      .chapter-button[aria-current="true"] { color: #fff; }
+      .chapter-button:hover { color: rgba(255, 255, 255, .78); }
+      .chapter-button:focus-visible { color: #fff; outline: 1px solid rgba(131, 200, 183, .7); outline-offset: 2px; }
+
+      .paper {
+        position: absolute;
+        right: 4%;
+        top: 6%;
+        width: 59%;
+        height: 88%;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, .2);
+        border-radius: clamp(8px, 2vw, 16px);
+        color: #252826;
+        background: #eee9df;
+        box-shadow: 0 24px 62px rgba(0, 0, 0, .38);
+      }
+
+      .paper-head {
+        position: absolute;
+        z-index: 5;
+        left: 0;
+        right: 0;
+        top: 0;
+        height: clamp(24px, 9%, 36px);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 clamp(10px, 2vw, 16px);
+        border-bottom: 1px solid rgba(37, 40, 38, .13);
+        background: rgba(238, 233, 223, .94);
+        font-size: 5px;
+        font-weight: 900;
+        letter-spacing: .11em;
+        text-transform: uppercase;
+      }
+
+      .paper-head span:last-child { color: #72776f; }
+
+      .paper-viewport {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: clamp(24px, 9%, 36px);
+        bottom: 0;
+        overflow: hidden;
+      }
+
+      .paper-track {
+        position: absolute;
+        inset: 0;
+        height: 500%;
+        will-change: transform;
+      }
+
+      .doc-page {
+        position: relative;
+        height: 20%;
+        padding: clamp(13px, 4vh, 24px) clamp(13px, 3vw, 23px);
+        overflow: hidden;
+        border-bottom: 1px solid rgba(37, 40, 38, .14);
+        background:
+          linear-gradient(90deg, rgba(72, 116, 107, .055) 1px, transparent 1px) 0 0 / 19px 100%,
+          #eee9df;
+      }
+
+      .paper-kicker {
+        color: #538276;
+        font-size: 5px;
+        font-weight: 900;
+        letter-spacing: .11em;
+        text-transform: uppercase;
+      }
+
+      .doc-page h2 {
+        margin: 8px 0 0;
+        max-width: 82%;
+        font: 800 clamp(12px, 3vw, 21px)/.95 system-ui, sans-serif;
+        letter-spacing: -.045em;
+      }
+
+      .doc-fields {
+        display: grid;
+        gap: clamp(5px, 1.5vh, 8px);
+        margin-top: clamp(10px, 3vh, 16px);
+      }
+
+      .doc-field {
+        width: fit-content;
+        max-width: 94%;
+        padding-left: 8px;
+        border-left: 2px solid #cc7659;
+        color: rgba(37, 40, 38, .73);
+        font-size: clamp(5px, 1.15vw, 8px);
+        font-weight: 750;
+        line-height: 1.35;
+        clip-path: inset(0 var(--conceal, 0%) 0 0);
+        opacity: var(--reveal, 1);
+      }
+
+      .doc-field:nth-child(even) { border-color: #629185; }
+
+      .doc-decision {
+        position: absolute;
+        left: clamp(13px, 3vw, 23px);
+        right: clamp(13px, 3vw, 23px);
+        bottom: clamp(10px, 3vh, 18px);
+        padding: 7px 9px;
+        border: 1px solid rgba(159, 81, 55, .2);
+        border-radius: 5px;
+        color: #8a4935;
+        background: rgba(204, 118, 89, .08);
+        font-size: clamp(4px, 1vw, 7px);
+        font-weight: 900;
+        line-height: 1.35;
+        text-transform: uppercase;
+      }
+
+      .doc-cursor {
+        position: absolute;
+        z-index: 7;
+        left: 18px;
+        top: 52px;
+        width: 7px;
+        height: 10px;
+        border-radius: 2px;
+        background: #242a27;
+        box-shadow: 0 0 0 2px #eee9df, 0 0 0 3px #cc7659;
+        pointer-events: none;
+        will-change: transform;
+      }
+
+      .doc-status {
+        position: absolute;
+        z-index: 8;
+        right: 16px;
+        bottom: 10px;
+        color: rgba(37, 40, 38, .5);
+        font-size: 5px;
+        font-weight: 900;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        pointer-events: none;
+      }
+
+      .doc-progress {
+        position: absolute;
+        z-index: 7;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 2px;
+        background: rgba(37, 40, 38, .1);
+      }
+
+      .doc-progress::after {
+        content: "";
+        display: block;
+        width: 100%;
+        height: 100%;
+        background: #cc7659;
+        scale: var(--progress, 0) 1;
+        transform-origin: left;
+      }
+
+      .doc-progress-label {
+        position: absolute;
+        left: clamp(16px, 5vw, 38px);
+        bottom: clamp(12px, 4vh, 20px);
+        color: rgba(255, 255, 255, .56);
+        font-size: 5px;
+        font-weight: 900;
+        letter-spacing: .09em;
+        text-transform: uppercase;
+      }
+
+      .library-badge { background: rgba(10, 18, 21, .68); }
+      .scene-caption { display: none; }
+
+      @media (max-width: 420px), (max-height: 240px) {
+        .doc-intro { top: 24px; width: 34%; }
+        .doc-intro h1 { margin-top: 6px; font-size: 15px; line-height: .9; }
+        .doc-intro p { display: none; }
+        .chapter-list { bottom: 20px; gap: 2px; }
+        .chapter-button { padding: 3px 0 3px 5px; }
+        .paper { top: 5%; height: 90%; }
+        .doc-page { padding: 8px 10px; }
+        .doc-page h2 { max-width: 96%; margin-top: 4px; font-size: 11px; line-height: .94; }
+        .doc-fields { gap: 3px; margin-top: 6px; }
+        .doc-field {
+          width: 100%;
+          max-width: 100%;
+          overflow: hidden;
+          padding-left: 5px;
+          font-size: 4px;
+          line-height: 1.2;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        .doc-decision {
+          left: 10px;
+          right: 10px;
+          bottom: 6px;
+          overflow: hidden;
+          padding: 4px 5px;
+          font-size: 4px;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
+
+      @media (max-width: 180px), (max-height: 100px) {
+        .doc-intro { z-index: 9; left: 6px; top: 4px; width: auto; pointer-events: none; }
+        .doc-eyebrow, .doc-intro p { display: none; }
+        .doc-intro h1 { margin: 0; font: 800 7px/1 system-ui, sans-serif; letter-spacing: -.03em; text-transform: uppercase; }
+        .chapter-list { z-index: 10; left: 7px; right: 42px; bottom: 6px; width: auto; display: flex; gap: 3px; pointer-events: none; }
+        .chapter-button { display: block; width: 14px; height: 2px; padding: 0; border: 0; background: rgba(36, 42, 39, .16); }
+        .chapter-button::before { left: 0; right: 0; top: 0; bottom: 0; width: auto; scale: var(--fill, 0) 1; transform-origin: left; }
+        .chapter-button span { display: none; }
+        .paper { left: 5px; right: 5px; top: 14px; bottom: 4px; width: auto; height: auto; border-radius: 6px; }
+        .paper-head { height: 11px; padding: 0 6px; font-size: 3px; }
+        .paper-viewport { top: 11px; }
+        .doc-page { padding: 6px 7px; }
+        .paper-kicker { font-size: 3px; }
+        .doc-page h2 { margin-top: 3px; font-size: 7px; }
+        .doc-fields { gap: 2px; margin-top: 4px; }
+        .doc-field { padding-left: 4px; border-left-width: 1px; font-size: 3px; line-height: 1.1; }
+        .doc-decision { left: 7px; right: 7px; bottom: 6px; padding: 2px 3px; font-size: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .doc-cursor { width: 3px; height: 4px; box-shadow: 0 0 0 1px #eee9df; }
+        .doc-status { right: 6px; bottom: 5px; font-size: 3px; }
+        .doc-progress-label, .library-badge { display: none; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .paper-track, .doc-cursor { will-change: auto; }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/scroll-scrubbed-document-generation-playback-R41aOkqc.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+    <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
+    <link rel="modulepreload" crossorigin href="./assets/batch-c-utils-g_3IBZ2b.js">
+    <link rel="modulepreload" crossorigin href="./assets/batch-a-qa-CFcoNLob.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main class="preview-stage doc-stage" id="doc-stage" tabindex="0" data-preview-mechanism="motion-human-scroll-research-brief" aria-label="AI research brief playback. Use wheel, Arrow Up, Arrow Down, Page Up, Page Down, Home, or End to scrub sections.">
+      <section class="doc-intro" aria-hidden="true">
+        <span class="doc-eyebrow">Proposal review / RB–04</span>
+        <h1>Generate the brief. Expose the consequence.</h1>
+        <p>Scrub the evidence chain before approving the build.</p>
+      </section>
+      <ol class="chapter-list" aria-label="Brief chapters">
+        <li><button class="chapter-button" type="button" data-section="0" aria-current="true"><span>01</span><span>Decision frame</span></button></li>
+        <li><button class="chapter-button" type="button" data-section="1" aria-current="false"><span>02</span><span>Risk hypothesis</span></button></li>
+        <li><button class="chapter-button" type="button" data-section="2" aria-current="false"><span>03</span><span>Research plan</span></button></li>
+        <li><button class="chapter-button" type="button" data-section="3" aria-current="false"><span>04</span><span>Guardrail proposal</span></button></li>
+        <li><button class="chapter-button" type="button" data-section="4" aria-current="false"><span>05</span><span>Recommendation</span></button></li>
+      </ol>
+      <section class="paper" id="paper" aria-live="polite">
+        <header class="paper-head"><span>AI evidence assistant / research brief</span><span id="paper-page">01 / 05</span></header>
+        <div class="paper-viewport" id="paper-viewport">
+          <div class="paper-track" id="paper-track">
+            <article class="doc-page" data-consequence="Defines whether the team funds synthesis or evidence retrieval.">
+              <span class="paper-kicker">01 · Decision frame</span>
+              <h2>Should the assistant write conclusions—or protect the path to evidence?</h2>
+              <div class="doc-fields">
+                <span class="doc-field">Sponsor: research operations · review date: 18 Sep</span>
+                <span class="doc-field">Decision: fund an eight-week prototype or pause</span>
+                <span class="doc-field">Primary users: six-person product research teams</span>
+                <span class="doc-field">Success: faster synthesis without lower source confidence</span>
+              </div>
+              <p class="doc-decision">Consequence · This framing determines which product gets funded.</p>
+            </article>
+            <article class="doc-page" data-consequence="A false confidence failure can ship an unsupported product decision.">
+              <span class="paper-kicker">02 · Risk hypothesis</span>
+              <h2>Fluent summaries may erase disagreement before the team sees it.</h2>
+              <div class="doc-fields">
+                <span class="doc-field">Observed pain: analysts lose 5–7 hours to evidence sorting</span>
+                <span class="doc-field">Critical risk: a polished claim outranks a contradictory source</span>
+                <span class="doc-field">Disconfirming signal: experts already verify every citation</span>
+                <span class="doc-field">Do not optimize: prose volume or generic answer speed</span>
+              </div>
+              <p class="doc-decision">Consequence · False confidence can turn one weak quote into roadmap certainty.</p>
+            </article>
+            <article class="doc-page" data-consequence="The study must reveal both saved time and missed contradictions.">
+              <span class="paper-kicker">03 · Research plan</span>
+              <h2>Test traceable synthesis against the team’s current evidence wall.</h2>
+              <div class="doc-fields">
+                <span class="doc-field">12 moderated sessions · researchers and product leads</span>
+                <span class="doc-field">Task: reconcile 24 mixed-support interview excerpts</span>
+                <span class="doc-field">Measure: time, citation opens, corrections, confidence shifts</span>
+                <span class="doc-field">Stop condition: two unsupported claims survive review</span>
+              </div>
+              <p class="doc-decision">Consequence · The stop condition can cancel the proposed build.</p>
+            </article>
+            <article class="doc-page" data-consequence="Guardrails trade some speed for reviewable evidence.">
+              <span class="paper-kicker">04 · Guardrail proposal</span>
+              <h2>Generate claims only when the supporting and opposing sources stay attached.</h2>
+              <div class="doc-fields">
+                <span class="doc-field">Every claim opens its exact source span</span>
+                <span class="doc-field">Contradictory evidence remains visible, never averaged away</span>
+                <span class="doc-field">Uncertainty language follows evidence coverage</span>
+                <span class="doc-field">Human approval required before export or stakeholder share</span>
+              </div>
+              <p class="doc-decision">Consequence · Reviewability is a release requirement, not a later feature.</p>
+            </article>
+            <article class="doc-page" data-consequence="Proceed only with a narrow prototype and explicit go/no-go gates.">
+              <span class="paper-kicker">05 · Recommendation</span>
+              <h2>Proceed with assisted synthesis. Do not ship autonomous conclusions.</h2>
+              <div class="doc-fields">
+                <span class="doc-field">Fund: evidence clustering, contradiction view, cited draft</span>
+                <span class="doc-field">Exclude: final recommendations and source-free summaries</span>
+                <span class="doc-field">Gate 1: 30% faster with no rise in unsupported claims</span>
+                <span class="doc-field">Gate 2: reviewers recover every source in under 10 seconds</span>
+              </div>
+              <p class="doc-decision">Consequence · Approve the prototype; withhold production commitment.</p>
+            </article>
+          </div>
+          <i class="doc-cursor" id="doc-cursor" aria-hidden="true"></i>
+          <span class="doc-status" id="doc-status">Decision frame · drafting</span>
+          <i class="doc-progress" id="doc-progress" aria-hidden="true"></i>
+        </div>
+      </section>
+      <span class="doc-progress-label" id="doc-progress-label">Section 01 / 05 · 0%</span>
+      <span class="library-badge">Motion · human document scrub</span>
+      <span class="scene-caption">Real wheel and keyboard input synchronizes page, cursor, chapter, and consequential research content.</span>
+    </main>
+  </body>
+</html>

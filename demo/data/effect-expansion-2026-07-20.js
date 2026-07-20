@@ -7,12 +7,12 @@ export const effectExpansion100Specs = [
     "nameZh": "滚动擦洗式文档生成回放",
     "category": "scroll",
     "sourceUrl": "https://www.granola.ai/",
-    "difference": "现有滚动主时间线移动卡片；本项让行裁剪、内层滚动、生成光标与解析态共同映射到同一进度。",
+    "difference": "真实滚轮或键盘把五段有决策后果的研究简报映射到同一进度：页面、字段裁剪、光标、章节和结论同步；初始不自动生成，边界滚轮会释放给外层页面。",
     "behavior": {
-      "trigger": "scroll progress",
-      "response": "Generate note lines, advance a caret, and scroll the inner document",
-      "timing": "continuous progress-linked",
-      "layer": "editor document surface"
+      "trigger": "real vertical wheel while hovered/focused, chapter click, or Arrow/Page/Home/End keys",
+      "response": "Scrub five consequential brief sections while field reveals, caret, chapter state, and paper position remain synchronized",
+      "timing": "direct wheel progress or a short reduced-motion-aware transition to a requested section",
+      "layer": "AI evidence-assistant research brief"
     },
     "implementation": {
       "projectId": "motiondivision-motion",
@@ -33,11 +33,11 @@ export const effectExpansion100Specs = [
     },
     "rationaleZh": "内外双滚动和文档生成因果清楚，区别于普通卡片时间线。",
     "batch": "A",
-    "demo": "一张原创会议记录从空白逐行生成，页内光标和滚动同步推进。",
-    "capture": "真实滚动从 0→100%，停在换页峰值，再回到 35% 证明可逆。",
+    "demo": "一份关于可追溯 AI 研究助手的五段决策简报，从问题框架、风险、研究计划和护栏推进到有门槛的建议；每页四个事实字段与一个明确后果。",
+    "capture": "真实鼠标滚轮逐段推进并在末端验证外滚轮释放，再用章节按钮、Home、PageDown 与 End 证明可逆和精确导航；断言无自动播放或合成输入。",
     "risk": {
       "level": "medium",
-      "detail": "必须真实更新 clip、scrollTop 与光标；只逐行淡入会退化成通用 stagger。"
+      "detail": "必须真实同步字段 clip、内层位移、光标和章节状态，同时避免捕获水平滚动或在首尾形成滚动陷阱。"
     },
     "observedImplementation": {
       "projectId": "greensock-gsap",

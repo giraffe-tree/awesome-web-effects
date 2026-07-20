@@ -369,6 +369,30 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("Home")
             elif index == 28:
                 page.wait_for_timeout(700)
+        elif demo["id"] == "scroll-scrubbed-document-generation-playback":
+            if index == 2:
+                page.mouse.move(230, 90)
+            elif 3 <= index <= 7:
+                page.mouse.wheel(0, 120)
+            elif index == 8:
+                page.mouse.wheel(0, 120)
+            elif index == 14:
+                page.locator('.chapter-button[data-section="2"]').click()
+            elif index == 15:
+                page.wait_for_timeout(500)
+            elif index == 21:
+                page.mouse.click(230, 90)
+                page.keyboard.press("Home")
+            elif index == 22:
+                page.wait_for_timeout(500)
+            elif index == 27:
+                page.keyboard.press("PageDown")
+            elif index == 28:
+                page.wait_for_timeout(500)
+            elif index == 32:
+                page.keyboard.press("End")
+            elif index == 33:
+                page.wait_for_timeout(500)
         page.evaluate("time => window.__setPreviewTime(time)", preview_time)
         frame_path = frame_root / f"{index:04d}.png"
         page.screenshot(path=str(frame_path), type="png")
@@ -609,6 +633,30 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["minOffset"] >= 0
         ):
             raise RuntimeError(f"{demo['id']} did not capture real throw inertia and exact keyboard boundary returns: {interaction!r}")
+    elif demo["id"] == "scroll-scrubbed-document-generation-playback":
+        page.wait_for_function(
+            "window.__PREVIEW_INTERACTION_STATE__.phase === 'idle' && !window.__PREVIEW_INTERACTION_STATE__.motionActive",
+            timeout=2_000,
+        )
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            interaction["automaticFallback"]
+            or interaction["automaticPlayback"]
+            or interaction["syntheticInputDispatch"]
+            or not interaction["initialStaticConfirmed"]
+            or interaction["inputCount"] < 9
+            or interaction["wheelCount"] < 5
+            or interaction["keyboardCount"] < 3
+            or interaction["chapterClickCount"] < 1
+            or interaction["boundaryReleaseCount"] < 1
+            or interaction["phase"] != "idle"
+            or interaction["motionActive"]
+            or interaction["sectionIndex"] != 4
+            or interaction["progress"] < .999
+            or interaction["cursorLine"] < 2
+            or "release-at-bounds" not in interaction["wheelPolicy"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture real reversible document scrubbing and boundary release: {interaction!r}")
 
     minimum_unique = min(6, max(2, frame_count // 6))
     if len(hashes) < minimum_unique:

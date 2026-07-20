@@ -279,17 +279,17 @@ const existingEffects = [
     "addedIn": "2026-expansion",
     "research": null,
     "behavior": {
-      "trigger": "state change or animation frame",
-      "response": "Motion-graphics burst",
-      "timing": "eased transition",
-      "layer": "content"
+      "trigger": "real pipeline-node click/tap or focused Enter/Space, with arrows for focus and Escape/R/Clear to reset",
+      "response": "Map one four-layer Mo.js confirmation burst to the exact center of the acknowledged release node",
+      "timing": "human-owned charge, release, dissipation, and settled phases; interruptible and never automatic",
+      "layer": "semantic release pipeline, local coordinate field, layered Mo.js composition, status, meter, and reset"
     },
-    "prompt": "Implement the \"Motion-graphics burst\" (动态图形爆发) web interaction effect in the current project.\n\nUse Mo.js (mojs/mojs) as the recommended implementation unless the existing stack makes a dependency-free equivalent more appropriate. Recreate this specific animation interaction, not a generic animation.\n\nInteraction contract:\n- Trigger: state change or animation frame\n- Visual response: Motion-graphics burst\n- Timing relationship: eased transition\n- Page layer: content\n\nRequirements:\n- Integrate with the existing design system and component structure.\n- Support keyboard and touch input whenever the interaction is actionable.\n- Respect prefers-reduced-motion with a clear non-animated fallback.\n- Avoid layout shift, scroll traps, inaccessible focus behavior, and unnecessary dependencies.\n- Keep the implementation responsive and clean up listeners, timers, and animation instances.\n\nStart from this minimal API shape:\n\n```js\nimport mojs from '@mojs/core';\nnew mojs.Burst({ parent: '#stage', radius: { 0: 80 }, count: 10 }).play();\n```\n\nReturn the working code, the files changed, and a short explanation of how to tune timing, easing, distance, and reduced-motion behavior.",
+    "prompt": "Implement the \"Motion-graphics burst\" (动态图形爆发) as feedback for a consequential user event, not an automatic explosion in empty space.\n\nUse Mo.js (mojs/mojs) to build one layered confirmation composition—for example shards, sparks, shockwave, and core—and tune every layer to the exact local center of the semantic object the user acknowledges. The burst must explain which pipeline event fired and preserve a visible confirmed state after dissipation.\n\nInteraction contract:\n- Trigger: real node click/tap or focused Enter/Space; Arrow/Home/End moves focus; Escape, R, or a Clear control resets the trace\n- Visual response: charge, release, and dissipate a layered Mo.js burst at the selected pipeline node, then retain an acknowledged result\n- Timing relationship: human-owned and interruptible; no autoplay, automatic node selection, preview-clock trigger, or synthetic event\n- Page layer: semantic event nodes beneath a pointer-transparent local Mo.js field, plus status and reset\n\nRequirements:\n- Start strictly idle with no selected node, no confirmed trace, and zero played timelines.\n- Measure node centers in field-local CSS pixels and tune every Mo.js part to the same origin.\n- Support pointer, touch, pen, keyboard, interruption, repeat acknowledgement, 320×180 and 144×81 previews, and prefers-reduced-motion static confirmation.\n- Keep node selection, cumulative trigger counts, current visible trace, phase, meter, and reset state distinct and synchronized.\n- Export runtime state that proves real input, Mo.js timeline membership, source-node mapping error, interruption, reset, and initial stillness.\n\nStart from this minimal API shape:\n\n```js\nimport mojs from '@mojs/core';\nconst burst = new mojs.Burst({ parent: '#field', left: 0, top: 0, radius: { 13: 66 }, count: 12 });\nconst playAt = ({ x, y }) => burst.tune({ left: x, top: y }).replay();\n```\n\nReturn the working code, the files changed, and a short explanation of how to tune local coordinates, layer timing, particle count, easing, interruption, and reduced motion.",
     "sources": [
       {
         "projectId": "mojs-mojs",
         "recommended": true,
-        "snippet": "import mojs from '@mojs/core';\nnew mojs.Burst({ parent: '#stage', radius: { 0: 80 }, count: 10 }).play();",
+        "snippet": "import mojs from '@mojs/core';\nconst burst = new mojs.Burst({ parent: '#field', left: 0, top: 0, radius: { 13: 66 }, count: 12 });\nconst playAt = ({ x, y }) => burst.tune({ left: x, top: y }).replay();",
         "preview": "captured/motion-graphics-burst",
         "previewKind": "local-demo-capture",
         "demoPath": "preview-demos/dist/motion-graphics-burst.html",
@@ -314,7 +314,7 @@ const existingEffects = [
       "total": 92,
       "decision": "admit",
       "reasonCode": "passed",
-      "rationaleZh": "径向爆发、层次、节奏和循环复位完整，是可直接命名和迁移的动态图形事件。"
+      "rationaleZh": "真实发布节点触发唯一四层 Mo.js 合成，所有粒子精确映射到节点中心；点击、键盘、打断与清理均有可核验状态，首帧不自动爆发。"
     }
   },
   {

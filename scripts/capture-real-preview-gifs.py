@@ -280,6 +280,38 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.wait_for_timeout(1_150)
             elif index == 34:
                 page.locator('.action-card').nth(2).hover()
+        elif demo["id"] == "motion-graphics-burst":
+            if index == 3:
+                page.locator('.burst-node[data-node-id="ingest"]').click()
+            elif index == 4:
+                page.wait_for_timeout(1_050)
+            elif index == 9:
+                page.locator('.burst-node[data-node-id="verify"]').click()
+            elif index == 10:
+                page.wait_for_timeout(350)
+            elif index == 11:
+                page.wait_for_timeout(800)
+            elif index == 15:
+                page.locator('.burst-node[data-node-id="verify"]').focus()
+                page.keyboard.press("ArrowRight")
+            elif index == 16:
+                page.keyboard.press("Enter")
+            elif index == 17:
+                page.wait_for_timeout(1_050)
+            elif index == 22:
+                page.locator('.burst-node[data-node-id="verify"]').click()
+            elif index == 23:
+                page.wait_for_timeout(250)
+            elif index == 24:
+                page.locator('.burst-node[data-node-id="release"]').click()
+            elif index == 25:
+                page.wait_for_timeout(1_050)
+            elif index == 30:
+                page.keyboard.press("Escape")
+            elif index == 33:
+                page.locator('.burst-node[data-node-id="verify"]').click()
+            elif index == 34:
+                page.wait_for_timeout(1_050)
         elif demo["id"] == "blurhash-to-photo-progressive-reveal":
             pointer_x = 230 if .5 <= preview_time < 2.25 else 32
             page.mouse.move(pointer_x, 90)
@@ -721,6 +753,42 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or any(value != "ready" for value in interaction["taskStates"].values())
         ):
             raise RuntimeError(f"{demo['id']} did not capture real priority-ordered incident assembly, inspection, and clearing: {interaction!r}")
+    elif demo["id"] == "motion-graphics-burst":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            interaction["automaticFallback"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticTrigger"]
+            or interaction["automaticNodeSelection"]
+            or interaction["syntheticInputDispatch"]
+            or not interaction["userInitiated"]
+            or not interaction["eventOwnedTimeline"]
+            or interaction["acceptedInputs"] != ["mouse", "touch", "pen", "keyboard"]
+            or interaction["inputCount"] < 8
+            or interaction["lastInputTrusted"] is not True
+            or interaction["triggerCount"] < 6
+            or interaction["burstCount"] != interaction["triggerCount"]
+            or interaction["mojsReplayCount"] != interaction["triggerCount"]
+            or interaction["pointerTriggerCount"] < 5
+            or interaction["keyboardTriggerCount"] < 1
+            or interaction["focusMoveCount"] < 1
+            or interaction["resetCount"] < 1
+            or interaction["interruptionCount"] < 1
+            or interaction["nodeTriggerCounts"] != {"ingest": 1, "verify": 3, "release": 2}
+            or interaction["selectedNode"] != "verify"
+            or interaction["lastTriggeredNode"] != "verify"
+            or not interaction["traceActive"]
+            or interaction["phase"] != "settled"
+            or interaction["isAnimating"]
+            or interaction["timelineProgress"] != 1
+            or not interaction["mappedToNodeCenter"]
+            or interaction["lastOriginDistanceFromNodeCenter"] > .02
+            or interaction["coordinateSpace"] != "burst-field-local-css-pixels"
+            or interaction["mojsRevision"] != "1.7.1"
+            or interaction["mojsTimelineCount"] != 4
+            or interaction["svgCount"] < 4
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture real node-mapped Mo.js bursts, interruption, and reset: {interaction!r}")
     elif demo["id"] == "blurhash-to-photo-progressive-reveal":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__()")
         if interaction["pointerEvents"] < 3 or interaction["pointerOverPhoto"]:

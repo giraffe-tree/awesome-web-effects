@@ -1,40 +1,402 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mo.js — Motion-graphics Burst</title>
+    <title>Mo.js — Trigger-mapped Node Bursts</title>
     <style>
-      :root { --preview-background: #11101b; }
-      .burst-stage { background: radial-gradient(circle at 50% 52%, #302b4d 0, #171525 36%, #0d0c15 75%); }
-      .burst-stage::before { content: ''; position: absolute; inset: 0; opacity: .22; background-image: linear-gradient(#9a91bd20 1px, transparent 1px), linear-gradient(90deg, #9a91bd20 1px, transparent 1px); background-size: 20px 20px; mask-image: radial-gradient(circle, #000, transparent 72%); }
-      .burst-stage::after { content: ''; position: absolute; left: 50%; top: 50%; width: 122px; height: 122px; border: 1px solid #bdb5e222; border-radius: 50%; transform: translate(-50%, -50%); box-shadow: 0 0 45px #735cff1f inset; }
-      .burst-field { position: absolute; z-index: 3; inset: 0; overflow: hidden; }
-      .burst-reticle { position: absolute; z-index: 2; left: 50%; top: 50%; width: 28px; height: 28px; border: 1px solid #fff5; border-radius: 50%; transform: translate(-50%, -50%); }
-      .burst-reticle::before,
-      .burst-reticle::after { content: ''; position: absolute; background: #fff6; }
-      .burst-reticle::before { left: 13px; top: -9px; width: 1px; height: 46px; }
-      .burst-reticle::after { left: -9px; top: 13px; width: 46px; height: 1px; }
-      .burst-index { position: absolute; z-index: 6; right: 12px; top: 11px; color: #eeeafd; font: 800 7px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .16em; text-align: right; text-transform: uppercase; }
-      .burst-index strong { display: block; margin-top: 3px; color: #ffbd5b; font-size: 9px; letter-spacing: .08em; }
-      .energy-meter { position: absolute; z-index: 6; left: 12px; right: 12px; bottom: 23px; height: 2px; overflow: hidden; background: #ffffff20; }
-      .energy-meter span { display: block; width: 100%; height: 100%; background: linear-gradient(90deg, #75f4d4, #ffbd5b, #ff5d8f); box-shadow: 0 0 10px #ff8d8f; transform: scaleX(0); transform-origin: left; }
-      .library-badge { background: #171525d9; }
-      .scene-caption { bottom: 8px; }
+      :root {
+        --preview-background: #e8e1d2;
+        color-scheme: light;
+      }
+
+      .burst-stage {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        min-width: 100%;
+        min-height: 100%;
+        overflow: clip;
+        color: #171b18;
+        background:
+          linear-gradient(90deg, rgba(23, 27, 24, .045) 1px, transparent 1px),
+          linear-gradient(rgba(23, 27, 24, .045) 1px, transparent 1px),
+          linear-gradient(145deg, #f3eee3, #ded5c4 72%, #cdc3b2);
+        background-size: 18px 18px, 18px 18px, auto;
+        outline: none;
+        isolation: isolate;
+      }
+
+      .burst-stage::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        opacity: .24;
+        background: radial-gradient(circle at 73% 42%, #f0653a 0, transparent 31%);
+        pointer-events: none;
+      }
+
+      .burst-header {
+        position: absolute;
+        z-index: 6;
+        left: clamp(12px, 4vw, 24px);
+        top: clamp(11px, 4vh, 19px);
+        width: min(34%, 166px);
+        pointer-events: none;
+      }
+
+      .burst-kicker,
+      .burst-header p,
+      .burst-status,
+      .burst-node,
+      .burst-clear,
+      .burst-readout {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        text-transform: uppercase;
+      }
+
+      .burst-kicker {
+        color: #c84625;
+        font-size: clamp(5px, 1.5vw, 7px);
+        font-weight: 900;
+        letter-spacing: .17em;
+      }
+
+      .burst-header h1 {
+        margin: 6px 0 0;
+        font: 800 clamp(18px, 6vw, 34px)/.84 Georgia, serif;
+        letter-spacing: -.065em;
+      }
+
+      .burst-header p {
+        margin: 8px 0 0;
+        color: rgba(23, 27, 24, .54);
+        font-size: clamp(4px, 1.2vw, 6px);
+        font-weight: 800;
+        line-height: 1.5;
+        letter-spacing: .07em;
+      }
+
+      .burst-board {
+        position: absolute;
+        z-index: 2;
+        left: 38%;
+        right: clamp(13px, 4vw, 25px);
+        top: clamp(33px, 17vh, 67px);
+        bottom: clamp(35px, 14vh, 57px);
+        min-height: 78px;
+        border: 1px solid rgba(23, 27, 24, .18);
+        border-radius: 14px;
+        background: rgba(247, 243, 234, .69);
+        box-shadow: 0 18px 50px rgba(63, 49, 33, .12);
+        backdrop-filter: blur(7px);
+      }
+
+      .burst-board::before {
+        content: "";
+        position: absolute;
+        left: 11%;
+        right: 11%;
+        top: 50%;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(23, 27, 24, .34) 9%, rgba(23, 27, 24, .34) 91%, transparent);
+      }
+
+      .burst-board::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 56%;
+        height: 18px;
+        border-top: 1px dashed rgba(23, 27, 24, .15);
+        border-bottom: 1px dashed rgba(23, 27, 24, .1);
+        translate: -50% -50%;
+        pointer-events: none;
+      }
+
+      .burst-readout {
+        position: absolute;
+        z-index: 3;
+        left: 12px;
+        top: 9px;
+        color: rgba(23, 27, 24, .48);
+        font-size: 5px;
+        font-weight: 900;
+        letter-spacing: .1em;
+      }
+
+      .burst-readout strong {
+        color: #171b18;
+        font-weight: 900;
+      }
+
+      .burst-nodes {
+        position: absolute;
+        inset: 0;
+        z-index: 4;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        align-items: center;
+        gap: clamp(6px, 2vw, 15px);
+        padding: 21px clamp(10px, 4vw, 25px) 11px;
+      }
+
+      .burst-node {
+        position: relative;
+        min-width: 0;
+        height: clamp(50px, 17vh, 78px);
+        padding: 8px 6px 6px;
+        border: 1px solid rgba(23, 27, 24, .23);
+        border-radius: 10px;
+        color: #171b18;
+        background: #f7f3ea;
+        box-shadow: 0 7px 16px rgba(63, 49, 33, .1);
+        cursor: pointer;
+        transition: translate .25s ease, border-color .25s ease, background .25s ease, box-shadow .25s ease;
+      }
+
+      .burst-node::before {
+        content: "";
+        position: absolute;
+        left: 8px;
+        top: 8px;
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: #807b71;
+        box-shadow: 0 0 0 3px rgba(128, 123, 113, .12);
+        transition: background .2s ease, box-shadow .2s ease, scale .2s ease;
+      }
+
+      .burst-node:hover,
+      .burst-node:focus-visible {
+        border-color: #171b18;
+        box-shadow: 0 9px 23px rgba(63, 49, 33, .15);
+        translate: 0 -2px;
+        outline: none;
+      }
+
+      .burst-node.is-firing {
+        border-color: #d95630;
+        background: #fff8ed;
+        box-shadow: 0 0 0 4px rgba(217, 86, 48, .11), 0 11px 24px rgba(63, 49, 33, .16);
+      }
+
+      .burst-node.is-confirmed::before {
+        background: #d95630;
+        box-shadow: 0 0 0 4px rgba(217, 86, 48, .16);
+        scale: 1.14;
+      }
+
+      .burst-node-index {
+        display: block;
+        color: rgba(23, 27, 24, .38);
+        font-size: 5px;
+        font-weight: 900;
+        letter-spacing: .1em;
+        text-align: right;
+      }
+
+      .burst-node strong {
+        display: block;
+        margin-top: 5px;
+        overflow: hidden;
+        font-size: clamp(6px, 1.8vw, 9px);
+        line-height: 1;
+        letter-spacing: .08em;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .burst-node small {
+        display: block;
+        margin-top: 5px;
+        overflow: hidden;
+        color: rgba(23, 27, 24, .48);
+        font-size: clamp(4px, 1.1vw, 5px);
+        font-weight: 800;
+        letter-spacing: .04em;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .burst-field {
+        position: absolute;
+        z-index: 10;
+        inset: 0;
+        overflow: clip;
+        pointer-events: none;
+      }
+
+      .burst-status {
+        position: absolute;
+        z-index: 12;
+        left: clamp(12px, 4vw, 24px);
+        right: clamp(12px, 4vw, 24px);
+        bottom: 12px;
+        display: flex;
+        align-items: center;
+        min-width: 0;
+        height: 18px;
+        color: rgba(23, 27, 24, .58);
+        font-size: 5px;
+        font-weight: 900;
+        letter-spacing: .08em;
+        pointer-events: none;
+      }
+
+      .burst-status::before {
+        content: "";
+        width: 5px;
+        height: 5px;
+        margin-right: 6px;
+        border-radius: 50%;
+        background: #777269;
+      }
+
+      .burst-stage[data-phase="charge"] .burst-status::before,
+      .burst-stage[data-phase="release"] .burst-status::before {
+        background: #d95630;
+      }
+
+      .burst-stage[data-phase="dissipate"] .burst-status::before {
+        background: #0e6c72;
+      }
+
+      .burst-meter {
+        position: absolute;
+        z-index: 11;
+        left: clamp(12px, 4vw, 24px);
+        right: clamp(78px, 20vw, 132px);
+        bottom: 34px;
+        height: 2px;
+        overflow: hidden;
+        background: rgba(23, 27, 24, .12);
+        pointer-events: none;
+      }
+
+      .burst-meter span {
+        display: block;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, #0e6c72, #efb433, #d95630);
+        scale: 0 1;
+        transform-origin: left;
+      }
+
+      .burst-clear {
+        position: absolute;
+        z-index: 13;
+        right: clamp(12px, 4vw, 24px);
+        bottom: 24px;
+        height: 23px;
+        padding: 0 10px;
+        border: 1px solid rgba(23, 27, 24, .23);
+        border-radius: 99px;
+        color: #171b18;
+        background: rgba(247, 243, 234, .72);
+        cursor: pointer;
+        font-size: 5px;
+        font-weight: 900;
+        letter-spacing: .08em;
+      }
+
+      .burst-clear:hover,
+      .burst-clear:focus-visible {
+        border-color: #171b18;
+        background: #fffaf0;
+        outline: none;
+      }
+
+      .burst-clear:disabled {
+        opacity: .38;
+        cursor: default;
+      }
+
+      .burst-stage > .library-badge {
+        top: auto;
+        left: auto;
+        right: 12px;
+        bottom: 9px;
+        border-color: rgba(23, 27, 24, .18);
+        color: rgba(23, 27, 24, .68);
+        background: rgba(247, 243, 234, .76);
+      }
+
+      .scene-caption { display: none; }
+
+      @media (prefers-reduced-motion: reduce) {
+        .burst-node { transition-duration: 0s; }
+      }
+
+      @media (max-width: 220px), (max-height: 120px) {
+        .burst-header,
+        .burst-readout,
+        .burst-stage > .library-badge { display: none; }
+        .burst-board { left: 4px; right: 4px; top: 7px; bottom: 18px; min-height: 0; border-radius: 7px; }
+        .burst-board::after { height: 8px; }
+        .burst-nodes { gap: 4px; padding: 6px 7px; }
+        .burst-node { height: 35px; padding: 4px 3px 2px; border-radius: 6px; }
+        .burst-node::before { left: 4px; top: 4px; width: 3px; height: 3px; box-shadow: none; }
+        .burst-node-index { font-size: 3px; }
+        .burst-node strong { margin-top: 3px; font-size: 4px; letter-spacing: 0; }
+        .burst-node small { margin-top: 2px; font-size: 3px; letter-spacing: 0; }
+        .burst-status { left: 5px; right: 5px; bottom: 2px; height: 10px; font-size: 3px; letter-spacing: 0; }
+        .burst-status::before { width: 3px; height: 3px; margin-right: 3px; }
+        .burst-meter { left: 5px; right: 5px; bottom: 14px; height: 1px; }
+        .burst-clear { display: none; }
+      }
     </style>
-    <script type="module" crossorigin src="./assets/motion-graphics-burst-CouGSS5q.js"></script>
+    <script type="module" crossorigin src="./assets/motion-graphics-burst-gl5de5Vm.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
     <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
     <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
   </head>
   <body>
-    <main class="preview-stage burst-stage" aria-label="A deterministic radial motion-graphics burst rendered by Mo.js">
-      <div class="burst-field" id="burst-field" data-preview-mechanism="mojs-burst"></div>
-      <span class="burst-reticle" aria-hidden="true"></span>
-      <span class="burst-index">Radial event<strong id="burst-phase">Charge</strong></span>
-      <div class="energy-meter" aria-hidden="true"><span id="energy-meter-fill"></span></div>
-      <span class="library-badge">Mo.js · Burst</span>
-      <span class="scene-caption">one impulse · layered radial choreography</span>
+    <main
+      class="preview-stage burst-stage"
+      id="burst-stage"
+      data-phase="idle"
+      data-preview-mechanism="real-input-mapped-mojs-node-burst"
+      tabindex="0"
+      aria-label="Release pipeline. Click a node or focus it and press Enter or Space to acknowledge its event with a mapped burst. Use arrow keys to move between nodes and Escape to clear."
+    >
+      <section class="burst-header" aria-hidden="true">
+        <span class="burst-kicker">Release circuit / 24.7</span>
+        <h1>Route the signal.<br />Mark the moment.</h1>
+        <p>One acknowledged event. One burst at its exact source node.</p>
+      </section>
+
+      <section class="burst-board" aria-label="Release pipeline nodes">
+        <span class="burst-readout">Pipeline <strong>Field kit / v18</strong></span>
+        <div class="burst-nodes" id="burst-nodes">
+          <button class="burst-node" type="button" data-node-id="ingest" aria-label="Acknowledge Ingest, 18 assets received">
+            <span class="burst-node-index">01</span>
+            <strong>Ingest</strong>
+            <small>18 assets</small>
+          </button>
+          <button class="burst-node" type="button" data-node-id="verify" aria-label="Acknowledge Verify, zero issues found" tabindex="-1">
+            <span class="burst-node-index">02</span>
+            <strong>Verify</strong>
+            <small>0 issues</small>
+          </button>
+          <button class="burst-node" type="button" data-node-id="release" aria-label="Acknowledge Release, staging is ready" tabindex="-1">
+            <span class="burst-node-index">03</span>
+            <strong>Release</strong>
+            <small>staging ready</small>
+          </button>
+        </div>
+      </section>
+
+      <div class="burst-field" id="burst-field" aria-hidden="true"></div>
+      <div class="burst-meter" aria-hidden="true"><span id="burst-meter-fill"></span></div>
+      <span class="burst-status" id="burst-status" aria-live="polite">Awaiting a real node input</span>
+      <button class="burst-clear" id="burst-clear" type="button" disabled>Clear trace</button>
+
+      <span class="library-badge">Mo.js · mapped burst</span>
+      <span class="scene-caption">A real input maps one layered Mo.js burst to the selected release node.</span>
     </main>
   </body>
 </html>

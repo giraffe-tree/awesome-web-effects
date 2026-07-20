@@ -700,22 +700,22 @@ const existingEffects = [
   {
     "id": "functional-webgl-draw-commands",
     "category": "webgl",
-    "name": "GPU-instanced particle vortex",
-    "nameZh": "GPU 实例化粒子涡旋",
+    "name": "Functional WebGL draw commands",
+    "nameZh": "函数式 WebGL 绘制命令",
     "addedIn": "2026-expansion",
     "research": null,
     "behavior": {
-      "trigger": "animation frame",
-      "response": "GPU-instanced particle vortex",
-      "timing": "continuous loop",
-      "layer": "3D or WebGL surface"
+      "trigger": "real Analyze/Mix click, direct field drag, or stage keyboard input",
+      "response": "Recompose the same 1,100 cell observations from one mixed sample into three coherent populations and reveal an 8% rare-response gate",
+      "timing": "human-owned direct scrub or interruptible endpoint transition; no automatic GPU loop or synthetic input",
+      "layer": "one WebGL assay surface composed from four visible regl commands: field, density, cells, and response gate"
     },
-    "prompt": "Implement the \"GPU-instanced particle vortex\" (GPU 实例化粒子涡旋) web interaction effect in the current project.\n\nUse regl (regl-project/regl) as the recommended implementation unless the existing stack makes a dependency-free equivalent more appropriate. Recreate this specific webgl interaction, not a generic animation.\n\nInteraction contract:\n- Trigger: animation frame\n- Visual response: GPU-instanced particle vortex\n- Timing relationship: continuous loop\n- Page layer: 3D or WebGL surface\n\nRequirements:\n- Integrate with the existing design system and component structure.\n- Support keyboard and touch input whenever the interaction is actionable.\n- Respect prefers-reduced-motion with a clear non-animated fallback.\n- Avoid layout shift, scroll traps, inaccessible focus behavior, and unnecessary dependencies.\n- Keep the implementation responsive and clean up listeners, timers, and animation instances.\n\nStart from this minimal API shape:\n\n```js\nimport createREGL from 'regl';\nconst regl = createREGL();\nregl({ frag, vert, count: 3 })();\n```\n\nReturn the working code, the files changed, and a short explanation of how to tune timing, easing, distance, and reduced-motion behavior.",
+    "prompt": "Implement the \"Functional WebGL draw commands\" (函数式 WebGL 绘制命令) as a comprehensible analysis task, not a generic autoplaying particle vortex.\n\nUse regl (regl-project/regl) to compose several reusable draw commands whose purposes are visible to a non-developer. For example, keep one deterministic set of scientific observations and use four commands—field, density, cells, and response gate—to transform a mixed sample into meaningful populations without losing any point.\n\nInteraction contract:\n- Trigger: real Analyze/Mix click or tap, direct pointer/touch scrub across the surface, or Arrow/Home/End/Enter/Space keyboard input\n- Visual response: the same 1,100 GPU points separate into three labelled populations while a rare-response gate and metrics become visible\n- Timing relationship: human-owned direct scrub or interruptible endpoint transition; no autoplay, continuous vortex, preview-clock-only motion, or synthetic event\n- Page layer: single WebGL assay surface plus semantic analysis copy, metrics, command stack, progress, and controls\n\nRequirements:\n- Start strictly at one stable mixed sample and prove the initial framebuffer remains unchanged without input.\n- Create multiple real regl command functions and execute each exactly once per render with visible responsibility.\n- Generate deterministic observation data with auditable particle/population counts and a checksum; do not use `Math.random`.\n- Support pointer, touch, click, keyboard endpoint/scrub control, 320×180 and 144×81 previews, and prefers-reduced-motion direct settling.\n- Keep progress, target, phase, motion, metrics, button state, Canvas label, draw counts, dimensions, and GPU result synchronized.\n- Export runtime state that proves real WebGL/regl context, command composition, data retention, input counts, initial stillness, and absence of automatic playback.\n\nStart from this minimal API shape:\n\n```js\nimport createREGL from 'regl';\nconst regl = createREGL({ canvas });\nconst drawField = regl(fieldCommand);\nconst drawCells = regl(cellCommand);\nconst drawGate = regl(gateCommand);\nconst render = props => { drawField(props); drawCells(props); drawGate(props); };\n```\n\nReturn the working code, the files changed, and a short explanation of how to tune draw-command boundaries, point count, deterministic data, interpolation, gate visibility, and reduced motion.",
     "sources": [
       {
         "projectId": "regl-project-regl",
         "recommended": true,
-        "snippet": "import createREGL from 'regl';\nconst regl = createREGL();\nregl({ frag, vert, count: 3 })();",
+        "snippet": "import createREGL from 'regl';\nconst regl = createREGL({ canvas });\nconst drawField = regl(fieldCommand);\nconst drawCells = regl(cellCommand);\nconst drawGate = regl(gateCommand);\nconst render = props => { drawField(props); drawCells(props); drawGate(props); };",
         "preview": "captured/functional-webgl-draw-commands",
         "previewKind": "local-demo-capture",
         "demoPath": "preview-demos/dist/functional-webgl-draw-commands.html",
@@ -740,7 +740,7 @@ const existingEffects = [
       "total": 96,
       "decision": "admit",
       "reasonCode": "passed",
-      "rationaleZh": "实例化粒子形成持续演化的涡旋流场，空间、节奏与色彩均达到完整生成艺术水准。"
+      "rationaleZh": "四个真实 regl draw command 分别承担 field、density、cells 与 response gate；用户把 1,100 个确定性样本分成 759/253/88 三群并显出 8% 稀有响应，首帧静止且数据不丢失。"
     }
   },
   {

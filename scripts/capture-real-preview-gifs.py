@@ -454,6 +454,29 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 34:
                 page.locator('#p5-stage canvas').focus()
                 page.keyboard.press("Home")
+        elif demo["id"] == "functional-webgl-draw-commands":
+            if index == 3:
+                page.locator('#analyze-button').click()
+            elif index == 11:
+                page.locator('#analyze-button').click()
+            elif index == 19:
+                box = page.locator('#analysis-stage').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * .25, box["y"] + box["height"] * .5)
+                page.mouse.down()
+            elif index == 20:
+                box = page.locator('#analysis-stage').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * .75, box["y"] + box["height"] * .5, steps=4)
+                page.mouse.up()
+            elif index == 22:
+                page.locator('#analysis-stage').focus()
+                page.keyboard.press("End")
+            elif index == 30:
+                page.keyboard.press("Home")
+            elif index == 34:
+                box = page.locator('#analysis-stage').bounding_box()
+                page.mouse.move(box["x"] + box["width"] - 1, box["y"] + box["height"] * .58)
+                page.mouse.down()
+                page.mouse.up()
         elif demo["id"] == "blurhash-to-photo-progressive-reveal":
             pointer_x = 230 if .5 <= preview_time < 2.25 else 32
             page.mouse.move(pointer_x, 90)
@@ -1056,6 +1079,42 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or len(interaction["fieldSignature"]) <= 16
         ):
             raise RuntimeError(f"{demo['id']} did not capture a real p5 poster edit across drag, presets, density, keyboard, and explicit loop transport: {interaction!r}")
+    elif demo["id"] == "functional-webgl-draw-commands":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            interaction["automaticPlayback"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or not interaction["initialStaticConfirmed"]
+            or interaction["inputAdapters"] != ["pointer", "touch", "click", "keyboard"]
+            or interaction["inputCount"] < 6
+            or interaction["pointerInputCount"] < 4
+            or interaction["keyboardInputCount"] < 2
+            or interaction["pointerMoveCount"] < 4
+            or interaction["transitionCount"] < 4
+            or interaction["drawCommandCount"] != 4
+            or interaction["drawCommandIds"] != ["field", "density", "cells", "response-gate"]
+            or any(count != interaction["renderCount"] for count in interaction["drawCommandExecutions"].values())
+            or interaction["particleCount"] != 1100
+            or interaction["populationCounts"] != [759, 253, 88]
+            or interaction["rarePopulationRatio"] != .08
+            or interaction["dataChecksum"] != 3876023964
+            or not interaction["deterministicData"]
+            or interaction["randomSourceUsed"]
+            or interaction["claimedLibrary"] != "regl@2.1.1"
+            or not interaction["realReglContext"]
+            or interaction["motionActive"]
+            or interaction["dragActive"]
+            or interaction["phase"] != "resolved"
+            or interaction["progress"] < .985
+            or interaction["targetProgress"] < .985
+            or interaction["activeDirection"] != "idle"
+            or interaction["lastInput"] != "pointer:mouse:drag"
+            or interaction["initialFrameChecksum"] == 0
+            or interaction["canvasWidth"] < 64
+            or interaction["canvasHeight"] < 64
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a real four-command regl cell analysis across buttons, drag, and keyboard: {interaction!r}")
     elif demo["id"] == "blurhash-to-photo-progressive-reveal":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__()")
         if interaction["pointerEvents"] < 3 or interaction["pointerOverPhoto"]:

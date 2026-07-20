@@ -30,7 +30,7 @@
       "originUrl": "https://github.com/regl-project/regl",
       "demoSourcePath": "demo/preview-demos/functional-webgl-draw-commands.html",
       "libraryVersion": "regl@2.1.1",
-      "generatedAt": "2026-07-18",
+      "generatedAt": "2026-07-21",
       "outputPath": "demo/gifs/captured/functional-webgl-draw-commands.gif",
       "usageBasis": "upstream repository/project material; verify license https://github.com/regl-project/regl/blob/HEAD/LICENSE"
     },

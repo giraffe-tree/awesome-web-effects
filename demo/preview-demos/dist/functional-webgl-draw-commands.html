@@ -1,20 +1,403 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>regl — Functional WebGL Draw Commands</title>
-    <script type="module" crossorigin src="./assets/functional-webgl-draw-commands-vC79ifsz.js"></script>
+    <title>regl — Cell Population Draw Commands</title>
+    <style>
+      :root {
+        --preview-background: #071713;
+        --ink: #f3f4e8;
+        --muted: #91a39a;
+        --line: rgba(218, 235, 222, .16);
+        --cyan: #66e7d4;
+        --acid: #d9f56a;
+        --coral: #ff8568;
+        color-scheme: dark;
+      }
+
+      .preview-stage {
+        overflow: hidden;
+        color: var(--ink);
+        background: #071713;
+      }
+
+      .analysis-stage {
+        --analysis-progress: 0;
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        outline: none;
+        touch-action: none;
+        cursor: crosshair;
+      }
+
+      .analysis-stage:focus-visible {
+        box-shadow: inset 0 0 0 2px var(--acid);
+      }
+
+      #regl-canvas {
+        position: absolute;
+        inset: 0;
+        display: block;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+
+      .topline {
+        position: absolute;
+        top: clamp(17px, 5vh, 25px);
+        right: clamp(20px, 4vw, 30px);
+        left: clamp(25px, 4vw, 30px);
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        color: rgba(243, 244, 232, .56);
+        font: 800 clamp(6px, 1vw, 8px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .13em;
+        text-transform: uppercase;
+        pointer-events: none;
+      }
+
+      .topline strong { color: var(--ink); }
+
+      .sample-id {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .sample-id b { color: var(--cyan); }
+
+      .analysis-copy {
+        position: absolute;
+        top: 24%;
+        left: clamp(25px, 4vw, 30px);
+        z-index: 2;
+        width: clamp(178px, 28vw, 216px);
+        pointer-events: none;
+      }
+
+      .eyebrow,
+      .phase-readout,
+      .metric span,
+      .command-stack,
+      .plot-axis,
+      .input-note {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-weight: 800;
+        letter-spacing: .11em;
+        text-transform: uppercase;
+      }
+
+      .eyebrow {
+        display: block;
+        margin-bottom: 9px;
+        color: var(--coral);
+        font-size: clamp(6px, .95vw, 8px);
+      }
+
+      h1 {
+        max-width: 210px;
+        margin: 0;
+        font-size: clamp(25px, 4.2vw, 34px);
+        font-weight: 560;
+        letter-spacing: -.055em;
+        line-height: .93;
+      }
+
+      .analysis-copy > p {
+        max-width: 190px;
+        margin: 13px 0 0;
+        color: var(--muted);
+        font-size: clamp(7px, 1.05vw, 9px);
+        line-height: 1.45;
+      }
+
+      .reading {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        align-items: center;
+        gap: 8px;
+        margin-top: clamp(14px, 3vh, 20px);
+      }
+
+      .status-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--cyan);
+        box-shadow: 0 0 14px rgba(102, 231, 212, .65);
+      }
+
+      .analysis-stage[data-phase='resolved'] .status-dot {
+        background: var(--acid);
+        box-shadow: 0 0 14px rgba(217, 245, 106, .7);
+      }
+
+      .phase-readout {
+        overflow: hidden;
+        color: var(--ink);
+        font-size: clamp(6px, .9vw, 7px);
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .metrics {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 7px;
+        margin-top: 10px;
+      }
+
+      .metric {
+        padding-top: 7px;
+        border-top: 1px solid var(--line);
+      }
+
+      .metric strong {
+        display: block;
+        color: var(--ink);
+        font-size: clamp(12px, 2vw, 16px);
+        font-weight: 570;
+        letter-spacing: -.03em;
+      }
+
+      .metric span {
+        display: block;
+        margin-top: 3px;
+        color: var(--muted);
+        font-size: clamp(4px, .72vw, 6px);
+      }
+
+      .command-stack {
+        position: absolute;
+        top: 19%;
+        right: clamp(18px, 3.7vw, 28px);
+        z-index: 2;
+        width: clamp(104px, 16vw, 124px);
+        color: rgba(243, 244, 232, .47);
+        font-size: clamp(5px, .75vw, 6px);
+        pointer-events: none;
+      }
+
+      .command-stack > strong {
+        display: block;
+        margin-bottom: 7px;
+        color: var(--ink);
+        font-size: 1.08em;
+      }
+
+      .command-stack span {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 6px 0;
+        border-top: 1px solid var(--line);
+      }
+
+      .command-stack i {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--cyan);
+        box-shadow: 0 0 9px currentColor;
+      }
+
+      .command-stack span:nth-of-type(2) i { background: var(--coral); }
+      .command-stack span:nth-of-type(3) i { background: var(--acid); }
+      .command-stack span:nth-of-type(4) i { border: 1px solid var(--acid); background: transparent; }
+
+      .plot-axis {
+        position: absolute;
+        z-index: 2;
+        color: rgba(243, 244, 232, .34);
+        font-size: clamp(4px, .65vw, 5px);
+        pointer-events: none;
+      }
+
+      .plot-axis.x { right: 20%; bottom: clamp(61px, 15vh, 78px); }
+      .plot-axis.y { top: 51%; right: clamp(10px, 1.9vw, 15px); transform: rotate(-90deg); }
+
+      .analysis-controls {
+        position: absolute;
+        right: clamp(20px, 4vw, 30px);
+        bottom: clamp(17px, 4.5vh, 23px);
+        left: clamp(25px, 4vw, 30px);
+        z-index: 4;
+        display: grid;
+        grid-template-columns: minmax(136px, 190px) minmax(90px, 1fr) auto;
+        align-items: center;
+        gap: clamp(10px, 2vw, 18px);
+      }
+
+      .analyze-button {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-width: 0;
+        padding: 9px 11px;
+        border: 1px solid rgba(217, 245, 106, .72);
+        border-radius: 999px;
+        color: var(--ink);
+        background: rgba(7, 23, 19, .88);
+        font: 800 clamp(6px, .95vw, 8px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: color .2s ease, background-color .2s ease;
+      }
+
+      .analyze-button::after { color: var(--acid); content: '→'; font-size: 1.35em; }
+      .analyze-button[aria-pressed='true'] { color: #102019; background: var(--acid); }
+      .analyze-button[aria-pressed='true']::after { color: #102019; content: '↺'; }
+      .analyze-button:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+
+      .progress-rail {
+        position: relative;
+        height: 1px;
+        background: rgba(243, 244, 232, .22);
+        pointer-events: none;
+      }
+
+      .progress-fill {
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: calc(var(--analysis-progress) * 100%);
+        background: var(--acid);
+      }
+
+      .progress-thumb {
+        position: absolute;
+        top: 50%;
+        left: calc(var(--analysis-progress) * 100%);
+        width: 7px;
+        height: 7px;
+        border: 1px solid #071713;
+        border-radius: 50%;
+        background: var(--acid);
+        box-shadow: 0 0 0 1px var(--acid), 0 0 12px rgba(217, 245, 106, .6);
+        transform: translate(-50%, -50%);
+      }
+
+      .input-note {
+        color: rgba(243, 244, 232, .48);
+        font-size: clamp(5px, .75vw, 6px);
+        white-space: nowrap;
+        pointer-events: none;
+      }
+
+      .library-badge {
+        border-color: rgba(243, 244, 232, .18);
+        color: var(--ink);
+        background: rgba(7, 23, 19, .82);
+      }
+
+      .scene-caption { display: none; }
+
+      @media (max-width: 420px), (max-height: 260px) {
+        .library-badge, .scene-caption { display: none; }
+        .topline { top: 8px; right: 9px; left: 9px; font-size: 5px; }
+        .analysis-copy { top: 24px; left: 9px; width: 118px; }
+        .eyebrow { margin-bottom: 5px; font-size: 5px; }
+        h1 { max-width: 112px; font-size: 17px; }
+        .analysis-copy > p { max-width: 108px; margin-top: 7px; font-size: 5.5px; line-height: 1.35; }
+        .reading { gap: 5px; margin-top: 8px; }
+        .status-dot { width: 5px; height: 5px; }
+        .phase-readout { font-size: 5px; }
+        .metrics { gap: 5px; margin-top: 6px; }
+        .metric { padding-top: 4px; }
+        .metric strong { font-size: 10px; }
+        .metric span { font-size: 4px; }
+        .command-stack {
+          top: 29px;
+          right: 8px;
+          width: auto;
+          padding: 4px 5px;
+          border: 1px solid var(--line);
+          border-radius: 999px;
+          background: rgba(7, 23, 19, .72);
+          font-size: 4px;
+        }
+        .command-stack > strong { margin: 0; }
+        .command-stack span { display: none; }
+        .plot-axis { display: none; }
+        .analysis-controls { right: 9px; bottom: 8px; left: 9px; grid-template-columns: 104px minmax(45px, 1fr) auto; gap: 7px; }
+        .analyze-button { padding: 6px 8px; font-size: 5px; }
+        .input-note { font-size: 4px; }
+      }
+
+      @media (max-width: 180px), (max-height: 105px) {
+        .topline { top: 3px; right: 4px; left: 4px; font-size: 3px; }
+        .topline span { display: none; }
+        .analysis-copy { top: 15px; left: 4px; width: 52px; }
+        .eyebrow, .analysis-copy > p, .reading, .metrics, .command-stack, .input-note { display: none; }
+        h1 { max-width: 50px; font-size: 8px; line-height: .98; }
+        .analysis-controls { right: 4px; bottom: 4px; left: 4px; grid-template-columns: 53px minmax(0, 1fr); gap: 5px; }
+        .analyze-button { padding: 4px 5px; font-size: 3.5px; }
+        .progress-thumb { width: 5px; height: 5px; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .analyze-button { transition: none; }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/functional-webgl-draw-commands-CQGdXXIJ.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
     <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
     <link rel="modulepreload" crossorigin href="./assets/regl-B2Y2V2F1.js">
     <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
   </head>
   <body>
-    <main class="preview-stage" aria-label="A live regl particle field rendered by reusable draw commands">
-      <canvas id="regl-canvas"></canvas>
-      <span class="library-badge">regl · draw command</span>
-      <span class="scene-caption">GPU instanced particle flow</span>
+    <main class="preview-stage" aria-label="A regl cell-analysis surface composes four reusable GPU draw commands">
+      <section
+        class="analysis-stage"
+        id="analysis-stage"
+        tabindex="0"
+        data-phase="mixed"
+        data-preview-mechanism="regl-draw-command-composition"
+        aria-describedby="analysis-instruction"
+      >
+        <canvas id="regl-canvas" role="img" aria-label="One thousand one hundred mixed cell measurements awaiting population analysis"></canvas>
+
+        <header class="topline">
+          <strong>CELL ATLAS / RESPONSE MAP</strong>
+          <span class="sample-id"><b>LIVE SAMPLE P–17</b> · 06 JUN · BLOOD</span>
+        </header>
+
+        <section class="analysis-copy" aria-live="polite">
+          <span class="eyebrow">IMMUNE ASSAY · REVIEW 04</span>
+          <h1>Separate the hidden response.</h1>
+          <p>Resolve one mixed sample into coherent populations without losing a single observation.</p>
+          <div class="reading"><span class="status-dot" aria-hidden="true"></span><output class="phase-readout" id="phase-readout">MIXED SAMPLE · READY</output></div>
+          <div class="metrics">
+            <div class="metric"><strong>1,100</strong><span>cells retained</span></div>
+            <div class="metric"><strong id="rare-readout">—</strong><span>rare response</span></div>
+          </div>
+        </section>
+
+        <aside class="command-stack" aria-label="GPU analysis layers">
+          <strong>DRAW STACK · 04</strong>
+          <span>01 field <i></i></span>
+          <span>02 density <i></i></span>
+          <span>03 cells <i></i></span>
+          <span>04 response gate <i></i></span>
+        </aside>
+
+        <span class="plot-axis x">RECEPTOR LEVEL →</span>
+        <span class="plot-axis y">RESPONSE SIGNAL →</span>
+
+        <footer class="analysis-controls">
+          <button class="analyze-button" id="analyze-button" type="button" aria-pressed="false">Separate populations</button>
+          <div class="progress-rail" aria-hidden="true"><span class="progress-fill"></span><span class="progress-thumb"></span></div>
+          <span class="input-note" id="analysis-instruction">DRAG FIELD · TAP BUTTON · ← → / HOME END</span>
+        </footer>
+      </section>
+      <span class="library-badge">regl · 4 draw commands</span>
+      <span class="scene-caption">mixed sample → three coherent populations</span>
     </main>
   </body>
 </html>

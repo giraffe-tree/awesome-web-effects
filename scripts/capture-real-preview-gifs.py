@@ -592,6 +592,37 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("Space")
             elif index == 35:
                 page.wait_for_timeout(340)
+        elif demo["id"] == "ascii-orchestration-signal-sweep":
+            if index == 3:
+                page.locator('#trace-button').click()
+            elif index == 14:
+                page.locator('#route-stage').focus()
+                page.keyboard.press("End")
+            elif index == 15:
+                page.locator('#direction-button').click()
+            elif index == 16:
+                page.locator('#route-stage').focus()
+                page.keyboard.press("Home")
+            elif index == 18:
+                page.locator('#trace-button').click()
+            elif index == 29:
+                box = page.locator('#route-stage').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * .8, box["y"] + box["height"] * .58)
+                page.mouse.down()
+            elif index == 30:
+                box = page.locator('#route-stage').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * .45, box["y"] + box["height"] * .46, steps=5)
+                page.mouse.up()
+            elif index == 31:
+                page.locator('#route-stage').focus()
+                page.keyboard.press("r")
+            elif index == 32:
+                page.keyboard.press("Home")
+            elif index == 34:
+                box = page.locator('#route-stage').bounding_box()
+                page.mouse.move(box["x"] + box["width"] - .01, box["y"] + box["height"] * .56)
+                page.mouse.down()
+                page.mouse.up()
         elif demo["id"] == "blurhash-to-photo-progressive-reveal":
             pointer_x = 230 if .5 <= preview_time < 2.25 else 32
             page.mouse.move(pointer_x, 90)
@@ -1347,6 +1378,47 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["lastTrustedEvent"] != "space-toggle"
         ):
             raise RuntimeError(f"{demo['id']} did not capture a real shared-baseline metadata/CTA handoff across hover, focus, activation, cancellation, and reset: {interaction!r}")
+    elif demo["id"] == "ascii-orchestration-signal-sweep":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            interaction["automaticPlayback"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or not interaction["initialStaticConfirmed"]
+            or interaction["inputAdapters"] != ["pointer", "touch", "click", "keyboard"]
+            or interaction["inputCount"] < 9
+            or interaction["pointerInputCount"] < 5
+            or interaction["keyboardInputCount"] < 4
+            or interaction["pointerMoveCount"] < 5
+            or interaction["directionChangeCount"] < 2
+            or interaction["transitionCount"] < 3
+            or interaction["boundaryInputCount"] < 2
+            or interaction["routeNodeCount"] != 7
+            or interaction["routeSegmentCount"] != 8
+            or interaction["revealedNodeCount"] != 7
+            or interaction["revealedNodeIds"] != ["edge", "router", "trace", "policy", "repair", "canary", "prod"]
+            or interaction["routeChecksum"] <= 0
+            or not interaction["deterministicField"]
+            or interaction["randomSourceUsed"]
+            or not interaction["p5Instance"]
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["motionActive"]
+            or interaction["dragActive"]
+            or interaction["direction"] != 1
+            or interaction["directionLabel"] != "forward"
+            or interaction["phase"] != "complete"
+            or interaction["boundary"] != "right"
+            or not interaction["complete"]
+            or interaction["progress"] < .999
+            or interaction["targetProgress"] < .999
+            or interaction["activeDirection"] != "idle"
+            or interaction["lastInput"] != "pointer:mouse:drag"
+            or interaction["initialFrameChecksum"] == 0
+            or interaction["visibleCellCount"] < 34 * 17
+            or interaction["canvasWidth"] < 64
+            or interaction["canvasHeight"] < 64
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a real bidirectional ASCII incident route across controls, pointer scrub, keyboard, and boundaries: {interaction!r}")
     elif demo["id"] == "blurhash-to-photo-progressive-reveal":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__()")
         if interaction["pointerEvents"] < 3 or interaction["pointerOverPhoto"]:

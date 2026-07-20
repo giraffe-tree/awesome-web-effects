@@ -426,23 +426,23 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "ascii-orchestration-signal-sweep",
-    "name": "ASCII orchestration signal sweep",
-    "nameZh": "ASCII 编排信号扫过",
+    "name": "ASCII incident route trace",
+    "nameZh": "ASCII 事故路由追踪",
     "category": "canvas",
     "sourceUrl": "https://www.augmentcode.com/",
-    "difference": "两套字符场被移动强度前沿选择性揭示，不是现有单文本 scramble 或矩阵雨。",
+    "difference": "固定字符噪声中隐藏一条七节点、八连线的真实事故路径；真人控制的前沿只揭示已走过的 Edge、Router、三名证据 Agent、Canary 与 Prod，而不是定时矩阵雨。",
     "behavior": {
-      "trigger": "time/pointer restart",
-      "response": "Sweep a signal front that resolves noisy glyphs into an architecture diagram",
-      "timing": "deterministic timed pass with decay",
-      "layer": "Canvas character field"
+      "trigger": "real Complete/Reset or direction button, direct pointer/touch scrub, or Arrow/Home/End/Enter/Space/R key",
+      "response": "Move a signal front through fixed ASCII noise to reveal a seven-node incident route and three evidence-agent branches in either direction",
+      "timing": "human-owned direct scrub or interruptible endpoint transition with no idle autoplay or synthetic capture",
+      "layer": "p5 Canvas character field plus semantic incident metrics and controls"
     },
     "implementation": {
       "projectId": "processing-p5-js",
       "projectUrl": "https://github.com/processing/p5.js",
       "library": "p5@2.3.0",
       "renderer": "canvas2d",
-      "snippet": "const band = max(0, 1 - abs(cell.x - bentFront) / .115); text(structure && band > .18 ? '◆' : glyph, x, y);",
+      "snippet": "const revealed=direction===1 ? cell.x<=progress : cell.x>=progress;\ntext(routeAt(cell.x,cell.y)&&revealed ? routeGlyph : fixedNoiseGlyph, x, y);",
       "referenceUrl": "https://www.augmentcode.com/"
     },
     "scores": {
@@ -454,19 +454,19 @@ export const effectExpansion100Specs = [
       "evidence": 9,
       "total": 94
     },
-    "rationaleZh": "噪声字符到结构字符的空间解析具有鲜明 AI 系统意象。",
+    "rationaleZh": "INC-4821 的 Edge→Router→Trace/Policy/Repair→Canary→Prod 拓扑以固定字符和确定性几何生成；只有真人按钮、拖拽、触摸或键盘才推进或反转前沿。",
     "batch": "A",
-    "demo": "点号、叉号噪声中，扫描前沿点亮一张隐藏的神经拓扑。",
-    "capture": "固定 11 秒相位，录下前沿进入、结构峰值、尾部衰减和复位。",
+    "demo": "INC-4821 checkout latency 事故追踪台；前沿从 Edge 穿过 Router 与三名证据 Agent，最终验证 Canary 与 Prod，也可反向回溯根因。",
+    "capture": "真实完成、边界键、方向切换、反向重置、指针拖拽和 R/Home 输入后，以右边界完整路由结束；不注入自动 sweep。",
     "risk": {
       "level": "medium",
-      "detail": "必须固定字符种子和相位；装饰性随机矩阵雨会失真。"
+      "detail": "必须固定字符场和语义拓扑，并证明所有进度来自真人输入；装饰性随机矩阵雨或闲置自动前沿会失真。"
     },
     "observedImplementation": {
       "projectId": "processing-p5-js",
       "library": "p5.js",
       "renderer": "Canvas 2D",
-      "snippet": "new p5(p=>{p.draw=()=>drawSignalFront(p,progress)})",
+      "snippet": "new p5(p=>{p.setup=()=>p.noLoop();p.draw=()=>drawIncidentRoute(p,progress,direction)})",
       "projectUrl": "https://github.com/processing/p5.js",
       "referenceUrl": "https://p5js.org/reference/"
     }

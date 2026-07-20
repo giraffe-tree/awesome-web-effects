@@ -1,31 +1,356 @@
 <!doctype html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>p5.js — ASCII Orchestration Signal Sweep</title>
-  <link rel="stylesheet" href="./shared.css" />
-  <style>
-    :root { --preview-background: #06100e; }
-    #ascii-field { position:absolute; inset:0; cursor:crosshair; }
-    #ascii-field canvas { width:100% !important; height:100% !important; }
-    .ascii-copy { position:absolute; z-index:4; left:18px; top:48px; width:145px; color:#efffd8; pointer-events:none; }
-    .ascii-copy b { display:block; font:900 20px/.9 ui-monospace,monospace; letter-spacing:-.07em; }
-    .ascii-copy span { display:block; margin-top:9px; color:#8dbbac; font:700 6px/1.45 ui-monospace,monospace; letter-spacing:.13em; text-transform:uppercase; }
-    .signal-key { position:absolute; z-index:4; right:14px; bottom:12px; color:#b8e5d5; font:700 6px/1 ui-monospace,monospace; letter-spacing:.1em; }
-    .signal-key::before { content:""; display:inline-block; width:28px; height:2px; margin:0 6px 2px 0; background:linear-gradient(90deg,transparent,#d8ff57,transparent); box-shadow:0 0 10px #d8ff57; }
-    .library-badge { background:#06100ed9; border-color:#baff7538; color:#efffd8; }
-    .scene-caption { display:none; }
-  </style>
-</head>
-<body>
-  <main class="preview-stage" aria-label="A traveling signal reveals an orchestration topology inside a seeded ASCII field">
-    <div id="ascii-field" tabindex="0" aria-label="Move the pointer to bend the signal front and click to reverse it"></div>
-    <div class="ascii-copy"><b>SIGNAL<br/>FINDS<br/>STRUCTURE</b><span>ambient glyphs → orchestration map</span></div>
-    <span class="signal-key">11s source · 3s study</span>
-    <span class="library-badge">p5.js · seeded ASCII field</span>
-    <span class="scene-caption">a traveling intensity front reveals hidden architecture</span>
-  </main>
-  <script type="module" src="./src/ascii-orchestration-signal-sweep-demo.js"></script>
-</body>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>p5.js — Incident Route Signal Sweep</title>
+    <link rel="stylesheet" href="./shared.css" />
+    <style>
+      :root {
+        --preview-background: #06110e;
+        --ink: #f1f6df;
+        --muted: #87a498;
+        --line: rgba(222, 246, 228, .16);
+        --lime: #dcfb64;
+        --cyan: #71e1cd;
+        --coral: #ff8064;
+        color-scheme: dark;
+      }
+
+      .preview-stage {
+        overflow: hidden;
+        color: var(--ink);
+        background: #06110e;
+      }
+
+      .route-stage {
+        --trace-progress: 0;
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        outline: none;
+        touch-action: none;
+        cursor: ew-resize;
+      }
+
+      .route-stage:focus-visible { box-shadow: inset 0 0 0 2px var(--lime); }
+
+      #ascii-canvas-host,
+      #ascii-canvas-host canvas {
+        position: absolute;
+        inset: 0;
+        display: block;
+        width: 100% !important;
+        height: 100% !important;
+        pointer-events: none;
+      }
+
+      .topline {
+        position: absolute;
+        top: clamp(18px, 4.8vh, 24px);
+        right: clamp(21px, 4vw, 30px);
+        left: clamp(25px, 4vw, 30px);
+        z-index: 3;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        color: rgba(241, 246, 223, .5);
+        font: 800 clamp(6px, 1vw, 8px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+        pointer-events: none;
+      }
+
+      .topline strong { color: var(--ink); }
+      .incident-id { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .incident-id b { color: var(--coral); }
+
+      .route-copy {
+        position: absolute;
+        top: 27%;
+        left: clamp(25px, 4vw, 30px);
+        z-index: 3;
+        width: clamp(184px, 29vw, 222px);
+        pointer-events: none;
+      }
+
+      .eyebrow,
+      .trace-state,
+      .metric span,
+      .boundary-readout,
+      .route-hint {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-weight: 800;
+        letter-spacing: .11em;
+        text-transform: uppercase;
+      }
+
+      .eyebrow {
+        display: block;
+        margin-bottom: 9px;
+        color: var(--cyan);
+        font-size: clamp(6px, .95vw, 8px);
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(26px, 4.35vw, 35px);
+        font-weight: 560;
+        letter-spacing: -.06em;
+        line-height: .92;
+      }
+
+      .route-copy > p {
+        max-width: 198px;
+        margin: 13px 0 0;
+        color: var(--muted);
+        font-size: clamp(7px, 1.05vw, 9px);
+        line-height: 1.45;
+      }
+
+      .trace-state {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        margin-top: clamp(14px, 3vh, 19px);
+        color: var(--ink);
+        font-size: clamp(6px, .9vw, 7px);
+      }
+
+      .trace-state::before {
+        flex: 0 0 auto;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--cyan);
+        box-shadow: 0 0 14px rgba(113, 225, 205, .62);
+        content: '';
+      }
+
+      .route-stage[data-complete='true'] .trace-state::before {
+        background: var(--lime);
+        box-shadow: 0 0 14px rgba(220, 251, 100, .68);
+      }
+
+      .metrics {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+        margin-top: 10px;
+      }
+
+      .metric {
+        padding-top: 7px;
+        border-top: 1px solid var(--line);
+      }
+
+      .metric strong {
+        display: block;
+        font-size: clamp(12px, 2vw, 16px);
+        font-weight: 560;
+        letter-spacing: -.04em;
+      }
+
+      .metric span {
+        display: block;
+        margin-top: 3px;
+        color: var(--muted);
+        font-size: clamp(4px, .72vw, 6px);
+      }
+
+      .boundary-readout {
+        position: absolute;
+        top: clamp(50px, 13vh, 63px);
+        right: clamp(20px, 4vw, 30px);
+        z-index: 3;
+        padding: 6px 8px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        color: rgba(241, 246, 223, .58);
+        background: rgba(6, 17, 14, .68);
+        font-size: clamp(5px, .8vw, 6px);
+        pointer-events: none;
+      }
+
+      .boundary-readout b { color: var(--lime); }
+
+      .route-controls {
+        position: absolute;
+        right: clamp(21px, 4vw, 30px);
+        bottom: clamp(17px, 4.6vh, 24px);
+        left: clamp(25px, 4vw, 30px);
+        z-index: 5;
+        display: grid;
+        grid-template-columns: minmax(126px, 174px) 80px minmax(90px, 1fr) auto;
+        align-items: center;
+        gap: clamp(8px, 1.7vw, 14px);
+      }
+
+      .trace-button,
+      .direction-button {
+        min-width: 0;
+        padding: 9px 11px;
+        border-radius: 999px;
+        font: 800 clamp(6px, .9vw, 7px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+
+      .trace-button {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border: 1px solid rgba(220, 251, 100, .72);
+        color: var(--ink);
+        background: rgba(6, 17, 14, .88);
+        transition: color .2s ease, background-color .2s ease;
+      }
+
+      .trace-button::after { color: var(--lime); content: '→'; font-size: 1.3em; }
+      .route-stage[data-direction='reverse'] .trace-button:not([aria-pressed='true'])::after { content: '←'; }
+      .trace-button[aria-pressed='true'] { color: #112017; background: var(--lime); }
+      .trace-button[aria-pressed='true']::after { color: #112017; content: '↺'; }
+
+      .direction-button {
+        border: 1px solid var(--line);
+        color: var(--muted);
+        background: rgba(6, 17, 14, .7);
+      }
+
+      .direction-button[aria-pressed='true'] { border-color: var(--cyan); color: var(--cyan); }
+      .trace-button:focus-visible,
+      .direction-button:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+
+      .progress-rail {
+        position: relative;
+        height: 1px;
+        background: rgba(241, 246, 223, .2);
+        pointer-events: none;
+      }
+
+      .progress-fill {
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: calc(var(--trace-progress) * 100%);
+        background: var(--lime);
+      }
+
+      .route-stage[data-direction='reverse'] .progress-fill {
+        inset: 0 0 0 auto;
+        width: calc((1 - var(--trace-progress)) * 100%);
+        background: var(--cyan);
+      }
+
+      .progress-thumb {
+        position: absolute;
+        top: 50%;
+        left: calc(var(--trace-progress) * 100%);
+        width: 7px;
+        height: 7px;
+        border: 1px solid #06110e;
+        border-radius: 50%;
+        background: var(--lime);
+        box-shadow: 0 0 0 1px var(--lime), 0 0 11px rgba(220, 251, 100, .58);
+        transform: translate(-50%, -50%);
+      }
+
+      .route-stage[data-direction='reverse'] .progress-thumb {
+        background: var(--cyan);
+        box-shadow: 0 0 0 1px var(--cyan), 0 0 11px rgba(113, 225, 205, .58);
+      }
+
+      .route-hint {
+        color: rgba(241, 246, 223, .46);
+        font-size: clamp(5px, .72vw, 6px);
+        white-space: nowrap;
+        pointer-events: none;
+      }
+
+      .library-badge {
+        border-color: rgba(220, 251, 100, .2);
+        color: var(--ink);
+        background: rgba(6, 17, 14, .82);
+      }
+
+      .scene-caption { display: none; }
+
+      @media (max-width: 420px), (max-height: 260px) {
+        .library-badge, .scene-caption { display: none; }
+        .topline { top: 7px; right: 8px; left: 8px; font-size: 4.6px; }
+        .route-copy { top: 28px; left: 8px; width: 110px; }
+        .eyebrow { margin-bottom: 5px; font-size: 4.7px; }
+        h1 { font-size: 17px; }
+        .route-copy > p { max-width: 105px; margin-top: 7px; font-size: 5.4px; line-height: 1.35; }
+        .trace-state { gap: 5px; margin-top: 8px; font-size: 4.7px; }
+        .trace-state::before { width: 5px; height: 5px; }
+        .metrics { gap: 5px; margin-top: 6px; }
+        .metric { padding-top: 4px; }
+        .metric strong { font-size: 9px; }
+        .metric span { font-size: 3.7px; }
+        .boundary-readout { top: 20px; right: 8px; padding: 4px 5px; font-size: 3.8px; }
+        .route-controls { right: 8px; bottom: 7px; left: 8px; grid-template-columns: 92px 50px minmax(34px, 1fr) auto; gap: 5px; }
+        .trace-button, .direction-button { padding: 6px 7px; font-size: 4.5px; }
+        .route-hint { font-size: 3.6px; }
+      }
+
+      @media (max-width: 180px), (max-height: 105px) {
+        .topline { top: 3px; right: 4px; left: 4px; font-size: 3px; }
+        .topline span { display: none; }
+        .route-copy, .boundary-readout, .route-hint { display: none; }
+        .route-controls { right: 4px; bottom: 4px; left: 4px; grid-template-columns: 40px 28px minmax(0, 1fr); gap: 4px; }
+        .trace-button, .direction-button { padding: 4px 5px; font-size: 3.4px; }
+        .progress-thumb { width: 5px; height: 5px; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .trace-button { transition: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="preview-stage" aria-label="A p5 ASCII signal front traces a real incident route through an agent system">
+      <section
+        class="route-stage"
+        id="route-stage"
+        tabindex="0"
+        data-direction="forward"
+        data-boundary="left"
+        data-complete="false"
+        data-preview-mechanism="p5-ascii-signal-route"
+        aria-describedby="route-instruction"
+      >
+        <div id="ascii-canvas-host" role="img" aria-label="ASCII noise concealing a seven-hop incident response route"></div>
+
+        <header class="topline">
+          <strong>ORCHESTRATION / ROUTE TRACE</strong>
+          <span class="incident-id"><b>INC–4821</b> · CHECKOUT LATENCY · P1</span>
+        </header>
+
+        <section class="route-copy" aria-live="polite">
+          <span class="eyebrow">LIVE INCIDENT · 04:18 UTC</span>
+          <h1>Trace the failure path.</h1>
+          <p>Follow one alert through triage, three evidence agents, canary and production.</p>
+          <output class="trace-state" id="trace-state">AWAITING TRACE · EDGE</output>
+          <div class="metrics">
+            <div class="metric"><strong id="hop-readout">0 / 7</strong><span>hops visible</span></div>
+            <div class="metric"><strong id="agent-readout">—</strong><span>agents resolved</span></div>
+          </div>
+        </section>
+
+        <div class="boundary-readout"><b id="boundary-label">LEFT EDGE</b> · <span id="percent-readout">00%</span></div>
+
+        <footer class="route-controls">
+          <button class="trace-button" id="trace-button" type="button" aria-pressed="false">Complete trace</button>
+          <button class="direction-button" id="direction-button" type="button" aria-pressed="false" aria-label="Reverse trace direction">FLOW →</button>
+          <div class="progress-rail" aria-hidden="true"><span class="progress-fill"></span><span class="progress-thumb"></span></div>
+          <span class="route-hint" id="route-instruction">DRAG / TOUCH · ← → · HOME END · R REVERSE</span>
+        </footer>
+      </section>
+      <span class="library-badge">p5.js · semantic ASCII route</span>
+      <span class="scene-caption">edge → router → agents → canary → prod</span>
+    </main>
+    <script type="module" src="./src/ascii-orchestration-signal-sweep-demo.js"></script>
+  </body>
 </html>

@@ -861,9 +861,9 @@ const expansionEffects = [
     id: 'depth-layer-blur-dissolve', category: 'canvas', name: 'Depth-layer ordered blur dissolve', nameZh: '景深分层顺序模糊溶解', order: 16,
     company: 'Black Forest Labs', homepage: 'https://bfl.ai/', observedAs: 'Depth-map ordered blur dissolve',
     difference: 'Depth values sequence near, middle, and far regions through separate blur and opacity handoffs instead of applying one displacement or crossfade to the whole image.',
-    behavior: { trigger: 'state change or animation frame', response: 'Near, middle, and far image layers blur and dissolve in depth order', timing: 'depth-staggered continuous handoff', layer: 'Canvas image compositor' },
+    behavior: { trigger: 'pointer/touch drag or keyboard progress control', response: 'Near, middle, far, and sky raster bands blur and dissolve in depth order', timing: 'input-driven depth-staggered handoff; no autonomous fallback', layer: 'Canvas raster compositor + shared ordinal depth mask' },
     implementationName: 'p5.js', projectId: 'processing-p5-js', projectUrl: 'https://github.com/processing/p5.js', referenceUrl: 'https://p5js.org/reference/',
-    snippet: "import p5 from 'p5';\nnew p5(p => { p.setup = () => p.createCanvas(320, 180); p.draw = () => drawDepthOrderedLayers(p, progress); });",
+    snippet: "const bands = rasterizeOrdinalMask(depthSvg);\ncanvas.onpointermove = event => drawDepthOrderedRasterBands(sceneA, sceneB, bands, progressFrom(event));",
     scores: { creativity: 19, artDirection: 19, motion: 19, clarity: 14, inspiration: 15, evidence: 10 },
     rationaleZh: '原创近中远景观以真实分层次序交接，模糊峰值和色彩换幕清楚显示了“深度决定消失顺序”的核心机制。'
   },

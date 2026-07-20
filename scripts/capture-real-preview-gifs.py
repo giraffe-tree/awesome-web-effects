@@ -215,6 +215,23 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.move(22, 161)
             elif index == 31:
                 page.mouse.move(160, 120)
+        elif demo["id"] == "depth-layer-blur-dissolve":
+            if index == 3:
+                page.mouse.move(1, 146)
+                page.mouse.down()
+            elif 4 <= index <= 16:
+                progress = (index - 4) / 12
+                page.mouse.move(1 + 318 * progress, 146)
+            elif index == 17:
+                page.mouse.up()
+            elif index == 20:
+                page.mouse.move(319, 146)
+                page.mouse.down()
+            elif 21 <= index <= 33:
+                progress = (index - 21) / 12
+                page.mouse.move(319 - 318 * progress, 146)
+            elif index == 34:
+                page.mouse.up()
         page.evaluate("time => window.__setPreviewTime(time)", preview_time)
         frame_path = frame_root / f"{index:04d}.png"
         page.screenshot(path=str(frame_path), type="png")
@@ -275,6 +292,22 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["mediaTime"] != 0
         ):
             raise RuntimeError(f"{demo['id']} did not preserve rehearsal/rewind/commit state boundaries: {interaction!r}")
+    elif demo["id"] == "depth-layer-blur-dissolve":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            interaction["automaticPath"]
+            or interaction["inputCount"] < 20
+            or interaction["inputKind"] != "mouse"
+            or interaction["mode"] != "idle"
+            or interaction["pointerCaptured"]
+            or interaction["depthMapVisible"]
+            or interaction["progress"] > .01
+            or interaction["targetProgress"] > .01
+            or not interaction["sourcesReady"]
+            or not interaction["maskReady"]
+            or min(interaction["bandCoverage"]) <= .05
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a real A-to-B-to-A ordinal-depth drag: {interaction!r}")
 
     minimum_unique = min(6, max(2, frame_count // 6))
     if len(hashes) < minimum_unique:

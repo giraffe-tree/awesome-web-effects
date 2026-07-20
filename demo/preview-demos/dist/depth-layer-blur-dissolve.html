@@ -5,27 +5,223 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>p5.js — Depth-layer Blur Dissolve</title>
     <style>
-      :root { --preview-background: #0a1020; }
-      #depth-stage { position: absolute; inset: 0; }
+      :root { --preview-background: #101a1b; }
+
+      #depth-stage {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        outline: none;
+        cursor: ew-resize;
+        touch-action: none;
+        background: #101a1b;
+      }
+
       #depth-stage canvas { width: 100% !important; height: 100% !important; }
-      .depth-scale { position: absolute; z-index: 8; right: 13px; top: 14px; display: grid; gap: 3px; width: 46px; }
-      .depth-scale span { height: 3px; border-radius: 99px; background: rgba(255,255,255,.18); }
-      .depth-scale span:nth-child(2) { width: 78%; }
-      .depth-scale span:nth-child(3) { width: 55%; }
-      .depth-scale b { color: rgba(255,255,255,.62); font: 700 6px/1 ui-monospace, monospace; letter-spacing: .08em; text-transform: uppercase; }
+
+      #depth-stage:focus-visible::after {
+        content: "";
+        position: absolute;
+        z-index: 18;
+        inset: 5px;
+        border: 1px solid rgba(255, 255, 255, .88);
+        pointer-events: none;
+      }
+
+      .depth-vignette {
+        position: absolute;
+        z-index: 3;
+        inset: 0;
+        pointer-events: none;
+        background:
+          linear-gradient(180deg, rgba(4, 10, 10, .18), transparent 42%, rgba(4, 9, 9, .42)),
+          linear-gradient(90deg, rgba(5, 10, 10, .22), transparent 38%);
+      }
+
+      .depth-title {
+        position: absolute;
+        z-index: 9;
+        left: 18px;
+        bottom: 36px;
+        width: 118px;
+        color: #fff;
+        pointer-events: none;
+        text-shadow: 0 2px 14px rgba(0, 0, 0, .55);
+      }
+
+      .depth-title small {
+        display: block;
+        color: rgba(255, 255, 255, .7);
+        font: 800 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+      }
+
+      .depth-title strong {
+        display: block;
+        margin-top: 5px;
+        font: 850 14px/.92 system-ui, sans-serif;
+        letter-spacing: -.045em;
+        text-transform: uppercase;
+      }
+
+      .depth-scale {
+        position: absolute;
+        z-index: 9;
+        top: 38px;
+        right: 15px;
+        display: grid;
+        gap: 4px;
+        width: 54px;
+        color: rgba(255, 255, 255, .58);
+        pointer-events: none;
+      }
+
+      .depth-scale b {
+        margin-bottom: 1px;
+        font: 800 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .1em;
+        text-align: right;
+        text-transform: uppercase;
+      }
+
+      .depth-scale span {
+        display: grid;
+        grid-template-columns: 1fr 5px;
+        align-items: center;
+        gap: 5px;
+        font: 750 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .08em;
+        text-align: right;
+        text-transform: uppercase;
+      }
+
+      .depth-scale i {
+        width: 5px;
+        height: 5px;
+        border: 1px solid rgba(255, 255, 255, .55);
+        border-radius: 50%;
+        background: transparent;
+        transition: background .12s ease, scale .12s ease;
+      }
+
+      #depth-stage[data-active-band="near"] [data-band="near"] i,
+      #depth-stage[data-active-band="middle"] [data-band="middle"] i,
+      #depth-stage[data-active-band="far"] [data-band="far"] i,
+      #depth-stage[data-active-band="sky"] [data-band="sky"] i {
+        background: #fff;
+        scale: 1.35;
+      }
+
+      .depth-scrub {
+        position: absolute;
+        z-index: 10;
+        left: 18px;
+        right: 18px;
+        bottom: 17px;
+        display: grid;
+        grid-template-columns: 25px 1fr 27px;
+        align-items: center;
+        gap: 7px;
+        color: rgba(255, 255, 255, .72);
+        pointer-events: none;
+      }
+
+      .depth-scrub b {
+        font: 800 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .09em;
+        text-transform: uppercase;
+      }
+
+      .depth-scrub b:last-child { text-align: right; }
+
+      .depth-track {
+        position: relative;
+        height: 1px;
+        background: rgba(255, 255, 255, .34);
+      }
+
+      .depth-track::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: calc(var(--depth-progress, 0) * 100%);
+        height: 1px;
+        background: #fff;
+      }
+
+      .depth-thumb {
+        position: absolute;
+        left: calc(var(--depth-progress, 0) * 100%);
+        top: 50%;
+        width: 7px;
+        height: 7px;
+        border: 1px solid #fff;
+        border-radius: 50%;
+        background: rgba(8, 16, 16, .72);
+        translate: -50% -50%;
+      }
+
+      .depth-status {
+        position: absolute;
+        z-index: 9;
+        right: 15px;
+        bottom: 31px;
+        color: rgba(255, 255, 255, .76);
+        font: 800 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .09em;
+        text-transform: uppercase;
+        pointer-events: none;
+        text-shadow: 0 1px 8px rgba(0, 0, 0, .7);
+      }
+
+      #depth-stage[data-depth-peek="true"] .depth-title strong { font-size: 11px; }
+      .library-badge { background: rgba(7, 14, 14, .72); }
+
+      @media (max-width: 180px) {
+        .depth-title { left: 10px; bottom: 27px; width: 82px; }
+        .depth-title strong { font-size: 9px; }
+        .depth-scale { top: 31px; right: 9px; }
+        .depth-scrub { left: 10px; right: 10px; bottom: 10px; }
+        .depth-status { display: none; }
+        .library-badge { left: 8px; top: 7px; padding: 4px 6px; font-size: 6px; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .depth-scale i { transition: none; }
+      }
     </style>
-    <script type="module" crossorigin src="./assets/depth-layer-blur-dissolve-51K4s0e1.js"></script>
+    <script type="module" crossorigin src="./assets/depth-layer-blur-dissolve-lXeMbphP.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
     <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
     <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
+    <link rel="modulepreload" crossorigin href="./assets/batch-c-utils-g_3IBZ2b.js">
     <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
   </head>
   <body>
-    <main class="preview-stage" aria-label="A landscape dissolves into another in depth order, with each layer blurring as it hands off">
-      <div id="depth-stage" data-preview-mechanism="p5-depth-layer-compositor"></div>
-      <div class="depth-scale" aria-hidden="true"><b>near → far</b><span></span><span></span><span></span></div>
-      <span class="library-badge">p5.js · ordered compositor</span>
-      <span class="scene-caption">depth map orders blur, dissolve and reveal</span>
+    <main class="preview-stage" aria-label="Drag to dissolve a fictional lakeside landscape from near to far depth; use arrow keys or hold Space to inspect the depth map">
+      <section id="depth-stage" tabindex="0" data-preview-mechanism="p5-raster-ordinal-depth-compositor" data-active-band="none" data-depth-peek="false">
+        <div class="depth-vignette" aria-hidden="true"></div>
+        <div class="depth-title" aria-hidden="true">
+          <small>Weather window / depth study</small>
+          <strong>Mist clears through the landscape.</strong>
+        </div>
+        <div class="depth-scale" aria-hidden="true">
+          <b>Near → far</b>
+          <span data-band="near">Near <i></i></span>
+          <span data-band="middle">Middle <i></i></span>
+          <span data-band="far">Far <i></i></span>
+          <span data-band="sky">Sky <i></i></span>
+        </div>
+        <div class="depth-scrub" aria-hidden="true">
+          <b>Mist</b>
+          <span class="depth-track" id="depth-track"><i class="depth-thumb"></i></span>
+          <b>Clear</b>
+        </div>
+        <span class="depth-status" id="depth-status" aria-hidden="true">Drag / arrows / hold Space</span>
+      </section>
+      <span class="library-badge">p5.js · ordinal image compositor</span>
     </main>
   </body>
 </html>

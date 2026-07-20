@@ -3,60 +3,587 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Motion — Interactive Vector State Machine</title>
+    <title>Motion — Hush Home Voice Agent</title>
     <link rel="stylesheet" href="./shared.css" />
     <style>
-      :root { --preview-background: #f0eddf; color-scheme: light; }
-      .vector-console { position: absolute; inset: 0; display: grid; grid-template-columns: 126px 1fr; align-items: center; padding: 34px 17px 20px; color: #20241e; cursor: pointer; }
-      .vector-console:focus-visible { outline: 2px solid #4867ff; outline-offset: -5px; }
-      .vector-stage { position: relative; width: 118px; height: 118px; }
+      :root {
+        --preview-background: #151713;
+        --paper: #e9e5d8;
+        --ink: #1b1d19;
+        --forest: #22332c;
+        --blue: #5268e8;
+        --mint: #75d7b2;
+        --coral: #ef7058;
+        --acid: #d6ec70;
+        color-scheme: dark;
+      }
+
+      button { font: inherit; color: inherit; }
+
+      .voice-stage {
+        padding: clamp(5px, 2.2vw, 16px);
+        background:
+          radial-gradient(circle at 84% 16%, rgba(214, 236, 112, .08), transparent 27%),
+          #151713;
+      }
+
+      .voice-shell {
+        display: grid;
+        width: 100%;
+        height: 100%;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        border: 1px solid rgba(240, 237, 223, .18);
+        border-radius: clamp(7px, 2.2vw, 18px);
+        background: var(--paper);
+        color: var(--ink);
+        grid-template-rows: clamp(30px, 10vh, 41px) minmax(0, 1fr);
+        box-shadow: 0 24px 70px rgba(0, 0, 0, .3);
+      }
+
+      .voice-header {
+        display: flex;
+        min-width: 0;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 clamp(9px, 2.4vw, 19px);
+        border-bottom: 1px solid rgba(27, 29, 25, .18);
+      }
+
+      .brand-lockup,
+      .privacy-state,
+      .agent-layout,
+      .state-heading,
+      .state-rail,
+      .control-row,
+      .scene-heading,
+      .scene-reading {
+        display: flex;
+        min-width: 0;
+        align-items: center;
+      }
+
+      .brand-lockup { gap: clamp(5px, 1.1vw, 8px); }
+      .brand-mark {
+        display: grid;
+        width: clamp(13px, 2.5vw, 19px);
+        aspect-ratio: 1;
+        place-items: center;
+        border-radius: 50%;
+        background: var(--ink);
+        color: var(--acid);
+        font: 900 clamp(4px, .8vw, 6px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+
+      .brand-lockup strong {
+        font-size: clamp(7px, 1.5vw, 12px);
+        letter-spacing: -.035em;
+        white-space: nowrap;
+      }
+
+      .brand-lockup span,
+      .privacy-state,
+      .assistant-kicker,
+      .state-index,
+      .state-description,
+      .state-rail,
+      .transcript-label,
+      .transcript-meta,
+      .control-button,
+      .scene-kicker,
+      .scene-status,
+      .scene-reading,
+      .room-label {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        text-transform: uppercase;
+      }
+
+      .brand-lockup span,
+      .privacy-state {
+        color: #74766d;
+        font-size: clamp(3px, .7vw, 5px);
+        font-weight: 820;
+        letter-spacing: .12em;
+        white-space: nowrap;
+      }
+
+      .privacy-state { gap: 5px; }
+      .privacy-state::before {
+        width: clamp(4px, .72vw, 6px);
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: var(--mint);
+        content: '';
+      }
+
+      .voice-workspace {
+        display: grid;
+        min-width: 0;
+        min-height: 0;
+        grid-template-columns: minmax(0, 1.25fr) minmax(230px, .8fr);
+      }
+
+      .assistant-panel {
+        position: relative;
+        display: flex;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        flex-direction: column;
+        padding: clamp(13px, 3.2vw, 26px);
+        border-right: 1px solid rgba(27, 29, 25, .18);
+      }
+
+      .assistant-kicker {
+        color: #777970;
+        font-size: clamp(3px, .72vw, 6px);
+        font-weight: 850;
+        letter-spacing: .12em;
+      }
+
+      .assistant-title {
+        margin: clamp(8px, 1.7vw, 13px) 0 0;
+        font: 900 clamp(24px, 5.2vw, 42px)/.8 ui-serif, Georgia, serif;
+        letter-spacing: -.07em;
+      }
+
+      .assistant-title em { color: #9b4737; font-weight: 520; }
+
+      .agent-layout {
+        flex: 1;
+        margin-top: clamp(10px, 2.3vw, 18px);
+        align-items: center;
+        gap: clamp(12px, 2.6vw, 21px);
+      }
+
+      .vector-stage {
+        position: relative;
+        width: clamp(96px, 22vw, 166px);
+        aspect-ratio: 1;
+        flex: 0 0 auto;
+      }
+
+      .vector-stage::before {
+        position: absolute;
+        inset: 12%;
+        border: 1px solid rgba(32, 42, 35, .12);
+        border-radius: 50%;
+        content: '';
+      }
+
       .vector-stage svg { display: block; width: 100%; height: 100%; overflow: visible; }
-      .vector-copy { padding-left: 17px; }
-      .state-kicker { margin: 0 0 6px; color: #657064; font: 800 6px/1 ui-monospace, monospace; letter-spacing: .14em; text-transform: uppercase; }
-      .state-name { margin: 0; font: 950 22px/.85 system-ui, sans-serif; letter-spacing: -.065em; text-transform: uppercase; }
-      .state-description { max-width: 135px; margin: 9px 0 0; color: #596158; font: 650 7px/1.45 system-ui, sans-serif; }
-      .state-rail { display: flex; gap: 4px; margin-top: 11px; }
-      .state-rail i { width: 25px; height: 3px; border-radius: 9px; background: #252a2420; }
-      .state-rail i.active { background: var(--state-color, #4867ff); }
-      .machine-core { transform-box: fill-box; transform-origin: center; }
-      .machine-orbit, .response-rays { transform-box: view-box; transform-origin: center; }
+
+      .machine-core,
+      .machine-orbit,
+      .listening-waves,
+      .response-rays {
+        transform-box: view-box;
+        transform-origin: center;
+      }
+
+      .state-glyph { opacity: 0; }
+      .assistant-panel[data-state="ready"] .glyph-ready,
+      .assistant-panel[data-state="listening"] .glyph-listening,
+      .assistant-panel[data-state="review"] .glyph-review,
+      .assistant-panel[data-state="applied"] .glyph-applied { opacity: 1; }
+
+      .listening-waves,
       .response-rays { opacity: 0; }
-      .library-badge { color: #273026; background: #f7f3e8d9; border-color: #252b241c; }
-      .scene-caption { left: auto; right: 12px; color: #48504783; }
+      .assistant-panel[data-state="listening"] .listening-waves { opacity: 1; }
+      .assistant-panel[data-state="applied"] .response-rays { opacity: 1; }
+
+      .agent-copy { min-width: 0; flex: 1; }
+      .state-heading { justify-content: space-between; gap: 8px; }
+      .state-index {
+        color: #797b72;
+        font-size: clamp(3px, .7vw, 5px);
+        font-weight: 850;
+        letter-spacing: .11em;
+        white-space: nowrap;
+      }
+
+      .state-name {
+        margin: clamp(6px, 1.3vw, 10px) 0 0;
+        font-size: clamp(15px, 3.5vw, 27px);
+        font-weight: 930;
+        line-height: .88;
+        letter-spacing: -.055em;
+        text-transform: uppercase;
+      }
+
+      .state-description {
+        max-width: 29em;
+        margin: clamp(8px, 1.6vw, 12px) 0 0;
+        color: #64675f;
+        font-size: clamp(4px, .8vw, 6px);
+        font-weight: 720;
+        letter-spacing: .045em;
+        line-height: 1.5;
+      }
+
+      .state-rail {
+        margin-top: clamp(9px, 1.8vw, 14px);
+        gap: clamp(3px, .65vw, 5px);
+      }
+
+      .state-segment {
+        display: grid;
+        min-width: 0;
+        flex: 1;
+        color: #8a8c83;
+        font-size: clamp(2px, .58vw, 4px);
+        font-weight: 830;
+        letter-spacing: .07em;
+        gap: 4px;
+      }
+
+      .state-segment::before {
+        width: 100%;
+        height: clamp(2px, .42vw, 3px);
+        border-radius: 99px;
+        background: rgba(28, 30, 25, .13);
+        content: '';
+      }
+
+      .state-segment.active { color: #34382f; }
+      .state-segment.active::before { background: var(--state-color, var(--blue)); }
+
+      .transcript-card {
+        min-width: 0;
+        margin-top: clamp(8px, 1.7vw, 13px);
+        padding: clamp(7px, 1.5vw, 11px);
+        border: 1px solid rgba(27, 30, 24, .18);
+        border-radius: clamp(5px, 1.2vw, 9px);
+        background: rgba(255, 255, 255, .22);
+      }
+
+      .transcript-label {
+        color: #777970;
+        font-size: clamp(3px, .65vw, 5px);
+        font-weight: 820;
+        letter-spacing: .1em;
+      }
+
+      .transcript-text {
+        overflow: hidden;
+        margin: 5px 0 0;
+        font-size: clamp(6px, 1.25vw, 9px);
+        font-weight: 820;
+        line-height: 1.25;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .transcript-meta {
+        display: block;
+        margin-top: 4px;
+        color: #8b8d84;
+        font-size: clamp(2px, .56vw, 4px);
+        font-weight: 760;
+        letter-spacing: .07em;
+      }
+
+      .control-row {
+        margin-top: clamp(8px, 1.7vw, 13px);
+        gap: clamp(4px, .8vw, 7px);
+      }
+
+      .control-button {
+        padding: clamp(5px, 1vw, 8px) clamp(7px, 1.3vw, 10px);
+        border: 1px solid rgba(28, 30, 25, .28);
+        border-radius: 999px;
+        background: transparent;
+        cursor: pointer;
+        font-size: clamp(3px, .66vw, 5px);
+        font-weight: 850;
+        letter-spacing: .08em;
+        white-space: nowrap;
+      }
+
+      .control-button.talk {
+        border-color: var(--ink);
+        background: var(--ink);
+        color: #f0ede0;
+        touch-action: none;
+      }
+
+      .control-button.talk[aria-pressed="true"] { background: var(--coral); color: #251b18; }
+      .control-button.confirm:not(:disabled) { border-color: var(--forest); background: var(--acid); color: var(--forest); }
+      .control-button:disabled { cursor: default; opacity: .36; }
+      .control-button:focus-visible {
+        outline: 2px solid var(--coral);
+        outline-offset: 2px;
+      }
+
+      .scene-panel {
+        position: relative;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        padding: clamp(12px, 2.9vw, 23px);
+        background: #26312b;
+        color: #eeebdf;
+      }
+
+      .scene-heading { justify-content: space-between; gap: 8px; }
+      .scene-kicker,
+      .scene-status,
+      .scene-reading,
+      .room-label {
+        font-size: clamp(3px, .68vw, 5px);
+        font-weight: 830;
+        letter-spacing: .1em;
+      }
+      .scene-kicker { color: #aeb4ab; }
+      .scene-status { color: var(--acid); white-space: nowrap; }
+
+      .room-preview {
+        position: absolute;
+        inset: clamp(36px, 9vw, 70px) clamp(11px, 2.8vw, 22px) clamp(38px, 9vw, 68px);
+        overflow: hidden;
+        border: 1px solid rgba(237, 233, 218, .17);
+        border-radius: clamp(5px, 1.3vw, 10px);
+        background:
+          linear-gradient(180deg, #333a36 0 62%, #1e211e 62%);
+      }
+
+      .room-window {
+        position: absolute;
+        top: 10%;
+        left: 9%;
+        width: 38%;
+        height: 49%;
+        border: 1px solid rgba(235, 232, 218, .22);
+        background: linear-gradient(165deg, #555971, #292d3c);
+      }
+      .room-window::before,
+      .room-window::after { position: absolute; background: rgba(236, 232, 218, .18); content: ''; }
+      .room-window::before { top: 49%; right: 0; left: 0; height: 1px; }
+      .room-window::after { top: 0; bottom: 0; left: 50%; width: 1px; }
+
+      .room-lamp {
+        position: absolute;
+        z-index: 3;
+        right: 19%;
+        bottom: 24%;
+        width: 3%;
+        height: 38%;
+        background: #b7b5a8;
+      }
+      .room-lamp::before {
+        position: absolute;
+        top: -18%;
+        left: 50%;
+        width: clamp(16px, 4.5vw, 34px);
+        aspect-ratio: 1.45;
+        border-radius: 50% 50% 24% 24%;
+        background: #d5d0bf;
+        content: '';
+        translate: -50% -50%;
+      }
+
+      .scene-glow {
+        position: absolute;
+        z-index: 1;
+        right: -4%;
+        bottom: -14%;
+        width: 73%;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(255, 210, 118, .56), rgba(255, 210, 118, 0) 68%);
+        opacity: .08;
+        pointer-events: none;
+      }
+
+      .scene-panel[data-scene="focus"] .scene-glow { opacity: 1; }
+      .scene-panel[data-scene="focus"] .room-preview { border-color: rgba(255, 218, 132, .45); }
+      .scene-panel[data-scene="focus"] .room-lamp::before { background: #ffd98d; }
+
+      .room-chair {
+        position: absolute;
+        z-index: 4;
+        left: 32%;
+        bottom: 14%;
+        width: 29%;
+        height: 28%;
+        border-radius: 42% 42% 14% 14%;
+        background: #5b665f;
+        box-shadow: 0 10px 0 -7px #171a17;
+      }
+
+      .room-table {
+        position: absolute;
+        z-index: 4;
+        right: 8%;
+        bottom: 13%;
+        width: 22%;
+        height: 4%;
+        background: #a78560;
+      }
+      .room-table::after { position: absolute; top: 100%; left: 48%; width: 4%; height: 330%; background: #8c6d4d; content: ''; }
+      .room-label { position: absolute; z-index: 5; bottom: 6%; left: 7%; color: #9da39a; }
+
+      .scene-reading {
+        position: absolute;
+        right: clamp(12px, 2.8vw, 22px);
+        bottom: clamp(12px, 2.7vw, 21px);
+        left: clamp(12px, 2.8vw, 22px);
+        justify-content: space-between;
+        color: #9fa69d;
+      }
+      .scene-reading strong { color: #eee9d9; }
+
+      @media (prefers-reduced-motion: reduce) {
+        .scene-glow { transition: none; }
+      }
+
+      @media (max-width: 420px) {
+        .voice-stage { padding: 5px; }
+        .voice-shell { border-radius: 7px; grid-template-rows: 21px minmax(0, 1fr); }
+        .voice-header { padding: 0 7px; }
+        .voice-workspace { grid-template-columns: minmax(0, 1.38fr) minmax(105px, .8fr); }
+        .assistant-panel { padding: 7px; }
+        .assistant-title { margin-top: 4px; font-size: 16px; }
+        .agent-layout { margin-top: 4px; align-items: flex-start; gap: 6px; }
+        .vector-stage { width: 48px; }
+        .state-name { margin-top: 3px; font-size: 10px; }
+        .state-description { display: none; }
+        .state-rail { margin-top: 3px; }
+        .transcript-card { margin-top: 3px; padding: 4px; }
+        .transcript-text { margin-top: 3px; font-size: 5px; }
+        .control-row { margin-top: 3px; gap: 3px; }
+        .control-button { padding: 3px 5px; }
+        .scene-panel { padding: 8px; }
+        .room-preview { inset: 30px 8px 31px; }
+        .scene-reading { right: 8px; bottom: 8px; left: 8px; }
+      }
+
+      @media (max-width: 220px), (max-height: 105px) {
+        .voice-stage { padding: 2px; }
+        .voice-shell { border-radius: 4px; grid-template-rows: 10px minmax(0, 1fr); }
+        .voice-header { padding: 0 3px; }
+        .brand-lockup { gap: 2px; }
+        .brand-mark { width: 5px; font-size: 1.4px; }
+        .brand-lockup strong { font-size: 3px; }
+        .brand-lockup span { display: none; }
+        .privacy-state { font-size: 1.3px; gap: 2px; }
+        .privacy-state::before { width: 2px; }
+        .voice-workspace { grid-template-columns: minmax(0, 1.35fr) minmax(48px, .8fr); }
+        .assistant-panel { padding: 4px; }
+        .assistant-kicker { font-size: 1.3px; }
+        .assistant-title { margin-top: 2px; font-size: 6px; line-height: 1; white-space: nowrap; }
+        .assistant-title br { display: none; }
+        .agent-layout { margin-top: 3px; gap: 3px; }
+        .vector-stage { width: 27px; }
+        .state-index { font-size: 1.1px; }
+        .state-name { margin-top: 2px; font-size: 5px; }
+        .state-description { margin-top: 2px; font-size: 1.2px; }
+        .state-rail { margin-top: 2px; gap: 1px; }
+        .state-segment { font-size: 1px; gap: 1px; }
+        .state-segment::before { height: 1px; }
+        .transcript-card { margin-top: 2px; padding: 2px; border-radius: 2px; }
+        .transcript-label { font-size: 1.1px; }
+        .transcript-text { margin-top: 1px; font-size: 1.5px; }
+        .transcript-meta { margin-top: 1px; font-size: 1px; }
+        .control-row { margin-top: 2px; gap: 1px; }
+        .control-button { padding: 1px 2px; font-size: 1.1px; }
+        .scene-panel { padding: 4px; }
+        .scene-kicker,
+        .scene-status,
+        .scene-reading,
+        .room-label { font-size: 1.2px; }
+        .room-preview { inset: 14px 4px 14px; border-radius: 2px; }
+        .scene-reading { right: 4px; bottom: 4px; left: 4px; }
+        .room-lamp::before { width: 8px; }
+      }
     </style>
   </head>
   <body>
-    <main class="preview-stage">
-      <div class="vector-console" id="vector-console" data-preview-mechanism="motion-vector-state-machine" role="button" tabindex="0" aria-label="Cycle the vector agent through idle, listening, and responding states">
-        <div class="vector-stage">
-          <svg viewBox="0 0 120 120" role="img" aria-label="An animated vector agent changing state">
-            <defs>
-              <radialGradient id="core-gradient"><stop offset="0" stop-color="#fff"/><stop offset=".35" stop-color="#c6ff86"/><stop offset="1" stop-color="#4f6cff"/></radialGradient>
-            </defs>
-            <g class="machine-orbit" id="machine-orbit" fill="none" stroke="#53645a" stroke-width="1">
-              <circle cx="60" cy="60" r="45" stroke-dasharray="3 8" opacity=".36"/>
-              <path d="M18 58c8-32 34-46 62-38" stroke="#4f6cff" stroke-width="2.2" stroke-linecap="round"/>
-              <circle cx="82" cy="21" r="3" fill="#4f6cff" stroke="none"/>
-            </g>
-            <g class="response-rays" id="response-rays" fill="none" stroke="#ff6b52" stroke-width="2" stroke-linecap="round">
-              <path d="M60 5v10M60 105v10M5 60h10M105 60h10M21 21l7 7M92 92l7 7M99 21l-7 7M28 92l-7 7"/>
-            </g>
-            <g class="machine-core" id="machine-core">
-              <path id="core-shape" d="M60 28C79 28 94 42 94 60S79 92 60 92 26 78 26 60 41 28 60 28Z" fill="url(#core-gradient)" stroke="#26342d" stroke-width="1.2"/>
-              <path id="state-glyph" d="M44 61c7-11 25-11 32 0-7 11-25 11-32 0Z" fill="#16221b"/>
-              <circle cx="60" cy="61" r="5" fill="#f2ffe1"/>
-            </g>
-          </svg>
+    <main class="preview-stage voice-stage" id="voice-stage" aria-label="Hush Home voice assistant controlling a reading-light scene">
+      <section class="voice-shell" id="voice-shell" data-preview-mechanism="motion-input-driven-vector-state-machine">
+        <header class="voice-header">
+          <div class="brand-lockup">
+            <i class="brand-mark" aria-hidden="true">H</i>
+            <strong>Hush Home</strong>
+            <span>Room agent · Living room</span>
+          </div>
+          <span class="privacy-state">Local audio · mic off</span>
+        </header>
+
+        <div class="voice-workspace">
+          <section class="assistant-panel" id="assistant-panel" data-state="ready" style="--state-color: var(--blue)">
+            <span class="assistant-kicker">Scene task 03 · Reading focus</span>
+            <h1 class="assistant-title">Set the room<br /> for <em>reading.</em></h1>
+
+            <div class="agent-layout">
+              <div class="vector-stage">
+                <svg viewBox="0 0 120 120" role="img" id="agent-vector" aria-label="Voice assistant ready">
+                  <defs>
+                    <radialGradient id="core-gradient"><stop offset="0" stop-color="#fffef1"/><stop offset=".38" stop-color="#d8f07c"/><stop offset="1" stop-color="#5268e8"/></radialGradient>
+                  </defs>
+                  <g class="machine-orbit" id="machine-orbit" fill="none" stroke="#58665d" stroke-width="1">
+                    <circle cx="60" cy="60" r="47" stroke-dasharray="3 8" opacity=".32"/>
+                    <path d="M17 58c8-32 35-47 64-38" stroke="var(--state-color)" stroke-width="2.2" stroke-linecap="round"/>
+                    <circle cx="83" cy="21" r="3" fill="var(--state-color)" stroke="none"/>
+                  </g>
+                  <g class="listening-waves" id="listening-waves" fill="none" stroke="#2d8b70" stroke-width="2" stroke-linecap="round">
+                    <path d="M21 44c-8 9-8 23 0 32M99 44c8 9 8 23 0 32"/>
+                    <path d="M14 36c-13 14-13 34 0 48M106 36c13 14 13 34 0 48" opacity=".45"/>
+                  </g>
+                  <g class="response-rays" id="response-rays" fill="none" stroke="#ef7058" stroke-width="2" stroke-linecap="round">
+                    <path d="M60 4v10M60 106v10M4 60h10M106 60h10M20 20l7 7M93 93l7 7M100 20l-7 7M27 93l-7 7"/>
+                  </g>
+                  <g class="machine-core" id="machine-core">
+                    <path id="core-shape" d="M60 27C80 27 95 42 95 60S80 93 60 93 25 78 25 60 40 27 60 27Z" fill="url(#core-gradient)" stroke="var(--state-color)" stroke-width="1.2"/>
+                    <g class="state-glyph glyph-ready" fill="none" stroke="#17231c" stroke-width="3" stroke-linecap="round"><path d="M43 61c8-11 26-11 34 0-8 11-26 11-34 0Z"/><circle cx="60" cy="61" r="4" fill="#17231c" stroke="none"/></g>
+                    <g class="state-glyph glyph-listening" fill="none" stroke="#17382d" stroke-width="3" stroke-linecap="round"><path d="M47 64v-8M55 68V51M63 66V54M71 63v-6"/></g>
+                    <g class="state-glyph glyph-review" fill="#382e70"><circle cx="49" cy="60" r="3"/><circle cx="60" cy="60" r="3"/><circle cx="71" cy="60" r="3"/></g>
+                    <g class="state-glyph glyph-applied" fill="none" stroke="#4d1b12" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="m46 61 9 9 20-23"/></g>
+                  </g>
+                </svg>
+              </div>
+
+              <div class="agent-copy">
+                <div class="state-heading"><span class="state-index" id="state-index">State 01 / 04</span><span class="state-index" id="input-state">Awaiting input</span></div>
+                <h2 class="state-name" id="state-name">Ready</h2>
+                <p class="state-description" id="state-description">The room agent is available, but no microphone or scene action is active.</p>
+                <div class="state-rail" aria-label="Voice task states">
+                  <span class="state-segment active" data-state-segment="ready">Ready</span>
+                  <span class="state-segment" data-state-segment="listening">Listen</span>
+                  <span class="state-segment" data-state-segment="review">Review</span>
+                  <span class="state-segment" data-state-segment="applied">Applied</span>
+                </div>
+
+                <div class="transcript-card" id="transcript-card" data-visible="false">
+                  <span class="transcript-label" id="transcript-label">Prompt</span>
+                  <p class="transcript-text" id="transcript-text">Hold to say “Set reading lights to focus.”</p>
+                  <span class="transcript-meta" id="transcript-meta">No audio captured · local only</span>
+                </div>
+
+                <div class="control-row">
+                  <button class="control-button talk" id="talk-button" type="button" aria-pressed="false">Hold to speak</button>
+                  <button class="control-button confirm" id="confirm-button" type="button" disabled>Apply scene</button>
+                  <button class="control-button" id="reset-button" type="button" disabled>Reset</button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <aside class="scene-panel" id="scene-panel" data-scene="neutral" aria-label="Living room scene preview">
+            <div class="scene-heading"><span class="scene-kicker">Scene preview / Living room</span><span class="scene-status" id="scene-status">Waiting</span></div>
+            <div class="room-preview">
+              <span class="room-window" aria-hidden="true"></span>
+              <span class="scene-glow" id="scene-glow" aria-hidden="true"></span>
+              <span class="room-lamp" aria-hidden="true"></span>
+              <span class="room-chair" aria-hidden="true"></span>
+              <span class="room-table" aria-hidden="true"></span>
+              <span class="room-label">Reading corner · fixture 02</span>
+            </div>
+            <div class="scene-reading"><span>Reading scene</span><strong id="scene-reading-value">Not applied</strong></div>
+          </aside>
         </div>
-        <section class="vector-copy">
-          <p class="state-kicker">Agent vector / state 01–03</p>
-          <h1 class="state-name" id="state-name">Idle</h1>
-          <p class="state-description" id="state-description">A calm orbit keeps the agent available without demanding attention.</p>
-          <div class="state-rail" aria-hidden="true"><i></i><i></i><i></i></div>
-        </section>
-      </div>
-      <span class="library-badge">Motion · SVG FSM</span>
-      <span class="scene-caption">click / Enter to advance state</span>
+      </section>
     </main>
     <script type="module" src="./src/interactive-vector-state-machine-demo.js"></script>
   </body>

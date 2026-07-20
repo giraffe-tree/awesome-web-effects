@@ -821,6 +821,46 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.wait_for_timeout(900)
             elif index == 34:
                 page.keyboard.press("Home")
+        elif demo["id"] == "interactive-vector-state-machine":
+            if index == 2:
+                page.locator('#talk-button').hover()
+                page.mouse.down()
+            elif index == 4:
+                page.mouse.up()
+            elif index == 5:
+                page.wait_for_timeout(120)
+            elif index == 6:
+                page.locator('#confirm-button').click()
+            elif index == 8:
+                page.wait_for_timeout(520)
+            elif index == 10:
+                page.locator('#talk-button').hover()
+                page.mouse.down()
+            elif index == 11:
+                page.wait_for_timeout(90)
+                page.mouse.up()
+            elif index == 12:
+                page.locator('#reset-button').click()
+            elif index == 14:
+                page.wait_for_timeout(420)
+            elif index == 16:
+                page.locator('#talk-button').focus()
+                page.keyboard.down("Enter")
+            elif index == 18:
+                page.keyboard.up("Enter")
+            elif index == 20:
+                page.locator('#confirm-button').click()
+            elif index == 22:
+                page.wait_for_timeout(520)
+            elif index == 25:
+                page.locator('#talk-button').focus()
+                page.keyboard.down("Space")
+            elif index == 27:
+                page.keyboard.up("Space")
+            elif index == 29:
+                page.keyboard.press("Escape")
+            elif index == 31:
+                page.wait_for_timeout(520)
         elif demo["id"] == "pointer-rotated-dot-matrix-globe":
             if index == 2:
                 page.locator('#focus-button').click()
@@ -1991,6 +2031,43 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["renderIgnoresPreviewClock"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture a human-operated eight-column departure board with cadence, interruption, completion, and reset evidence: {interaction!r}")
+    elif demo["id"] == "interactive-vector-state-machine":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            interaction["automaticStateCycle"]
+            or interaction["automaticRehearsal"]
+            or interaction["previewClockDriven"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInput"]
+            or not interaction["userInitiatedChangesOnly"]
+            or not interaction["initialStaticVerified"]
+            or interaction["inputCount"] < 12
+            or interaction["pointerInputCount"] < 7
+            or interaction["keyboardInputCount"] < 5
+            or interaction["pressStartCount"] < 4
+            or interaction["captureCompleteCount"] < 4
+            or interaction["confirmCount"] < 2
+            or interaction["resetButtonCount"] < 1
+            or interaction["escapeResetCount"] < 1
+            or interaction["resetCount"] < 2
+            or interaction["transitionCount"] < 12
+            or interaction["motionStartCount"] < 12
+            or interaction["motionCompleteCount"] < 4
+            or interaction["motionCancelCount"] < 1
+            or len(interaction["transitionHistory"]) != 12
+            or not all(item["trusted"] for item in interaction["transitionHistory"])
+            or interaction["phase"] != "ready"
+            or interaction["stateIndex"] != 0
+            or interaction["transcript"] is not None
+            or interaction["appliedScene"]
+            or interaction["activeInput"]
+            or interaction["activeInputKind"] is not None
+            or interaction["holdDurationMs"] != 0
+            or interaction["animationActive"]
+            or interaction["inputKind"] != "keyboard"
+            or interaction["lastTrustedEvent"] != "escape-reset-agent"
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture held human input, transcript review, explicit room-scene approval, re-recording, interruption, and reset: {interaction!r}")
     elif demo["id"] == "pointer-rotated-dot-matrix-globe":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         if (

@@ -943,23 +943,23 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "interactive-vector-state-machine",
-    "name": "Interactive vector state machine",
-    "nameZh": "交互式矢量状态机",
+    "name": "Held-input room-scene assistant",
+    "nameZh": "按住输入的房间场景助手",
     "category": "animation",
     "sourceUrl": "https://github.com/rive-app/rive-wasm",
-    "difference": "输入驱动有记忆的矢量状态机；现有关键帧与共享布局没有显式状态转换和 Rive 输入。",
+    "difference": "Hush Home 把 Ready、Listening、Review、Applied 四个 SVG 几何态绑定到真实按住输入、转写审核和显式确认；客厅灯光只有在 Apply scene 后才从中性切到 40% warm。",
     "behavior": {
-      "trigger": "hover/press/state input",
-      "response": "Transition a vector creature across resting, alert, and confirmed states",
-      "timing": "finite-state blended transitions",
-      "layer": "Rive canvas"
+      "trigger": "real pointer/touch/pen hold-and-release, keyboard Enter/Space hold, explicit Apply, Reset, or Escape",
+      "response": "Move a local room command through ready, listening, review, and applied states while withholding the scene consequence until approval",
+      "timing": "human-owned finite-state transitions with interruptible Motion feedback and no automatic state cycle",
+      "layer": "full-frame SVG state machine, semantic transcript controls, and code-authored room preview"
     },
     "implementation": {
       "projectId": "motiondivision-motion",
       "projectUrl": "https://github.com/motiondivision/motion",
       "library": "motion@12.42.2",
       "renderer": "svg",
-      "snippet": "const control = animate(paths, { pathLength: [0.18, 1, 0.62, 0.18] }, { duration: 3 }); control.pause();",
+      "snippet": "talk.onpointerdown=e=>e.isTrusted&&transitionTo('listening'); talk.onpointerup=e=>e.isTrusted&&transitionTo('review');",
       "referenceUrl": "https://github.com/rive-app/rive-wasm"
     },
     "scores": {
@@ -971,13 +971,13 @@ export const effectExpansion100Specs = [
       "evidence": 9,
       "total": 94
     },
-    "rationaleZh": "状态输入与矢量动画绑定，交互契约独立而清楚。",
+    "rationaleZh": "矢量变形不再自我展示：按住时才监听、松开后只进入审核、确认后房间才变暖，四态几何和真实任务结果形成完整因果链。",
     "batch": "B",
-    "demo": "一枚生物按钮在 rest、hover、press、success 间连续变形。",
-    "capture": "真实 pointer hover→press→触发 success input→等待状态回落。",
+    "demo": "Hush Home 客厅助手：按住说出阅读灯指令，松开得到本地转写，显式 Apply 后才把灯光设置为 40% warm；可随时重录或复位。",
+    "capture": "真实鼠标按住/松开→审核→确认→重录与重置；再以 Enter/Space 按住流程完成确认和 Escape 复位，验证中断与键盘等价路径。",
     "risk": {
       "level": "high",
-      "detail": "必须有自制或许可明确的 .riv 资产；远程社区资产不可直接打包。"
+      "detail": "四态转换必须来自受信输入；转写与房间结果不可提前出现，快速重录需取消旧 Motion，且 reduced-motion 仍保持同一语义状态机。"
     },
     "observedImplementation": {
       "projectId": "rive-app-rive-wasm",

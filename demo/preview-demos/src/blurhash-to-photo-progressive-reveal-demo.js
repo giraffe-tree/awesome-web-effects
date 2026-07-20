@@ -1,6 +1,6 @@
 import p5 from 'p5';
 import { installPreviewController, markPreviewFailure } from '../shared.js';
-import { clamp, loopTime, smoothstep } from './batch-c-utils.js';
+import { clamp, smoothstep } from './batch-c-utils.js';
 
 const CHARACTERS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz#$%*+,-.:;=?@[]^_{|}~';
 const PHOTO_URL = new URL('../assets/aesthetic-collection/coastal-retreat.jpg', import.meta.url).href;
@@ -154,8 +154,20 @@ function drawCover(context, image, frame) {
 
 try {
   const host = document.querySelector('#blurhash-host');
+  const stage = document.querySelector('.preview-stage');
   const state = document.querySelector('#decode-state');
-  let time = 0;
+  const hint = document.querySelector('#load-hint');
+  const loadCursor = document.querySelector('#load-cursor');
+  let clock = 0;
+  let reveal = 0;
+  let targetReveal = 0;
+  let transitionFrom = 0;
+  let transitionStart = 0;
+  let pointerOverPhoto = false;
+  let locked = false;
+  let focused = false;
+  let pointerEvents = 0;
+  let keyboardEvents = 0;
   let draws = 0;
   let lastRealtime = -Infinity;
   let sketch;
@@ -187,12 +199,95 @@ try {
     throw error;
   });
 
+  const setTarget = value => {
+    const next = value ? 1 : 0;
+    if (next === targetReveal) return;
+    transitionFrom = reveal;
+    transitionStart = clock;
+    targetReveal = next;
+  };
+
+  const syncIntent = () => {
+    setTarget(locked || pointerOverPhoto);
+    stage.dataset.loadIntent = locked ? 'locked' : pointerOverPhoto ? 'active' : 'idle';
+  };
+
+  const pointForEvent = event => {
+    const bounds = host.getBoundingClientRect();
+    return {
+      x: (event.clientX - bounds.left) / bounds.width * 320,
+      y: (event.clientY - bounds.top) / bounds.height * 180,
+    };
+  };
+
+  const isInsidePhoto = point => point.x >= PHOTO_FRAME.x
+    && point.x <= PHOTO_FRAME.x + PHOTO_FRAME.width
+    && point.y >= PHOTO_FRAME.y
+    && point.y <= PHOTO_FRAME.y + PHOTO_FRAME.height;
+
+  host.addEventListener('pointermove', event => {
+    pointerEvents += 1;
+    const point = pointForEvent(event);
+    const inside = event.pointerType !== 'touch' && isInsidePhoto(point);
+    loadCursor.style.left = `${point.x}px`;
+    loadCursor.style.top = `${point.y}px`;
+    loadCursor.dataset.visible = String(inside);
+    if (inside === pointerOverPhoto) return;
+    pointerOverPhoto = inside;
+    syncIntent();
+  });
+
+  host.addEventListener('pointerleave', () => {
+    pointerOverPhoto = false;
+    loadCursor.dataset.visible = 'false';
+    syncIntent();
+  });
+
+  host.addEventListener('pointerdown', event => {
+    pointerEvents += 1;
+    if (!isInsidePhoto(pointForEvent(event))) return;
+    event.preventDefault();
+    if (locked) {
+      locked = false;
+      pointerOverPhoto = false;
+      loadCursor.dataset.visible = 'false';
+    } else {
+      locked = true;
+      if (event.pointerType === 'touch') pointerOverPhoto = false;
+    }
+    host.focus({ preventScroll: true });
+    syncIntent();
+  });
+
+  host.addEventListener('focus', () => { focused = true; });
+  host.addEventListener('blur', () => { focused = false; });
   host.addEventListener('keydown', event => {
-    if (event.key === ' ') {
+    if (event.key === ' ' || event.key === 'Enter') {
       event.preventDefault();
-      time = 0;
+      keyboardEvents += 1;
+      locked = !locked;
+      syncIntent();
+    } else if (event.key === 'Escape') {
+      event.preventDefault();
+      keyboardEvents += 1;
+      locked = false;
+      pointerOverPhoto = false;
+      loadCursor.dataset.visible = 'false';
+      syncIntent();
     }
   });
+
+  const updateReveal = seconds => {
+    if (seconds < clock) {
+      transitionFrom = reveal;
+      transitionStart = seconds;
+    }
+    clock = seconds;
+    const duration = targetReveal > transitionFrom ? .72 : .5;
+    const progress = smoothstep(clamp((clock - transitionStart) / duration));
+    reveal = transitionFrom + (targetReveal - transitionFrom) * progress;
+    if (Math.abs(reveal - targetReveal) < .001) reveal = targetReveal;
+  };
 
   sketch = new p5(p => {
     p.setup = () => {
@@ -209,14 +304,6 @@ try {
     p.draw = () => {
       if (!placeholder || !photo) return;
       draws += 1;
-      const phase = loopTime(time) / 3;
-      const reveal = phase < .18
-        ? 0
-        : phase < .5
-          ? smoothstep((phase - .18) / .32)
-          : phase < .82
-            ? 1
-            : 1 - smoothstep((phase - .82) / .18);
       const context = p.drawingContext;
 
       p.background('#e9e4da');
@@ -233,8 +320,8 @@ try {
         drawCover(context, photo, PHOTO_FRAME);
         context.restore();
       }
-      if (reveal < .96) {
-        const shimmerX = PHOTO_FRAME.x - 55 + (PHOTO_FRAME.width + 110) * clamp((phase - .03) / .47);
+      if (reveal > .01 && reveal < .96) {
+        const shimmerX = PHOTO_FRAME.x - 55 + (PHOTO_FRAME.width + 110) * reveal;
         const shimmer = context.createLinearGradient(shimmerX - 38, 0, shimmerX + 38, 0);
         shimmer.addColorStop(0, 'rgba(255,255,255,0)');
         shimmer.addColorStop(.5, `rgba(255,255,255,${.1 * (1 - reveal)})`);
@@ -246,9 +333,25 @@ try {
 
       const percentage = Math.round(reveal * 100);
       state.dataset.ready = String(percentage === 100);
-      state.textContent = percentage === 0 ? 'HASH · WAITING' : percentage === 100 ? 'PHOTO · READY' : `DETAIL · ${String(percentage).padStart(2, '0')}%`;
+      state.textContent = percentage === 0 ? 'HASH · HOVER' : percentage === 100 ? 'PHOTO · LIVE' : `DETAIL · ${String(percentage).padStart(2, '0')}%`;
+      hint.textContent = locked
+        ? 'LOCKED · TAP TO RESET'
+        : pointerOverPhoto
+          ? percentage === 100 ? 'MOVE AWAY TO BLUR' : 'HOVER REQUEST · LOADING'
+          : percentage > 0
+            ? 'RETURNING TO HASH'
+            : focused ? 'PRESS SPACE / ENTER' : 'HOVER / TAP PHOTO';
     };
   }, host);
+
+  window.__PREVIEW_INTERACTION_STATE__ = () => ({
+    pointerEvents,
+    keyboardEvents,
+    pointerOverPhoto,
+    locked,
+    reveal,
+    targetReveal,
+  });
 
   window.__PREVIEW_RUNTIME_ASSERT__ = () => (
     sketch instanceof p5
@@ -259,6 +362,8 @@ try {
     && decoded?.pixels.length === HASH_WIDTH * HASH_HEIGHT * 4
     && decoded?.nx === COMPONENT_X
     && decoded?.ny === COMPONENT_Y
+    && typeof window.__PREVIEW_INTERACTION_STATE__ === 'function'
+    && host.tabIndex === 0
     && draws > 0
   );
 
@@ -269,7 +374,7 @@ try {
     render: (seconds, manual) => {
       if (!manual && seconds - lastRealtime < 1 / 24) return;
       lastRealtime = seconds;
-      time = seconds;
+      updateReveal(seconds);
       sketch.redraw();
     },
     ready,

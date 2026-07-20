@@ -239,17 +239,53 @@ def main() -> int:
                 "photo": [209, 144],
                 "capture": "real-demo",
             }
-            blurhash_frame.evaluate("window.__setPreviewTime(.3)")
             blurhash_start = blurhash_frame.locator("canvas").evaluate("canvas => canvas.toDataURL()")
-            blurhash_frame.evaluate("window.__setPreviewTime(1.5)")
+            expect(blurhash_frame.locator("#decode-state")).to_have_text("HASH · HOVER")
+            scaled_preview_box = blurhash_preview.bounding_box()
+            assert scaled_preview_box
+            preview_scale = scaled_preview_box["width"] / 320
+            page.mouse.move(
+                scaled_preview_box["x"] + 230 * preview_scale,
+                scaled_preview_box["y"] + 90 * preview_scale,
+            )
+            expect(blurhash_frame.locator("#decode-state")).to_have_text("PHOTO · LIVE")
             blurhash_revealed = blurhash_frame.locator("canvas").evaluate("canvas => canvas.toDataURL()")
             assert blurhash_start != blurhash_revealed, "Live BlurHash preview did not render different states."
+            pointer_interaction = blurhash_frame.evaluate("window.__PREVIEW_INTERACTION_STATE__()")
+            assert pointer_interaction["pointerEvents"] >= 1
+            assert pointer_interaction["pointerOverPhoto"] and pointer_interaction["targetReveal"] == 1
+            page.mouse.click(
+                scaled_preview_box["x"] + 230 * preview_scale,
+                scaled_preview_box["y"] + 90 * preview_scale,
+            )
+            expect(blurhash_frame.locator("#load-hint")).to_have_text("LOCKED · TAP TO RESET")
+            page.mouse.move(
+                scaled_preview_box["x"] + 32 * preview_scale,
+                scaled_preview_box["y"] + 90 * preview_scale,
+            )
+            expect(blurhash_frame.locator("#decode-state")).to_have_text("PHOTO · LIVE")
+            page.mouse.move(
+                scaled_preview_box["x"] + 230 * preview_scale,
+                scaled_preview_box["y"] + 90 * preview_scale,
+            )
+            page.mouse.click(
+                scaled_preview_box["x"] + 230 * preview_scale,
+                scaled_preview_box["y"] + 90 * preview_scale,
+            )
+            expect(blurhash_frame.locator("#decode-state")).to_have_text("HASH · HOVER")
+            blurhash_host = blurhash_frame.locator("#blurhash-host")
+            blurhash_host.press("Space")
+            expect(blurhash_frame.locator("#decode-state")).to_have_text("PHOTO · LIVE")
+            blurhash_host.press("Escape")
+            expect(blurhash_frame.locator("#decode-state")).to_have_text("HASH · HOVER")
+            keyboard_interaction = blurhash_frame.evaluate("window.__PREVIEW_INTERACTION_STATE__()")
+            assert keyboard_interaction["keyboardEvents"] == 2
+            assert not keyboard_interaction["locked"]
             live_shell_box = modal.locator(".modal-preview-frame-shell").bounding_box()
-            scaled_preview_box = blurhash_preview.bounding_box()
             assert live_shell_box and scaled_preview_box
             assert abs(live_shell_box["width"] - scaled_preview_box["width"]) < 1
             assert abs(live_shell_box["height"] - scaled_preview_box["height"]) < 1
-            page.keyboard.press("Escape")
+            modal.locator(".effect-modal-close").click()
             expect(modal).to_be_hidden()
 
             official_preview_expectations = {

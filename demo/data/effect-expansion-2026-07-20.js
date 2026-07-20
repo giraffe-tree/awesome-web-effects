@@ -3299,7 +3299,7 @@ export const effectExpansion100Specs = [
     "sourceUrl": "https://github.com/woltapp/blurhash",
     "difference": "紧凑编码色场先出现再交接高清图；普通 skeleton 没有内容相关色彩，图像 ambience 不表达加载。",
     "behavior": {
-      "trigger": "image request/load",
+      "trigger": "image-card hover, click, touch, or keyboard request",
       "response": "Decode a tiny content-aware color field and crossfade into the full image",
       "timing": "progressive two-stage media load",
       "layer": "image card"
@@ -3323,8 +3323,8 @@ export const effectExpansion100Specs = [
     },
     "rationaleZh": "加载占位与最终图共享色彩结构，进度语义清楚。",
     "batch": "C",
-    "demo": "三张照片先显示 32×32 BlurHash 色块，延迟后高清图从中心清晰。",
-    "capture": "阻断图片 900ms→显示 hash→解除加载→录下交叉淡化。",
+    "demo": "悬停图片卡加载清晰图；移开恢复 BlurHash，点击、触控或键盘可锁定切换。",
+    "capture": "真实移动指针进入图片→录下 Hash 到照片揭示→移出图片恢复占位图。",
     "risk": {
       "level": "low",
       "detail": "必须使用真实 hash decode；模糊同一图片不等于 BlurHash。"

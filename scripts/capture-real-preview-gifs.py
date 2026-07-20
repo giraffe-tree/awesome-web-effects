@@ -173,10 +173,18 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
     hashes: set[str] = set()
     for index in range(frame_count):
         preview_time = index / args.fps
+        if demo["id"] == "blurhash-to-photo-progressive-reveal":
+            pointer_x = 230 if .5 <= preview_time < 2.25 else 32
+            page.mouse.move(pointer_x, 90)
         page.evaluate("time => window.__setPreviewTime(time)", preview_time)
         frame_path = frame_root / f"{index:04d}.png"
         page.screenshot(path=str(frame_path), type="png")
         hashes.add(hashlib.sha256(frame_path.read_bytes()).hexdigest())
+
+    if demo["id"] == "blurhash-to-photo-progressive-reveal":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__()")
+        if interaction["pointerEvents"] < 3 or interaction["pointerOverPhoto"]:
+            raise RuntimeError(f"{demo['id']} did not capture a real pointer enter/leave sequence: {interaction!r}")
 
     minimum_unique = min(6, max(2, frame_count // 6))
     if len(hashes) < minimum_unique:

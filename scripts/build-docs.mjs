@@ -86,7 +86,7 @@ function visualShowcase(language) {
     const category = categoryById.get(effect.category);
     const name = isZh ? effect.nameZh : effect.name;
     const label = isZh ? category.labelZh : category.label;
-    return `<td width="33%" align="center"><a href="${liveDemo}#${effect.id}"><img src="demo/gifs/${source.preview}.gif" width="320" alt="${escapeHtml(name)}"></a><br><sub><strong>${escapeHtml(name)}</strong><br>${escapeHtml(label)} · ${effect.admission.total}/100</sub></td>`;
+    return `<td width="33%" align="center"><a href="${liveDemo}#${effect.id}"><img src="demo/gifs/${source.preview}.gif" width="270" alt="${escapeHtml(name)}"></a><br><sub><strong>${escapeHtml(name)}</strong><br>${escapeHtml(label)} · ${effect.admission.total}/100</sub></td>`;
   });
   const rows = [];
   for (let index = 0; index < cards.length; index += 3) {

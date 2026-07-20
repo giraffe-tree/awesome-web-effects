@@ -755,23 +755,23 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "audio-equalizer-typography",
-    "name": "Audio equalizer typography",
-    "nameZh": "活跃音轨均衡器排印",
+    "name": "Live-analyser letterform reshaping",
+    "nameZh": "实时分析器字形重塑",
     "category": "canvas",
     "sourceUrl": "https://soundraw.io/",
-    "difference": "真实频谱柱共同勾出一行标题轮廓，区别于随机 equalizer 和普通遥测图表。",
+    "difference": "真实 Web Audio AnalyserNode 的 128 个频率 bin 被映射到 PULSE 字形的 230 条纵向切片，直接改变单词轮廓的高度与频谱倾斜；底部小柱仅作辅助刻度，不再冒充效果主体。",
     "behavior": {
-      "trigger": "audio playback / analyser frames",
-      "response": "Reshape a typographic bar sculpture from real frequency bins",
-      "timing": "continuous signal-driven deformation",
-      "layer": "Canvas/SVG typographic sculpture"
+      "trigger": "explicit tone click, pointer/touch press-and-drag, or keyboard Enter/Space and pitch keys",
+      "response": "Start a real sawtooth source, read its live analyser, and materially stretch the masked PULSE letterform across low-to-high frequency slices",
+      "timing": "human-owned live spectrum response; silent static initial frame and no synthetic capture spectrum",
+      "layer": "full-frame p5 Canvas letterform test with semantic audio and pitch controls"
     },
     "implementation": {
       "projectId": "processing-p5-js",
       "projectUrl": "https://github.com/processing/p5.js",
       "library": "p5@2.3.0",
       "renderer": "canvas2d",
-      "snippet": "analyser.getByteFrequencyData(bins); line(x, baseline, x, baseline - (15 + bins[i] / 255 * 62));",
+      "snippet": "analyser.getByteFrequencyData(bins); for(let x=0;x<mask.width;x+=4){const e=bins[binFor(x)]/255;ctx.drawImage(mask,x,0,4,h,x,(h-h*(1+e*1.28))/2,4,h*(1+e*1.28));}",
       "referenceUrl": "https://soundraw.io/"
     },
     "scores": {
@@ -783,13 +783,13 @@ export const effectExpansion100Specs = [
       "evidence": 8,
       "total": 86
     },
-    "rationaleZh": "音频数据与标题雕塑绑定，暂停归位使机制可读。",
+    "rationaleZh": "PULSE 不再浮在频谱柱前：一个真实 p5 Canvas 先生成可校验的文字 mask，再由真人启动的 AnalyserNode 数据逐切片重塑轮廓；静音、实时、高低音和 reduced-motion 状态都保持可解释。",
     "batch": "A",
-    "demo": "24 根排版柱形成“LISTEN”轮廓，播放时按频段真实起伏。",
-    "capture": "播放固定音频→录制低频/高频峰值→暂停观察柱体归位。",
+    "demo": "Live Audio Letterform Test 把 PULSE 的 920×320 mask 切成 230 段；真人启动 sawtooth 后，128-bin 实时频谱控制每段高度和倾斜，拖动或键盘实时改变 110–880 Hz 音高。",
+    "capture": "真实点击启动，双次 pointer hold/drag 扫过音高，Home/End/Arrow 改频率，Space/Enter 切换锁定，Escape 回到静音原形；录制同时验证真实 analyser 读数。",
     "risk": {
       "level": "high",
-      "detail": "必须使用 AnalyserNode；随机 bar animation 直接拒绝。"
+      "detail": "AudioContext 只能由真人手势创建；频谱必须来自真实 AnalyserNode，字形变形要足够明显但仍保留 PULSE 的可读轮廓。"
     },
     "observedImplementation": {
       "projectId": "web-platform-audio",

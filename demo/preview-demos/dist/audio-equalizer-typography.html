@@ -1,9 +1,343 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>p5.js — Audio Equalizer Typography</title><style>
-:root{--preview-background:#070819}.eq-stage{background:radial-gradient(circle at 50% 55%,#2b2b7950,transparent 45%),#050612}.eq-copy{position:absolute;z-index:4;left:17px;top:44px;color:#fff;font:900 17px/.9 Georgia,serif;letter-spacing:-.04em;pointer-events:none}.eq-copy small{display:block;margin-top:7px;color:#8f9bce;font:800 6px/1 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase}.eq-host{position:absolute;inset:0}.eq-host canvas{width:100%!important;height:100%!important}.eq-play{position:absolute;z-index:5;left:17px;bottom:22px;height:23px;padding:0 9px;border:1px solid #a9b6ff4a;border-radius:99px;background:#151a45;color:#fff;font:900 6px/1 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;cursor:pointer}.scene-caption{display:none}
-</style>  <script type="module" crossorigin src="./assets/audio-equalizer-typography-De759vxY.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
-  <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
-  <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
-  <link rel="modulepreload" crossorigin href="./assets/batch-a-qa-CFcoNLob.js">
-  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage eq-stage"><div class="eq-host" id="eq-host"></div><div class="eq-copy">THE WORD<br/>IS THE<br/>SPECTRUM<small>real analyser data shapes the type</small></div><button class="eq-play" id="eq-play" type="button">Hear tone</button><span class="library-badge">p5.js · Web Audio analyser</span><span class="scene-caption">frequency energy turns a typographic silhouette into a live sculpture</span></main></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>p5.js — Live Audio Letterform Test</title>
+    <style>
+      :root {
+        --preview-background: #100b18;
+        --ink: #f6f0df;
+        --muted: #a59aaa;
+        --line: rgba(246, 240, 223, .16);
+        --coral: #ff785e;
+        --cyan: #74dfd0;
+        --acid: #ddf66a;
+        color-scheme: dark;
+      }
+
+      .preview-stage {
+        overflow: hidden;
+        color: var(--ink);
+        background: #100b18;
+      }
+
+      .type-stage {
+        --pitch-progress: .38;
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        outline: none;
+        touch-action: none;
+        cursor: ew-resize;
+      }
+
+      .type-stage:focus-visible { box-shadow: inset 0 0 0 2px var(--acid); }
+
+      #type-canvas-host,
+      #type-canvas-host canvas {
+        position: absolute;
+        inset: 0;
+        display: block;
+        width: 100% !important;
+        height: 100% !important;
+        pointer-events: none;
+      }
+
+      .topline {
+        position: absolute;
+        top: clamp(18px, 4.8vh, 24px);
+        right: clamp(21px, 4vw, 30px);
+        left: clamp(25px, 4vw, 30px);
+        z-index: 3;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        color: rgba(246, 240, 223, .48);
+        font: 800 clamp(6px, 1vw, 8px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+        pointer-events: none;
+      }
+
+      .topline strong { color: var(--ink); }
+      .session-id { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .session-id b { color: var(--coral); }
+
+      .type-copy {
+        position: absolute;
+        top: 25%;
+        left: clamp(25px, 4vw, 30px);
+        z-index: 3;
+        width: clamp(180px, 29vw, 222px);
+        pointer-events: none;
+      }
+
+      .eyebrow,
+      .audio-state,
+      .metric span,
+      .frequency-map,
+      .input-hint {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-weight: 800;
+        letter-spacing: .105em;
+        text-transform: uppercase;
+      }
+
+      .eyebrow {
+        display: block;
+        margin-bottom: 9px;
+        color: var(--cyan);
+        font-size: clamp(6px, .95vw, 8px);
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(25px, 4.25vw, 34px);
+        font-weight: 560;
+        letter-spacing: -.06em;
+        line-height: .93;
+      }
+
+      .type-copy > p {
+        max-width: 198px;
+        margin: 13px 0 0;
+        color: var(--muted);
+        font-size: clamp(7px, 1.05vw, 9px);
+        line-height: 1.45;
+      }
+
+      .audio-state {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        margin-top: clamp(14px, 3vh, 19px);
+        color: var(--ink);
+        font-size: clamp(6px, .9vw, 7px);
+      }
+
+      .audio-state::before {
+        flex: 0 0 auto;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #6f5d72;
+        content: '';
+      }
+
+      .type-stage[data-audio-active='true'] .audio-state::before {
+        background: var(--acid);
+        box-shadow: 0 0 14px rgba(221, 246, 106, .7);
+      }
+
+      .metrics {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+        margin-top: 10px;
+      }
+
+      .metric {
+        padding-top: 7px;
+        border-top: 1px solid var(--line);
+      }
+
+      .metric strong {
+        display: block;
+        font-size: clamp(12px, 2vw, 16px);
+        font-weight: 560;
+        letter-spacing: -.04em;
+      }
+
+      .metric span {
+        display: block;
+        margin-top: 3px;
+        color: var(--muted);
+        font-size: clamp(4px, .72vw, 6px);
+      }
+
+      .frequency-map {
+        position: absolute;
+        top: clamp(51px, 13vh, 64px);
+        right: clamp(20px, 4vw, 30px);
+        z-index: 3;
+        padding: 6px 8px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        color: rgba(246, 240, 223, .58);
+        background: rgba(16, 11, 24, .7);
+        font-size: clamp(5px, .8vw, 6px);
+        pointer-events: none;
+      }
+
+      .frequency-map b { color: var(--acid); }
+
+      .type-controls {
+        position: absolute;
+        right: clamp(21px, 4vw, 30px);
+        bottom: clamp(17px, 4.6vh, 24px);
+        left: clamp(25px, 4vw, 30px);
+        z-index: 5;
+        display: grid;
+        grid-template-columns: minmax(126px, 176px) minmax(90px, 1fr) auto;
+        align-items: center;
+        gap: clamp(9px, 2vw, 16px);
+      }
+
+      .tone-button {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-width: 0;
+        padding: 9px 11px;
+        border: 1px solid rgba(221, 246, 106, .72);
+        border-radius: 999px;
+        color: var(--ink);
+        background: rgba(16, 11, 24, .88);
+        font: 800 clamp(6px, .9vw, 7px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: color .2s ease, background-color .2s ease;
+      }
+
+      .tone-button::after { color: var(--acid); content: '▶'; font-size: .95em; }
+      .tone-button[aria-pressed='true'] { color: #15131a; background: var(--acid); }
+      .tone-button[aria-pressed='true']::after { color: #15131a; content: '■'; }
+      .tone-button:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+
+      .pitch-rail {
+        position: relative;
+        height: 1px;
+        background: rgba(246, 240, 223, .21);
+        pointer-events: none;
+      }
+
+      .pitch-rail::before,
+      .pitch-rail::after {
+        position: absolute;
+        top: -8px;
+        color: rgba(246, 240, 223, .38);
+        font: 800 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .08em;
+      }
+
+      .pitch-rail::before { left: 0; content: 'LOW'; }
+      .pitch-rail::after { right: 0; content: 'HIGH'; }
+
+      .pitch-fill {
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: calc(var(--pitch-progress) * 100%);
+        background: linear-gradient(90deg, var(--coral), var(--acid));
+      }
+
+      .pitch-thumb {
+        position: absolute;
+        top: 50%;
+        left: calc(var(--pitch-progress) * 100%);
+        width: 7px;
+        height: 7px;
+        border: 1px solid #100b18;
+        border-radius: 50%;
+        background: var(--acid);
+        box-shadow: 0 0 0 1px var(--acid), 0 0 11px rgba(221, 246, 106, .6);
+        transform: translate(-50%, -50%);
+      }
+
+      .input-hint {
+        color: rgba(246, 240, 223, .45);
+        font-size: clamp(5px, .72vw, 6px);
+        white-space: nowrap;
+        pointer-events: none;
+      }
+
+      .library-badge {
+        border-color: rgba(221, 246, 106, .2);
+        color: var(--ink);
+        background: rgba(16, 11, 24, .82);
+      }
+
+      .scene-caption { display: none; }
+
+      @media (max-width: 420px), (max-height: 260px) {
+        .library-badge, .scene-caption { display: none; }
+        .topline { top: 7px; right: 8px; left: 8px; font-size: 4.6px; }
+        .type-copy { top: 28px; left: 8px; width: 108px; }
+        .eyebrow { margin-bottom: 5px; font-size: 4.7px; }
+        h1 { font-size: 17px; }
+        .type-copy > p { max-width: 104px; margin-top: 7px; font-size: 5.35px; line-height: 1.34; }
+        .audio-state { gap: 5px; margin-top: 8px; font-size: 4.7px; }
+        .audio-state::before { width: 5px; height: 5px; }
+        .metrics { gap: 5px; margin-top: 6px; }
+        .metric { padding-top: 4px; }
+        .metric strong { font-size: 9px; }
+        .metric span { font-size: 3.7px; }
+        .frequency-map { top: 20px; right: 8px; padding: 4px 5px; font-size: 3.8px; }
+        .type-controls { right: 8px; bottom: 7px; left: 8px; grid-template-columns: 91px minmax(40px, 1fr) auto; gap: 7px; }
+        .tone-button { padding: 6px 7px; font-size: 4.5px; }
+        .input-hint { font-size: 3.6px; }
+      }
+
+      @media (max-width: 180px), (max-height: 105px) {
+        .topline { top: 3px; right: 4px; left: 4px; font-size: 3px; }
+        .topline span { display: none; }
+        .type-copy, .frequency-map, .input-hint { display: none; }
+        .type-controls { right: 4px; bottom: 4px; left: 4px; grid-template-columns: 38px minmax(0, 1fr); gap: 5px; }
+        .tone-button { padding: 4px 5px; font-size: 3.4px; }
+        .pitch-thumb { width: 5px; height: 5px; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .tone-button { transition: none; }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/audio-equalizer-typography-D4DOV238.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+    <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
+    <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
+    <link rel="modulepreload" crossorigin href="./assets/batch-a-qa-CFcoNLob.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main class="preview-stage" aria-label="A real Web Audio spectrum reshapes the silhouette of a live canvas wordmark">
+      <section
+        class="type-stage"
+        id="type-stage"
+        tabindex="0"
+        data-audio-active="false"
+        data-preview-mechanism="p5-web-audio-letterform"
+        aria-describedby="type-instruction"
+      >
+        <div id="type-canvas-host" role="img" aria-label="The original PULSE wordmark awaiting a human-triggered tone"></div>
+
+        <header class="topline">
+          <strong>SONIC IDENTITY / FORM TEST</strong>
+          <span class="session-id"><b>TAKE 04</b> · PULSE WORDMARK · LIVE</span>
+        </header>
+
+        <section class="type-copy" aria-live="polite">
+          <span class="eyebrow">AUDIO LOGO · HUMAN INPUT</span>
+          <h1>Make the word sound like itself.</h1>
+          <p>Low-to-high analyser energy stretches the matching slices of one live letterform.</p>
+          <output class="audio-state" id="audio-state">SILENT · ORIGINAL FORM</output>
+          <div class="metrics">
+            <div class="metric"><strong id="frequency-readout">260 Hz</strong><span>test tone</span></div>
+            <div class="metric"><strong id="peak-readout">—</strong><span>spectrum peak</span></div>
+          </div>
+        </section>
+
+        <div class="frequency-map"><b id="deformation-readout">0%</b> · FORM SHIFT</div>
+
+        <footer class="type-controls">
+          <button class="tone-button" id="tone-button" type="button" aria-pressed="false">Start tone</button>
+          <div class="pitch-rail" aria-hidden="true"><span class="pitch-fill"></span><span class="pitch-thumb"></span></div>
+          <span class="input-hint" id="type-instruction">PRESS + DRAG / TOUCH · ← → PITCH · ENTER / SPACE</span>
+        </footer>
+      </section>
+      <span class="library-badge">p5.js · real Web Audio analyser</span>
+      <span class="scene-caption">frequency energy deforms the word itself</span>
+    </main>
+  </body>
+</html>

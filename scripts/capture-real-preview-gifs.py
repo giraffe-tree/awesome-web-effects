@@ -656,6 +656,46 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("PageDown")
             elif index == 34:
                 page.locator('#audio-play').click()
+        elif demo["id"] == "audio-equalizer-typography":
+            if index == 2:
+                page.locator('#tone-button').click()
+            elif index == 5:
+                box = page.locator('#type-stage').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * .18, box["y"] + box["height"] * .54)
+                page.mouse.down()
+            elif index == 7:
+                box = page.locator('#type-stage').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * .55, box["y"] + box["height"] * .54, steps=5)
+                page.mouse.up()
+            elif index == 10:
+                page.locator('#type-stage').focus()
+                page.keyboard.press("Home")
+            elif index == 12:
+                page.keyboard.press("ArrowRight")
+            elif index == 14:
+                page.keyboard.press("End")
+            elif index == 17:
+                page.locator('#tone-button').click()
+            elif index == 20:
+                box = page.locator('#type-stage').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * .25, box["y"] + box["height"] * .54)
+                page.mouse.down()
+            elif index == 22:
+                box = page.locator('#type-stage').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * .75, box["y"] + box["height"] * .54, steps=5)
+                page.mouse.up()
+            elif index == 24:
+                page.locator('#type-stage').focus()
+                page.keyboard.press("Space")
+            elif index == 27:
+                page.keyboard.press("ArrowLeft")
+            elif index == 30:
+                page.locator('#tone-button').click()
+            elif index == 32:
+                page.locator('#type-stage').focus()
+                page.keyboard.press("Enter")
+            elif index == 34:
+                page.keyboard.press("Escape")
         elif demo["id"] == "dom-to-3d-scroll-synchronization":
             if index == 2:
                 box = page.locator('#sync-stage').bounding_box()
@@ -1550,6 +1590,48 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["lastInputTrusted"] is not True
         ):
             raise RuntimeError(f"{demo['id']} did not capture one human-operated, sample-locked Web Audio restoration comparison: {interaction!r}")
+    elif demo["id"] == "audio-equalizer-typography":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            interaction["automaticPlayback"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["previewClockDrivesSpectrum"]
+            or not interaction["deterministicSilentFrame"]
+            or not interaction["initialStaticConfirmed"]
+            or interaction["inputAdapters"] != ["pointer", "touch", "click", "keyboard"]
+            or interaction["inputCount"] < 12
+            or interaction["pointerInputCount"] < 5
+            or interaction["keyboardInputCount"] < 7
+            or interaction["pointerMoveCount"] < 10
+            or interaction["audioToggleCount"] < 9
+            or interaction["pitchChangeCount"] < 16
+            or not interaction["audioContextCreated"]
+            or not interaction["analyserConnected"]
+            or not interaction["oscillatorStarted"]
+            or interaction["audioContextState"] != "running"
+            or interaction["analyserReadCount"] <= 0
+            or interaction["analyserFftSize"] != 256
+            or interaction["frequencyBinCount"] != 128
+            or interaction["word"] != "PULSE"
+            or interaction["sliceCount"] != 230
+            or interaction["maskPixelCount"] <= 40000
+            or not interaction["p5Instance"]
+            or interaction["claimedLibrary"] != "p5@2.3.0 + Web Audio"
+            or interaction["audioActive"]
+            or interaction["latched"]
+            or interaction["pointerHolding"]
+            or interaction["phase"] != "silent"
+            or abs(interaction["pitchNormalized"] - .67) > .00001
+            or interaction["frequencyHz"] != 443
+            or interaction["peakBin"] != 0
+            or interaction["peakMagnitude"] != 0
+            or interaction["deformationAmount"] != 0
+            or interaction["lastInput"] != "keyboard:Escape"
+            or interaction["canvasWidth"] < 64
+            or interaction["canvasHeight"] < 64
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a human-started real analyser materially reshaping the PULSE letterform: {interaction!r}")
     elif demo["id"] == "dom-to-3d-scroll-synchronization":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         if (

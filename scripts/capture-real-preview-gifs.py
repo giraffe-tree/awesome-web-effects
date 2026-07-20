@@ -441,6 +441,28 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("ArrowRight")
             elif index == 32:
                 page.wait_for_timeout(650)
+        elif demo["id"] == "filterable-grid-reflow":
+            if index == 3:
+                page.locator('.filter-button[data-filter="field-tools"]').click()
+            elif index == 4:
+                page.wait_for_timeout(600)
+            elif index == 10:
+                page.locator('.sort-button[data-sort="name"]').click()
+            elif index == 11:
+                page.wait_for_timeout(600)
+            elif index == 17:
+                page.locator('.filter-button[data-filter="field-archive"]').click()
+            elif index == 18:
+                page.wait_for_timeout(600)
+            elif index == 24:
+                page.keyboard.press("Home")
+            elif index == 25:
+                page.wait_for_timeout(600)
+            elif index == 30:
+                page.locator('.sort-button[data-sort="name"]').focus()
+                page.keyboard.press("ArrowLeft")
+            elif index == 31:
+                page.wait_for_timeout(600)
         page.evaluate("time => window.__setPreviewTime(time)", preview_time)
         frame_path = frame_root / f"{index:04d}.png"
         page.screenshot(path=str(frame_path), type="png")
@@ -765,6 +787,34 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["synchronizedLayers"] != expected_layers
         ):
             raise RuntimeError(f"{demo['id']} did not capture real five-layer scenario and action handoffs: {interaction!r}")
+    elif demo["id"] == "filterable-grid-reflow":
+        page.wait_for_function(
+            "window.__PREVIEW_INTERACTION_STATE__.layoutComplete && !window.__PREVIEW_INTERACTION_STATE__.arrangePending",
+            timeout=2_000,
+        )
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            interaction["automaticFiltering"]
+            or interaction["automaticSorting"]
+            or interaction["syntheticInput"]
+            or interaction["automaticFallback"]
+            or not interaction["imagesReady"]
+            or not interaction["assetSourceValid"]
+            or not interaction["initialStaticVerified"]
+            or interaction["sourceCount"] != 6
+            or interaction["totalCount"] != 6
+            or interaction["inputCount"] < 5
+            or interaction["inputKind"] != "keyboard"
+            or interaction["filterChangeCount"] < 3
+            or interaction["sortChangeCount"] < 2
+            or interaction["arrangeCount"] < 5
+            or not interaction["layoutComplete"]
+            or interaction["arrangePending"]
+            or interaction["filter"] != "all"
+            or interaction["sort"] != "curated"
+            or interaction["visibleCount"] != 6
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture real Isotope filtering, sorting, and gap closure: {interaction!r}")
 
     minimum_unique = min(6, max(2, frame_count // 6))
     if len(hashes) < minimum_unique:

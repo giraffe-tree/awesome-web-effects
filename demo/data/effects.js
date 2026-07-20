@@ -417,17 +417,17 @@ const existingEffects = [
     "addedIn": "baseline",
     "research": null,
     "behavior": {
-      "trigger": "state change or animation frame",
-      "response": "Filterable grid reflow",
-      "timing": "eased transition",
-      "layer": "content"
+      "trigger": "real filter/sort button click or Arrow/Home/End key within a control group",
+      "response": "Filter six identifiable field objects into three balanced categories or sort them by curated rank/name while Isotope closes every gap",
+      "timing": "operator-owned Isotope fitRows transition; reduced motion arranges immediately",
+      "layer": "field-kit collection, object imagery, metadata, filters, sort controls, and live result count"
     },
     "prompt": "Implement the \"Filterable grid reflow\" (可筛选网格重排) web interaction effect in the current project.\n\nUse Isotope (metafizzy/isotope) as the recommended implementation unless the existing stack makes a dependency-free equivalent more appropriate. Recreate this specific transition interaction, not a generic animation.\n\nInteraction contract:\n- Trigger: state change or animation frame\n- Visual response: Filterable grid reflow\n- Timing relationship: eased transition\n- Page layer: content\n\nRequirements:\n- Integrate with the existing design system and component structure.\n- Support keyboard and touch input whenever the interaction is actionable.\n- Respect prefers-reduced-motion with a clear non-animated fallback.\n- Avoid layout shift, scroll traps, inaccessible focus behavior, and unnecessary dependencies.\n- Keep the implementation responsive and clean up listeners, timers, and animation instances.\n\nStart from this minimal API shape:\n\n```js\nimport Isotope from 'isotope-layout';\nconst grid = new Isotope('.grid', { itemSelector: '.item' });\ngrid.arrange({ filter: '.featured' });\n```\n\nReturn the working code, the files changed, and a short explanation of how to tune timing, easing, distance, and reduced-motion behavior.",
     "sources": [
       {
         "projectId": "metafizzy-isotope",
         "recommended": true,
-        "snippet": "import Isotope from 'isotope-layout';\nconst grid = new Isotope('.grid', { itemSelector: '.item' });\ngrid.arrange({ filter: '.featured' });",
+        "snippet": "const grid = new Isotope('.grid',{layoutMode:'fitRows',getSortData:{name:'[data-name]'}});\ngrid.arrange({filter: selectedCategory, sortBy: selectedSort});",
         "preview": "captured/filterable-grid-reflow",
         "previewKind": "local-demo-capture",
         "demoPath": "preview-demos/dist/filterable-grid-reflow.html",

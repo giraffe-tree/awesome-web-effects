@@ -129,7 +129,7 @@
       "originUrl": "https://github.com/metafizzy/isotope",
       "demoSourcePath": "demo/preview-demos/filterable-grid-reflow.html",
       "libraryVersion": "isotope-layout@3.0.6",
-      "generatedAt": "2026-07-18",
+      "generatedAt": "2026-07-21",
       "outputPath": "demo/gifs/captured/filterable-grid-reflow.gif",
       "usageBasis": "local demo capture using the pinned Isotope package; verify license https://github.com/metafizzy/isotope/blob/HEAD/license.md"
     },

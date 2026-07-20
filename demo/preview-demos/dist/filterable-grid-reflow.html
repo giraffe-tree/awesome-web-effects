@@ -5,42 +5,295 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Isotope — Filterable Grid Reflow</title>
     <style>
-      :root { --preview-background: #f5f1e8; color-scheme: light; }
-      .filters { position: absolute; z-index: 4; top: 39px; left: 12px; display: flex; gap: 5px; }
-      .filter-pill { padding: 4px 7px; border: 0; border-radius: 999px; background: #ded9cf; color: #625d54; font-size: 7px; font-weight: 800; text-transform: uppercase; }
-      .filter-pill.active { background: #171815; color: white; }
-      .grid { position: absolute; top: 66px; left: 12px; right: 10px; height: 103px; }
-      .grid-item { width: 54px; height: 44px; margin: 0 5px 5px 0; border-radius: 9px; color: #fff; box-shadow: 0 6px 12px #4a423424; }
-      .grid-item::before { content: attr(data-label); position: absolute; left: 8px; bottom: 7px; font-size: 7px; font-weight: 900; letter-spacing: .05em; }
-      .grid-item::after { content: ''; position: absolute; top: 7px; left: 8px; width: 15px; height: 3px; border-radius: 4px; background: #ffffffa8; }
-      .warm { background: linear-gradient(140deg, #ff775c, #d53662); }
-      .cool { background: linear-gradient(140deg, #48d6c8, #3676d2); }
-      .featured { outline: 2px solid #171815; outline-offset: -3px; }
-      .library-badge { color: #25241f; background: #ffffffe0; border-color: #29282120; }
-      .scene-caption { color: #5f5a50; }
+      :root { --preview-background: #181a17; color-scheme: dark; }
+
+      .catalog-stage {
+        width: 100%;
+        max-width: 100%;
+        overflow: clip;
+        color: #f5efe3;
+        background:
+          radial-gradient(circle at 84% 8%, rgba(184, 80, 35, .14), transparent 31%),
+          linear-gradient(145deg, #1a1c19, #24251f 56%, #171815);
+      }
+
+      .catalog-stage::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        opacity: .2;
+        background-image: radial-gradient(rgba(255, 247, 230, .42) .45px, transparent .55px);
+        background-size: 4px 4px;
+        mask-image: linear-gradient(180deg, #000, transparent 66%);
+      }
+
+      .catalog-head {
+        position: absolute;
+        z-index: 8;
+        left: clamp(12px, 3.4vw, 25px);
+        right: clamp(12px, 3.4vw, 25px);
+        top: clamp(12px, 3vw, 19px);
+        height: clamp(57px, 17vw, 66px);
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 18px;
+      }
+
+      .catalog-heading { min-width: 0; }
+      .catalog-heading small {
+        display: block;
+        margin-bottom: clamp(4px, 1vw, 7px);
+        color: #d57443;
+        font: 850 clamp(5px, .95vw, 7px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .13em;
+        text-transform: uppercase;
+      }
+
+      .catalog-heading h1 {
+        margin: 0;
+        color: #f7f0e4;
+        font: 780 clamp(15px, 3.5vw, 27px)/.88 Georgia, "Times New Roman", serif;
+        letter-spacing: -.045em;
+        white-space: nowrap;
+      }
+
+      .catalog-controls {
+        display: grid;
+        justify-items: end;
+        gap: clamp(5px, 1.1vw, 8px);
+        min-width: 0;
+      }
+
+      .control-row { display: flex; align-items: center; justify-content: flex-end; gap: clamp(5px, 1.2vw, 9px); }
+      .control-set { display: inline-flex; align-items: center; gap: 2px; padding: 3px; border: 1px solid rgba(255, 247, 231, .13); border-radius: 999px; background: rgba(9, 10, 9, .38); }
+      .control-label {
+        margin: 0 4px 0 5px;
+        color: rgba(244, 236, 222, .48);
+        font: 800 clamp(4px, .8vw, 6px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .11em;
+        text-transform: uppercase;
+      }
+
+      .control-button {
+        min-height: clamp(20px, 3.8vw, 28px);
+        padding: 0 clamp(5px, 1vw, 7px);
+        border: 0;
+        border-radius: 999px;
+        color: rgba(247, 240, 227, .62);
+        background: transparent;
+        font: 790 clamp(5px, .9vw, 7px)/1 system-ui, sans-serif;
+        white-space: nowrap;
+        cursor: pointer;
+      }
+
+      .control-button[aria-pressed="true"] { color: #181713; background: #efe5d4; box-shadow: 0 4px 12px rgba(0, 0, 0, .2); }
+      .control-button:focus-visible { outline: 2px solid #db7948; outline-offset: 2px; }
+      .control-button .short-label { display: none; }
+
+      .collection-status {
+        color: rgba(244, 236, 222, .5);
+        font: 760 clamp(4px, .82vw, 6px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+      }
+
+      .catalog-grid {
+        --gap: clamp(5px, 1.35vw, 10px);
+        position: absolute !important;
+        z-index: 4;
+        left: clamp(12px, 3.4vw, 25px);
+        right: clamp(2px, 2.1vw, 15px);
+        top: clamp(82px, 22.8vw, 93px);
+        bottom: clamp(10px, 3.2vw, 17px);
+        height: auto !important;
+        min-height: 0;
+      }
+
+      .grid-item {
+        position: relative;
+        width: calc((100% - var(--gap) * 3) / 3);
+        height: calc((100% - var(--gap) * 2) / 2);
+        margin: 0 var(--gap) var(--gap) 0;
+        overflow: hidden;
+        border: 1px solid rgba(255, 248, 234, .13);
+        border-radius: clamp(8px, 2.1vw, 15px);
+        color: #fff9ed;
+        background: #d9d0c0;
+        box-shadow: 0 10px 28px rgba(4, 5, 4, .24);
+        isolation: isolate;
+      }
+
+      .item-photo,
+      .item-shade { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+      .item-photo {
+        display: block;
+        object-fit: cover;
+        transform: scale(1.012);
+        filter: saturate(.9) contrast(1.015) brightness(.95);
+        transition: filter .28s ease, transform .44s cubic-bezier(.2, .8, .2, 1);
+      }
+
+      .item-shade {
+        z-index: 1;
+        pointer-events: none;
+        background: linear-gradient(180deg, transparent 39%, rgba(24, 22, 18, .18) 55%, rgba(19, 18, 15, .9) 100%);
+      }
+
+      .item-number {
+        position: absolute;
+        z-index: 3;
+        top: clamp(5px, 1.2vw, 9px);
+        right: clamp(6px, 1.3vw, 10px);
+        color: rgba(35, 31, 25, .55);
+        font: 900 clamp(4px, .9vw, 7px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .08em;
+      }
+
+      .item-meta {
+        position: absolute;
+        z-index: 3;
+        left: clamp(7px, 1.5vw, 12px);
+        right: clamp(7px, 1.5vw, 12px);
+        bottom: clamp(7px, 1.5vw, 12px);
+        min-width: 0;
+      }
+
+      .item-category,
+      .item-name,
+      .item-use { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .item-category {
+        margin-bottom: clamp(3px, .65vw, 5px);
+        color: #e68a59;
+        font: 850 clamp(4px, .78vw, 6px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .11em;
+        text-transform: uppercase;
+      }
+
+      .item-name { font: 850 clamp(7px, 1.55vw, 12px)/1 system-ui, sans-serif; letter-spacing: -.015em; }
+      .item-use { margin-top: clamp(3px, .6vw, 5px); color: rgba(255, 248, 235, .58); font: 620 clamp(4px, .8vw, 6px)/1 system-ui, sans-serif; }
+
+      .grid-item:hover .item-photo { filter: saturate(1.02) contrast(1.02) brightness(1.02); transform: scale(1.045); }
+      .grid-item.category-camp-utility .item-category { color: #e1a866; }
+      .grid-item.category-field-archive .item-category { color: #b8c58d; }
+
+      .catalog-stage > .library-badge {
+        top: clamp(12px, 3vw, 19px);
+        left: clamp(12px, 3.4vw, 25px);
+        padding: 4px 7px;
+        color: rgba(249, 241, 226, .76);
+        background: rgba(7, 8, 7, .44);
+        border-color: rgba(255, 248, 234, .13);
+        font-size: clamp(4px, .82vw, 6px);
+      }
+
+      .scene-caption { display: none; }
+
+      @media (max-width: 420px), (max-height: 240px) {
+        .catalog-head { top: 10px; height: 64px; display: block; }
+        .catalog-heading { position: absolute; left: 0; bottom: 0; }
+        .catalog-heading small { margin-bottom: 3px; font-size: 4px; }
+        .catalog-heading h1 { font-size: 16px; }
+        .catalog-controls { position: absolute; left: 0; right: 0; top: 19px; display: block; }
+        .control-row { width: 100%; justify-content: flex-end; gap: 3px; }
+        .control-set { gap: 1px; padding: 2px; }
+        .control-label { display: none; }
+        .control-button { min-height: 18px; padding-inline: 4px; font-size: 4px; }
+        .collection-status { display: none; }
+        .catalog-grid { top: 80px; }
+      }
+
+      @media (max-width: 180px), (max-height: 100px) {
+        .catalog-head { left: 4px; right: 4px; top: 3px; height: 22px; display: block; }
+        .catalog-heading, .catalog-stage > .library-badge { display: none; }
+        .catalog-controls { display: block; }
+        .control-row { width: 100%; gap: 2px; justify-content: space-between; }
+        .control-set { gap: 1px; padding: 1px; border-radius: 5px; }
+        .control-label, .collection-status { display: none; }
+        .control-button { min-height: 17px; padding: 0 3px; border-radius: 4px; font-size: 3px; }
+        .control-button .long-label { display: none; }
+        .control-button .short-label { display: inline; }
+        .catalog-grid { --gap: 2px; left: 4px; right: 2px; top: 27px; bottom: 2px; }
+        .grid-item { border-radius: 3px; box-shadow: none; }
+        .item-photo { transform: none; }
+        .item-number { top: 2px; right: 2px; font-size: 2.2px; }
+        .item-meta { left: 3px; right: 2px; bottom: 2px; }
+        .item-category { margin-bottom: 1px; font-size: 2.15px; letter-spacing: .04em; }
+        .item-name { font-size: 3.2px; }
+        .item-use { margin-top: 1px; font-size: 2.15px; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .item-photo { transition: none; transform: none; }
+      }
     </style>
-    <script type="module" crossorigin src="./assets/filterable-grid-reflow-DRBSF19B.js"></script>
+    <script type="module" crossorigin src="./assets/filterable-grid-reflow-Bp5Dtpdp.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
     <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
     <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
   </head>
   <body>
-    <main class="preview-stage" aria-label="A real Isotope grid filtering and reflowing its items">
-      <div class="filters" aria-hidden="true">
-        <span class="filter-pill active" data-filter-label="all">All</span>
-        <span class="filter-pill" data-filter-label="warm">Warm</span>
-        <span class="filter-pill" data-filter-label="cool">Cool</span>
-        <span class="filter-pill" data-filter-label="featured">Featured</span>
-      </div>
-      <div class="grid" id="isotope-grid" data-preview-mechanism="isotope-layout">
-        <div class="grid-item warm featured" data-label="A"></div><div class="grid-item cool" data-label="B"></div>
-        <div class="grid-item warm" data-label="C"></div><div class="grid-item cool featured" data-label="D"></div>
-        <div class="grid-item cool" data-label="E"></div><div class="grid-item warm featured" data-label="F"></div>
-        <div class="grid-item warm" data-label="G"></div><div class="grid-item cool" data-label="H"></div>
-        <div class="grid-item warm featured" data-label="I"></div><div class="grid-item cool" data-label="J"></div>
-      </div>
-      <span class="library-badge">Isotope · filter + layout</span>
-      <span class="scene-caption">items filter, sort, and occupy new cells</span>
+    <main class="preview-stage catalog-stage" id="catalog-stage" aria-label="A user-controlled field-object catalog with real Isotope filtering and sorting">
+      <header class="catalog-head">
+        <div class="catalog-heading" aria-hidden="true">
+          <small>Six objects · three field systems</small>
+          <h1>Useful things, kept in order.</h1>
+        </div>
+        <div class="catalog-controls">
+          <div class="control-row">
+            <div class="control-set" id="filter-controls" role="group" aria-label="Filter collection">
+              <span class="control-label">Filter</span>
+              <button class="control-button filter-button" type="button" data-filter="all" aria-pressed="true"><span class="long-label">All</span><span class="short-label">All</span></button>
+              <button class="control-button filter-button" type="button" data-filter="field-tools" aria-pressed="false"><span class="long-label">Field tools</span><span class="short-label">Tools</span></button>
+              <button class="control-button filter-button" type="button" data-filter="camp-utility" aria-pressed="false"><span class="long-label">Camp utility</span><span class="short-label">Camp</span></button>
+              <button class="control-button filter-button" type="button" data-filter="field-archive" aria-pressed="false"><span class="long-label">Field archive</span><span class="short-label">Archive</span></button>
+            </div>
+            <div class="control-set" id="sort-controls" role="group" aria-label="Sort collection">
+              <span class="control-label">Sort</span>
+              <button class="control-button sort-button" type="button" data-sort="curated" aria-pressed="true"><span class="long-label">Curated</span><span class="short-label">Curated</span></button>
+              <button class="control-button sort-button" type="button" data-sort="name" aria-pressed="false"><span class="long-label">A–Z</span><span class="short-label">A–Z</span></button>
+            </div>
+          </div>
+          <output class="collection-status" id="collection-status" aria-live="polite">6 objects · All · Curated</output>
+        </div>
+      </header>
+
+      <section class="catalog-grid" id="isotope-grid" data-preview-mechanism="isotope-user-filter-sort" aria-label="Field object collection">
+        <article class="grid-item category-field-tools" data-name="Folding Field Tool" data-rank="1" data-category="field-tools" aria-label="Folding Field Tool, Field tools, trail-side adjustments">
+          <img class="item-photo" src="./assets/01-folding-field-tool-CC4qOAD6.jpg" alt="" />
+          <span class="item-shade" aria-hidden="true"></span><i class="item-number" aria-hidden="true">01</i>
+          <span class="item-meta"><small class="item-category">Field tools</small><strong class="item-name">Folding Field Tool</strong><span class="item-use">Trail-side adjustments</span></span>
+        </article>
+        <article class="grid-item category-camp-utility" data-name="Enamel Field Mug" data-rank="2" data-category="camp-utility" aria-label="Enamel Field Mug, Camp utility, hot drinks at camp">
+          <img class="item-photo" src="./assets/03-enamel-field-mug-C6iUIv0E.jpg" alt="" />
+          <span class="item-shade" aria-hidden="true"></span><i class="item-number" aria-hidden="true">03</i>
+          <span class="item-meta"><small class="item-category">Camp utility</small><strong class="item-name">Enamel Field Mug</strong><span class="item-use">Hot drinks at camp</span></span>
+        </article>
+        <article class="grid-item category-field-archive" data-name="Clothbound Field Journal" data-rank="3" data-category="field-archive" aria-label="Clothbound Field Journal, Field archive, weather notes and sketches">
+          <img class="item-photo" src="./assets/05-clothbound-field-journal-CcvlOmlE.jpg" alt="" />
+          <span class="item-shade" aria-hidden="true"></span><i class="item-number" aria-hidden="true">05</i>
+          <span class="item-meta"><small class="item-category">Field archive</small><strong class="item-name">Clothbound Field Journal</strong><span class="item-use">Weather notes + sketches</span></span>
+        </article>
+        <article class="grid-item category-field-tools" data-name="Field Binoculars" data-rank="4" data-category="field-tools" aria-label="Field Binoculars, Field tools, long-range observation">
+          <img class="item-photo" src="./assets/02-field-binoculars-OfN96xx8.jpg" alt="" />
+          <span class="item-shade" aria-hidden="true"></span><i class="item-number" aria-hidden="true">02</i>
+          <span class="item-meta"><small class="item-category">Field tools</small><strong class="item-name">Field Binoculars</strong><span class="item-use">Long-range observation</span></span>
+        </article>
+        <article class="grid-item category-camp-utility" data-name="Waxed Canvas Pouch" data-rank="5" data-category="camp-utility" aria-label="Waxed Canvas Pouch, Camp utility, small-kit organization">
+          <img class="item-photo" src="./assets/04-waxed-canvas-pouch-CsP6zemo.jpg" alt="" />
+          <span class="item-shade" aria-hidden="true"></span><i class="item-number" aria-hidden="true">04</i>
+          <span class="item-meta"><small class="item-category">Camp utility</small><strong class="item-name">Waxed Canvas Pouch</strong><span class="item-use">Small-kit organization</span></span>
+        </article>
+        <article class="grid-item category-field-archive" data-name="Archival Slide Tray" data-rank="6" data-category="field-archive" aria-label="Archival Slide Tray, Field archive, landscape reference set">
+          <img class="item-photo" src="./assets/06-archival-slide-tray-Bu9MHF9Z.jpg" alt="" />
+          <span class="item-shade" aria-hidden="true"></span><i class="item-number" aria-hidden="true">06</i>
+          <span class="item-meta"><small class="item-category">Field archive</small><strong class="item-name">Archival Slide Tray</strong><span class="item-use">Landscape reference set</span></span>
+        </article>
+      </section>
+
+      <span class="library-badge">Isotope · human filter + sort</span>
     </main>
   </body>
 </html>

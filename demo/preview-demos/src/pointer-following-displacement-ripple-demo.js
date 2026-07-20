@@ -5,8 +5,13 @@ import { clamp } from './batch-b-utils.js';
 try {
   const stage = document.querySelector('#ripple-stage');
   const canvas = document.querySelector('#ripple-canvas');
-  const ring = document.querySelector('#ripple-ring');
+  const ring = document.querySelector('#probe-ring');
+  const ringLabel = document.querySelector('#probe-label');
   const status = document.querySelector('#ripple-status');
+  const sampleOutput = document.querySelector('#sample-output');
+  const deviationOutput = document.querySelector('#deviation-output');
+  const sampleControls = [...document.querySelectorAll('.sample-control')];
+  const reducedMotionQuery = matchMedia('(prefers-reduced-motion: reduce)');
   const dpr = Math.min(devicePixelRatio || 1, 2);
   const regl = createREGL({
     canvas,
@@ -25,7 +30,7 @@ try {
   const sourceTexture = regl.texture({
     width: 1,
     height: 1,
-    data: [21, 33, 31, 255],
+    data: [23, 37, 34, 255],
     min: 'linear',
     mag: 'linear',
     wrap: 'clamp'
@@ -43,22 +48,76 @@ try {
     textureReady = true;
   });
 
+  const samples = {
+    facade: { x: .31, y: .59, label: 'Facade mullions' },
+    pool: { x: .61, y: .27, label: 'Pool tile grid' },
+    horizon: { x: .79, y: .55, label: 'Ocean horizon' }
+  };
+
   const interaction = {
+    id: 'pointer-following-displacement-ripple',
+    task: 'architectural-straight-line-refraction-qa',
+    automaticFallback: false,
     automaticPath: false,
+    automaticPlayback: false,
+    captureClockDriven: false,
+    syntheticInputDispatch: false,
+    userInputRequired: true,
+    inputDrivenRecovery: true,
+    acceptedInputs: ['mouse', 'touch', 'pen', 'keyboard', 'sample-control'],
+    initialFrameStatic: true,
+    initialOrigin: { x: .56, y: .48 },
+    initialInputCount: 0,
     engaged: false,
-    eventTime: 0,
-    inputCount: 0,
-    inputKind: 'none',
     mode: 'idle',
+    phase: 'idle',
     origin: { x: .56, y: .48 },
-    strength: 0
+    strength: 0,
+    currentAge: 0,
+    inputStartedAt: null,
+    inputCount: 0,
+    activationCount: 0,
+    resetInputCount: 0,
+    pointerInputCount: 0,
+    keyboardInputCount: 0,
+    touchInputCount: 0,
+    pointerActivationCount: 0,
+    keyboardActivationCount: 0,
+    presetActivationCount: 0,
+    recoveryCompletionCount: 0,
+    impulseRequestId: 0,
+    activeImpulseRequestId: null,
+    pointerCaptured: false,
+    activePointerId: null,
+    inputKind: 'none',
+    lastInputSource: 'initial',
+    lastInputTrusted: null,
+    selectedSample: 'none',
+    previousSample: 'none',
+    pointerVelocity: 0,
+    estimatedPeakDisplacementPx: 0,
+    estimatedCurrentDisplacementPx: 0,
+    reducedMotion: reducedMotionQuery.matches,
+    reducedMotionHold: reducedMotionQuery.matches,
+    preferenceChangeCount: 0,
+    sourceTextureReady: false,
+    sourceNaturalWidth: 0,
+    sourceNaturalHeight: 0,
+    shaderDisplacementScale: .058,
+    shaderFrontFrequency: 34,
+    shaderElasticFrequency: 96,
+    drawCount: 0,
+    resizeCount: 0,
+    renderCount: 0,
+    previewClockMutationCount: 0,
+    renderIgnoresPreviewClock: true
   };
   window.__PREVIEW_INTERACTION_STATE__ = interaction;
 
-  let controllerTime = 0;
   let previousInputTime = 0;
   let previousOrigin = { ...interaction.origin };
-  let draws = 0;
+  let activePointerId = null;
+  let latestPointerKind = 'mouse';
 
   const draw = regl({
     vert: `
@@ -122,70 +181,205 @@ try {
   });
 
   function resize() {
-    const width = Math.round(innerWidth * dpr);
-    const height = Math.round(innerHeight * dpr);
+    const width = Math.max(1, Math.round(stage.clientWidth * dpr));
+    const height = Math.max(1, Math.round(stage.clientHeight * dpr));
     if (canvas.width === width && canvas.height === height) return;
     canvas.width = width;
     canvas.height = height;
-    canvas.style.width = `${innerWidth}px`;
-    canvas.style.height = `${innerHeight}px`;
     regl.poll();
+    interaction.resizeCount += 1;
   }
 
   function normalizedPoint(clientX, clientY) {
     const bounds = canvas.getBoundingClientRect();
     return {
-      x: clamp((clientX - bounds.left) / bounds.width, .03, .97),
-      y: 1 - clamp((clientY - bounds.top) / bounds.height, .05, .95)
+      x: clamp((clientX - bounds.left) / Math.max(1, bounds.width), .03, .97),
+      y: 1 - clamp((clientY - bounds.top) / Math.max(1, bounds.height), .05, .95)
     };
   }
 
-  function activate(nextOrigin, inputKind, eventTimestamp = performance.now()) {
-    const distance = Math.hypot(
-      nextOrigin.x - previousOrigin.x,
-      nextOrigin.y - previousOrigin.y
-    );
-    const elapsedInput = Math.max(16, eventTimestamp - previousInputTime);
-    const velocity = distance / elapsedInput * 1000;
-
-    interaction.origin = nextOrigin;
-    interaction.eventTime = controllerTime;
-    interaction.inputCount += 1;
-    interaction.inputKind = inputKind;
-    interaction.strength = clamp(.6 + velocity * .17, .6, 1);
-    interaction.engaged = true;
-    interaction.mode = 'active';
-    previousOrigin = { ...nextOrigin };
-    previousInputTime = eventTimestamp;
-    stage.dataset.phase = 'active';
+  function nearestSample(origin) {
+    const [key, distance] = Object.entries(samples).reduce((best, [sampleKey, sample]) => {
+      const nextDistance = Math.hypot(sample.x - origin.x, sample.y - origin.y);
+      return nextDistance < best[1] ? [sampleKey, nextDistance] : best;
+    }, ['none', Infinity]);
+    return distance <= .028 ? key : 'pointer';
   }
 
-  function resetInteraction() {
+  function recordInput(kind, source, trusted) {
+    interaction.inputCount += 1;
+    interaction.inputKind = kind;
+    interaction.lastInputSource = source;
+    interaction.lastInputTrusted = trusted;
+    if (kind === 'keyboard') interaction.keyboardInputCount += 1;
+    else {
+      interaction.pointerInputCount += 1;
+      if (kind === 'touch') interaction.touchInputCount += 1;
+    }
+  }
+
+  function activate(nextOrigin, kind, source, trusted, operation, eventTimestamp = performance.now()) {
+    if (trusted !== true) return;
+    const now = performance.now();
+    const distance = Math.hypot(nextOrigin.x - previousOrigin.x, nextOrigin.y - previousOrigin.y);
+    const elapsedInput = Math.max(16, eventTimestamp - previousInputTime);
+    const velocity = distance / elapsedInput * 1000;
+    const strengthScale = interaction.reducedMotion ? .34 : 1;
+    interaction.origin = {
+      x: Number(clamp(nextOrigin.x, .03, .97).toFixed(5)),
+      y: Number(clamp(nextOrigin.y, .05, .95).toFixed(5))
+    };
+    interaction.inputStartedAt = now;
+    interaction.activationCount += 1;
+    interaction.impulseRequestId += 1;
+    interaction.activeImpulseRequestId = interaction.impulseRequestId;
+    interaction.pointerVelocity = Number(velocity.toFixed(4));
+    interaction.strength = Number((clamp(.64 + velocity * .16, .64, 1) * strengthScale).toFixed(5));
+    interaction.currentAge = interaction.reducedMotion ? .18 : 0;
+    interaction.engaged = true;
+    interaction.mode = interaction.reducedMotion ? 'reduced-hold' : 'refracting';
+    interaction.phase = interaction.mode;
+    interaction.previousSample = interaction.selectedSample;
+    interaction.selectedSample = operation === 'preset' ? source.replace('preset-', '') : nearestSample(interaction.origin);
+    interaction.estimatedPeakDisplacementPx = Number((interaction.strength * interaction.shaderDisplacementScale * stage.clientWidth * .76).toFixed(2));
+    if (operation === 'pointer') interaction.pointerActivationCount += 1;
+    else if (operation === 'keyboard') interaction.keyboardActivationCount += 1;
+    else if (operation === 'preset') interaction.presetActivationCount += 1;
+    recordInput(kind, source, trusted);
+    previousOrigin = { ...interaction.origin };
+    previousInputTime = eventTimestamp;
+    syncInterface();
+    drawFrame();
+  }
+
+  function finishRecovery(countCompletion = true) {
     interaction.engaged = false;
     interaction.mode = 'idle';
+    interaction.phase = 'idle';
     interaction.strength = 0;
-    stage.dataset.phase = 'idle';
-    status.textContent = 'Still water / ready';
+    interaction.currentAge = 0;
+    interaction.inputStartedAt = null;
+    interaction.activeImpulseRequestId = null;
+    interaction.estimatedCurrentDisplacementPx = 0;
+    if (countCompletion) interaction.recoveryCompletionCount += 1;
+    syncInterface();
+  }
+
+  function resetFromInput(kind, source, trusted) {
+    if (trusted !== true) return;
+    releasePointer();
+    interaction.resetInputCount += 1;
+    recordInput(kind, source, trusted);
+    interaction.previousSample = interaction.selectedSample;
+    interaction.selectedSample = 'none';
+    finishRecovery(false);
+    drawFrame();
+  }
+
+  function releasePointer(event) {
+    if (activePointerId !== null && canvas.hasPointerCapture?.(activePointerId)) canvas.releasePointerCapture(activePointerId);
+    if (!event || event.pointerId === activePointerId) activePointerId = null;
+    interaction.pointerCaptured = false;
+    interaction.activePointerId = null;
+  }
+
+  function syncInterface() {
+    stage.dataset.phase = interaction.phase;
+    stage.dataset.sample = interaction.selectedSample;
+    stage.dataset.inputCount = String(interaction.inputCount);
+    stage.dataset.lastSource = interaction.lastInputSource;
+    stage.dataset.engaged = String(interaction.engaged);
+    ring.style.left = `${interaction.origin.x * 100}%`;
+    ring.style.top = `${(1 - interaction.origin.y) * 100}%`;
+    const selected = samples[interaction.selectedSample];
+    ringLabel.textContent = selected?.label || 'Pointer sample';
+    sampleControls.forEach(control => {
+      const active = control.dataset.sample === interaction.selectedSample;
+      control.classList.toggle('is-active', active);
+      if (control.dataset.sample !== 'reset') control.setAttribute('aria-pressed', String(active));
+    });
+    if (!interaction.engaged) {
+      sampleOutput.textContent = 'Reference stable';
+      deviationOutput.textContent = '0.0 px';
+      status.textContent = 'Source texture · still';
+      return;
+    }
+    sampleOutput.textContent = selected?.label || 'Pointer sample';
+    deviationOutput.textContent = `${interaction.estimatedCurrentDisplacementPx.toFixed(1)} px`;
+    status.textContent = interaction.mode === 'refracting'
+      ? 'regl displacement · refracting'
+      : interaction.mode === 'recovering'
+        ? 'Input-derived recovery · settling'
+        : 'Reduced motion · held sample';
+  }
+
+  function drawFrame() {
+    resize();
+    let age = 0;
+    let impulse = 0;
+    if (interaction.engaged) {
+      if (interaction.reducedMotion) {
+        age = .18;
+        impulse = interaction.strength;
+        interaction.mode = 'reduced-hold';
+        interaction.phase = 'reduced-hold';
+      } else {
+        age = Math.max(0, (performance.now() - interaction.inputStartedAt) / 1000);
+        impulse = interaction.strength;
+        interaction.currentAge = Number(age.toFixed(4));
+        interaction.mode = age > .22 ? 'recovering' : 'refracting';
+        interaction.phase = interaction.mode;
+        if (age > 1.65) {
+          finishRecovery();
+          age = 0;
+          impulse = 0;
+        }
+      }
+    }
+    const decay = Math.exp(-age * 2.15) * impulse;
+    interaction.estimatedCurrentDisplacementPx = Number((interaction.shaderDisplacementScale * decay * canvas.clientWidth * .76).toFixed(2));
+    regl.clear({ color: [.09, .14, .12, 1] });
+    draw({
+      origin: [interaction.origin.x, interaction.origin.y],
+      age,
+      impulse,
+      aspect: Math.max(1, canvas.clientWidth) / Math.max(1, canvas.clientHeight)
+    });
+    interaction.drawCount += 1;
+    syncInterface();
+    if (typeof window.__PREVIEW_RUNTIME_ASSERT__ === 'function') {
+      stage.dataset.runtimeAssert = String(window.__PREVIEW_RUNTIME_ASSERT__());
+    }
+  }
+
+  function inputKindFromClick(event) {
+    return event.detail === 0 ? 'keyboard' : latestPointerKind;
   }
 
   canvas.addEventListener('pointerdown', event => {
+    event.preventDefault();
+    latestPointerKind = event.pointerType || 'mouse';
+    canvas.focus({ preventScroll: true });
+    activePointerId = event.pointerId;
+    interaction.activePointerId = event.pointerId;
     canvas.setPointerCapture?.(event.pointerId);
-    activate(normalizedPoint(event.clientX, event.clientY), event.pointerType || 'pointer', event.timeStamp);
+    interaction.pointerCaptured = true;
+    activate(normalizedPoint(event.clientX, event.clientY), latestPointerKind, 'pointer-drag', event.isTrusted, 'pointer', event.timeStamp);
   });
+
   canvas.addEventListener('pointermove', event => {
-    if (event.pointerType === 'touch' && event.buttons === 0) return;
-    activate(normalizedPoint(event.clientX, event.clientY), event.pointerType || 'pointer', event.timeStamp);
+    latestPointerKind = event.pointerType || 'mouse';
+    if (event.pointerType === 'touch' && !interaction.pointerCaptured) return;
+    if (interaction.pointerCaptured && event.pointerId !== activePointerId) return;
+    activate(normalizedPoint(event.clientX, event.clientY), latestPointerKind, interaction.pointerCaptured ? 'pointer-drag' : 'pointer-hover', event.isTrusted, 'pointer', event.timeStamp);
   });
-  canvas.addEventListener('pointerup', event => {
-    if (canvas.hasPointerCapture?.(event.pointerId)) {
-      canvas.releasePointerCapture(event.pointerId);
-    }
-  });
+
+  canvas.addEventListener('pointerup', releasePointer);
+  canvas.addEventListener('pointercancel', event => resetFromInput(event.pointerType || 'pointer', 'pointer-cancel-reset', event.isTrusted));
   canvas.addEventListener('pointerleave', event => {
-    if (event.pointerType === 'mouse') resetInteraction();
+    if (event.pointerType === 'mouse' && !interaction.pointerCaptured) resetFromInput('mouse', 'pointer-leave-reset', event.isTrusted);
   });
-  canvas.addEventListener('pointercancel', resetInteraction);
-  canvas.addEventListener('blur', resetInteraction);
+
   canvas.addEventListener('keydown', event => {
     const movement = {
       ArrowLeft: [-.055, 0],
@@ -193,77 +387,127 @@ try {
       ArrowUp: [0, .055],
       ArrowDown: [0, -.055]
     }[event.key];
-    if (!movement) {
-      if (event.key === 'Escape') resetInteraction();
+    const sampleKey = { f: 'facade', F: 'facade', p: 'pool', P: 'pool', h: 'horizon', H: 'horizon' }[event.key];
+    if (!movement && !sampleKey && !['Enter', ' ', 'Escape', 'Home'].includes(event.key)) return;
+    event.preventDefault();
+    if (event.repeat) return;
+    if (['Escape', 'Home'].includes(event.key)) {
+      resetFromInput('keyboard', `keyboard-${event.key}`, event.isTrusted);
       return;
     }
-    event.preventDefault();
-    const nextOrigin = {
+    if (sampleKey) {
+      activate(samples[sampleKey], 'keyboard', `keyboard-${sampleKey}`, event.isTrusted, 'preset', event.timeStamp);
+      return;
+    }
+    const nextOrigin = movement ? {
       x: clamp(interaction.origin.x + movement[0], .03, .97),
       y: clamp(interaction.origin.y + movement[1], .05, .95)
-    };
-    activate(nextOrigin, 'keyboard', event.timeStamp);
+    } : interaction.origin;
+    activate(nextOrigin, 'keyboard', movement ? `keyboard-${event.key}` : 'keyboard-pulse', event.isTrusted, 'keyboard', event.timeStamp);
   });
 
-  window.__PREVIEW_RUNTIME_ASSERT__ = () =>
-    typeof draw === 'function'
-    && textureReady
-    && sourceImage.complete
-    && sourceImage.naturalWidth === 1280
-    && sourceImage.naturalHeight === 720
-    && typeof sourceTexture.destroy === 'function'
-    && !regl._gl.isContextLost()
-    && draws > 0
-    && window.__PREVIEW_INTERACTION_STATE__ === interaction
-    && interaction.automaticPath === false
-    && ['idle', 'active', 'settling'].includes(interaction.mode)
-    && typeof interaction.engaged === 'boolean'
-    && Number.isFinite(interaction.origin.x)
-    && Number.isFinite(interaction.origin.y)
-    && interaction.origin.x >= .03
-    && interaction.origin.x <= .97
-    && interaction.origin.y >= .05
-    && interaction.origin.y <= .95
-    && Number.isInteger(interaction.inputCount)
-    && interaction.inputCount >= 0
-    && (interaction.mode === 'idle'
-      ? interaction.engaged === false && interaction.strength === 0
-      : interaction.engaged === true && interaction.strength > 0);
+  sampleControls.forEach(control => {
+    control.addEventListener('pointerdown', event => {
+      latestPointerKind = event.pointerType || 'mouse';
+    });
+    control.addEventListener('click', event => {
+      const kind = inputKindFromClick(event);
+      if (control.dataset.sample === 'reset') {
+        resetFromInput(kind, 'reset-control', event.isTrusted);
+        return;
+      }
+      activate(samples[control.dataset.sample], kind, `preset-${control.dataset.sample}`, event.isTrusted, 'preset', event.timeStamp || performance.now());
+    });
+  });
+
+  reducedMotionQuery.addEventListener('change', event => {
+    interaction.reducedMotion = event.matches;
+    interaction.reducedMotionHold = event.matches;
+    interaction.preferenceChangeCount += 1;
+    if (interaction.engaged) {
+      interaction.inputStartedAt = performance.now();
+      interaction.currentAge = event.matches ? .18 : 0;
+    }
+    drawFrame();
+  });
+
+  window.__PREVIEW_RUNTIME_ASSERT__ = () => {
+    const bounds = canvas.getBoundingClientRect();
+    const inputEvidence = interaction.inputCount === interaction.pointerInputCount + interaction.keyboardInputCount
+      && interaction.inputCount === interaction.activationCount + interaction.resetInputCount
+      && interaction.activationCount === interaction.pointerActivationCount + interaction.keyboardActivationCount + interaction.presetActivationCount;
+    const textureEvidence = textureReady
+      && interaction.sourceTextureReady
+      && sourceImage.complete
+      && sourceImage.naturalWidth === 1280
+      && sourceImage.naturalHeight === 720
+      && interaction.sourceNaturalWidth === sourceImage.naturalWidth
+      && interaction.sourceNaturalHeight === sourceImage.naturalHeight
+      && typeof sourceTexture.destroy === 'function';
+    const activeEvidence = interaction.mode === 'idle'
+      ? interaction.engaged === false
+        && interaction.strength === 0
+        && interaction.activeImpulseRequestId === null
+      : interaction.engaged === true
+        && interaction.strength > 0
+        && interaction.activeImpulseRequestId === interaction.impulseRequestId
+        && ['refracting', 'recovering', 'reduced-hold'].includes(interaction.mode);
+    const initialEvidence = interaction.inputCount > 0 || (
+      interaction.initialFrameStatic
+      && interaction.origin.x === interaction.initialOrigin.x
+      && interaction.origin.y === interaction.initialOrigin.y
+      && interaction.initialInputCount === 0
+      && interaction.mode === 'idle'
+    );
+    return typeof createREGL === 'function'
+      && typeof draw === 'function'
+      && !regl._gl.isContextLost()
+      && stage.dataset.previewMechanism === 'regl-human-texture-displacement-inspection'
+      && canvas.tabIndex === 0
+      && bounds.width >= innerWidth * .99
+      && bounds.height >= innerHeight * .99
+      && canvas.width === Math.round(stage.clientWidth * dpr)
+      && canvas.height === Math.round(stage.clientHeight * dpr)
+      && sampleControls.length === 4
+      && sampleControls.every(control => control instanceof HTMLButtonElement && control.type === 'button')
+      && textureEvidence
+      && inputEvidence
+      && activeEvidence
+      && initialEvidence
+      && interaction.origin.x >= .03 && interaction.origin.x <= .97
+      && interaction.origin.y >= .05 && interaction.origin.y <= .95
+      && interaction.shaderDisplacementScale === .058
+      && interaction.shaderFrontFrequency === 34
+      && interaction.shaderElasticFrequency === 96
+      && interaction.pointerCaptured === (activePointerId !== null)
+      && interaction.activePointerId === activePointerId
+      && interaction.automaticFallback === false
+      && interaction.automaticPath === false
+      && interaction.automaticPlayback === false
+      && interaction.captureClockDriven === false
+      && interaction.syntheticInputDispatch === false
+      && interaction.userInputRequired === true
+      && interaction.inputDrivenRecovery === true
+      && interaction.previewClockMutationCount === 0
+      && interaction.renderIgnoresPreviewClock === true
+      && interaction.reducedMotionHold === interaction.reducedMotion
+      && Number.isInteger(interaction.inputCount)
+      && Number.isInteger(interaction.impulseRequestId)
+      && interaction.drawCount > 0
+      && interaction.renderCount > 0
+      && window.__PREVIEW_INTERACTION_STATE__ === interaction;
+  };
 
   installPreviewController({
     id: 'pointer-following-displacement-ripple',
     library: 'regl@2.1.1',
     renderer: 'webgl',
-    render: time => {
-      controllerTime = Number(time) || 0;
-      resize();
-
-      let age = 0;
-      let impulse = 0;
-      if (interaction.engaged) {
-        age = Math.max(0, controllerTime - interaction.eventTime);
-        impulse = interaction.strength;
-        if (age > .22) interaction.mode = 'settling';
-        if (age > 1.65) resetInteraction();
-      }
-
-      regl.clear({ color: [.08, .13, .12, 1] });
-      draw({
-        origin: [interaction.origin.x, interaction.origin.y],
-        age,
-        impulse,
-        aspect: innerWidth / innerHeight
-      });
-      draws += 1;
-
-      ring.style.left = `${interaction.origin.x * 100}%`;
-      ring.style.top = `${(1 - interaction.origin.y) * 100}%`;
-      stage.dataset.phase = interaction.mode;
-      status.textContent = interaction.mode === 'active'
-        ? `${interaction.inputKind} / refracting`
-        : interaction.mode === 'settling'
-          ? 'Elastic recovery / settling'
-          : 'Still water / ready';
+    render: () => {
+      interaction.renderCount += 1;
+      interaction.sourceTextureReady = textureReady;
+      interaction.sourceNaturalWidth = sourceImage.naturalWidth;
+      interaction.sourceNaturalHeight = sourceImage.naturalHeight;
+      drawFrame();
     },
     ready: Promise.all([document.fonts.ready, imageReady]).catch(error => {
       markPreviewFailure(error);
@@ -271,7 +515,7 @@ try {
     })
   });
 
-  window.addEventListener('beforeunload', () => {
+  addEventListener('beforeunload', () => {
     sourceTexture.destroy();
     regl.destroy();
   }, { once: true });

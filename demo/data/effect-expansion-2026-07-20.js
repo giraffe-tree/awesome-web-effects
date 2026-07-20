@@ -1319,16 +1319,16 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "pointer-following-displacement-ripple",
-    "name": "Pointer-following displacement ripple",
-    "nameZh": "指针跟随位移涟漪",
+    "name": "Architectural refraction QA probe",
+    "nameZh": "建筑渲染折射质检探针",
     "category": "canvas",
     "sourceUrl": "https://github.com/pixijs/pixijs",
     "difference": "单张图像被移动位移场持续推开并衰减；现有位移图悬停在两张图之间切换。",
     "behavior": {
-      "trigger": "pointer move",
-      "response": "Move a displacement texture under the pointer and let the image surface recover",
-      "timing": "continuous local deformation with decay",
-      "layer": "WebGL image surface"
+      "trigger": "trusted pointer hover, captured touch/pen drag, keyboard movement/pulse, or facade/pool/horizon sample controls",
+      "response": "Displace the submitted architectural texture around the chosen straight-line reference, expose the estimated offset, and preserve the exact probe origin while the shader recovers",
+      "timing": "input-started expanding front with 1.65 s elastic recovery; reduced motion holds a lower-strength static sample until reset",
+      "layer": "full-bleed regl texture, fixed QA frame, live probe ring, deviation readout, and sampling controls"
     },
     "implementation": {
       "projectId": "regl-project-regl",
@@ -1347,10 +1347,10 @@ export const effectExpansion100Specs = [
       "evidence": 9,
       "total": 93
     },
-    "rationaleZh": "触发、连续性与媒体关系都不同于现有两图切换。",
+    "rationaleZh": "把图片涟漪变成建筑渲染折射质检：窗框、池底网格和海平线提供可观察的直线证据，真人采样直接生成偏移并回稳。",
     "batch": "B",
-    "demo": "真实指针、触控或方向键在海岸建筑照片上产生局部 UV 折射，波前扩张并弹性回稳。",
-    "capture": "真实移动指针穿过窗框与池底网格→录下两次折射波前→停留到完全复原。",
+    "demo": "海岸建筑提交图被真实 regl fragment shader 采样；Facade、Pool grid、Horizon、鼠标/触控拖拽与键盘探针在对应直线附近产生可读 UV 折射、偏移读数和弹性恢复。",
+    "capture": "真实点击 Facade、指针经过池面与海平线并等待完整恢复，再执行捕获拖拽、方向键、P、Horizon、Enter、Pool 和显式 Reset；断言可信输入、真实本地纹理、WebGL 参数、恢复完成与静止终态。",
     "risk": {
       "level": "medium",
       "detail": "必须使用真实 WebGL UV 位移和本地图像纹理；CSS blur 假变形不合格。"

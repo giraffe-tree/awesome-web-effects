@@ -3,15 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>regl — Pointer-following Displacement Ripple</title>
+    <title>regl — Human-operated Refraction QA Probe</title>
     <style>
-      :root { --preview-background: #15211f; }
+      :root {
+        --preview-background: #172522;
+        color-scheme: dark;
+      }
+
+      button { font: inherit; }
 
       .ripple-stage {
         position: absolute;
         inset: 0;
         overflow: hidden;
-        background: #15211f;
+        background: #172522;
       }
 
       #ripple-canvas {
@@ -20,8 +25,13 @@
         display: block;
         width: 100%;
         height: 100%;
+        outline: none;
         cursor: crosshair;
         touch-action: none;
+      }
+
+      #ripple-canvas:focus-visible {
+        box-shadow: inset 0 0 0 2px #fff4d5;
       }
 
       .ripple-shade {
@@ -30,135 +40,300 @@
         inset: 0;
         pointer-events: none;
         background:
-          linear-gradient(90deg, rgba(7, 12, 11, .62), transparent 43%),
-          linear-gradient(180deg, rgba(4, 8, 7, .18), transparent 44%, rgba(4, 8, 7, .32));
+          linear-gradient(90deg, #09110fae 0, #0a1210a0 19%, transparent 46%),
+          linear-gradient(180deg, #0c151238 0, transparent 45%, #07100e73 100%);
       }
 
-      .ripple-frame {
+      .qa-frame {
         position: absolute;
         z-index: 3;
-        left: 13px;
-        right: 13px;
+        left: 14px;
+        right: 14px;
         top: 34px;
-        bottom: 13px;
-        border: 1px solid rgba(255, 255, 255, .42);
+        bottom: 14px;
+        border: 1px solid #fff6de69;
         pointer-events: none;
       }
 
-      .ripple-frame::before,
-      .ripple-frame::after {
-        content: "";
+      .qa-frame::before,
+      .qa-frame::after {
         position: absolute;
-        width: 11px;
-        height: 11px;
-        border-color: rgba(255, 255, 255, .86);
+        width: 12px;
+        height: 12px;
+        border-color: #fff7e2dd;
+        content: "";
       }
 
-      .ripple-frame::before {
-        left: -1px;
-        top: -1px;
-        border-left: 2px solid;
-        border-top: 2px solid;
+      .qa-frame::before { left: -1px; top: -1px; border-left: 2px solid; border-top: 2px solid; }
+      .qa-frame::after { right: -1px; bottom: -1px; border-right: 2px solid; border-bottom: 2px solid; }
+
+      .project-head {
+        position: absolute;
+        z-index: 7;
+        left: 22px;
+        right: 22px;
+        top: 42px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        color: #f1eee3;
+        font: 850 5px/1 ui-monospace, monospace;
+        letter-spacing: .11em;
+        text-transform: uppercase;
+        text-shadow: 0 2px 10px #1b2825;
+        pointer-events: none;
       }
 
-      .ripple-frame::after {
-        right: -1px;
-        bottom: -1px;
-        border-right: 2px solid;
-        border-bottom: 2px solid;
-      }
+      .project-head strong { color: #fff8de; }
+      .project-meta { color: #d8ddd2b8; white-space: nowrap; }
 
       .ripple-copy {
         position: absolute;
-        z-index: 4;
+        z-index: 7;
         left: 24px;
-        bottom: 24px;
-        width: 118px;
-        color: white;
+        top: 82px;
+        width: min(38%, 225px);
+        color: #fff9e7;
         pointer-events: none;
-        text-shadow: 0 2px 14px rgba(0, 0, 0, .42);
+        text-shadow: 0 3px 18px #0a1411;
+      }
+
+      .ripple-copy small,
+      .sample-card small,
+      .deviation-row,
+      .probe-note,
+      .sample-control {
+        text-transform: uppercase;
       }
 
       .ripple-copy small {
-        color: rgba(255, 255, 255, .72);
-        font: 800 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
-        letter-spacing: .13em;
-        text-transform: uppercase;
+        color: #d0ded3;
+        font: 850 5px/1 ui-monospace, monospace;
+        letter-spacing: .14em;
       }
 
       .ripple-copy h1 {
-        margin: 7px 0 0;
-        font: 920 18px/.86 system-ui, sans-serif;
-        letter-spacing: -.06em;
+        margin: 9px 0 0;
+        font: 950 clamp(27px, 6vw, 49px)/.8 system-ui, sans-serif;
+        letter-spacing: -.075em;
         text-transform: uppercase;
       }
 
+      .ripple-copy h1 span { color: #ffc27a; }
+
       .ripple-copy p {
-        margin: 8px 0 0;
-        color: rgba(255, 255, 255, .76);
-        font: 650 5px/1.35 ui-monospace, SFMono-Regular, Menlo, monospace;
+        margin: 9px 0 0;
+        max-width: 180px;
+        color: #c0d0c7;
+        font: 750 5px/1.45 ui-monospace, monospace;
         letter-spacing: .06em;
         text-transform: uppercase;
       }
 
+      .sample-card {
+        position: absolute;
+        z-index: 8;
+        left: 24px;
+        bottom: 48px;
+        width: 164px;
+        padding: 9px 10px;
+        border: 1px solid #e7eee05c;
+        border-radius: 9px;
+        background: #0b1714c9;
+        color: #c3d0c7;
+        box-shadow: 0 12px 28px #03080773;
+        backdrop-filter: blur(8px);
+        pointer-events: none;
+      }
+
+      .sample-card small {
+        display: block;
+        color: #91a59a;
+        font: 850 4px/1 ui-monospace, monospace;
+        letter-spacing: .11em;
+      }
+
+      .sample-card output {
+        display: block;
+        margin-top: 5px;
+        color: #fff4d7;
+        font: 950 8px/1 ui-monospace, monospace;
+        letter-spacing: .05em;
+        text-transform: uppercase;
+      }
+
+      .deviation-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 7px;
+        margin-top: 6px;
+        color: #8ba096;
+        font: 800 4px/1 ui-monospace, monospace;
+        letter-spacing: .07em;
+      }
+
+      .deviation-row strong { color: #ffbd74; }
+      .ripple-stage[data-phase="idle"] .deviation-row strong { color: #8fd7ba; }
+
       .ripple-status {
         position: absolute;
-        z-index: 4;
-        right: 21px;
-        top: 42px;
-        padding: 5px 7px;
-        color: rgba(255, 255, 255, .88);
-        border: 1px solid rgba(255, 255, 255, .28);
-        background: rgba(8, 15, 14, .42);
-        font: 800 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        z-index: 8;
+        right: 22px;
+        top: 66px;
+        padding: 6px 8px;
+        border: 1px solid #f8f4df52;
+        border-radius: 99px;
+        background: #0a1512a8;
+        color: #e5eee5;
+        font: 850 5px/1 ui-monospace, monospace;
         letter-spacing: .1em;
         text-transform: uppercase;
         backdrop-filter: blur(8px);
         pointer-events: none;
       }
 
-      .ripple-ring {
+      .probe-ring {
         position: absolute;
-        z-index: 5;
-        left: 50%;
-        top: 50%;
-        width: 36px;
-        height: 36px;
-        border: 1px solid rgba(255, 255, 255, .94);
+        z-index: 6;
+        left: 56%;
+        top: 52%;
+        width: 48px;
+        height: 48px;
+        border: 1px solid #fff9e7e8;
         border-radius: 50%;
         opacity: 0;
         translate: -50% -50%;
-        scale: .72;
-        box-shadow: 0 0 0 7px rgba(255, 255, 255, .1), inset 0 0 15px rgba(255, 255, 255, .08);
-        transition: opacity .18s ease, scale .28s cubic-bezier(.2, .8, .2, 1);
+        box-shadow: 0 0 0 8px #fff8e71c, inset 0 0 17px #ffffff1e;
         pointer-events: none;
       }
 
-      .ripple-stage[data-phase="active"] .ripple-ring,
-      .ripple-stage[data-phase="settling"] .ripple-ring {
-        opacity: 1;
-        scale: 1;
+      .probe-ring::before,
+      .probe-ring::after {
+        position: absolute;
+        background: #fff9e7bd;
+        content: "";
       }
 
-      .ripple-stage[data-phase="settling"] .ripple-ring { opacity: .54; }
+      .probe-ring::before { left: -9px; right: -9px; top: 50%; height: 1px; }
+      .probe-ring::after { top: -9px; bottom: -9px; left: 50%; width: 1px; }
 
-      .library-badge {
-        background: rgba(7, 16, 15, .76);
-        border-color: rgba(255, 255, 255, .22);
+      .probe-ring i {
+        position: absolute;
+        inset: 7px;
+        border: 1px dashed #ffd08fbd;
+        border-radius: 50%;
       }
 
-      .scene-caption {
-        left: auto;
-        right: 18px;
-        bottom: 18px;
-        color: rgba(255, 255, 255, .68);
+      .probe-ring b {
+        position: absolute;
+        left: calc(100% + 11px);
+        top: 19px;
+        color: #fff5d9;
+        font: 900 4px/1 ui-monospace, monospace;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        white-space: nowrap;
+        text-shadow: 0 1px 6px #101b18;
+      }
+
+      .ripple-stage:not([data-phase="idle"]) .probe-ring { opacity: 1; }
+      .ripple-stage[data-phase="recovering"] .probe-ring { opacity: .58; }
+
+      .sample-controls {
+        position: absolute;
+        z-index: 12;
+        left: 50%;
+        bottom: 17px;
+        display: flex;
+        gap: 4px;
+        transform: translateX(-50%);
+      }
+
+      .sample-control {
+        min-height: 24px;
+        padding: 0 8px;
+        border: 1px solid #e7eee04a;
+        border-radius: 99px;
+        background: #0a1714d1;
+        color: #9eafa6;
+        font-size: 4px;
+        font-weight: 900;
+        letter-spacing: .08em;
+        cursor: pointer;
+        touch-action: manipulation;
+      }
+
+      .sample-control.is-active {
+        border-color: #ffd695b8;
+        background: #483d2fd9;
+        color: #fff4d6;
+      }
+
+      .sample-control:focus-visible {
+        outline: 2px solid white;
+        outline-offset: 2px;
+      }
+
+      .probe-note {
+        position: absolute;
+        z-index: 8;
+        right: 21px;
+        bottom: 20px;
+        color: #d5ddd4b8;
+        font: 800 4px/1 ui-monospace, monospace;
+        letter-spacing: .08em;
+        pointer-events: none;
+      }
+
+      .library-badge { z-index: 15; background: #081411dc; border-color: #f3f1dc42; color: #e9f0e8; }
+      .scene-caption { display: none; }
+
+      @media (max-width: 380px) and (min-height: 136px) {
+        .qa-frame { left: 9px; right: 9px; top: 28px; bottom: 9px; }
+        .project-head { left: 14px; right: 14px; top: 34px; font-size: 4px; }
+        .project-meta { display: none; }
+        .ripple-copy { left: 14px; top: 59px; width: 42%; }
+        .ripple-copy small { font-size: 4px; }
+        .ripple-copy h1 { margin-top: 6px; font-size: 24px; }
+        .ripple-copy p { margin-top: 6px; font-size: 3px; }
+        .sample-card { left: 14px; bottom: 36px; width: 126px; padding: 6px 7px; border-radius: 6px; }
+        .sample-card small, .deviation-row { font-size: 3px; }
+        .sample-card output { margin-top: 4px; font-size: 6px; }
+        .ripple-status { right: 14px; top: 39px; padding: 4px 6px; font-size: 4px; }
+        .probe-ring { width: 34px; height: 34px; }
+        .probe-ring b { left: calc(100% + 7px); top: 13px; font-size: 3px; }
+        .sample-controls { bottom: 10px; gap: 2px; }
+        .sample-control { min-height: 19px; padding: 0 6px; font-size: 3px; }
+        .probe-note { right: 12px; bottom: 13px; font-size: 3px; }
+      }
+
+      @media (max-width: 260px), (max-height: 135px) {
+        .qa-frame { left: 3px; right: 3px; top: 3px; bottom: 3px; }
+        .project-head { left: 6px; right: 6px; top: 7px; font-size: 3px; }
+        .ripple-copy { left: 6px; top: 20px; width: 49%; }
+        .ripple-copy small { display: none; }
+        .ripple-copy h1 { margin-top: 0; font-size: 10px; }
+        .ripple-copy p { display: none; }
+        .sample-card { left: 6px; bottom: 17px; width: 77px; padding: 3px 4px; border-radius: 4px; backdrop-filter: none; }
+        .sample-card small { font-size: 2px; }
+        .sample-card output { margin-top: 2px; font-size: 4px; }
+        .deviation-row { margin-top: 2px; font-size: 2px; }
+        .ripple-status { display: none; }
+        .probe-ring { width: 22px; height: 22px; }
+        .probe-ring i { inset: 4px; }
+        .probe-ring b { display: none; }
+        .sample-controls { bottom: 3px; gap: 1px; }
+        .sample-control { min-height: 13px; padding: 0 4px; font-size: 2.5px; }
+        .probe-note { display: none; }
+        .library-badge { display: none; }
       }
 
       @media (prefers-reduced-motion: reduce) {
-        .ripple-ring { transition: none; }
+        .probe-ring { transition: none; }
       }
     </style>
-    <script type="module" crossorigin src="./assets/pointer-following-displacement-ripple-C8_pk0xO.js"></script>
+    <script type="module" crossorigin src="./assets/pointer-following-displacement-ripple-BVRPZnk2.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
     <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
     <link rel="modulepreload" crossorigin href="./assets/regl-B2Y2V2F1.js">
@@ -166,20 +341,32 @@
     <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
   </head>
   <body>
-    <main class="preview-stage">
-      <section class="ripple-stage" id="ripple-stage" data-phase="idle" data-preview-mechanism="regl-texture-displacement-ripple">
-        <canvas id="ripple-canvas" tabindex="0" aria-label="Move the pointer, touch the image, or use arrow keys to move a refractive ripple across the architecture photograph"></canvas>
+    <main class="preview-stage" aria-label="Architectural refraction quality assurance tool">
+      <section id="ripple-stage" class="ripple-stage" data-phase="idle" data-sample="none" data-preview-mechanism="regl-human-texture-displacement-inspection">
+        <canvas id="ripple-canvas" tabindex="0" aria-label="Move the pointer, drag by touch, use arrow keys, or choose a sample to inspect local straight-line refraction in the pavilion image"></canvas>
         <div class="ripple-shade" aria-hidden="true"></div>
-        <div class="ripple-frame" aria-hidden="true"></div>
+        <div class="qa-frame" aria-hidden="true"></div>
+        <header class="project-head"><span><strong>Pavilion 04</strong> / Render QA</span><span class="project-meta">Optical review · source 1280×720</span></header>
         <section class="ripple-copy" aria-hidden="true">
-          <small>Coastal pavilion / water study</small>
-          <h1>Move through the reflection.</h1>
-          <p>Pointer · touch · arrow keys</p>
+          <small>Local refraction probe</small>
+          <h1>Inspect<br /><span>line distortion.</span></h1>
+          <p>Compare displaced pixels against the fixed crosshair reference.</p>
         </section>
-        <span class="ripple-status" id="ripple-status" aria-hidden="true">Still water / ready</span>
-        <i class="ripple-ring" id="ripple-ring" aria-hidden="true"></i>
-        <span class="library-badge">regl · sampled photo texture</span>
-        <span class="scene-caption">event → refract → recover</span>
+        <section class="sample-card" aria-label="Displacement inspection result">
+          <small>Current sample</small>
+          <output id="sample-output" aria-live="polite">Reference stable</output>
+          <div class="deviation-row"><span>Estimated local offset</span><strong id="deviation-output">0.0 px</strong></div>
+        </section>
+        <span id="ripple-status" class="ripple-status" aria-hidden="true">Source texture · still</span>
+        <i id="probe-ring" class="probe-ring" aria-hidden="true"><i></i><b id="probe-label">Pointer sample</b></i>
+        <nav class="sample-controls" aria-label="Inspection sample points">
+          <button class="sample-control" type="button" data-sample="facade" aria-label="Test facade mullion refraction">Facade</button>
+          <button class="sample-control" type="button" data-sample="pool" aria-label="Test pool tile grid refraction">Pool grid</button>
+          <button class="sample-control" type="button" data-sample="horizon" aria-label="Test ocean horizon refraction">Horizon</button>
+          <button class="sample-control" type="button" data-sample="reset" aria-label="Reset to undistorted reference">Reset</button>
+        </nav>
+        <span class="probe-note">Pointer / touch / arrows · Enter pulses · Esc resets</span>
+        <span class="library-badge">regl · sampled photo displacement</span>
       </section>
     </main>
   </body>

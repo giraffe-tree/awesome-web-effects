@@ -1207,10 +1207,57 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             pointer_x = 230 if .5 <= preview_time < 2.25 else 32
             page.mouse.move(pointer_x, 90)
         elif demo["id"] == "pointer-following-displacement-ripple":
-            if index == round(.5 * args.fps):
-                page.mouse.move(144, 70)
-            elif index == round(1.15 * args.fps):
-                page.mouse.move(218, 132)
+            if index == 2:
+                page.locator('.sample-control[data-sample="facade"]').click()
+            elif index == 3:
+                page.wait_for_timeout(260)
+            elif index == 5:
+                page.mouse.move(210, 110)
+            elif index == 6:
+                page.wait_for_timeout(260)
+            elif index == 8:
+                page.mouse.move(270, 78)
+            elif index == 10:
+                page.wait_for_timeout(1750)
+            elif index == 12:
+                page.mouse.move(120, 135)
+                page.mouse.down()
+            elif index == 13:
+                page.mouse.move(250, 60, steps=4)
+            elif index == 14:
+                page.mouse.up()
+            elif index == 16:
+                page.locator('#ripple-canvas').focus()
+                page.keyboard.press("ArrowLeft")
+            elif index == 17:
+                page.keyboard.press("ArrowUp")
+            elif index == 18:
+                page.wait_for_timeout(260)
+            elif index == 20:
+                page.keyboard.press("p")
+            elif index == 21:
+                page.wait_for_timeout(320)
+            elif index == 23:
+                page.locator('.sample-control[data-sample="horizon"]').click()
+            elif index == 24:
+                page.wait_for_timeout(320)
+            elif index == 26:
+                page.locator('#ripple-canvas').focus()
+                page.keyboard.press("Enter")
+            elif index == 27:
+                page.wait_for_timeout(320)
+            elif index == 29:
+                page.locator('.sample-control[data-sample="reset"]').click()
+            elif index == 30:
+                page.wait_for_timeout(320)
+            elif index == 32:
+                page.locator('.sample-control[data-sample="pool"]').click()
+            elif index == 33:
+                page.wait_for_timeout(420)
+            elif index == 34:
+                page.locator('.sample-control[data-sample="reset"]').click()
+            elif index == 35:
+                page.wait_for_timeout(320)
         elif demo["id"] == "four-corner-hover-crop-marks":
             if index == round(.35 * args.fps):
                 page.mouse.move(92, 78)
@@ -2622,14 +2669,49 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
         if interaction["pointerEvents"] < 3 or interaction["pointerOverPhoto"]:
             raise RuntimeError(f"{demo['id']} did not capture a real pointer enter/leave sequence: {interaction!r}")
     elif demo["id"] == "pointer-following-displacement-ripple":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         if (
-            interaction["automaticPath"]
-            or interaction["inputCount"] < 2
+            not assertion
+            or interaction["task"] != "architectural-straight-line-refraction-qa"
+            or interaction["automaticFallback"]
+            or interaction["automaticPath"]
+            or interaction["automaticPlayback"]
+            or interaction["captureClockDriven"]
+            or interaction["syntheticInputDispatch"]
+            or not interaction["userInputRequired"]
+            or not interaction["inputDrivenRecovery"]
+            or interaction["acceptedInputs"] != ["mouse", "touch", "pen", "keyboard", "sample-control"]
+            or not interaction["initialFrameStatic"]
+            or interaction["inputCount"] < 17
+            or interaction["activationCount"] < 13
+            or interaction["resetInputCount"] < 3
+            or interaction["pointerInputCount"] < 12
+            or interaction["keyboardInputCount"] < 4
+            or interaction["pointerActivationCount"] < 7
+            or interaction["keyboardActivationCount"] < 3
+            or interaction["presetActivationCount"] < 4
+            or interaction["recoveryCompletionCount"] < 1
             or interaction["inputKind"] != "mouse"
+            or interaction["lastInputSource"] != "reset-control"
+            or interaction["lastInputTrusted"] is not True
             or interaction["mode"] != "idle"
+            or interaction["phase"] != "idle"
+            or interaction["engaged"]
+            or interaction["strength"] != 0
+            or interaction["selectedSample"] != "none"
+            or interaction["pointerCaptured"]
+            or interaction["activePointerId"] is not None
+            or not interaction["sourceTextureReady"]
+            or interaction["sourceNaturalWidth"] != 1280
+            or interaction["sourceNaturalHeight"] != 720
+            or interaction["shaderDisplacementScale"] != .058
+            or interaction["shaderFrontFrequency"] != 34
+            or interaction["shaderElasticFrequency"] != 96
+            or interaction["previewClockMutationCount"] != 0
+            or interaction["renderIgnoresPreviewClock"] is not True
         ):
-            raise RuntimeError(f"{demo['id']} did not capture two real pointer impulses and recovery: {interaction!r}")
+            raise RuntimeError(f"{demo['id']} did not capture trusted facade/pool/horizon QA probes, pointer drag, keyboard sampling, input-derived WebGL recovery, and explicit reset: {interaction!r}")
     elif demo["id"] == "four-corner-hover-crop-marks":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         if (

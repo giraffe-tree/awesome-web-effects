@@ -623,6 +623,39 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.move(box["x"] + box["width"] - .01, box["y"] + box["height"] * .56)
                 page.mouse.down()
                 page.mouse.up()
+        elif demo["id"] == "noise-cancellation-audio-comparison":
+            if index == 2:
+                page.locator('#audio-play').click()
+            elif index == 4:
+                page.locator('.mix-preset[data-mix="0"]').click()
+            elif index == 7:
+                box = page.locator('#compare-surface').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * .82, box["y"] + box["height"] * .5)
+                page.mouse.down()
+            elif index == 9:
+                box = page.locator('#compare-surface').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * .35, box["y"] + box["height"] * .5, steps=5)
+                page.mouse.up()
+            elif index == 12:
+                page.locator('.mix-preset[data-mix="1"]').click()
+            elif index == 15:
+                page.locator('#audio-play').click()
+            elif index == 18:
+                page.locator('#compare-surface').focus()
+                page.keyboard.press("Home")
+            elif index == 20:
+                page.keyboard.press("End")
+            elif index == 22:
+                page.keyboard.press("ArrowRight")
+            elif index == 25:
+                page.locator('.mix-preset[data-mix="0.5"]').click()
+            elif index == 28:
+                page.locator('#audio-play').click()
+            elif index == 31:
+                page.locator('#compare-surface').focus()
+                page.keyboard.press("PageDown")
+            elif index == 34:
+                page.locator('#audio-play').click()
         elif demo["id"] == "dom-to-3d-scroll-synchronization":
             if index == 2:
                 box = page.locator('#sync-stage').bounding_box()
@@ -1468,6 +1501,55 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["canvasHeight"] < 64
         ):
             raise RuntimeError(f"{demo['id']} did not capture a real bidirectional ASCII incident route across controls, pointer scrub, keyboard, and boundaries: {interaction!r}")
+    elif demo["id"] == "noise-cancellation-audio-comparison":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            interaction["automaticFallback"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticCrossfade"]
+            or interaction["automaticDividerMotion"]
+            or interaction["captureClockDriven"]
+            or interaction["syntheticInputDispatch"]
+            or not interaction["userOwnedMix"]
+            or not interaction["controlsBuiltWithoutAutoplay"]
+            or not interaction["initialFrameStatic"]
+            or interaction["initialMix"] != .5
+            or interaction["initialPlaying"]
+            or interaction["initialAudioContextCreated"]
+            or interaction["acceptedInputs"] != ["mouse", "touch", "pen", "keyboard"]
+            or interaction["inputCount"] < 12
+            or interaction["pointerInputCount"] < 8
+            or interaction["keyboardInputCount"] < 4
+            or interaction["dragSessionCount"] < 1
+            or interaction["dragUpdateCount"] < 6
+            or interaction["presetSelectionCount"] < 3
+            or interaction["keyboardMixCount"] < 4
+            or interaction["playToggleCount"] < 4
+            or interaction["mixMutationCount"] < 10
+            or not interaction["audioContextCreated"]
+            or not interaction["audioGraphReady"]
+            or not interaction["audioStarted"]
+            or interaction["playing"]
+            or interaction["audioStartCount"] != 1
+            or interaction["audioResumeCount"] < 4
+            or interaction["sourceStartDelta"] != 0
+            or interaction["bufferFrameCount"] <= 0
+            or interaction["bufferSampleRate"] <= 0
+            or interaction["audioBufferDifference"] <= .01
+            or interaction["measuredNoiseReductionDb"] < 25
+            or abs(interaction["equalPowerEnergy"] - 1) > .00001
+            or abs(interaction["cleanMix"] - .3) > .00001
+            or abs(interaction["curtainPosition"] - .7) > .00001
+            or interaction["selectedPreset"] != "custom"
+            or interaction["previousPreset"] != "split"
+            or interaction["mixSource"] != "keyboard"
+            or interaction["motionControlCount"] != 1
+            or interaction["dragActive"]
+            or interaction["phase"] != "reviewing"
+            or interaction["inputKind"] != "mouse"
+            or interaction["lastInputTrusted"] is not True
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture one human-operated, sample-locked Web Audio restoration comparison: {interaction!r}")
     elif demo["id"] == "dom-to-3d-scroll-synchronization":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         if (

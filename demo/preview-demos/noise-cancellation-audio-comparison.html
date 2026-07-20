@@ -1,39 +1,329 @@
 <!doctype html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Motion — Noise Cancellation Audio Comparison</title>
-  <link rel="stylesheet" href="./shared.css" />
-  <style>
-    :root { --preview-background:#0e1321; }
-    .audio-stage { background:radial-gradient(circle at 75% 18%,#29487b80,transparent 39%),linear-gradient(145deg,#0a0e19,#111c31); }
-    .audio-shell { position:absolute; inset:35px 15px 17px; border:1px solid #b8d3ff2c; border-radius:18px; background:#080c15a8; overflow:hidden; box-shadow:0 18px 45px #0006; }
-    .audio-heading { position:absolute; left:14px; top:12px; z-index:3; color:#f5f8ff; font:900 12px/1 ui-monospace,monospace; letter-spacing:-.03em; }
-    .audio-heading small { display:block; margin-top:5px; color:#8398bd; font:800 6px/1 ui-monospace,monospace; letter-spacing:.12em; text-transform:uppercase; }
-    #audio-wave { position:absolute; left:12px; right:12px; top:48px; width:calc(100% - 24px); height:52px; }
-    .audio-divider { position:absolute; z-index:4; left:20px; top:43px; width:2px; height:62px; background:#fff; box-shadow:0 0 13px #7be8ff; pointer-events:none; }
-    .audio-divider::before { content:"A / B"; position:absolute; left:-10px; top:-13px; width:22px; color:#c9f8ff; font:900 5px/1 ui-monospace,monospace; text-align:center; }
-    .audio-controls { position:absolute; left:13px; right:13px; bottom:10px; display:flex; justify-content:space-between; align-items:center; }
-    .audio-play { height:23px; padding:0 9px; border:1px solid #8be9ff55; border-radius:99px; background:#18344a; color:#d8fbff; font:900 6px/1 ui-monospace,monospace; letter-spacing:.1em; text-transform:uppercase; cursor:pointer; }
-    .audio-play:hover { background:#1f6976; }
-    .audio-legend { color:#7287aa; font:800 6px/1 ui-monospace,monospace; letter-spacing:.09em; text-transform:uppercase; }
-    .audio-legend b:first-child { color:#ff8e91; }.audio-legend b:last-child { color:#77efff; }
-    .library-badge { background:#0a0e19d9; }
-    .scene-caption { display:none; }
-  </style>
-</head>
-<body>
-  <main class="preview-stage audio-stage" aria-label="A moving divider crossfades between noisy and cleaned versions of the same synthesized audio">
-    <section class="audio-shell">
-      <div class="audio-heading">CITY SIGNAL / 01<small>same recording · two treatments</small></div>
-      <canvas id="audio-wave" width="560" height="104" aria-label="Noisy and cleaned waveform comparison"></canvas>
-      <i class="audio-divider" id="audio-divider" aria-hidden="true"></i>
-      <div class="audio-controls"><button class="audio-play" id="audio-play" type="button">Hear A/B</button><span class="audio-legend"><b>raw</b> · <b>clean</b></span></div>
-    </section>
-    <span class="library-badge">Motion · Web Audio A/B</span>
-    <span class="scene-caption">one divider controls the visible waveform and the real audio crossfade</span>
-  </main>
-  <script type="module" src="./src/noise-cancellation-audio-comparison-demo.js"></script>
-</body>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Motion — Human-operated Audio Cleanup Review</title>
+    <link rel="stylesheet" href="./shared.css" />
+    <style>
+      :root {
+        --preview-background: #111311;
+        --paper: #e9e2d3;
+        --ink: #202622;
+        --raw: #ee6b52;
+        --clean: #68cfc3;
+        color-scheme: dark;
+      }
+
+      button { font: inherit; }
+
+      .audio-stage {
+        --mix-color: #dfb873;
+        background:
+          radial-gradient(circle at 78% 24%, #3d5e5838, transparent 39%),
+          linear-gradient(145deg, #111412, #18201d 66%, #101311);
+      }
+
+      .audio-stage[data-mode="raw"] { --mix-color: var(--raw); }
+      .audio-stage[data-mode="clean"] { --mix-color: var(--clean); }
+
+      .audio-shell {
+        position: absolute;
+        inset: 29px 20px 21px;
+        display: grid;
+        grid-template-rows: 27px minmax(0, 1fr) 29px;
+        gap: 7px;
+        min-height: 0;
+      }
+
+      .review-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        min-width: 0;
+      }
+
+      .recording-title {
+        min-width: 0;
+        color: #aebbb6;
+        font-size: 6px;
+        font-weight: 850;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+
+      .recording-title strong { color: #f3f0e8; }
+
+      .audit-badge {
+        margin-left: 7px;
+        padding: 3px 5px;
+        border: 1px solid #6e807a4a;
+        border-radius: 99px;
+        color: #7f938c;
+        font-size: 4px;
+        vertical-align: 1px;
+      }
+
+      .mix-presets {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .mix-preset {
+        min-height: 21px;
+        padding: 0 8px;
+        border: 1px solid #6f817b4a;
+        border-radius: 99px;
+        background: #18221e;
+        color: #879991;
+        font-size: 5px;
+        font-weight: 900;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        cursor: pointer;
+        touch-action: manipulation;
+      }
+
+      .mix-preset.is-active {
+        border-color: color-mix(in srgb, var(--mix-color), transparent 15%);
+        background: color-mix(in srgb, var(--mix-color) 15%, #18221e);
+        color: #f7f2e9;
+      }
+
+      .mix-preset:focus-visible,
+      .audio-play:focus-visible,
+      .compare-surface:focus-visible {
+        outline: 2px solid #f4efe4;
+        outline-offset: 2px;
+      }
+
+      .wave-panel {
+        position: relative;
+        min-width: 0;
+        min-height: 0;
+        overflow: clip;
+        border: 1px solid #6f817b54;
+        border-radius: 15px;
+        background: #0f1716;
+        box-shadow: 0 17px 38px #0006, inset 0 1px #ffffff0b;
+      }
+
+      #audio-wave {
+        position: absolute;
+        inset: 0;
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      .compare-surface {
+        position: absolute;
+        inset: 0;
+        z-index: 5;
+        cursor: ew-resize;
+        touch-action: none;
+      }
+
+      .side-label {
+        position: absolute;
+        top: 9px;
+        z-index: 6;
+        padding: 4px 6px;
+        border-radius: 99px;
+        font-size: 5px;
+        font-weight: 950;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        pointer-events: none;
+      }
+      .side-label.raw { left: 9px; background: #3a211d; color: #ff9b86; }
+      .side-label.clean { right: 9px; background: #17322e; color: #8aeee2; }
+
+      .audio-divider {
+        position: absolute;
+        z-index: 7;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: #f9f4e9;
+        box-shadow: 0 0 0 1px #1017148a, 0 0 14px var(--mix-color);
+        pointer-events: none;
+        will-change: transform;
+      }
+
+      .audio-divider::before {
+        position: absolute;
+        left: -7px;
+        top: calc(50% - 7px);
+        width: 14px;
+        height: 14px;
+        border: 2px solid #111714;
+        border-radius: 50%;
+        background: var(--mix-color);
+        box-shadow: 0 0 0 2px #f5f0e96b;
+        content: "";
+      }
+
+      .wave-caption,
+      .noise-floor {
+        position: absolute;
+        bottom: 9px;
+        z-index: 6;
+        color: #9aaba5;
+        font-size: 4px;
+        font-weight: 850;
+        letter-spacing: .09em;
+        text-transform: uppercase;
+        pointer-events: none;
+      }
+      .wave-caption { left: 10px; }
+      .noise-floor { right: 10px; }
+
+      .review-footer {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 9px;
+        min-width: 0;
+      }
+
+      .audio-play {
+        min-height: 25px;
+        padding: 0 10px;
+        border: 1px solid #87dcd064;
+        border-radius: 99px;
+        background: #1a3630;
+        color: #d8f5ed;
+        font-size: 5px;
+        font-weight: 950;
+        letter-spacing: .09em;
+        text-transform: uppercase;
+        cursor: pointer;
+        touch-action: manipulation;
+      }
+
+      .audio-play[data-playing="true"] { border-color: #e98c736b; background: #3b241e; color: #ffc1ad; }
+
+      .mix-meter {
+        position: relative;
+        min-width: 0;
+        height: 19px;
+        border: 1px solid #6678724c;
+        border-radius: 99px;
+        background: linear-gradient(90deg, #3b211c, #253128 50%, #173430);
+        overflow: clip;
+      }
+
+      .mix-meter::before {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, #ffffff04 50%, transparent 50%);
+        background-size: 12px 100%;
+        content: "";
+      }
+
+      .meter-readout {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        color: #e8efe9;
+        font: 900 5px/1 ui-monospace, monospace;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+      }
+
+      .signal-stats {
+        color: #879991;
+        font: 850 5px/1.35 ui-monospace, monospace;
+        letter-spacing: .07em;
+        text-align: right;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+
+      .signal-stats strong { color: var(--clean); }
+      .library-badge { color: #e2ebe6; background: #111916de; border-color: #70807842; }
+      .scene-caption { color: #8c9e97; }
+
+      @media (max-width: 380px) and (min-height: 136px) {
+        .audio-shell { inset: 29px 11px 19px; grid-template-rows: 23px minmax(0, 1fr) 25px; gap: 5px; }
+        .recording-title { font-size: 5px; }
+        .audit-badge { display: none; }
+        .mix-preset { min-height: 19px; padding: 0 6px; font-size: 4px; }
+        .wave-panel { border-radius: 11px; }
+        .side-label { top: 6px; padding: 3px 5px; font-size: 4px; }
+        .side-label.raw { left: 6px; }
+        .side-label.clean { right: 6px; }
+        .wave-caption, .noise-floor { bottom: 6px; font-size: 3px; }
+        .review-footer { gap: 5px; }
+        .audio-play { min-height: 22px; padding: 0 7px; font-size: 4px; }
+        .mix-meter { height: 17px; }
+        .meter-readout, .signal-stats { font-size: 4px; }
+        .scene-caption { display: none; }
+      }
+
+      @media (max-width: 260px), (max-height: 135px) {
+        .audio-shell { inset: 4px; grid-template-rows: 14px minmax(0, 1fr) 15px; gap: 3px; }
+        .recording-title { display: none; }
+        .review-head { justify-content: flex-end; }
+        .mix-presets { width: 100%; gap: 2px; }
+        .mix-preset { flex: 1; min-height: 14px; padding: 0 2px; border-radius: 5px; font-size: 3px; }
+        .wave-panel { border-radius: 6px; }
+        .side-label { top: 3px; padding: 2px 3px; font-size: 3px; }
+        .side-label.raw { left: 3px; }
+        .side-label.clean { right: 3px; }
+        .audio-divider::before { left: -4px; top: calc(50% - 4px); width: 8px; height: 8px; border-width: 1px; }
+        .wave-caption { left: 4px; bottom: 3px; font-size: 2.5px; }
+        .noise-floor { right: 4px; bottom: 3px; font-size: 2.5px; }
+        .review-footer { grid-template-columns: auto minmax(0, 1fr); gap: 3px; }
+        .audio-play { min-height: 15px; padding: 0 4px; font-size: 3px; }
+        .mix-meter { height: 13px; }
+        .meter-readout { font-size: 3px; }
+        .signal-stats { display: none; }
+        .library-badge, .scene-caption { display: none; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .audio-divider { will-change: auto; }
+      }
+    </style>
+  </head>
+  <body>
+    <main id="audio-stage" class="preview-stage audio-stage" data-mode="split" data-phase="idle" data-preview-mechanism="web-audio-sample-locked-restoration" aria-label="Human-operated field interview noise cleanup review">
+      <section class="audio-shell" aria-labelledby="recording-title">
+        <header class="review-head">
+          <span id="recording-title" class="recording-title"><strong>Field interview · 07</strong> / HVAC cleanup <span class="audit-badge">same take · sample locked</span></span>
+          <nav class="mix-presets" aria-label="Audition presets">
+            <button class="mix-preset" type="button" data-mix="0" aria-label="Audition raw recording" aria-pressed="false">Raw</button>
+            <button class="mix-preset is-active" type="button" data-mix="0.5" aria-label="Audition split comparison" aria-pressed="true">Split</button>
+            <button class="mix-preset" type="button" data-mix="1" aria-label="Audition cleaned recording" aria-pressed="false">Clean</button>
+          </nav>
+        </header>
+
+        <div id="wave-panel" class="wave-panel">
+          <canvas id="audio-wave" width="1000" height="260" aria-label="Sample-locked raw and cleaned waveform comparison"></canvas>
+          <div id="compare-surface" class="compare-surface" role="slider" tabindex="0" aria-label="Clean audio mix" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-valuetext="50 percent clean, split comparison"></div>
+          <span class="side-label raw">Raw · −21 dB</span>
+          <span class="side-label clean">Clean · −47 dB</span>
+          <i id="audio-divider" class="audio-divider" aria-hidden="true"></i>
+          <span class="wave-caption">Voice / same 4.0 s take</span>
+          <span class="noise-floor">Removed HVAC energy shown in red</span>
+        </div>
+
+        <footer class="review-footer">
+          <button id="audio-play" class="audio-play" type="button" data-playing="false">Start audition</button>
+          <div class="mix-meter" aria-hidden="true"><output id="meter-readout" class="meter-readout">50% clean · split</output></div>
+          <span class="signal-stats">Noise floor <strong id="noise-reduction">−26 dB</strong><br />48 kHz · dual buffer</span>
+        </footer>
+      </section>
+      <span class="library-badge">Motion · Web Audio restoration</span>
+      <span class="scene-caption">drag the waveform curtain or choose a preset, then audition the sample-locked result</span>
+    </main>
+    <script type="module" src="./src/noise-cancellation-audio-comparison-demo.js"></script>
+  </body>
 </html>

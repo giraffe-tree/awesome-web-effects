@@ -661,23 +661,23 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "noise-cancellation-audio-comparison",
-    "name": "Noise-cancellation audio comparison",
-    "nameZh": "降噪音频 A/B 交叉试听",
+    "name": "Sample-locked interview cleanup review",
+    "nameZh": "采样锁定的采访降噪审听",
     "category": "canvas",
     "sourceUrl": "https://krisp.ai/",
-    "difference": "同一播放时间轴在原声与净化声之间连续 crossfade，并让波形分界同步；不同于循环区域编辑。",
+    "difference": "同一段四秒采访被写入两个真实 AudioBuffer；原声与经高低通处理的净化声严格同起点，等功率混音、波形分界和 26.02 dB 实测噪声衰减由同一个真人输入同步控制。",
     "behavior": {
-      "trigger": "drag/click/playback",
-      "response": "Crossfade two synchronized audio tracks while revealing removed spectral energy",
-      "timing": "continuous A/B blend on one playhead",
-      "layer": "audio waveform comparison"
+      "trigger": "real pointer/touch drag, Raw/Split/Clean preset, keyboard slider control, and explicit audition toggle",
+      "response": "Crossfade sample-locked raw and restored Web Audio buffers while the waveform curtain reveals the removed HVAC energy",
+      "timing": "human-owned equal-power A/B mix on one four-second looping take; no automatic crossfade or playback",
+      "layer": "full-frame Canvas waveform review with a semantic comparison slider"
     },
     "implementation": {
       "projectId": "motiondivision-motion",
       "projectUrl": "https://github.com/motiondivision/motion",
       "library": "motion@12.42.2",
       "renderer": "canvas2d",
-      "snippet": "rawGain.gain.setTargetAtTime(1 - ratio, audio.currentTime, .03); cleanGain.gain.setTargetAtTime(ratio, audio.currentTime, .03);",
+      "snippet": "const raw=Math.cos(mix*Math.PI/2); const clean=Math.sin(mix*Math.PI/2); rawGain.gain.setTargetAtTime(raw,ctx.currentTime,.012); cleanGain.gain.setTargetAtTime(clean,ctx.currentTime,.012);",
       "referenceUrl": "https://krisp.ai/"
     },
     "scores": {
@@ -689,13 +689,13 @@ export const effectExpansion100Specs = [
       "evidence": 8,
       "total": 87
     },
-    "rationaleZh": "同源双轨与可视化分界使降噪机制无需声音也能被理解。",
+    "rationaleZh": "Field interview 07 把抽象城市噪声改成明确的 HVAC 清理任务；真实双缓冲、样本锁定起播、滤波节点、等功率交叉试听与可视化 removed-energy 共同形成可核验的听觉和静音证据。",
     "batch": "A",
-    "demo": "原创城市声拆成原声/降噪两轨，拖动空间分界同步改变声音和波形。",
-    "capture": "播放→拖动 mix 0→1→0.35→暂停，画面记录两波形差异。",
+    "demo": "Field interview 07 的同一四秒录音被合成为原声与净化双缓冲；拖动幕帘、选择预设或使用键盘会同时改变波形分割与真实 Web Audio 等功率混音。",
+    "capture": "真实点击开始审听，选择 Raw/Clean/Split，拖动波形幕帘，并用 Home/End/Arrow/Page 键校验连续混音；最终停在 30% clean 且暂停。",
     "risk": {
       "level": "high",
-      "detail": "需原创双轨与真实同步音频；静音 GIF 必须靠波形和频段差解释。"
+      "detail": "必须保持真人手势才能创建 AudioContext 和改变混音；双源需样本锁定，静音 GIF 也必须明确呈现噪声能量差和实测衰减。"
     },
     "observedImplementation": {
       "projectId": "web-platform-audio",

@@ -1225,16 +1225,16 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "pointer-driven-multilayer-depth-stage",
-    "name": "Pointer-driven multilayer depth stage",
-    "nameZh": "指针驱动多层景深舞台",
+    "name": "Apartment view-corridor depth inspection",
+    "nameZh": "住宅视廊多层景深审查",
     "category": "pointer",
     "sourceUrl": "https://github.com/wagerfield/parallax",
     "difference": "前景、主体、远景按深度系数独立位移；现有卡片倾斜高光让一个平面整体旋转。",
     "behavior": {
-      "trigger": "mouse hover, captured touch/pen drag, or arrow keys",
-      "response": "Offset four authored trail-atlas planes, route, beacon, and reticle by distinct depth coefficients",
-      "timing": "direct input-driven reversible parallax; centered and still when idle",
-      "layer": "full-bleed layered DOM scene"
+      "trigger": "trusted mouse hover, captured touch/pen drag, Arrow keys, 1/2/3, or explicit viewpoint buttons",
+      "response": "Move four ordered apartment-view planes at distinct depth coefficients while the live verdict changes among tower overlap, partial screening, and a clear harbor corridor",
+      "timing": "direct human-input response with no automatic path; Home, Escape, R, or pointer exit restores the centered still inspection",
+      "layer": "full-bleed apartment balcony, neighboring tower, harbor landmark, and atmosphere planes"
     },
     "implementation": {
       "projectId": "motiondivision-motion",
@@ -1253,10 +1253,10 @@ export const effectExpansion100Specs = [
       "evidence": 9,
       "total": 88
     },
-    "rationaleZh": "多层相对运动而非整体变换，空间深度一眼可辨。",
+    "rationaleZh": "把抽象视差变成可作决策的住宅看房视廊审查：前景、遮挡建筑、港湾地标与天空按真实层差移动，观察位置直接改变可见性结论。",
     "batch": "B",
-    "demo": "原创全屏 trail-atlas 场景含天空、远岭、近岭、前景、路线与信标；鼠标、触摸拖拽和键盘真实驱动四层景深。",
-    "capture": "真实鼠标先悬停穿越四角，再按下拖拽并离开舞台归中；断言无自动路径、输入计数、捕获释放和静止终态。",
+    "demo": "原创全屏 North Wharf 18C 看房界面含天空、港湾与桥、Tower 07 遮挡层及阳台前景；鼠标、触控/笔拖拽、方向键与视点按钮真实驱动四层景深和视廊判定。",
+    "capture": "真实点击左右视点、键盘微调与 1/2/3 选点，再执行鼠标悬停和捕获拖拽，最后用 Home 显式归中；断言所有输入可信、无自动路径、四层系数有序且终态静止。",
     "risk": {
       "level": "medium",
       "detail": "上游 SPDX 未断言；需核验许可并给移动端方向权限降级。"

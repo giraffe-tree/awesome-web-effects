@@ -1198,23 +1198,46 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 34:
                 page.mouse.up()
         elif demo["id"] == "pointer-driven-multilayer-depth-stage":
-            if index == 3:
-                page.mouse.move(35, 140)
-            elif 4 <= index <= 10:
-                progress = (index - 4) / 6
-                page.mouse.move(35 + 250 * progress, 140 - 95 * progress)
-            elif index == 12:
-                page.mouse.move(70, 50)
+            if index == 2:
+                page.locator('.view-control[data-view="left"]').click()
+            elif index == 4:
+                page.locator('.view-control[data-view="right"]').click()
+            elif index == 6:
+                page.locator('#depth-stage').focus()
+                page.keyboard.press("ArrowLeft")
+            elif index == 7:
+                page.keyboard.press("ArrowLeft")
+            elif index == 9:
+                page.keyboard.press("1")
+            elif index == 11:
+                page.keyboard.press("2")
+            elif index == 13:
+                page.keyboard.press("3")
             elif index == 15:
-                page.mouse.move(45, 145)
+                page.mouse.move(278, 42)
+            elif index == 16:
+                page.mouse.move(42, 136, steps=4)
+            elif index == 18:
+                page.mouse.move(52, 138)
                 page.mouse.down()
-            elif 16 <= index <= 24:
-                progress = (index - 16) / 8
-                page.mouse.move(45 + 230 * progress, 145 - 110 * progress)
-            elif index == 25:
+            elif 19 <= index <= 23:
+                progress = (index - 19) / 4
+                page.mouse.move(52 + 218 * progress, 138 - 94 * progress)
+            elif index == 24:
                 page.mouse.up()
-            elif index == 28:
-                page.mouse.move(330, 190)
+            elif index == 26:
+                page.keyboard.press("ArrowRight")
+            elif index == 27:
+                page.keyboard.press("ArrowUp")
+            elif index == 29:
+                page.keyboard.press("3")
+            elif index == 31:
+                page.keyboard.press("Home")
+            elif index == 34:
+                page.locator('.view-control[data-view="right"]').click()
+            elif index == 35:
+                page.locator('#depth-stage').focus()
+                page.keyboard.press("Home")
         elif demo["id"] == "track-card-play-state-handoff":
             if index == 3:
                 page.mouse.click(276, 64)
@@ -2512,16 +2535,42 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
     elif demo["id"] == "pointer-driven-multilayer-depth-stage":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         if (
-            interaction["automaticPath"]
-            or interaction["inputCount"] < 15
-            or interaction["inputKind"] != "mouse"
+            interaction["automaticFallback"]
+            or interaction["automaticPath"]
+            or interaction["automaticPlayback"]
+            or interaction["captureClockDriven"]
+            or interaction["syntheticInputDispatch"]
+            or not interaction["userInputRequired"]
+            or not interaction["initialFrameStatic"]
+            or interaction["acceptedInputs"] != ["mouse", "touch", "pen", "keyboard", "viewpoint-control"]
+            or interaction["inputCount"] < 18
+            or interaction["pointerInputCount"] < 8
+            or interaction["keyboardInputCount"] < 8
+            or interaction["pointerUpdateCount"] < 7
+            or interaction["keyboardUpdateCount"] < 4
+            or interaction["presetSelectionCount"] < 6
+            or interaction["resetCount"] < 2
+            or interaction["viewMutationCount"] < 12
+            or interaction["inputKind"] != "keyboard"
+            or interaction["lastInputSource"] != "keyboard-Home"
+            or interaction["lastInputTrusted"] is not True
             or interaction["mode"] != "idle"
             or interaction["engaged"]
             or interaction["pointerCaptured"]
+            or interaction["activePointerId"] is not None
             or abs(interaction["x"] - .5) > .001
             or abs(interaction["y"] - .5) > .001
+            or interaction["selectedPreset"] != "center"
+            or interaction["verdict"] != "partial"
+            or interaction["visibilityScore"] != 46
+            or interaction["motionControlCount"] != 2
+            or not interaction["controlsBuiltWithoutAutoplay"]
+            or interaction["layerCount"] != 4
+            or interaction["depths"] != [.06, .24, .64, 1]
+            or not interaction["depthOrderingValid"]
+            or interaction["renderIgnoresPreviewClock"] is not True
         ):
-            raise RuntimeError(f"{demo['id']} did not capture real hover, drag, release, and centered recovery: {interaction!r}")
+            raise RuntimeError(f"{demo['id']} did not capture trusted viewpoint choices, keyboard inspection, pointer hover/drag, four ordered depth planes, and explicit centered recovery: {interaction!r}")
     elif demo["id"] == "track-card-play-state-handoff":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         if (

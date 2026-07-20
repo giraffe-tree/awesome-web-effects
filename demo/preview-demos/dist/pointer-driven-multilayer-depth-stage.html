@@ -3,87 +3,250 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Motion — Pointer-driven Multilayer Depth Stage</title>
+    <title>Motion — Human-operated View-corridor Inspection</title>
     <style>
-      :root { --preview-background: #07141a; }
+      :root {
+        --preview-background: #9fc1c4;
+        color-scheme: dark;
+      }
+
+      button { font: inherit; }
 
       .depth-stage {
         position: absolute;
         inset: 0;
-        width: 100%;
-        height: 100%;
         min-width: 100%;
         min-height: 100%;
         overflow: hidden;
         outline: none;
         cursor: crosshair;
-        perspective: 720px;
+        perspective: 760px;
         touch-action: none;
-        background: #173341;
+        background: #aac7c8;
       }
 
       .depth-stage:focus-visible::after {
-        content: "";
         position: absolute;
-        z-index: 20;
+        z-index: 30;
         inset: 5px;
-        border: 1px solid rgba(255, 255, 255, .82);
+        border: 1px solid #fff;
+        content: "";
         pointer-events: none;
       }
 
       .depth-layer {
         position: absolute;
-        inset: -15%;
-        width: 130%;
-        height: 130%;
-        will-change: transform, filter;
+        inset: -13%;
+        width: 126%;
+        height: 126%;
         transform-origin: center;
         pointer-events: none;
+        will-change: transform, filter;
       }
 
-      .sky {
+      .atmosphere-layer {
+        z-index: 1;
         background:
-          radial-gradient(circle at 74% 24%, rgba(255, 221, 147, .98) 0 3.5%, rgba(255, 205, 117, .24) 4%, transparent 10%),
-          linear-gradient(180deg, #18394d 0%, #5f8590 63%, #a0a895 100%);
+          radial-gradient(circle at 73% 25%, #fff0b4 0 3.2%, #f5d99470 3.5%, transparent 10%),
+          linear-gradient(180deg, #89b9c2 0%, #bfd2ca 59%, #dfc69f 100%);
       }
 
-      .sky::after {
+      .atmosphere-layer::before,
+      .atmosphere-layer::after {
+        position: absolute;
+        height: 1px;
+        background: #edf8ed99;
         content: "";
+      }
+
+      .atmosphere-layer::before { left: 13%; right: 48%; top: 30%; }
+      .atmosphere-layer::after { left: 59%; right: 11%; top: 39%; opacity: .65; }
+
+      .skyline-layer {
+        z-index: 2;
+        overflow: hidden;
+      }
+
+      .skyline-layer::before {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 20%;
+        height: 31%;
+        background:
+          linear-gradient(90deg,
+            #607a79 0 4%, transparent 4% 6%,
+            #708a87 6% 11%, transparent 11% 13%,
+            #536f70 13% 18%, transparent 18% 20%,
+            #80908a 20% 27%, transparent 27% 30%,
+            #5f7776 30% 34%, transparent 34% 37%,
+            #78928e 37% 43%, transparent 43% 46%,
+            #516b6b 46% 53%, transparent 53% 57%,
+            #718783 57% 63%, transparent 63% 67%,
+            #5a7474 67% 72%, transparent 72% 75%,
+            #7f928d 75% 82%, transparent 82% 85%,
+            #587170 85% 91%, transparent 91% 94%,
+            #79918d 94% 100%);
+        clip-path: polygon(0 72%,0 41%,4% 41%,4% 23%,11% 23%,11% 49%,18% 49%,18% 12%,27% 12%,27% 53%,34% 53%,34% 34%,43% 34%,43% 56%,53% 56%,53% 5%,63% 5%,63% 47%,72% 47%,72% 28%,82% 28%,82% 52%,91% 52%,91% 18%,100% 18%,100% 100%,0 100%);
+        opacity: .72;
+        content: "";
+      }
+
+      .harbor-water {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 31%;
+        background:
+          repeating-linear-gradient(178deg, transparent 0 8px, #d9e2d452 9px, transparent 10px 16px),
+          linear-gradient(#789c9b, #3f7075);
+      }
+
+      .bridge-graphic {
+        position: absolute;
+        left: 42%;
+        bottom: 21%;
+        width: 43%;
+        height: 31%;
+        overflow: visible;
+      }
+
+      .bridge-graphic path,
+      .bridge-graphic line {
+        fill: none;
+        stroke: #f0ddd0;
+        vector-effect: non-scaling-stroke;
+      }
+
+      .bridge-graphic .bridge-deck { stroke-width: 3; }
+      .bridge-graphic .bridge-cable { stroke-width: 1; opacity: .75; }
+
+      .landmark-target {
+        position: absolute;
+        z-index: 3;
+        left: 59%;
+        top: 40%;
+        width: 17px;
+        height: 17px;
+        border: 1px solid #fff7df;
+        border-radius: 50%;
+        box-shadow: 0 0 0 5px #ff705d29, 0 0 14px #ff705d80;
+      }
+
+      .landmark-target::before,
+      .landmark-target::after {
+        position: absolute;
+        background: #fff7df;
+        content: "";
+      }
+
+      .landmark-target::before { left: -5px; right: -5px; top: 50%; height: 1px; }
+      .landmark-target::after { top: -5px; bottom: -5px; left: 50%; width: 1px; }
+
+      .landmark-target span {
+        position: absolute;
+        left: 20px;
+        top: 4px;
+        color: #f9f2df;
+        font: 900 4px/1 ui-monospace, monospace;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        white-space: nowrap;
+        text-shadow: 0 1px 5px #263839;
+      }
+
+      .obstruction-layer {
+        z-index: 4;
+      }
+
+      .neighbor-tower {
+        position: absolute;
+        left: 59%;
+        top: 21%;
+        width: 18%;
+        height: 61%;
+        overflow: hidden;
+        border: 1px solid #d8d5c463;
+        background:
+          repeating-linear-gradient(90deg, transparent 0 16%, #b9c9c41c 17% 19%, transparent 20% 33%),
+          repeating-linear-gradient(180deg, #506a69 0 9%, #283f42 10% 12%, #5e7774 13% 22%);
+        box-shadow: 10px 17px 28px #24383b57;
+        transform: skewY(-1deg);
+      }
+
+      .neighbor-tower::before {
         position: absolute;
         inset: 0;
-        opacity: .2;
-        background: repeating-linear-gradient(103deg, transparent 0 19px, rgba(255, 255, 255, .16) 20px, transparent 21px 42px);
-        mask-image: linear-gradient(180deg, #000, transparent 62%);
-      }
-
-      .ridge-far {
-        clip-path: polygon(0 62%, 10% 46%, 19% 55%, 31% 33%, 41% 54%, 55% 29%, 68% 55%, 80% 38%, 90% 55%, 100% 43%, 100% 100%, 0 100%);
-        background: linear-gradient(180deg, #547b71, #315a56 68%);
-      }
-
-      .ridge-far::after,
-      .ridge-near::after {
+        background: linear-gradient(90deg, #eff3dd17, transparent 45%, #14272e54);
         content: "";
+      }
+
+      .neighbor-tower::after {
         position: absolute;
-        inset: 0;
-        opacity: .3;
-        background: repeating-radial-gradient(ellipse at 48% 110%, transparent 0 18px, rgba(220, 238, 219, .22) 19px, transparent 20px 35px);
+        left: 8%;
+        bottom: 4%;
+        padding: 3px 4px;
+        border: 1px solid #dde3d04d;
+        color: #d9e1d1;
+        font: 850 3px/1 ui-monospace, monospace;
+        letter-spacing: .08em;
+        content: "TOWER 07";
       }
 
-      .ridge-near {
-        clip-path: polygon(0 75%, 8% 61%, 16% 70%, 26% 46%, 36% 72%, 48% 40%, 61% 73%, 72% 54%, 83% 70%, 92% 49%, 100% 66%, 100% 100%, 0 100%);
-        background: linear-gradient(180deg, #214f48, #0e302d 78%);
+      .obstruction-shadow {
+        position: absolute;
+        left: 49%;
+        right: 13%;
+        bottom: 13%;
+        height: 14%;
+        background: #213d3e7a;
+        clip-path: polygon(18% 0, 100% 82%, 100% 100%, 0 100%);
       }
 
-      .foreground {
-        clip-path: polygon(0 83%, 12% 78%, 24% 82%, 36% 73%, 48% 81%, 60% 74%, 72% 79%, 84% 70%, 100% 76%, 100% 100%, 0 100%);
+      .balcony-layer {
+        z-index: 6;
+      }
+
+      .balcony-ceiling,
+      .balcony-sill,
+      .balcony-post {
+        position: absolute;
+        background: #17292b;
+        box-shadow: 0 7px 20px #0005;
+      }
+
+      .balcony-ceiling { left: 0; right: 0; top: 0; height: 13%; }
+      .balcony-sill { left: 0; right: 0; bottom: 0; height: 18%; }
+      .balcony-post { top: 0; bottom: 0; left: 13%; width: 4%; }
+
+      .balcony-rail {
+        position: absolute;
+        left: 10%;
+        right: 4%;
+        bottom: 24%;
+        height: 28%;
+        border-top: 3px solid #d9e0d6a6;
+        border-bottom: 1px solid #d9e0d657;
+        background: repeating-linear-gradient(90deg, transparent 0 13%, #d9e0d650 13.4% 14%, transparent 14.5% 26%);
+      }
+
+      .balcony-plant {
+        position: absolute;
+        right: 4%;
+        bottom: 15%;
+        width: 20%;
+        height: 47%;
         background:
-          repeating-linear-gradient(165deg, rgba(201, 218, 180, .16) 0 1px, transparent 1px 13px),
-          #071f20;
-        box-shadow: inset 0 18px 35px rgba(0, 0, 0, .26);
+          radial-gradient(ellipse at 28% 68%, #294940 0 10%, transparent 11%),
+          radial-gradient(ellipse at 62% 52%, #315b4b 0 13%, transparent 14%),
+          radial-gradient(ellipse at 42% 31%, #426953 0 12%, transparent 13%),
+          radial-gradient(ellipse at 77% 24%, #24483f 0 11%, transparent 12%),
+          linear-gradient(82deg, transparent 48%, #263f35 49% 51%, transparent 52%);
+        filter: drop-shadow(-6px 7px 6px #14232155);
       }
 
-      .depth-route {
+      .sightline-overlay {
         position: absolute;
         z-index: 5;
         inset: 0;
@@ -94,149 +257,278 @@
         will-change: transform;
       }
 
-      .depth-route path {
-        fill: none;
-        stroke: rgba(255, 227, 159, .72);
-        stroke-width: 1.25;
-        stroke-dasharray: 3 4;
+      .sightline-overlay path {
+        fill: #ff735d13;
+        stroke: #ffe5bb9e;
+        stroke-width: 1;
+        stroke-dasharray: 4 4;
         vector-effect: non-scaling-stroke;
       }
 
-      .depth-route circle { fill: #ffe09b; }
-
-      .depth-figure {
+      .inspection-header {
         position: absolute;
-        z-index: 7;
-        left: 62%;
-        top: 63%;
-        width: clamp(8px, 3.8vw, 18px);
-        aspect-ratio: 1;
-        border: 1px solid rgba(255, 244, 204, .92);
-        border-radius: 50%;
-        background: #ff725d;
-        box-shadow: 0 0 0 5px rgba(255, 114, 93, .14), 0 9px 18px rgba(0, 0, 0, .48);
-        will-change: transform;
-        pointer-events: none;
-      }
-
-      .depth-figure::after {
-        content: "";
-        position: absolute;
-        left: 50%;
-        top: 100%;
-        width: 1px;
-        height: clamp(9px, 4.2vw, 20px);
-        background: linear-gradient(#ffe7ad, transparent);
-      }
-
-      .depth-copy {
-        position: absolute;
-        z-index: 9;
-        left: clamp(12px, 5vw, 28px);
-        top: 28%;
-        width: min(42%, 190px);
-        color: white;
-        pointer-events: none;
-        text-shadow: 0 2px 14px rgba(2, 12, 14, .72);
-      }
-
-      .depth-copy small {
-        color: rgba(235, 249, 241, .68);
-        font: 800 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
-        letter-spacing: .13em;
-        text-transform: uppercase;
-      }
-
-      .depth-copy h1 {
-        margin: 7px 0 0;
-        font: 900 clamp(14px, 5.8vw, 30px)/.84 system-ui, sans-serif;
-        letter-spacing: -.06em;
-        text-transform: uppercase;
-      }
-
-      .depth-meta {
+        z-index: 12;
+        left: 20px;
+        right: 20px;
+        top: 31px;
         display: flex;
-        gap: 7px;
-        margin-top: 9px;
-        color: rgba(235, 249, 241, .66);
-        font: 750 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
-        letter-spacing: .08em;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        color: #e8f0e7;
+        font: 850 5px/1 ui-monospace, monospace;
+        letter-spacing: .11em;
         text-transform: uppercase;
+        text-shadow: 0 2px 8px #1a3135;
+        pointer-events: none;
+      }
+
+      .inspection-header strong { color: #fff7dd; }
+
+      .inspection-copy {
+        position: absolute;
+        z-index: 12;
+        left: 20px;
+        top: 72px;
+        width: min(40%, 205px);
+        color: #eef3e8;
+        text-shadow: 0 2px 14px #1b3033;
+        pointer-events: none;
+      }
+
+      .inspection-copy small {
+        color: #b9cec4;
+        font: 850 5px/1 ui-monospace, monospace;
+        letter-spacing: .14em;
+        text-transform: uppercase;
+      }
+
+      .inspection-copy h1 {
+        margin: 8px 0 0;
+        font: 950 clamp(24px, 6vw, 48px)/.8 system-ui, sans-serif;
+        letter-spacing: -.07em;
+        text-transform: uppercase;
+      }
+
+      .inspection-copy h1 span { color: #ff7965; }
+
+      .decision-card {
+        position: absolute;
+        z-index: 13;
+        left: 20px;
+        bottom: 42px;
+        min-width: 155px;
+        padding: 9px 10px;
+        border: 1px solid #e1e8da47;
+        border-radius: 9px;
+        background: #13262acd;
+        box-shadow: 0 12px 27px #06101266;
+        color: #9fb6ad;
+        pointer-events: none;
+        backdrop-filter: blur(8px);
+      }
+
+      .decision-card small {
+        display: block;
+        font: 850 4px/1 ui-monospace, monospace;
+        letter-spacing: .11em;
+        text-transform: uppercase;
+      }
+
+      .decision-card output {
+        display: block;
+        margin-top: 5px;
+        color: #ffb36f;
+        font: 950 8px/1 ui-monospace, monospace;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+      }
+
+      .decision-card p {
+        margin: 4px 0 0;
+        color: #809991;
+        font: 750 4px/1.25 ui-monospace, monospace;
+        letter-spacing: .05em;
+        text-transform: uppercase;
+      }
+
+      .depth-stage[data-verdict="clear"] .decision-card output { color: #89dfbd; }
+      .depth-stage[data-verdict="blocked"] .decision-card output { color: #ff7965; }
+
+      .view-controls {
+        position: absolute;
+        z-index: 16;
+        left: 50%;
+        bottom: 15px;
+        display: flex;
+        gap: 4px;
+        transform: translateX(-50%);
+      }
+
+      .view-control {
+        min-height: 23px;
+        padding: 0 8px;
+        border: 1px solid #dce6da42;
+        border-radius: 99px;
+        background: #152b2fd4;
+        color: #9ab1a9;
+        font-size: 4px;
+        font-weight: 900;
+        letter-spacing: .09em;
+        text-transform: uppercase;
+        cursor: pointer;
+        touch-action: manipulation;
+      }
+
+      .view-control.is-active {
+        border-color: #fff0bd9c;
+        background: #3b4d43e8;
+        color: #fff4d1;
+      }
+
+      .view-control:focus-visible {
+        outline: 2px solid white;
+        outline-offset: 2px;
       }
 
       .depth-readout {
         position: absolute;
-        z-index: 9;
-        right: 13px;
-        bottom: 12px;
-        color: rgba(225, 244, 239, .76);
-        font: 750 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
-        letter-spacing: .1em;
+        z-index: 13;
+        right: 18px;
+        bottom: 17px;
+        color: #b4c8bf;
+        font: 800 4px/1 ui-monospace, monospace;
+        letter-spacing: .09em;
         text-transform: uppercase;
+        text-shadow: 0 1px 5px #10282b;
         pointer-events: none;
       }
 
       .depth-reticle {
         position: absolute;
-        z-index: 8;
+        z-index: 11;
         left: 50%;
         top: 50%;
-        width: 18px;
-        height: 18px;
-        border: 1px solid rgba(255, 255, 255, .52);
+        width: 20px;
+        height: 20px;
+        border: 1px solid #fff9de9c;
         border-radius: 50%;
         opacity: 0;
         translate: -50% -50%;
-        transition: opacity .15s ease;
         pointer-events: none;
       }
 
-      .depth-stage[data-engaged="true"] .depth-reticle { opacity: 1; }
-      .library-badge { background: rgba(5, 18, 20, .72); }
-      .scene-caption { right: auto; left: 13px; bottom: 11px; }
+      .depth-reticle::before,
+      .depth-reticle::after {
+        position: absolute;
+        background: #fff9de9c;
+        content: "";
+      }
 
-      @media (max-width: 180px) {
-        .depth-copy { left: 10px; top: 30%; width: 50%; }
-        .depth-copy h1 { font-size: 11px; }
-        .depth-copy small, .depth-meta, .depth-readout { font-size: 4px; }
-        .depth-meta { margin-top: 5px; }
-        .library-badge { top: 7px; left: 8px; padding: 4px 6px; font-size: 6px; }
+      .depth-reticle::before { left: -5px; right: -5px; top: 50%; height: 1px; }
+      .depth-reticle::after { top: -5px; bottom: -5px; left: 50%; width: 1px; }
+      .depth-stage[data-engaged="true"] .depth-reticle { opacity: 1; }
+
+      .library-badge { background: #10252ad9; border-color: #dbe8db42; color: #e9f2e8; }
+      .scene-caption { color: #b9cbc1; }
+
+      @media (max-width: 380px) and (min-height: 136px) {
+        .inspection-header { left: 10px; right: 10px; top: 28px; font-size: 4px; }
+        .inspection-copy { left: 10px; top: 52px; width: 52%; }
+        .inspection-copy small { font-size: 4px; }
+        .inspection-copy h1 { margin-top: 6px; font-size: 20px; }
+        .decision-card { left: 10px; bottom: 34px; min-width: 124px; padding: 6px 7px; border-radius: 7px; }
+        .decision-card small, .decision-card p { font-size: 3px; }
+        .decision-card output { margin-top: 4px; font-size: 6px; }
+        .view-controls { bottom: 10px; gap: 2px; }
+        .view-control { min-height: 19px; padding: 0 6px; font-size: 3px; }
+        .depth-readout { right: 9px; bottom: 12px; font-size: 3px; }
+        .landmark-target { width: 12px; height: 12px; }
+        .landmark-target span { left: 15px; font-size: 3px; }
         .scene-caption { display: none; }
       }
 
+      @media (max-width: 260px), (max-height: 135px) {
+        .inspection-header { left: 4px; right: 4px; top: 4px; font-size: 3px; }
+        .inspection-header span:last-child { display: none; }
+        .inspection-copy { left: 4px; top: 17px; width: 58%; }
+        .inspection-copy small { display: none; }
+        .inspection-copy h1 { margin-top: 0; font-size: 9px; }
+        .decision-card { left: 4px; bottom: 17px; min-width: 83px; padding: 3px 4px; border-radius: 4px; backdrop-filter: none; }
+        .decision-card small { font-size: 2px; }
+        .decision-card output { margin-top: 2px; font-size: 4px; }
+        .decision-card p { display: none; }
+        .view-controls { bottom: 2px; gap: 1px; }
+        .view-control { min-height: 13px; padding: 0 4px; font-size: 2.5px; }
+        .depth-readout { display: none; }
+        .landmark-target { width: 8px; height: 8px; }
+        .landmark-target span { display: none; }
+        .depth-reticle { width: 10px; height: 10px; }
+        .neighbor-tower::after { display: none; }
+        .library-badge, .scene-caption { display: none; }
+      }
+
       @media (prefers-reduced-motion: reduce) {
-        .depth-reticle { transition: none; }
+        .depth-layer, .sightline-overlay { will-change: auto; }
       }
     </style>
-    <script type="module" crossorigin src="./assets/pointer-driven-multilayer-depth-stage-FNnAcQUe.js"></script>
+    <script type="module" crossorigin src="./assets/pointer-driven-multilayer-depth-stage-paVrRkpZ.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
     <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
     <link rel="modulepreload" crossorigin href="./assets/batch-b-utils-CmA_lC0Z.js">
     <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
   </head>
   <body>
-    <main class="preview-stage">
-      <section class="depth-stage" id="depth-stage" data-preview-mechanism="motion-human-depth-parallax" data-engaged="false" tabindex="0" aria-label="Move the pointer, drag by touch, or use arrow keys to inspect a four-plane trail landscape">
-        <div class="depth-layer sky"></div>
-        <div class="depth-layer ridge-far"></div>
-        <div class="depth-layer ridge-near"></div>
-        <div class="depth-layer foreground"></div>
-        <svg class="depth-route" viewBox="0 0 320 180" aria-hidden="true">
-          <path d="M18 154 C68 132 102 162 151 137 S241 139 301 111" />
-          <circle cx="18" cy="154" r="2" />
-          <circle cx="301" cy="111" r="2" />
+    <main class="preview-stage" aria-label="Apartment view-corridor inspection tool">
+      <section id="depth-stage" class="depth-stage" data-preview-mechanism="motion-human-view-corridor-parallax" data-engaged="false" data-verdict="partial" tabindex="0" aria-label="Move the pointer, drag by touch, use arrow keys, or choose a viewpoint to inspect the harbor sightline from apartment 18C">
+        <div class="depth-layer atmosphere-layer" data-layer="atmosphere" data-depth="0.06"></div>
+        <div class="depth-layer skyline-layer" data-layer="harbor-landmark" data-depth="0.24">
+          <div class="harbor-water"></div>
+          <svg class="bridge-graphic" viewBox="0 0 240 110" aria-hidden="true">
+            <path class="bridge-deck" d="M4 80H236" />
+            <path class="bridge-cable" d="M15 78Q62 15 110 78M130 78Q177 15 225 78" />
+            <line class="bridge-cable" x1="62" y1="15" x2="62" y2="94" />
+            <line class="bridge-cable" x1="177" y1="15" x2="177" y2="94" />
+          </svg>
+          <span class="landmark-target"><span>Harbor bridge</span></span>
+        </div>
+        <div class="depth-layer obstruction-layer" data-layer="neighbor-tower" data-depth="0.64">
+          <div class="neighbor-tower"></div>
+          <div class="obstruction-shadow"></div>
+        </div>
+        <div class="depth-layer balcony-layer" data-layer="balcony-foreground" data-depth="1">
+          <div class="balcony-ceiling"></div>
+          <div class="balcony-post"></div>
+          <div class="balcony-rail"></div>
+          <div class="balcony-plant"></div>
+          <div class="balcony-sill"></div>
+        </div>
+
+        <svg class="sightline-overlay" viewBox="0 0 320 180" aria-hidden="true">
+          <path d="M160 90 L218 65 L218 115 Z" />
         </svg>
-        <i class="depth-figure" aria-hidden="true"></i>
-        <i class="depth-reticle" id="depth-reticle" aria-hidden="true"></i>
-        <section class="depth-copy" aria-hidden="true">
-          <small>Trail atlas / live viewpoint</small>
-          <h1>Read the ridge in layers.</h1>
-          <div class="depth-meta"><span>04 planes</span><span>1,840 m</span><span>Clear</span></div>
+        <i id="depth-reticle" class="depth-reticle" aria-hidden="true"></i>
+
+        <header class="inspection-header"><span><strong>North Wharf</strong> / Unit 18C</span><span>View study · revision 04</span></header>
+        <section class="inspection-copy" aria-hidden="true">
+          <small>Sightline inspection</small>
+          <h1>Check the<br /><span>view corridor.</span></h1>
         </section>
-        <span class="depth-readout" id="depth-readout" aria-hidden="true">View centered / ready</span>
+        <section class="decision-card" aria-label="Sightline decision">
+          <small>Harbor landmark visibility</small>
+          <output id="decision-output" aria-live="polite">Partly screened</output>
+          <p id="decision-detail">Shift right to clear neighboring Tower 07.</p>
+        </section>
+
+        <nav class="view-controls" aria-label="Viewpoint presets">
+          <button class="view-control" type="button" data-view="left" aria-label="Inspect left viewpoint">Left</button>
+          <button class="view-control is-active" type="button" data-view="center" aria-label="Reset to center viewpoint" aria-pressed="true">Center</button>
+          <button class="view-control" type="button" data-view="right" aria-label="Inspect right viewpoint">Right</button>
+        </nav>
+        <span id="depth-readout" class="depth-readout" aria-hidden="true">Centered · 4 depth planes</span>
       </section>
-      <span class="library-badge">Motion · human depth planes</span>
-      <span class="scene-caption">near ×1.0 · horizon ×0.08</span>
+      <span class="library-badge">Motion · human depth inspection</span>
+      <span class="scene-caption">near ×1.00 · tower ×0.64 · harbor ×0.24 · sky ×0.06</span>
     </main>
   </body>
 </html>

@@ -16,6 +16,7 @@ const assert = (condition, message) => { if (!condition) errors.push(message); }
 const duplicates = values => [...new Set(values.filter((value, index) => values.indexOf(value) !== index))];
 const execFileAsync = promisify(execFile);
 const realPreviewKinds = new Set(['official-capture', 'local-demo-capture']);
+const readmeFilename = locale => locale.code === 'en' ? 'README.md' : `README.${locale.code}.md`;
 
 assert(supportedLocales.length === 20, 'The website must expose exactly the top 20 total-speaker locales.');
 assert(defaultLocale === 'en', 'English must remain the default locale.');
@@ -152,12 +153,17 @@ for (const category of categories) {
   assert(count > 0, `Empty effect category: ${category.id}.`);
 }
 
-const [html, readme, readmeZh, admissionAudit] = await Promise.all([
+const localizedReadmeFiles = supportedLocales.map(readmeFilename);
+const [html, admissionAudit, languageSupportDoc, legacyChineseReadme, ...localizedReadmes] = await Promise.all([
   readFile(resolve(root, 'demo', 'index.html'), 'utf8'),
-  readFile(resolve(root, 'README.md'), 'utf8'),
+  readFile(resolve(root, 'research', `demo-admission-audit-${admissionAuditSummary.auditedAt}.md`), 'utf8'),
+  readFile(resolve(root, 'docs', 'LANGUAGES.md'), 'utf8'),
   readFile(resolve(root, 'README.zh-CN.md'), 'utf8'),
-  readFile(resolve(root, 'research', `demo-admission-audit-${admissionAuditSummary.auditedAt}.md`), 'utf8')
+  ...localizedReadmeFiles.map(filename => readFile(resolve(root, filename), 'utf8'))
 ]);
+const readmeByLocale = new Map(supportedLocales.map((locale, index) => [locale.code, localizedReadmes[index]]));
+const readme = readmeByLocale.get('en');
+const readmeZh = readmeByLocale.get('zh-Hans');
 assert(html.includes("./data/effects.js"), 'Demo does not load the canonical effect catalog.');
 assert(html.includes("./data/locales.js"), 'Demo does not load the canonical locale catalog.');
 assert(html.includes('type="module"'), 'Demo catalog must load as an ES module.');
@@ -196,12 +202,24 @@ const liveDemo = 'https://giraffe-tree.github.io/awesome-web-effects/';
 assert(readme.includes(liveDemo), 'English README does not link to the current GitHub Pages site.');
 assert(readmeZh.includes(liveDemo), 'Chinese README does not link to the current GitHub Pages site.');
 for (const locale of supportedLocales) {
-  assert(readme.includes(locale.nativeName) && readme.includes(`?lang=${encodeURIComponent(locale.code)}`), `English README is missing locale ${locale.code}.`);
-  assert(readmeZh.includes(locale.nativeName) && readmeZh.includes(`?lang=${encodeURIComponent(locale.code)}`), `Chinese README is missing locale ${locale.code}.`);
+  const localizedReadme = readmeByLocale.get(locale.code);
+  assert(localizedReadme?.includes('# Awesome Web Effects'), `${locale.code}: localized README is missing its title.`);
+  assert(localizedReadme?.includes(`?lang=${encodeURIComponent(locale.code)}`), `${locale.code}: localized README does not link to its site locale.`);
+  assert(localizedReadme?.includes('docs/LANGUAGES.md'), `${locale.code}: localized README does not link to the language metadata document.`);
+  assert(!localizedReadme?.includes('## Languages') && !localizedReadme?.includes('## 支持语言'), `${locale.code}: language metadata must not be embedded in a README.`);
+  for (const targetLocale of supportedLocales) {
+    assert(localizedReadme?.includes(`[${targetLocale.nativeName}](${readmeFilename(targetLocale)})`), `${locale.code}: README language navigation is missing ${targetLocale.code}.`);
+  }
+  assert(languageSupportDoc.includes(locale.nativeName), `Language metadata document is missing ${locale.code}.`);
+  assert(languageSupportDoc.includes(`../${readmeFilename(locale)}`), `Language metadata document does not link to README ${locale.code}.`);
+  assert(languageSupportDoc.includes(`?lang=${encodeURIComponent(locale.code)}`), `Language metadata document does not link to site locale ${locale.code}.`);
 }
+assert(!readme.includes('| # | Language') && !readmeZh.includes('| # | 语言'), 'Language ranking tables must live only in docs/LANGUAGES.md.');
+assert(languageSupportDoc.includes('Ethnologue 200') && languageSupportDoc.includes('| # | Language / 语言 |'), 'Language metadata document is missing ranking methodology or the locale table.');
+assert(legacyChineseReadme.includes('README.zh-Hans.md'), 'Legacy README.zh-CN.md must point to the canonical Simplified Chinese README.');
 assert(readme.includes('research/ai-native-homepages-100.md'), 'English README does not link to the homepage research summary.');
 assert(readmeZh.includes('research/ai-native-homepages-100.md'), 'Chinese README does not link to the homepage research summary.');
-assert(!`${html}\n${readme}\n${readmeZh}`.includes('giraffe-tree/awesome-interaction'), 'Stale awesome-interaction repository or Pages link detected.');
+assert(!`${html}\n${localizedReadmes.join('\n')}\n${languageSupportDoc}`.includes('giraffe-tree/awesome-interaction'), 'Stale awesome-interaction repository or Pages link detected.');
 
 try {
   const { stdout } = await execFileAsync(

@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 import { categories, effects, projects, snapshotDate } from '../demo/data/effects.js';
 import { admissionAuditSummary, admissionPolicy } from '../demo/data/demo-admission.js';
-import { supportedLocales } from '../demo/data/locales.js';
+import { getMessages, supportedLocales } from '../demo/data/locales.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const liveDemo = 'https://giraffe-tree.github.io/awesome-web-effects/';
@@ -78,7 +78,8 @@ const escapeHtml = value => String(value)
   .replaceAll('"', '&quot;');
 
 function visualShowcase(language) {
-  const isZh = language === 'zh';
+  const isZh = language === 'zh-Hans';
+  const locale = supportedLocales.find(item => item.code === language) || supportedLocales[0];
   const cards = showcaseIds.map(id => {
     const effect = effects.find(item => item.id === id);
     if (!effect) throw new Error(`Missing README showcase effect: ${id}`);
@@ -87,7 +88,7 @@ function visualShowcase(language) {
     const category = categoryById.get(effect.category);
     const name = isZh ? effect.nameZh : effect.name;
     const label = isZh ? category.labelZh : category.label;
-    return `<td width="33%" align="center"><a href="${liveDemo}#${effect.id}"><img src="demo/gifs/${source.preview}.gif" width="270" alt="${escapeHtml(name)}"></a><br><sub><strong>${escapeHtml(name)}</strong><br>${escapeHtml(label)} · ${effect.admission.total}/100</sub></td>`;
+    return `<td width="33%" align="center"><a href="${siteUrlFor(locale)}#${effect.id}"><img src="demo/gifs/${source.preview}.gif" width="270" alt="${escapeHtml(name)}"></a><br><sub><strong>${escapeHtml(name)}</strong><br>${escapeHtml(label)} · ${effect.admission.total}/100</sub></td>`;
   });
   const rows = [];
   for (let index = 0; index < cards.length; index += 3) {
@@ -105,35 +106,103 @@ function metricStrip(language) {
   return `<table><tr>${values.map((value, index) => `<td width="25%" align="center"><strong>${value}</strong><br><sub>${labels[index]}</sub></td>`).join('')}</tr></table>`;
 }
 
-function languageSupportSection(language) {
-  const isZh = language === 'zh';
-  const header = isZh
-    ? '| # | 语言 | 本地名称 | 总使用者（L1 + L2） | 网站 locale | 方向 |\n| ---: | --- | --- | ---: | --- | --- |'
-    : '| # | Language | Native name | Total speakers (L1 + L2) | Site locale | Direction |\n| ---: | --- | --- | ---: | --- | --- |';
-  const rows = supportedLocales.map(locale => {
-    const name = isZh ? locale.chineseName : locale.englishName;
-    const siteUrl = `${liveDemo}?lang=${encodeURIComponent(locale.code)}`;
-    return `| ${locale.rank} | ${name} | ${locale.nativeName} | ${formatStars(locale.speakersMillions)}M | [\`${locale.code}\`](${siteUrl}) | ${locale.dir.toUpperCase()} |`;
-  });
-  const intro = isZh
-    ? '网站界面支持下列 20 种 locale，包括可分享的 `?lang=` URL、浏览器语言检测、本地持久化、本地化数字，以及阿拉伯语、乌尔都语和埃及阿拉伯语的 RTL 布局。完整 README 目前提供英文与简体中文；150 个效果的技术名称、行为字段、代码和 Agent Prompt 仍以规范英文为准，已有中文名称时同时显示中文。'
-    : 'The site interface supports the following 20 locales with shareable `?lang=` URLs, browser-language detection, local persistence, localized numbers, and RTL layout for Arabic, Urdu, and Egyptian Arabic. Full README documentation remains available in English and Simplified Chinese; the 150 effects keep canonical English technical names, behavior fields, code, and agent prompts, with existing Chinese names shown where authored.';
-  const source = isZh
-    ? '排名采用 [Ethnologue 200（2026，第 29 版）](https://shop.ethnologue.com/products/2026-ethnologue-200) 的单一语言总使用者（L1 + L2）口径，并通过[完整总使用者排名](https://en.wikipedia.org/wiki/List_of_languages_by_total_number_of_speakers)交叉核对。人数为估计值；多语者会在不同语言中重复计数，普通话与全部汉语并不等同，现代标准阿拉伯语与埃及阿拉伯语也分开统计。'
-    : 'The ranking uses the individual-language, total-speaker (L1 + L2) method from [Ethnologue 200 (2026, 29th edition)](https://shop.ethnologue.com/products/2026-ethnologue-200), cross-checked against the [complete total-speaker table](https://en.wikipedia.org/wiki/List_of_languages_by_total_number_of_speakers). Counts are estimates; multilingual people appear in more than one language, Mandarin is not all Chinese varieties combined, and Modern Standard Arabic and Egyptian Arabic are counted separately.';
-  return `${intro}\n\n${header}\n${rows.join('\n')}\n\n${source}`;
+const readmeFilename = locale => locale.code === 'en' ? 'README.md' : `README.${locale.code}.md`;
+const siteUrlFor = locale => `${liveDemo}?lang=${encodeURIComponent(locale.code)}`;
+
+function languageNavigation(fromDocs = false) {
+  const prefix = fromDocs ? '../' : '';
+  return supportedLocales.map(locale => `[${locale.nativeName}](${prefix}${readmeFilename(locale)})`).join(' · ');
+}
+
+function localizedMetricStrip(locale) {
+  const t = getMessages(locale.code);
+  const labels = [t.effects, t.gifs, t.previewLocal, t.curatorialScore];
+  const values = [effects.length, verifiedPreviewCount, localDemoPreviewCount, `${admissionPolicy.threshold}/100`];
+  return `<table><tr>${values.map((value, index) => `<td width="25%" align="center"><strong>${value}</strong><br><sub>${escapeHtml(labels[index])}</sub></td>`).join('')}</tr></table>`;
+}
+
+function localizedReadme(locale) {
+  const t = getMessages(locale.code);
+  const siteUrl = siteUrlFor(locale);
+  return `# Awesome Web Effects
+
+${languageNavigation()}
+
+<p align="center"><strong>${escapeHtml(t.kicker)}</strong></p>
+<p align="center">${escapeHtml(t.hero)}</p>
+
+${visualShowcase(locale.code)}
+
+<p align="center"><a href="${siteUrl}"><strong>${escapeHtml(t.browse)} →</strong></a></p>
+
+## ${escapeHtml(t.section)}
+
+${escapeHtml(t.catalogTitle)}
+
+${localizedMetricStrip(locale)}
+
+<table><tr><td width="33%"><strong>${escapeHtml(t.visualTitle)}</strong><br><sub>${escapeHtml(t.visualCopy)}</sub></td><td width="33%"><strong>${escapeHtml(t.codeTitle)}</strong><br><sub>${escapeHtml(t.codeCopy)}</sub></td><td width="33%"><strong>${escapeHtml(t.promptTitle)}</strong><br><sub>${escapeHtml(t.promptCopy)}</sub></td></tr></table>
+
+## ${escapeHtml(t.codeTitle)}
+
+${escapeHtml(t.codeCopy)}
+
+\`\`\`bash
+python3 -m http.server 4173 --directory demo
+\`\`\`
+
+- [${escapeHtml(t.browse)}](${siteUrl})
+- [${escapeHtml(t.repo)}](https://github.com/giraffe-tree/awesome-web-effects)
+- [${escapeHtml(t.viewReference)}](README.md)
+- [Language metadata / 语言资料](docs/LANGUAGES.md)
+
+${escapeHtml(t.footer)}
+`;
+}
+
+function languageSupportDocument() {
+  const header = '| # | Language / 语言 | Native name / 本地名称 | Total speakers (L1 + L2) | README | Site locale | Direction |\n| ---: | --- | --- | ---: | --- | --- | --- |';
+  const rows = supportedLocales.map(locale => `| ${locale.rank} | ${locale.englishName} / ${locale.chineseName} | ${locale.nativeName} | ${formatStars(locale.speakersMillions)}M | [${readmeFilename(locale)}](../${readmeFilename(locale)}) | [\`${locale.code}\`](${siteUrlFor(locale)}) | ${locale.dir.toUpperCase()} |`);
+  return `# Supported languages / 支持语言
+
+${languageNavigation(true)}
+
+The website UI and README entry points support the following 20 locales. The 150 effect names, behavior fields, code samples, and agent prompts remain canonical English technical content, with authored Simplified Chinese names shown where available.
+
+网站界面与 README 入口支持以下 20 种 locale。150 个效果的名称、行为字段、代码示例和 Agent Prompt 仍以规范英文技术内容为准，已有简体中文名称时会同时显示。
+
+${header}
+${rows.join('\n')}
+
+## Method / 统计口径
+
+The ranking uses the individual-language, total-speaker (L1 + L2) method from [Ethnologue 200 (2026, 29th edition)](https://shop.ethnologue.com/products/2026-ethnologue-200), cross-checked against the [complete total-speaker table](https://en.wikipedia.org/wiki/List_of_languages_by_total_number_of_speakers). Counts are estimates; multilingual people appear in more than one language, Mandarin is not all Chinese varieties combined, and Modern Standard Arabic and Egyptian Arabic are counted separately.
+
+排名采用 [Ethnologue 200（2026，第 29 版）](https://shop.ethnologue.com/products/2026-ethnologue-200) 的单一语言总使用者（L1 + L2）口径，并通过[完整总使用者排名](https://en.wikipedia.org/wiki/List_of_languages_by_total_number_of_speakers)交叉核对。人数为估计值；多语者会在不同语言中重复计数，普通话不等于全部汉语，现代标准阿拉伯语与埃及阿拉伯语也分开统计。
+
+## Compatibility / 兼容性
+
+- URL: \`?lang=<locale>\`; explicit URL selection overrides local storage and browser language.
+- RTL: \`ar\`, \`ur\`, and \`arz\` set \`dir="rtl"\`.
+- Code, repository paths, and effect keys remain isolated left-to-right.
+- URL：\`?lang=<locale>\`；显式 URL 选择优先于本地存储和浏览器语言。
+- RTL：\`ar\`、\`ur\`、\`arz\` 使用 \`dir="rtl"\`。
+- 代码、仓库路径和效果 Key 保持从左到右隔离显示。
+`;
 }
 
 const english = `# Awesome Web Effects
 
-[中文文档](README.zh-CN.md) · [Open the live visual catalog](${liveDemo})
+${languageNavigation()}
+
+[Open the live visual catalog](${siteUrlFor(supportedLocales[0])}) · [Language metadata](docs/LANGUAGES.md)
 
 <p align="center"><strong>See the interaction. Learn its name. Copy the code or agent prompt.</strong></p>
 <p align="center">A visual atlas for the moment when you know the feeling you want, but not the words to describe the effect.</p>
 
 ${visualShowcase('en')}
 
-<p align="center"><a href="${liveDemo}"><strong>Explore all ${effects.length} live effects →</strong></a></p>
+<p align="center"><a href="${siteUrlFor(supportedLocales[0])}"><strong>Explore all ${effects.length} live effects →</strong></a></p>
 
 ## See it. Name it. Build it.
 
@@ -142,10 +211,6 @@ ${metricStrip('en')}
 <table><tr><td width="33%"><strong>① Find by sight</strong><br><sub>Scan real motion instead of guessing library names.</sub></td><td width="33%"><strong>② Open the effect</strong><br><sub>Check the score, source, behavior and minimal implementation.</sub></td><td width="33%"><strong>③ Ship the idea</strong><br><sub>Copy code or a scoped prompt for Codex / Claude Code.</sub></td></tr></table>
 
 This is an **effect-first**, curator-reviewed reference—not another repository list. Every published item has visible evidence, a score of at least **${admissionPolicy.threshold}/100**, provenance, reusable code and a runnable or official preview.
-
-## Languages
-
-${languageSupportSection('en')}
 
 ## Browse by visual family
 
@@ -220,7 +285,7 @@ Expected project URL: [${liveDemo}](${liveDemo})
 - Keep \`effect.id\` semantic and stable; never derive it from a repository name.
 - Reusing a project across effects is valid. Add alternative implementations to an effect's \`sources\` array.
 - Keep snippets and previews on the source relation, not on the project or effect root.
-- Run \`node scripts/build-docs.mjs\` to regenerate both README files.
+- Run \`node scripts/build-docs.mjs\` to regenerate all localized README files and the language metadata document.
 - Run \`node scripts/validate.mjs\` before committing.
 
 GIFs and project names are used for research, indexing, and comparison. Rights remain with their respective authors.
@@ -228,14 +293,16 @@ GIFs and project names are used for research, indexing, and comparison. Rights r
 
 const chinese = `# Awesome Web Effects
 
-[English (default)](README.md) · [打开在线视觉目录](${liveDemo})
+${languageNavigation()}
+
+[打开在线视觉目录](${siteUrlFor(supportedLocales[1])}) · [语言资料](docs/LANGUAGES.md)
 
 <p align="center"><strong>先看见效果，再知道它叫什么，最后复制代码或 Agent 提示词。</strong></p>
 <p align="center">当你脑中已经有想要的感觉，却不知道如何描述特效时，这里就是一张可直接观看的 Web 交互图鉴。</p>
 
-${visualShowcase('zh')}
+${visualShowcase('zh-Hans')}
 
-<p align="center"><a href="${liveDemo}"><strong>查看全部 ${effects.length} 个实时效果 →</strong></a></p>
+<p align="center"><a href="${siteUrlFor(supportedLocales[1])}"><strong>查看全部 ${effects.length} 个实时效果 →</strong></a></p>
 
 ## 看见它、叫出它、实现它
 
@@ -244,10 +311,6 @@ ${metricStrip('zh')}
 <table><tr><td width="33%"><strong>① 用眼睛找</strong><br><sub>直接浏览真实动效，不必先猜库名或技术术语。</sub></td><td width="33%"><strong>② 点开效果</strong><br><sub>查看评分、来源、行为拆解和最小实现。</sub></td><td width="33%"><strong>③ 带走方案</strong><br><sub>复制代码，或把完整提示词交给 Codex / Claude Code。</sub></td></tr></table>
 
 这不是另一份仓库名称列表，而是一个**效果优先、经过人工策展评分**的视觉参考库。每个入选条目都有真实证据、不低于 **${admissionPolicy.threshold}/100** 的评分、可追溯来源、可复用代码，以及本地可运行或官方预览。
-
-## 支持语言
-
-${languageSupportSection('zh')}
 
 ## 按视觉类型浏览
 
@@ -322,15 +385,21 @@ Demo 完全静态且只使用相对路径。仓库内工作流会在推送到 \`
 - \`effect.id\` 必须语义化且保持稳定，禁止从仓库名派生。
 - 同一项目可被多个效果复用；替代实现加入效果的 \`sources\` 数组。
 - 代码与预览必须放在来源关系上，不能放到项目或效果根节点。
-- 运行 \`node scripts/build-docs.mjs\` 同步生成两份 README。
+- 运行 \`node scripts/build-docs.mjs\` 同步生成全部本地化 README 与语言资料文件。
 - 提交前运行 \`node scripts/validate.mjs\`。
 
 GIF 与项目名称仅用于研究、索引和比较，权利归各自作者所有。
 `;
 
+const readmeWrites = supportedLocales.map(locale => {
+  const content = locale.code === 'en' ? english : locale.code === 'zh-Hans' ? chinese : localizedReadme(locale);
+  return writeFile(resolve(root, readmeFilename(locale)), content);
+});
+
 await Promise.all([
-  writeFile(resolve(root, 'README.md'), english),
-  writeFile(resolve(root, 'README.zh-CN.md'), chinese)
+  ...readmeWrites,
+  writeFile(resolve(root, 'docs', 'LANGUAGES.md'), languageSupportDocument()),
+  writeFile(resolve(root, 'README.zh-CN.md'), '# 简体中文 README 已迁移\n\n[打开简体中文 README](README.zh-Hans.md)\n')
 ]);
 
-console.log(`Generated bilingual effect-first docs with ${supportedLocales.length} site locales for ${effects.length} effects and ${projects.length} source projects.`);
+console.log(`Generated ${supportedLocales.length} localized README files, language metadata, and the zh-CN compatibility pointer for ${effects.length} effects and ${projects.length} source projects.`);

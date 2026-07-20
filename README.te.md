@@ -1,0 +1,37 @@
+# Awesome Web Effects
+
+[English](README.md) · [简体中文](README.zh-Hans.md) · [हिन्दी](README.hi.md) · [Español](README.es.md) · [العربية](README.ar.md) · [Français](README.fr.md) · [বাংলা](README.bn.md) · [Português](README.pt.md) · [Bahasa Indonesia](README.id.md) · [اردو](README.ur.md) · [Русский](README.ru.md) · [Deutsch](README.de.md) · [日本語](README.ja.md) · [Naijá](README.pcm.md) · [العربي المصري](README.arz.md) · [मराठी](README.mr.md) · [Tiếng Việt](README.vi.md) · [తెలుగు](README.te.md) · [Kiswahili](README.sw.md) · [Hausa](README.ha.md)
+
+<p align="center"><strong>ఎఫెక్ట్‌కు ప్రాధాన్యమిచ్చే ఇంటరాక్షన్ అట్లాస్</strong></p>
+<p align="center">దృశ్య సమీక్షలో 80 లేదా అంతకంటే ఎక్కువ స్కోర్ చేసిన Demoలనే ప్రచురిస్తాము; ప్రతి దానిలో నిజమైన preview, కనిష్ఠ code, implementation prompt ఉంటాయి.</p>
+
+<table>
+<tr><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=te#synchronized-scenario-scene-handoff"><img src="demo/gifs/captured/synchronized-scenario-scene-handoff.gif" width="270" alt="Synchronized scenario scene handoff"></a><br><sub><strong>Synchronized scenario scene handoff</strong><br>Page &amp; layout · 98/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=te#pointer-injected-gpu-fluid"><img src="demo/gifs/captured/pointer-injected-gpu-fluid.gif" width="270" alt="Pointer-injected GPU fluid"></a><br><sub><strong>Pointer-injected GPU fluid</strong><br>3D &amp; WebGL · 98/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=te#dom-aware-drag-spawned-fish-flock"><img src="demo/gifs/captured/dom-aware-drag-spawned-fish-flock.gif" width="270" alt="DOM-aware drag-spawned fish flock"></a><br><sub><strong>DOM-aware drag-spawned fish flock</strong><br>Canvas &amp; 2D · 98/100</sub></td></tr>
+<tr><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=te#traveling-dot-headline-rewriter"><img src="demo/gifs/captured/traveling-dot-headline-rewriter.gif" width="270" alt="Traveling-dot headline eraser-writer"></a><br><sub><strong>Traveling-dot headline eraser-writer</strong><br>Text &amp; SVG · 97/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=te#drag-thrown-card-stack"><img src="demo/gifs/captured/drag-thrown-card-stack.gif" width="270" alt="Drag-thrown card stack"></a><br><sub><strong>Drag-thrown card stack</strong><br>Pointer &amp; hover · 94/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=te#scroll-scrubbed-document-generation-playback"><img src="demo/gifs/captured/scroll-scrubbed-document-generation-playback.gif" width="270" alt="Scroll-scrubbed document generation playback"></a><br><sub><strong>Scroll-scrubbed document generation playback</strong><br>Scroll &amp; reveal · 97/100</sub></td></tr>
+<tr><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=te#interactive-vector-state-machine"><img src="demo/gifs/captured/interactive-vector-state-machine.gif" width="270" alt="Interactive vector state machine"></a><br><sub><strong>Interactive vector state machine</strong><br>Motion &amp; choreography · 94/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=te#live-hand-landmark-video-overlay"><img src="demo/gifs/captured/live-hand-landmark-video-overlay.gif" width="270" alt="Live hand-landmark video overlay"></a><br><sub><strong>Live hand-landmark video overlay</strong><br>Canvas &amp; 2D · 94/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=te#refractive-glass-transmission-sculpture"><img src="demo/gifs/captured/refractive-glass-transmission-sculpture.gif" width="270" alt="Refractive glass transmission sculpture"></a><br><sub><strong>Refractive glass transmission sculpture</strong><br>3D &amp; WebGL · 95/100</sub></td></tr>
+</table>
+
+<p align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=te"><strong>ఎఫెక్ట్‌లను చూడండి →</strong></a></p>
+
+## ఇంటరాక్షన్ కేటలాగ్
+
+మొదట ప్రవర్తనను ఎంచుకోండి. తరువాత సాధనాన్ని ఎంచుకోండి.
+
+<table><tr><td width="25%" align="center"><strong>150</strong><br><sub>ఎఫెక్ట్‌లు</sub></td><td width="25%" align="center"><strong>150</strong><br><sub>ధృవీకరించిన GIFలు</sub></td><td width="25%" align="center"><strong>148</strong><br><sub>స్థానిక Demo</sub></td><td width="25%" align="center"><strong>80/100</strong><br><sub>క్యురేటోరియల్ ప్రవేశ స్కోర్</sub></td></tr></table>
+
+<table><tr><td width="33%"><strong>నిర్మించే ముందు నిజమైన Demo చూడండి.</strong><br><sub>ప్రతి ప్రచురిత అంశం సృజనాత్మకత, art direction, motion, చదవగలగడం, ప్రేరణ, ఆధారాలపై 100-పాయింట్ల సమీక్షను దాటింది.</sub></td><td width="33%"><strong>పనిచేసే codeతో ప్రారంభించండి.</strong><br><sub>ఏ ఎఫెక్ట్‌నైనా తెరిచి, సిఫారసు చేసిన మూలం నుంచి అతి చిన్న ఉపయోగకర implementationను కాపీ చేయండి.</sub></td><td width="33%"><strong>మీ coding agentకు అప్పగించండి.</strong><br><sub>ఒక క్లిక్‌తో accessibility, responsive, cleanup, reduced-motion అవసరాలతో స్పష్టమైన prompt కాపీ అవుతుంది.</sub></td></tr></table>
+
+## పనిచేసే codeతో ప్రారంభించండి.
+
+ఏ ఎఫెక్ట్‌నైనా తెరిచి, సిఫారసు చేసిన మూలం నుంచి అతి చిన్న ఉపయోగకర implementationను కాపీ చేయండి.
+
+```bash
+python3 -m http.server 4173 --directory demo
+```
+
+- [ఎఫెక్ట్‌లను చూడండి](https://giraffe-tree.github.io/awesome-web-effects/?lang=te)
+- [రిపోజిటరీ చూడండి](https://github.com/giraffe-tree/awesome-web-effects)
+- [Research reference తెరవండి ↗](README.md)
+- [Language metadata / 语言资料](docs/LANGUAGES.md)
+
+ఎఫెక్ట్-మొదటి, బహుభాషా, implementation కోసం రూపొందించబడింది. ప్రాజెక్ట్ పేర్లు, previews ఆయా రచయితల ఆస్తి.

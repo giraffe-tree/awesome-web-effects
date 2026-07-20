@@ -1,17 +1,19 @@
 # Awesome Web Effects
 
-[中文文档](README.zh-CN.md) · [Open the live visual catalog](https://giraffe-tree.github.io/awesome-web-effects/)
+[English](README.md) · [简体中文](README.zh-Hans.md) · [हिन्दी](README.hi.md) · [Español](README.es.md) · [العربية](README.ar.md) · [Français](README.fr.md) · [বাংলা](README.bn.md) · [Português](README.pt.md) · [Bahasa Indonesia](README.id.md) · [اردو](README.ur.md) · [Русский](README.ru.md) · [Deutsch](README.de.md) · [日本語](README.ja.md) · [Naijá](README.pcm.md) · [العربي المصري](README.arz.md) · [मराठी](README.mr.md) · [Tiếng Việt](README.vi.md) · [తెలుగు](README.te.md) · [Kiswahili](README.sw.md) · [Hausa](README.ha.md)
+
+[Open the live visual catalog](https://giraffe-tree.github.io/awesome-web-effects/?lang=en) · [Language metadata](docs/LANGUAGES.md)
 
 <p align="center"><strong>See the interaction. Learn its name. Copy the code or agent prompt.</strong></p>
 <p align="center">A visual atlas for the moment when you know the feeling you want, but not the words to describe the effect.</p>
 
 <table>
-<tr><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/#synchronized-scenario-scene-handoff"><img src="demo/gifs/captured/synchronized-scenario-scene-handoff.gif" width="270" alt="Synchronized scenario scene handoff"></a><br><sub><strong>Synchronized scenario scene handoff</strong><br>Page &amp; layout · 98/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/#pointer-injected-gpu-fluid"><img src="demo/gifs/captured/pointer-injected-gpu-fluid.gif" width="270" alt="Pointer-injected GPU fluid"></a><br><sub><strong>Pointer-injected GPU fluid</strong><br>3D &amp; WebGL · 98/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/#dom-aware-drag-spawned-fish-flock"><img src="demo/gifs/captured/dom-aware-drag-spawned-fish-flock.gif" width="270" alt="DOM-aware drag-spawned fish flock"></a><br><sub><strong>DOM-aware drag-spawned fish flock</strong><br>Canvas &amp; 2D · 98/100</sub></td></tr>
-<tr><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/#traveling-dot-headline-rewriter"><img src="demo/gifs/captured/traveling-dot-headline-rewriter.gif" width="270" alt="Traveling-dot headline eraser-writer"></a><br><sub><strong>Traveling-dot headline eraser-writer</strong><br>Text &amp; SVG · 97/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/#drag-thrown-card-stack"><img src="demo/gifs/captured/drag-thrown-card-stack.gif" width="270" alt="Drag-thrown card stack"></a><br><sub><strong>Drag-thrown card stack</strong><br>Pointer &amp; hover · 94/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/#scroll-scrubbed-document-generation-playback"><img src="demo/gifs/captured/scroll-scrubbed-document-generation-playback.gif" width="270" alt="Scroll-scrubbed document generation playback"></a><br><sub><strong>Scroll-scrubbed document generation playback</strong><br>Scroll &amp; reveal · 97/100</sub></td></tr>
-<tr><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/#interactive-vector-state-machine"><img src="demo/gifs/captured/interactive-vector-state-machine.gif" width="270" alt="Interactive vector state machine"></a><br><sub><strong>Interactive vector state machine</strong><br>Motion &amp; choreography · 94/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/#live-hand-landmark-video-overlay"><img src="demo/gifs/captured/live-hand-landmark-video-overlay.gif" width="270" alt="Live hand-landmark video overlay"></a><br><sub><strong>Live hand-landmark video overlay</strong><br>Canvas &amp; 2D · 94/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/#refractive-glass-transmission-sculpture"><img src="demo/gifs/captured/refractive-glass-transmission-sculpture.gif" width="270" alt="Refractive glass transmission sculpture"></a><br><sub><strong>Refractive glass transmission sculpture</strong><br>3D &amp; WebGL · 95/100</sub></td></tr>
+<tr><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#synchronized-scenario-scene-handoff"><img src="demo/gifs/captured/synchronized-scenario-scene-handoff.gif" width="270" alt="Synchronized scenario scene handoff"></a><br><sub><strong>Synchronized scenario scene handoff</strong><br>Page &amp; layout · 98/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#pointer-injected-gpu-fluid"><img src="demo/gifs/captured/pointer-injected-gpu-fluid.gif" width="270" alt="Pointer-injected GPU fluid"></a><br><sub><strong>Pointer-injected GPU fluid</strong><br>3D &amp; WebGL · 98/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#dom-aware-drag-spawned-fish-flock"><img src="demo/gifs/captured/dom-aware-drag-spawned-fish-flock.gif" width="270" alt="DOM-aware drag-spawned fish flock"></a><br><sub><strong>DOM-aware drag-spawned fish flock</strong><br>Canvas &amp; 2D · 98/100</sub></td></tr>
+<tr><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#traveling-dot-headline-rewriter"><img src="demo/gifs/captured/traveling-dot-headline-rewriter.gif" width="270" alt="Traveling-dot headline eraser-writer"></a><br><sub><strong>Traveling-dot headline eraser-writer</strong><br>Text &amp; SVG · 97/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#drag-thrown-card-stack"><img src="demo/gifs/captured/drag-thrown-card-stack.gif" width="270" alt="Drag-thrown card stack"></a><br><sub><strong>Drag-thrown card stack</strong><br>Pointer &amp; hover · 94/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#scroll-scrubbed-document-generation-playback"><img src="demo/gifs/captured/scroll-scrubbed-document-generation-playback.gif" width="270" alt="Scroll-scrubbed document generation playback"></a><br><sub><strong>Scroll-scrubbed document generation playback</strong><br>Scroll &amp; reveal · 97/100</sub></td></tr>
+<tr><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#interactive-vector-state-machine"><img src="demo/gifs/captured/interactive-vector-state-machine.gif" width="270" alt="Interactive vector state machine"></a><br><sub><strong>Interactive vector state machine</strong><br>Motion &amp; choreography · 94/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#live-hand-landmark-video-overlay"><img src="demo/gifs/captured/live-hand-landmark-video-overlay.gif" width="270" alt="Live hand-landmark video overlay"></a><br><sub><strong>Live hand-landmark video overlay</strong><br>Canvas &amp; 2D · 94/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#refractive-glass-transmission-sculpture"><img src="demo/gifs/captured/refractive-glass-transmission-sculpture.gif" width="270" alt="Refractive glass transmission sculpture"></a><br><sub><strong>Refractive glass transmission sculpture</strong><br>3D &amp; WebGL · 95/100</sub></td></tr>
 </table>
 
-<p align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/"><strong>Explore all 150 live effects →</strong></a></p>
+<p align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en"><strong>Explore all 150 live effects →</strong></a></p>
 
 ## See it. Name it. Build it.
 
@@ -20,35 +22,6 @@
 <table><tr><td width="33%"><strong>① Find by sight</strong><br><sub>Scan real motion instead of guessing library names.</sub></td><td width="33%"><strong>② Open the effect</strong><br><sub>Check the score, source, behavior and minimal implementation.</sub></td><td width="33%"><strong>③ Ship the idea</strong><br><sub>Copy code or a scoped prompt for Codex / Claude Code.</sub></td></tr></table>
 
 This is an **effect-first**, curator-reviewed reference—not another repository list. Every published item has visible evidence, a score of at least **80/100**, provenance, reusable code and a runnable or official preview.
-
-## Languages
-
-The site interface supports the following 20 locales with shareable `?lang=` URLs, browser-language detection, local persistence, localized numbers, and RTL layout for Arabic, Urdu, and Egyptian Arabic. Full README documentation remains available in English and Simplified Chinese; the 150 effects keep canonical English technical names, behavior fields, code, and agent prompts, with existing Chinese names shown where authored.
-
-| # | Language | Native name | Total speakers (L1 + L2) | Site locale | Direction |
-| ---: | --- | --- | ---: | --- | --- |
-| 1 | English | English | 1,493M | [`en`](https://giraffe-tree.github.io/awesome-web-effects/?lang=en) | LTR |
-| 2 | Mandarin Chinese | 简体中文 | 1,183M | [`zh-Hans`](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans) | LTR |
-| 3 | Hindi | हिन्दी | 611M | [`hi`](https://giraffe-tree.github.io/awesome-web-effects/?lang=hi) | LTR |
-| 4 | Spanish | Español | 561M | [`es`](https://giraffe-tree.github.io/awesome-web-effects/?lang=es) | LTR |
-| 5 | Modern Standard Arabic | العربية | 335M | [`ar`](https://giraffe-tree.github.io/awesome-web-effects/?lang=ar) | RTL |
-| 6 | French | Français | 334M | [`fr`](https://giraffe-tree.github.io/awesome-web-effects/?lang=fr) | LTR |
-| 7 | Bengali | বাংলা | 274M | [`bn`](https://giraffe-tree.github.io/awesome-web-effects/?lang=bn) | LTR |
-| 8 | Portuguese | Português | 269M | [`pt`](https://giraffe-tree.github.io/awesome-web-effects/?lang=pt) | LTR |
-| 9 | Indonesian | Bahasa Indonesia | 255M | [`id`](https://giraffe-tree.github.io/awesome-web-effects/?lang=id) | LTR |
-| 10 | Urdu | اردو | 246M | [`ur`](https://giraffe-tree.github.io/awesome-web-effects/?lang=ur) | RTL |
-| 11 | Russian | Русский | 210M | [`ru`](https://giraffe-tree.github.io/awesome-web-effects/?lang=ru) | LTR |
-| 12 | Standard German | Deutsch | 133M | [`de`](https://giraffe-tree.github.io/awesome-web-effects/?lang=de) | LTR |
-| 13 | Japanese | 日本語 | 126M | [`ja`](https://giraffe-tree.github.io/awesome-web-effects/?lang=ja) | LTR |
-| 14 | Nigerian Pidgin | Naijá | 121M | [`pcm`](https://giraffe-tree.github.io/awesome-web-effects/?lang=pcm) | LTR |
-| 15 | Egyptian Arabic | العربي المصري | 118M | [`arz`](https://giraffe-tree.github.io/awesome-web-effects/?lang=arz) | RTL |
-| 16 | Marathi | मराठी | 99M | [`mr`](https://giraffe-tree.github.io/awesome-web-effects/?lang=mr) | LTR |
-| 17 | Vietnamese | Tiếng Việt | 97M | [`vi`](https://giraffe-tree.github.io/awesome-web-effects/?lang=vi) | LTR |
-| 18 | Telugu | తెలుగు | 96M | [`te`](https://giraffe-tree.github.io/awesome-web-effects/?lang=te) | LTR |
-| 19 | Swahili | Kiswahili | 95M | [`sw`](https://giraffe-tree.github.io/awesome-web-effects/?lang=sw) | LTR |
-| 20 | Hausa | Hausa | 94M | [`ha`](https://giraffe-tree.github.io/awesome-web-effects/?lang=ha) | LTR |
-
-The ranking uses the individual-language, total-speaker (L1 + L2) method from [Ethnologue 200 (2026, 29th edition)](https://shop.ethnologue.com/products/2026-ethnologue-200), cross-checked against the [complete total-speaker table](https://en.wikipedia.org/wiki/List_of_languages_by_total_number_of_speakers). Counts are estimates; multilingual people appear in more than one language, Mandarin is not all Chinese varieties combined, and Modern Standard Arabic and Egyptian Arabic are counted separately.
 
 ## Browse by visual family
 
@@ -342,7 +315,7 @@ Expected project URL: [https://giraffe-tree.github.io/awesome-web-effects/](http
 - Keep `effect.id` semantic and stable; never derive it from a repository name.
 - Reusing a project across effects is valid. Add alternative implementations to an effect's `sources` array.
 - Keep snippets and previews on the source relation, not on the project or effect root.
-- Run `node scripts/build-docs.mjs` to regenerate both README files.
+- Run `node scripts/build-docs.mjs` to regenerate all localized README files and the language metadata document.
 - Run `node scripts/validate.mjs` before committing.
 
 GIFs and project names are used for research, indexing, and comparison. Rights remain with their respective authors.

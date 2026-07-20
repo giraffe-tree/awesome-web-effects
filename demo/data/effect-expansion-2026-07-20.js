@@ -285,23 +285,23 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "card-metadata-to-cta-role-swap",
-    "name": "Card metadata-to-CTA role swap",
-    "nameZh": "卡片元数据到 CTA 角色互换",
+    "name": "Research-card baseline role handoff",
+    "nameZh": "研究卡同基线角色交接",
     "category": "pointer",
     "sourceUrl": "https://www.together.ai/",
-    "difference": "同一排版基线从作者信息接力为 CTA，而不是加一个常驻遮罩按钮。",
+    "difference": "同一实测排版槽让作者、报告编号与阅读时长完整让位给下一步操作，CTA 并非叠加遮罩；研究主题、证据图和触发意图始终保持上下文连续。",
     "behavior": {
-      "trigger": "hover/focus",
-      "response": "Move metadata out and grow an action into the same semantic slot",
-      "timing": "coordinated reversible role handoff",
-      "layer": "research card footer"
+      "trigger": "real mouse hover, keyboard focus/toggle, touch/pen toggle, Escape, or Reset",
+      "response": "Hand one measured baseline from author/report metadata to Open field report while card intent, ARIA state, and evidence context stay synchronized",
+      "timing": "human-owned 260 ms reversible and interruptible role handoff with no automatic rehearsal",
+      "layer": "Field Research Archive study card and one shared semantic role slot"
     },
     "implementation": {
       "projectId": "motiondivision-motion",
       "projectUrl": "https://github.com/motiondivision/motion",
       "library": "motion@12.42.2",
       "renderer": "dom",
-      "snippet": "metaMotion.time = t; ctaMotion.time = t; card.style.setProperty('--bloom', bloom(t));",
+      "snippet": "const options={duration:.26};\nanimate(metadata,{opacity:0,y:-7},options);\nanimate(cta,{opacity:1,y:0},options);\nroleSlot.dataset.activeRole='cta';",
       "referenceUrl": "https://www.together.ai/"
     },
     "scores": {
@@ -313,19 +313,19 @@ export const effectExpansion100Specs = [
       "evidence": 9,
       "total": 91
     },
-    "rationaleZh": "角色接力与信息职责变化构成独立卡片交互词汇。",
+    "rationaleZh": "作者、报告编号与阅读时长和“打开实地报告”共享完全一致的基线矩形；真实悬停、焦点、触摸或键盘意图触发可逆交接，语义状态与 260ms Motion 过渡同步。",
     "batch": "A",
-    "demo": "三张研究卡，作者/年份在悬停后让位给“展开实验”操作。",
-    "capture": "依次 hover 两张卡，停在元数据退出和 CTA 完成两个关键帧。",
+    "demo": "一张可信的城市降温研究卡，作者/报告/阅读时长在同一实测槽中让位给“打开实地报告”，右侧证据图保持上下文。",
+    "capture": "真实 hover/focus 触发角色交接，快速离开证明可取消反向，激活 CTA 后用 Escape/Reset 恢复，再以键盘固定完成态。",
     "risk": {
       "level": "medium",
-      "detail": "若只是绝对定位按钮淡入，会与常规 hover 重复。"
+      "detail": "必须证明元数据和 CTA 共用同一几何基线，并由真人意图驱动语义与视觉同步切换；否则会退化成普通按钮淡入。"
     },
     "observedImplementation": {
       "projectId": "motiondivision-motion",
       "library": "Motion",
       "renderer": "DOM",
-      "snippet": "animate('.meta',{y:-16,opacity:0});animate('.cta',{y:[16,0],opacity:[0,1]})",
+      "snippet": "animate('.meta',{y:-7,opacity:0});animate('.cta',{y:[7,0],opacity:[0,1]})",
       "projectUrl": "https://github.com/motiondivision/motion",
       "referenceUrl": "https://motion.dev/docs/animate"
     }

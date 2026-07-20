@@ -550,6 +550,48 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 34:
                 page.locator('#starfield-stage canvas').focus()
                 page.keyboard.press("End")
+        elif demo["id"] == "card-metadata-to-cta-role-swap":
+            if index == 3:
+                page.locator('#research-card').hover()
+            elif index == 4:
+                page.wait_for_timeout(340)
+            elif index == 7:
+                page.mouse.move(1, 1)
+            elif index == 8:
+                page.wait_for_timeout(340)
+            elif index == 11:
+                page.locator('#research-card').hover()
+            elif index == 12:
+                page.mouse.move(1, 1)
+            elif index == 13:
+                page.wait_for_timeout(340)
+            elif index == 16:
+                page.locator('#research-card').focus()
+            elif index == 17:
+                page.wait_for_timeout(340)
+            elif index == 19:
+                page.keyboard.press("Enter")
+            elif index == 21:
+                page.locator('#cta-button').click()
+            elif index == 24:
+                page.keyboard.press("Escape")
+            elif index == 25:
+                page.wait_for_timeout(340)
+            elif index == 26:
+                page.mouse.move(1, 1)
+            elif index == 28:
+                page.locator('#research-card').hover()
+            elif index == 29:
+                page.wait_for_timeout(340)
+            elif index == 31:
+                page.locator('#reset-button').click()
+            elif index == 32:
+                page.wait_for_timeout(340)
+            elif index == 34:
+                page.locator('#research-card').focus()
+                page.keyboard.press("Space")
+            elif index == 35:
+                page.wait_for_timeout(340)
         elif demo["id"] == "blurhash-to-photo-progressive-reveal":
             pointer_x = 230 if .5 <= preview_time < 2.25 else 32
             page.mouse.move(pointer_x, 90)
@@ -1269,6 +1311,42 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["renderCount"] <= 0
         ):
             raise RuntimeError(f"{demo['id']} did not capture real wheel, drag, chapter, keyboard, and boundary-owned observatory depth: {interaction!r}")
+    elif demo["id"] == "card-metadata-to-cta-role-swap":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            interaction["automaticRehearsal"]
+            or interaction["previewClockDriven"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInput"]
+            or not interaction["userInitiatedChangesOnly"]
+            or not interaction["initialStaticVerified"]
+            or not interaction["baselineValidated"]
+            or not interaction["metadataVisibleValidated"]
+            or not interaction["ctaVisibleValidated"]
+            or interaction["inputCount"] < 11
+            or interaction["pointerInputCount"] < 8
+            or interaction["keyboardInputCount"] < 3
+            or interaction["hoverEnterCount"] < 3
+            or interaction["hoverLeaveCount"] < 3
+            or interaction["focusInCount"] < 2
+            or interaction["focusOutCount"] < 1
+            or interaction["keyboardToggleCount"] < 2
+            or interaction["escapeResetCount"] < 1
+            or interaction["buttonResetCount"] < 1
+            or interaction["ctaActivationCount"] < 1
+            or interaction["handoffStartCount"] < 8
+            or interaction["handoffCompleteCount"] < 5
+            or interaction["handoffCancelCount"] < 1
+            or not interaction["desiredCtaVisible"]
+            or interaction["activeRole"] != "cta"
+            or interaction["phase"] != "cta"
+            or not interaction["focusWithin"]
+            or not interaction["touchPinned"]
+            or interaction["animationActive"]
+            or interaction["inputKind"] != "keyboard"
+            or interaction["lastTrustedEvent"] != "space-toggle"
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a real shared-baseline metadata/CTA handoff across hover, focus, activation, cancellation, and reset: {interaction!r}")
     elif demo["id"] == "blurhash-to-photo-progressive-reveal":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__()")
         if interaction["pointerEvents"] < 3 or interaction["pointerOverPhoto"]:

@@ -1,8 +1,528 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>Motion — Card Metadata to CTA Role Swap</title><style>
-:root{--preview-background:#090d12}.swap-stage{background:radial-gradient(circle at 79% 25%,#326b785c,transparent 36%),linear-gradient(145deg,#070a0e,#111d25)}.research-card{position:absolute;inset:32px 25px 19px;overflow:hidden;border:1px solid #bde8ef2a;border-radius:18px;background:linear-gradient(135deg,#10252b,#0c1219);color:#eafcff;cursor:pointer}.research-card::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 70% 30%,#63f1db33,transparent 24%),repeating-linear-gradient(90deg,transparent 0 21px,#b9ffff08 22px);opacity:var(--bloom,0)}.research-kicker{position:absolute;left:15px;top:14px;font:900 6px/1 ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;color:#7fb9b4}.research-title{position:absolute;left:14px;top:39px;margin:0;font:900 22px/.88 Georgia,serif;letter-spacing:-.055em}.role-slot{position:absolute;left:15px;right:15px;bottom:14px;height:25px;border-top:1px solid #ffffff18;padding-top:9px}.metadata,.research-cta{position:absolute;left:0;top:8px;font:900 6px/1 ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase}.metadata{color:#8ea1a7}.research-cta{padding:5px 8px;border-radius:99px;background:#79f2d6;color:#071411}.scene-caption{display:none}
-</style>  <script type="module" crossorigin src="./assets/card-metadata-to-cta-role-swap-qmGwgTaw.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
-  <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
-  <link rel="modulepreload" crossorigin href="./assets/batch-a-qa-CFcoNLob.js">
-  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage swap-stage"><article class="research-card" id="research-card" tabindex="0" aria-label="Hover to replace research metadata with an action"><span class="research-kicker">Field study · 028</span><h1 class="research-title">Synthetic<br/>weather<br/>systems</h1><div class="role-slot"><span class="metadata" id="metadata">M. Ito + A. Chen · 2026</span><span class="research-cta" id="research-cta">Open experiment ↗</span></div></article><span class="library-badge">Motion · semantic role handoff</span><span class="scene-caption">metadata exits and an action inherits the same baseline</span></main></body></html>
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Motion — Research Archive Role Handoff</title>
+    <style>
+      :root {
+        --preview-background: #171814;
+        --paper: #e9e8da;
+        --ink: #181a15;
+        --moss: #72815f;
+        --signal: #ee754c;
+        --line: rgba(232, 232, 216, .15);
+        color-scheme: dark;
+      }
+
+      button { font: inherit; color: inherit; }
+
+      .archive-stage {
+        background:
+          radial-gradient(circle at 82% 16%, rgba(106, 126, 87, .14), transparent 34%),
+          linear-gradient(145deg, #1c1d18, #10110e);
+      }
+
+      .archive-shell {
+        position: absolute;
+        inset: clamp(5px, 2.4vw, 18px);
+        display: grid;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        border: 1px solid rgba(235, 233, 216, .2);
+        border-radius: clamp(6px, 2.2vw, 18px);
+        background: #1b1c17;
+        box-shadow: 0 24px 64px rgba(0, 0, 0, .28);
+        grid-template-rows: clamp(30px, 11vh, 44px) minmax(0, 1fr);
+      }
+
+      .archive-header {
+        display: flex;
+        min-width: 0;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 clamp(9px, 2.5vw, 20px);
+        border-bottom: 1px solid var(--line);
+      }
+
+      .archive-title,
+      .archive-tools {
+        display: flex;
+        min-width: 0;
+        align-items: center;
+        gap: clamp(5px, 1.2vw, 9px);
+      }
+
+      .archive-mark {
+        width: clamp(6px, 1.1vw, 9px);
+        aspect-ratio: 1;
+        flex: 0 0 auto;
+        border-radius: 50% 50% 50% 0;
+        rotate: -45deg;
+        background: var(--signal);
+      }
+
+      .archive-title strong,
+      .archive-tools strong {
+        overflow: hidden;
+        font-size: clamp(7px, 1.5vw, 12px);
+        letter-spacing: -.02em;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .archive-title span,
+      .archive-tools span {
+        color: #929489;
+        font: 700 clamp(4px, .86vw, 7px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+
+      .reset-button {
+        padding: clamp(4px, .8vw, 7px) clamp(7px, 1.3vw, 10px);
+        border: 1px solid #3b3d33;
+        border-radius: 999px;
+        background: #202119;
+        color: #b5b7aa;
+        cursor: pointer;
+        font-size: clamp(5px, .88vw, 7px);
+        font-weight: 760;
+      }
+
+      .reset-button:focus-visible,
+      .research-card:focus-visible,
+      .cta-button:focus-visible {
+        outline: 2px solid var(--signal);
+        outline-offset: 2px;
+      }
+
+      .archive-workspace {
+        display: grid;
+        min-width: 0;
+        min-height: 0;
+        place-items: center;
+        padding: clamp(9px, 2.6vw, 22px);
+        background:
+          linear-gradient(rgba(233, 232, 218, .035) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(233, 232, 218, .035) 1px, transparent 1px);
+        background-size: clamp(18px, 4.5vw, 34px) clamp(18px, 4.5vw, 34px);
+      }
+
+      .research-card {
+        position: relative;
+        display: grid;
+        width: min(100%, 650px);
+        height: 100%;
+        max-height: 288px;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        border: 1px solid rgba(24, 26, 21, .38);
+        border-radius: clamp(7px, 1.8vw, 15px);
+        background: var(--paper);
+        color: var(--ink);
+        cursor: pointer;
+        grid-template-columns: minmax(0, 1.32fr) minmax(155px, .82fr);
+        box-shadow: 0 22px 55px rgba(0, 0, 0, .24);
+      }
+
+      .research-card::after {
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        box-shadow: inset 0 0 0 1px rgba(238, 117, 76, calc(var(--intent, 0) * .42));
+        content: '';
+        pointer-events: none;
+      }
+
+      .study-copy {
+        display: flex;
+        min-width: 0;
+        min-height: 0;
+        flex-direction: column;
+        padding: clamp(13px, 3.3vw, 27px);
+      }
+
+      .study-kicker,
+      .study-status,
+      .study-facts,
+      .figure-kicker,
+      .figure-axis,
+      .metadata-copy,
+      .cta-copy,
+      .slot-label {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        text-transform: uppercase;
+      }
+
+      .study-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+      }
+
+      .study-kicker,
+      .study-status {
+        color: #66715b;
+        font-size: clamp(4px, .82vw, 7px);
+        font-weight: 820;
+        letter-spacing: .13em;
+      }
+
+      .study-status {
+        display: flex;
+        align-items: center;
+        color: #9b593f;
+        gap: 5px;
+      }
+
+      .study-status::before {
+        width: clamp(4px, .8vw, 6px);
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: var(--signal);
+        content: '';
+      }
+
+      .study-title {
+        margin: clamp(12px, 2.7vw, 22px) 0 0;
+        color: var(--ink);
+        font: 880 clamp(27px, 6.1vw, 50px)/.78 ui-serif, Georgia, serif;
+        letter-spacing: -.068em;
+      }
+
+      .study-summary {
+        max-width: 37em;
+        margin: clamp(12px, 2.4vw, 19px) 0 0;
+        color: #585c51;
+        font-size: clamp(6px, 1.15vw, 9px);
+        line-height: 1.42;
+      }
+
+      .study-facts {
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: auto;
+        color: #74786d;
+        font-size: clamp(4px, .76vw, 6px);
+        font-weight: 760;
+        letter-spacing: .09em;
+        gap: clamp(5px, 1vw, 8px);
+      }
+
+      .study-facts span:not(:last-child)::after {
+        margin-left: clamp(5px, 1vw, 8px);
+        color: var(--signal);
+        content: '·';
+      }
+
+      .role-slot {
+        position: relative;
+        height: clamp(31px, 8.5vh, 42px);
+        margin-top: clamp(10px, 2.1vw, 16px);
+        border-top: 1px solid rgba(30, 33, 26, .18);
+      }
+
+      .role-slot::before {
+        position: absolute;
+        right: 0;
+        bottom: 8px;
+        left: 0;
+        height: 1px;
+        background: rgba(238, 117, 76, .18);
+        content: '';
+        pointer-events: none;
+      }
+
+      .slot-label {
+        position: absolute;
+        z-index: 3;
+        top: 5px;
+        right: 0;
+        color: rgba(98, 101, 91, .6);
+        font-size: clamp(3px, .65vw, 5px);
+        font-weight: 750;
+        letter-spacing: .1em;
+        pointer-events: none;
+      }
+
+      .role-layer {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+
+      .role-content {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        min-width: 0;
+        align-items: flex-end;
+        padding-bottom: 10px;
+      }
+
+      .metadata-copy,
+      .cta-copy {
+        display: flex;
+        min-width: 0;
+        align-items: center;
+        font-size: clamp(5px, .93vw, 7px);
+        font-weight: 820;
+        letter-spacing: .075em;
+        white-space: nowrap;
+      }
+
+      .metadata-copy {
+        overflow: hidden;
+        color: #65695e;
+        text-overflow: ellipsis;
+      }
+
+      .metadata-copy i,
+      .cta-copy i {
+        width: clamp(6px, 1.1vw, 8px);
+        aspect-ratio: 1;
+        flex: 0 0 auto;
+        margin-right: clamp(5px, 1vw, 8px);
+        border: 1px solid currentColor;
+        border-radius: 50%;
+      }
+
+      .cta-content { opacity: 0; transform: translateY(7px); }
+
+      .cta-button {
+        display: inline-flex;
+        align-items: center;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: #9a452b;
+        cursor: pointer;
+      }
+
+      .cta-button::after {
+        margin-left: clamp(6px, 1.2vw, 9px);
+        font-size: 1.2em;
+        content: '↗';
+      }
+
+      .evidence-figure {
+        position: relative;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        border-left: 1px solid rgba(28, 31, 25, .16);
+        background:
+          linear-gradient(rgba(31, 35, 27, .09) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(31, 35, 27, .09) 1px, transparent 1px),
+          #cdd2bd;
+        background-size: clamp(15px, 3vw, 24px) clamp(15px, 3vw, 24px);
+      }
+
+      .figure-kicker,
+      .figure-axis {
+        position: absolute;
+        z-index: 3;
+        color: #4e5947;
+        font-size: clamp(4px, .75vw, 6px);
+        font-weight: 820;
+        letter-spacing: .11em;
+      }
+
+      .figure-kicker { top: clamp(12px, 2.4vw, 19px); left: clamp(11px, 2.2vw, 17px); }
+      .figure-axis { right: clamp(9px, 2vw, 15px); bottom: clamp(10px, 2.2vw, 17px); color: #6e7568; }
+
+      .heat-reading {
+        position: absolute;
+        z-index: 3;
+        top: clamp(28px, 6.5vw, 50px);
+        left: clamp(11px, 2.2vw, 17px);
+        margin: 0;
+        color: #22261e;
+        font-size: clamp(16px, 3.8vw, 30px);
+        line-height: .9;
+        letter-spacing: -.055em;
+      }
+
+      .heat-reading small {
+        display: block;
+        margin-top: 5px;
+        color: #5f6858;
+        font: 750 clamp(4px, .76vw, 6px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+      }
+
+      .contour {
+        position: absolute;
+        border: 1px solid rgba(37, 52, 32, .45);
+        border-radius: 50%;
+        transform: rotate(-18deg);
+      }
+
+      .contour.c1 { right: -16%; bottom: -28%; width: 92%; aspect-ratio: 1.32; }
+      .contour.c2 { right: -2%; bottom: -12%; width: 67%; aspect-ratio: 1.24; border-color: rgba(238, 117, 76, .66); }
+      .contour.c3 { right: 11%; bottom: 5%; width: 43%; aspect-ratio: 1.1; }
+      .contour.c4 { right: 23%; bottom: 20%; width: 20%; aspect-ratio: 1; background: rgba(238, 117, 76, .13); }
+
+      .sample-node {
+        position: absolute;
+        z-index: 2;
+        width: clamp(4px, .9vw, 7px);
+        aspect-ratio: 1;
+        border: 1px solid #20251d;
+        border-radius: 50%;
+        background: #dce0cf;
+        box-shadow: 0 0 0 3px rgba(29, 35, 26, .08);
+      }
+
+      .sample-node.n1 { right: 22%; bottom: 26%; }
+      .sample-node.n2 { right: 42%; bottom: 38%; }
+      .sample-node.n3 { right: 15%; bottom: 52%; }
+
+      .archive-status {
+        position: absolute;
+        z-index: 5;
+        right: clamp(10px, 2vw, 15px);
+        bottom: clamp(9px, 1.8vw, 14px);
+        color: #4e5947;
+        font: 760 clamp(3px, .66vw, 5px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .09em;
+        text-transform: uppercase;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .research-card,
+        .role-content,
+        .evidence-figure { transition: none !important; }
+      }
+
+      @media (max-width: 420px) {
+        .archive-shell { inset: 6px; grid-template-rows: 22px minmax(0, 1fr); }
+        .archive-header { padding: 0 7px; }
+        .archive-workspace { padding: 7px; }
+        .research-card { max-height: none; grid-template-columns: minmax(0, 1.45fr) minmax(78px, .75fr); }
+        .study-copy { padding: 10px; }
+        .study-title { margin-top: 8px; font-size: 22px; }
+        .study-summary { margin-top: 7px; font-size: 5px; }
+        .study-facts { gap: 4px; font-size: 3.5px; }
+        .study-facts span:not(:last-child)::after { margin-left: 4px; }
+        .role-slot { height: 28px; margin-top: 7px; }
+        .metadata-copy,
+        .cta-copy { font-size: 4px; }
+        .figure-kicker { top: 8px; left: 7px; }
+        .heat-reading { top: 23px; left: 7px; font-size: 13px; }
+        .archive-status { right: 7px; bottom: 7px; }
+      }
+
+      @media (max-width: 220px), (max-height: 105px) {
+        .archive-shell { inset: 3px; border-radius: 4px; grid-template-rows: 11px minmax(0, 1fr); }
+        .archive-header { padding: 0 4px; }
+        .archive-title,
+        .archive-tools { gap: 2px; }
+        .archive-mark { width: 3px; }
+        .archive-title strong,
+        .archive-tools strong { font-size: 3px; }
+        .archive-title span,
+        .archive-tools span { font-size: 1.7px; }
+        .archive-tools span { display: none; }
+        .reset-button { padding: 1px 2px; font-size: 2px; }
+        .archive-workspace { padding: 3px; background-size: 12px 12px; }
+        .research-card { height: 100%; border-radius: 3px; grid-template-columns: minmax(0, 1.5fr) minmax(42px, .72fr); }
+        .study-copy { padding: 4px; }
+        .study-kicker,
+        .study-status { font-size: 1.6px; }
+        .study-status { gap: 2px; }
+        .study-status::before { width: 2px; }
+        .study-title { margin-top: 3px; font-size: 8px; }
+        .study-summary { display: none; }
+        .study-facts { font-size: 1.5px; gap: 2px; }
+        .study-facts span:not(:last-child)::after { margin-left: 2px; }
+        .role-slot { height: 11px; margin-top: 2px; }
+        .role-slot::before { bottom: 2px; }
+        .slot-label { top: 1px; font-size: 1.3px; }
+        .role-content { padding-bottom: 3px; }
+        .metadata-copy,
+        .cta-copy { font-size: 1.7px; }
+        .metadata-copy i,
+        .cta-copy i { width: 3px; margin-right: 2px; }
+        .cta-button::after { margin-left: 2px; }
+        .figure-kicker { top: 4px; left: 4px; font-size: 1.5px; }
+        .heat-reading { top: 11px; left: 4px; font-size: 6px; }
+        .heat-reading small { margin-top: 2px; font-size: 1.4px; }
+        .figure-axis { right: 3px; bottom: 3px; font-size: 1.3px; }
+        .sample-node { width: 2px; box-shadow: none; }
+        .archive-status { right: 3px; bottom: 3px; font-size: 1.2px; }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/card-metadata-to-cta-role-swap-BxD545Vj.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+    <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main class="preview-stage archive-stage" id="archive-stage" aria-label="Research archive card whose metadata yields to a contextual action">
+      <section class="archive-shell" id="archive-shell" data-preview-mechanism="motion-role-slot-handoff">
+        <header class="archive-header">
+          <div class="archive-title">
+            <i class="archive-mark" aria-hidden="true"></i>
+            <strong>Field Research Archive</strong>
+            <span>Applied ecology index</span>
+          </div>
+          <div class="archive-tools">
+            <span id="archive-count">Study 028 / 164</span>
+            <button class="reset-button" id="reset-button" type="button">Reset view</button>
+          </div>
+        </header>
+
+        <div class="archive-workspace">
+          <article class="research-card" id="research-card" tabindex="0" aria-label="Research study: Cooling the Commons. Hover or focus to reveal the open report action." aria-expanded="false" data-role="metadata">
+            <section class="study-copy">
+              <div class="study-head">
+                <span class="study-kicker">Urban climate · Study 028</span>
+                <span class="study-status">Peer reviewed</span>
+              </div>
+              <h1 class="study-title">Cooling the<br />Commons</h1>
+              <p class="study-summary">A three-city study of canopy shade, pavement heat, and evening access across 1,842 public blocks.</p>
+              <div class="study-facts" aria-label="Study facts">
+                <span>Thermal mapping</span><span>3 summers</span><span>42 sensors</span>
+              </div>
+
+              <div class="role-slot" id="role-slot" data-active-role="metadata" aria-label="Study metadata and contextual action share this row">
+                <span class="slot-label">Shared baseline / role 03</span>
+                <div class="role-layer" id="metadata-layer" aria-hidden="false">
+                  <div class="role-content metadata-content" id="metadata">
+                    <span class="metadata-copy"><i aria-hidden="true"></i>M. Ito + A. Chen · Report 028 · 18 min read</span>
+                  </div>
+                </div>
+                <div class="role-layer" id="cta-layer" aria-hidden="true">
+                  <div class="role-content cta-content" id="research-cta">
+                    <span class="cta-copy"><i aria-hidden="true"></i><button class="cta-button" id="cta-button" type="button" tabindex="-1">Open field report</button></span>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <figure class="evidence-figure" aria-label="Code-native canopy cooling evidence diagram">
+              <span class="figure-kicker">Evidence surface / 03</span>
+              <h2 class="heat-reading">−4.8°C<small>Mean shaded delta</small></h2>
+              <i class="contour c1" aria-hidden="true"></i>
+              <i class="contour c2" aria-hidden="true"></i>
+              <i class="contour c3" aria-hidden="true"></i>
+              <i class="contour c4" aria-hidden="true"></i>
+              <i class="sample-node n1" aria-hidden="true"></i>
+              <i class="sample-node n2" aria-hidden="true"></i>
+              <i class="sample-node n3" aria-hidden="true"></i>
+              <span class="figure-axis">Shade cover → evening access</span>
+              <span class="archive-status" id="archive-status">Metadata active</span>
+            </figure>
+          </article>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

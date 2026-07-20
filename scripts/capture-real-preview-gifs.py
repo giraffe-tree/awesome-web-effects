@@ -181,6 +181,13 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.move(144, 70)
             elif index == round(1.15 * args.fps):
                 page.mouse.move(218, 132)
+        elif demo["id"] == "four-corner-hover-crop-marks":
+            if index == round(.35 * args.fps):
+                page.mouse.move(92, 78)
+            elif index == round(1.1 * args.fps):
+                page.mouse.move(230, 105)
+            elif index == round(1.75 * args.fps):
+                page.mouse.move(330, 190)
         page.evaluate("time => window.__setPreviewTime(time)", preview_time)
         frame_path = frame_root / f"{index:04d}.png"
         page.screenshot(path=str(frame_path), type="png")
@@ -199,6 +206,17 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["mode"] != "idle"
         ):
             raise RuntimeError(f"{demo['id']} did not capture two real pointer impulses and recovery: {interaction!r}")
+    elif demo["id"] == "four-corner-hover-crop-marks":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            interaction["automaticFallback"]
+            or interaction["revision"] < 2
+            or interaction["input"] != "mouse"
+            or interaction["phase"] != "idle"
+            or interaction["engaged"]
+            or not interaction["assetReady"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a real pointer enter/move/leave sequence: {interaction!r}")
 
     minimum_unique = min(6, max(2, frame_count // 6))
     if len(hashes) < minimum_unique:

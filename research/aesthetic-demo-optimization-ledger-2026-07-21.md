@@ -18,6 +18,7 @@
 | `State` | `external-only` | The catalog item is represented by upstream official material and has no local runnable Demo in the audited scope. This is a scope constraint, not a licensing conclusion. |
 | `Wave` | `W0 · complete` | Completed work in the current wave. |
 | `Wave` | `W1 · next pilots` | Explicitly designated next pilots. |
+| `Wave` | `W1 · complete` | A W1 pilot passed implementation, capture, publication, and push gates. |
 | `Wave` | `WX · official-only` | Work cannot be treated like a local Demo optimization without first changing scope. |
 | `Wave` | `WB-01/02/03` | Audited backlog grouped by original 50-item batch; the audit rank inside each batch remains authoritative. |
 
@@ -32,7 +33,7 @@ When implementation changes an interaction contract, preserve the audit row and 
 | ---: | --- | --- | --- | --- |
 | 055 | `pointer-following-displacement-ripple` | `complete` | W0 · complete | Generated architecture image is localized under `demo/preview-demos/assets/aesthetic-wave-01/pointer-following-displacement-ripple/` and sampled as a real regl texture. Current live behavior is real mouse/touch/arrow-key input followed by expansion and elastic recovery; the audit-time automatic circular rehearsal has been removed. |
 | 097 | `blurhash-to-photo-progressive-reveal` | `complete` | W0 · complete | Marked complete in the current optimization wave. The audit already identified it as the most mature queue item with local raster input satisfying the mechanism. |
-| 031 | `four-corner-hover-crop-marks` | `next-pilot` | W1 · next pilots | Explicit next pilot. A generated coastal-retreat candidate exists in `tmp/aesthetic-wave-assets/four-corner-hover-crop-marks/`; it remains a candidate until implementation and verification. |
+| 031 | `four-corner-hover-crop-marks` | `complete` | W1 · complete | Generated coastal-retreat image is now the full-bleed editorial subject. Real mouse enter/move/leave, touch/pen taps, and keyboard controls drive crop marks, coordinates, and the metadata-to-CTA handoff with no automatic fallback. |
 | 149 | `chromatic-channel-drag-portrait` | `next-pilot` | W1 · next pilots | Explicit next pilot. A generated fictional editorial portrait exists in `tmp/aesthetic-wave-assets/chromatic-channel-drag-portrait/`; true R/G/B pixel extraction and recomposition remain implementation requirements. |
 | 010 | `context-aware-custom-cursor` | `external-only` | WX · official-only | Official-only capture, no local runnable Demo. The cursor states are code-native and existing page imagery is incidental; this ledger does not claim a local asset or editable local implementation. |
 | 011 | `displacement-map-image-hover` | `external-only` | WX · official-only | Official-only capture, no local runnable Demo. Paired photographs and a displacement map are mechanism inputs, but the audited catalog only exposes upstream official material; the ledger does not substitute a local implementation. |
@@ -43,7 +44,7 @@ Audit basis: current GIF sampled at 0% / 33% / 66% / 100%, cross-checked against
 
 | Audit rank | Catalog | Tier | Demo | State | Wave | ImageGen decision | Current expression problem | One-sentence experience | Credible product scenario | Interaction / automatic trigger (audit snapshot) | Raster judgment |
 | --- | ---: | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| A-01 | 031 | — | `four-corner-hover-crop-marks` | `next-pilot` | W1 · next pilots | generated candidate | The diagonal abstract gradient behaves like a placeholder, so the crop marks demonstrate motion without creating a believable act of selecting or framing an image. | Hover an architectural project photograph and watch four quiet editorial marks settle around the chosen frame. | Architecture studio portfolio or magazine project index. | Pointer enter / keyboard focus holds the marks; leave / blur releases them; the capture loop rehearses the same reveal automatically. | **Yes** — one strong editorial project photograph is the object being framed. |
+| A-01 | 031 | — | `four-corner-hover-crop-marks` | `complete` | W1 · complete | generated and integrated | The diagonal abstract gradient behaves like a placeholder, so the crop marks demonstrate motion without creating a believable act of selecting or framing an image. | Hover an architectural project photograph and watch four quiet editorial marks settle around the chosen frame. | Architecture studio portfolio or magazine project index. | Pointer enter / keyboard focus holds the marks; leave / blur releases them; the capture loop rehearses the same reveal automatically. | **Yes** — one strong editorial project photograph is the object being framed. |
 | A-02 | 029 | — | `hover-rehearsed-video-style-rail` | `audited` | WB-01 · 001–050 | not selected in audit | Five abstract ring canvases behave like animated color swatches, so “rehearse a video look” cannot be distinguished from previewing decorative motion presets. | Hover a style thumbnail to rehearse it temporarily on recognisable footage, then click to commit that look and center it in the rail. | Generative-video style picker, color-grading preset browser, or campaign clip editor. | Pointer enter rehearses temporarily; pointer leave resets; click persists selection; the capture timeline automatically pans and activates the rail. | **Yes** — one recognisable source clip or frame sequence must remain constant while looks change. |
 | A-03 | 016 | — | `depth-layer-blur-dissolve` | `audited` | WB-01 · 001–050 | not selected in audit | Flat vector mountains prove layer ordering but make blur depth look like a slide transition rather than a spatial image handoff. | A near-to-far landscape dissolves by depth so foreground, middle ground, and sky surrender at different moments. | Travel story transition, spatial gallery, or cinematic destination landing page. | Automatic deterministic timeline; no direct human control in the current demo. | **Yes** — paired photographic scenes plus depth segmentation are central to judging the compositor. |
 | A-04 | 028 | — | `duration-aware-hero-film-handoff` | `audited` | WB-01 · 001–050 | not selected in audit | Four procedural color fields have no scene semantics, so unequal clip duration and preloading are visible only through labels. | A cinematic hero moves through four recognisable shots, preloading each successor just before its own beat ends. | Film portfolio, hospitality campaign, or product launch hero reel. | Automatic duration-aware playback; clicking a film canvas advances the offset. | **Yes** — recognisable stills or short clip frames make duration and handoff meaningful. |
@@ -214,10 +215,13 @@ Only three entries were selected for built-in ImageGen during these audits. `not
 
 ### 031 · four-corner-hover-crop-marks
 
-- Decision: generated candidate; current state `next-pilot`.
+- Decision: generated and integrated; current state `complete`.
 - Why selected: the abstract diagonal gradient does not provide a believable object to frame; one editorial architecture photograph is sufficient and its role is directly testable under the crop marks.
 - Candidate: `tmp/aesthetic-wave-assets/four-corner-hover-crop-marks/coastal-retreat-candidate.png`.
 - Dimensions: 1672 × 941 RGB PNG.
+- Final local asset: `demo/preview-demos/assets/aesthetic-wave-01/four-corner-hover-crop-marks/coastal-retreat-editorial-source.jpg`.
+- Final dimensions: 1280 × 720 RGB JPEG, locally cropped and resized with metadata removed.
+- Final SHA-256: `22f701bf10a09293215761241c850b297b70c850f80032b0108110a83de89d05`.
 - Visual check: no text, logo, watermark, UI, border, or baked-in crop marks; the right-third building survives the crop and darker lower-left space supports HTML copy.
 - Mechanism rule: the photograph must remain the exact surface framed by code-drawn crop marks, not a decorative background.
 

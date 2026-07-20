@@ -197,10 +197,10 @@ export const effectExpansion100Specs = [
     "sourceUrl": "https://cognition.ai/",
     "difference": "四个独立角标围绕图像边界收放，现有倾斜高光和情境光标都不改变卡片的裁切语义。",
     "behavior": {
-      "trigger": "hover/focus",
-      "response": "Reveal and slightly expand four crop-register corners",
-      "timing": "short reversible hover transition",
-      "layer": "image card frame"
+      "trigger": "pointer hover / touch tap / keyboard",
+      "response": "Reveal four crop-register corners while project metadata hands off to the CTA",
+      "timing": "short reversible transition; no autonomous fallback",
+      "layer": "full-bleed project image frame"
     },
     "implementation": {
       "projectId": "motiondivision-motion",
@@ -221,8 +221,8 @@ export const effectExpansion100Specs = [
     },
     "rationaleZh": "裁切框语义明确，低成本但需靠强摄影排版达到艺术门槛。",
     "batch": "A",
-    "demo": "一张大幅显微摄影卡，角标出现时坐标与焦距信息同步显现。",
-    "capture": "pointer 从外侧进入中心、停 600ms、离开；键盘 focus 再复演。",
+    "demo": "一张全幅 AI 虚构海岸建筑项目图；真实输入触发四角框选，元数据同步让位给 CTA。",
+    "capture": "初始静止；鼠标从外侧进入并移动、离开；触摸点击切换；键盘 Enter/Space 与方向键复演。禁止自动 fallback。",
     "risk": {
       "level": "medium",
       "detail": "缩略图中四角必须足够大；不能让图片缩放掩盖主体效果。"

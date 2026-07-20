@@ -1,3 +1,203 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>Motion — Four-corner Hover Crop Marks</title><link rel="stylesheet" href="./shared.css"/><style>
-:root{--preview-background:#100d0b}.crop-stage{background:linear-gradient(145deg,#100d0b,#251b15)}.crop-card{position:absolute;left:36px;top:36px;width:248px;height:126px;overflow:hidden;border-radius:3px;background:linear-gradient(135deg,#d17a4a,#2a6273 55%,#141d21);cursor:crosshair}.crop-card::before{content:"";position:absolute;inset:-20px;background:radial-gradient(ellipse at 35% 65%,#f2c37e 0 10%,transparent 11%),linear-gradient(145deg,transparent 38%,#071215aa 39% 56%,transparent 57%);transform:rotate(-4deg)}.crop-title{position:absolute;left:13px;bottom:12px;color:#fff;font:900 19px/.82 Georgia,serif;letter-spacing:-.06em;text-shadow:0 3px 15px #000}.crop-mark{position:absolute;width:18px;height:18px;opacity:0}.crop-mark::before,.crop-mark::after{content:"";position:absolute;background:#fff}.crop-mark::before{width:18px;height:2px}.crop-mark::after{width:2px;height:18px}.crop-mark.tl{left:7px;top:7px}.crop-mark.tr{right:7px;top:7px}.crop-mark.tr::before,.crop-mark.tr::after{right:0}.crop-mark.bl{left:7px;bottom:7px}.crop-mark.bl::before,.crop-mark.bl::after{bottom:0}.crop-mark.br{right:7px;bottom:7px}.crop-mark.br::before,.crop-mark.br::after{right:0;bottom:0}.crop-coordinate{position:absolute;right:11px;bottom:10px;color:#fff;font:800 5px/1 ui-monospace,monospace;letter-spacing:.08em}.scene-caption{display:none}
-</style></head><body><main class="preview-stage crop-stage"><article class="crop-card" id="crop-card" tabindex="0" aria-label="Hover or focus to reveal four crop marks"><b class="crop-title">FRAME<br/>THE WILD</b><i class="crop-mark tl"></i><i class="crop-mark tr"></i><i class="crop-mark bl"></i><i class="crop-mark br"></i><span class="crop-coordinate">X 036 / Y 018</span></article><span class="library-badge">Motion · editorial crop intent</span><span class="scene-caption">four marks frame the image without scaling it</span></main><script type="module" src="./src/four-corner-hover-crop-marks-demo.js"></script></body></html>
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Motion — Four-corner Hover Crop Marks</title>
+  <link rel="stylesheet" href="./shared.css" />
+  <style>
+    :root { --preview-background: #121715; }
+
+    .crop-stage { background: #121715; }
+
+    .crop-card {
+      --edge: clamp(7px, 2.4vw, 21px);
+      --mark-size: clamp(14px, 5.2vw, 38px);
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: #172525;
+      color: #f3efe3;
+      cursor: crosshair;
+      outline: none;
+      touch-action: manipulation;
+    }
+
+    .crop-image,
+    .crop-wash,
+    .crop-grain { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+    .crop-image {
+      object-fit: cover;
+      object-position: 50% 50%;
+      filter: saturate(.88) contrast(1.03) brightness(.88);
+      transform: scale(1.012);
+    }
+
+    .crop-wash {
+      background:
+        linear-gradient(90deg, rgba(5, 12, 12, .75) 0%, rgba(5, 12, 12, .18) 48%, rgba(5, 12, 12, .08) 100%),
+        linear-gradient(0deg, rgba(5, 11, 10, .56) 0%, transparent 47%);
+      pointer-events: none;
+    }
+
+    .crop-grain {
+      opacity: .16;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.4'/%3E%3C/svg%3E");
+      mix-blend-mode: soft-light;
+    }
+
+    .crop-copy {
+      position: absolute;
+      z-index: 3;
+      left: clamp(11px, 5.2vw, 43px);
+      bottom: clamp(10px, 5vw, 40px);
+      pointer-events: none;
+    }
+
+    .crop-kicker,
+    .crop-meta,
+    .crop-cta,
+    .crop-coordinate {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-weight: 700;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+
+    .crop-kicker {
+      display: block;
+      margin-bottom: clamp(4px, 1.4vw, 11px);
+      color: #e8aa62;
+      font-size: clamp(6px, 1.35vw, 11px);
+    }
+
+    .crop-title {
+      display: block;
+      max-width: 8ch;
+      color: #f5f0e4;
+      font: 800 clamp(18px, 6.15vw, 48px)/.84 Georgia, "Times New Roman", serif;
+      letter-spacing: -.06em;
+      text-wrap: balance;
+      text-shadow: 0 3px 22px rgba(0, 0, 0, .48);
+    }
+
+    .crop-meta,
+    .crop-cta {
+      position: absolute;
+      z-index: 4;
+      right: clamp(10px, 3.8vw, 31px);
+      bottom: clamp(10px, 3.8vw, 31px);
+      color: rgba(247, 241, 225, .9);
+      font-size: clamp(6px, 1.28vw, 10px);
+      line-height: 1.45;
+      text-align: right;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    .crop-cta {
+      opacity: 0;
+      color: #fff7e8;
+      font-size: clamp(7px, 1.55vw, 12px);
+    }
+
+    .crop-coordinate {
+      position: absolute;
+      z-index: 4;
+      top: clamp(10px, 3.5vw, 29px);
+      right: clamp(10px, 3.5vw, 29px);
+      color: rgba(247, 241, 225, .76);
+      font-size: clamp(5px, 1.08vw, 9px);
+      pointer-events: none;
+    }
+
+    .crop-mark {
+      position: absolute;
+      z-index: 6;
+      width: var(--mark-size);
+      height: var(--mark-size);
+      opacity: 0;
+      pointer-events: none;
+      filter: drop-shadow(0 2px 5px rgba(0, 0, 0, .4));
+    }
+
+    .crop-mark::before,
+    .crop-mark::after {
+      content: "";
+      position: absolute;
+      background: #fff4dc;
+    }
+
+    .crop-mark::before { width: 100%; height: clamp(2px, .38vw, 3px); }
+    .crop-mark::after { width: clamp(2px, .38vw, 3px); height: 100%; }
+    .crop-mark.tl { left: var(--edge); top: var(--edge); }
+    .crop-mark.tr { right: var(--edge); top: var(--edge); }
+    .crop-mark.bl { left: var(--edge); bottom: var(--edge); }
+    .crop-mark.br { right: var(--edge); bottom: var(--edge); }
+    .crop-mark.tr::before, .crop-mark.tr::after, .crop-mark.br::before, .crop-mark.br::after { right: 0; }
+    .crop-mark.bl::before, .crop-mark.bl::after, .crop-mark.br::before, .crop-mark.br::after { bottom: 0; }
+
+    .crop-card:focus-visible::after {
+      content: "";
+      position: absolute;
+      z-index: 8;
+      inset: 3px;
+      border: 1px solid rgba(255, 244, 220, .78);
+      pointer-events: none;
+    }
+
+    .crop-stage .library-badge {
+      top: clamp(6px, 2vw, 16px);
+      left: clamp(7px, 2.2vw, 18px);
+      z-index: 7;
+      padding: clamp(3px, .7vw, 5px) clamp(5px, 1.2vw, 9px);
+      border-color: rgba(255, 244, 220, .28);
+      background: rgba(8, 14, 13, .55);
+      color: rgba(255, 247, 231, .84);
+      font-size: clamp(5px, 1vw, 8px);
+    }
+
+    @media (max-width: 190px) {
+      .crop-stage .library-badge { max-width: 62px; overflow: hidden; white-space: nowrap; }
+      .crop-coordinate { top: 7px; }
+      .crop-kicker { letter-spacing: .08em; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .crop-image { transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="preview-stage crop-stage">
+    <article
+      class="crop-card"
+      id="crop-card"
+      role="button"
+      tabindex="0"
+      aria-pressed="false"
+      aria-label="Open the fictional House at the Edge concept study; hover, tap, or press Enter"
+      data-state="idle"
+    >
+      <img class="crop-image" id="crop-image" alt="AI-generated fictional ochre coastal retreat set into a dark basalt cliff" />
+      <span class="crop-wash" aria-hidden="true"></span>
+      <span class="crop-grain" aria-hidden="true"></span>
+      <span class="crop-copy" aria-hidden="true">
+        <small class="crop-kicker">Concept study · 031</small>
+        <strong class="crop-title">HOUSE AT<br />THE EDGE</strong>
+      </span>
+      <span class="crop-meta" aria-hidden="true">ARCHITECTURE<br />01 / 03</span>
+      <span class="crop-cta" aria-hidden="true">OPEN PROJECT ↗</span>
+      <span class="crop-coordinate" id="crop-coordinate" aria-hidden="true">X 050 / Y 050</span>
+      <i class="crop-mark tl" data-dx="-10" data-dy="-10" aria-hidden="true"></i>
+      <i class="crop-mark tr" data-dx="10" data-dy="-10" aria-hidden="true"></i>
+      <i class="crop-mark bl" data-dx="-10" data-dy="10" aria-hidden="true"></i>
+      <i class="crop-mark br" data-dx="10" data-dy="10" aria-hidden="true"></i>
+    </article>
+    <span class="library-badge">Motion · crop intent</span>
+  </main>
+  <script type="module" src="./src/four-corner-hover-crop-marks-demo.js"></script>
+</body>
+</html>

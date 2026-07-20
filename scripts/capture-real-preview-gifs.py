@@ -735,6 +735,46 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.wait_for_timeout(650)
             elif index == 33:
                 page.keyboard.press("Escape")
+        elif demo["id"] == "mechanical-split-flap-character-change":
+            if index == 2:
+                page.locator('#advance-button').click()
+            elif index == 3:
+                page.wait_for_timeout(900)
+            elif index == 6:
+                page.locator('#flap-board').click()
+            elif index == 7:
+                page.wait_for_timeout(900)
+            elif index == 10:
+                page.locator('#flap-board').focus()
+                page.keyboard.press("ArrowRight")
+            elif index == 11:
+                page.wait_for_timeout(900)
+            elif index == 14:
+                page.locator('#advance-button').click()
+            elif index == 15:
+                page.wait_for_timeout(150)
+            elif index == 16:
+                page.locator('#flap-board').click()
+            elif index == 17:
+                page.wait_for_timeout(900)
+            elif index == 20:
+                page.locator('#flap-board').focus()
+                page.keyboard.press("ArrowDown")
+            elif index == 21:
+                page.wait_for_timeout(900)
+            elif index == 24:
+                page.keyboard.press("Enter")
+            elif index == 25:
+                page.wait_for_timeout(900)
+            elif index == 28:
+                page.locator('#reset-button').click()
+            elif index == 31:
+                page.locator('#flap-board').focus()
+                page.keyboard.press("N")
+            elif index == 32:
+                page.wait_for_timeout(900)
+            elif index == 34:
+                page.keyboard.press("Home")
         elif demo["id"] == "dom-to-3d-scroll-synchronization":
             if index == 2:
                 box = page.locator('#sync-stage').bounding_box()
@@ -1712,6 +1752,57 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["lastTrustedEvent"] != "escape-reset"
         ):
             raise RuntimeError(f"{demo['id']} did not capture human-selected Range geometry, interruptible redraw, keyboard navigation, and explicit reset: {interaction!r}")
+    elif demo["id"] == "mechanical-split-flap-character-change":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            interaction["automaticFallback"]
+            or interaction["automaticCycle"]
+            or interaction["automaticPlayback"]
+            or interaction["captureClockDriven"]
+            or interaction["syntheticInputDispatch"]
+            or not interaction["userRequestRequired"]
+            or not interaction["initialFrameStatic"]
+            or interaction["initialStatusIndex"] != 0
+            or interaction["initialStatus"] != "ON TIME "
+            or interaction["acceptedInputs"] != ["mouse", "touch", "pen", "keyboard"]
+            or interaction["inputCount"] < 10
+            or interaction["pointerInputCount"] < 5
+            or interaction["keyboardInputCount"] < 5
+            or interaction["transitionRequestCount"] < 8
+            or interaction["completedTransitionCount"] < 7
+            or interaction["interruptedTransitionCount"] < 1
+            or interaction["forcedSettlementCount"] < 1
+            or interaction["resetRequestCount"] < 2
+            or interaction["clickRequestCount"] < 2
+            or interaction["boardRequestCount"] < 2
+            or interaction["keyboardRequestCount"] < 4
+            or interaction["maximumConcurrentTransitions"] != 1
+            or interaction["cadenceMs"] != 75
+            or interaction["upperDurationMs"] != 150
+            or interaction["lowerDurationMs"] != 170
+            or interaction["lowerOffsetMs"] != 125
+            or interaction["plannedLandingOrder"] != list(range(8))
+            or interaction["characterCount"] != 8
+            or interaction["motionControlCount"] != 16
+            or interaction["activeMotionControlCount"] != 0
+            or interaction["motionPlayCallCount"] < 128
+            or interaction["controlRebuildCount"] < 10
+            or interaction["controlCancellationCount"] <= 0
+            or not interaction["controlsBuiltWithoutAutoplay"]
+            or interaction["currentIndex"] != 0
+            or interaction["currentStatus"] != "ON TIME "
+            or interaction["targetIndex"] is not None
+            or interaction["requestedStatus"] is not None
+            or interaction["transitionActive"]
+            or interaction["activeTransitionCount"] != 0
+            or interaction["settledCharacterCount"] != 8
+            or interaction["phase"] != "reset"
+            or interaction["lastInputKind"] != "keyboard"
+            or interaction["lastInputTrusted"] is not True
+            or interaction["lastRequestSource"] != "keyboard-Home"
+            or not interaction["renderIgnoresPreviewClock"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a human-operated eight-column departure board with cadence, interruption, completion, and reset evidence: {interaction!r}")
     elif demo["id"] == "dom-to-3d-scroll-synchronization":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         if (

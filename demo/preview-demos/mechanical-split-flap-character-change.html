@@ -1,3 +1,468 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>Motion — Mechanical Split-flap Character Change</title><link rel="stylesheet" href="./shared.css"/><style>
-:root{--preview-background:#0f1112}.flap-stage{background:radial-gradient(circle at 50% 55%,#4e4b3948,transparent 45%),linear-gradient(145deg,#0b0c0d,#1b1d1e);color:#fff}.flap-copy{position:absolute;left:16px;top:44px;font:900 15px/.9 Georgia,serif;letter-spacing:-.045em}.flap-copy small{display:block;margin-top:6px;color:#8e918f;font:800 6px/1 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase}.flap-board{position:absolute;left:16px;right:16px;top:82px;display:grid;grid-template-columns:repeat(6,1fr);gap:4px;perspective:600px}.flap{position:relative;height:47px;border:1px solid #ffffff1d;border-radius:5px;background:#282b2b;box-shadow:0 4px 0 #080909;transform-style:preserve-3d;overflow:hidden}.flap::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:#050606;box-shadow:0 1px #ffffff12}.flap-letter{display:grid;place-items:center;width:100%;height:100%;font:950 25px/1 ui-monospace,monospace}.flap-hinge{position:absolute;inset:0;background:#333736;transform-origin:center;backface-visibility:hidden;display:grid;place-items:center;font:950 25px/1 ui-monospace,monospace;clip-path:inset(0 0 50% 0)}.flap-button{position:absolute;right:17px;bottom:17px;height:22px;padding:0 8px;border:1px solid #ffffff2f;border-radius:99px;background:#222626;color:#fff;font:900 6px/1 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;cursor:pointer}.scene-caption{display:none}
-</style></head><body><main class="preview-stage flap-stage"><div class="flap-copy">A WORD WITH<br/>MECHANICAL MEMORY<small>six independent split flaps</small></div><div class="flap-board" id="flap-board"></div><button class="flap-button" id="flap-button" type="button">Flip word</button><span class="library-badge">Motion · split-flap display</span><span class="scene-caption">characters change through hinged display geometry, not a fade</span></main><script type="module" src="./src/mechanical-split-flap-character-change-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Motion — Human-operated Departure Status Flaps</title>
+    <link rel="stylesheet" href="./shared.css" />
+    <style>
+      :root {
+        --preview-background: #111411;
+        --ink: #f3eddc;
+        --muted: #8d988e;
+        --signal: #a9dc88;
+        color-scheme: dark;
+      }
+
+      button { font: inherit; }
+
+      .flap-stage {
+        --status-color: #a9dc88;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 76% 32%, color-mix(in srgb, var(--status-color) 13%, transparent), transparent 34%),
+          linear-gradient(145deg, #0d100e, #1a1e1a 68%, #101310);
+      }
+
+      .flap-stage[data-status-key="boarding"] { --status-color: #8fc8e8; }
+      .flap-stage[data-status-key="last-call"] { --status-color: #edbd69; }
+      .flap-stage[data-status-key="departed"] { --status-color: #a6aba7; }
+
+      .departure-shell {
+        position: absolute;
+        inset: 30px 20px 21px;
+        display: grid;
+        grid-template-rows: 22px minmax(0, 1fr) 29px;
+        gap: 8px;
+        min-height: 0;
+      }
+
+      .departure-head,
+      .board-head,
+      .departure-actions {
+        display: flex;
+        align-items: center;
+      }
+
+      .departure-head {
+        justify-content: space-between;
+        gap: 12px;
+        color: #929c94;
+        font-size: 5px;
+        font-weight: 900;
+        letter-spacing: .13em;
+        text-transform: uppercase;
+      }
+
+      .station-mark {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        min-width: 0;
+        white-space: nowrap;
+      }
+
+      .station-roundel {
+        display: grid;
+        width: 15px;
+        height: 15px;
+        place-items: center;
+        border: 1px solid #c9d2ca5c;
+        border-radius: 50%;
+        color: #ece8dc;
+        font-size: 5px;
+        letter-spacing: 0;
+      }
+
+      .departure-head strong { color: #f2ede1; }
+      .operator-note { color: #69736c; white-space: nowrap; }
+
+      .service-layout {
+        display: grid;
+        grid-template-columns: minmax(104px, .38fr) minmax(0, 1fr);
+        gap: 10px;
+        min-height: 0;
+      }
+
+      .service-card,
+      .status-board {
+        border: 1px solid #70786f4b;
+        border-radius: 13px;
+        background: #141815dd;
+        box-shadow: 0 17px 36px #0005, inset 0 1px #ffffff08;
+      }
+
+      .service-card {
+        display: grid;
+        align-content: space-between;
+        padding: 12px;
+        overflow: hidden;
+      }
+
+      .service-kicker,
+      .route-code,
+      .destination,
+      .platform-label,
+      .board-label,
+      .board-sequence,
+      .interaction-note,
+      .advance-button,
+      .reset-button {
+        text-transform: uppercase;
+      }
+
+      .service-kicker {
+        color: #707a72;
+        font: 850 5px/1 ui-monospace, monospace;
+        letter-spacing: .13em;
+      }
+
+      .route-code {
+        margin: 5px 0 0;
+        color: #f4efe2;
+        font: 950 clamp(25px, 6vw, 48px)/.78 ui-monospace, monospace;
+        letter-spacing: -.09em;
+      }
+
+      .destination {
+        margin-top: 9px;
+        color: #aab3ac;
+        font: 900 6px/1.15 ui-monospace, monospace;
+        letter-spacing: .08em;
+      }
+
+      .service-foot {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 7px;
+      }
+
+      .departure-time {
+        color: var(--status-color);
+        font: 950 18px/.8 ui-monospace, monospace;
+        letter-spacing: -.06em;
+      }
+
+      .platform-label {
+        color: #79837b;
+        font: 850 4px/1.35 ui-monospace, monospace;
+        letter-spacing: .1em;
+        text-align: right;
+      }
+
+      .platform-label strong { color: #f0eadc; font-size: 9px; }
+
+      .status-board {
+        display: grid;
+        grid-template-rows: 19px minmax(0, 1fr) 17px;
+        gap: 6px;
+        min-width: 0;
+        min-height: 0;
+        padding: 10px;
+      }
+
+      .board-head { justify-content: space-between; gap: 8px; }
+
+      .board-label {
+        min-width: 0;
+        color: #727d75;
+        font: 850 5px/1 ui-monospace, monospace;
+        letter-spacing: .11em;
+        white-space: nowrap;
+      }
+
+      .board-label output {
+        margin-left: 5px;
+        color: var(--status-color);
+        font-weight: 950;
+      }
+
+      .board-sequence {
+        color: #657068;
+        font: 850 4px/1 ui-monospace, monospace;
+        letter-spacing: .08em;
+        white-space: nowrap;
+      }
+
+      .flap-board {
+        display: grid;
+        grid-template-columns: repeat(8, minmax(0, 1fr));
+        gap: 4px;
+        min-width: 0;
+        min-height: 0;
+        outline: none;
+        perspective: 720px;
+        cursor: pointer;
+        touch-action: manipulation;
+      }
+
+      .flap-board:focus-visible,
+      .advance-button:focus-visible,
+      .reset-button:focus-visible {
+        outline: 2px solid #f4efe0;
+        outline-offset: 2px;
+      }
+
+      .flap {
+        position: relative;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        border: 1px solid #69706952;
+        border-radius: 6px;
+        background: #090b0a;
+        box-shadow: 0 4px 0 #050605, 0 9px 14px #0007;
+        transform-style: preserve-3d;
+      }
+
+      .flap::before,
+      .flap::after {
+        position: absolute;
+        z-index: 8;
+        top: calc(50% - 1px);
+        width: 3px;
+        height: 3px;
+        border-radius: 50%;
+        background: #070807;
+        box-shadow: inset 0 1px #ffffff24;
+        content: "";
+        pointer-events: none;
+      }
+
+      .flap::before { left: 2px; }
+      .flap::after { right: 2px; }
+
+      .flap-panel,
+      .flap-leaf {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+        color: #f2ecdc;
+        font: 950 clamp(10px, 5.4vw, 39px)/1 ui-monospace, monospace;
+        text-shadow: 0 2px #000;
+        backface-visibility: hidden;
+        transform-style: preserve-3d;
+      }
+
+      .flap-panel-top {
+        clip-path: inset(0 0 50% 0);
+        background: linear-gradient(#242824, #191c19);
+      }
+
+      .flap-panel-bottom {
+        clip-path: inset(50% 0 0 0);
+        background: linear-gradient(#101210, #191c19);
+      }
+
+      .flap-leaf { z-index: 4; pointer-events: none; }
+      .flap-leaf-out {
+        clip-path: inset(0 0 50% 0);
+        background: linear-gradient(#292d29, #171a17);
+        transform-origin: 50% 50%;
+      }
+
+      .flap-leaf-in {
+        clip-path: inset(50% 0 0 0);
+        background: linear-gradient(#111311, #202420);
+        transform: rotateX(90deg);
+        transform-origin: 50% 50%;
+      }
+
+      .flap-midline {
+        position: absolute;
+        z-index: 7;
+        left: 0;
+        right: 0;
+        top: 50%;
+        height: 1px;
+        background: #030403;
+        box-shadow: 0 1px #ffffff12;
+        pointer-events: none;
+      }
+
+      .flap[data-phase="upper"] { border-color: #8e968a73; }
+      .flap[data-phase="lower"] { border-color: color-mix(in srgb, var(--status-color) 45%, transparent); }
+      .flap[data-phase="landed"] { box-shadow: 0 4px 0 #050605, 0 0 12px color-mix(in srgb, var(--status-color) 18%, transparent); }
+
+      .board-foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        color: #6f7971;
+        font: 800 4px/1 ui-monospace, monospace;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+      }
+
+      .cadence-track {
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        width: min(98px, 38%);
+        gap: 3px;
+      }
+
+      .cadence-track i {
+        height: 2px;
+        border-radius: 99px;
+        background: #555d56;
+      }
+
+      .cadence-track i.is-landed { background: var(--status-color); }
+
+      .departure-actions {
+        justify-content: space-between;
+        gap: 9px;
+        min-width: 0;
+      }
+
+      .action-cluster { display: flex; gap: 5px; }
+
+      .advance-button,
+      .reset-button {
+        min-height: 25px;
+        border-radius: 99px;
+        font-size: 5px;
+        font-weight: 950;
+        letter-spacing: .09em;
+        cursor: pointer;
+        touch-action: manipulation;
+      }
+
+      .advance-button {
+        padding: 0 11px;
+        border: 1px solid color-mix(in srgb, var(--status-color) 58%, transparent);
+        background: color-mix(in srgb, var(--status-color) 15%, #171b17);
+        color: #f4eee0;
+      }
+
+      .reset-button {
+        padding: 0 9px;
+        border: 1px solid #6a736b52;
+        background: #171a17;
+        color: #879189;
+      }
+
+      .interaction-note {
+        min-width: 0;
+        overflow: hidden;
+        color: #737d75;
+        font: 800 4px/1 ui-monospace, monospace;
+        letter-spacing: .09em;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .library-badge { background: #111511dd; border-color: #6f786f42; color: #dce5dc; }
+      .scene-caption { color: #7e8980; }
+
+      @media (max-width: 380px) and (min-height: 136px) {
+        .departure-shell { inset: 28px 10px 18px; grid-template-rows: 18px minmax(0, 1fr) 24px; gap: 5px; }
+        .departure-head { font-size: 4px; }
+        .station-roundel { width: 12px; height: 12px; font-size: 4px; }
+        .operator-note { display: none; }
+        .service-layout { grid-template-columns: 75px minmax(0, 1fr); gap: 5px; }
+        .service-card, .status-board { border-radius: 8px; }
+        .service-card { padding: 7px; }
+        .service-kicker { font-size: 3px; }
+        .route-code { font-size: 23px; }
+        .destination { margin-top: 5px; font-size: 4px; }
+        .departure-time { font-size: 12px; }
+        .platform-label { font-size: 3px; }
+        .platform-label strong { font-size: 6px; }
+        .status-board { grid-template-rows: 13px minmax(0, 1fr) 11px; gap: 3px; padding: 6px; }
+        .board-label { font-size: 4px; }
+        .board-sequence { display: none; }
+        .flap-board { gap: 2px; }
+        .flap { border-radius: 4px; box-shadow: 0 3px 0 #050605, 0 5px 8px #0006; }
+        .flap-panel, .flap-leaf { font-size: clamp(14px, 6vw, 20px); }
+        .board-foot { font-size: 3px; }
+        .cadence-track { width: 70px; gap: 2px; }
+        .advance-button, .reset-button { min-height: 21px; padding: 0 7px; font-size: 4px; }
+        .interaction-note { font-size: 3px; }
+        .scene-caption { display: none; }
+      }
+
+      @media (max-width: 260px), (max-height: 135px) {
+        .departure-shell { inset: 4px; grid-template-rows: 11px minmax(0, 1fr) 14px; gap: 3px; }
+        .departure-head { font-size: 3px; }
+        .station-mark { gap: 4px; }
+        .station-roundel { width: 9px; height: 9px; font-size: 3px; }
+        .operator-note { display: block; font-size: 3px; }
+        .service-layout { display: block; min-height: 0; }
+        .service-card { display: none; }
+        .status-board { height: 100%; grid-template-rows: 8px minmax(0, 1fr) 7px; gap: 2px; padding: 3px; border-radius: 5px; }
+        .board-label { font-size: 3px; }
+        .board-label output { margin-left: 2px; }
+        .flap-board { gap: 1px; }
+        .flap { border-radius: 2px; box-shadow: 0 2px 0 #050605; }
+        .flap::before, .flap::after { width: 1px; height: 1px; }
+        .flap::before { left: 1px; }
+        .flap::after { right: 1px; }
+        .flap-panel, .flap-leaf { font-size: 10px; }
+        .board-foot { font-size: 2px; }
+        .cadence-track { width: 46px; gap: 1px; }
+        .cadence-track i { height: 1px; }
+        .departure-actions { gap: 3px; }
+        .action-cluster { gap: 2px; }
+        .advance-button, .reset-button { min-height: 14px; padding: 0 4px; font-size: 3px; }
+        .interaction-note { font-size: 2.5px; }
+        .library-badge, .scene-caption { display: none; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .flap, .flap-leaf { transition: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <main id="flap-stage" class="preview-stage flap-stage" data-status-key="on-time" data-phase="idle" data-preview-mechanism="motion-character-split-flap" aria-label="Human-operated railway departure status board">
+      <section class="departure-shell" aria-labelledby="service-heading">
+        <header class="departure-head">
+          <span class="station-mark"><span class="station-roundel">N</span><strong id="service-heading">Northline departures</strong> · Concourse B</span>
+          <span class="operator-note">Operator update · manual dispatch</span>
+        </header>
+
+        <section class="service-layout">
+          <article class="service-card" aria-label="Train service details">
+            <div>
+              <span class="service-kicker">Service R7 · Coastal</span>
+              <p class="route-code">204</p>
+              <p class="destination">Harbor terminal<br />via East Junction</p>
+            </div>
+            <footer class="service-foot">
+              <time class="departure-time" datetime="08:42">08:42</time>
+              <span class="platform-label">Platform<br /><strong>04</strong></span>
+            </footer>
+          </article>
+
+          <section class="status-board" aria-label="Departure status mechanism">
+            <header class="board-head">
+              <span class="board-label">Current status <output id="status-output" aria-live="polite">ON TIME</output></span>
+              <span class="board-sequence">On time → Boarding → Last call → Departed</span>
+            </header>
+            <div id="flap-board" class="flap-board" role="button" tabindex="0" aria-label="Advance departure status from On time to Boarding"></div>
+            <footer class="board-foot">
+              <span id="mechanism-readout">Ready · operator controlled</span>
+              <span id="cadence-track" class="cadence-track" aria-hidden="true"></span>
+            </footer>
+          </section>
+        </section>
+
+        <footer class="departure-actions">
+          <div class="action-cluster">
+            <button id="advance-button" class="advance-button" type="button">Advance status</button>
+            <button id="reset-button" class="reset-button" type="button">Reset</button>
+          </div>
+          <span class="interaction-note">Click board / Enter / → to advance · R or Home to reset</span>
+        </footer>
+      </section>
+      <span class="library-badge">Motion · operator split-flap</span>
+      <span class="scene-caption">each character lands on its own mechanical beat after a real operator request</span>
+    </main>
+    <script type="module" src="./src/mechanical-split-flap-character-change-demo.js"></script>
+  </body>
+</html>

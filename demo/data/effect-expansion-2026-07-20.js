@@ -849,23 +849,23 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "mechanical-split-flap-character-change",
-    "name": "Mechanical split-flap character change",
-    "nameZh": "机械分瓣翻牌字符",
+    "name": "Operator-driven departure split-flap",
+    "nameZh": "人工调度的发车翻页牌",
     "category": "vector",
     "sourceUrl": "https://github.com/pqina/flip",
-    "difference": "每个字符上下叶片物理式接力并传播进位，区别于打字、选择替换和 SVG morph。",
+    "difference": "Northline R7/204 的八列状态牌各自拥有上下静态面、出入两片 3D 叶片和铰链；真人请求 ON TIME→BOARDING→LAST CALL→DEPARTED 时，16 个无 autoplay 的 Motion 控件以 75 ms 列间距逐字落定。",
     "behavior": {
-      "trigger": "timer / value update",
-      "response": "Flip upper and lower glyph leaves to propagate a new value",
-      "timing": "per-glyph mechanical sequence",
-      "layer": "DOM/CSS 3D character cells"
+      "trigger": "real board/button click or tap, Enter/Space/Arrow/N advance, and Reset/R/Home/Escape",
+      "response": "Advance one railway operating state across eight independent split-flap mechanisms, or restore the board to ON TIME",
+      "timing": "human-requested 75 ms column cadence with interruptible authoritative settlement; no automatic cycling",
+      "layer": "full-frame semantic railway departure board with DOM/CSS 3D cells"
     },
     "implementation": {
       "projectId": "motiondivision-motion",
       "projectUrl": "https://github.com/motiondivision/motion",
       "library": "motion@12.42.2",
       "renderer": "dom",
-      "snippet": "animate(hinges, { rotateX: [0, -92, -180] }, { delay: stagger(.045) });",
+      "snippet": "cells.forEach((cell,i)=>{const upper=animate(cell.out,{rotateX:[0,-92]},{delay:i*.075,autoplay:false});const lower=animate(cell.in,{rotateX:[92,0]},{delay:i*.075+.125,autoplay:false});upper.play();lower.play();});",
       "referenceUrl": "https://github.com/pqina/flip"
     },
     "scores": {
@@ -877,13 +877,13 @@ export const effectExpansion100Specs = [
       "evidence": 9,
       "total": 89
     },
-    "rationaleZh": "进位传播使机械结构在缩略图中也可辨认。",
+    "rationaleZh": "从组件 specimen 转为具体发车状态后，每个字符的机械接力与信息紧迫度绑定；落字顺序、时间、目标字符、中断强制落定和最大并发都成为可核验的运行证据。",
     "batch": "A",
-    "demo": "档案编号从 0098 逐步翻到 0104，背后是工业计数器舞台。",
-    "capture": "固定更新序列，录下 0099→0100 的多字符进位峰值。",
+    "demo": "Northline Harbor Terminal 发车牌显示 R7/204、08:42、站台 04；操作员逐次请求 ON TIME、BOARDING、LAST CALL 与 DEPARTED，八列独立翻页。",
+    "capture": "真实按钮、牌面、Arrow/Enter/N 依次推进，故意在一次翻页中途再次请求以验证中断强制落定，再用按钮与 Home 双次复位。",
     "risk": {
       "level": "low",
-      "detail": "需检查背面镜像、字体等宽和 GIF 断帧。"
+      "detail": "必须保持八个四片式 DOM 机构、等宽字形和逐列落定；快速重请求需先权威落定旧目标，不能并发叠加或由预览时钟循环。"
     },
     "observedImplementation": {
       "projectId": "pqina-flip",

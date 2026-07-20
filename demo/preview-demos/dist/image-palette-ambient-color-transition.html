@@ -1,7 +1,221 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p5.js — Image Palette Ambient Color Transition</title><style>:root{--preview-background:#151432}#palette-host{position:absolute;inset:0;cursor:pointer}#palette-host canvas{width:100%!important;height:100%!important}.palette-copy{position:absolute;z-index:5;left:13px;top:43px;color:#fff;pointer-events:none}.palette-copy small{font:800 6px/1 ui-monospace;letter-spacing:.16em;color:#fff6a3}.palette-copy h1{width:98px;margin:8px 0 0;font:950 17px/.85 system-ui;letter-spacing:-.055em}.palette-chip{position:absolute;right:12px;top:12px;z-index:5;width:54px;height:18px;border:1px solid #ffffff5c;color:#fff;display:grid;place-items:center;font:800 6px/1 ui-monospace}.library-badge{background:#111226b8}</style>  <script type="module" crossorigin src="./assets/image-palette-ambient-color-transition-B86YbaAO.js"></script>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>p5.js — Image Palette Ambient Color Transition</title>
+  <style>
+    :root {
+      --preview-background: #142028;
+      --palette-ink: #fff8e9;
+      --palette-muted: rgba(255, 248, 233, .68);
+      --palette-line: rgba(255, 248, 233, .22);
+      --palette-panel: rgba(11, 17, 20, .52);
+      --palette-active: #d2a379;
+    }
+
+    #palette-host {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    #palette-host canvas {
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    .palette-stage {
+      color: var(--palette-ink);
+      outline: none;
+    }
+
+    .palette-stage::after {
+      content: '';
+      position: absolute;
+      z-index: 2;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(90deg, rgba(5, 9, 10, .24), transparent 55%);
+    }
+
+    .palette-copy {
+      position: absolute;
+      z-index: 5;
+      left: 14px;
+      top: 43px;
+      width: 104px;
+      pointer-events: none;
+    }
+
+    .palette-copy small {
+      color: var(--palette-muted);
+      font: 800 6px/1 ui-monospace, monospace;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+
+    .palette-copy h1 {
+      margin: 8px 0 0;
+      font: 900 19px/.82 Georgia, serif;
+      letter-spacing: -.055em;
+    }
+
+    .palette-copy p {
+      margin: 8px 0 0;
+      color: var(--palette-muted);
+      font: 700 6px/1.4 ui-monospace, monospace;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .stay-price {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 4px;
+      margin-top: 9px;
+      padding-top: 7px;
+      border-top: 1px solid var(--palette-line);
+      color: var(--palette-muted);
+      font: 700 6px/1 ui-monospace, monospace;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .stay-price b {
+      color: var(--palette-ink);
+      font-size: 9px;
+    }
+
+    .palette-chip {
+      position: absolute;
+      z-index: 6;
+      right: 17px;
+      top: 14px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      min-width: 65px;
+      height: 18px;
+      padding: 0 6px;
+      border: 1px solid rgba(255, 255, 255, .28);
+      border-radius: 99px;
+      background: rgba(8, 11, 12, .46);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, .18);
+      color: #fff;
+      backdrop-filter: blur(8px);
+      font: 800 5px/1 ui-monospace, monospace;
+      letter-spacing: .08em;
+    }
+
+    .palette-swatches {
+      display: flex;
+      gap: 2px;
+    }
+
+    .palette-swatches i {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, .28);
+    }
+
+    .stay-nav {
+      position: absolute;
+      z-index: 8;
+      left: 12px;
+      right: 12px;
+      bottom: 9px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4px;
+      padding: 4px;
+      border: 1px solid var(--palette-line);
+      border-radius: 10px;
+      background: var(--palette-panel);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .2);
+      backdrop-filter: blur(12px);
+    }
+
+    .stay-nav button {
+      position: relative;
+      height: 21px;
+      padding: 0 5px 0 14px;
+      overflow: hidden;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: rgba(255, 255, 255, .58);
+      cursor: pointer;
+      text-align: left;
+      font: 850 6px/1 ui-monospace, monospace;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+
+    .stay-nav button::before {
+      content: '';
+      position: absolute;
+      left: 5px;
+      top: 8px;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .28);
+      transition: transform .2s ease, background-color .2s ease;
+    }
+
+    .stay-nav button[aria-pressed="true"] {
+      background: rgba(255, 255, 255, .12);
+      color: #fff;
+    }
+
+    .stay-nav button[aria-pressed="true"]::before {
+      background: var(--palette-active);
+      box-shadow: 0 0 8px var(--palette-active);
+      transform: scale(1.18);
+    }
+
+    .stay-nav button:focus-visible {
+      outline: 1px solid #fff;
+      outline-offset: -2px;
+    }
+
+    .palette-stage .library-badge {
+      border-color: var(--palette-line);
+      background: var(--palette-panel);
+      color: var(--palette-ink);
+    }
+
+    .scene-caption { display: none; }
+  </style>
+  <script type="module" crossorigin src="./assets/image-palette-ambient-color-transition-DN5qKxuK.js"></script>
   <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
   <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
   <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
   <link rel="modulepreload" crossorigin href="./assets/batch-c-utils-g_3IBZ2b.js">
   <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage" data-preview-mechanism="sampled-image-palette-ambience"><div id="palette-host" tabindex="0" aria-label="Click the image cards or use arrow keys to sample a new dominant palette"></div><section class="palette-copy"><small>PIXEL PALETTE / 03</small><h1>LET THE IMAGE COLOR THE ROOM.</h1></section><output class="palette-chip" id="palette-chip">RGB —</output><span class="library-badge">p5.js · Canvas pixel sampling</span><span class="scene-caption">offscreen image pixels drive ambient transition</span></main></body></html>
+</head>
+<body>
+  <main class="preview-stage palette-stage" id="palette-stage" data-preview-mechanism="sampled-image-palette-ambience" tabindex="0" aria-label="Choose a stay by atmosphere. Use the destination buttons or the left and right arrow keys.">
+    <div id="palette-host" aria-hidden="true"></div>
+    <section class="palette-copy" aria-live="polite">
+      <small id="stay-kicker">Coast · from $240</small>
+      <h1 id="stay-name">AEGEAN<br>HUSH</h1>
+      <p id="stay-location">Amorgos · Greece</p>
+      <span class="stay-price"><b id="stay-price">$240</b> per night</span>
+    </section>
+    <output class="palette-chip" id="palette-chip" aria-label="Live palette sampled from the selected photograph">
+      <span class="palette-swatches" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span id="palette-value">LIVE</span>
+    </output>
+    <nav class="stay-nav" aria-label="Stay atmosphere">
+      <button type="button" data-stay="0" aria-pressed="true">01 · Coast</button>
+      <button type="button" data-stay="1" aria-pressed="false">02 · Court</button>
+      <button type="button" data-stay="2" aria-pressed="false">03 · Desert</button>
+    </nav>
+    <span class="library-badge">p5.js · live pixel palette</span>
+    <span class="scene-caption">local photographs drive ambient color and contrast</span>
+  </main>
+</body>
+</html>

@@ -1,7 +1,53 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p5.js — BlurHash to Photo Progressive Reveal</title><style>:root{--preview-background:#11131a}#blurhash-host{position:absolute;inset:0}#blurhash-host canvas{width:100%!important;height:100%!important}.blur-copy{position:absolute;z-index:5;left:13px;top:45px;color:#f5f6ff;pointer-events:none}.blur-copy small{font:800 6px/1 ui-monospace;letter-spacing:.16em;color:#ffcf88}.blur-copy h1{width:104px;margin:8px 0 0;font:950 17px/.85 system-ui;letter-spacing:-.055em}.decode-state{position:absolute;right:12px;top:12px;z-index:5;color:#ffcf88;font:900 7px/1 ui-monospace}.library-badge{background:#11131ac9}</style>  <script type="module" crossorigin src="./assets/blurhash-to-photo-progressive-reveal-DCBNF3ea.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
-  <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
-  <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
-  <link rel="modulepreload" crossorigin href="./assets/batch-c-utils-g_3IBZ2b.js">
-  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage" data-preview-mechanism="blurhash-basis-decoder"><div id="blurhash-host" tabindex="0" aria-label="Press Space to replay the decoded placeholder to sharp image handoff"></div><section class="blur-copy"><small>PROGRESSIVE IMAGE / HASH</small><h1>COLOR ARRIVES BEFORE DETAIL.</h1></section><output class="decode-state" id="decode-state">DECODE 00%</output><span class="library-badge">p5.js · BlurHash cosine decode</span><span class="scene-caption">compact basis field → center-out photo reveal</span></main></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>p5.js — BlurHash to Photo Progressive Reveal</title>
+    <style>
+      :root { --preview-background: #e9e4da; color-scheme: light; }
+      #blurhash-host { position: absolute; inset: 0; }
+      #blurhash-host canvas { width: 100% !important; height: 100% !important; }
+      .stay-copy { position: absolute; z-index: 5; left: 13px; top: 48px; width: 79px; color: #18272b; pointer-events: none; }
+      .stay-copy small { display: block; color: #8f593f; font: 850 6px/1 ui-monospace, monospace; letter-spacing: .15em; }
+      .stay-copy h1 { margin: 8px 0 0; font: 950 20px/.84 system-ui, sans-serif; letter-spacing: -.06em; }
+      .stay-dates { margin: 12px 0 0; color: #455154; font: 750 6px/1.35 ui-monospace, monospace; letter-spacing: .09em; text-transform: uppercase; }
+      .photo-frame { position: absolute; z-index: 4; left: 100px; right: 11px; top: 22px; bottom: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,.46); border-radius: 13px; box-shadow: 0 14px 28px rgba(46,45,38,.18); pointer-events: none; }
+      .photo-frame::after { content: ''; position: absolute; inset: 44% 0 0; background: linear-gradient(180deg, transparent, rgba(10,22,28,.72)); }
+      .stay-meta { position: absolute; z-index: 2; left: 11px; right: 11px; bottom: 10px; display: flex; align-items: end; justify-content: space-between; gap: 8px; color: white; }
+      .stay-meta small { display: block; margin-bottom: 3px; color: rgba(255,255,255,.72); font: 750 6px/1 ui-monospace, monospace; letter-spacing: .12em; text-transform: uppercase; }
+      .stay-meta strong { display: block; font: 850 12px/1 system-ui, sans-serif; letter-spacing: -.035em; }
+      .stay-price { flex: none; text-align: right; font: 800 7px/1.25 ui-monospace, monospace; letter-spacing: .04em; }
+      .decode-state { position: absolute; z-index: 7; top: 31px; right: 19px; padding: 5px 7px; border: 1px solid rgba(255,255,255,.42); border-radius: 999px; color: white; background: rgba(15,29,34,.42); backdrop-filter: blur(8px); font: 850 6px/1 ui-monospace, monospace; letter-spacing: .09em; }
+      .decode-state::before { content: ''; display: inline-block; width: 4px; height: 4px; margin-right: 5px; border-radius: 50%; background: #f2b683; box-shadow: 0 0 0 2px rgba(242,182,131,.18); vertical-align: 1px; }
+      .decode-state[data-ready="true"]::before { background: #b8e6cf; box-shadow: 0 0 0 2px rgba(184,230,207,.2); }
+      .library-badge { color: #203136; background: rgba(247,243,235,.86); border-color: rgba(32,49,54,.16); }
+      .scene-caption { display: none; }
+    </style>
+    <script type="module" crossorigin src="./assets/blurhash-to-photo-progressive-reveal-Ex9AgCY2.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+    <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
+    <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
+    <link rel="modulepreload" crossorigin href="./assets/batch-c-utils-g_3IBZ2b.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main class="preview-stage" data-preview-mechanism="blurhash-basis-decoder">
+      <div id="blurhash-host" tabindex="0" aria-label="Press Space to replay the BlurHash to coastal retreat photo handoff"></div>
+      <section class="stay-copy">
+        <small>AEGEAN / 04</small>
+        <h1>STAY<br>ABOVE<br>THE TIDE.</h1>
+        <p class="stay-dates">2 nights<br>Sep 18—20</p>
+      </section>
+      <article class="photo-frame" aria-label="Kastro House in Naxos, Greece">
+        <div class="stay-meta">
+          <div><small>Naxos, Greece</small><strong>Kastro House</strong></div>
+          <span class="stay-price">★ 4.9<br>€280 / night</span>
+        </div>
+      </article>
+      <output class="decode-state" id="decode-state" data-ready="false">HASH · WAITING</output>
+      <span class="library-badge">p5.js · BlurHash from source</span>
+      <span class="scene-caption">same-image hash → quiet coastal stay</span>
+    </main>
+  </body>
+</html>

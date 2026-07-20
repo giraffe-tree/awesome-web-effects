@@ -1,7 +1,275 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Motion — Hover-activated Image Marquee Menu</title><style>
-:root{--preview-background:#ece7db;color-scheme:light}.image-menu{position:absolute;inset:0;overflow:hidden;color:#1c201c}.menu-names{position:absolute;z-index:5;left:13px;top:43px;width:92px}.menu-names button{display:block;width:100%;padding:4px 0;border:0;color:#1e231e66;background:none;text-align:left;font:950 15px/.95 system-ui;letter-spacing:-.045em;cursor:pointer}.menu-names button.active{color:#1c211c}.image-window{position:absolute;left:112px;right:0;top:28px;bottom:19px;overflow:hidden;border-left:1px solid #222a2227}.image-track{display:flex;width:max-content;height:100%;gap:7px;padding:0 7px}.image-card{position:relative;width:96px;height:100%;border:1px solid #1e251f;border-radius:11px;overflow:hidden;background:#ff6d55}.image-card:nth-child(2n){background:#6977ff}.image-card:nth-child(3n){background:#bfe968}.image-card::before{content:'';position:absolute;left:20px;top:23px;width:55px;height:55px;border:1px solid #fff9;border-radius:50%;box-shadow:inset 0 0 0 9px #fff1}.image-card span{position:absolute;left:9px;bottom:9px;color:white;font:850 7px/1 ui-monospace;letter-spacing:.1em}.library-badge{color:#202820;background:#f8f2e5da;border-color:#20282020}.scene-caption{display:none}</style>  <script type="module" crossorigin src="./assets/hover-activated-image-marquee-menu-K81dcbOE.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
-  <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
-  <link rel="modulepreload" crossorigin href="./assets/batch-b-utils-CmA_lC0Z.js">
-  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage"><div class="image-menu" data-preview-mechanism="motion-hover-image-marquee"><nav class="menu-names" id="menu-names" aria-label="Projects"><button type="button">Signal</button><button type="button">Matter</button><button type="button">Current</button><button type="button">Future</button></nav><div class="image-window"><div class="image-track" id="image-track"><article class="image-card"><span>01 / SIGNAL</span></article><article class="image-card"><span>02 / MATTER</span></article><article class="image-card"><span>03 / CURRENT</span></article><article class="image-card"><span>04 / FUTURE</span></article><article class="image-card"><span>05 / AGAIN</span></article></div></div></div><span class="library-badge">Motion · hover marquee</span></main></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Motion — Hover-activated Image Marquee Menu</title>
+    <style>
+      :root {
+        --preview-background: #e8e4da;
+        color-scheme: light;
+      }
+
+      .image-menu {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        color: #171a17;
+        background:
+          radial-gradient(circle at 82% 8%, rgba(255, 255, 255, .68), transparent 29%),
+          #e8e4da;
+      }
+
+      .folio {
+        position: absolute;
+        z-index: 8;
+        top: 12px;
+        right: 10px;
+        color: rgba(23, 26, 23, .54);
+        font: 750 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .13em;
+        text-transform: uppercase;
+      }
+
+      .menu-list {
+        position: absolute;
+        left: 8px;
+        right: 8px;
+        top: 39px;
+        bottom: 9px;
+        display: grid;
+        grid-template-rows: repeat(3, minmax(0, 1fr));
+        overflow: hidden;
+        border-top: 1px solid rgba(23, 26, 23, .3);
+        border-bottom: 1px solid rgba(23, 26, 23, .3);
+        background: rgba(248, 245, 236, .3);
+      }
+
+      .menu-row {
+        --accent: #e9bb61;
+        position: relative;
+        min-width: 0;
+        overflow: hidden;
+        padding: 0;
+        border: 0;
+        border-bottom: 1px solid rgba(23, 26, 23, .22);
+        color: #171a17;
+        background: transparent;
+        text-align: left;
+        cursor: pointer;
+      }
+
+      .menu-row:nth-child(2) { --accent: #b8c98c; }
+      .menu-row:nth-child(3) { --accent: #e27150; border-bottom: 0; }
+
+      .row-static,
+      .row-flow {
+        position: absolute;
+        inset: 0;
+      }
+
+      .row-static {
+        display: grid;
+        grid-template-columns: 25px minmax(0, 1fr) auto 17px;
+        align-items: center;
+        gap: 7px;
+        padding: 0 9px;
+        opacity: .42;
+        transition: opacity .18s ease, transform .18s ease;
+      }
+
+      .menu-row:hover .row-static,
+      .menu-row:focus-visible .row-static { opacity: .72; }
+
+      .row-index {
+        color: rgba(23, 26, 23, .56);
+        font: 800 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .08em;
+      }
+
+      .row-title {
+        overflow: hidden;
+        font: 870 17px/.9 system-ui, sans-serif;
+        letter-spacing: -.06em;
+        text-overflow: ellipsis;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+
+      .row-meta {
+        color: rgba(23, 26, 23, .64);
+        font: 750 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+
+      .row-arrow {
+        font: 700 12px/1 system-ui, sans-serif;
+        transform: translateX(-2px);
+      }
+
+      .row-flow {
+        overflow: hidden;
+        color: #171a17;
+        background: var(--accent);
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(100%);
+        transition: opacity .18s ease, transform .24s cubic-bezier(.22, .72, .2, 1);
+      }
+
+      .menu-row.active .row-static {
+        opacity: 0;
+        transform: translateY(-76%);
+      }
+
+      .menu-row.active .row-flow {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .row-rail {
+        display: flex;
+        width: max-content;
+        height: 100%;
+        will-change: transform;
+      }
+
+      .rail-unit {
+        position: relative;
+        flex: 0 0 152px;
+        display: grid;
+        grid-template-columns: 58px minmax(0, 1fr);
+        align-items: center;
+        gap: 8px;
+        height: 100%;
+        padding: 4px 10px 4px 0;
+      }
+
+      .rail-unit::after {
+        content: "✦";
+        position: absolute;
+        right: 2px;
+        top: 50%;
+        font-size: 5px;
+        transform: translateY(-50%);
+      }
+
+      .rail-unit img {
+        display: block;
+        width: 58px;
+        height: 100%;
+        min-height: 34px;
+        object-fit: cover;
+        box-shadow: inset 0 0 0 1px rgba(23, 26, 23, .18);
+      }
+
+      .menu-row[data-index="0"] img { object-position: 66% center; }
+      .menu-row[data-index="1"] img { object-position: 50% center; }
+      .menu-row[data-index="2"] img { object-position: 59% center; }
+
+      .rail-copy {
+        display: block;
+        min-width: 0;
+      }
+
+      .rail-copy strong {
+        display: block;
+        overflow: hidden;
+        font: 900 11px/.9 system-ui, sans-serif;
+        letter-spacing: -.05em;
+        text-overflow: clip;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+
+      .rail-copy small {
+        display: block;
+        margin-top: 4px;
+        overflow: hidden;
+        font: 800 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .08em;
+        text-overflow: clip;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+
+      .library-badge {
+        top: 8px;
+        left: 10px;
+        color: #202820;
+        border-color: rgba(32, 40, 32, .14);
+        background: rgba(248, 244, 233, .86);
+      }
+
+      .scene-caption { display: none; }
+
+      .image-menu.is-seeking .row-static,
+      .image-menu.is-seeking .row-flow,
+      .image-menu.is-seeking .menu-row { transition: none; }
+
+      @media (prefers-reduced-motion: reduce) {
+        .row-static,
+        .row-flow,
+        .menu-row { transition: none; }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/hover-activated-image-marquee-menu-BQzkkvhA.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+    <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
+    <link rel="modulepreload" crossorigin href="./assets/batch-b-utils-CmA_lC0Z.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main class="preview-stage">
+      <section class="image-menu" id="image-menu" data-active="0" data-preview-mechanism="motion-hover-image-marquee" aria-label="Architecture field notes menu">
+        <span class="folio">Field notes · 07</span>
+        <nav class="menu-list" id="menu-list" aria-label="Architecture destinations">
+          <button class="menu-row" type="button" data-index="0" aria-label="Mílos Coast, Greece retreat" aria-pressed="true">
+            <span class="row-static">
+              <span class="row-index">01 / 03</span><strong class="row-title">Mílos Coast</strong><span class="row-meta">Greece · retreat</span><span class="row-arrow">↗</span>
+            </span>
+            <span class="row-flow" aria-hidden="true">
+              <span class="row-rail">
+                <span class="rail-unit"><img src="./assets/coastal-retreat-CWzFg942.jpg" alt="" /><span class="rail-copy"><strong>Mílos Coast</strong><small>Greece · 36°43′N</small></span></span>
+                <span class="rail-unit"><img src="./assets/coastal-retreat-CWzFg942.jpg" alt="" /><span class="rail-copy"><strong>Mílos Coast</strong><small>Greece · 36°43′N</small></span></span>
+                <span class="rail-unit"><img src="./assets/coastal-retreat-CWzFg942.jpg" alt="" /><span class="rail-copy"><strong>Mílos Coast</strong><small>Greece · 36°43′N</small></span></span>
+                <span class="rail-unit"><img src="./assets/coastal-retreat-CWzFg942.jpg" alt="" /><span class="rail-copy"><strong>Mílos Coast</strong><small>Greece · 36°43′N</small></span></span>
+              </span>
+            </span>
+          </button>
+
+          <button class="menu-row" type="button" data-index="1" aria-label="Atlas Court, Morocco riad" aria-pressed="false">
+            <span class="row-static">
+              <span class="row-index">02 / 03</span><strong class="row-title">Atlas Court</strong><span class="row-meta">Morocco · riad</span><span class="row-arrow">↗</span>
+            </span>
+            <span class="row-flow" aria-hidden="true">
+              <span class="row-rail">
+                <span class="rail-unit"><img src="./assets/courtyard-pool-Be3uIumm.jpg" alt="" /><span class="rail-copy"><strong>Atlas Court</strong><small>Morocco · 31°38′N</small></span></span>
+                <span class="rail-unit"><img src="./assets/courtyard-pool-Be3uIumm.jpg" alt="" /><span class="rail-copy"><strong>Atlas Court</strong><small>Morocco · 31°38′N</small></span></span>
+                <span class="rail-unit"><img src="./assets/courtyard-pool-Be3uIumm.jpg" alt="" /><span class="rail-copy"><strong>Atlas Court</strong><small>Morocco · 31°38′N</small></span></span>
+                <span class="rail-unit"><img src="./assets/courtyard-pool-Be3uIumm.jpg" alt="" /><span class="rail-copy"><strong>Atlas Court</strong><small>Morocco · 31°38′N</small></span></span>
+              </span>
+            </span>
+          </button>
+
+          <button class="menu-row" type="button" data-index="2" aria-label="Atacama Sky, Chile observatory" aria-pressed="false">
+            <span class="row-static">
+              <span class="row-index">03 / 03</span><strong class="row-title">Atacama Sky</strong><span class="row-meta">Chile · observatory</span><span class="row-arrow">↗</span>
+            </span>
+            <span class="row-flow" aria-hidden="true">
+              <span class="row-rail">
+                <span class="rail-unit"><img src="./assets/desert-observatory-DuP1eWob.jpg" alt="" /><span class="rail-copy"><strong>Atacama Sky</strong><small>Chile · 23°51′S</small></span></span>
+                <span class="rail-unit"><img src="./assets/desert-observatory-DuP1eWob.jpg" alt="" /><span class="rail-copy"><strong>Atacama Sky</strong><small>Chile · 23°51′S</small></span></span>
+                <span class="rail-unit"><img src="./assets/desert-observatory-DuP1eWob.jpg" alt="" /><span class="rail-copy"><strong>Atacama Sky</strong><small>Chile · 23°51′S</small></span></span>
+                <span class="rail-unit"><img src="./assets/desert-observatory-DuP1eWob.jpg" alt="" /><span class="rail-copy"><strong>Atacama Sky</strong><small>Chile · 23°51′S</small></span></span>
+              </span>
+            </span>
+          </button>
+        </nav>
+      </section>
+      <span class="library-badge">Motion · row-local flow</span>
+    </main>
+  </body>
+</html>

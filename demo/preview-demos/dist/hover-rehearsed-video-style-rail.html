@@ -1,8 +1,320 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>Motion — Hover-rehearsed Video Style Rail</title><style>
-:root{--preview-background:#11100f}.style-stage{background:linear-gradient(145deg,#151311,#26211c);color:#fff}.style-title{position:absolute;left:16px;top:42px;font:900 15px/.95 Georgia,serif;letter-spacing:-.04em}.style-title small{display:block;margin-top:6px;color:#9c9185;font:800 6px/1 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase}.style-window{position:absolute;left:0;right:0;top:76px;height:78px;overflow:hidden}.style-rail{position:absolute;left:108px;display:flex;gap:8px;will-change:transform}.style-card{position:relative;flex:0 0 70px;height:68px;padding:0;overflow:hidden;border:1px solid #ffffff24;border-radius:12px;background:#222;color:#fff;cursor:pointer;transition:border-color .2s}.style-card[aria-checked="true"]{border-color:#fff;box-shadow:0 0 0 2px #ffbf5a}.style-card canvas{width:100%;height:100%}.style-card b{position:absolute;left:6px;bottom:6px;font:900 6px/1 ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;text-shadow:0 2px 8px #000}.style-card::after{content:"preview";position:absolute;right:5px;top:5px;padding:3px;border-radius:4px;background:#0008;font:800 4px/1 ui-monospace,monospace;opacity:0}.style-card:hover::after{opacity:1}.scene-caption{display:none}
-</style>  <script type="module" crossorigin src="./assets/hover-rehearsed-video-style-rail-D6J647dY.js"></script>
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Motion — Hover-rehearsed Video Style Rail</title>
+  <style>
+    :root { --preview-background: #131513; }
+
+    .style-stage {
+      background: #131513;
+      color: #f6f1e7;
+    }
+
+    .look-player,
+    .look-canvas,
+    .look-vignette,
+    .look-grain {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .look-player { overflow: hidden; background: #181b19; }
+
+    .look-canvas {
+      object-fit: cover;
+      display: block;
+      background: #181b19;
+    }
+
+    .look-video {
+      position: fixed;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .look-vignette {
+      z-index: 2;
+      pointer-events: none;
+      background:
+        linear-gradient(180deg, rgba(7, 10, 9, .55), transparent 35%),
+        linear-gradient(0deg, rgba(7, 10, 9, .72), transparent 44%),
+        linear-gradient(90deg, rgba(7, 10, 9, .26), transparent 55%);
+    }
+
+    .look-grain {
+      z-index: 3;
+      opacity: .13;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.45'/%3E%3C/svg%3E");
+      mix-blend-mode: soft-light;
+    }
+
+    .look-heading,
+    .look-state,
+    .look-timecode {
+      position: absolute;
+      z-index: 6;
+      pointer-events: none;
+      text-transform: uppercase;
+    }
+
+    .look-heading {
+      top: clamp(27px, 9vw, 66px);
+      left: clamp(8px, 4.1vw, 33px);
+    }
+
+    .look-heading strong {
+      display: block;
+      color: #f5efe4;
+      font: 800 clamp(8px, 2.7vw, 21px)/.9 Georgia, "Times New Roman", serif;
+      letter-spacing: -.035em;
+    }
+
+    .look-heading small {
+      display: block;
+      margin-top: clamp(3px, .9vw, 7px);
+      color: rgba(245, 239, 228, .62);
+      font: 700 clamp(5px, 1.05vw, 8px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .12em;
+    }
+
+    .look-state,
+    .look-timecode {
+      right: clamp(8px, 3.8vw, 30px);
+      font: 750 clamp(5px, 1.14vw, 9px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .12em;
+    }
+
+    .look-state {
+      top: clamp(7px, 3.4vw, 27px);
+      color: rgba(255, 247, 232, .94);
+    }
+
+    .look-state::before {
+      content: "";
+      display: inline-block;
+      width: clamp(4px, .75vw, 6px);
+      height: clamp(4px, .75vw, 6px);
+      margin-right: clamp(3px, .7vw, 6px);
+      border-radius: 50%;
+      background: #de8b4a;
+      box-shadow: 0 0 0 2px rgba(222, 139, 74, .2);
+      vertical-align: 1px;
+    }
+
+    .look-player[data-phase="rehearsing"] .look-state::before {
+      background: #f7f2e8;
+      box-shadow: 0 0 0 2px rgba(247, 242, 232, .22);
+    }
+
+    .look-timecode {
+      top: clamp(20px, 6.5vw, 50px);
+      color: rgba(255, 247, 232, .55);
+    }
+
+    .style-window {
+      position: absolute;
+      z-index: 8;
+      left: 0;
+      right: 0;
+      bottom: clamp(5px, 3vw, 23px);
+      height: clamp(27px, 8.7vw, 64px);
+      overflow: hidden;
+    }
+
+    .style-rail {
+      position: absolute;
+      left: 50%;
+      top: 1px;
+      display: flex;
+      gap: clamp(4px, 1.25vw, 10px);
+      width: max-content;
+      transform: translateX(-50%);
+      will-change: transform;
+    }
+
+    .style-card {
+      --grade-filter: brightness(.91) contrast(1.03) saturate(.9);
+      --grade-tint: transparent;
+      position: relative;
+      flex: 0 0 clamp(34px, 13vw, 94px);
+      width: clamp(34px, 13vw, 94px);
+      height: clamp(24px, 8.4vw, 60px);
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, .28);
+      border-radius: clamp(3px, 1.1vw, 8px);
+      background: #1a1c1a;
+      color: #fff;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .style-card[data-look="ember"] {
+      --grade-filter: brightness(.92) contrast(1.08) saturate(1.12) sepia(.22) hue-rotate(-8deg);
+      --grade-tint: rgba(125, 58, 14, .17);
+    }
+
+    .style-card[data-look="glacier"] {
+      --grade-filter: brightness(.88) contrast(1.12) saturate(.68);
+      --grade-tint: rgba(20, 76, 108, .23);
+    }
+
+    .style-card[data-look="dust"] {
+      --grade-filter: brightness(1.02) contrast(.88) saturate(.52) sepia(.2);
+      --grade-tint: rgba(216, 194, 157, .15);
+    }
+
+    .style-card[data-look="noir"] {
+      --grade-filter: brightness(.84) contrast(1.22) grayscale(1);
+      --grade-tint: rgba(0, 0, 0, .08);
+    }
+
+    .style-card img,
+    .style-card::before {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .style-card img {
+      object-fit: cover;
+      filter: var(--grade-filter);
+      transform: scale(1.02);
+    }
+
+    .style-card::before {
+      content: "";
+      z-index: 1;
+      background: var(--grade-tint);
+      mix-blend-mode: soft-light;
+    }
+
+    .style-card::after {
+      content: "";
+      position: absolute;
+      z-index: 4;
+      inset: 0;
+      border: 1px solid transparent;
+      border-radius: inherit;
+      pointer-events: none;
+    }
+
+    .style-card[aria-checked="true"] {
+      border-color: #dc8b4c;
+      box-shadow: 0 0 0 2px rgba(220, 139, 76, .88);
+    }
+
+    .style-card[data-previewing="true"] {
+      border-color: #fffaf0;
+      box-shadow: 0 0 0 2px rgba(255, 250, 240, .88);
+    }
+
+    .style-card[data-previewing="true"]::after { border-color: rgba(15, 17, 15, .55); }
+
+    .style-card:focus-visible {
+      box-shadow: 0 0 0 2px #121512, 0 0 0 4px #fff9ed;
+    }
+
+    .style-name,
+    .style-index {
+      position: absolute;
+      z-index: 3;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      text-shadow: 0 1px 6px #000, 0 1px 2px #000;
+      pointer-events: none;
+    }
+
+    .style-name {
+      left: clamp(3px, .9vw, 7px);
+      bottom: clamp(3px, .8vw, 6px);
+      font-size: clamp(5px, 1.05vw, 8px);
+    }
+
+    .style-index {
+      top: clamp(3px, .7vw, 6px);
+      right: clamp(3px, .7vw, 6px);
+      color: rgba(255, 255, 255, .64);
+      font-size: clamp(4px, .88vw, 7px);
+    }
+
+    .style-stage .library-badge {
+      top: clamp(6px, 2.1vw, 16px);
+      left: clamp(7px, 2.2vw, 18px);
+      z-index: 9;
+      padding: clamp(2px, .7vw, 5px) clamp(4px, 1.1vw, 8px);
+      border-color: rgba(255, 255, 255, .23);
+      background: rgba(8, 11, 10, .55);
+      font-size: clamp(5px, 1vw, 8px);
+    }
+
+    @media (max-width: 190px) {
+      .style-stage .library-badge {
+        max-width: 63px;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+      .look-heading small { display: none; }
+      .look-heading { top: 24px; }
+      .look-timecode { top: 18px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .style-rail { will-change: auto; }
+    }
+  </style>
+  <script type="module" crossorigin src="./assets/hover-rehearsed-video-style-rail-DIrM8l0_.js"></script>
   <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
   <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
   <link rel="modulepreload" crossorigin href="./assets/batch-a-qa-CFcoNLob.js">
   <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage style-stage"><div class="style-title">REHEARSE A LOOK<small>hover previews · click commits</small></div><div class="style-window"><div class="style-rail" id="style-rail" role="radiogroup" aria-label="Select a moving image style"><button class="style-card" role="radio" aria-checked="true" data-style="0"><canvas width="140" height="136"></canvas><b>Bloom</b></button><button class="style-card" role="radio" aria-checked="false" data-style="1"><canvas width="140" height="136"></canvas><b>Prism</b></button><button class="style-card" role="radio" aria-checked="false" data-style="2"><canvas width="140" height="136"></canvas><b>Paper</b></button><button class="style-card" role="radio" aria-checked="false" data-style="3"><canvas width="140" height="136"></canvas><b>Pulse</b></button><button class="style-card" role="radio" aria-checked="false" data-style="4"><canvas width="140" height="136"></canvas><b>Ink</b></button></div></div><span class="library-badge">Motion · hover rehearsal rail</span><span class="scene-caption">hover is temporary, click is persistent and centers the choice</span></main></body></html>
+</head>
+<body>
+  <main class="preview-stage style-stage">
+    <section class="look-player" id="look-player" data-effective-look="true" data-phase="idle" aria-label="Video look preview">
+      <canvas class="look-canvas" id="look-canvas" width="1280" height="720" aria-hidden="true"></canvas>
+      <video class="look-video" id="look-video" muted playsinline loop preload="auto" aria-hidden="true"></video>
+      <span class="look-vignette" aria-hidden="true"></span>
+      <span class="look-grain" aria-hidden="true"></span>
+      <header class="look-heading" aria-hidden="true">
+        <strong>COLOR STUDY / CUT 04</strong>
+        <small>one source · five grades</small>
+      </header>
+      <output class="look-state" id="look-state" aria-live="polite">COMMITTED · TRUE</output>
+      <span class="look-timecode" id="look-timecode" aria-hidden="true">00:00:00</span>
+      <div class="style-window">
+        <div class="style-rail" id="style-rail" role="radiogroup" aria-label="Choose a grade for the same source video">
+          <button class="style-card" type="button" role="radio" aria-checked="false" tabindex="-1" data-style-index="0" data-look="ember" aria-label="Rehearse Ember; activate to commit">
+            <img alt="" /><span class="style-index">01</span><b class="style-name">Ember</b>
+          </button>
+          <button class="style-card" type="button" role="radio" aria-checked="false" tabindex="-1" data-style-index="1" data-look="glacier" aria-label="Rehearse Glacier; activate to commit">
+            <img alt="" /><span class="style-index">02</span><b class="style-name">Glacier</b>
+          </button>
+          <button class="style-card" type="button" role="radio" aria-checked="true" tabindex="0" data-style-index="2" data-look="true" aria-label="Rehearse True; activate to commit">
+            <img alt="" /><span class="style-index">03</span><b class="style-name">True</b>
+          </button>
+          <button class="style-card" type="button" role="radio" aria-checked="false" tabindex="-1" data-style-index="3" data-look="dust" aria-label="Rehearse Dust; activate to commit">
+            <img alt="" /><span class="style-index">04</span><b class="style-name">Dust</b>
+          </button>
+          <button class="style-card" type="button" role="radio" aria-checked="false" tabindex="-1" data-style-index="4" data-look="noir" aria-label="Rehearse Noir; activate to commit">
+            <img alt="" /><span class="style-index">05</span><b class="style-name">Noir</b>
+          </button>
+        </div>
+      </div>
+    </section>
+    <span class="library-badge">Motion · grade rail</span>
+  </main>
+</body>
+</html>

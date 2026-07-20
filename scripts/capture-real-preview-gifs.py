@@ -200,6 +200,21 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.move(260 - 82 * progress, 90)
             elif index == 21:
                 page.mouse.up()
+        elif demo["id"] == "hover-rehearsed-video-style-rail":
+            if index == 5:
+                page.mouse.move(69, 161)
+            elif index == 12:
+                page.mouse.move(160, 120)
+            elif index == 15:
+                page.mouse.move(251, 161)
+            elif index == 20:
+                page.mouse.click(251, 161)
+            elif index == 23:
+                page.mouse.move(160, 120)
+            elif index == 26:
+                page.mouse.move(22, 161)
+            elif index == 31:
+                page.mouse.move(160, 120)
         page.evaluate("time => window.__setPreviewTime(time)", preview_time)
         frame_path = frame_root / f"{index:04d}.png"
         page.screenshot(path=str(frame_path), type="png")
@@ -243,6 +258,23 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["channelIntegrity"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture a real bidirectional drag and spring recovery: {interaction!r}")
+    elif demo["id"] == "hover-rehearsed-video-style-rail":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            interaction["automaticFallback"]
+            or interaction["revision"] < 6
+            or interaction["commits"] < 1
+            or interaction["committedIndex"] != 4
+            or interaction["committedLook"] != "noir"
+            or interaction["previewIndex"] is not None
+            or interaction["effectiveIndex"] != 4
+            or interaction["phase"] != "committed"
+            or interaction["input"] != "mouse"
+            or not interaction["mediaReady"]
+            or interaction["playing"]
+            or interaction["mediaTime"] != 0
+        ):
+            raise RuntimeError(f"{demo['id']} did not preserve rehearsal/rewind/commit state boundaries: {interaction!r}")
 
     minimum_unique = min(6, max(2, frame_count // 6))
     if len(hashes) < minimum_unique:

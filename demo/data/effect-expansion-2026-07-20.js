@@ -103,17 +103,17 @@ export const effectExpansion100Specs = [
     "sourceUrl": "https://captions.ai/",
     "difference": "hover 只临时播放并在离开时归零，click 才持久选中和居中；与普通轮播或 autoplay 卡片不同。",
     "behavior": {
-      "trigger": "hover/focus then click",
-      "response": "Preview, rewind, then persist and center a selected style",
-      "timing": "temporary rehearsal followed by committed state",
-      "layer": "media selection rail"
+      "trigger": "pointer hover / keyboard focus, then click, tap, or key commit",
+      "response": "Regrade and play one shared source temporarily, rewind on leave, then persist and center the committed look",
+      "timing": "input-driven rehearsal followed by a persistent committed state; no autonomous fallback",
+      "layer": "one-source video canvas + media selection rail"
     },
     "implementation": {
       "projectId": "motiondivision-motion",
       "projectUrl": "https://github.com/motiondivision/motion",
       "library": "motion@12.42.2",
-      "renderer": "canvas2d",
-      "snippet": "card.onpointerenter = () => preview(i); card.onpointerleave = () => rewind(i); card.onclick = () => commitAndCenter(i);",
+      "renderer": "video-backed canvas2d + DOM",
+      "snippet": "card.onpointerenter=()=>rehearse(sharedVideo,i); card.onpointerleave=rewind; card.onpointerup=()=>commitAndCenter(i);",
       "referenceUrl": "https://captions.ai/"
     },
     "scores": {
@@ -127,11 +127,11 @@ export const effectExpansion100Specs = [
     },
     "rationaleZh": "临时预演与持久选择的状态差异可被短录制清楚证明。",
     "batch": "A",
-    "demo": "五张原创动态图块组成风格轨，当前选中项带 radiogroup 语义。",
-    "capture": "悬停第二项播放→移开复位→点击第四项→轨道平滑居中。",
+    "demo": "一段 AI 虚构舞者短片作为五种 look 的唯一共享源；主画面负责预演，缩略轨只改变代码调色。",
+    "capture": "初始静止；hover Ember 播放→leave 回卷 True→hover Noir 并点击提交、居中→leave 后 Noir 保持→hover Glacier、leave 后返回 Noir。",
     "risk": {
-      "level": "high",
-      "detail": "需要五段本地视频并同时验证键盘、hover 和 click 三种输入。"
+      "level": "medium",
+      "detail": "必须核验五个 look 严格共享同一媒体，且 pointer、touch、keyboard 不会混淆临时 preview 与 committed state。"
     },
     "observedImplementation": {
       "projectId": "web-platform-video",

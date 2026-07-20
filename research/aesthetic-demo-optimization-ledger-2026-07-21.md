@@ -34,7 +34,7 @@ When implementation changes an interaction contract, preserve the audit row and 
 | 055 | `pointer-following-displacement-ripple` | `complete` | W0 · complete | Generated architecture image is localized under `demo/preview-demos/assets/aesthetic-wave-01/pointer-following-displacement-ripple/` and sampled as a real regl texture. Current live behavior is real mouse/touch/arrow-key input followed by expansion and elastic recovery; the audit-time automatic circular rehearsal has been removed. |
 | 097 | `blurhash-to-photo-progressive-reveal` | `complete` | W0 · complete | Marked complete in the current optimization wave. The audit already identified it as the most mature queue item with local raster input satisfying the mechanism. |
 | 031 | `four-corner-hover-crop-marks` | `complete` | W1 · complete | Generated coastal-retreat image is now the full-bleed editorial subject. Real mouse enter/move/leave, touch/pen taps, and keyboard controls drive crop marks, coordinates, and the metadata-to-CTA handoff with no automatic fallback. |
-| 149 | `chromatic-channel-drag-portrait` | `next-pilot` | W1 · next pilots | Explicit next pilot. A generated fictional editorial portrait exists in `tmp/aesthetic-wave-assets/chromatic-channel-drag-portrait/`; true R/G/B pixel extraction and recomposition remain implementation requirements. |
+| 149 | `chromatic-channel-drag-portrait` | `complete` | W1 · complete | A generated fictional portrait is now decoded into real red-only, green-only, and blue-only pixel buffers. Mouse/touch drag and keyboard input separate the channels; release uses a deterministic spring to restore exact registration with no automatic fallback. |
 | 010 | `context-aware-custom-cursor` | `external-only` | WX · official-only | Official-only capture, no local runnable Demo. The cursor states are code-native and existing page imagery is incidental; this ledger does not claim a local asset or editable local implementation. |
 | 011 | `displacement-map-image-hover` | `external-only` | WX · official-only | Official-only capture, no local runnable Demo. Paired photographs and a displacement map are mechanism inputs, but the audited catalog only exposes upstream official material; the ledger does not substitute a local implementation. |
 
@@ -158,7 +158,7 @@ Audit basis: published definitions, the current 320×180 GIF mid-frame, and HTML
 
 | Audit rank | Catalog | Tier | Demo | State | Wave | ImageGen decision | Current expression problem | One-sentence experience | Credible product scenario | Interaction / automatic trigger (audit snapshot) | Raster judgment |
 | --- | ---: | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| C-01 | 149 | P0 | `chromatic-channel-drag-portrait` | `next-pilot` | W1 · next pilots | generated candidate | 当前“肖像”只是白色椭圆面具，RGB 分离没有真实像素、皮肤与发丝边缘可读 | 拖动人物肖像，像拆开彩色印刷套版一样看见三条颜色通道 | 创意工作室人物名片或音乐人档案封面 | 人类：水平拖拽/移动指针控制通道偏移 | 是：肖像像素就是通道运算输入 |
+| C-01 | 149 | P0 | `chromatic-channel-drag-portrait` | `complete` | W1 · complete | generated and integrated | 当前“肖像”只是白色椭圆面具，RGB 分离没有真实像素、皮肤与发丝边缘可读 | 拖动人物肖像，像拆开彩色印刷套版一样看见三条颜色通道 | 创意工作室人物名片或音乐人档案封面 | 人类：水平拖拽/移动指针控制通道偏移 | 是：肖像像素就是通道运算输入 |
 | C-02 | 137 | P0 | `gesture-sliced-image-shutters` | `audited` | WB-03 · 101–150 | not selected in audit | 名称说图像百叶，实际是 CSS 三色块，切片之间没有连续照片内容 | 横向拖动，让一张旅行影像像百叶窗一样错峰打开视野 | 酒店目的地画廊或建筑项目封面 | 人类：水平拖拽控制八片位移与倾斜 | 是：同一照片必须跨切片连续 |
 | C-03 | 109 | P0 | `accordion-image-slices` | `audited` | WB-03 · 101–150 | not selected in audit | 十一片目前是交替纯色几何，并非被折叠的同一图像表面 | 左右移动，把一幅展览影像压合或展开成手风琴 | 美术馆展览导览或摄影作品浏览 | 人类：水平指针/方向键控制开合 | 是：图像分片是效果主体 |
 | C-04 | 141 | P0 | `pixel-sort-hover-wipe` | `audited` | WB-03 · 101–150 | not selected in audit | 像素源是代码画出的山形渐变，原图与排序区的差异过弱，像普通数据填充 | 擦过照片，让有序画面逐列解体成按亮度排序的数据 | 摄影编辑器的故障艺术预览 | 人类：水平指针控制排序边界 | 是：真实照片像素参与列排序 |
@@ -264,10 +264,13 @@ Avoid: people, vehicles, branded objects, surreal warped architecture, fisheye d
 
 ### 149 · chromatic-channel-drag-portrait
 
-- Decision: generated candidate; current state `next-pilot`.
+- Decision: generated and integrated; current state `complete`.
 - Why selected: the effect explicitly requires portrait pixels, while the audited implementation used colored ellipses. A real raster portrait is required to expose channel offsets along skin, eye, hair, and shoulder edges.
 - Candidate: `tmp/aesthetic-wave-assets/chromatic-channel-drag-portrait/editorial-portrait-rgb-source.png`.
 - Dimensions: 941 × 1672 RGB PNG, approximately 2.2 MiB.
+- Final local asset: `demo/preview-demos/assets/aesthetic-wave-01/chromatic-channel-drag-portrait/editorial-portrait-rgb-source.jpg`.
+- Final dimensions: 768 × 768 RGB baseline JPEG, center-cropped and locally optimized from the generated source.
+- Final SHA-256: `6b5f299569456ed8ec496385c5783863fdc8f4911c8cb6cd8f080613685040f2`.
 - Visual check: one fictional adult, complete head/face/hair/shoulders, clean background, useful cool rim and warm facial contrast; no text, number, logo, watermark, jewelry, prop, hand, or visible structural error.
 - Mechanism rule: implementation must read the pixels, extract R/G/B channels, offset them, and recompose them. Using the image only as a background while keeping ellipse masks as the effect would not satisfy the audit.
 - Publishing gate: create a smaller local card crop, add generation provenance, and verify face crop plus channel legibility at 144×81 and in the live Modal.

@@ -188,6 +188,18 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.move(230, 105)
             elif index == round(1.75 * args.fps):
                 page.mouse.move(330, 190)
+        elif demo["id"] == "chromatic-channel-drag-portrait":
+            if index == 5:
+                page.mouse.move(220, 90)
+                page.mouse.down()
+            elif 6 <= index <= 12:
+                progress = (index - 6) / 6
+                page.mouse.move(220 + 62 * progress, 90)
+            elif 16 <= index <= 20:
+                progress = (index - 16) / 4
+                page.mouse.move(260 - 82 * progress, 90)
+            elif index == 21:
+                page.mouse.up()
         page.evaluate("time => window.__setPreviewTime(time)", preview_time)
         frame_path = frame_root / f"{index:04d}.png"
         page.screenshot(path=str(frame_path), type="png")
@@ -217,6 +229,20 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["assetReady"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture a real pointer enter/move/leave sequence: {interaction!r}")
+    elif demo["id"] == "chromatic-channel-drag-portrait":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            interaction["automaticFallback"]
+            or interaction["inputCount"] < 10
+            or interaction["inputKind"] != "mouse"
+            or interaction["inputMode"] != "idle"
+            or interaction["activePointerId"] is not None
+            or interaction["maxObservedShift"] < 17
+            or abs(interaction["shift"]) > .15
+            or not interaction["ready"]
+            or not interaction["channelIntegrity"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a real bidirectional drag and spring recovery: {interaction!r}")
 
     minimum_unique = min(6, max(2, frame_count // 6))
     if len(hashes) < minimum_unique:

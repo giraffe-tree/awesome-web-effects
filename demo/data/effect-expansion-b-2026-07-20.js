@@ -208,11 +208,11 @@ export const effectExpansion150BatchB = [
   },
   {
     id: 'chromatic-channel-drag-portrait', order: 149, name: 'Chromatic channel drag portrait', nameZh: '色彩通道拖拽肖像', category: 'canvas', sourceUrl: 'https://github.com/akella/fake3d',
-    difference: '程序化肖像被真实以 screen 模式绘制为 RGB 三通道并向相反方向位移，不是 CSS 阴影故障。',
-    behavior: { trigger: 'pointer horizontal movement', response: 'Red and blue portrait channels separate around a fixed green registration layer', timing: 'continuous chromatic parallax', layer: 'generated portrait canvas' },
-    prompt: '绘制同一程序化肖像三次，以 screen 合成红绿蓝通道，并按指针横向位置反向分离红蓝层。',
-    implementation: p5Implementation("new p5(p => { p.draw = () => drawRgbPortrait(p.drawingContext, channelShift); });", 'https://github.com/akella/fake3d'),
-    scores: score(18, 19, 18, 15, 15, 10), rationaleZh: '肖像轮廓提供稳定参照，通道分离的方向和距离都容易辨认。'
+    difference: '本地原创肖像的真实像素被拆为 R/G/B 三张通道缓冲，以 screen 模式在固定绿色注册层两侧反向位移；不是 CSS 阴影故障或三张带色复制图。',
+    behavior: { trigger: 'pointer drag, touch drag, or arrow-key hold', response: 'Red and blue portrait channels separate around a fixed green registration layer', timing: 'continuous chromatic parallax with spring registration', layer: 'raster portrait canvas' },
+    prompt: '加载本地原创肖像并从像素拆出红、绿、蓝通道；拖拽时红蓝层围绕固定绿色层反向分离，释放后用确定性弹簧回到精准套准。',
+    implementation: p5Implementation("const { red, green, blue } = extractRgbChannels(imageData); ctx.globalCompositeOperation = 'screen'; ctx.drawImage(red, -shift, 0); ctx.drawImage(green, 0, 0); ctx.drawImage(blue, shift, 0);", 'https://github.com/akella/fake3d'),
+    scores: score(18, 19, 18, 15, 15, 10), rationaleZh: '真实肖像的发丝、面部与肩线提供稳定参照，拖拽或键盘输入后的通道分离和弹簧归位都清晰可辨。'
   },
   {
     id: 'procedural-folding-kaleidoscope', order: 150, name: 'Procedural folding kaleidoscope', nameZh: '程序化折叠万花筒', category: 'canvas', sourceUrl: 'https://github.com/processing/p5.js',

@@ -623,6 +623,42 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.move(box["x"] + box["width"] - .01, box["y"] + box["height"] * .56)
                 page.mouse.down()
                 page.mouse.up()
+        elif demo["id"] == "clip-path-menu-curtain":
+            if index == 2:
+                page.locator('#menu-toggle').click()
+            elif index == 4:
+                page.wait_for_timeout(900)
+            elif index == 7:
+                page.locator('#menu-toggle').focus()
+                page.keyboard.press("Tab")
+            elif index == 9:
+                page.keyboard.press("Tab")
+            elif index == 11:
+                page.keyboard.press("Enter")
+            elif index == 12:
+                page.wait_for_timeout(900)
+            elif index == 15:
+                page.locator('#menu-toggle').click()
+            elif index == 16:
+                page.wait_for_timeout(900)
+            elif index == 19:
+                page.keyboard.press("Shift+Tab")
+            elif index == 21:
+                page.keyboard.press("Escape")
+            elif index == 22:
+                page.wait_for_timeout(900)
+            elif index == 25:
+                page.locator('#menu-toggle').click()
+            elif index == 26:
+                page.wait_for_timeout(900)
+            elif index == 29:
+                page.locator('.menu-link[data-section="artists"]').click()
+            elif index == 30:
+                page.wait_for_timeout(900)
+            elif index == 33:
+                page.locator('#menu-toggle').click()
+            elif index == 34:
+                page.wait_for_timeout(900)
         elif demo["id"] == "playable-brand-minesweeper-footer":
             if index == 2:
                 page.locator('.mine-cell[data-index="0"]').click()
@@ -1844,6 +1880,34 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["canvasHeight"] < 64
         ):
             raise RuntimeError(f"{demo['id']} did not capture a real bidirectional ASCII incident route across controls, pointer scrub, keyboard, and boundaries: {interaction!r}")
+    elif demo["id"] == "clip-path-menu-curtain":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            interaction["claimedLibrary"] != "motion@12.42.2"
+            or interaction["renderer"] != "dom"
+            or interaction["mechanism"] != "css-clip-path-polygon"
+            or interaction["inputAdapters"] != ["pointer", "touch", "click", "keyboard"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["previewClockDrivesMenu"]
+            or not interaction["motionControlsCreated"]
+            or not interaction["initialStaticConfirmed"]
+            or interaction["inputCount"] < 10
+            or interaction["openCount"] < 4
+            or interaction["closeCount"] < 3
+            or interaction["selectionCount"] < 2
+            or interaction["syncCount"] < 20
+            or interaction["selectedSection"] != "artists"
+            or interaction["phase"] != "open"
+            or interaction["progress"] != 1
+            or interaction["targetProgress"] != 1
+            or interaction["motionActive"]
+            or not interaction["focusTrapActive"]
+            or interaction["focusedIndex"] != 0
+            or interaction["lastInput"] != "click:toggle"
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a human-operated publication curtain with staggered links, focus trapping, two semantic selections, Escape, and final open state: {interaction!r}")
     elif demo["id"] == "playable-brand-minesweeper-footer":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         if (

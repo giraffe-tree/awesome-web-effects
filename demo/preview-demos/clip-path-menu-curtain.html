@@ -1,3 +1,472 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>Motion — Clip-path Menu Curtain</title><link rel="stylesheet" href="./shared.css"/><style>
-:root{--preview-background:#efe9d7;color-scheme:light}.curtain-stage{background:linear-gradient(145deg,#f3eddc,#d9ccb5);color:#171410}.curtain-back{position:absolute;left:18px;top:49px;font:900 25px/.82 Georgia,serif;letter-spacing:-.07em}.curtain-back small{display:block;margin-top:10px;font:900 6px/1.4 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#766a58}.curtain{position:absolute;z-index:6;inset:0;background:#1a1d1a;color:#f7f0df;clip-path:polygon(0 0,100% 0,100% 0,0 0)}.curtain nav{position:absolute;left:26px;top:49px;display:grid;gap:8px;counter-reset:item}.curtain a{color:inherit;text-decoration:none;font:900 18px/.9 Georgia,serif;letter-spacing:-.04em}.curtain a::before{content:"0" counter(item) "  ";counter-increment:item;color:#6edbb7;font:800 6px/1 ui-monospace,monospace;vertical-align:middle}.menu-toggle{position:absolute;z-index:10;right:13px;top:11px;width:34px;height:25px;border:1px solid currentColor;border-radius:99px;background:#f5efdf;color:#171410;font:900 6px/1 ui-monospace,monospace;cursor:pointer}.curtain-stage .library-badge{background:#f3eddcd9;border-color:#17141025;color:#171410}.scene-caption{display:none}
-</style></head><body><main class="preview-stage curtain-stage"><div class="curtain-back">THE PAGE<br/>WAITS<br/>BEHIND<small>shape reveal · position-aware links</small></div><aside class="curtain" id="curtain"><nav><a href="#">Research</a><a href="#">Studio</a><a href="#">Archive</a><a href="#">Contact</a></nav></aside><button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false">MENU</button><span class="library-badge">Motion · polygon curtain</span><span class="scene-caption">the menu is revealed by a changing shape, not an opacity fade</span></main><script type="module" src="./src/clip-path-menu-curtain-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Motion — Common Ground Exhibition Index</title>
+    <link rel="stylesheet" href="./shared.css" />
+    <style>
+      :root {
+        --preview-background: #eee8d9;
+        --paper: #eee8d9;
+        --ink: #17211d;
+        --forest: #14241f;
+        --cream: #f4efdf;
+        --acid: #d6ee75;
+        --orange: #ec7655;
+        color-scheme: light;
+      }
+
+      button { font: inherit; }
+
+      .curtain-stage {
+        background:
+          linear-gradient(90deg, rgba(23, 33, 29, .048) 1px, transparent 1px),
+          linear-gradient(rgba(23, 33, 29, .048) 1px, transparent 1px),
+          var(--paper);
+        background-size: 26px 26px;
+        color: var(--ink);
+      }
+
+      .masthead {
+        position: absolute;
+        top: 14px;
+        left: 17px;
+        right: 17px;
+        z-index: 3;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 9px;
+        border-bottom: 1px solid rgba(23, 33, 29, .22);
+        pointer-events: none;
+      }
+
+      .brand,
+      .issue-mark,
+      .eyebrow,
+      .feature-meta dt,
+      .feature-meta dd,
+      .menu-kicker,
+      .menu-edition,
+      .nav-index,
+      .nav-note,
+      .menu-note,
+      .curtain-edge,
+      .page-marker {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        text-transform: uppercase;
+      }
+
+      .brand {
+        display: flex;
+        gap: 9px;
+        align-items: center;
+        font-size: 7px;
+        font-weight: 900;
+        letter-spacing: .15em;
+      }
+
+      .brand::before {
+        width: 9px;
+        height: 9px;
+        background: var(--ink);
+        content: "";
+        clip-path: polygon(0 0, 100% 0, 100% 60%, 55% 60%, 55% 100%, 0 100%);
+      }
+
+      .issue-mark {
+        color: #667169;
+        font-size: 6px;
+        font-weight: 800;
+        letter-spacing: .12em;
+      }
+
+      .feature {
+        position: absolute;
+        top: 72px;
+        left: 18px;
+        z-index: 2;
+        width: 45%;
+      }
+
+      .eyebrow {
+        margin: 0 0 10px;
+        color: #637068;
+        font-size: 6px;
+        font-weight: 850;
+        letter-spacing: .16em;
+      }
+
+      .feature h1 {
+        max-width: 315px;
+        margin: 0;
+        font: 580 clamp(35px, 7.2vw, 58px)/.79 Georgia, 'Times New Roman', serif;
+        letter-spacing: -.075em;
+      }
+
+      .feature-deck {
+        max-width: 270px;
+        margin: 16px 0 0;
+        color: #536159;
+        font: 500 9px/1.5 Inter, ui-sans-serif, system-ui, sans-serif;
+      }
+
+      .feature-meta {
+        display: grid;
+        grid-template-columns: repeat(3, max-content);
+        gap: 24px;
+        margin: 20px 0 0;
+      }
+
+      .feature-meta div { display: grid; gap: 4px; }
+      .feature-meta dt { color: #7a847e; font-size: 5px; font-weight: 800; letter-spacing: .12em; }
+      .feature-meta dd { margin: 0; font-size: 7px; font-weight: 900; letter-spacing: .08em; }
+
+      .catalogue-plate {
+        position: absolute;
+        top: 57px;
+        right: 17px;
+        bottom: 24px;
+        z-index: 1;
+        width: 44%;
+        overflow: hidden;
+        border: 1px solid rgba(23, 33, 29, .24);
+        background:
+          radial-gradient(circle at 58% 43%, transparent 0 14%, rgba(238, 232, 217, .94) 14.4% 16%, transparent 16.4% 25%, rgba(238, 232, 217, .72) 25.4% 27%, transparent 27.4%),
+          repeating-radial-gradient(circle at 58% 43%, transparent 0 5px, rgba(214, 238, 117, .22) 6px, transparent 7px),
+          linear-gradient(142deg, #1c3b32, #173029 62%, #10231d);
+      }
+
+      .catalogue-plate::before {
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(118deg, transparent 44%, rgba(236, 118, 85, .92) 44.4% 47%, transparent 47.4%),
+          linear-gradient(22deg, transparent 67%, rgba(214, 238, 117, .86) 67.4% 70%, transparent 70.4%);
+        content: "";
+        mix-blend-mode: screen;
+      }
+
+      .plate-code {
+        position: absolute;
+        right: 10px;
+        bottom: 7px;
+        color: rgba(244, 239, 223, .92);
+        font: 500 clamp(45px, 10vw, 86px)/.78 Georgia, serif;
+        letter-spacing: -.1em;
+      }
+
+      .page-marker {
+        position: absolute;
+        right: 18px;
+        bottom: 9px;
+        z-index: 3;
+        color: #637068;
+        font-size: 5px;
+        font-weight: 850;
+        letter-spacing: .12em;
+      }
+
+      .curtain {
+        position: absolute;
+        inset: 0;
+        z-index: 6;
+        overflow: hidden;
+        background:
+          linear-gradient(90deg, rgba(244, 239, 223, .045) 1px, transparent 1px),
+          linear-gradient(var(--forest), var(--forest));
+        background-size: 32px 100%, auto;
+        color: var(--cream);
+        clip-path: polygon(100% 0, 100% 0, 100% 0, 100% 0);
+        pointer-events: none;
+      }
+
+      .menu-header {
+        position: absolute;
+        top: 15px;
+        left: 18px;
+        right: 82px;
+        display: flex;
+        justify-content: space-between;
+        padding-bottom: 9px;
+        border-bottom: 1px solid rgba(244, 239, 223, .2);
+      }
+
+      .menu-kicker,
+      .menu-edition {
+        font-size: 6px;
+        font-weight: 850;
+        letter-spacing: .15em;
+      }
+
+      .menu-kicker { color: var(--acid); }
+      .menu-edition { color: #84958d; }
+
+      .menu-layout {
+        position: absolute;
+        top: 60px;
+        right: 19px;
+        bottom: 18px;
+        left: 18px;
+        display: grid;
+        grid-template-columns: minmax(0, 1.75fr) minmax(128px, .65fr);
+        gap: 38px;
+      }
+
+      .menu-nav {
+        display: grid;
+        align-content: start;
+      }
+
+      .menu-link {
+        display: grid;
+        grid-template-columns: 25px minmax(0, 1fr) auto;
+        gap: 10px;
+        align-items: center;
+        min-height: 59px;
+        padding: 5px 4px;
+        border-top: 1px solid rgba(244, 239, 223, .18);
+        color: inherit;
+        opacity: 0;
+        text-decoration: none;
+        transform: translateY(12px);
+      }
+
+      .menu-link:last-child { border-bottom: 1px solid rgba(244, 239, 223, .18); }
+      .menu-link:focus-visible { outline: 2px solid var(--acid); outline-offset: -2px; }
+      .menu-link[aria-current="page"] .nav-title { color: var(--acid); }
+
+      .nav-index {
+        color: #7a8c83;
+        font-size: 6px;
+        font-weight: 850;
+        letter-spacing: .12em;
+      }
+
+      .nav-title {
+        font: 560 clamp(21px, 3.6vw, 30px)/.9 Georgia, 'Times New Roman', serif;
+        letter-spacing: -.045em;
+      }
+
+      .nav-note {
+        color: #90a097;
+        font-size: 5px;
+        font-weight: 750;
+        letter-spacing: .1em;
+        text-align: right;
+      }
+
+      .menu-aside {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 13px 0 2px;
+        border-top: 1px solid rgba(244, 239, 223, .18);
+      }
+
+      .menu-aside strong {
+        display: block;
+        margin-top: 10px;
+        font: 560 18px/.93 Georgia, serif;
+        letter-spacing: -.04em;
+      }
+
+      .menu-note {
+        margin: 0;
+        color: #8b9b93;
+        font-size: 5px;
+        font-weight: 750;
+        line-height: 1.6;
+        letter-spacing: .11em;
+      }
+
+      .curtain-edge {
+        position: absolute;
+        right: 15px;
+        bottom: 14px;
+        color: rgba(214, 238, 117, .54);
+        font-size: 5px;
+        font-weight: 850;
+        letter-spacing: .12em;
+        writing-mode: vertical-rl;
+      }
+
+      .menu-toggle {
+        position: absolute;
+        z-index: 10;
+        top: 9px;
+        right: 14px;
+        display: grid;
+        grid-template-columns: 1fr 11px;
+        gap: 8px;
+        align-items: center;
+        min-width: 60px;
+        height: 31px;
+        padding: 0 9px 0 11px;
+        border: 1px solid currentColor;
+        border-radius: 99px;
+        background: rgba(238, 232, 217, .9);
+        color: var(--ink);
+        cursor: pointer;
+        font: 900 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        transition: color 180ms ease, background 180ms ease, transform 180ms ease;
+      }
+
+      .menu-toggle:hover { transform: translateY(-1px); }
+      .menu-toggle:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+      .menu-icon { position: relative; width: 11px; height: 8px; }
+      .menu-icon::before,
+      .menu-icon::after {
+        position: absolute;
+        left: 0;
+        width: 11px;
+        height: 1px;
+        background: currentColor;
+        content: "";
+        transform-origin: center;
+        transition: transform 180ms ease, top 180ms ease;
+      }
+
+      .menu-icon::before { top: 1px; }
+      .menu-icon::after { top: 6px; }
+      .curtain-stage[data-menu-active="true"] .menu-toggle { background: transparent; color: var(--cream); }
+      .curtain-stage[data-menu-active="true"] .menu-icon::before { top: 3px; transform: rotate(45deg); }
+      .curtain-stage[data-menu-active="true"] .menu-icon::after { top: 3px; transform: rotate(-45deg); }
+      .library-badge, .scene-caption { display: none; }
+
+      @media (max-width: 420px) {
+        .masthead { top: 9px; left: 11px; right: 11px; padding-bottom: 6px; }
+        .brand { font-size: 5px; }
+        .brand::before { width: 7px; height: 7px; }
+        .issue-mark { display: none; }
+        .feature { top: 44px; left: 11px; width: 48%; }
+        .eyebrow { margin-bottom: 6px; font-size: 4.5px; }
+        .feature h1 { font-size: 28px; }
+        .feature-deck { max-width: 135px; margin-top: 8px; font-size: 6px; line-height: 1.35; }
+        .feature-meta { display: none; }
+        .catalogue-plate { top: 35px; right: 10px; bottom: 12px; width: 46%; }
+        .plate-code { right: 7px; bottom: 4px; font-size: 43px; }
+        .page-marker { display: none; }
+        .menu-toggle { top: 5px; right: 8px; min-width: 49px; height: 24px; padding: 0 7px; font-size: 5px; }
+        .menu-header { top: 9px; left: 11px; right: 68px; padding-bottom: 6px; }
+        .menu-kicker, .menu-edition { font-size: 4.5px; }
+        .menu-layout { top: 38px; right: 11px; bottom: 8px; left: 11px; grid-template-columns: 1fr; gap: 0; }
+        .menu-link { grid-template-columns: 17px minmax(0, 1fr) auto; gap: 6px; min-height: 31px; padding: 3px 2px; }
+        .nav-index { font-size: 4.5px; }
+        .nav-title { font-size: 18px; }
+        .nav-note { font-size: 4px; }
+        .menu-aside, .curtain-edge { display: none; }
+      }
+
+      @media (max-width: 190px), (max-height: 110px) {
+        .masthead { top: 5px; left: 6px; right: 6px; padding-bottom: 4px; }
+        .brand { gap: 4px; font-size: 3.5px; }
+        .brand::before { width: 5px; height: 5px; }
+        .feature { top: 22px; left: 6px; width: 51%; }
+        .eyebrow { margin-bottom: 3px; font-size: 3px; }
+        .feature h1 { font-size: 16px; line-height: .82; }
+        .feature-deck { display: none; }
+        .catalogue-plate { top: 19px; right: 5px; bottom: 5px; width: 43%; }
+        .plate-code { right: 4px; bottom: 3px; font-size: 22px; }
+        .menu-toggle { top: 3px; right: 4px; grid-template-columns: 1fr 7px; gap: 4px; min-width: 38px; height: 17px; padding: 0 5px; font-size: 3.5px; }
+        .menu-icon { width: 7px; height: 6px; }
+        .menu-icon::before, .menu-icon::after { width: 7px; }
+        .menu-icon::before { top: 1px; }
+        .menu-icon::after { top: 5px; }
+        .menu-header { top: 5px; left: 6px; right: 50px; padding-bottom: 4px; }
+        .menu-kicker { font-size: 3.5px; }
+        .menu-edition { display: none; }
+        .menu-layout { top: 20px; right: 6px; bottom: 4px; left: 6px; }
+        .menu-link { grid-template-columns: 11px minmax(0, 1fr); gap: 3px; min-height: 13px; padding: 1px; }
+        .nav-index { font-size: 3px; }
+        .nav-title { font-size: 9px; line-height: .88; }
+        .nav-note { display: none; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .menu-toggle, .menu-icon::before, .menu-icon::after { transition: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="preview-stage curtain-stage" data-preview-mechanism="motion-clip-path-curtain" data-menu-active="false">
+      <header class="masthead" aria-hidden="true">
+        <span class="brand">Common Ground</span>
+        <span class="issue-mark">Journal of culture &amp; place · No. 07</span>
+      </header>
+
+      <section class="feature" aria-live="polite">
+        <p class="eyebrow" id="feature-kicker">Current exhibition · Coast archive</p>
+        <h1 id="feature-title">After the<br />wild tide.</h1>
+        <p class="feature-deck" id="feature-deck">Field recordings, salt maps and moving images from six changing shorelines.</p>
+        <dl class="feature-meta">
+          <div><dt>Opens</dt><dd id="feature-date">18 Sep</dd></div>
+          <div><dt>Room</dt><dd id="feature-room">North 02</dd></div>
+          <div><dt>Access</dt><dd id="feature-access">Free</dd></div>
+        </dl>
+      </section>
+
+      <div class="catalogue-plate" aria-hidden="true"><span class="plate-code" id="plate-code">A/07</span></div>
+      <span class="page-marker" aria-hidden="true">Selected section · <b id="page-marker">Exhibitions</b></span>
+
+      <aside
+        class="curtain"
+        id="curtain"
+        role="dialog"
+        aria-modal="true"
+        aria-hidden="true"
+        aria-labelledby="menu-title"
+        inert
+      >
+        <header class="menu-header">
+          <span class="menu-kicker" id="menu-title">Publication index</span>
+          <span class="menu-edition">Volume 07 · Autumn 2026</span>
+        </header>
+
+        <div class="menu-layout">
+          <nav class="menu-nav" id="menu-nav" aria-label="Publication sections">
+            <a class="menu-link" href="#exhibitions" data-section="exhibitions" aria-current="page">
+              <span class="nav-index">01</span><span class="nav-title">Exhibitions</span><span class="nav-note">Live programme · 04</span>
+            </a>
+            <a class="menu-link" href="#essays" data-section="essays">
+              <span class="nav-index">02</span><span class="nav-title">Essays</span><span class="nav-note">Criticism &amp; field notes · 28</span>
+            </a>
+            <a class="menu-link" href="#artists" data-section="artists">
+              <span class="nav-index">03</span><span class="nav-title">Artists</span><span class="nav-note">Practices in the index · 42</span>
+            </a>
+            <a class="menu-link" href="#visit" data-section="visit">
+              <span class="nav-index">04</span><span class="nav-title">Visit</span><span class="nav-note">Thu—Sun · 11—18</span>
+            </a>
+          </nav>
+
+          <section class="menu-aside" aria-label="Current programme note">
+            <div>
+              <p class="menu-note">Now showing</p>
+              <strong>Listening room:<br />Estuary, 04:16</strong>
+            </div>
+            <p class="menu-note">41 Moss Lane · Gallery 2<br />Open late on Friday</p>
+          </section>
+        </div>
+        <span class="curtain-edge" aria-hidden="true">Polygon reveal / authored axis</span>
+      </aside>
+
+      <button
+        class="menu-toggle"
+        id="menu-toggle"
+        type="button"
+        aria-controls="curtain"
+        aria-expanded="false"
+        aria-label="Open publication index"
+      >
+        <span id="toggle-label">Index</span><span class="menu-icon" aria-hidden="true"></span>
+      </button>
+
+      <span class="library-badge">Motion · polygon curtain</span>
+      <span class="scene-caption">A publication index is revealed by a spatially authored clip-path edge.</span>
+    </main>
+    <script type="module" src="./src/clip-path-menu-curtain-demo.js"></script>
+  </body>
+</html>

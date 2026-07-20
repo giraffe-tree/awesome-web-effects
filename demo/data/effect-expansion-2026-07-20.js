@@ -567,23 +567,23 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "clip-path-menu-curtain",
-    "name": "Clip-path menu curtain",
-    "nameZh": "裁剪路径菜单帘幕",
+    "name": "Publication index curtain",
+    "nameZh": "文化刊物索引幕布",
     "category": "transition",
     "sourceUrl": "https://www.anthropic.com/",
-    "difference": "全屏菜单由 polygon 帘幕穿过内容展开，区别于本批分层全屏菜单的多底板交错。",
+    "difference": "Common Ground 的完整文化刊物专题页上，四段 polygon 幕布边缘依次越过 Exhibitions、Essays、Artists、Visit；选择栏目会更新底层标题、导语与访问信息后再收幕。",
     "behavior": {
-      "trigger": "menu toggle",
-      "response": "Unroll and retract a full-screen navigation curtain from an authored axis",
-      "timing": "reversible shape reveal",
-      "layer": "navigation overlay"
+      "trigger": "real menu click/tap, native link activation, Tab/Shift+Tab focus travel, or Escape",
+      "response": "Open a shaped publication index, reveal links only after the moving edge reaches them, then apply the chosen section to the page beneath",
+      "timing": "human-owned reversible 760 ms polygon reveal with per-row thresholds and no automatic rehearsal",
+      "layer": "full-frame cultural publication page plus accessible modal navigation curtain"
     },
     "implementation": {
       "projectId": "motiondivision-motion",
       "projectUrl": "https://github.com/motiondivision/motion",
       "library": "motion@12.42.2",
       "renderer": "dom",
-      "snippet": "animate(curtain, { clipPath: ['polygon(0 0,100% 0,100% 0,0 0)', 'polygon(0 0,100% 0,100% 100%,0 100%)'] });",
+      "snippet": "const reveal=animate(curtain,{clipPath:[closed,edge,almostOpen,open]},{times:[0,.43,.78,1],autoplay:false}); reveal.time=progress;",
       "referenceUrl": "https://www.anthropic.com/"
     },
     "scores": {
@@ -595,13 +595,13 @@ export const effectExpansion100Specs = [
       "evidence": 9,
       "total": 89
     },
-    "rationaleZh": "形状揭幕是主体，适合作为品牌导航转场词汇。",
+    "rationaleZh": "幕布不再包围一组稀疏链接：闭合态是可成立的专题页，展开态是有层级的出版索引，栏目选择又会真实改变底页，形状运动与导航任务因此互相解释。",
     "batch": "A",
-    "demo": "纸帘从徽标轴线放开，菜单项仅在帘幕跨过自身时显现。",
-    "capture": "点击打开→记录半开 polygon→完全展开→点击收束。",
+    "demo": "Common Ground 文化刊物/展览索引；四个栏目按幕布几何阈值出现，焦点被约束在 Close 与链接间，选择 Essays 或 Artists 会更新底页内容再收幕。",
+    "capture": "真人打开→Tab/Shift+Tab 验证焦点循环→键盘选择 Essays→再次打开并 Escape→鼠标选择 Artists→最终展开，记录闭合、斜边过渡与完整菜单。",
     "risk": {
       "level": "low",
-      "detail": "若所有菜单项同时淡入会退化为普通 overlay。"
+      "detail": "链接必须随移动边缘逐行出现；closed 时 dialog 应 inert，open 时焦点不可逃逸，选择内容与 aria-current 必须同步。"
     },
     "observedImplementation": {
       "projectId": "motiondivision-motion",

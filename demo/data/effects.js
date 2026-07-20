@@ -880,10 +880,10 @@ const expansionEffects = [
   {
     id: 'synchronized-scenario-scene-handoff', category: 'transition', name: 'Synchronized scenario scene handoff', nameZh: '多层同步场景换幕', order: 18,
     company: 'Vapi', homepage: 'https://vapi.ai/', observedAs: 'Synchronized scenario scene handoff',
-    difference: 'One state atomically coordinates the background, color overlay, editorial copy, and a perspective-flipping label rather than swapping a single tab panel.',
-    behavior: { trigger: 'scenario selection or timed state change', response: 'Background, overlay, copy, and perspective label hand off as one scene', timing: 'coordinated multiphase transition', layer: 'Full scene and content planes' },
+    difference: 'One operator-owned state atomically coordinates a case-specific background, issue summary, queue and priority, primary action, and perspective status across three operational support scenarios; there is no timed carousel.',
+    behavior: { trigger: 'real scenario click or Left/Right/Home/End key', response: 'Handoff billing, account-risk, or migration context across five synchronized semantic layers', timing: 'content folds through a hidden midpoint while scene planes crossfade; reduced motion switches directly', layer: 'Customer-support routing workbench' },
     implementationName: 'Motion', projectId: 'motiondivision-motion', projectUrl: 'https://github.com/motiondivision/motion', referenceUrl: 'https://motion.dev/docs',
-    snippet: "import { animate } from 'motion';\nanimate(['.scene', '.overlay', '.copy', '.label'], { opacity: [0, 1], rotateX: [18, 0] }, { duration: 1 });",
+    snippet: "animate(0,1,{onUpdate:p=>syncSceneSummaryRouteActionPerspective(p,from,to)});",
     scores: { creativity: 19, artDirection: 19, motion: 20, clarity: 15, inspiration: 15, evidence: 10 },
     rationaleZh: '背景材质、遮罩、排版与立体标签在同一节拍原子换幕，视觉叙事完整且不同层的职责都能被辨认。'
   },

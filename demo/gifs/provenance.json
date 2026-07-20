@@ -195,7 +195,7 @@
       "originUrl": "https://github.com/motiondivision/motion",
       "demoSourcePath": "demo/preview-demos/synchronized-scenario-scene-handoff.html",
       "libraryVersion": "motion@12.42.2",
-      "generatedAt": "2026-07-18",
+      "generatedAt": "2026-07-21",
       "outputPath": "demo/gifs/captured/synchronized-scenario-scene-handoff.gif",
       "usageBasis": "original local mechanism demo using the pinned Motion package; verify license https://github.com/motiondivision/motion/blob/HEAD/LICENSE.md"
     },

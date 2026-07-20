@@ -419,6 +419,28 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.wait_for_timeout(650)
             elif index == 32:
                 page.locator("#play-toggle").click()
+        elif demo["id"] == "synchronized-scenario-scene-handoff":
+            if index == 3:
+                page.locator('.scenario-tab[data-index="1"]').click()
+            elif index == 4:
+                page.wait_for_timeout(650)
+            elif index == 9:
+                page.locator("#case-action").click()
+            elif index == 15:
+                page.locator('.scenario-tab[data-index="2"]').click()
+            elif index == 16:
+                page.wait_for_timeout(650)
+            elif index == 21:
+                page.locator("#case-action").click()
+            elif index == 25:
+                page.mouse.click(250, 110)
+                page.keyboard.press("Home")
+            elif index == 26:
+                page.wait_for_timeout(650)
+            elif index == 31:
+                page.keyboard.press("ArrowRight")
+            elif index == 32:
+                page.wait_for_timeout(650)
         page.evaluate("time => window.__setPreviewTime(time)", preview_time)
         frame_path = frame_root / f"{index:04d}.png"
         page.screenshot(path=str(frame_path), type="png")
@@ -712,6 +734,37 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["eventIndex"] > 2
         ):
             raise RuntimeError(f"{demo['id']} did not capture operator-owned visible playback, scrub, and restart: {interaction!r}")
+    elif demo["id"] == "synchronized-scenario-scene-handoff":
+        page.wait_for_function(
+            "window.__PREVIEW_INTERACTION_STATE__.phase === 'idle'",
+            timeout=2_000,
+        )
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        expected_layers = {
+            "background": "identity-anomaly-radar",
+            "summary": "mfa-reset-payout-change",
+            "route": "account-integrity-p0",
+            "action": "freeze-verify-owner",
+            "perspective": "risk-timeline",
+        }
+        if (
+            interaction["automaticFallback"]
+            or interaction["automaticPlayback"]
+            or interaction["syntheticInputDispatch"]
+            or not interaction["initialStaticConfirmed"]
+            or interaction["inputCount"] < 6
+            or interaction["clickCount"] < 2
+            or interaction["keyboardCount"] < 2
+            or interaction["switchCount"] < 4
+            or interaction["animatedTransitionCount"] < 4
+            or interaction["primaryActionCount"] < 2
+            or interaction["lastAction"] != "open-cutover-plan"
+            or interaction["phase"] != "idle"
+            or interaction["activeIndex"] != 1
+            or interaction["displayedIndex"] != 1
+            or interaction["synchronizedLayers"] != expected_layers
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture real five-layer scenario and action handoffs: {interaction!r}")
 
     minimum_unique = min(6, max(2, frame_count // 6))
     if len(hashes) < minimum_unique:

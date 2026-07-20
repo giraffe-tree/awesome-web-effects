@@ -3,35 +3,365 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Motion — Synchronized Scenario Scene Handoff</title>
+    <title>Motion — Synchronized Support Scenario Handoff</title>
     <link rel="stylesheet" href="./shared.css" />
     <style>
-      :root { --preview-background: #090b11; }
-      .handoff-stage { background: #090b11; perspective: 640px; }
-      .scene-plane { position: absolute; inset: 0; overflow: hidden; }
-      .scene-plane::before { content: ''; position: absolute; inset: -20%; background: var(--scene-art); transform: rotate(-8deg) scale(1.15); }
-      #scene-a { --scene-art: radial-gradient(circle at 72% 32%, #ffbe6b 0 8%, transparent 9%), linear-gradient(125deg, #3a1651, #c34d6f 48%, #f1a56d); }
-      #scene-b { --scene-art: radial-gradient(circle at 28% 28%, #b6faff 0 7%, transparent 8%), linear-gradient(128deg, #081c34, #137d8a 52%, #8ed8b8); opacity: 0; }
-      .scene-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,.07) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.07) 1px, transparent 1px); background-size: 28px 28px; mix-blend-mode: overlay; }
-      .handoff-copy { position: absolute; z-index: 5; left: 20px; top: 56px; width: 176px; color: white; }
-      .handoff-copy p { margin: 0 0 7px; color: rgba(255,255,255,.7); font: 800 7px/1 ui-monospace, monospace; letter-spacing: .12em; text-transform: uppercase; }
-      .handoff-copy h1 { margin: 0; font: 900 30px/.86 Georgia, serif; letter-spacing: -.06em; text-wrap: balance; }
-      .scenario-label { position: absolute; z-index: 7; right: 15px; bottom: 24px; width: 88px; height: 37px; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.5); border-radius: 3px; background: rgba(5,8,13,.76); box-shadow: 0 14px 28px rgba(0,0,0,.35); color: white; font: 900 8px/1 ui-monospace, monospace; letter-spacing: .08em; text-transform: uppercase; transform-origin: 50% 100%; }
-      .handoff-overlay { position: absolute; z-index: 4; inset: 0; background: linear-gradient(90deg, rgba(7,8,13,.78), transparent 72%); }
+      :root { --preview-background: #080d12; }
+
+      .handoff-stage {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        min-width: 100%;
+        min-height: 100%;
+        overflow: hidden;
+        color: #f6f7f4;
+        background: #080d12;
+        perspective: 720px;
+        outline: none;
+      }
+
+      .scene-plane {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        opacity: 0;
+        transform: scale(1.045);
+        transform-origin: center;
+        pointer-events: none;
+      }
+
+      .scene-plane.is-active { opacity: 1; transform: scale(1); }
+      .scene-plane::before,
+      .scene-plane::after { content: ""; position: absolute; }
+
+      .scene-billing {
+        background:
+          radial-gradient(circle at 82% 22%, rgba(242, 173, 92, .4), transparent 24%),
+          linear-gradient(130deg, #131921 0 35%, #4d3929 72%, #bc7549);
+      }
+
+      .scene-billing::before {
+        right: 5%;
+        top: 15%;
+        width: 35%;
+        height: 62%;
+        border: 1px solid rgba(255, 236, 205, .23);
+        border-radius: 8px;
+        background: repeating-linear-gradient(180deg, rgba(255, 239, 216, .14) 0 1px, transparent 1px 18px);
+        rotate: -4deg;
+      }
+
+      .scene-billing::after {
+        right: 10%;
+        top: 30%;
+        width: 18%;
+        aspect-ratio: 1;
+        border: 1px solid rgba(255, 224, 179, .3);
+        border-radius: 50%;
+        box-shadow: 0 0 0 14px rgba(234, 153, 80, .08), 0 0 0 28px rgba(234, 153, 80, .05);
+      }
+
+      .scene-risk {
+        background:
+          radial-gradient(circle at 76% 43%, rgba(255, 85, 99, .42), transparent 18%),
+          linear-gradient(130deg, #0b131c 0 38%, #342037 72%, #822e42);
+      }
+
+      .scene-risk::before {
+        right: 7%;
+        top: 8%;
+        width: 44%;
+        aspect-ratio: 1;
+        border: 1px solid rgba(255, 145, 157, .22);
+        border-radius: 50%;
+        background:
+          linear-gradient(90deg, transparent 49.5%, rgba(255, 255, 255, .13) 50%, transparent 50.5%),
+          linear-gradient(transparent 49.5%, rgba(255, 255, 255, .13) 50%, transparent 50.5%);
+        box-shadow: inset 0 0 0 28px rgba(255, 255, 255, .025), inset 0 0 0 56px rgba(255, 255, 255, .02);
+      }
+
+      .scene-risk::after {
+        right: 23%;
+        top: 37%;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #ff6676;
+        box-shadow: 37px -22px 0 -1px #ffb35e, -28px 39px 0 -2px #f06071;
+      }
+
+      .scene-migration {
+        background:
+          radial-gradient(circle at 77% 35%, rgba(95, 188, 198, .38), transparent 24%),
+          linear-gradient(130deg, #09151a 0 35%, #163b43 70%, #287582);
+      }
+
+      .scene-migration::before {
+        right: 4%;
+        top: 12%;
+        width: 44%;
+        height: 68%;
+        background:
+          linear-gradient(rgba(255, 255, 255, .09) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, .09) 1px, transparent 1px);
+        background-size: 22px 22px;
+        transform: skewY(-5deg);
+      }
+
+      .scene-migration::after {
+        right: 10%;
+        top: 26%;
+        width: 30%;
+        height: 36%;
+        border: 1px solid rgba(142, 233, 233, .24);
+        border-radius: 10px;
+        background:
+          radial-gradient(circle at 12% 24%, #91e1d8 0 3px, transparent 4px),
+          radial-gradient(circle at 67% 18%, #91e1d8 0 3px, transparent 4px),
+          radial-gradient(circle at 43% 72%, #e7bd68 0 4px, transparent 5px),
+          linear-gradient(155deg, transparent 34%, rgba(145, 225, 216, .38) 35% 36%, transparent 37% 58%, rgba(145, 225, 216, .34) 59% 60%, transparent 61%);
+      }
+
+      .scene-code {
+        position: absolute;
+        right: 7%;
+        bottom: 7%;
+        color: rgba(255, 255, 255, .35);
+        font: 900 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .14em;
+        text-transform: uppercase;
+      }
+
+      .handoff-overlay {
+        position: absolute;
+        z-index: 2;
+        inset: 0;
+        pointer-events: none;
+        background:
+          linear-gradient(90deg, rgba(5, 9, 13, .9) 0, rgba(5, 9, 13, .65) 48%, rgba(5, 9, 13, .14) 86%),
+          linear-gradient(180deg, rgba(5, 9, 13, .42), transparent 30%, rgba(5, 9, 13, .44));
+      }
+
+      .workbench {
+        position: absolute;
+        z-index: 4;
+        inset: 5% 4%;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, .16);
+        border-radius: clamp(11px, 2.5vw, 20px);
+        background: rgba(6, 12, 16, .27);
+        box-shadow: 0 24px 60px rgba(0, 0, 0, .32);
+      }
+
+      .workbench-head,
+      .scenario-tabs,
+      .case-kicker,
+      .case-detail,
+      .route-label,
+      .route-value,
+      .priority-value,
+      .case-action,
+      .perspective-label,
+      .workbench-status {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+
+      .workbench-head {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        height: clamp(25px, 11%, 38px);
+        display: flex;
+        align-items: center;
+        padding: 0 clamp(10px, 2vw, 16px);
+        border-bottom: 1px solid rgba(255, 255, 255, .1);
+        color: rgba(255, 255, 255, .58);
+        font-size: 6px;
+        font-weight: 900;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+      }
+
+      .workbench-status { margin-left: auto; color: #9fc6b5; font-size: 5px; letter-spacing: .07em; }
+
+      .scenario-tabs {
+        position: absolute;
+        left: clamp(11px, 2.4vw, 18px);
+        top: calc(clamp(25px, 11%, 38px) + 9px);
+        display: flex;
+        gap: 5px;
+      }
+
+      .scenario-tab {
+        height: 23px;
+        padding: 0 9px;
+        border: 1px solid rgba(255, 255, 255, .18);
+        border-radius: 99px;
+        color: rgba(255, 255, 255, .52);
+        background: rgba(6, 12, 16, .42);
+        cursor: pointer;
+        font: 900 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .07em;
+        text-transform: uppercase;
+      }
+
+      .scenario-tab[aria-current="true"] { border-color: rgba(255, 255, 255, .72); color: #fff; background: rgba(255, 255, 255, .11); }
+      .scenario-tab:focus-visible { outline: 1px solid #fff; outline-offset: 2px; }
+
+      .case-summary {
+        position: absolute;
+        left: clamp(12px, 3vw, 23px);
+        top: 34%;
+        width: min(56%, 420px);
+      }
+
+      .case-kicker {
+        color: #d8b178;
+        font-size: 6px;
+        font-weight: 900;
+        letter-spacing: .13em;
+        text-transform: uppercase;
+      }
+
+      .case-summary h1 {
+        margin: 8px 0 0;
+        max-width: 470px;
+        font: 800 clamp(18px, 5vw, 34px)/.87 system-ui, sans-serif;
+        letter-spacing: -.06em;
+        text-wrap: balance;
+      }
+
+      .case-detail {
+        margin: 10px 0 0;
+        max-width: 430px;
+        color: rgba(255, 255, 255, .59);
+        font-size: clamp(5px, 1.1vw, 8px);
+        font-weight: 700;
+        line-height: 1.45;
+      }
+
+      .route-strip {
+        position: absolute;
+        left: clamp(12px, 3vw, 23px);
+        bottom: clamp(12px, 5%, 19px);
+        display: grid;
+        grid-template-columns: minmax(105px, 1.5fr) minmax(70px, .8fr);
+        width: min(52%, 385px);
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, .14);
+        border-radius: 8px;
+        background: rgba(4, 10, 13, .58);
+        backdrop-filter: blur(9px);
+      }
+
+      .route-cell { min-width: 0; padding: 8px 10px; }
+      .route-cell + .route-cell { border-left: 1px solid rgba(255, 255, 255, .11); }
+      .route-label { display: block; color: rgba(255, 255, 255, .35); font-size: 4px; font-weight: 900; letter-spacing: .09em; text-transform: uppercase; }
+      .route-value, .priority-value { display: block; margin-top: 4px; overflow: hidden; color: #fff; font-size: 6px; font-weight: 900; text-overflow: ellipsis; text-transform: uppercase; white-space: nowrap; }
+      .priority-value { color: #efbd75; }
+
+      .case-action {
+        position: absolute;
+        z-index: 6;
+        right: clamp(14px, 4vw, 30px);
+        bottom: clamp(14px, 6%, 22px);
+        min-width: 126px;
+        height: 31px;
+        padding: 0 13px;
+        border: 1px solid rgba(255, 255, 255, .52);
+        border-radius: 99px;
+        color: #0b1215;
+        background: #edf2eb;
+        cursor: pointer;
+        font-size: 6px;
+        font-weight: 900;
+        letter-spacing: .05em;
+        text-transform: uppercase;
+      }
+
+      .case-action:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+
+      .perspective-label {
+        position: absolute;
+        z-index: 7;
+        right: clamp(15px, 5vw, 36px);
+        top: 32%;
+        width: min(27%, 185px);
+        min-height: 57px;
+        display: grid;
+        align-content: center;
+        padding: 10px 12px;
+        border: 1px solid rgba(255, 255, 255, .35);
+        border-radius: 7px;
+        color: #fff;
+        background: rgba(5, 11, 15, .68);
+        box-shadow: 0 15px 34px rgba(0, 0, 0, .33);
+        transform-origin: 50% 100%;
+        transform-style: preserve-3d;
+      }
+
+      .perspective-label b { font-size: 7px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+      .perspective-label span { margin-top: 5px; color: rgba(255, 255, 255, .52); font-size: 5px; font-weight: 800; text-transform: uppercase; }
+
+      .library-badge { background: rgba(5, 11, 15, .72); }
+      .scene-caption { display: none; }
+
+      @media (max-width: 180px), (max-height: 100px) {
+        .workbench { inset: 12px 4px 3px; border-radius: 6px; }
+        .workbench-head { height: 8px; padding: 0 5px; font-size: 3px; }
+        .workbench-status { font-size: 3px; }
+        .scenario-tabs { left: 5px; top: 10px; gap: 2px; }
+        .scenario-tab { height: 8px; padding: 0 4px; font-size: 3px; }
+        .case-summary { left: 6px; top: 31%; width: 66%; }
+        .case-kicker { font-size: 3px; }
+        .case-summary h1 { margin-top: 3px; font-size: 7px; }
+        .case-detail { margin-top: 3px; max-width: 88%; font-size: 3px; line-height: 1.15; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .route-strip { left: 5px; bottom: 4px; width: 66%; grid-template-columns: 1.3fr .8fr; border-radius: 3px; }
+        .route-cell { padding: 3px 4px; }
+        .route-label { font-size: 2px; }
+        .route-value, .priority-value { margin-top: 2px; font-size: 3px; }
+        .perspective-label { right: 5px; top: 31%; width: 28%; min-height: 20px; padding: 4px; border-radius: 3px; }
+        .perspective-label b { font-size: 3px; }
+        .perspective-label span { margin-top: 2px; font-size: 2px; }
+        .case-action { right: 5px; bottom: 4px; width: 39px; min-width: 39px; max-width: 39px; height: 9px; padding: 0 4px; overflow: hidden; font-size: 3px; text-overflow: ellipsis; white-space: nowrap; }
+        .scene-code { right: 5px; bottom: 3px; font-size: 3px; }
+        .library-badge { top: 4px; left: 5px; padding: 2px 4px; font-size: 4px; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .scene-plane, .case-summary, .route-strip, .case-action, .perspective-label { will-change: auto; }
+      }
     </style>
   </head>
   <body>
-    <main class="preview-stage handoff-stage" aria-label="One scenario state change synchronizes background, overlay, content and a perspective label">
-      <div class="scene-plane" id="scene-a"><span class="scene-grid"></span></div>
-      <div class="scene-plane" id="scene-b"><span class="scene-grid"></span></div>
-      <div class="handoff-overlay" id="handoff-overlay"></div>
-      <section class="handoff-copy" id="handoff-copy" data-preview-mechanism="motion-synchronized-handoff">
-        <p id="scenario-kicker">01 · support</p>
-        <h1 id="scenario-title">Answer with empathy.</h1>
+    <main class="preview-stage handoff-stage" id="handoff-stage" tabindex="0" data-preview-mechanism="motion-human-synchronized-support-routing" aria-label="Customer support routing workbench. Use scenario buttons, Left and Right Arrow, Home, or End.">
+      <div class="scene-plane scene-billing is-active" data-scene="billing-dispute"><span class="scene-code">Ledger / renewal variance</span></div>
+      <div class="scene-plane scene-risk" data-scene="account-risk"><span class="scene-code">Identity / anomaly timeline</span></div>
+      <div class="scene-plane scene-migration" data-scene="enterprise-migration"><span class="scene-code">Migration / dependency map</span></div>
+      <div class="handoff-overlay" id="handoff-overlay" aria-hidden="true"></div>
+      <section class="workbench">
+        <header class="workbench-head">Northstar support / live routing <span class="workbench-status" id="workbench-status">Case synchronized · 01 / 03</span></header>
+        <nav class="scenario-tabs" aria-label="Support scenarios">
+          <button class="scenario-tab" type="button" data-index="0" aria-current="true">Billing</button>
+          <button class="scenario-tab" type="button" data-index="1" aria-current="false">Risk</button>
+          <button class="scenario-tab" type="button" data-index="2" aria-current="false">Migration</button>
+        </nav>
+        <section class="case-summary" id="case-summary">
+          <span class="case-kicker" id="case-kicker">CS–48291 · Billing dispute</span>
+          <h1 id="case-title">Duplicate renewal after seat reduction</h1>
+          <p class="case-detail" id="case-detail">Harbor Studio reduced 84 → 61 seats, but the annual invoice renewed the old count and added a $2,400 variance.</p>
+        </section>
+        <section class="route-strip" id="route-strip" aria-label="Routing assignment">
+          <div class="route-cell"><span class="route-label">Responsible queue</span><b class="route-value" id="route-value">Billing resolutions</b></div>
+          <div class="route-cell"><span class="route-label">Priority / SLA</span><b class="priority-value" id="priority-value">P1 · 18m</b></div>
+        </section>
+        <button class="case-action" id="case-action" type="button">Open ledger + draft credit</button>
+        <aside class="perspective-label" id="perspective-label"><b id="perspective-title">Ledger view</b><span id="perspective-status">Evidence ready</span></aside>
       </section>
-      <div class="scenario-label" id="scenario-label">Support</div>
-      <span class="library-badge">Motion · coordinated state</span>
-      <span class="scene-caption">one state · four synchronized planes</span>
+      <span class="library-badge">Motion · synchronized routing</span>
+      <span class="scene-caption">One explicit scenario state synchronizes scene semantics, issue content, routing, action, and perspective.</span>
     </main>
     <script type="module" src="./src/synchronized-scenario-scene-handoff-demo.js"></script>
   </body>

@@ -203,6 +203,55 @@ def main() -> int:
             expect(modal).to_be_hidden()
             assert page.evaluate("document.activeElement?.id") == "scroll-scrubbed-master-timeline"
 
+            blurhash_row = page.locator("#blurhash-to-photo-progressive-reveal")
+            blurhash_row.locator(".effect-cell").click()
+            expect(modal).to_be_visible()
+            blurhash_preview = modal.locator(".modal-preview-frame")
+            expect(blurhash_preview).to_have_attribute(
+                "src", "./preview-demos/dist/blurhash-to-photo-progressive-reveal.html"
+            )
+            expect(blurhash_preview).to_have_attribute("width", "320")
+            expect(blurhash_preview).to_have_attribute("height", "180")
+            expect(modal.locator(".modal-preview img")).to_have_count(0)
+            blurhash_frame = page.frame(
+                url=lambda url: url.endswith("/preview-demos/dist/blurhash-to-photo-progressive-reveal.html")
+            )
+            assert blurhash_frame is not None, "BlurHash runnable detail preview iframe did not load."
+            blurhash_frame.wait_for_function(
+                "window.__PREVIEW_READY__ === true || Boolean(window.__PREVIEW_ERROR__)"
+            )
+            assert not blurhash_frame.evaluate("window.__PREVIEW_ERROR__ || null")
+            blurhash_geometry = blurhash_frame.evaluate(
+                """() => {
+                    const canvas = document.querySelector('canvas');
+                    const photo = document.querySelector('.photo-frame').getBoundingClientRect();
+                    return {
+                        viewport: [innerWidth, innerHeight],
+                        canvas: [canvas.width, canvas.height],
+                        photo: [photo.width, photo.height],
+                        capture: window.__PREVIEW_META__?.capture,
+                    };
+                }"""
+            )
+            assert blurhash_geometry == {
+                "viewport": [320, 180],
+                "canvas": [320, 180],
+                "photo": [209, 144],
+                "capture": "real-demo",
+            }
+            blurhash_frame.evaluate("window.__setPreviewTime(.3)")
+            blurhash_start = blurhash_frame.locator("canvas").evaluate("canvas => canvas.toDataURL()")
+            blurhash_frame.evaluate("window.__setPreviewTime(1.5)")
+            blurhash_revealed = blurhash_frame.locator("canvas").evaluate("canvas => canvas.toDataURL()")
+            assert blurhash_start != blurhash_revealed, "Live BlurHash preview did not render different states."
+            live_shell_box = modal.locator(".modal-preview-frame-shell").bounding_box()
+            scaled_preview_box = blurhash_preview.bounding_box()
+            assert live_shell_box and scaled_preview_box
+            assert abs(live_shell_box["width"] - scaled_preview_box["width"]) < 1
+            assert abs(live_shell_box["height"] - scaled_preview_box["height"]) < 1
+            page.keyboard.press("Escape")
+            expect(modal).to_be_hidden()
+
             official_preview_expectations = {
                 "context-aware-custom-cursor": (
                     "https://user-images.githubusercontent.com/11841379/162477170-5dd33ecd-0e72-4fe4-9053-53d7b5557637.gif",

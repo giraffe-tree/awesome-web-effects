@@ -312,7 +312,8 @@
       html[dir="rtl"] .effect-modal-close { float: left; margin: 14px 0 -52px 14px; }
       .modal-preview { position: relative; display: grid; place-items: center; min-height: 360px; overflow: hidden; color: white; background: #111216; }
       .modal-preview-live { min-height: 453px; padding: 24px; background: radial-gradient(circle at 50% 28%, #30333b, #111216 70%); }
-      .modal-preview-frame { display: block; width: min(100%, 720px); aspect-ratio: 16 / 9; border: 0; border-radius: 18px; background: #07090d; box-shadow: 0 22px 70px rgba(0,0,0,.42); }
+      .modal-preview-frame-shell { position: relative; width: min(100%, 720px); aspect-ratio: 16 / 9; overflow: hidden; border-radius: 18px; background: #07090d; box-shadow: 0 22px 70px rgba(0,0,0,.42); }
+      .modal-preview-frame { position: absolute; inset: 0 auto auto 0; display: block; width: 320px; height: 180px; border: 0; background: #07090d; transform: scale(var(--preview-scale, 1)); transform-origin: top left; }
       .modal-preview-live .media-load-state { margin: 24px; border-radius: 18px; }
       .modal-preview-official { padding: 32px; }
       .modal-preview-official img { display: block; width: auto; height: auto; max-width: 100%; max-height: min(58vh, 540px); object-fit: contain; image-rendering: auto; }
@@ -453,7 +454,7 @@
         html[dir="rtl"] .effect-modal-close { margin: 10px 0 -48px 10px; }
         .modal-preview, .modal-preview-unavailable { min-height: 220px; }
         .modal-preview-live { min-height: 0; padding: 0; }
-        .modal-preview-frame { width: 100%; border-radius: 0; box-shadow: none; }
+        .modal-preview-frame-shell { width: 100%; border-radius: 0; box-shadow: none; }
         .modal-preview-live .media-load-state { margin: 0; border-radius: 0; }
         .modal-preview-official { padding: 20px; }
         .modal-preview-official .media-load-state { inset: 20px; }
@@ -718,6 +719,21 @@
           };
 
           if (media.tagName === 'IFRAME') {
+            const frameShell = media.closest('[data-live-preview-shell]');
+            const fitLivePreview = () => {
+              if (!frameShell?.isConnected) return;
+              const nativeWidth = Number(media.getAttribute('width')) || 320;
+              const availableWidth = frameShell.clientWidth;
+              if (availableWidth > 0) frameShell.style.setProperty('--preview-scale', String(availableWidth / nativeWidth));
+            };
+            fitLivePreview();
+            if ('ResizeObserver' in window && frameShell) {
+              shell._previewResizeObserver = new ResizeObserver(fitLivePreview);
+              shell._previewResizeObserver.observe(frameShell);
+            } else {
+              shell._previewResizeHandler = fitLivePreview;
+              window.addEventListener('resize', fitLivePreview);
+            }
             armTimeout(12000);
             media.addEventListener('load', () => {
               let sameOrigin = false;
@@ -833,6 +849,12 @@
         if (modal.hidden) return;
         modal.hidden = true;
         document.body.classList.remove('modal-open');
+        modalContent.querySelectorAll('[data-media-shell]').forEach(shell => {
+          clearTimeout(shell._mediaTimeout);
+          shell._mediaObserver?.disconnect();
+          shell._previewResizeObserver?.disconnect();
+          if (shell._previewResizeHandler) window.removeEventListener('resize', shell._previewResizeHandler);
+        });
         modalContent.replaceChildren();
         const trigger = modalTrigger;
         modalTrigger = null;
@@ -858,7 +880,7 @@
         const preview = !realPreview
           ? `<div class="modal-preview modal-preview-unavailable"><div><span aria-hidden="true">◎</span><strong>${t.unavailableDetail}</strong><p>${t.unavailableHelp}</p></div><span class="modal-preview-status">${previewStatus}</span></div>`
           : source.demoPath
-            ? `<div class="modal-preview modal-preview-live" data-media-shell data-media-state="loading" data-media-error-key="liveLoadError" aria-busy="true"><iframe class="modal-preview-frame" data-managed-media src="./${escapeHTML(source.demoPath)}" title="${previewTitle}" loading="eager"></iframe>${mediaStateMarkup(t.loadingLive, true)}<span class="modal-preview-status">${t.livePreview}</span></div>`
+            ? `<div class="modal-preview modal-preview-live" data-media-shell data-media-state="loading" data-media-error-key="liveLoadError" aria-busy="true"><div class="modal-preview-frame-shell" data-live-preview-shell><iframe class="modal-preview-frame" data-managed-media src="./${escapeHTML(source.demoPath)}" title="${previewTitle}" width="320" height="180" loading="eager"></iframe></div>${mediaStateMarkup(t.loadingLive, true)}<span class="modal-preview-status">${t.livePreview}</span></div>`
             : `<div class="modal-preview modal-preview-official" data-media-shell data-media-state="loading" data-media-error-key="officialLoadError" aria-busy="true"><img src="${escapeHTML(officialPreviewUrl(source))}" data-managed-media data-official-preview data-upstream-src="${escapeHTML(officialPreviewUrl(source))}" data-fallback-src="./gifs/${escapeHTML(source.preview)}.gif" alt="${previewTitle}" decoding="async" referrerpolicy="no-referrer" />${mediaStateMarkup(t.loadingOfficial, true)}<span class="modal-preview-status">${t.officialNativePreview}</span></div>`;
         const links = [modalLink(project.url, t.viewProject)];
         if (source.demoPath) links.push(modalLink(`./${source.demoPath}`, t.openDemo));

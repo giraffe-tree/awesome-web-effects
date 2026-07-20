@@ -323,6 +323,31 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("ArrowUp")
             elif index == 33:
                 page.keyboard.press("Home")
+        elif demo["id"] == "delayed-dropdown-promo-sweep":
+            if index == 3:
+                page.mouse.click(274, 24)
+            elif index == 4:
+                page.wait_for_timeout(690)
+            elif index == 10:
+                page.wait_for_timeout(850)
+            elif index == 14:
+                page.keyboard.press("Escape")
+            elif index == 15:
+                page.wait_for_timeout(400)
+            elif index == 20:
+                page.mouse.click(274, 24)
+            elif index == 21:
+                page.wait_for_timeout(250)
+            elif index == 22:
+                page.mouse.click(5, 175)
+            elif index == 23:
+                page.wait_for_timeout(400)
+            elif index == 27:
+                page.mouse.click(274, 24)
+            elif index == 28:
+                page.wait_for_timeout(690)
+            elif index == 33:
+                page.wait_for_timeout(850)
         page.evaluate("time => window.__setPreviewTime(time)", preview_time)
         frame_path = frame_root / f"{index:04d}.png"
         page.screenshot(path=str(frame_path), type="png")
@@ -512,6 +537,30 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["layout"]["cardHeight"] <= 0
         ):
             raise RuntimeError(f"{demo['id']} did not capture real pointer, keyboard, and centered-reset tilt states: {interaction!r}")
+    elif demo["id"] == "delayed-dropdown-promo-sweep":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        counts = interaction["counts"]
+        if (
+            interaction["automaticFallback"]
+            or not interaction["assetReady"]
+            or not interaction["initialClosedVerified"]
+            or not interaction["open"]
+            or interaction["phase"] != "open"
+            or interaction["sweep"] != "complete"
+            or interaction["delayPending"]
+            or counts["automaticOpen"] != 0
+            or counts["input"] < 5
+            or counts["toggle"] < 3
+            or counts["open"] < 3
+            or counts["close"] < 2
+            or counts["escape"] < 1
+            or counts["outside"] < 1
+            or counts["delayScheduled"] < 3
+            or counts["delayCancelled"] < 1
+            or counts["sweepStarted"] < 2
+            or counts["sweepCompleted"] < 2
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture completed, cancelled, and restarted disclosure sweeps: {interaction!r}")
 
     minimum_unique = min(6, max(2, frame_count // 6))
     if len(hashes) < minimum_unique:

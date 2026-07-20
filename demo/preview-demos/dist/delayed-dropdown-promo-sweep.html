@@ -5,54 +5,425 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Motion — Delayed Dropdown Promo Sweep</title>
     <style>
-      :root { --preview-background: #f2efe7; color-scheme: light; }
-      .site-bar { position: absolute; z-index: 15; left: 13px; right: 13px; top: 11px; display: flex; align-items: center; justify-content: space-between; }
-      .site-wordmark { color: #25231f; font: 950 10px/1 system-ui, sans-serif; letter-spacing: -.04em; }
-      .products-trigger { display: inline-flex; align-items: center; gap: 5px; min-height: 25px; padding: 0 9px; border: 1px solid #302c2528; border-radius: 999px; color: #27241f; background: #fffdf8; font: 800 7px/1 system-ui, sans-serif; cursor: pointer; box-shadow: 0 6px 18px #493c2410; }
-      .products-trigger::after { content: '⌄'; translate: 0 -1px; transition: rotate .2s ease; }
-      .products-trigger[aria-expanded='true']::after { rotate: 180deg; }
-      .menu-shell { position: absolute; z-index: 10; left: 13px; right: 13px; top: 45px; height: 116px; display: grid; grid-template-columns: 1fr 1.06fr; gap: 5px; padding: 5px; border: 1px solid #29251d1f; border-radius: 15px; background: #fffdf8; box-shadow: 0 20px 45px #493c2424; transform-origin: 80% 0; overflow: hidden; opacity: 0; }
-      .menu-list { display: flex; flex-direction: column; padding: 8px 7px; }
-      .menu-list small { margin-bottom: 7px; color: #26231e66; font: 800 6px/1 ui-monospace, monospace; letter-spacing: .14em; }
-      .menu-item { display: grid; grid-template-columns: 18px 1fr; gap: 7px; align-items: center; min-height: 27px; color: #25221e; text-decoration: none; }
-      .menu-icon { width: 18px; height: 18px; display: grid; place-items: center; border-radius: 6px; background: #ece7dc; color: #645a4e; font: 900 7px/1 ui-monospace, monospace; }
-      .menu-item strong { display: block; font: 850 7px/1.1 system-ui, sans-serif; }
-      .menu-item span { display: block; margin-top: 3px; color: #39332c7a; font: 650 5.5px/1.1 system-ui, sans-serif; }
-      .promo-card { position: relative; overflow: hidden; border-radius: 11px; color: white; background: radial-gradient(circle at 88% 15%, #e1ff95 0 9%, transparent 10%), linear-gradient(140deg, #6b3ef2, #ca46cb 58%, #ff765c); }
-      .promo-grid { position: absolute; inset: 0; opacity: .18; background-image: linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px); background-size: 17px 17px; transform: perspective(100px) rotateX(32deg) scale(1.4); }
-      .promo-copy { position: absolute; z-index: 3; left: 11px; right: 11px; bottom: 11px; }
-      .promo-copy i { display: inline-block; margin-bottom: 6px; padding: 3px 5px; border: 1px solid #ffffff63; border-radius: 99px; font: 800 5px/1 ui-monospace, monospace; letter-spacing: .1em; }
-      .promo-copy strong { display: block; max-width: 92px; font: 900 13px/.9 ui-serif, Georgia, serif; letter-spacing: -.035em; }
-      .promo-sweep { position: absolute; z-index: 2; top: -28px; bottom: -28px; width: 44px; left: 0; background: linear-gradient(90deg, transparent, #ffffffb8, #d7ff92ba, transparent); filter: blur(2px); rotate: 14deg; transform: translateX(-120%); mix-blend-mode: screen; }
-      .promo-orbit { position: absolute; z-index: 1; right: -13px; top: -18px; width: 82px; height: 82px; border: 1px solid #ffffff70; border-radius: 50%; box-shadow: inset 0 0 0 15px #ffffff0d, inset 0 0 0 26px #ffffff0a; }
-      .preview-stage > .library-badge { top: auto; bottom: 9px; color: #393127; background: #fffdf0d9; border-color: #332b221f; }
-      .scene-caption { left: auto; right: 13px; color: #39312782; }
+      :root { --preview-background: #eee9de; color-scheme: light; }
+
+      .dropdown-stage {
+        color: #27251f;
+        background:
+          linear-gradient(90deg, transparent 49.8%, rgba(57, 52, 42, .055) 50%, transparent 50.2%),
+          radial-gradient(circle at 80% 18%, rgba(184, 81, 31, .11), transparent 28%),
+          linear-gradient(145deg, #f5f1e8, #e7e0d3);
+      }
+
+      .dropdown-stage::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        opacity: .38;
+        background-image: radial-gradient(rgba(40, 38, 32, .18) .55px, transparent .55px);
+        background-size: 4px 4px;
+        mask-image: linear-gradient(90deg, #000, transparent 72%);
+      }
+
+      .site-bar {
+        position: absolute;
+        z-index: 20;
+        left: clamp(8px, 4.3vw, 32px);
+        right: clamp(8px, 4.3vw, 32px);
+        top: clamp(8px, 3.2vw, 20px);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .site-wordmark {
+        display: inline-flex;
+        align-items: center;
+        gap: clamp(5px, 1.2vw, 9px);
+        color: #25241f;
+        font: 900 clamp(7px, 1.55vw, 12px)/1 system-ui, sans-serif;
+        letter-spacing: -.045em;
+      }
+
+      .site-wordmark::before {
+        content: "";
+        width: clamp(8px, 1.9vw, 14px);
+        aspect-ratio: 1;
+        border-radius: 35% 65% 58% 42%;
+        background: #b85024;
+        rotate: 17deg;
+        box-shadow: inset -3px -2px 0 rgba(62, 29, 13, .2);
+      }
+
+      .products-trigger {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: clamp(5px, 1vw, 8px);
+        min-height: clamp(23px, 5.3vw, 36px);
+        padding: 0 clamp(9px, 2.2vw, 17px);
+        border: 1px solid rgba(48, 44, 37, .22);
+        border-radius: 999px;
+        color: #292720;
+        background: rgba(255, 253, 248, .88);
+        font: 800 clamp(6px, 1.25vw, 10px)/1 system-ui, sans-serif;
+        letter-spacing: .035em;
+        cursor: pointer;
+        box-shadow: 0 8px 28px rgba(55, 45, 29, .08);
+        backdrop-filter: blur(12px);
+      }
+
+      .products-trigger::after {
+        content: "";
+        width: 4px;
+        height: 4px;
+        border-right: 1px solid currentColor;
+        border-bottom: 1px solid currentColor;
+        rotate: 45deg;
+        translate: 0 -1px;
+        transition: rotate .22s ease, translate .22s ease;
+      }
+
+      .products-trigger[aria-expanded="true"]::after { rotate: 225deg; translate: 0 1px; }
+      .products-trigger:focus-visible { outline: 2px solid #b85024; outline-offset: 2px; }
+
+      .page-intro {
+        position: absolute;
+        z-index: 2;
+        left: clamp(11px, 6.2vw, 48px);
+        top: 29%;
+        max-width: min(56vw, 390px);
+      }
+
+      .page-intro small,
+      .intro-meta,
+      .promo-chip,
+      .promo-action,
+      .menu-eyebrow {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+      }
+
+      .page-intro small {
+        display: block;
+        margin-bottom: clamp(5px, 1.5vw, 12px);
+        color: #9b4825;
+        font-size: clamp(5px, 1.25vw, 10px);
+        font-weight: 850;
+      }
+
+      .page-intro h1 {
+        margin: 0;
+        color: #25231e;
+        font: 800 clamp(18px, 6.4vw, 50px)/.83 Georgia, "Times New Roman", serif;
+        letter-spacing: -.058em;
+      }
+
+      .page-intro p {
+        max-width: 34ch;
+        margin: clamp(7px, 2vw, 16px) 0 0;
+        color: rgba(39, 36, 30, .58);
+        font: 620 clamp(6px, 1.4vw, 11px)/1.45 system-ui, sans-serif;
+      }
+
+      .intro-meta {
+        position: absolute;
+        right: clamp(12px, 6vw, 48px);
+        bottom: clamp(13px, 8.5vw, 58px);
+        display: grid;
+        grid-template-columns: repeat(2, auto);
+        gap: clamp(8px, 2.6vw, 22px);
+        color: rgba(41, 37, 30, .48);
+        font-size: clamp(5px, 1.12vw, 9px);
+        font-weight: 750;
+      }
+
+      .menu-shell {
+        position: absolute;
+        z-index: 15;
+        left: clamp(8px, 4.3vw, 32px);
+        right: clamp(8px, 4.3vw, 32px);
+        top: clamp(43px, 13vw, 78px);
+        bottom: clamp(13px, 10vw, 48px);
+        display: grid;
+        grid-template-columns: minmax(0, .86fr) minmax(0, 1.18fr);
+        gap: clamp(5px, 1.5vw, 12px);
+        min-height: 0;
+        padding: clamp(5px, 1.4vw, 11px);
+        overflow: hidden;
+        border: 1px solid rgba(49, 43, 33, .15);
+        border-radius: clamp(13px, 3.4vw, 25px);
+        background: rgba(255, 253, 248, .96);
+        box-shadow: 0 24px 70px rgba(59, 46, 27, .2);
+        transform-origin: 82% 0;
+        backdrop-filter: blur(18px);
+      }
+
+      .menu-shell[hidden] { display: none; }
+
+      .menu-list {
+        display: grid;
+        grid-template-rows: auto repeat(3, minmax(0, 1fr));
+        min-width: 0;
+        min-height: 0;
+        padding: clamp(4px, 1.4vw, 12px);
+      }
+
+      .menu-eyebrow {
+        margin-bottom: clamp(3px, .8vw, 7px);
+        color: rgba(48, 43, 36, .48);
+        font-size: clamp(4px, .9vw, 7px);
+        font-weight: 850;
+      }
+
+      .menu-item {
+        display: grid;
+        grid-template-columns: clamp(18px, 4.5vw, 34px) minmax(0, 1fr) auto;
+        gap: clamp(6px, 1.5vw, 11px);
+        align-items: center;
+        min-width: 0;
+        padding: clamp(3px, .7vw, 6px) 0;
+        border-top: 1px solid rgba(48, 42, 33, .095);
+        color: #292720;
+        text-decoration: none;
+      }
+
+      .menu-item:focus-visible { outline: 2px solid #b85024; outline-offset: 2px; border-radius: 6px; }
+
+      .menu-icon {
+        width: clamp(18px, 4.5vw, 34px);
+        aspect-ratio: 1;
+        display: grid;
+        place-items: center;
+        border-radius: clamp(6px, 1.5vw, 11px);
+        color: #9c4925;
+        background: #eee5d8;
+        font: 900 clamp(5px, 1.1vw, 9px)/1 ui-monospace, monospace;
+      }
+
+      .menu-item strong,
+      .menu-item span { display: block; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .menu-item strong { font: 850 clamp(6px, 1.5vw, 12px)/1.1 system-ui, sans-serif; }
+      .menu-item span {
+        margin-top: clamp(2px, .55vw, 4px);
+        color: rgba(48, 43, 36, .52);
+        font: 620 clamp(4px, 1vw, 8px)/1.1 system-ui, sans-serif;
+      }
+
+      .menu-arrow { color: #a34e28; font: 800 clamp(6px, 1.4vw, 11px)/1 system-ui, sans-serif; }
+
+      .promo-card {
+        position: relative;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        border-radius: clamp(10px, 2.8vw, 20px);
+        color: #fffaf0;
+        background: #29251f;
+        isolation: isolate;
+      }
+
+      .promo-photo,
+      .promo-shade,
+      .promo-grain { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+      .promo-photo {
+        display: block;
+        object-fit: cover;
+        object-position: center;
+        filter: saturate(.94) contrast(1.03) brightness(.82);
+        transform: scale(1.012);
+      }
+
+      .promo-shade {
+        z-index: 1;
+        background:
+          linear-gradient(90deg, rgba(20, 18, 15, .9) 0%, rgba(20, 18, 15, .68) 35%, rgba(20, 18, 15, .08) 68%, rgba(20, 18, 15, .2) 100%),
+          linear-gradient(0deg, rgba(20, 17, 13, .78), transparent 62%);
+        pointer-events: none;
+      }
+
+      .promo-grain {
+        z-index: 2;
+        opacity: .12;
+        pointer-events: none;
+        background-image: radial-gradient(rgba(255, 255, 255, .38) .45px, transparent .55px);
+        background-size: 3px 3px;
+        mix-blend-mode: soft-light;
+      }
+
+      .promo-copy {
+        position: absolute;
+        z-index: 5;
+        left: clamp(8px, 2.6vw, 20px);
+        right: 42%;
+        bottom: clamp(8px, 2.6vw, 20px);
+      }
+
+      .promo-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        margin-bottom: clamp(5px, 1.4vw, 10px);
+        padding: clamp(3px, .65vw, 5px) clamp(5px, 1vw, 8px);
+        border: 1px solid rgba(255, 247, 232, .42);
+        border-radius: 999px;
+        color: #fff8ec;
+        background: rgba(23, 19, 15, .24);
+        font-size: clamp(4px, .85vw, 7px);
+        font-weight: 850;
+        opacity: 0;
+        backdrop-filter: blur(6px);
+      }
+
+      .promo-chip::before { content: ""; width: 4px; height: 4px; border-radius: 50%; background: #dc7744; }
+
+      .promo-copy strong {
+        display: block;
+        max-width: 12ch;
+        color: #fff8eb;
+        font: 780 clamp(11px, 3.2vw, 25px)/.88 Georgia, "Times New Roman", serif;
+        letter-spacing: -.045em;
+        text-wrap: balance;
+      }
+
+      .promo-copy p {
+        max-width: 26ch;
+        margin: clamp(5px, 1.2vw, 9px) 0 0;
+        color: rgba(255, 247, 232, .66);
+        font: 600 clamp(4px, .95vw, 8px)/1.35 system-ui, sans-serif;
+      }
+
+      .promo-action {
+        display: inline-block;
+        margin-top: clamp(6px, 1.5vw, 12px);
+        color: #f2a275;
+        font-size: clamp(4px, .9vw, 7px);
+        font-weight: 850;
+      }
+
+      .promo-sweep {
+        position: absolute;
+        z-index: 4;
+        top: -20%;
+        bottom: -20%;
+        left: -30%;
+        width: 26%;
+        background: linear-gradient(90deg, transparent, rgba(255, 218, 176, .18), rgba(255, 250, 229, .82), rgba(220, 112, 59, .3), transparent);
+        filter: blur(clamp(1px, .4vw, 3px));
+        rotate: 10deg;
+        transform: translateX(-110%);
+        mix-blend-mode: screen;
+        pointer-events: none;
+      }
+
+      .promo-card[data-sweep="complete"] {
+        box-shadow: inset 0 0 0 1px rgba(240, 151, 102, .24);
+      }
+
+      .dropdown-stage > .library-badge {
+        top: auto;
+        bottom: clamp(6px, 2vw, 14px);
+        color: #50483d;
+        background: rgba(255, 253, 247, .76);
+        border-color: rgba(50, 44, 35, .12);
+        font-size: clamp(5px, 1vw, 8px);
+      }
+
+      .scene-caption {
+        left: auto;
+        right: clamp(8px, 3.2vw, 24px);
+        bottom: clamp(7px, 2.2vw, 15px);
+        color: rgba(57, 50, 41, .5);
+        font-size: clamp(4px, .9vw, 7px);
+      }
+
+      @media (max-width: 180px), (max-height: 100px) {
+        .site-bar { left: 6px; right: 6px; top: 5px; }
+        .site-wordmark { gap: 4px; font-size: 5px; }
+        .site-wordmark::before { width: 7px; }
+        .products-trigger { min-height: 18px; padding: 0 6px; gap: 4px; font-size: 4.5px; }
+        .products-trigger::after { width: 3px; height: 3px; }
+        .page-intro { left: 7px; top: 29px; max-width: 78px; }
+        .page-intro small, .page-intro p, .intro-meta { display: none; }
+        .page-intro h1 { font-size: 12px; }
+        .menu-shell { left: 4px; right: 4px; top: 28px; bottom: 4px; grid-template-columns: .88fr 1.12fr; gap: 3px; padding: 3px; border-radius: 7px; }
+        .menu-list { padding: 1px 2px; }
+        .menu-eyebrow { display: none; }
+        .menu-item { grid-template-columns: 10px minmax(0, 1fr); gap: 3px; padding: 0; }
+        .menu-icon { width: 10px; border-radius: 3px; font-size: 3px; }
+        .menu-item strong { font-size: 4px; }
+        .menu-item span, .menu-arrow { display: none; }
+        .promo-card { border-radius: 5px; }
+        .promo-copy { left: 5px; right: 38%; bottom: 4px; }
+        .promo-chip { margin-bottom: 3px; padding: 2px 3px; font-size: 2.7px; }
+        .promo-chip::before { width: 2px; height: 2px; }
+        .promo-copy strong { font-size: 6px; line-height: .92; }
+        .promo-copy p { display: none; }
+        .promo-action { margin-top: 3px; font-size: 3px; }
+        .dropdown-stage > .library-badge { left: 6px; bottom: 3px; max-width: 59px; padding: 2px 4px; overflow: hidden; font-size: 4px; white-space: nowrap; }
+        .scene-caption { display: none; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .products-trigger::after { transition: none; }
+        .promo-photo { transform: none; }
+        .promo-sweep { display: none; }
+      }
     </style>
-    <script type="module" crossorigin src="./assets/delayed-dropdown-promo-sweep-ii-DYsdr.js"></script>
+    <script type="module" crossorigin src="./assets/delayed-dropdown-promo-sweep-Bi9frGn3.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
     <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
     <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
   </head>
   <body>
-    <main class="preview-stage" aria-label="A Motion-powered product dropdown whose promotional card waits before a colored light sweep crosses it">
+    <main class="preview-stage dropdown-stage" data-preview-mechanism="motion-delayed-dropdown-commerce" aria-label="A fictional outdoor store with an accessible product dropdown and a delayed one-shot promotional sweep">
       <header class="site-bar">
-        <span class="site-wordmark">NORTH/AI</span>
-        <button class="products-trigger" id="products-trigger" type="button" aria-expanded="false" aria-controls="product-menu">Products</button>
+        <span class="site-wordmark">NORTH / TWENTY-TWO</span>
+        <button
+          class="products-trigger"
+          id="products-trigger"
+          type="button"
+          aria-expanded="false"
+          aria-haspopup="true"
+          aria-controls="product-menu"
+        >Shop packs</button>
       </header>
-      <section class="menu-shell" id="product-menu" data-preview-mechanism="motion-delayed-dropdown" aria-label="Product navigation">
-        <nav class="menu-list" aria-label="Product links">
-          <small>BUILD WITH US</small>
-          <a class="menu-item" href="#studio"><b class="menu-icon">01</b><span><strong>Studio</strong><span>Compose intelligent flows</span></span></a>
-          <a class="menu-item" href="#signal"><b class="menu-icon">02</b><span><strong>Signal</strong><span>Read every customer cue</span></span></a>
-          <a class="menu-item" href="#atlas"><b class="menu-icon">03</b><span><strong>Atlas</strong><span>Map your knowledge</span></span></a>
-        </nav>
-        <article class="promo-card">
-          <div class="promo-grid"></div><div class="promo-orbit"></div><div class="promo-sweep" id="promo-sweep"></div>
-          <div class="promo-copy"><i id="promo-chip">NEW RELEASE</i><strong>Agents that see the whole picture.</strong></div>
-        </article>
+
+      <section class="page-intro" aria-hidden="true">
+        <small>Everyday trail systems · 2026</small>
+        <h1>Carry one pack.<br />Take the long way.</h1>
+        <p>Modular carry for city platforms, wet switchbacks and everything between.</p>
       </section>
-      <span class="library-badge">Motion · delayed reveal</span>
-      <span class="scene-caption">menu first · chromatic sweep second</span>
+      <div class="intro-meta" aria-hidden="true"><span>22 L / DAILY</span><span>48 H / FIELD TEST</span></div>
+
+      <section class="menu-shell" id="product-menu" aria-label="Shop pack categories" hidden inert>
+        <nav class="menu-list" aria-label="Product categories">
+          <small class="menu-eyebrow">Choose your carry</small>
+          <a class="menu-item" href="#daypacks" tabindex="-1"><b class="menu-icon">18</b><span><strong>Trail daypacks</strong><span>18–24 L · workday to ridgeline</span></span><i class="menu-arrow" aria-hidden="true">↗</i></a>
+          <a class="menu-item" href="#travel" tabindex="-1"><b class="menu-icon">36</b><span><strong>Travel packs</strong><span>32–40 L · carry-on ready</span></span><i class="menu-arrow" aria-hidden="true">↗</i></a>
+          <a class="menu-item" href="#hydration" tabindex="-1"><b class="menu-icon">02</b><span><strong>Hydration + care</strong><span>Flasks, filters and repair kits</span></span><i class="menu-arrow" aria-hidden="true">↗</i></a>
+        </nav>
+
+        <a class="promo-card" id="promo-card" href="#all-trail-22" tabindex="-1" data-sweep="idle" aria-label="Explore the fictional All-trail 22 litre daypack">
+          <img class="promo-photo" id="promo-photo" src="./assets/burnt-orange-technical-daypack-DOrjVtCR.jpg" alt="" />
+          <span class="promo-shade" aria-hidden="true"></span>
+          <span class="promo-grain" aria-hidden="true"></span>
+          <span class="promo-sweep" id="promo-sweep" aria-hidden="true"></span>
+          <span class="promo-copy">
+            <i class="promo-chip" id="promo-chip">Field tested / 022</i>
+            <strong>All-trail 22L</strong>
+            <p>Weather-ready carry for Monday morning and mile twelve.</p>
+            <i class="promo-action">Explore the daypack →</i>
+          </span>
+        </a>
+      </section>
+
+      <span class="library-badge">Motion · delayed commerce cue</span>
+      <span class="scene-caption">links first · one considered highlight second</span>
     </main>
   </body>
 </html>

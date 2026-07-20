@@ -272,7 +272,7 @@
       "originUrl": "https://github.com/motiondivision/motion",
       "demoSourcePath": "demo/preview-demos/delayed-dropdown-promo-sweep.html",
       "libraryVersion": "motion@12.42.2",
-      "generatedAt": "2026-07-18",
+      "generatedAt": "2026-07-21",
       "outputPath": "demo/gifs/captured/delayed-dropdown-promo-sweep.gif",
       "usageBasis": "original local mechanism demo using the pinned Motion package; verify license https://github.com/motiondivision/motion/blob/HEAD/LICENSE.md"
     },

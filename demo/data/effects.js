@@ -950,10 +950,10 @@ const expansionEffects = [
   {
     id: 'delayed-dropdown-promo-sweep', category: 'transition', name: 'Delayed dropdown promo sweep', nameZh: '延迟触发的下拉推广扫光', order: 25,
     company: 'Glean', homepage: 'https://www.glean.com/', observedAs: 'Delayed dropdown promo sweep',
-    difference: 'The navigation opens first, then a one-shot color beam traverses only the promoted row after a semantic delay and resets on close, rather than looping as decoration.',
-    behavior: { trigger: 'dropdown open', response: 'A delayed chromatic beam sweeps once behind a promoted navigation card', timing: 'open, pause, one-shot sweep, reset', layer: 'Navigation overlay' },
+    difference: 'The accessible product navigation opens first, then a one-shot light sweep introduces one concrete featured daypack after a semantic delay and fully cancels or resets when the disclosure closes.',
+    behavior: { trigger: 'real disclosure click, ArrowDown, Escape, outside click, or focus exit', response: 'Expose useful category links immediately, then reveal one featured daypack with a delayed one-shot sweep', timing: 'open, useful pause, single sweep, cancellable close, restart on reopen', layer: 'Focusable navigation overlay and raster promo card' },
     implementationName: 'Motion', projectId: 'motiondivision-motion', projectUrl: 'https://github.com/motiondivision/motion', referenceUrl: 'https://motion.dev/docs',
-    snippet: "import { animate } from 'motion';\nawait animate('.menu', { height: [0, 140], opacity: [0, 1] }).finished;\nanimate('.promo-beam', { x: ['-120%', '120%'] }, { delay: .2, duration: 1.3 });",
+    snippet: "import { animate } from 'motion';\nopenMenu(); const timer=setTimeout(() => animate('.promo-beam',{x:['-110%','610%']}),680);\ncloseMenu=()=>{clearTimeout(timer);menu.inert=true;};",
     scores: { creativity: 16, artDirection: 18, motion: 19, clarity: 15, inspiration: 14, evidence: 10 },
     rationaleZh: '菜单展开、节奏停顿、重点卡片单次扫光和关闭复位构成明确的导航导视语义，画面层级完整。'
   },

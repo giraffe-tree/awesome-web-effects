@@ -140,7 +140,7 @@
       "originUrl": "https://github.com/micku7zu/vanilla-tilt.js",
       "demoSourcePath": "demo/preview-demos/perspective-tilt-and-glare.html",
       "libraryVersion": "vanilla-tilt@1.8.1",
-      "generatedAt": "2026-07-18",
+      "generatedAt": "2026-07-21",
       "outputPath": "demo/gifs/captured/perspective-tilt-and-glare.gif",
       "usageBasis": "local demo capture using the pinned VanillaTilt package; verify license https://github.com/micku7zu/vanilla-tilt.js/blob/HEAD/LICENSE"
     },

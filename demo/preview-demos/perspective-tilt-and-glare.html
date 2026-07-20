@@ -1,34 +1,232 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>VanillaTilt — Perspective Tilt and Glare</title>
-    <link rel="stylesheet" href="./shared.css" />
+    <link rel="stylesheet" href="./shared.css">
     <style>
-      :root { --preview-background: radial-gradient(circle at 80% 18%, #264157, #0a111b 55%, #05080d); }
-      .tilt-wrap { position: absolute; inset: 28px 28px 17px; display: grid; place-items: center; perspective: 750px; }
-      .tilt-card { position: relative; width: 174px; height: 112px; transform-style: preserve-3d; border: 1px solid #ffffff50; border-radius: 19px; overflow: hidden; background: linear-gradient(145deg, #173c52, #572f75 58%, #d4567f); box-shadow: 0 24px 55px #000b; }
-      .tilt-grid { position: absolute; inset: 0; opacity: .3; background-image: linear-gradient(#fff2 1px, transparent 1px), linear-gradient(90deg, #fff2 1px, transparent 1px); background-size: 18px 18px; }
-      .tilt-orb { position: absolute; top: 22px; right: 24px; width: 52px; height: 52px; border-radius: 50%; transform: translateZ(34px); background: radial-gradient(circle at 35% 30%, #fff, #66f2ff 24%, #7b4aff 68%); box-shadow: 0 0 28px #65dfff9c; }
-      .tilt-copy { position: absolute; left: 17px; bottom: 17px; transform: translateZ(44px); color: white; }
-      .tilt-copy strong { display: block; font-size: 13px; letter-spacing: .03em; }
-      .tilt-copy small { font-size: 7px; color: #ffffffb0; text-transform: uppercase; letter-spacing: .12em; }
-      .pointer-dot { position: fixed; z-index: 30; width: 8px; height: 8px; margin: -4px; border: 1px solid #fff; border-radius: 50%; box-shadow: 0 0 10px #fff; pointer-events: none; }
-      .js-tilt-glare { border-radius: inherit; }
+      :root { --preview-background: #07101b; }
+      .preview-stage {
+        background:
+          radial-gradient(circle at 76% 42%, rgba(66, 98, 143, .25), transparent 29%),
+          radial-gradient(circle at 15% 82%, rgba(150, 82, 69, .12), transparent 34%),
+          linear-gradient(145deg, #0d1c2b, #07101b 58%, #04080d);
+      }
+      .preview-stage::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        opacity: .22;
+        pointer-events: none;
+        background-image: linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px);
+        background-size: clamp(17px, 5.3vw, 38px) clamp(17px, 5.3vw, 38px);
+        mask-image: linear-gradient(90deg, #000, transparent 52%);
+      }
+      .stage-copy {
+        position: absolute;
+        z-index: 3;
+        left: 5%;
+        top: 39%;
+        width: 21%;
+        color: #eaf0f4;
+        pointer-events: none;
+      }
+      .stage-copy small {
+        display: block;
+        margin-bottom: clamp(5px, 1.7vw, 12px);
+        color: #d6b27f;
+        font: 850 clamp(5px, 1.55vw, 10px)/1 ui-monospace, monospace;
+        letter-spacing: .14em;
+      }
+      .stage-copy strong {
+        display: block;
+        font: 900 clamp(10px, 3.35vw, 24px)/.88 ui-serif, Georgia, serif;
+        letter-spacing: -.055em;
+      }
+      .tilt-wrap {
+        position: absolute;
+        inset: 0;
+        z-index: 4;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding: 7% 6% 8% 5%;
+        perspective: 1100px;
+      }
+      .tilt-card {
+        position: relative;
+        width: min(66vw, 120.536vh, 380px);
+        aspect-ratio: 1.586 / 1;
+        flex: 0 0 auto;
+        overflow: hidden;
+        border: 1px solid rgba(224, 232, 239, .46);
+        border-radius: clamp(8px, 4.8%, 22px);
+        outline: none;
+        background: #09111b;
+        box-shadow: 0 clamp(14px, 5vw, 42px) clamp(28px, 10vw, 82px) rgba(0, 0, 0, .58), 0 1px 0 rgba(255,255,255,.14) inset;
+        cursor: crosshair;
+        touch-action: none;
+        transform-style: preserve-3d;
+      }
+      .tilt-card:focus-visible {
+        outline: clamp(1px, .35vw, 3px) solid #f2d8a7;
+        outline-offset: clamp(2px, .6vw, 5px);
+      }
+      .card-art,
+      .card-vignette,
+      .card-microgrid,
+      .card-laminate { position: absolute; inset: 0; pointer-events: none; }
+      .card-art { width: 100%; height: 100%; object-fit: cover; }
+      .card-vignette { background: linear-gradient(90deg, rgba(3,8,14,.76), rgba(4,9,16,.22) 54%, rgba(4,8,13,.04)), linear-gradient(0deg, rgba(2,5,9,.4), transparent 55%); }
+      .card-microgrid {
+        opacity: .18;
+        background-image: linear-gradient(rgba(235,244,251,.22) 1px, transparent 1px), linear-gradient(90deg, rgba(235,244,251,.18) 1px, transparent 1px);
+        background-size: 8.35% 13.2%;
+        mask-image: linear-gradient(90deg, #000, transparent 71%);
+      }
+      .card-laminate {
+        opacity: .42;
+        background: linear-gradient(115deg, transparent 24%, rgba(163,196,220,.08) 43%, rgba(237,209,159,.13) 51%, transparent 66%);
+        mix-blend-mode: screen;
+      }
+      .card-rule {
+        position: absolute;
+        z-index: 3;
+        left: 8.5%;
+        right: 8.5%;
+        top: 12%;
+        height: 1px;
+        background: linear-gradient(90deg, #ead4ae, rgba(234,212,174,.12));
+        transform: translateZ(clamp(8px, 2vw, 18px));
+      }
+      .card-kicker {
+        position: absolute;
+        z-index: 4;
+        left: 8.5%;
+        top: 17%;
+        color: rgba(239, 225, 198, .82);
+        font: 850 clamp(4.5px, 1.45vw, 10px)/1 ui-monospace, monospace;
+        letter-spacing: .14em;
+        transform: translateZ(clamp(11px, 2.6vw, 23px));
+      }
+      .tilt-copy {
+        position: absolute;
+        z-index: 5;
+        left: 8.5%;
+        bottom: 15%;
+        width: 57%;
+        color: #f7f1e7;
+        text-shadow: 0 3px 18px rgba(0,0,0,.72);
+        transform: translateZ(clamp(16px, 4vw, 36px));
+      }
+      .tilt-copy strong {
+        display: block;
+        font: 900 clamp(10px, 4.25vw, 29px)/.84 ui-serif, Georgia, serif;
+        letter-spacing: -.055em;
+      }
+      .tilt-copy small {
+        display: block;
+        margin-top: clamp(5px, 1.55vw, 11px);
+        color: rgba(228, 235, 240, .72);
+        font: 760 clamp(4.5px, 1.4vw, 9px)/1 ui-monospace, monospace;
+        letter-spacing: .11em;
+      }
+      .foil-seal {
+        position: absolute;
+        z-index: 5;
+        right: 8.5%;
+        bottom: 11%;
+        display: grid;
+        place-items: center;
+        width: clamp(17px, 9.8%, 42px);
+        aspect-ratio: 1;
+        border: 1px solid rgba(241, 220, 172, .72);
+        border-radius: 50%;
+        color: #f5dfad;
+        background: repeating-conic-gradient(from 20deg, rgba(107,184,202,.46) 0 9deg, rgba(226,172,105,.5) 9deg 18deg, rgba(118,98,179,.4) 18deg 27deg);
+        box-shadow: 0 0 0 2px rgba(4,9,14,.52) inset, 0 0 16px rgba(174,199,200,.18);
+        font: 900 clamp(4.5px, 1.55vw, 10px)/1 ui-monospace, monospace;
+        transform: translateZ(clamp(20px, 4.6vw, 42px));
+      }
+      .card-serial {
+        position: absolute;
+        z-index: 4;
+        right: 8.5%;
+        top: 17%;
+        color: rgba(231, 238, 241, .58);
+        font: 760 clamp(4.5px, 1.3vw, 9px)/1 ui-monospace, monospace;
+        letter-spacing: .1em;
+        transform: translateZ(clamp(10px, 2.3vw, 21px));
+      }
+      .js-tilt-glare { z-index: 8; border-radius: inherit; }
+      .js-tilt-glare-inner {
+        background-image: linear-gradient(115deg, transparent 23%, rgba(185,222,235,.22) 42%, rgba(255,240,196,.88) 51%, rgba(184,160,231,.22) 60%, transparent 74%) !important;
+        mix-blend-mode: soft-light;
+      }
+      .tilt-readout {
+        position: absolute;
+        z-index: 7;
+        right: 6%;
+        bottom: 5.5%;
+        color: rgba(228, 236, 241, .62);
+        font: 780 clamp(5px, 1.45vw, 10px)/1 ui-monospace, monospace;
+        letter-spacing: .1em;
+        pointer-events: none;
+      }
+      .scene-caption { display: none; }
+      .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+      .preview-stage[data-reduced-motion="true"] .tilt-card { transform: none !important; transition: none !important; }
+
+      @media (max-width: 190px), (max-height: 105px) {
+        .stage-copy,
+        .library-badge,
+        .tilt-readout { display: none; }
+        .tilt-wrap { justify-content: center; padding: 5px; }
+        .tilt-card { width: min(68vw, 118.95vh); }
+        .tilt-copy small,
+        .card-serial { display: none; }
+      }
     </style>
   </head>
   <body>
-    <main class="preview-stage" aria-label="A real VanillaTilt card responding with perspective and glare">
-      <div class="tilt-wrap" data-preview-mechanism="vanilla-tilt">
-        <article class="tilt-card" id="tilt-card">
-          <div class="tilt-grid"></div><div class="tilt-orb"></div>
-          <div class="tilt-copy"><small>pointer mapped</small><strong>DEPTH / LIGHT</strong></div>
+    <main class="preview-stage" aria-label="A collectible field pass whose perspective and reflected light follow real input">
+      <section class="stage-copy" aria-hidden="true">
+        <small>MATERIAL / 01</small>
+        <strong>LIGHT<br>REVEALS<br>THE PASS.</strong>
+      </section>
+      <div class="tilt-wrap" data-preview-mechanism="vanilla-tilt-real-input">
+        <article
+          class="tilt-card"
+          id="tilt-card"
+          tabindex="0"
+          aria-label="Nocturne Observatory field pass, registered and facing forward"
+          aria-describedby="tilt-instructions"
+          aria-keyshortcuts="ArrowLeft ArrowRight ArrowUp ArrowDown Home Escape"
+        >
+          <img
+            class="card-art"
+            id="card-art"
+            src="./assets/aesthetic-wave-02/perspective-tilt-and-glare/observatory-field-pass-artwork.jpg"
+            alt=""
+          >
+          <div class="card-vignette"></div>
+          <div class="card-microgrid"></div>
+          <div class="card-laminate"></div>
+          <span class="card-rule"></span>
+          <span class="card-kicker">OBSERVATORY NIGHT · 09/27</span>
+          <div class="tilt-copy">
+            <strong>NOCTURNE<br>FIELD PASS</strong>
+            <small>RIDGE ACCESS · AFTER DARK</small>
+          </div>
+          <span class="card-serial">A–041</span>
+          <span class="foil-seal" aria-hidden="true">09</span>
         </article>
       </div>
-      <span class="pointer-dot" id="pointer-dot"></span>
-      <span class="library-badge">VanillaTilt · glare</span>
-      <span class="scene-caption">pointer position becomes perspective + light</span>
+      <p class="sr-only" id="tilt-instructions">Move the pointer across the pass, drag it by touch, or use the arrow keys to inspect its perspective and laminate. Press Home or Escape to reset.</p>
+      <output class="tilt-readout" id="tilt-readout">REGISTERED · MOVE TO INSPECT</output>
+      <span class="library-badge">VanillaTilt · real glare</span>
+      <span class="scene-caption">real input maps to card perspective and laminate light</span>
     </main>
     <script type="module" src="./src/vanilla-tilt-demo.js"></script>
   </body>

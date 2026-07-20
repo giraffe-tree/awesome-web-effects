@@ -303,6 +303,26 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.click(92, 156)
             elif index == 28:
                 page.mouse.click(36, 156)
+        elif demo["id"] == "perspective-tilt-and-glare":
+            if index == 3:
+                page.mouse.move(112, 40)
+            elif 4 <= index <= 10:
+                progress = (index - 4) / 6
+                page.mouse.move(112 + 166 * progress, 40 + 88 * progress)
+            elif index == 11:
+                page.mouse.move(330, 190)
+            elif index == 16:
+                page.mouse.move(268, 42)
+            elif index == 22:
+                page.mouse.move(330, 190)
+            elif index == 26:
+                page.mouse.click(200, 90)
+            elif index == 27:
+                page.keyboard.press("ArrowLeft")
+            elif index == 29:
+                page.keyboard.press("ArrowUp")
+            elif index == 33:
+                page.keyboard.press("Home")
         page.evaluate("time => window.__setPreviewTime(time)", preview_time)
         frame_path = frame_root / f"{index:04d}.png"
         page.screenshot(path=str(frame_path), type="png")
@@ -473,6 +493,25 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["lastDrawSource"] != "sharp-film-video"
         ):
             raise RuntimeError(f"{demo['id']} did not capture real playback, seek, and same-source ambience controls: {interaction!r}")
+    elif demo["id"] == "perspective-tilt-and-glare":
+        interaction = page.evaluate("window.__TILT_GLARE_STATE__")
+        if (
+            not interaction["ready"]
+            or not interaction["imageDecoded"]
+            or not interaction["libraryInstance"]
+            or interaction["automaticPointerDispatches"] != 0
+            or interaction["mouseMoves"] < 8
+            or interaction["keyboardSteps"] < 3
+            or interaction["inputMode"] != "idle"
+            or interaction["activePointerId"] is not None
+            or abs(interaction["point"]["x"] - .5) > .001
+            or abs(interaction["point"]["y"] - .5) > .001
+            or interaction["imageWidth"] != 1280
+            or interaction["imageHeight"] != 800
+            or interaction["layout"]["cardWidth"] <= 0
+            or interaction["layout"]["cardHeight"] <= 0
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture real pointer, keyboard, and centered-reset tilt states: {interaction!r}")
 
     minimum_unique = min(6, max(2, frame_count // 6))
     if len(hashes) < minimum_unique:

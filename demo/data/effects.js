@@ -469,10 +469,10 @@ const existingEffects = [
     "addedIn": "baseline",
     "research": null,
     "behavior": {
-      "trigger": "pointer or touch",
-      "response": "Perspective tilt and glare",
-      "timing": "eased transition",
-      "layer": "content"
+      "trigger": "real mouse movement, captured touch/pen drag, or arrow keys",
+      "response": "Tilt a fictional observatory field pass and move its laminate glare across distinct materials",
+      "timing": "direct input mapping with eased pointer response and explicit reset",
+      "layer": "responsive product-pass card, artwork, raised type, foil, and glare"
     },
     "prompt": "Implement the \"Perspective tilt and glare\" (透视倾斜与高光) web interaction effect in the current project.\n\nUse vanilla-tilt.js (micku7zu/vanilla-tilt.js) as the recommended implementation unless the existing stack makes a dependency-free equivalent more appropriate. Recreate this specific pointer interaction, not a generic animation.\n\nInteraction contract:\n- Trigger: pointer or touch\n- Visual response: Perspective tilt and glare\n- Timing relationship: eased transition\n- Page layer: content\n\nRequirements:\n- Integrate with the existing design system and component structure.\n- Support keyboard and touch input whenever the interaction is actionable.\n- Respect prefers-reduced-motion with a clear non-animated fallback.\n- Avoid layout shift, scroll traps, inaccessible focus behavior, and unnecessary dependencies.\n- Keep the implementation responsive and clean up listeners, timers, and animation instances.\n\nStart from this minimal API shape:\n\n```js\nimport VanillaTilt from 'vanilla-tilt';\nVanillaTilt.init(document.querySelector('.card'), { max: 12, glare: true });\n```\n\nReturn the working code, the files changed, and a short explanation of how to tune timing, easing, distance, and reduced-motion behavior.",
     "sources": [

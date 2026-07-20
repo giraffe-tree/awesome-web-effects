@@ -371,17 +371,17 @@ const existingEffects = [
     "addedIn": "2026-expansion",
     "research": null,
     "behavior": {
-      "trigger": "state change or animation frame",
-      "response": "Compact SVG shape tween",
-      "timing": "eased transition",
-      "layer": "content"
+      "trigger": "real shortlist click/tap or Enter/Space/Arrow keys, with Escape or ArrowLeft to remove",
+      "response": "Morph the same live SVG path from add to check while card treatment, saved count, availability, and decision copy resolve together",
+      "timing": "680ms human-owned KUTE.js path tween in either direction; no autoplay or synthetic toggle",
+      "layer": "credible stay-comparison card, semantic shortlist control, live SVG icon, and synchronized decision state"
     },
-    "prompt": "Implement the \"Compact SVG shape tween\" (轻量 SVG 形状补间) web interaction effect in the current project.\n\nUse KUTE.js (thednp/kute.js) as the recommended implementation unless the existing stack makes a dependency-free equivalent more appropriate. Recreate this specific animation interaction, not a generic animation.\n\nInteraction contract:\n- Trigger: state change or animation frame\n- Visual response: Compact SVG shape tween\n- Timing relationship: eased transition\n- Page layer: content\n\nRequirements:\n- Integrate with the existing design system and component structure.\n- Support keyboard and touch input whenever the interaction is actionable.\n- Respect prefers-reduced-motion with a clear non-animated fallback.\n- Avoid layout shift, scroll traps, inaccessible focus behavior, and unnecessary dependencies.\n- Keep the implementation responsive and clean up listeners, timers, and animation instances.\n\nStart from this minimal API shape:\n\n```js\nimport KUTE from 'kute.js';\nKUTE.to('#shape-a', { path: '#shape-b' }, { duration: 700 }).start();\n```\n\nReturn the working code, the files changed, and a short explanation of how to tune timing, easing, distance, and reduced-motion behavior.",
+    "prompt": "Implement the \"Compact SVG shape tween\" (轻量 SVG 形状补间) as a meaningful product-state decision, not a looping star-to-heart specimen.\n\nUse KUTE.js (thednp/kute.js) to morph one visible SVG path between two semantic states—for example an Add icon and a confirmation check—inside a real control. The same decision must update the surrounding card treatment, label, saved count, availability, and accessible pressed state so the morph preserves identity instead of decorating an unrelated UI.\n\nInteraction contract:\n- Trigger: real control click/tap or native Enter/Space; ArrowRight saves, while ArrowLeft or Escape removes/resets\n- Visual response: one live SVG path morphs add→check or check→add while every dependent decision signal resolves in the same direction\n- Timing relationship: human-owned 680ms eased KUTE.js tween; no autoplay, looping, preview-clock changes, or synthetic event dispatch\n- Page layer: credible comparison card, shortlist decision control, live SVG path, and synchronized count/status copy\n\nRequirements:\n- Start strictly unsaved with the source path visible and remain unchanged until trusted input.\n- Use a real `KUTE.Tween`, validate path normalization/topology, and keep exactly one DOM path throughout both states.\n- Support pointer, touch, keyboard save/remove/reset, repeated forward and reverse decisions, 320×180 and 144×81 previews, and prefers-reduced-motion direct completion.\n- Keep `aria-pressed`, card state, copy, count, availability, rendered shape, tween direction, and motion state synchronized.\n- Export runtime state that proves initial stillness, KUTE version/tween/path evidence, input adapters, direction counts, and absence of automatic playback.\n\nStart from this minimal API shape:\n\n```js\nimport KUTE from 'kute.js';\nconst tween = KUTE.fromTo('#decision-path', { path: addPath }, { path: checkPath }, { duration: 680, easing: 'easingCubicInOut', morphPrecision: 4 });\ntween.start();\n```\n\nReturn the working code, the files changed, and a short explanation of how to tune path topology, morph precision, easing, direction reversal, state synchronization, and reduced motion.",
     "sources": [
       {
         "projectId": "thednp-kute-js",
         "recommended": true,
-        "snippet": "import KUTE from 'kute.js';\nKUTE.to('#shape-a', { path: '#shape-b' }, { duration: 700 }).start();",
+        "snippet": "import KUTE from 'kute.js';\nconst tween = KUTE.fromTo('#decision-path', { path: addPath }, { path: checkPath }, { duration: 680, easing: 'easingCubicInOut', morphPrecision: 4 });\ntween.start();",
         "preview": "captured/compact-svg-shape-tween",
         "previewKind": "local-demo-capture",
         "demoPath": "preview-demos/dist/compact-svg-shape-tween.html",
@@ -406,7 +406,7 @@ const existingEffects = [
       "total": 89,
       "decision": "admit",
       "reasonCode": "passed",
-      "rationaleZh": "星形与心形的拓扑变形干净、连贯、辨识度高，适合作为形状补间的视觉词汇。"
+      "rationaleZh": "同一 live SVG 路径在真实收藏决策中由加号变为确认勾，卡片、文案、计数、可用性与 ARIA 状态同步；正反向输入均由用户触发且首帧静止。"
     }
   },
   {

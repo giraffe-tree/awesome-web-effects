@@ -118,7 +118,7 @@
       "originUrl": "https://github.com/thednp/kute.js",
       "demoSourcePath": "demo/preview-demos/compact-svg-shape-tween.html",
       "libraryVersion": "kute.js@2.2.6",
-      "generatedAt": "2026-07-18",
+      "generatedAt": "2026-07-21",
       "outputPath": "demo/gifs/captured/compact-svg-shape-tween.gif",
       "usageBasis": "local demo capture using the pinned KUTE.js package; verify license https://github.com/thednp/kute.js/blob/HEAD/LICENSE"
     },

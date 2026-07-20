@@ -1,63 +1,412 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>KUTE.js — Compact SVG Shape Tween</title>
+    <title>KUTE.js — Shortlist Decision Morph</title>
     <style>
-      :root { --preview-background: #f2efe7; color-scheme: light; }
-      .morph-board {
-        position: absolute;
-        inset: 38px 16px 24px;
-        overflow: hidden;
-        border: 1px solid #2a30401c;
-        border-radius: 20px;
-        background:
-          radial-gradient(circle at 50% 46%, #ffb8c866, transparent 27%),
-          linear-gradient(135deg, #fffdf7, #e9e9ff);
-        box-shadow: 0 16px 30px #4f526518, inset 0 1px white;
+      :root {
+        --preview-background: #142720;
+        --paper: #f3eedf;
+        --ink: #17231d;
+        --muted: #6d796e;
+        --line: rgba(23, 35, 29, .17);
+        --moss: #315e46;
+        --citrus: #d9f263;
+        --clay: #c47052;
+        color-scheme: light;
       }
-      .morph-svg { width: 100%; height: 100%; }
-      .shape-ghost { fill: none; stroke: #30344924; stroke-width: 1; stroke-dasharray: 3 4; }
-      .shape-active { filter: drop-shadow(0 12px 15px #644dc64a); }
-      .morph-axis { stroke: #272b3d14; stroke-width: 1; }
-      .morph-dot { fill: #fff; stroke: #37334a; stroke-width: 1.5; }
-      .morph-label {
-        fill: #4a4b5f99;
-        font: 800 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
-        letter-spacing: .11em;
+
+      .preview-stage {
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 13% 12%, rgba(217, 242, 99, .12), transparent 30%),
+          linear-gradient(132deg, #193128, #102019 78%);
+      }
+
+      .shortlist-stage {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        grid-template-rows: auto minmax(0, 1fr) auto;
+        gap: clamp(9px, 2.4vh, 15px);
+        overflow: hidden;
+        padding: clamp(17px, 4.8vh, 28px) clamp(15px, 4vw, 29px) clamp(16px, 4.5vh, 24px);
+        outline: none;
+      }
+
+      .shortlist-stage:focus-visible {
+        box-shadow: inset 0 0 0 2px var(--citrus);
+      }
+
+      .shortlist-head,
+      .stage-footer,
+      .stay-meta,
+      .decision-heading,
+      .count-readout,
+      .state-note,
+      .availability {
+        font-weight: 800;
+        letter-spacing: .105em;
         text-transform: uppercase;
       }
-      .library-badge { color: #282635; background: #fffdf0e8; border-color: #34304426; }
-      .scene-caption { color: #656477; }
+
+      .shortlist-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        min-width: 0;
+        padding-left: 108px;
+        color: rgba(243, 238, 223, .64);
+        font-size: clamp(6px, 1.1vw, 8px);
+      }
+
+      .shortlist-head strong {
+        overflow: hidden;
+        color: var(--paper);
+        font-weight: 820;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .shortlist-head span { flex: 0 0 auto; }
+
+      .stay-card {
+        position: relative;
+        display: grid;
+        grid-template-columns: minmax(118px, .68fr) minmax(165px, 1.17fr) minmax(190px, 1.05fr);
+        min-height: 0;
+        overflow: hidden;
+        border: 1px solid rgba(243, 238, 223, .2);
+        border-radius: clamp(13px, 2vw, 20px);
+        background: var(--paper);
+        box-shadow: 0 22px 44px rgba(0, 0, 0, .23);
+      }
+
+      .stay-card::after {
+        position: absolute;
+        inset: 0;
+        border: 2px solid transparent;
+        border-radius: inherit;
+        content: '';
+        pointer-events: none;
+      }
+
+      .stay-card[data-saved='true']::after { border-color: rgba(217, 242, 99, .76); }
+
+      .property-visual {
+        position: relative;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        background:
+          linear-gradient(90deg, transparent 48%, rgba(243, 238, 223, .09) 49%, rgba(243, 238, 223, .09) 51%, transparent 52%),
+          linear-gradient(#325c47 0 38%, #284936 38% 100%);
+      }
+
+      .property-visual::before {
+        position: absolute;
+        left: 15%;
+        right: 12%;
+        bottom: 11%;
+        height: 51%;
+        border: 1px solid rgba(243, 238, 223, .42);
+        background:
+          linear-gradient(90deg, rgba(217, 242, 99, .86) 0 24%, transparent 24% 38%, rgba(243, 238, 223, .18) 38% 100%),
+          linear-gradient(160deg, transparent 0 44%, rgba(14, 31, 23, .72) 45% 100%);
+        box-shadow: 8px 8px 0 rgba(13, 30, 22, .32);
+        content: '';
+        transform: skewY(-3deg);
+      }
+
+      .property-visual::after {
+        position: absolute;
+        left: 8%;
+        right: 7%;
+        bottom: 8%;
+        height: 1px;
+        background: rgba(243, 238, 223, .45);
+        box-shadow: 0 -22px 0 rgba(243, 238, 223, .11), 0 -46px 0 rgba(243, 238, 223, .08);
+        content: '';
+      }
+
+      .visual-index {
+        position: absolute;
+        top: 12px;
+        left: 13px;
+        z-index: 2;
+        color: rgba(243, 238, 223, .72);
+        font: 800 clamp(5px, .9vw, 7px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .12em;
+      }
+
+      .property-copy {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-width: 0;
+        padding: clamp(13px, 3vw, 22px);
+        border-right: 1px solid var(--line);
+      }
+
+      .stay-meta {
+        margin-bottom: clamp(5px, 1.5vh, 9px);
+        color: var(--clay);
+        font-size: clamp(5px, .9vw, 7px);
+      }
+
+      h1 {
+        margin: 0;
+        color: var(--ink);
+        font-size: clamp(17px, 3.65vw, 27px);
+        font-weight: 590;
+        letter-spacing: -.05em;
+        line-height: .98;
+      }
+
+      .property-copy > p {
+        margin: clamp(7px, 1.8vh, 11px) 0 0;
+        color: var(--muted);
+        font-size: clamp(7px, 1.2vw, 9px);
+        line-height: 1.35;
+      }
+
+      .stay-details {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        margin-top: auto;
+        padding-top: 9px;
+      }
+
+      .stay-details span {
+        padding: 4px 6px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        color: #58645a;
+        font-size: clamp(5px, .8vw, 6px);
+        font-weight: 700;
+      }
+
+      .decision-panel {
+        display: grid;
+        grid-template-rows: auto minmax(0, 1fr) auto;
+        gap: 8px;
+        min-width: 0;
+        min-height: 0;
+        padding: clamp(12px, 2.7vw, 19px);
+        background: #e9e2cf;
+      }
+
+      .decision-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 6px;
+        color: var(--muted);
+        font-size: clamp(5px, .82vw, 6px);
+      }
+
+      .decision-heading b { color: var(--ink); }
+
+      .save-control {
+        align-self: center;
+        display: grid;
+        grid-template-columns: clamp(44px, 7vw, 60px) minmax(0, 1fr);
+        align-items: center;
+        gap: clamp(8px, 1.5vw, 12px);
+        width: 100%;
+        min-width: 0;
+        padding: clamp(7px, 1.4vw, 10px);
+        border: 1px solid var(--ink);
+        border-radius: clamp(12px, 2vw, 18px);
+        color: var(--ink);
+        background: rgba(243, 238, 223, .58);
+        font: inherit;
+        text-align: left;
+        cursor: pointer;
+        transition: background-color .28s ease, color .28s ease, box-shadow .28s ease;
+      }
+
+      .save-control:hover { box-shadow: 0 9px 18px rgba(23, 35, 29, .13); }
+      .save-control:active { transform: translateY(1px); }
+      .save-control:focus-visible { outline: 3px solid var(--citrus); outline-offset: 2px; }
+      .save-control[aria-pressed='true'] { color: var(--paper); background: var(--moss); }
+
+      .icon-shell {
+        display: grid;
+        width: clamp(44px, 7vw, 60px);
+        aspect-ratio: 1;
+        place-items: center;
+        border-radius: 50%;
+        background: var(--ink);
+        box-shadow: inset 0 0 0 1px rgba(243, 238, 223, .12);
+      }
+
+      .save-control[aria-pressed='true'] .icon-shell { background: var(--citrus); }
+
+      .morph-svg { width: 66%; height: 66%; overflow: visible; }
+      .shape-active { fill: var(--citrus); filter: drop-shadow(0 4px 4px rgba(0, 0, 0, .14)); }
+      .save-control[aria-pressed='true'] .shape-active { fill: var(--ink); }
+
+      .save-copy { min-width: 0; }
+
+      .save-copy strong {
+        display: block;
+        overflow: hidden;
+        font-size: clamp(9px, 1.6vw, 12px);
+        font-weight: 760;
+        letter-spacing: -.015em;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .save-copy small {
+        display: block;
+        overflow: hidden;
+        margin-top: 4px;
+        color: currentColor;
+        font-size: clamp(5px, .82vw, 6px);
+        opacity: .62;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .decision-foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        padding-top: 7px;
+        border-top: 1px solid var(--line);
+      }
+
+      .count-readout,
+      .state-note {
+        overflow: hidden;
+        font-size: clamp(5px, .82vw, 6px);
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .count-readout { color: var(--ink); font-variant-numeric: tabular-nums; }
+      .state-note { color: var(--muted); }
+
+      .stage-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        min-width: 0;
+        color: rgba(243, 238, 223, .62);
+        font-size: clamp(5px, .88vw, 7px);
+      }
+
+      .availability {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .availability b { color: var(--citrus); }
+      .input-hint { flex: 0 0 auto; }
+
+      .library-badge {
+        border-color: rgba(243, 238, 223, .24);
+        color: var(--paper);
+        background: rgba(16, 32, 25, .78);
+      }
+
+      .scene-caption { display: none; }
+
+      @media (max-width: 420px), (max-height: 260px) {
+        .shortlist-stage { grid-template-rows: 12px minmax(0, 1fr) 8px; gap: 5px; padding: 7px 8px 6px; }
+        .library-badge, .scene-caption { display: none; }
+        .shortlist-head { padding-left: 0; font-size: 5px; }
+        .stay-card { grid-template-columns: .72fr 1.05fr 1.15fr; border-radius: 9px; }
+        .visual-index { top: 6px; left: 6px; }
+        .property-copy { padding: 8px; }
+        .stay-meta { margin-bottom: 4px; }
+        h1 { font-size: clamp(10px, 4vw, 14px); }
+        .property-copy > p { margin-top: 4px; font-size: 6px; }
+        .stay-details { gap: 3px; padding-top: 5px; }
+        .stay-details span { padding: 2px 4px; }
+        .decision-panel { gap: 4px; padding: 7px; }
+        .save-control { grid-template-columns: 38px minmax(0, 1fr); gap: 5px; padding: 5px; border-radius: 10px; }
+        .icon-shell { width: 38px; }
+        .save-copy strong { font-size: 7px; }
+        .save-copy small { margin-top: 2px; font-size: 4.5px; }
+        .decision-foot { padding-top: 3px; }
+      }
+
+      @media (max-width: 180px), (max-height: 105px) {
+        .shortlist-stage { grid-template-rows: 8px minmax(0, 1fr); gap: 2px; padding: 3px; }
+        .shortlist-head { font-size: 3.2px; }
+        .shortlist-head span, .stage-footer, .property-visual, .property-copy > p, .stay-details, .decision-heading, .save-copy small, .decision-foot { display: none; }
+        .stay-card { grid-template-columns: minmax(0, 1fr) 50px; border-radius: 4px; }
+        .property-copy { justify-content: center; padding: 5px; border-right: 1px solid var(--line); }
+        .stay-meta { margin-bottom: 3px; font-size: 3.2px; }
+        h1 { font-size: 6.6px; line-height: 1.05; }
+        .decision-panel { display: grid; place-items: center; padding: 3px; }
+        .save-control { display: grid; grid-template-columns: 25px; justify-content: center; width: 34px; padding: 3px; border-radius: 7px; }
+        .icon-shell { width: 25px; }
+        .save-copy strong { margin-top: 2px; font-size: 3.4px; text-align: center; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .save-control { transition: none; }
+      }
     </style>
-    <script type="module" crossorigin src="./assets/compact-svg-shape-tween-B-v8RZus.js"></script>
+    <script type="module" crossorigin src="./assets/compact-svg-shape-tween-yN2kO0jV.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
     <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
   </head>
   <body>
-    <main class="preview-stage" aria-label="A real KUTE.js tween morphs one SVG path between a star and a heart">
-      <section class="morph-board" data-preview-mechanism="kute-svg-morph">
-        <svg class="morph-svg" viewBox="0 0 288 118" role="img" aria-label="SVG path morphing continuously between two silhouettes">
-          <defs>
-            <linearGradient id="morph-gradient" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0" stop-color="#6ee7ff" />
-              <stop offset=".48" stop-color="#7c63ff" />
-              <stop offset="1" stop-color="#ff668f" />
-            </linearGradient>
-          </defs>
-          <line class="morph-axis" x1="34" y1="59" x2="254" y2="59" />
-          <circle class="morph-dot" cx="34" cy="59" r="3" />
-          <circle class="morph-dot" cx="254" cy="59" r="3" />
-          <path class="shape-ghost" d="M144 18 L156 45 L186 45 L162 63 L171 92 L144 76 L117 92 L126 63 L102 45 L132 45 Z" />
-          <path class="shape-ghost" d="M144 94 C134 85 104 65 104 43 C104 23 128 16 144 34 C160 16 184 23 184 43 C184 65 154 85 144 94 Z" />
-          <path id="morph-path" class="shape-active" fill="url(#morph-gradient)" d="M144 18 L156 45 L186 45 L162 63 L171 92 L144 76 L117 92 L126 63 L102 45 L132 45 Z" />
-          <text class="morph-label" x="12" y="18">path A · angular</text>
-          <text class="morph-label" x="206" y="105">path B · curved</text>
-        </svg>
+    <main class="preview-stage" aria-label="A KUTE.js path morph confirms a real shortlist decision">
+      <section
+        class="shortlist-stage"
+        id="shortlist-stage"
+        tabindex="0"
+        data-preview-mechanism="kute-svg-morph"
+        aria-describedby="input-hint"
+      >
+        <header class="shortlist-head">
+          <strong>WAYPOINT / PRIVATE STAY REVIEW</strong>
+          <span>KYOTO · 14–17 OCT · 04 OPTIONS</span>
+        </header>
+
+        <article class="stay-card" id="stay-card" data-saved="false">
+          <div class="property-visual" aria-hidden="true"><span class="visual-index">03 / FIELD HOUSE</span></div>
+
+          <div class="property-copy">
+            <span class="stay-meta">ARASHIYAMA · HOUSE 03</span>
+            <h1>Field House<br />by the grove</h1>
+            <p>A quiet timber stay with a private bath and dawn trail access.</p>
+            <div class="stay-details"><span>4.92 rating</span><span>2 guests</span><span>¥42k / night</span></div>
+          </div>
+
+          <aside class="decision-panel">
+            <div class="decision-heading"><b>Autumn shortlist</b><span>Private</span></div>
+            <button class="save-control" id="save-control" type="button" aria-pressed="false">
+              <span class="icon-shell" aria-hidden="true">
+                <svg class="morph-svg" viewBox="0 0 60 60">
+                  <path id="morph-path" class="shape-active" d="M26 8 H34 V26 H52 V34 H34 V52 H26 V34 H8 V26 H26 Z" />
+                </svg>
+              </span>
+              <span class="save-copy"><strong id="save-label">Add to shortlist</strong><small id="save-detail">Easy to undo before booking</small></span>
+            </button>
+            <div class="decision-foot"><span class="count-readout" id="count-readout">00 / 04 saved</span><span class="state-note" id="state-note">Not saved</span></div>
+          </aside>
+        </article>
+
+        <footer class="stage-footer">
+          <span class="availability" id="availability"><b>AVAILABLE</b> · held for another 12 minutes</span>
+          <span class="input-hint" id="input-hint">CLICK / ENTER / SPACE · ← REMOVE · → SAVE · ESC RESET</span>
+        </footer>
       </section>
-      <span class="library-badge">KUTE.js · SVG morph</span>
-      <span class="scene-caption">one live path · topology normalized by the tween</span>
+      <span class="library-badge">KUTE.js · live SVG path</span>
+      <span class="scene-caption">one icon preserves identity across a real decision</span>
     </main>
   </body>
 </html>

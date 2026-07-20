@@ -346,6 +346,41 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("End")
             elif index == 33:
                 page.locator('.keyframe-button[data-index="2"]').click()
+        elif demo["id"] == "compact-svg-shape-tween":
+            if index == 3:
+                page.locator('#save-control').click()
+            elif index == 4:
+                page.wait_for_timeout(750)
+            elif index == 8:
+                page.locator('#shortlist-stage').focus()
+                page.keyboard.press("ArrowLeft")
+            elif index == 9:
+                page.wait_for_timeout(750)
+            elif index == 13:
+                page.locator('#shortlist-stage').focus()
+                page.keyboard.press("Enter")
+            elif index == 14:
+                page.wait_for_timeout(750)
+            elif index == 18:
+                page.locator('#save-control').click()
+            elif index == 19:
+                page.wait_for_timeout(250)
+            elif index == 20:
+                page.wait_for_timeout(550)
+            elif index == 24:
+                page.locator('#shortlist-stage').focus()
+                page.keyboard.press("ArrowRight")
+            elif index == 25:
+                page.wait_for_timeout(750)
+            elif index == 29:
+                page.locator('#shortlist-stage').focus()
+                page.keyboard.press("Escape")
+            elif index == 30:
+                page.wait_for_timeout(750)
+            elif index == 34:
+                page.locator('#save-control').click()
+            elif index == 35:
+                page.wait_for_timeout(750)
         elif demo["id"] == "blurhash-to-photo-progressive-reveal":
             pointer_x = 230 if .5 <= preview_time < 2.25 else 32
             page.mouse.move(pointer_x, 90)
@@ -855,6 +890,33 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["lastTrustedEvent"] != "marker-3"
         ):
             raise RuntimeError(f"{demo['id']} did not capture real Theatre.js marker selection, scrub, play, pause, cancellation, and completion: {interaction!r}")
+    elif demo["id"] == "compact-svg-shape-tween":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            interaction["automaticPlayback"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or not interaction["initialStaticConfirmed"]
+            or interaction["inputAdapters"] != ["click", "keyboard", "pointer"]
+            or interaction["inputCount"] < 7
+            or interaction["keyboardCount"] < 4
+            or interaction["pointerActivationCount"] < 3
+            or interaction["forwardMorphCount"] < 4
+            or interaction["reverseMorphCount"] < 3
+            or interaction["kuteVersion"] != "2.2.6"
+            or interaction["normalizedPointCount"] < 3
+            or interaction["durationMs"] != 680
+            or not interaction["saved"]
+            or not interaction["targetSaved"]
+            or interaction["phase"] != "idle-saved"
+            or interaction["motionActive"]
+            or interaction["morphProgress"] != 1
+            or interaction["activeDirection"] != "idle"
+            or interaction["renderedShape"] != "check"
+            or interaction["shortlistCount"] != 1
+            or interaction["lastInput"] != "pointer:mouse"
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a real KUTE.js shortlist decision across pointer and keyboard input: {interaction!r}")
     elif demo["id"] == "blurhash-to-photo-progressive-reveal":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__()")
         if interaction["pointerEvents"] < 3 or interaction["pointerOverPhoto"]:

@@ -385,17 +385,17 @@ export const effectExpansion100Specs = [
     "sourceUrl": "https://replicate.com/",
     "difference": "背景复用前景同一动态源并放大、重模糊、混合，区别于独立渐变或丝绸 shader 背景。",
     "behavior": {
-      "trigger": "media playback / slide change",
-      "response": "Mirror the active film into a blurred ambient-light layer",
-      "timing": "continuous source-synchronized ambience",
-      "layer": "background behind media"
+      "trigger": "real video playback, Play/Pause, seek keys, or ambient toggle",
+      "response": "Redraw each decoded foreground-video frame into a blurred ambient-light canvas",
+      "timing": "requestVideoFrameCallback-synchronized ambience with user-owned playback controls",
+      "layer": "one sharp HTML video plus its same-frame full-stage canvas echo"
     },
     "implementation": {
       "projectId": "motiondivision-motion",
       "projectUrl": "https://github.com/motiondivision/motion",
       "library": "motion@12.42.2",
       "renderer": "canvas2d",
-      "snippet": "drawSource(sharpContext, t); ambientContext.drawImage(sharpCanvas, 0, 0, ambient.width, ambient.height);",
+      "snippet": "video.requestVideoFrameCallback((_, meta) => ambientContext.drawImage(video, 0, 0, width, height));",
       "referenceUrl": "https://replicate.com/"
     },
     "scores": {
@@ -409,17 +409,17 @@ export const effectExpansion100Specs = [
     },
     "rationaleZh": "前景画面与环境光色同步，材质结果而非独立背景是核心。",
     "batch": "A",
-    "demo": "清晰小影片置于中央，同源背景变成缓慢流动的环境光。",
-    "capture": "录制两段片切换，确认前景与模糊色场同步交接。",
+    "demo": "一支真实本地玻璃产品影片既是清晰前景，也是逐帧重绘并模糊的环境光源；用户可暂停、续播、快进和关闭氛围层。",
+    "capture": "从真实静音自播开始，依次暂停、关闭环境光、真实 seek、恢复环境光并续播；断言只有一个视频源且 canvas 与其 decoded frame 同步。",
     "risk": {
       "level": "medium",
       "detail": "必须同源；无关 CSS gradient 不能作为降级实现。"
     },
     "observedImplementation": {
       "projectId": "web-platform-video",
-      "library": "HTMLVideoElement + CSS filter",
-      "renderer": "video + CSS compositing",
-      "snippet": "ambient.src=foreground.currentSrc;ambient.style.filter='blur(56px)'",
+      "library": "HTMLVideoElement + Canvas 2D + Motion",
+      "renderer": "video + canvas2d + CSS filter",
+      "snippet": "ambientContext.drawImage(foregroundVideo,0,0,w,h);animate(ambient,{opacity})",
       "projectUrl": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement",
       "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/CSS/filter"
     }

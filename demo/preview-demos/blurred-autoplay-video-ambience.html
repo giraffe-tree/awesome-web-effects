@@ -1,3 +1,242 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>Motion — Blurred Autoplay Video Ambience</title><link rel="stylesheet" href="./shared.css"/><style>
-:root{--preview-background:#091014}.ambience-stage{background:#071014}.ambient-film{position:absolute;inset:-34px;width:calc(100% + 68px);height:calc(100% + 68px);filter:blur(24px) saturate(1.45);opacity:.72;transform:scale(1.18);mix-blend-mode:screen}.ambient-wash{position:absolute;inset:0;background:#15222970;mix-blend-mode:multiply}.sharp-film{position:absolute;right:25px;top:35px;width:174px;height:111px;border:1px solid #ffffff42;border-radius:15px;box-shadow:0 18px 40px #0009}.ambience-copy{position:absolute;z-index:4;left:17px;top:48px;width:104px;color:#fff;font:900 18px/.87 Georgia,serif;letter-spacing:-.05em;text-shadow:0 4px 18px #000}.ambience-copy small{display:block;margin-top:9px;color:#c5d9dc;font:800 6px/1.4 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase}.scene-caption{display:none}
-</style></head><body><main class="preview-stage ambience-stage"><canvas class="ambient-film" id="ambient-film" width="640" height="360"></canvas><i class="ambient-wash"></i><canvas class="sharp-film" id="sharp-film" width="348" height="222"></canvas><div class="ambience-copy">THE FILM<br/>LIGHTS<br/>ITS OWN<br/>ROOM<small>one source · clear + blurred</small></div><span class="library-badge">Motion · same-source ambience</span><span class="scene-caption">the live foreground film becomes its own moving environmental light</span></main><script type="module" src="./src/blurred-autoplay-video-ambience-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Motion — Blurred Autoplay Video Ambience</title>
+    <link rel="stylesheet" href="./shared.css" />
+    <style>
+      :root { --preview-background: #071014; }
+
+      .ambience-stage {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        min-width: 100%;
+        min-height: 100%;
+        overflow: hidden;
+        color: #f6f4ef;
+        background: #071014;
+        outline: none;
+        isolation: isolate;
+      }
+
+      .ambient-film {
+        position: absolute;
+        z-index: 0;
+        inset: -14%;
+        display: block;
+        width: 128%;
+        height: 128%;
+        opacity: .76;
+        filter: blur(clamp(17px, 5vw, 38px)) saturate(1.55) brightness(.8);
+        transform: scale(1.08);
+        transform-origin: center;
+        pointer-events: none;
+      }
+
+      .ambient-wash {
+        position: absolute;
+        z-index: 1;
+        inset: 0;
+        pointer-events: none;
+        background:
+          radial-gradient(circle at 78% 42%, transparent 10%, rgba(5, 10, 13, .16) 44%, rgba(5, 10, 13, .58) 92%),
+          linear-gradient(90deg, rgba(5, 10, 13, .78) 0, rgba(5, 10, 13, .28) 47%, rgba(5, 10, 13, .06));
+      }
+
+      .sharp-shell {
+        position: absolute;
+        z-index: 3;
+        right: clamp(18px, 6vw, 44px);
+        top: 50%;
+        width: min(58%, 480px);
+        aspect-ratio: 16 / 9;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, .34);
+        border-radius: clamp(10px, 3vw, 24px);
+        translate: 0 -51%;
+        background: #0a1115;
+        box-shadow: 0 24px 65px rgba(0, 0, 0, .56);
+      }
+
+      .sharp-film {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        background: #0a1115;
+      }
+
+      .sharp-shell::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: linear-gradient(180deg, transparent 66%, rgba(4, 8, 10, .38));
+      }
+
+      .video-progress {
+        position: absolute;
+        z-index: 2;
+        left: 12px;
+        right: 12px;
+        bottom: 10px;
+        height: 2px;
+        overflow: hidden;
+        border-radius: 9px;
+        background: rgba(255, 255, 255, .24);
+        pointer-events: none;
+      }
+
+      .video-progress::after {
+        content: "";
+        display: block;
+        width: 100%;
+        height: 100%;
+        background: #f1cfb6;
+        scale: var(--progress, 0) 1;
+        transform-origin: left;
+      }
+
+      .ambience-copy {
+        position: absolute;
+        z-index: 4;
+        left: clamp(15px, 5vw, 34px);
+        top: 50%;
+        width: min(36%, 230px);
+        translate: 0 -58%;
+        pointer-events: none;
+        text-shadow: 0 4px 22px rgba(0, 0, 0, .68);
+      }
+
+      .ambience-kicker,
+      .ambience-copy p,
+      .ambience-status,
+      .ambience-button,
+      .ambience-hint {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        text-transform: uppercase;
+      }
+
+      .ambience-kicker {
+        color: rgba(198, 220, 222, .82);
+        font-size: 6px;
+        font-weight: 800;
+        letter-spacing: .15em;
+      }
+
+      .ambience-copy h1 {
+        margin: 7px 0 0;
+        font: 800 clamp(19px, 6vw, 38px)/.82 Georgia, serif;
+        letter-spacing: -.075em;
+      }
+
+      .ambience-copy p {
+        margin: 10px 0 0;
+        max-width: 180px;
+        color: rgba(255, 255, 255, .65);
+        font-size: 5px;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: .09em;
+      }
+
+      .ambience-status {
+        position: absolute;
+        z-index: 5;
+        top: 14px;
+        right: 16px;
+        color: rgba(255, 255, 255, .72);
+        font-size: 6px;
+        font-weight: 800;
+        letter-spacing: .1em;
+        pointer-events: none;
+      }
+
+      .ambience-controls {
+        position: absolute;
+        z-index: 6;
+        left: clamp(14px, 5vw, 34px);
+        bottom: clamp(12px, 5vh, 22px);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .ambience-button {
+        height: 25px;
+        padding: 0 10px;
+        border: 1px solid rgba(255, 255, 255, .34);
+        border-radius: 99px;
+        color: #fff;
+        background: rgba(6, 13, 16, .48);
+        backdrop-filter: blur(8px);
+        cursor: pointer;
+        font-size: 6px;
+        font-weight: 900;
+        letter-spacing: .09em;
+      }
+
+      .ambience-button:hover,
+      .ambience-button:focus-visible {
+        border-color: rgba(255, 255, 255, .9);
+        background: rgba(255, 255, 255, .14);
+        outline: none;
+      }
+
+      .ambience-hint {
+        margin-left: 3px;
+        color: rgba(255, 255, 255, .58);
+        font-size: 5px;
+        font-weight: 700;
+        letter-spacing: .07em;
+        pointer-events: none;
+      }
+
+      .library-badge { background: rgba(5, 12, 15, .7); }
+      .scene-caption { display: none; }
+
+      @media (max-width: 180px), (max-height: 100px) {
+        .ambient-film { filter: blur(14px) saturate(1.5) brightness(.78); }
+        .sharp-shell { left: 5px; right: 5px; top: 50%; bottom: auto; width: auto; height: auto; aspect-ratio: 16 / 9; translate: 0 -50%; border-radius: 6px; }
+        .ambience-copy { z-index: 5; left: 9px; top: 31px; width: 52%; translate: none; }
+        .ambience-kicker { font-size: 3px; }
+        .ambience-copy h1 { margin-top: 3px; font-size: 10px; }
+        .ambience-copy p, .ambience-status, .ambience-hint, #ambient-toggle { display: none; }
+        .ambience-controls { left: auto; right: 7px; bottom: 4px; }
+        .ambience-button { height: 13px; padding: 0 5px; font-size: 4px; }
+        .video-progress { left: 7px; right: 7px; bottom: 5px; height: 1px; }
+        .library-badge { top: 4px; left: 6px; padding: 2px 4px; font-size: 4px; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .ambient-film { will-change: auto; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="preview-stage ambience-stage" id="ambience-stage" tabindex="0" data-preview-mechanism="motion-single-video-decoded-frame-ambience" aria-label="Hand-blown glass film. Space or Enter toggles playback, Left and Right seek, and A toggles the ambient light.">
+      <canvas class="ambient-film" id="ambient-film" width="640" height="360" aria-hidden="true"></canvas>
+      <div class="ambient-wash" aria-hidden="true"></div>
+      <div class="sharp-shell">
+        <video class="sharp-film" id="sharp-film" src="./assets/aesthetic-wave-02/blurred-autoplay-video-ambience/glass-ambience-loop.mp4" poster="./assets/aesthetic-wave-02/blurred-autoplay-video-ambience/glass-ambience-poster.jpg" preload="auto" muted playsinline loop></video>
+        <span class="video-progress" id="video-progress" aria-hidden="true"></span>
+      </div>
+      <section class="ambience-copy" aria-hidden="true">
+        <span class="ambience-kicker">Glass study / one decoded source</span>
+        <h1>The film lights its own room.</h1>
+        <p>One clear frame, redrawn as soft environmental color.</p>
+      </section>
+      <span class="ambience-status" id="ambience-status" aria-live="polite">Film ready · ambience on</span>
+      <div class="ambience-controls" aria-label="Film controls">
+        <button class="ambience-button" id="play-toggle" type="button" aria-pressed="false">Play</button>
+        <button class="ambience-button" id="ambient-toggle" type="button" aria-pressed="true">Ambient on</button>
+        <span class="ambience-hint">← / → seek · A ambience</span>
+      </div>
+      <span class="library-badge">Motion · decoded-frame ambience</span>
+      <span class="scene-caption">The only live video is also redrawn into its synchronized ambient light.</span>
+    </main>
+    <script type="module" src="./src/blurred-autoplay-video-ambience-demo.js"></script>
+  </body>
+</html>

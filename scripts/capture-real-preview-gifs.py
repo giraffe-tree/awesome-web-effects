@@ -292,6 +292,17 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.wait_for_timeout(550)
             elif index == 35:
                 page.mouse.click(35, 156)
+        elif demo["id"] == "blurred-autoplay-video-ambience":
+            if index == 3:
+                page.mouse.click(36, 156)
+            elif index == 9:
+                page.mouse.click(92, 156)
+            elif index == 16:
+                page.keyboard.press("ArrowRight")
+            elif index == 22:
+                page.mouse.click(92, 156)
+            elif index == 28:
+                page.mouse.click(36, 156)
         page.evaluate("time => window.__setPreviewTime(time)", preview_time)
         frame_path = frame_root / f"{index:04d}.png"
         page.screenshot(path=str(frame_path), type="png")
@@ -437,6 +448,31 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or len(set(round(value, 2) for value in interaction["measuredDurations"])) < 3
         ):
             raise RuntimeError(f"{demo['id']} did not capture a real duration handoff, manual scene handoff, and user pause: {interaction!r}")
+    elif demo["id"] == "blurred-autoplay-video-ambience":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or not interaction["mediaDriven"]
+            or interaction["inputCount"] < 5
+            or interaction["playToggleCount"] < 2
+            or interaction["seekCount"] < 1
+            or interaction["realSeekCount"] < 1
+            or interaction["ambientToggleCount"] < 2
+            or not interaction["ambientEnabled"]
+            or not interaction["userInitiated"]
+            or not interaction["userInitiatedPlayback"]
+            or interaction["playOrigin"] != "user"
+            or not interaction["playing"]
+            or interaction["paused"]
+            or interaction["lastSeekDelta"] != 1
+            or not interaction["metadataReady"]
+            or not interaction["canPlayReady"]
+            or not interaction["firstFrameReady"]
+            or interaction["ambientDrawCount"] < 2
+            or interaction["lastDrawSource"] != "sharp-film-video"
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture real playback, seek, and same-source ambience controls: {interaction!r}")
 
     minimum_unique = min(6, max(2, frame_count // 6))
     if len(hashes) < minimum_unique:

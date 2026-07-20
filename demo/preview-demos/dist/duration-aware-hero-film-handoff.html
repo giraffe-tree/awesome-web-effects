@@ -1,8 +1,259 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>Motion — Duration-aware Hero Film Handoff</title><style>
-:root{--preview-background:#050709}.film-stage{background:#050709}.film-stack,.film{position:absolute;inset:0}.film{width:100%;height:100%;opacity:0}.film-copy{position:absolute;z-index:8;left:18px;top:48px;color:#fff}.film-copy b{display:block;font:900 23px/.86 Georgia,serif;letter-spacing:-.07em;text-shadow:0 4px 20px #000}.film-copy small{display:block;margin-top:9px;font:800 6px/1 ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase}.film-timeline{position:absolute;z-index:9;left:18px;right:18px;bottom:16px;display:grid;grid-template-columns:8fr 5fr 9fr 8fr;gap:3px}.film-segment{height:3px;border-radius:9px;background:#ffffff2b;overflow:hidden}.film-segment::after{content:"";display:block;width:100%;height:100%;background:var(--tone);transform:scaleX(var(--fill,0));transform-origin:left}.film-status{position:absolute;z-index:9;right:17px;top:14px;color:#fff;font:900 6px/1 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase}.scene-caption{display:none}
-</style>  <script type="module" crossorigin src="./assets/duration-aware-hero-film-handoff-CyFHBKfS.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
-  <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
-  <link rel="modulepreload" crossorigin href="./assets/batch-a-qa-CFcoNLob.js">
-  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage film-stage"><div class="film-stack" id="film-stack"><canvas class="film"></canvas><canvas class="film"></canvas><canvas class="film"></canvas><canvas class="film"></canvas></div><div class="film-copy"><b>FOUR<br/>TEMPOS.<br/>ONE CUT.</b><small>next scene preloads before its beat</small></div><span class="film-status" id="film-status">scene 01 · loaded</span><div class="film-timeline"><i class="film-segment" style="--tone:#ff654f"></i><i class="film-segment" style="--tone:#73e6d1"></i><i class="film-segment" style="--tone:#a28cff"></i><i class="film-segment" style="--tone:#ffd768"></i></div><span class="library-badge">Motion · duration-aware film stack</span><span class="scene-caption">unequal clips preload and crossfade only near the handoff</span></main></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Motion — Duration-aware Hero Film Handoff</title>
+    <style>
+      :root { --preview-background: #071014; }
+
+      .film-stage {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        min-width: 100%;
+        min-height: 100%;
+        overflow: hidden;
+        color: #f7f2e9;
+        background: #071014;
+        outline: none;
+      }
+
+      .film-stack,
+      .film-media,
+      .film-shade {
+        position: absolute;
+        inset: 0;
+      }
+
+      .film-stack {
+        overflow: hidden;
+        background: #0a1316;
+      }
+
+      .film-media {
+        z-index: 0;
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0;
+        background: #0a1316;
+        pointer-events: none;
+      }
+
+      .film-media.is-active { z-index: 2; opacity: 1; }
+      .film-media.is-incoming { z-index: 3; }
+
+      .film-shade {
+        z-index: 5;
+        pointer-events: none;
+        background:
+          linear-gradient(90deg, rgba(3, 9, 12, .77) 0, rgba(3, 9, 12, .37) 35%, transparent 68%),
+          linear-gradient(180deg, rgba(3, 8, 10, .18), transparent 52%, rgba(3, 8, 10, .72));
+      }
+
+      .film-copy {
+        position: absolute;
+        z-index: 8;
+        left: clamp(14px, 5vw, 30px);
+        top: 50%;
+        width: min(42%, 190px);
+        translate: 0 -55%;
+        pointer-events: none;
+      }
+
+      .film-kicker,
+      .film-copy p,
+      .film-status,
+      .film-duration,
+      .film-play {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        text-transform: uppercase;
+      }
+
+      .film-kicker {
+        color: #d8c09e;
+        font-size: 6px;
+        font-weight: 800;
+        letter-spacing: .16em;
+      }
+
+      .film-copy h1 {
+        margin: 7px 0 0;
+        font: 800 clamp(19px, 6.7vw, 35px)/.82 Georgia, serif;
+        letter-spacing: -.075em;
+        text-shadow: 0 4px 24px rgba(0, 0, 0, .56);
+      }
+
+      .film-copy p {
+        margin: 9px 0 0;
+        color: rgba(255, 255, 255, .67);
+        font-size: 5px;
+        font-weight: 700;
+        line-height: 1.35;
+        letter-spacing: .09em;
+      }
+
+      .film-status {
+        position: absolute;
+        z-index: 9;
+        top: 14px;
+        right: 16px;
+        color: rgba(255, 255, 255, .76);
+        font-size: 6px;
+        font-weight: 800;
+        letter-spacing: .11em;
+        pointer-events: none;
+      }
+
+      .film-controls {
+        position: absolute;
+        z-index: 10;
+        left: clamp(12px, 4vw, 24px);
+        right: clamp(12px, 4vw, 24px);
+        bottom: clamp(10px, 5vh, 20px);
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        gap: 10px;
+        align-items: end;
+      }
+
+      .film-play {
+        min-width: 48px;
+        height: 25px;
+        padding: 0 10px;
+        border: 1px solid rgba(255, 255, 255, .38);
+        border-radius: 99px;
+        color: #fff;
+        background: rgba(5, 13, 16, .46);
+        backdrop-filter: blur(7px);
+        cursor: pointer;
+        font-size: 6px;
+        font-weight: 900;
+        letter-spacing: .1em;
+      }
+
+      .film-play:hover,
+      .film-play:focus-visible {
+        border-color: rgba(255, 255, 255, .92);
+        background: rgba(255, 255, 255, .13);
+        outline: none;
+      }
+
+      .film-timeline {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 4px;
+        min-width: 0;
+      }
+
+      .film-segment {
+        position: relative;
+        min-width: 0;
+        height: 25px;
+        padding: 0;
+        overflow: hidden;
+        border: 0;
+        border-top: 2px solid rgba(255, 255, 255, .24);
+        color: rgba(255, 255, 255, .7);
+        background: transparent;
+        text-align: left;
+        cursor: pointer;
+      }
+
+      .film-segment::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: -2px;
+        height: 2px;
+        background: #e8c998;
+        scale: var(--fill, 0) 1;
+        transform-origin: left;
+      }
+
+      .film-segment[aria-current="true"] { color: #fff; }
+      .film-segment:focus-visible { outline: 1px solid rgba(255, 255, 255, .84); outline-offset: 3px; }
+
+      .film-segment-label,
+      .film-duration {
+        display: block;
+        margin-top: 6px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .film-segment-label {
+        font: 800 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+      }
+
+      .film-duration {
+        position: absolute;
+        top: 6px;
+        right: 1px;
+        margin: 0;
+        font-size: 4px;
+        font-weight: 700;
+        letter-spacing: .03em;
+        opacity: .58;
+      }
+
+      .library-badge { background: rgba(5, 13, 16, .72); }
+      .scene-caption { display: none; }
+
+      @media (max-width: 180px), (max-height: 100px) {
+        .film-copy { left: 9px; width: 48%; translate: 0 -48%; }
+        .film-kicker { font-size: 3px; }
+        .film-copy h1 { margin-top: 3px; font-size: 11px; }
+        .film-copy p, .film-status, .film-segment-label, .film-duration { display: none; }
+        .film-controls { left: 7px; right: 7px; bottom: 5px; gap: 5px; }
+        .film-play { min-width: 34px; height: 14px; padding: 0 5px; font-size: 4px; }
+        .film-segment { height: 14px; }
+        .film-timeline { gap: 2px; }
+        .library-badge { top: 4px; left: 6px; padding: 2px 4px; font-size: 4px; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .film-media { will-change: auto; }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/duration-aware-hero-film-handoff-CHbfCAqW.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+    <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
+    <link rel="modulepreload" crossorigin href="./assets/batch-c-utils-g_3IBZ2b.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main class="preview-stage film-stage" id="film-stage" tabindex="0" data-preview-mechanism="motion-user-duration-media-handoff" aria-label="Four-scene bathhouse film. Use Play, the scene buttons, arrow keys, Home, End, Space, or Enter.">
+      <div class="film-stack" id="film-stack" aria-hidden="true">
+        <video class="film-media is-active" src="./assets/01-arrival-BbPEQRIC.mp4" poster="./assets/01-arrival-DAMkbCBl.jpg" preload="metadata" muted playsinline></video>
+        <video class="film-media" src="./assets/02-water-4dzBc6hv.mp4" poster="./assets/02-water-DJ9RZ08g.jpg" preload="metadata" muted playsinline></video>
+        <video class="film-media" src="./assets/03-material-BqClXQGq.mp4" poster="./assets/03-material-Dg0daTRL.jpg" preload="metadata" muted playsinline></video>
+        <video class="film-media" src="./assets/04-afterglow-D5BbL21_.mp4" poster="./assets/04-afterglow-BlpRjXPl.jpg" preload="metadata" muted playsinline></video>
+      </div>
+      <div class="film-shade" aria-hidden="true"></div>
+      <section class="film-copy" aria-hidden="true">
+        <span class="film-kicker">Basalt bathhouse / four studies</span>
+        <h1>Time the cut.<br />Keep the quiet.</h1>
+        <p>Each handoff listens to the film's real duration.</p>
+      </section>
+      <span class="film-status" id="film-status" aria-live="polite">01 Arrival · ready</span>
+      <nav class="film-controls" aria-label="Film controls">
+        <button class="film-play" id="film-play" type="button" aria-pressed="false">Play</button>
+        <div class="film-timeline" id="film-timeline">
+          <button class="film-segment" type="button" data-scene="0" aria-current="true"><span class="film-segment-label">01 Arrival</span><span class="film-duration">—</span></button>
+          <button class="film-segment" type="button" data-scene="1" aria-current="false"><span class="film-segment-label">02 Water</span><span class="film-duration">—</span></button>
+          <button class="film-segment" type="button" data-scene="2" aria-current="false"><span class="film-segment-label">03 Material</span><span class="film-duration">—</span></button>
+          <button class="film-segment" type="button" data-scene="3" aria-current="false"><span class="film-segment-label">04 Afterglow</span><span class="film-duration">—</span></button>
+        </div>
+      </nav>
+      <span class="library-badge">Motion · real-media handoff</span>
+      <span class="scene-caption">Unequal local films crossfade only after the next real video can play.</span>
+    </main>
+  </body>
+</html>

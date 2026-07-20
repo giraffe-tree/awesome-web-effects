@@ -56,17 +56,17 @@ export const effectExpansion100Specs = [
     "sourceUrl": "https://kling.ai/",
     "difference": "不是定时轮播；每段媒体读取自己的 duration，并在交接窗口才预载下一段和短暂叠层。",
     "behavior": {
-      "trigger": "media duration / timeupdate",
-      "response": "Preload the next film and crossfade at each clip's real end",
-      "timing": "duration-aware sequenced handoff",
-      "layer": "hero media layers"
+      "trigger": "explicit Play/Pause or scene selection, then each local video's measured duration/currentTime",
+      "response": "Preload the next real film and crossfade two decoded video layers without a black frame",
+      "timing": "user-owned playback with duration-aware preload and unequal sequential handoff",
+      "layer": "full-bleed HTML video stack and semantic scene timeline"
     },
     "implementation": {
       "projectId": "motiondivision-motion",
       "projectUrl": "https://github.com/motiondivision/motion",
       "library": "motion@12.42.2",
-      "renderer": "canvas2d",
-      "snippet": "const active = locate(t, durations); layers[next].style.opacity = crossfade(active.local, preloadWindow);",
+      "renderer": "dom",
+      "snippet": "video.addEventListener('timeupdate', () => remaining(video) <= preloadWindow && preload(next)); await animateCrossfade(video, nextVideo);",
       "referenceUrl": "https://kling.ai/"
     },
     "scores": {
@@ -80,8 +80,8 @@ export const effectExpansion100Specs = [
     },
     "rationaleZh": "不同片长驱动接力，媒体时序而非固定秒表成为核心机制。",
     "batch": "A",
-    "demo": "四段程序化短片组成一支连续品牌影片，HUD 显示当前、预载、下一段。",
-    "capture": "等待 metadata，连续录制两个不同时长的交接与 300ms 交叉淡化。",
+    "demo": "四段本地非等长浴场影片由真实 metadata/currentTime 驱动；用户播放、暂停或选段，下一段 canplay 后才用 Motion 双层交叉淡化。",
+    "capture": "真实点击 Play，等待第一段按实测 duration 自动预载并接力到第二段，再点击第四段交接并暂停；断言无黑帧、无自动播放 fallback。",
     "risk": {
       "level": "high",
       "detail": "需制作四段本地可再分发媒体；不能把 GIF 里看不见的预载逻辑当作效果证据。"

@@ -276,6 +276,22 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.move(260 - 210 * progress, 100)
             elif index == 22:
                 page.mouse.up()
+        elif demo["id"] == "duration-aware-hero-film-handoff":
+            if index == 3:
+                page.mouse.click(35, 156)
+            elif index == 4:
+                # This preview is intentionally driven by the real HTMLVideoElement
+                # clock. Let the 2.4 s opening clip reach its 0.72 s preload window
+                # so the GIF records a genuine duration-aware handoff.
+                page.wait_for_timeout(2250)
+            elif index == 28:
+                page.mouse.click(270, 156)
+            elif index == 29:
+                # Preserve the authored 0.48 s Motion crossfade after the viewer
+                # explicitly selects scene four.
+                page.wait_for_timeout(550)
+            elif index == 35:
+                page.mouse.click(35, 156)
         page.evaluate("time => window.__setPreviewTime(time)", preview_time)
         frame_path = frame_root / f"{index:04d}.png"
         page.screenshot(path=str(frame_path), type="png")
@@ -400,6 +416,27 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["initialRegistration"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture two real signed drags and exact shared-image registration: {interaction!r}")
+    elif demo["id"] == "duration-aware-hero-film-handoff":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            interaction["automaticFallback"]
+            or not interaction["mediaDriven"]
+            or interaction["inputCount"] < 3
+            or interaction["inputKind"] != "mouse"
+            or interaction["selectionCount"] < 1
+            or interaction["playbackToggleCount"] < 2
+            or interaction["playIntent"]
+            or interaction["playing"]
+            or interaction["phase"] != "paused"
+            or interaction["activeIndex"] != 3
+            or interaction["incomingIndex"] is not None
+            or interaction["handoffCount"] < 2
+            or interaction["lastHandoffTo"] != 3
+            or not interaction["preloadRequested"][1]
+            or interaction["metadataReadyCount"] != 4
+            or len(set(round(value, 2) for value in interaction["measuredDurations"])) < 3
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a real duration handoff, manual scene handoff, and user pause: {interaction!r}")
 
     minimum_unique = min(6, max(2, frame_count // 6))
     if len(hashes) < minimum_unique:

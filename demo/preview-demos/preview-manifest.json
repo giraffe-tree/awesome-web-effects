@@ -226,7 +226,7 @@
     {
       "id": "duration-aware-hero-film-handoff",
       "library": "motion@12.42.2",
-      "renderer": "canvas2d",
+      "renderer": "dom",
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/duration-aware-hero-film-handoff.html",
       "demoSourcePath": "preview-demos/duration-aware-hero-film-handoff.html",

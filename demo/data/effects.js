@@ -938,14 +938,14 @@ const expansionEffects = [
     rationaleZh: '54/34/20 颗确定性星点以 0.17/0.48/1.00 的可核验速率响应同一真人进度；四个观测章节、目标标注和纵深读数让视差服务于真实夜空判读。'
   },
   {
-    id: 'staggered-multichart-telemetry-boot', category: 'canvas', name: 'Staggered multi-chart telemetry boot', nameZh: '交错多图表遥测启动', order: 24,
+    id: 'staggered-multichart-telemetry-boot', category: 'canvas', name: 'Operator-triggered staggered telemetry preflight', nameZh: '操作员触发的交错遥测预检', order: 24,
     company: 'Pinecone', homepage: 'https://www.pinecone.io/', observedAs: 'Staggered multi-chart telemetry boot',
-    difference: 'Independent chart loaders resolve in sequence and each real data trace progressively draws online, rather than moving generic DOM elements through a staggered entrance.',
-    behavior: { trigger: 'dashboard mount or restart', response: 'Loaders resolve and distinct telemetry charts progressively draw online in sequence', timing: 'staggered multi-stage boot', layer: 'Canvas dashboard panels' },
+    difference: 'One trusted operator command starts a finite three-chart diagnostic pass, revealing deterministic ingress, load, and link evidence in decision order and retaining a reviewable result.',
+    behavior: { trigger: 'trusted Run preflight click or keyboard activation', response: 'Ingress trace, node load, and link integrity come online in a finite stagger and resolve to a retained Nominal record', timing: '1.72-second human-started diagnostic pass', layer: 'Full-stage orbital relay preflight console' },
     implementationName: 'p5.js', projectId: 'processing-p5-js', projectUrl: 'https://github.com/processing/p5.js', referenceUrl: 'https://p5js.org/reference/',
     snippet: "import p5 from 'p5';\nnew p5(p => { p.draw = () => charts.forEach((chart, i) => chart.draw(p, clamp(progress * 4 - i * .45, 0, 1))); });",
-    scores: { creativity: 18, artDirection: 18, motion: 19, clarity: 15, inspiration: 15, evidence: 10 },
-    rationaleZh: '多种图表经历加载、刻度、曲线和实时光点四段上线，序列关系明确，避免退化成普通卡片错峰入场。'
+    scores: { creativity: 20, artDirection: 20, motion: 20, clarity: 15, inspiration: 15, evidence: 10 },
+    rationaleZh: '操作员显式启动一次有限预检，Ingress、Node Load、Link Health 按诊断优先级交错上线；结论由固定遥测数组真实计算并稳定保留，无输入时三图表完全静止。'
   },
   {
     id: 'delayed-dropdown-promo-sweep', category: 'transition', name: 'Delayed dropdown promo sweep', nameZh: '延迟触发的下拉推广扫光', order: 25,

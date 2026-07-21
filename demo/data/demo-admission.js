@@ -182,8 +182,8 @@ export const reviewedDemoScores = {
     rationaleZh: '固定海报标题提供参照，近中远三层星点在密度、尺寸和速度上同时分级，滚动纵深一眼可辨。'
   },
   'staggered-multichart-telemetry-boot': {
-    creativity: 18, artDirection: 18, motion: 19, clarity: 15, inspiration: 15, evidence: 10,
-    rationaleZh: '多种图表经历加载、刻度、曲线和实时光点四段上线，序列关系明确，避免退化成普通卡片错峰入场。'
+    creativity: 20, artDirection: 20, motion: 20, clarity: 15, inspiration: 15, evidence: 10,
+    rationaleZh: '操作员显式启动一次有限预检，Ingress、Node Load、Link Health 按诊断优先级交错上线；确定性数据计算 Nominal 结论并稳定保留，首帧无自动启动。'
   },
   'delayed-dropdown-promo-sweep': {
     creativity: 16, artDirection: 18, motion: 19, clarity: 15, inspiration: 14, evidence: 10,

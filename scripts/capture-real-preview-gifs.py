@@ -2844,6 +2844,9 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 26:
                 page.locator('#route-field').focus()
                 page.keyboard.press('Home')
+        elif demo["id"] == "staggered-multichart-telemetry-boot":
+            if index == 3:
+                page.locator('#run-preflight').click()
         elif demo["id"] == "poisson-constellation-bloom":
             if index == 2:
                 page.mouse.move(170, 92)
@@ -9535,6 +9538,59 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["runtimeAssertionPassed"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture a trusted full-stage arena wayfinding ribbon calibration across two paused Motion-driven SVG text paths with captured drag, stable hold, keyboard reset and no automatic conveyor motion: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "staggered-multichart-telemetry-boot":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "operator-started-orbital-relay-telemetry-preflight"
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["mechanism"] != "one-trusted-human-input-reveals-three-deterministic-charts-in-a-finite-stagger"
+            or interaction["assetStrategy"] != "code-native-deterministic-telemetry-no-functional-raster-input-required"
+            or interaction["captureType"] != "hybrid"
+            or interaction["acceptedInputs"] != ["trusted-pointer-click", "trusted-keyboard-button-activation"]
+            or interaction["causality"] != "trusted-run-button-starts-one-finite-staggered-diagnostic-pass"
+            or not interaction["userInputRequired"]
+            or not interaction["strictTrustedInputGuard"]
+            or not interaction["initialFrameStatic"]
+            or not interaction["initialStaticVerified"]
+            or interaction["automaticCycle"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticLoop"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["previewClockMutationBeforeInput"]
+            or not interaction["previewClockDrivesFiniteTransitionAfterInput"]
+            or interaction["phase"] != "complete"
+            or interaction["progress"] != 1
+            or interaction["stageProgress"] != [1, 1, 1]
+            or interaction["activeStageIndex"] != 2
+            or interaction["inputCount"] != 1
+            or interaction["trustedInputCount"] != 1
+            or interaction["pointerInputCount"] != 1
+            or interaction["keyboardInputCount"] != 0
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["runStartCount"] != 1
+            or interaction["runCompleteCount"] != 1
+            or interaction["rerunCount"] != 0
+            or interaction["stageActivationCount"] != 3
+            or interaction["finiteTransitionStepCount"] < 18
+            or interaction["reducedMotionDirectCount"] != 0
+            or interaction["finalRecordId"] != "pass-07-nominal"
+            or not interaction["resultValidated"]
+            or interaction["lastInputKind"] != "pointer"
+            or interaction["lastInputSource"] != "run-preflight-button"
+            or interaction["lastInputTrusted"] is not True
+            or interaction["dataSignature"] != "11616:3478:94"
+            or not interaction["canvasSizeValidated"]
+            or not interaction["geometryValidated"]
+            or interaction["latestDrawSignature"] == "none"
+            or interaction["drawCount"] < 18
+            or interaction["renderCount"] < 30
+            or not interaction["ready"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture one trusted full-stage operator-started p5 telemetry preflight with three finite staggered deterministic charts, a retained Nominal record and no automatic boot: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "poisson-constellation-bloom":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

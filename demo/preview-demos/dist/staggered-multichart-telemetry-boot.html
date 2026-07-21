@@ -3,35 +3,309 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>p5.js — Staggered Multichart Telemetry Boot</title>
+    <title>p5.js — Staggered Multichart Telemetry Preflight</title>
     <style>
-      :root { --preview-background: #eff0e7; color-scheme: light; }
-      #telemetry-stage { position: absolute; inset: 0; cursor: crosshair; }
-      #telemetry-stage canvas { width: 100% !important; height: 100% !important; }
-      .telemetry-header { position: absolute; z-index: 4; left: 13px; right: 13px; top: 11px; display: flex; align-items: center; justify-content: space-between; color: #182019; pointer-events: none; }
-      .telemetry-header strong { font: 900 9px/1 ui-monospace, monospace; letter-spacing: -.02em; }
-      .telemetry-header span { display: inline-flex; align-items: center; gap: 5px; font: 800 6px/1 ui-monospace, monospace; letter-spacing: .12em; }
-      .telemetry-header span::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: #8b8e85; box-shadow: 0 0 0 3px #8b8e8520; }
-      .telemetry-header[data-online='true'] span::before { background: #1cad72; box-shadow: 0 0 0 3px #1cad7226; }
-      .boot-sequence { position: absolute; z-index: 4; left: 13px; bottom: 10px; display: flex; gap: 4px; pointer-events: none; }
-      .boot-sequence i { width: 15px; height: 2px; border-radius: 5px; background: #26372a24; }
-      .boot-sequence i.active { background: #26372a; }
-      .preview-stage > .library-badge { left: auto; right: 11px; top: auto; bottom: 8px; color: #29342b; background: #f6f5e9d9; border-color: #1d2c2220; }
-      .scene-caption { color: #3440398f; }
+      :root {
+        --preview-background: #07100f;
+        --ink: #f2f0df;
+        --muted: #849792;
+        --line: rgba(196, 220, 209, .15);
+        --mint: #8ce5ba;
+        --amber: #ffb968;
+        color-scheme: dark;
+      }
+
+      * { box-sizing: border-box; }
+      button { font: inherit; color: inherit; }
+
+      .telemetry-stage {
+        display: grid;
+        overflow: hidden;
+        place-items: center;
+        background:
+          radial-gradient(circle at 82% 18%, rgba(50, 116, 91, .22), transparent 31%),
+          linear-gradient(145deg, #0b1715, #040908 72%);
+      }
+
+      .telemetry-shell {
+        position: absolute;
+        inset: clamp(5px, 2.2vw, 17px);
+        display: grid;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        border: 1px solid rgba(187, 216, 203, .18);
+        border-radius: clamp(7px, 2.1vw, 16px);
+        background: rgba(8, 18, 17, .94);
+        box-shadow: 0 24px 70px rgba(0, 0, 0, .34);
+        grid-template-rows: clamp(29px, 10vh, 42px) minmax(0, 1fr) clamp(48px, 18vh, 68px);
+      }
+
+      .telemetry-header,
+      .telemetry-footer {
+        display: flex;
+        min-width: 0;
+        align-items: center;
+        padding: 0 clamp(9px, 2.2vw, 18px);
+      }
+
+      .telemetry-header {
+        justify-content: space-between;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .mission-mark,
+      .system-state,
+      .footer-copy,
+      .action-area {
+        display: flex;
+        min-width: 0;
+        align-items: center;
+      }
+
+      .mission-mark { gap: clamp(6px, 1.3vw, 10px); }
+      .mission-glyph {
+        position: relative;
+        width: clamp(14px, 2.4vw, 19px);
+        aspect-ratio: 1;
+        flex: 0 0 auto;
+        border: 1px solid var(--mint);
+        border-radius: 50%;
+      }
+      .mission-glyph::before,
+      .mission-glyph::after {
+        position: absolute;
+        content: '';
+      }
+      .mission-glyph::before {
+        inset: 4px;
+        border: 1px solid rgba(140, 229, 186, .45);
+        border-radius: 50%;
+      }
+      .mission-glyph::after {
+        top: 50%;
+        left: -4px;
+        width: calc(100% + 8px);
+        height: 1px;
+        background: rgba(140, 229, 186, .55);
+        transform: rotate(-24deg);
+      }
+
+      .mission-copy,
+      .footer-copy { flex-direction: column; align-items: flex-start; gap: 2px; }
+      .mission-copy strong,
+      .footer-copy strong {
+        overflow: hidden;
+        max-width: 100%;
+        color: var(--ink);
+        font-size: clamp(7px, 1.35vw, 11px);
+        line-height: 1;
+        letter-spacing: -.02em;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .mission-copy span,
+      .system-state,
+      .footer-copy span,
+      .run-button,
+      .sequence-step {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        text-transform: uppercase;
+      }
+      .mission-copy span,
+      .footer-copy span {
+        color: var(--muted);
+        font-size: clamp(4px, .75vw, 6px);
+        font-weight: 750;
+        letter-spacing: .13em;
+      }
+
+      .system-state {
+        gap: 6px;
+        color: #9caea9;
+        font-size: clamp(4px, .8vw, 6px);
+        font-weight: 800;
+        letter-spacing: .12em;
+        white-space: nowrap;
+      }
+      .system-state::before {
+        width: 6px;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: #6c7975;
+        box-shadow: 0 0 0 3px rgba(108, 121, 117, .12);
+        content: '';
+      }
+      .telemetry-shell[data-phase="running"] .system-state::before {
+        background: var(--amber);
+        box-shadow: 0 0 0 3px rgba(255, 185, 104, .13);
+      }
+      .telemetry-shell[data-phase="complete"] .system-state::before {
+        background: var(--mint);
+        box-shadow: 0 0 0 3px rgba(140, 229, 186, .15);
+      }
+
+      .telemetry-workspace {
+        position: relative;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+      }
+      .telemetry-workspace::before {
+        position: absolute;
+        z-index: 2;
+        inset: 0;
+        opacity: .13;
+        background-image:
+          linear-gradient(rgba(158, 201, 181, .2) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(158, 201, 181, .2) 1px, transparent 1px);
+        background-size: clamp(20px, 5vw, 38px) clamp(20px, 5vw, 38px);
+        content: '';
+        pointer-events: none;
+        mask-image: linear-gradient(to bottom, black, transparent 85%);
+      }
+      #telemetry-canvas,
+      #telemetry-canvas canvas {
+        position: absolute;
+        inset: 0;
+        display: block;
+        width: 100% !important;
+        height: 100% !important;
+      }
+
+      .telemetry-footer {
+        justify-content: space-between;
+        gap: clamp(8px, 2vw, 16px);
+        border-top: 1px solid var(--line);
+        background: rgba(5, 12, 11, .86);
+      }
+      .footer-copy { flex: 0 1 28%; }
+      .sequence {
+        display: flex;
+        min-width: 104px;
+        flex: 1 1 auto;
+        justify-content: center;
+        align-items: center;
+        gap: clamp(4px, .9vw, 7px);
+      }
+      .sequence-step {
+        display: flex;
+        min-width: 0;
+        align-items: center;
+        gap: 4px;
+        color: #647873;
+        font-size: clamp(3.5px, .65vw, 5px);
+        font-weight: 800;
+        letter-spacing: .08em;
+        white-space: nowrap;
+      }
+      .sequence-step::before {
+        width: clamp(12px, 2.5vw, 20px);
+        height: 2px;
+        border-radius: 999px;
+        background: #273632;
+        content: '';
+      }
+      .sequence-step[data-active="true"] { color: var(--ink); }
+      .sequence-step[data-active="true"]::before { background: var(--mint); box-shadow: 0 0 7px rgba(140, 229, 186, .4); }
+      .sequence-step[data-current="true"]::before { background: var(--amber); }
+
+      .action-area { flex: 0 0 auto; gap: 7px; }
+      .run-button {
+        min-width: clamp(74px, 14vw, 104px);
+        padding: clamp(6px, 1.2vw, 9px) clamp(9px, 1.7vw, 13px);
+        border: 1px solid rgba(140, 229, 186, .34);
+        border-radius: 999px;
+        background: var(--mint);
+        color: #07100f;
+        cursor: pointer;
+        font-size: clamp(4px, .77vw, 6px);
+        font-weight: 900;
+        letter-spacing: .09em;
+      }
+      .run-button:hover { filter: brightness(1.08); }
+      .run-button:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+      .run-button:disabled { cursor: wait; opacity: .64; }
+
+      @media (max-width: 420px) {
+        .telemetry-shell { inset: 5px; grid-template-rows: 25px minmax(0, 1fr) 43px; }
+        .telemetry-header,
+        .telemetry-footer { padding: 0 8px; }
+        .mission-copy strong { font-size: 7px; }
+        .system-state { font-size: 4px; }
+        .footer-copy { flex-basis: 24%; }
+        .sequence { min-width: 80px; gap: 4px; }
+        .sequence-step { font-size: 3px; }
+        .sequence-step::before { width: 9px; }
+        .run-button { min-width: 68px; padding: 6px 8px; font-size: 4px; }
+      }
+
+      @media (max-width: 270px) and (min-height: 230px) {
+        .telemetry-shell { grid-template-rows: 34px minmax(0, 1fr) 66px; }
+        .mission-copy strong { font-size: 9px; }
+        .mission-copy span { font-size: 5px; }
+        .footer-copy { position: absolute; right: 9px; bottom: 44px; left: 9px; flex-basis: auto; }
+        .telemetry-footer { position: relative; align-items: flex-end; padding-bottom: 9px; }
+        .sequence { justify-content: flex-start; }
+        .sequence-step { flex-direction: column; align-items: flex-start; gap: 2px; font-size: 4px; }
+      }
+
+      @media (max-width: 220px), (max-height: 105px) {
+        .telemetry-shell { inset: 3px; border-radius: 4px; grid-template-rows: 14px minmax(0, 1fr) 23px; }
+        .telemetry-header,
+        .telemetry-footer { padding: 0 4px; }
+        .mission-glyph { width: 7px; }
+        .mission-glyph::before { inset: 2px; }
+        .mission-copy strong { font-size: 3px; }
+        .mission-copy span,
+        .footer-copy span,
+        .system-state { font-size: 2px; }
+        .footer-copy strong { font-size: 3px; }
+        .sequence { min-width: 42px; gap: 2px; }
+        .sequence-step { font-size: 1.7px; gap: 1px; }
+        .sequence-step::before { width: 5px; height: 1px; }
+        .run-button { min-width: 31px; padding: 3px 4px; font-size: 2px; }
+      }
     </style>
-    <script type="module" crossorigin src="./assets/staggered-multichart-telemetry-boot-HPQWtrHT.js"></script>
+    <script type="module" crossorigin src="./assets/staggered-multichart-telemetry-boot-BdCYNb1Y.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
     <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
     <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
     <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
   </head>
   <body>
-    <main class="preview-stage" aria-label="A live p5.js telemetry console whose line, bar, and radial charts boot in a staggered sequence">
-      <div id="telemetry-stage" data-preview-mechanism="p5-staggered-telemetry" tabindex="0" aria-label="Click or press Enter to restart the telemetry boot sequence"></div>
-      <div class="telemetry-header" id="telemetry-header"><strong>FIELD / 07</strong><span id="system-label">SYSTEM BOOT</span></div>
-      <div class="boot-sequence" id="boot-sequence" aria-hidden="true"><i></i><i></i><i></i></div>
-      <span class="library-badge">p5.js · staged draw</span>
-      <span class="scene-caption">each instrument comes online in sequence</span>
+    <main class="preview-stage telemetry-stage" id="telemetry-stage" aria-label="Interactive orbital relay telemetry preflight">
+      <section class="telemetry-shell" id="telemetry-shell" data-phase="idle" data-preview-mechanism="p5-staggered-telemetry-preflight">
+        <header class="telemetry-header">
+          <div class="mission-mark">
+            <i class="mission-glyph" aria-hidden="true"></i>
+            <div class="mission-copy">
+              <strong>Orbital Relay · Pass 07</strong>
+              <span>Svalbard ground station</span>
+            </div>
+          </div>
+          <span class="system-state" id="system-state" aria-live="polite">Awaiting operator</span>
+        </header>
+
+        <section class="telemetry-workspace" id="telemetry-workspace" aria-label="Three-stage telemetry verification charts">
+          <div id="telemetry-canvas"></div>
+        </section>
+
+        <footer class="telemetry-footer">
+          <div class="footer-copy">
+            <span>Verification record</span>
+            <strong id="record-copy">No run recorded</strong>
+          </div>
+          <div class="sequence" aria-label="Verification sequence">
+            <span class="sequence-step" data-step="0" data-active="false" data-current="false">Ingress</span>
+            <span class="sequence-step" data-step="1" data-active="false" data-current="false">Load</span>
+            <span class="sequence-step" data-step="2" data-active="false" data-current="false">Link</span>
+          </div>
+          <div class="action-area">
+            <button class="run-button" id="run-preflight" type="button">Run preflight</button>
+          </div>
+        </footer>
+      </section>
     </main>
   </body>
 </html>

@@ -1980,6 +1980,14 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 27:
                 page.locator('#keep-datum').focus()
                 page.keyboard.press('Enter')
+        elif demo["id"] == "hover-activated-image-marquee-menu":
+            if index == 4:
+                page.locator('[data-index="2"]').hover()
+            elif index == 9:
+                page.locator('[data-index="2"]').click()
+            elif index == 11:
+                status_box = page.locator('#decision-status').bounding_box()
+                page.mouse.click(status_box["x"] + status_box["width"] * .5, status_box["y"] + status_box["height"] * .5)
         elif demo["id"] == "gooey-pixel-cursor-wake":
             if index == 3:
                 box = page.locator('#pixel-wake-host').bounding_box()
@@ -7661,6 +7669,98 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or page.locator('#pitch-value').text_content() != "34°"
         ):
             raise RuntimeError(f"{demo['id']} did not capture real 3D datum picking, camera revision, and explicitly retained Tech Park load: {interaction!r}")
+    elif demo["id"] == "hover-activated-image-marquee-menu":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        third_transform = page.locator('[data-index="2"] .row-rail').evaluate("element => getComputedStyle(element).transform")
+        row_accents = page.locator('.menu-row').evaluate_all("rows => rows.map(row => row.style.getPropertyValue('--accent'))")
+        retained_records = [record for record in interaction["inputRecords"] if record["action"] == "retain-destination"]
+        if (
+            not assertion
+            or interaction["id"] != "hover-activated-image-marquee-menu"
+            or interaction["task"] != "human-previews-a-destination-inside-its-own-row-and-explicitly-retains-or-revises-the-destination"
+            or interaction["claimedLibrary"] != "motion@12.42.2"
+            or interaction["mechanism"] != "trusted-row-hover-or-focus-activates-one-row-local-image-and-place-rail-whose-finite-translation-is-controlled-by-motion"
+            or interaction["assetStrategy"] != "reuse-three-existing-local-generated-photographs-with-exact-file-identity-and-real-pixel-derived-row-styles"
+            or interaction["imageGenerationDecision"] != "reuse-existing-functional-images-no-replacement-generation"
+            or interaction["assetManifestCount"] != 3
+            or interaction["assetManifestChecksum"] != 3094457892
+            or not interaction["assetIdentityVerified"]
+            or interaction["identityFailureCount"] != 0
+            or interaction["expectedAssetByteTotal"] != 282286
+            or interaction["verifiedAssetByteTotal"] != 282286
+            or interaction["decodedImageCount"] != 12
+            or interaction["naturalDimensionMatchCount"] != 12
+            or interaction["sourceImageUseCounts"] != [4, 4, 4]
+            or interaction["remoteImageCount"] != 0
+            or interaction["pixelSampleWidth"] != 32
+            or interaction["pixelSampleHeight"] != 18
+            or interaction["pixelSampleCount"] != 1728
+            or len(interaction["photoPixelRecords"]) != 3
+            or interaction["distinctPixelSignatureCount"] != 3
+            or interaction["distinctDerivedAccentCount"] != 3
+            or interaction["pixelDrivenRailStyleCount"] != 3
+            or any(record["pixelSignature"] <= 0 or record["luminanceVariance"] <= 100 for record in interaction["photoPixelRecords"])
+            or row_accents != [record["derivedAccent"] for record in interaction["photoPixelRecords"]]
+            or interaction["automaticRowRehearsal"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticCycle"]
+            or interaction["automaticFallback"]
+            or interaction["previewClockStartsRail"]
+            or not interaction["previewClockOnlyAdvancesTrustedRail"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["railMutationWithoutInputCount"] != 0
+            or interaction["untrustedMutationCount"] != 0
+            or not interaction["initialStillVerified"]
+            or not interaction["rowLocalRailVerified"]
+            or interaction["motionControllerCount"] != 3
+            or interaction["railDistances"] != [152, 152, 152]
+            or interaction["railStartCount"] != 1
+            or interaction["railCompletionCount"] != 1
+            or interaction["railStarted"] != [False, False, True]
+            or interaction["railCompleted"] != [False, False, True]
+            or interaction["railProgresses"] != [0, 0, 1]
+            or third_transform == "none"
+            or "-152" not in third_transform
+            or interaction["hoverIndex"] is not None
+            or interaction["focusIndex"] is not None
+            or interaction["activeIndex"] != 2
+            or interaction["retainedIndex"] != 2
+            or not interaction["retainedAfterHoverExitVerified"]
+            or interaction["selectionHistory"] != [None]
+            or interaction["confirmationCount"] != 1
+            or interaction["businessCommitCount"] != 1
+            or interaction["prematureCommitCount"] != 0
+            or interaction["phase"] != "destination-retained"
+            or interaction["result"] != "destination-retained-desert-observatory"
+            or interaction["inputCount"] != 5
+            or interaction["trustedInputCount"] != 5
+            or interaction["pointerInputCount"] != 5
+            or interaction["keyboardInputCount"] != 0
+            or interaction["controlInputCount"] != 0
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["hoverInputCount"] != 1
+            or interaction["focusInputCount"] != 1
+            or interaction["clickConfirmationInputCount"] != 1
+            or interaction["pointerLeaveInputCount"] != 1
+            or interaction["focusOutInputCount"] != 1
+            or interaction["lastInputModality"] != "pointer"
+            or len(interaction["inputRecords"]) != 2
+            or any(not record["trusted"] for record in interaction["inputRecords"])
+            or len(retained_records) != 1
+            or retained_records[0]["pixelSignature"] != interaction["photoPixelRecords"][2]["pixelSignature"]
+            or interaction["undoCount"] != 0
+            or interaction["resetCount"] != 0
+            or interaction["decisionClearCount"] != 0
+            or page.locator('#image-menu').get_attribute('data-active') != "2"
+            or page.locator('#image-menu').get_attribute('data-retained') != "2"
+            or page.locator('.menu-row.active').count() != 1
+            or page.locator('.menu-row.retained').count() != 1
+            or page.locator('.menu-row[aria-pressed="true"]').count() != 1
+            or page.locator('#decision-status').get_attribute('data-retained') != "true"
+            or page.locator('#decision-output').text_content() != "KEPT · ATACAMA SKY"
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture one real pixel-driven row rail and a retained Atacama destination after hover exit: {interaction!r}")
     elif demo["id"] == "gooey-pixel-cursor-wake":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")

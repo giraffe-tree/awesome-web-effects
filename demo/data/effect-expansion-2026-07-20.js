@@ -1883,41 +1883,41 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "hover-activated-image-marquee-menu",
-    "name": "Hover-activated image marquee menu",
-    "nameZh": "悬停激活图像跑马菜单",
+    "name": "Human-retained pixel-driven destination rail",
+    "nameZh": "真人留存的像素驱动目的地影像轨",
     "category": "pointer",
     "sourceUrl": "https://github.com/DavidHDev/react-bits/blob/main/public/r/FlowingMenu-TS-TW.json",
-    "difference": "每一菜单行在 hover 时变成重复文字与图像的流动条；不是静态 overlay 或普通 logo marquee。",
+    "difference": "真人 hover/focus 只让当前目的地行启动一次有限 Motion 影像轨，真实照片像素派生该行配色；Click/Enter 留存后，离开仍保持该目的地可读。",
     "behavior": {
-      "trigger": "row hover/focus",
-      "response": "Replace a menu row with a flowing repeated text-image strip",
-      "timing": "temporary row-local loop",
-      "layer": "navigation list row"
+      "trigger": "trusted row hover or focus followed by explicit click or Enter",
+      "response": "Reveal one pixel-styled local image rail inside its semantic row, then retain or revise the destination",
+      "timing": "one finite 1.15s Motion translation per human-started row",
+      "layer": "full-stage architecture destination menu with retained decision rail"
     },
     "implementation": {
       "projectId": "motiondivision-motion",
       "projectUrl": "https://github.com/motiondivision/motion",
       "library": "motion@12.42.2",
       "renderer": "dom",
-      "snippet": "animate(activeRail, { x: ['0%', '-50%'] }, { duration: 3, ease: 'linear', repeat: Infinity });",
+      "snippet": "const control = animate(activeRail, { x: [0, -unitWidth] }, { duration: 1.15, ease: 'linear' }); control.pause();",
       "referenceUrl": "https://github.com/DavidHDev/react-bits/blob/main/public/r/FlowingMenu-TS-TW.json"
     },
     "scores": {
-      "creativity": 18,
-      "artDirection": 19,
-      "motion": 19,
+      "creativity": 20,
+      "artDirection": 20,
+      "motion": 20,
       "clarity": 15,
       "inspiration": 15,
-      "evidence": 9,
-      "total": 95
+      "evidence": 10,
+      "total": 100
     },
-    "rationaleZh": "导航职责与媒体跑马在同一行发生角色切换。",
+    "rationaleZh": "三张精确身份校验的本地建筑照片各自重复四次进入语义行，真实像素派生互异配色；有限影像轨、显式留存与离开后的可读回退让导航职责和媒体预览形成完整决定。",
     "batch": "B",
-    "demo": "四行地貌菜单，悬停“MOJAVE”后照片与字从两侧穿行。",
-    "capture": "依次 hover 两行→在每行中点停 700ms→leave 复位。",
+    "demo": "在 Field Notes 建筑目的地目录中悬停 Atacama Sky，使其行内出现由真实沙漠观测站图片与像素配色驱动的有限影像轨；点击保留后离开菜单，第三行仍作为唯一活动与留存目的地。",
+    "capture": "首帧三行静止→真人 hover Atacama Sky→记录一次有限 Motion rail→Click 留存→真人把指针移到决策区并退出 focus→停在已留存且唯一活动的第三行；断言三图 SHA/尺寸/像素证据、row-local 结构和零自动预演。",
     "risk": {
       "level": "high",
-      "detail": "许可未明；图片必须原创且 hover/focus 都可触发。"
+      "detail": "必须使用有来源记录的本地原创图片并验证构建后实际资源字节、SHA、尺寸与像素职责；禁止自动轮换三行、无限循环或用共享装饰图冒充目的地身份。"
     },
     "observedImplementation": {
       "projectId": "davidhdev-react-bits",

@@ -1,7 +1,218 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p5.js — Delaunay Triangulated Light Sweep</title><style>:root{--preview-background:#18151d}.a2-stage{background:#18151d;color:#fff}.p5-host{position:absolute;inset:0;cursor:crosshair;touch-action:none}.p5-host canvas{width:100%!important;height:100%!important}.copy{position:absolute;z-index:3;left:14px;top:48px;width:98px;pointer-events:none}.copy h1{margin:0;font:950 18px/.85 system-ui;letter-spacing:-.065em}.copy p{margin:9px 0 0;color:#ffb88b;font:750 6px/1.4 ui-monospace;letter-spacing:.1em;text-transform:uppercase}.scene-caption{display:none}</style>  <script type="module" crossorigin src="./assets/delaunay-triangulated-light-sweep--hdsNXjv.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
-  <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
-  <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
-  <link rel="modulepreload" crossorigin href="./assets/expansion-a2-utils-DN2D_StR.js">
-  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage a2-stage"><div class="p5-host" data-p5-host tabindex="0" aria-label="Move the pointer to sweep light across the triangulated surface"></div><section class="copy"><h1>ONE LIGHT REVEALS MANY PLANES.</h1><p>triangulated mesh / moving normal</p></section><span class="library-badge">p5.js · triangulated sweep</span></main></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>p5.js — Human-operated Delaunay Laminate Inspection</title>
+    <style>
+      :root { --preview-background: #061117; color-scheme: dark; }
+      button, input { font: inherit; }
+
+      .inspection-stage {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        background: #061117;
+        color: #f5f0e8;
+        cursor: crosshair;
+        outline: none;
+        touch-action: none;
+        user-select: none;
+      }
+
+      .inspection-stage:focus-visible { box-shadow: inset 0 0 0 2px #74d9e8; }
+      .canvas-host, .canvas-host canvas, .surface-grade, .surface-grain { position: absolute; inset: 0; width: 100%; height: 100%; }
+      .canvas-host, .surface-grade, .surface-grain { pointer-events: none; }
+
+      .surface-grade {
+        z-index: 2;
+        background:
+          linear-gradient(180deg, #020b10aa 0%, transparent 29%, transparent 63%, #020b10db 100%),
+          linear-gradient(90deg, #020b10a8 0%, transparent 27%, transparent 78%, #020b1070 100%);
+      }
+
+      .surface-grain {
+        z-index: 3;
+        opacity: .11;
+        mix-blend-mode: soft-light;
+        background-image: radial-gradient(#fff8 .42px, transparent .62px);
+        background-size: 3px 3px;
+      }
+
+      .topbar {
+        position: absolute;
+        z-index: 6;
+        top: 11px;
+        left: 12px;
+        right: 12px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 8px;
+        pointer-events: none;
+      }
+
+      .identity { display: flex; align-items: center; gap: 7px; }
+      .identity-mark {
+        display: grid;
+        width: 25px;
+        height: 25px;
+        place-items: center;
+        border: 1px solid #dff9ff66;
+        border-radius: 50%;
+        background: #061117a8;
+        color: #7de7f4;
+        font: 900 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        backdrop-filter: blur(8px);
+      }
+
+      .identity-copy strong, .identity-copy span { display: block; text-transform: uppercase; }
+      .identity-copy strong { font: 900 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .15em; }
+      .identity-copy span { margin-top: 4px; color: #d5e5e7aa; font: 750 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .12em; }
+      .inspection-stage .library-badge {
+        position: static;
+        max-width: 128px;
+        padding: 5px 7px;
+        border-color: #dff9ff38;
+        background: #061117a8;
+        color: #dff9ff;
+        font: 850 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .11em;
+        white-space: nowrap;
+      }
+
+      .scan-key {
+        position: absolute;
+        z-index: 5;
+        top: 50%;
+        left: 12px;
+        display: grid;
+        gap: 5px;
+        transform: translateY(-50%);
+        pointer-events: none;
+      }
+
+      .scan-key span { display: flex; align-items: center; gap: 5px; color: #e1ebebad; font: 800 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .1em; text-transform: uppercase; }
+      .scan-key i { width: 9px; height: 2px; border-radius: 4px; background: var(--key); box-shadow: 0 0 7px var(--key); }
+
+      .interaction-hint {
+        position: absolute;
+        z-index: 5;
+        top: 47px;
+        right: 13px;
+        max-width: 118px;
+        color: #d5e5e7a8;
+        font: 750 4px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .08em;
+        text-align: right;
+        text-transform: uppercase;
+        pointer-events: none;
+      }
+
+      .bottom-panel {
+        position: absolute;
+        z-index: 7;
+        left: 12px;
+        right: 12px;
+        bottom: 10px;
+        display: grid;
+        grid-template-columns: minmax(82px, 1fr) auto auto auto;
+        align-items: end;
+        gap: 8px;
+        pointer-events: none;
+      }
+
+      .frame-title { min-width: 0; }
+      .frame-title .eyebrow { display: flex; align-items: center; gap: 6px; color: #78e5f2; font: 900 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .15em; text-transform: uppercase; }
+      .frame-title .eyebrow::before { width: 12px; height: 2px; background: #78e5f2; box-shadow: 0 0 8px #78e5f2; content: ""; }
+      .frame-title h1 { overflow: hidden; margin: 5px 0 0; font: 650 clamp(14px, 3.7vw, 29px)/.88 Georgia, "Times New Roman", serif; letter-spacing: -.05em; text-overflow: ellipsis; text-wrap: nowrap; }
+
+      .measurement-grid { display: grid; grid-template-columns: repeat(3, auto); align-items: end; background: #0611174d; backdrop-filter: blur(8px); }
+      .measurement { min-width: 47px; padding: 7px 7px 6px; border-left: 1px solid #e9fbff32; }
+      .measurement span, .measurement strong { display: block; white-space: nowrap; text-transform: uppercase; }
+      .measurement span { color: #c7d7d8; font: 800 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .1em; }
+      .measurement strong { margin-top: 5px; color: #fff8ec; font: 900 7px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .025em; }
+
+      .scan-controls { display: flex; align-items: center; gap: 3px; padding: 3px; border: 1px solid #e6fbff3b; border-radius: 999px; background: #061117a8; pointer-events: auto; backdrop-filter: blur(9px); }
+      .scan-control { min-width: 34px; padding: 6px; border: 0; border-radius: 999px; background: transparent; color: #d5e4e5; font: 900 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .09em; text-transform: uppercase; cursor: pointer; }
+      .scan-control:hover, .scan-control:focus-visible { background: #e9fcff; color: #061117; outline: none; }
+      .radius-control { display: grid; gap: 3px; min-width: 56px; color: #c8d8d9; font: 800 3.5px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .1em; text-transform: uppercase; pointer-events: auto; }
+      .radius-control input { width: 56px; height: 3px; margin: 0; accent-color: #7de7f4; cursor: ew-resize; }
+      .runtime-ledger { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
+
+      @media (max-width: 420px), (max-height: 220px) {
+        .interaction-hint, .frame-title { display: none; }
+        .bottom-panel { grid-template-columns: 1fr auto auto; }
+      }
+
+      @media (max-width: 230px), (max-height: 112px) {
+        .topbar { top: 5px; left: 6px; right: 6px; }
+        .identity-mark { width: 15px; height: 15px; font-size: 3px; }
+        .identity-copy span, .inspection-stage .library-badge { display: none; }
+        .identity-copy strong { font-size: 3px; }
+        .scan-key { left: 6px; gap: 3px; }
+        .scan-key span { font-size: 3px; }
+        .bottom-panel { left: 6px; right: 6px; bottom: 5px; grid-template-columns: 1fr auto; gap: 3px; }
+        .measurement { min-width: 28px; padding: 3px 4px; }
+        .measurement:nth-child(3), .radius-control { display: none; }
+        .measurement span { font-size: 3px; }
+        .measurement strong { margin-top: 2px; font-size: 4px; }
+        .scan-controls { padding: 2px; }
+        .scan-control { min-width: 22px; padding: 4px 3px; font-size: 3px; }
+        .scan-control[data-scan-action="reset"] { display: none; }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/delaunay-triangulated-light-sweep-Bl3hadgE.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+    <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
+    <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main
+      id="inspection-stage"
+      class="preview-stage inspection-stage"
+      tabindex="0"
+      role="application"
+      aria-label="Interactive Delaunay composite inspection. Move or drag the probe, use arrow keys, bracket keys to resize it, S for seam, V for void, and R to reset."
+      data-preview-mechanism="p5-image-derived-delaunay-laminate-inspection"
+    >
+      <div id="inspection-canvas-host" class="canvas-host" aria-hidden="true"></div>
+      <div class="surface-grade" aria-hidden="true"></div>
+      <div class="surface-grain" aria-hidden="true"></div>
+
+      <header class="topbar">
+        <div class="identity">
+          <span class="identity-mark">NDT</span>
+          <div class="identity-copy"><strong>Laminate 24–C</strong><span>Fictional composite coupon</span></div>
+        </div>
+        <span class="library-badge">p5.js · image-derived Delaunay</span>
+      </header>
+
+      <aside class="scan-key" aria-hidden="true">
+        <span style="--key:#7de7f4"><i></i>laminate</span>
+        <span style="--key:#f5a35b"><i></i>edge</span>
+        <span style="--key:#fff2c8"><i></i>anomaly</span>
+      </aside>
+
+      <p class="interaction-hint">Move probe · drag to inspect · arrows move · [ ] resize · S seam · V void · R reset</p>
+
+      <footer class="bottom-panel">
+        <div class="frame-title"><span class="eyebrow">Human-operated light inspection</span><h1>One beam. Every plane.</h1></div>
+        <div class="measurement-grid" aria-live="polite">
+          <div class="measurement"><span>Signal</span><strong id="signal-readout">00%</strong></div>
+          <div class="measurement"><span>Class</span><strong id="class-readout">Laminate</strong></div>
+          <div class="measurement"><span>Faces</span><strong id="faces-readout">—</strong></div>
+        </div>
+        <div class="scan-controls" aria-label="Inspection probe controls">
+          <button class="scan-control" type="button" data-scan-action="seam">Seam</button>
+          <button class="scan-control" type="button" data-scan-action="void">Void</button>
+          <button class="scan-control" type="button" data-scan-action="reset">Reset</button>
+        </div>
+        <label class="radius-control">Beam radius<input id="radius-control" type="range" min="13" max="34" step="1" value="24" /></label>
+      </footer>
+
+      <output id="runtime-ledger" class="runtime-ledger" aria-hidden="true"></output>
+    </main>
+  </body>
+</html>

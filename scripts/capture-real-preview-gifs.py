@@ -2529,6 +2529,36 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("Home")
             elif index == 31:
                 page.mouse.move(167, 73)
+        elif demo["id"] == "delaunay-triangulated-light-sweep":
+            if index == 2:
+                page.mouse.move(240, 68)
+            elif index == 4:
+                page.mouse.move(160, 82)
+            elif index == 5:
+                page.mouse.down()
+            elif index == 6:
+                page.mouse.move(175, 75, steps=2)
+            elif index == 7:
+                page.mouse.move(195, 64, steps=2)
+            elif index == 8:
+                page.mouse.move(214, 56, steps=2)
+            elif index == 9:
+                page.mouse.move(228, 51, steps=2)
+            elif index == 10:
+                page.mouse.up()
+            elif index == 13:
+                page.locator('[data-scan-action="seam"]').click()
+            elif index == 16:
+                page.locator('[data-scan-action="void"]').click()
+            elif index == 19:
+                page.locator("#radius-control").focus()
+                page.keyboard.press("ArrowRight")
+                page.keyboard.press("ArrowRight")
+            elif index == 22:
+                page.locator("#inspection-stage").focus()
+                page.keyboard.press("ArrowLeft")
+            elif index == 24:
+                page.keyboard.press("]")
         elif demo["id"] == "poisson-constellation-bloom":
             if index == 2:
                 page.mouse.move(170, 92)
@@ -8115,6 +8145,95 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["ready"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture a trusted full-stage coastal quadtree LOD review with exact source evidence, verified topology and a retained human-owned focus without automatic motion: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "delaunay-triangulated-light-sweep":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-pixel-derived-delaunay-composite-inspection"
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["mechanism"] != "committed-laminate-pixels-drive-delaunay-vertices-face-material-and-defect-signal"
+            or interaction["acceptedInputs"] != ["mouse-hover", "mouse-drag", "touch-drag", "pen-drag", "keyboard", "button-control", "range-control"]
+            or not interaction["userInputRequired"]
+            or not interaction["initialFrameStatic"]
+            or not interaction["initialStaticConfirmed"]
+            or interaction["automaticCycle"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or interaction["previewClockMutationCount"] != 0
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["inputCount"] < 14
+            or interaction["pointerEnterCount"] < 1
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerMoveCount"] < 6
+            or interaction["pointerReleaseCount"] != 1
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerReleaseCaptureCount"] != 1
+            or interaction["pointerCaptured"]
+            or interaction["activePointerId"] is not None
+            or interaction["keyboardInputCount"] != 2
+            or interaction["buttonActivationCount"] != 2
+            or interaction["rangeInputCount"] != 2
+            or interaction["humanMutationCount"] < 10
+            or interaction["seamPresetCount"] != 1
+            or interaction["voidPresetCount"] != 1
+            or interaction["resetCount"] != 0
+            or interaction["beamRadius"] != 28
+            or interaction["lastInputTrusted"] is not True
+            or interaction["lastInputKind"] != "keyboard-]"
+            or interaction["lastPointerType"] != "mouse"
+            or interaction["visitedClassCount"] < 2
+            or interaction["maximumSignal"] <= 0
+            or interaction["assetFetchCount"] != 1
+            or interaction["assetResponseStatus"] != 200
+            or not interaction["assetSameOrigin"]
+            or interaction["assetByteLength"] != 353080
+            or interaction["assetSha256"] != "7836b637c6d44e631e61b15bf99afb0d70c67a3075b82d3eb3bc40f596c7a837"
+            or not interaction["assetShaMatchesExpected"]
+            or not interaction["browserImageDecoded"]
+            or interaction["sourceNaturalWidth"] != 960
+            or interaction["sourceNaturalHeight"] != 640
+            or not interaction["p5ImageDecoded"]
+            or interaction["p5ImageClass"] != "p5.Image"
+            or interaction["p5ImageWidth"] != 960
+            or interaction["p5ImageHeight"] != 640
+            or interaction["p5ImagePixelLength"] != 2457600
+            or interaction["sampledWidth"] != 96
+            or interaction["sampledHeight"] != 54
+            or interaction["sampledPixelCount"] != 5184
+            or interaction["sampledByteLength"] != 20736
+            or len(interaction["sourcePixelSha256"]) != 64
+            or not interaction["sourcePixelSha256"].strip("0")
+            or interaction["distinctSampleColorCount"] <= 300
+            or interaction["sampledLumaRange"] <= .5
+            or interaction["candidateCellCount"] <= 100
+            or interaction["imageDrivenVertexCount"] <= 50
+            or interaction["boundaryVertexCount"] < 30
+            or interaction["vertexCount"] < 90
+            or interaction["triangleCount"] <= interaction["vertexCount"]
+            or interaction["uniqueEdgeCount"] <= interaction["triangleCount"]
+            or interaction["degenerateTriangleCount"] != 0
+            or interaction["delaunayEmptyCircleViolations"] != 0
+            or interaction["topologyChecksum"] <= 0
+            or interaction["facePropertyChecksum"] <= 0
+            or interaction["laminateTriangleCount"] <= 0
+            or interaction["edgeTriangleCount"] <= 0
+            or interaction["anomalyTriangleCount"] <= 0
+            or interaction["laminateTriangleCount"] + interaction["edgeTriangleCount"] + interaction["anomalyTriangleCount"] != interaction["triangleCount"]
+            or not interaction["assetEvidenceReady"]
+            or not interaction["topologyReady"]
+            or not interaction["p5InstanceReady"]
+            or not interaction["p5CanvasReady"]
+            or interaction["p5CanvasWidth"] != 320
+            or interaction["p5CanvasHeight"] != 180
+            or interaction["p5CompletedDrawCount"] < 10
+            or not interaction["ready"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a trusted full-stage composite laminate Delaunay inspection with exact source evidence, valid topology, multiple material classes and a retained human-owned beam: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "poisson-constellation-bloom":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

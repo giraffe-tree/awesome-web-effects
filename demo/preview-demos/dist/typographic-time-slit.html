@@ -1,7 +1,247 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p5.js — Typographic Time Slit</title><style>:root{--preview-background:#e94b3c;color-scheme:light}.expansion-stage{position:absolute;inset:0;overflow:hidden;cursor:ns-resize}.expansion-stage canvas{display:block}.library-badge{color:#190d0a;background:#ffd6b7d8;border-color:#190d0a22}.scene-caption{color:#2a0f0b88}</style>  <script type="module" crossorigin src="./assets/typographic-time-slit-CjNbsCgN.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
-  <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
-  <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
-  <link rel="modulepreload" crossorigin href="./assets/expansion-a-utils-anD0k7Pd.js">
-  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage"><div class="expansion-stage" id="expansion-stage" data-preview-mechanism="p5-time-slit-type" tabindex="0" aria-label="Move the pointer to scrub the typographic time slit"></div><span class="library-badge">p5.js · typographic slit</span><span class="scene-caption">a moving cut exposes another sentence in time</span></main></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>p5.js — North Sea Editorial Time Slit</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --preview-background: #091521;
+        --paper: #fff4df;
+        --muted: rgba(231, 239, 238, .7);
+        --line: rgba(237, 245, 243, .28);
+        --evidence-accent: #f0a352;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        min-width: 0;
+        overflow: hidden;
+        background: var(--preview-background);
+        color: var(--paper);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      button { font: inherit; }
+
+      .time-slit-stage {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        isolation: isolate;
+        outline: none;
+        background: #091521;
+        cursor: ns-resize;
+        touch-action: none;
+        user-select: none;
+      }
+
+      .time-slit-stage::after {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        pointer-events: none;
+        content: "";
+        box-shadow: inset 0 0 0 1px rgba(235, 244, 242, .1);
+      }
+
+      .time-slit-stage:focus-visible::after {
+        inset: 3px;
+        border: 1px solid var(--evidence-accent);
+        box-shadow: none;
+      }
+
+      .time-slit-canvas,
+      .time-slit-canvas canvas {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .time-slit-canvas canvas { display: block; }
+
+      .time-slit-stage .library-badge {
+        top: clamp(7px, 2.5vh, 12px);
+        left: clamp(7px, 2vw, 14px);
+        z-index: 5;
+        color: var(--paper);
+        border-color: var(--line);
+        background: rgba(6, 17, 26, .74);
+        box-shadow: 0 5px 18px rgba(0, 0, 0, .2);
+      }
+
+      .review-evidence {
+        position: absolute;
+        top: clamp(7px, 2.5vh, 12px);
+        right: clamp(7px, 2vw, 14px);
+        z-index: 5;
+        min-width: min(29vw, 164px);
+        padding: clamp(6px, 1.35vw, 10px);
+        border: 1px solid var(--line);
+        background: rgba(6, 17, 26, .74);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, .2);
+        backdrop-filter: blur(8px);
+        pointer-events: none;
+      }
+
+      .review-evidence output,
+      .review-evidence span {
+        display: block;
+        font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+        text-transform: uppercase;
+      }
+
+      .review-status {
+        color: var(--evidence-accent);
+        font-size: clamp(5px, 1.1vw, 8px);
+        font-weight: 850;
+        letter-spacing: .1em;
+        line-height: 1.1;
+      }
+
+      .evidence-score {
+        margin-top: 3px;
+        color: var(--paper);
+        font-size: clamp(11px, 2.75vw, 21px);
+        font-weight: 760;
+        letter-spacing: -.05em;
+        line-height: 1;
+      }
+
+      .region-status {
+        margin-top: 4px;
+        overflow: hidden;
+        color: var(--muted);
+        font-size: clamp(5px, .95vw, 7px);
+        font-weight: 700;
+        letter-spacing: .08em;
+        line-height: 1;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+
+      .slit-readout {
+        position: absolute;
+        z-index: 5;
+        right: clamp(7px, 2vw, 14px);
+        bottom: clamp(7px, 3.2vh, 13px);
+        color: var(--paper);
+        font: 800 clamp(5px, 1.1vw, 8px)/1 ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+        letter-spacing: .08em;
+        text-shadow: 0 1px 6px rgba(0, 0, 0, .7);
+        pointer-events: none;
+      }
+
+      .slit-guide {
+        position: absolute;
+        z-index: 5;
+        left: clamp(7px, 2vw, 14px);
+        bottom: clamp(7px, 3.2vh, 13px);
+        margin: 0;
+        color: rgba(245, 242, 228, .78);
+        font: 750 clamp(5px, 1.05vw, 8px)/1 ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+        letter-spacing: .06em;
+        text-shadow: 0 1px 6px rgba(0, 0, 0, .72);
+        text-transform: uppercase;
+        pointer-events: none;
+      }
+
+      .slit-controls {
+        position: absolute;
+        z-index: 7;
+        left: 50%;
+        bottom: clamp(6px, 2.8vh, 12px);
+        display: flex;
+        gap: 4px;
+        transform: translateX(-50%);
+      }
+
+      .slit-control {
+        min-width: 39px;
+        height: 24px;
+        padding: 0 8px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: rgba(6, 17, 26, .78);
+        color: var(--paper);
+        font: 800 7px/1 ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+        letter-spacing: .07em;
+        text-transform: uppercase;
+        cursor: pointer;
+        backdrop-filter: blur(8px);
+      }
+
+      .slit-control:hover,
+      .slit-control:focus-visible {
+        border-color: var(--evidence-accent);
+        outline: none;
+      }
+
+      .slit-control[aria-pressed="true"] {
+        border-color: var(--evidence-accent);
+        background: var(--evidence-accent);
+        color: #081722;
+      }
+
+      @media (max-width: 420px) {
+        .review-evidence { min-width: 98px; }
+        .slit-guide { max-width: 27%; overflow: hidden; white-space: nowrap; }
+      }
+
+      @media (max-width: 200px), (max-height: 100px) {
+        .time-slit-stage .library-badge {
+          top: 3px;
+          left: 3px;
+          padding: 3px 4px;
+          font-size: 5px;
+          letter-spacing: .02em;
+        }
+        .review-evidence {
+          top: 3px;
+          right: 3px;
+          min-width: 55px;
+          padding: 3px 4px;
+          backdrop-filter: none;
+        }
+        .review-status { font-size: 4px; letter-spacing: .02em; }
+        .evidence-score { margin-top: 1px; font-size: 7px; }
+        .region-status { display: none; }
+        .slit-controls { bottom: 3px; gap: 2px; }
+        .slit-control { min-width: 23px; height: 13px; padding: 0 3px; font-size: 4px; letter-spacing: 0; }
+        .slit-guide { display: none; }
+        .slit-readout { right: 3px; bottom: 5px; font-size: 4px; }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/typographic-time-slit-lz6bjMGL.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+    <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
+    <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main class="preview-stage">
+      <section class="time-slit-stage" id="expansion-stage" data-preview-mechanism="p5-human-editorial-time-slit" tabindex="0" role="slider" aria-label="Editorial version time slit. Move or drag vertically to compare Draft 04 and Release 05. Use Arrow keys, Home, End, Page Up, Page Down, or the visible region controls." aria-valuemin="10" aria-valuemax="90" aria-valuenow="58">
+        <div class="time-slit-canvas" id="time-slit-canvas"></div>
+        <span class="library-badge">p5.js · live proof slit</span>
+        <aside class="review-evidence" aria-live="polite">
+          <output class="review-status" id="review-status">VERSION EVIDENCE · SCANNING</output>
+          <output class="evidence-score" id="evidence-score">-- / 100</output>
+          <span class="region-status" id="region-status">STRUCTURE · Δ --</span>
+        </aside>
+        <p class="slit-guide">Hover / drag vertically · ↑↓ keys</p>
+        <nav class="slit-controls" aria-label="Inspect proof region">
+          <button class="slit-control" type="button" data-slit-target="0.14" aria-pressed="false">Mast</button>
+          <button class="slit-control" type="button" data-slit-target="0.46" aria-pressed="false">Frame</button>
+          <button class="slit-control" type="button" data-slit-target="0.74" aria-pressed="false">Tide</button>
+          <button class="slit-control" type="button" data-slit-target="0.58" aria-pressed="true">Reset</button>
+        </nav>
+        <output class="slit-readout" id="slit-readout" aria-label="Slit position">58%</output>
+      </section>
+    </main>
+  </body>
+</html>

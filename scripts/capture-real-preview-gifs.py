@@ -2580,6 +2580,34 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.locator('[data-terrain-action="raise"]').click()
             elif index == 19:
                 page.locator('[data-terrain-action="raise"]').click()
+        elif demo["id"] == "typographic-time-slit":
+            if index == 3:
+                page.mouse.move(154, 42)
+            elif index == 6:
+                page.mouse.move(154, 76, steps=3)
+            elif index == 9:
+                page.mouse.down()
+            elif index == 10:
+                page.mouse.move(154, 106, steps=2)
+            elif index == 11:
+                page.mouse.move(154, 136, steps=2)
+            elif index == 12:
+                page.mouse.up()
+            elif index == 15:
+                page.locator('[data-slit-target="0.14"]').click()
+            elif index == 18:
+                page.locator('[data-slit-target="0.46"]').click()
+            elif index == 21:
+                page.locator("#expansion-stage").focus()
+                page.keyboard.press("PageDown")
+            elif index == 24:
+                page.keyboard.press("ArrowUp")
+            elif index == 27:
+                page.locator('[data-slit-target="0.74"]').click()
+            elif index == 30:
+                page.locator('[data-slit-target="0.58"]').click()
+            elif index == 33:
+                page.mouse.move(154, 95)
         elif demo["id"] == "poisson-constellation-bloom":
             if index == 2:
                 page.mouse.move(170, 92)
@@ -8357,6 +8385,108 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["ready"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture a trusted full-stage alpine watershed contour and flood review with exact source evidence, a real safe route and a retained high-risk human-owned result: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "typographic-time-slit":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-fictional-editorial-version-proof-inspection"
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["renderer"] != "canvas2d"
+            or interaction["mechanism"] != "trusted-human-input-directly-moves-a-horizontal-p5-clip-between-two-pixel-proven-editorial-versions"
+            or interaction["assetMechanismRole"] != "decoded-left-and-right-proof-pixels-drive-both-visible-timelines-change-regions-palette-score-and-acceptance"
+            or interaction["acceptedInputs"] != ["mouse-hover", "mouse-drag", "touch-drag", "pen-drag", "keyboard", "button-control"]
+            or not interaction["userInputRequired"]
+            or not interaction["strictTrustedInputGuard"]
+            or not interaction["initialFrameStatic"]
+            or not interaction["initialStaticConfirmed"]
+            or interaction["automaticCycle"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["previewClockMutationCount"] != 0
+            or interaction["previewClockIgnoredCount"] < 1
+            or interaction["inputCount"] < 15
+            or interaction["trustedInputCount"] != interaction["inputCount"]
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["pointerEnterCount"] < 1
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerMoveCount"] < 8
+            or interaction["pointerReleaseCount"] != 1
+            or interaction["pointerCancelCount"] != 0
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerCaptureReleaseCount"] != 1
+            or interaction["pointerCaptured"]
+            or interaction["activePointerId"] is not None
+            or interaction["hoverInputCount"] < 4
+            or interaction["capturedPointerMoveCount"] < 4
+            or interaction["keyboardInputCount"] != 2
+            or interaction["buttonActivationCount"] != 4
+            or interaction["hoverMutationCount"] < 3
+            or interaction["dragMutationCount"] < 3
+            or interaction["keyboardMutationCount"] != 2
+            or interaction["buttonMutationCount"] != 4
+            or interaction["slitMutationCount"] < 12
+            or interaction["humanInputCausalityCount"] != interaction["slitMutationCount"]
+            or interaction["distinctVisitedBandCount"] < 3
+            or interaction["selectedBandLabel"] != "STRUCTURE"
+            or interaction["lastInputKind"] != "pointer-hover"
+            or interaction["lastInputTrusted"] is not True
+            or interaction["lastPointerType"] != "mouse"
+            or interaction["slitPosition"] < .5
+            or interaction["slitPosition"] > .56
+            or interaction["assetFetchCount"] != 1
+            or interaction["assetResponseStatus"] != 200
+            or not interaction["assetSameOrigin"]
+            or not interaction["assetMimeType"].startswith("image/jpeg")
+            or interaction["assetByteLength"] != 201120
+            or interaction["assetSha256"] != "c198935149ddc604574425ab9c5934025e8495e6b96d663be8cbefdc7ec12bfa"
+            or not interaction["assetShaMatchesExpected"]
+            or not interaction["browserImageDecoded"]
+            or interaction["sourceNaturalWidth"] != 960
+            or interaction["sourceNaturalHeight"] != 640
+            or not interaction["p5ImageDecoded"]
+            or interaction["p5ImageClass"] != "p5.Image"
+            or interaction["p5ImageWidth"] != 960
+            or interaction["p5ImageHeight"] != 640
+            or interaction["p5ImagePixelLength"] != 2457600
+            or interaction["sampledWidth"] != 72
+            or interaction["sampledHeight"] != 72
+            or interaction["sampledPixelCountPerVersion"] != 5184
+            or interaction["sampledPixelByteLengthPerVersion"] != 20736
+            or interaction["comparedPixelCount"] != 5184
+            or len(interaction["comparisonPixelSha256"]) != 64
+            or not interaction["comparisonPixelSha256"].strip("0")
+            or not interaction["comparisonPixelShaValid"]
+            or interaction["distinctSampleColorCount"] <= 350
+            or interaction["changedPixelCount"] <= 3000
+            or interaction["changedPixelRatio"] <= .35
+            or interaction["changedPixelRatio"] >= 1
+            or interaction["meanPixelDelta"] <= 18
+            or interaction["maximumPixelDelta"] <= interaction["meanPixelDelta"]
+            or interaction["tileCount"] != 48
+            or interaction["changedTileCount"] < 10
+            or len(interaction["tileEvidence"]) != 48
+            or len(interaction["rowEvidence"]) != 6
+            or len(interaction["beforeAverageRgb"]) != 3
+            or len(interaction["afterAverageRgb"]) != 3
+            or len(interaction["releaseAccentRgb"]) != 3
+            or interaction["evidenceScore"] < interaction["acceptanceThreshold"]
+            or interaction["acceptanceOutcome"] != "PASS"
+            or not interaction["assetEvidenceReady"]
+            or not interaction["pixelEvidenceReady"]
+            or not interaction["p5InstanceReady"]
+            or not interaction["p5CanvasReady"]
+            or interaction["p5CanvasWidth"] != 320
+            or interaction["p5CanvasHeight"] != 180
+            or interaction["p5CompletedDrawCount"] < 12
+            or not interaction["runtimeAssertionPassed"]
+            or not interaction["ready"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a trusted full-stage editorial Draft-to-Release time-slit inspection with exact source evidence, multiple changed bands and a retained pixel-proven PASS without automatic motion: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "poisson-constellation-bloom":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

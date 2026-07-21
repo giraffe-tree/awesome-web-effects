@@ -1552,6 +1552,23 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.wheel(0, -38)
             elif index == 35:
                 page.locator('#reset-control').click()
+        elif demo["id"] == "metaball-blob-cursor":
+            if index == 3:
+                page.locator('#finish-cobalt').hover()
+            elif index == 4:
+                page.wait_for_timeout(380)
+            elif index == 8:
+                page.locator('#finish-moss').hover()
+            elif index == 9:
+                page.wait_for_timeout(380)
+            elif index == 13:
+                page.locator('#finish-coral').hover()
+            elif index == 14:
+                page.wait_for_timeout(380)
+            elif index == 18:
+                page.locator('#finish-coral').click()
+            elif 19 <= index <= 24:
+                page.wait_for_timeout(115)
         elif demo["id"] == "velocity-spaced-image-trail":
             if index == 1:
                 page.locator('.frame-button[data-frame="1"]').click()
@@ -5564,6 +5581,45 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["lastInputTrusted"] is not True
         ):
             raise RuntimeError(f"{demo['id']} did not capture trusted slow/fast signed wheel velocity, two opposed captured drags, keyboard impulses, repeated reversal, inertia, and exact reset on the real Motion rail: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "metaball-blob-cursor":
+        interaction = page.evaluate("window.__METABALL_TARGET_STATE__")
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        if (
+            not assertion
+            or interaction["task"] != "human-selects-and-locks-a-real-product-finish-through-a-liquid-target-bridge"
+            or interaction["claimedLibrary"] != "motion@12.42.2"
+            or interaction["assetStrategy"] != "code-native-product-geometry-and-svg-metaball-field-no-functional-raster-input-required"
+            or interaction["automaticPath"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticCycle"]
+            or interaction["automaticTimeline"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or interaction["previewClockMutationCount"] != 0
+            or interaction["phase"] != "locked"
+            or interaction["selectedFinish"] != "coral"
+            or not interaction["resultHeld"]
+            or not interaction["resultValidated"]
+            or interaction["inputCount"] != interaction["trustedInputCount"]
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["targetHoverCount"] < 3
+            or interaction["targetHitCount"] != 1
+            or interaction["selectionStartCount"] != 1
+            or interaction["selectionCompleteCount"] != 1
+            or interaction["transitionProgress"] != 1
+            or interaction["cursorTravelStartCount"] < 3
+            or interaction["cursorTravelCompleteCount"] < 1
+            or interaction["maximumBridgeLength"] < 10
+            or interaction["mergedFrameCount"] < 1
+            or interaction["stretchedFrameCount"] < 1
+            or interaction["selectedBridgeFrameCount"] < 1
+            or interaction["geometryCoverageX"] < .995
+            or interaction["geometryCoverageY"] < .995
+            or page.locator('#finish-coral').get_attribute('aria-pressed') != "true"
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a real retained finish selection through a liquid target bridge: {interaction!r}")
     elif demo["id"] == "velocity-spaced-image-trail":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

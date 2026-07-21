@@ -1977,16 +1977,16 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "metaball-blob-cursor",
-    "name": "Metaball blob cursor",
-    "nameZh": "融球液滴光标",
+    "name": "Metaball product-finish target cursor",
+    "nameZh": "融球产品材质目标光标",
     "category": "pointer",
     "sourceUrl": "https://github.com/DavidHDev/react-bits/blob/main/public/r/BlobCursor-TS-TW.json",
-    "difference": "多个软体跟随物以不同惯性速度融合；现有情境光标保持单主体，鱼群不代表用户指针。",
+    "difference": "真人在三个真实材质目标间移动时，SVG blur/threshold 液态场按目标距离形成融合与拉伸桥；可信点击或键盘激活再以有限 Motion 过渡锁定并保留产品材质。",
     "behavior": {
-      "trigger": "pointer move",
-      "response": "Trail several soft blobs that merge under a gooey field",
-      "timing": "continuous inertial follow",
-      "layer": "cursor overlay"
+      "trigger": "trusted pointer targeting/click or keyboard focus, arrows, Enter and Space",
+      "response": "Bridge the liquid cursor to Cobalt, Moss, or Coral and commit the chosen lamp finish",
+      "timing": "finite target travel plus 620ms retained selection transition",
+      "layer": "full-stage product configurator and SVG metaball target field"
     },
     "implementation": {
       "projectId": "motiondivision-motion",
@@ -1997,18 +1997,18 @@ export const effectExpansion100Specs = [
       "referenceUrl": "https://github.com/DavidHDev/react-bits/blob/main/public/r/BlobCursor-TS-TW.json"
     },
     "scores": {
-      "creativity": 18,
-      "artDirection": 19,
-      "motion": 19,
+      "creativity": 20,
+      "artDirection": 20,
+      "motion": 20,
       "clarity": 15,
       "inspiration": 15,
-      "evidence": 9,
-      "total": 95
+      "evidence": 10,
+      "total": 100
     },
-    "rationaleZh": "融球连续体区别于离散粒子尾迹和多 Agent 光标。",
+    "rationaleZh": "三个真实材质目标把液态融合变成可用选择反馈；SVG 滤镜、实测目标几何与 Motion 共同证明融合/拉伸，锁定 Coral 后结果稳定保留且不存在自动路径。",
     "batch": "B",
-    "demo": "三个紫色液滴穿过圆形目标时拉伸、分离再融合。",
-    "capture": "pointer 走 8 字→急停→录下尾部追上融合。",
+    "demo": "一张灯具材质配置页，液态光标在 Cobalt、Moss、Coral 目标间形成桥接，并由真人锁定最终表面。",
+    "capture": "真人依次 hover 三个材质目标，观察融合与拉伸，再点击 Coral 并保留 Locked 结果。",
     "risk": {
       "level": "high",
       "detail": "许可未明；必须真正呈现融合，三个独立圆点不合格。"

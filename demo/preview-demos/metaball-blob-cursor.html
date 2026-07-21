@@ -1,2 +1,376 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Motion — Metaball Blob Cursor</title><link rel="stylesheet" href="./shared.css"><style>
-:root{--preview-background:#10141a}.blob-stage{position:absolute;inset:0;cursor:none}.blob-stage svg{width:100%;height:100%;display:block}.blob-copy{position:absolute;left:14px;top:49px;color:white;pointer-events:none}.blob-copy small{font:800 6px/1 ui-monospace;letter-spacing:.13em;color:#98a4b1}.blob-copy h1{width:120px;margin:9px 0 0;font:950 21px/.82 system-ui;letter-spacing:-.06em}.blob-cursor{transform-box:fill-box;transform-origin:center}.library-badge{background:#0c1117c7}.scene-caption{left:auto;right:12px}</style></head><body><main class="preview-stage"><div class="blob-stage" id="blob-stage" data-preview-mechanism="motion-metaball-cursor" tabindex="0" aria-label="Move the pointer or arrow keys to stretch the metaball cursor"><svg viewBox="0 0 320 180"><defs><filter id="metaball"><feGaussianBlur stdDeviation="7" result="blur"/><feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 22 -9"/><feComposite in="SourceGraphic" operator="atop"/></filter></defs><g filter="url(#metaball)" fill="#6d5dff"><circle class="blob-cursor" id="blob-lead" cx="225" cy="90" r="23"/><circle class="blob-cursor" id="blob-follow" cx="195" cy="90" r="17"/><circle class="blob-cursor" id="blob-tail" cx="173" cy="90" r="11"/></g></svg><section class="blob-copy"><small>CURSOR / METABALL</small><h1>MOVE AS ONE LIQUID SHAPE.</h1></section></div><span class="library-badge">Motion · SVG metaball</span><span class="scene-caption">blur threshold fuses the cursor bodies</span></main><script type="module" src="./src/metaball-blob-cursor-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Motion — Metaball Finish Selector</title>
+    <link rel="stylesheet" href="./shared.css" />
+    <style>
+      :root {
+        --preview-background: #ebe7dc;
+        --paper: #ebe7dc;
+        --ink: #171b19;
+        --muted: #6b706b;
+        --acid: #d8ff53;
+        --chosen: #315dff;
+      }
+
+      * { box-sizing: border-box; }
+      button { font: inherit; }
+
+      .finish-stage {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        color: var(--ink);
+        background:
+          linear-gradient(90deg, rgba(23, 27, 25, .045) 1px, transparent 1px) 0 0 / 24px 100%,
+          linear-gradient(rgba(23, 27, 25, .04) 1px, transparent 1px) 0 0 / 100% 24px,
+          var(--paper);
+        cursor: none;
+        user-select: none;
+      }
+
+      .finish-stage::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(circle at 73% 22%, color-mix(in srgb, var(--chosen) 18%, transparent), transparent 27%),
+          radial-gradient(circle at 12% 86%, rgba(216, 255, 83, .38), transparent 23%);
+        pointer-events: none;
+      }
+
+      .masthead {
+        position: absolute;
+        z-index: 5;
+        top: 34px;
+        left: 11px;
+        display: grid;
+        gap: 2px;
+        pointer-events: none;
+      }
+
+      .kicker,
+      .step,
+      .finish-name,
+      .selection-status,
+      .instruction {
+        font-size: clamp(6px, 1.5vw, 11px);
+        font-weight: 900;
+        letter-spacing: .13em;
+        text-transform: uppercase;
+      }
+
+      .kicker { color: rgba(23, 27, 25, .5); }
+      .masthead strong {
+        font-size: clamp(12px, 3.2vw, 26px);
+        font-weight: 950;
+        line-height: .9;
+        letter-spacing: -.055em;
+      }
+
+      .product-card {
+        position: absolute;
+        z-index: 2;
+        top: 60px;
+        bottom: 12px;
+        left: 11px;
+        width: 57%;
+        min-width: 142px;
+        overflow: hidden;
+        border: 1px solid rgba(23, 27, 25, .16);
+        border-radius: 9px;
+        background: rgba(249, 247, 240, .72);
+        box-shadow: 0 13px 32px rgba(38, 38, 27, .08);
+        pointer-events: none;
+      }
+
+      .product-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        opacity: .14;
+        background: repeating-linear-gradient(118deg, transparent 0 14px, currentColor 15px 16px);
+      }
+
+      .step {
+        position: absolute;
+        top: 8px;
+        left: 9px;
+        color: rgba(23, 27, 25, .48);
+      }
+
+      .lamp {
+        position: absolute;
+        top: 18%;
+        left: 50%;
+        width: 43%;
+        max-width: 150px;
+        aspect-ratio: .82;
+        transform: translateX(-50%);
+      }
+
+      .lamp-shade {
+        position: absolute;
+        z-index: 2;
+        top: 0;
+        left: 50%;
+        width: 100%;
+        height: 59%;
+        transform: translateX(-50%);
+        border-radius: 48% 48% 14% 14% / 34% 34% 12% 12%;
+        background: var(--chosen);
+        box-shadow: inset 0 -10px 18px rgba(0, 0, 0, .16), 0 8px 20px color-mix(in srgb, var(--chosen) 24%, transparent);
+      }
+
+      .lamp-glow {
+        position: absolute;
+        z-index: 1;
+        top: 42%;
+        left: 50%;
+        width: 78%;
+        height: 39%;
+        transform: translateX(-50%);
+        background: radial-gradient(ellipse at top, color-mix(in srgb, var(--chosen) 42%, white), transparent 68%);
+        filter: blur(3px);
+      }
+
+      .lamp-stem {
+        position: absolute;
+        top: 53%;
+        bottom: 8%;
+        left: calc(50% - 2px);
+        width: 4px;
+        border-radius: 4px;
+        background: #2b302d;
+      }
+
+      .lamp-base {
+        position: absolute;
+        bottom: 4%;
+        left: 25%;
+        width: 50%;
+        height: 8%;
+        border-radius: 50%;
+        background: #2b302d;
+      }
+
+      .product-meta {
+        position: absolute;
+        right: 9px;
+        bottom: 8px;
+        left: 9px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 7px;
+      }
+
+      .product-name {
+        font-size: clamp(10px, 2.5vw, 22px);
+        font-weight: 950;
+        line-height: .9;
+        letter-spacing: -.04em;
+      }
+
+      .selection-status {
+        color: var(--chosen);
+        text-align: right;
+      }
+
+      .finish-panel {
+        position: absolute;
+        z-index: 5;
+        top: 59px;
+        right: 10px;
+        bottom: 13px;
+        left: calc(57% + 20px);
+        display: grid;
+        grid-template-rows: auto repeat(3, minmax(26px, 1fr));
+        gap: 5px;
+      }
+
+      .instruction {
+        align-self: center;
+        color: rgba(23, 27, 25, .58);
+        line-height: 1.2;
+      }
+
+      .finish-option {
+        position: relative;
+        display: grid;
+        grid-template-columns: clamp(17px, 3vw, 26px) 1fr auto;
+        align-items: center;
+        gap: 6px;
+        min-width: 0;
+        padding: 5px 6px;
+        border: 1px solid rgba(23, 27, 25, .15);
+        border-radius: 6px;
+        color: var(--ink);
+        background: rgba(250, 248, 241, .78);
+        cursor: none;
+        outline: none;
+        box-shadow: 0 4px 15px rgba(23, 27, 25, .045);
+      }
+
+      .finish-option::after {
+        content: "";
+        position: absolute;
+        inset: -2px;
+        border: 1px solid transparent;
+        border-radius: 8px;
+        pointer-events: none;
+      }
+
+      .finish-option:is(:hover, :focus-visible)::after,
+      .finish-option[data-selected="true"]::after {
+        border-color: var(--swatch);
+      }
+
+      .swatch {
+        width: clamp(17px, 3vw, 26px);
+        aspect-ratio: 1;
+        border: 2px solid rgba(255, 255, 255, .8);
+        border-radius: 50%;
+        background: var(--swatch);
+        box-shadow: 0 0 0 1px rgba(23, 27, 25, .2);
+      }
+
+      .finish-name { overflow: hidden; text-overflow: ellipsis; }
+      .finish-code {
+        color: rgba(23, 27, 25, .44);
+        font: 800 clamp(6px, 1vw, 8px)/1 ui-monospace, monospace;
+      }
+
+      .cursor-layer {
+        position: absolute;
+        z-index: 10;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+        pointer-events: none;
+      }
+
+      .metaball-body { fill: var(--chosen); }
+      .cursor-core { fill: white; opacity: .96; }
+      .target-core { fill: var(--ink); opacity: .82; }
+
+      .cursor-hint {
+        position: absolute;
+        z-index: 6;
+        top: 13px;
+        right: 10px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        color: rgba(23, 27, 25, .52);
+        font: 850 6px/1 ui-monospace, monospace;
+        letter-spacing: .11em;
+        pointer-events: none;
+      }
+
+      .cursor-hint::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--acid);
+        box-shadow: 0 0 0 2px rgba(23, 27, 25, .12);
+      }
+
+      .library-badge { background: rgba(23, 27, 25, .86); }
+      .scene-caption { display: none; }
+
+      @media (max-aspect-ratio: 4 / 5) {
+        .masthead { top: 40px; }
+        .product-card {
+          top: 74px;
+          right: 10px;
+          bottom: 137px;
+          left: 10px;
+          width: auto;
+          min-width: 0;
+        }
+        .lamp { width: min(31%, 72px); }
+        .finish-panel {
+          top: auto;
+          right: 10px;
+          bottom: 13px;
+          left: 10px;
+          height: 116px;
+          grid-template-columns: repeat(3, 1fr);
+          grid-template-rows: auto 1fr;
+        }
+        .instruction { grid-column: 1 / -1; }
+        .finish-option {
+          grid-template-columns: 17px 1fr;
+          grid-template-rows: 1fr auto;
+        }
+        .finish-code { grid-column: 2; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="preview-stage">
+      <section class="finish-stage" id="finish-stage" data-preview-mechanism="trusted-pointer-metaball-target-bridge" tabindex="-1" aria-label="Choose a lamp finish with the pointer or keyboard">
+        <header class="masthead">
+          <span class="kicker">Object 04 · live configurator</span>
+          <strong>Pick a finish.</strong>
+        </header>
+
+        <article class="product-card" id="product-card" aria-live="polite">
+          <span class="step">01 / Shade</span>
+          <div class="lamp" aria-hidden="true">
+            <span class="lamp-shade"></span>
+            <span class="lamp-glow"></span>
+            <span class="lamp-stem"></span>
+            <span class="lamp-base"></span>
+          </div>
+          <footer class="product-meta">
+            <span class="product-name">ARC / 04</span>
+            <output class="selection-status" id="selection-status">Awaiting finish</output>
+          </footer>
+        </article>
+
+        <nav class="finish-panel" aria-label="Lamp finishes">
+          <span class="instruction" id="finish-instruction">Move to compare · press to lock</span>
+          <button class="finish-option" id="finish-cobalt" data-finish="cobalt" data-color="#315dff" style="--swatch:#315dff" type="button" aria-pressed="false">
+            <span class="swatch" aria-hidden="true"></span><span class="finish-name">Cobalt</span><span class="finish-code">01</span>
+          </button>
+          <button class="finish-option" id="finish-moss" data-finish="moss" data-color="#52794f" style="--swatch:#52794f" type="button" aria-pressed="false">
+            <span class="swatch" aria-hidden="true"></span><span class="finish-name">Moss</span><span class="finish-code">02</span>
+          </button>
+          <button class="finish-option" id="finish-coral" data-finish="coral" data-color="#ec5d3f" style="--swatch:#ec5d3f" type="button" aria-pressed="false">
+            <span class="swatch" aria-hidden="true"></span><span class="finish-name">Coral</span><span class="finish-code">03</span>
+          </button>
+        </nav>
+
+        <svg class="cursor-layer" id="cursor-layer" aria-hidden="true">
+          <defs>
+            <filter id="metaball" x="-45%" y="-45%" width="190%" height="190%" color-interpolation-filters="sRGB">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur" />
+              <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 23 -9" result="threshold" />
+              <feComposite in="SourceGraphic" in2="threshold" operator="atop" />
+            </filter>
+          </defs>
+          <g class="metaball-body" id="metaball-body" filter="url(#metaball)">
+            <path id="blob-bridge" fill="none" stroke="currentColor" stroke-width="13" stroke-linecap="round" d="M 0 0 L 0 0" />
+            <circle id="blob-target" cx="0" cy="0" r="9.5" />
+            <circle id="blob-tail" cx="0" cy="0" r="7.5" />
+            <circle id="blob-follow" cx="0" cy="0" r="9" />
+            <circle id="blob-lead" cx="0" cy="0" r="12" />
+          </g>
+          <circle class="target-core" id="target-core" cx="0" cy="0" r="2.2" />
+          <circle class="cursor-core" id="cursor-core" cx="0" cy="0" r="2.2" />
+        </svg>
+
+        <span class="cursor-hint" id="cursor-hint">Human input required</span>
+      </section>
+      <span class="library-badge">Motion · SVG metaball</span>
+      <span class="scene-caption">liquid cursor proves target intent</span>
+    </main>
+    <script type="module" src="./src/metaball-blob-cursor-demo.js"></script>
+  </body>
+</html>

@@ -2400,16 +2400,16 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "pickable-extruded-data-columns",
-    "name": "Pickable extruded data columns",
-    "nameZh": "可拾取挤出数据柱",
+    "name": "Human-retained civic load columns",
+    "nameZh": "真人留存的城市负载数据柱",
     "category": "webgl",
     "sourceUrl": "https://github.com/visgl/deck.gl",
-    "difference": "GPU 实例柱以数据高度编码并通过真实 picking 返回对象；多图表启动是二维时序。",
+    "difference": "25 个命名城区与真实 MW 数值同时决定 3D 柱高和负载分档；真人旋转视角后通过面多边形拾取候选，显式 Keep 才保留城区结论。",
     "behavior": {
-      "trigger": "hover/drag",
-      "response": "Pick instanced data columns, elevate the active mark, and update a tooltip",
-      "timing": "continuous camera plus discrete GPU picking",
-      "layer": "deck.gl WebGL layer"
+      "trigger": "trusted hover, geometric pick, captured camera drag, keyboard navigation, and explicit keep",
+      "response": "Project data-driven 3D columns, hit-test their real face polygons, revise the camera, and retain one district",
+      "timing": "direct human camera and selection transactions with no automatic orbit",
+      "layer": "full-stage p5 Civic Grid 09:00 load matrix"
     },
     "implementation": {
       "projectId": "processing-p5-js",
@@ -2420,21 +2420,21 @@ export const effectExpansion100Specs = [
       "referenceUrl": "https://github.com/visgl/deck.gl"
     },
     "scores": {
-      "creativity": 16,
-      "artDirection": 18,
-      "motion": 18,
+      "creativity": 19,
+      "artDirection": 20,
+      "motion": 19,
       "clarity": 15,
       "inspiration": 14,
-      "evidence": 9,
-      "total": 90
+      "evidence": 10,
+      "total": 97
     },
-    "rationaleZh": "数据高度、相机和 GPU 拾取构成独立三维可视化交互。",
+    "rationaleZh": "25 个唯一 datum、33–96 MW 数值映射、100 个带身份的可拾取面与候选/留存分离，把等距柱群变成可复核的城市负载审阅工具。",
     "batch": "C",
-    "demo": "36 根城市信号柱在深色平面上生长，悬停单柱升起并显示名称。",
-    "capture": "orbit 20°→hover 三柱→停在最高柱→leave 清除。",
+    "demo": "在 Civic Grid 的 09:00 城市负载矩阵中，真人旋转视角、拾取 Civic Core 并保留，检查 Foundry 候选仍不覆盖旧留存，Undo/Reset 后用键盘选中并保留 Tech Park。",
+    "capture": "首帧静止→从实时安全空点捕获拖拽相机→读取实时投影并拾取 Civic Core→Keep→悬停 Foundry 验证候选/留存分离→Undo→Reset→键盘选择 Tech Park 与调整相机→Enter Keep→停在 v2 留存；断言数据映射、100 面 picking 与零自动相机。",
     "risk": {
       "level": "medium",
-      "detail": "必须是真实 picking；用 DOM 热区模拟命中不合格。"
+      "detail": "必须由数值驱动柱高/颜色并由实际投影面多边形完成 datum picking；禁止 DOM 热区、自动相机、自动轮换选择或装饰位图冒充数据证据。"
     },
     "observedImplementation": {
       "projectId": "visgl-deck-gl",

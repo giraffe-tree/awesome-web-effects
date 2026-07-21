@@ -1,1 +1,239 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p5.js — Pickable Extruded Data Columns</title><link rel="stylesheet" href="./shared.css"><style>:root{--preview-background:#0b0b12}#column-host{position:absolute;inset:0;cursor:crosshair}#column-host canvas{width:100%!important;height:100%!important}.column-copy{position:absolute;z-index:5;left:13px;top:47px;color:#fff8e8;pointer-events:none}.column-copy small{font:800 6px/1 ui-monospace;letter-spacing:.16em;color:#ffca63}.column-copy h1{width:94px;margin:8px 0 0;font:950 18px/.84 system-ui;letter-spacing:-.055em}.column-tip{position:absolute;z-index:5;right:11px;top:11px;padding:6px 7px;border:1px solid #ffca635c;color:#ffda8e;background:#0b0b12cc;font:800 6px/1.35 ui-monospace}.library-badge{background:#0b0b12c9}</style></head><body><main class="preview-stage" data-preview-mechanism="isometric-column-picking"><div id="column-host" tabindex="0" aria-label="Move across the extruded columns or use arrow keys to pick a signal"></div><section class="column-copy"><small>SIGNAL FIELD / 36</small><h1>PICK THE TALLEST PULSE.</h1></section><output class="column-tip" id="column-tip">CITY —<br>VALUE 00</output><span class="library-badge">p5.js · geometric picking</span><span class="scene-caption">polygon hit test elevates one extruded datum</span></main><script type="module" src="./src/pickable-extruded-data-columns-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>p5.js — Pickable Extruded Data Columns</title>
+    <link rel="stylesheet" href="./shared.css">
+    <style>
+      :root {
+        --preview-background: #ebe8de;
+        --ink: #151816;
+        --muted: #6d746e;
+        --paper: #f5f2e9;
+        --green: #3f8d72;
+        --violet: #7564d9;
+        --coral: #f36f56;
+        color-scheme: light;
+      }
+
+      button { font: inherit; }
+
+      .preview-stage {
+        background:
+          radial-gradient(circle at 80% 18%, rgba(117, 100, 217, .15), transparent 30%),
+          linear-gradient(150deg, #f6f2e8, #e4e0d5);
+        color: var(--ink);
+      }
+
+      #column-host,
+      #column-host canvas {
+        position: absolute;
+        inset: 0;
+        width: 100% !important;
+        height: 100% !important;
+      }
+      #column-host { z-index: 1; outline: none; touch-action: none; cursor: crosshair; }
+      #column-host canvas { pointer-events: none; }
+      #column-host:focus-visible::after {
+        content: "";
+        position: absolute;
+        inset: 31px 4px 44px;
+        border: 2px solid rgba(63, 141, 114, .5);
+        border-radius: 9px;
+        pointer-events: none;
+      }
+
+      .topbar {
+        position: absolute;
+        z-index: 8;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 29px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 9px 0 12px;
+        border-bottom: 1px solid rgba(21, 24, 22, .14);
+        background: rgba(245, 242, 233, .7);
+        backdrop-filter: blur(9px);
+      }
+
+      .brand,
+      .dataset,
+      .eyebrow,
+      .candidate-label,
+      .kept-label,
+      .metric-label,
+      .toolbar button {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        text-transform: uppercase;
+        letter-spacing: .1em;
+      }
+      .brand { font-size: 6px; font-weight: 950; }
+      .brand i { color: var(--coral); font-style: normal; }
+      .dataset { margin-left: auto; margin-right: 6px; color: #7c827c; font-size: 4.5px; font-weight: 850; }
+      .toolbar { display: flex; gap: 3px; }
+      .toolbar button {
+        height: 19px;
+        min-width: 29px;
+        padding: 0 5px;
+        border: 1px solid rgba(21, 24, 22, .18);
+        border-radius: 4px;
+        background: rgba(250, 248, 241, .72);
+        color: #59605a;
+        cursor: pointer;
+        font-size: 4.5px;
+        font-weight: 900;
+      }
+      .toolbar button:hover,
+      .toolbar button:focus-visible { border-color: var(--green); outline: 2px solid rgba(63, 141, 114, .22); outline-offset: 1px; }
+      .toolbar button:disabled { opacity: .35; cursor: default; }
+      .toolbar .keep { border-color: #151816; background: #151816; color: #dff5a9; }
+
+      .readout {
+        position: absolute;
+        z-index: 6;
+        left: 11px;
+        top: 39px;
+        width: 91px;
+        height: 94px;
+        padding: 8px;
+        border: 1px solid rgba(21, 24, 22, .14);
+        border-radius: 8px;
+        background: rgba(250, 248, 241, .82);
+        box-shadow: 0 12px 32px rgba(44, 43, 37, .08);
+        backdrop-filter: blur(8px);
+        overflow: hidden;
+        pointer-events: none;
+      }
+      .eyebrow { color: #747b75; font-size: 4.5px; font-weight: 900; }
+      .readout h1 { margin: 5px 0 0; font-size: 12px; line-height: .9; letter-spacing: -.045em; }
+      .candidate-label { display: block; margin-top: 8px; color: #858b85; font-size: 4px; font-weight: 900; }
+      .datum-name { display: block; margin-top: 3px; font: 900 8px/.95 system-ui; }
+      .datum-value { display: inline-block; margin-top: 5px; color: var(--coral); font: 950 12px/1 ui-monospace, monospace; }
+      .datum-unit { color: #7b817b; font: 800 4.5px/1 ui-monospace, monospace; }
+      .readout[data-empty="true"] .datum-name { color: #8a908a; }
+      .readout[data-empty="true"] .datum-value { color: #9ca19c; }
+
+      .legend {
+        position: absolute;
+        z-index: 5;
+        right: 11px;
+        top: 39px;
+        display: flex;
+        gap: 6px;
+        color: #6f756f;
+        font: 800 4px/1 ui-monospace, monospace;
+        text-transform: uppercase;
+        letter-spacing: .07em;
+        pointer-events: none;
+      }
+      .legend span::before { content: ""; display: inline-block; width: 5px; height: 5px; margin-right: 3px; border-radius: 1px; background: var(--green); vertical-align: -1px; }
+      .legend span:nth-child(2)::before { background: var(--violet); }
+      .legend span:nth-child(3)::before { background: var(--coral); }
+
+      .kept-rail {
+        position: absolute;
+        z-index: 7;
+        left: 10px;
+        right: 10px;
+        bottom: 7px;
+        height: 34px;
+        display: grid;
+        grid-template-columns: 1.1fr 1fr;
+        align-items: center;
+        gap: 7px;
+        padding: 5px 8px;
+        border: 1px solid rgba(21, 24, 22, .14);
+        border-radius: 7px;
+        background: rgba(248, 246, 238, .9);
+        box-shadow: 0 9px 24px rgba(37, 37, 31, .09);
+      }
+      .kept-label,
+      .metric-label { display: block; color: #838983; font-size: 4px; font-weight: 900; }
+      .kept-value { display: block; margin-top: 3px; font: 900 5.6px/1 system-ui; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .view-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+      .view-metrics strong { display: block; margin-top: 3px; font: 900 5.5px/1 ui-monospace, monospace; }
+
+      .library-badge,
+      .scene-caption { display: none; }
+
+      @media (min-width: 500px) {
+        .topbar { height: 47px; padding: 0 22px; }
+        .brand { font-size: 10px; }
+        .dataset { margin-right: 15px; font-size: 7px; }
+        .toolbar { gap: 7px; }
+        .toolbar button { height: 32px; min-width: 56px; padding: 0 11px; border-radius: 7px; font-size: 7px; }
+        #column-host:focus-visible::after { inset: 53px 10px 90px; border-radius: 15px; }
+        .readout { left: 23px; top: 67px; width: 193px; height: auto; padding: 16px; border-radius: 15px; }
+        .eyebrow { font-size: 7px; }
+        .readout h1 { margin-top: 9px; font-size: 25px; }
+        .candidate-label { margin-top: 18px; font-size: 7px; }
+        .datum-name { margin-top: 7px; font-size: 16px; }
+        .datum-value { margin-top: 12px; font-size: 27px; }
+        .datum-unit { font-size: 8px; }
+        .legend { right: 24px; top: 68px; gap: 16px; font-size: 7px; }
+        .legend span::before { width: 9px; height: 9px; margin-right: 5px; }
+        .kept-rail { left: 22px; right: 22px; bottom: 16px; height: 64px; padding: 10px 16px; border-radius: 12px; }
+        .kept-label,
+        .metric-label { font-size: 7px; }
+        .kept-value { margin-top: 7px; font-size: 11px; }
+        .view-metrics strong { margin-top: 6px; font-size: 11px; }
+      }
+
+      @media (max-aspect-ratio: 4/5) {
+        .topbar { height: 38px; padding: 0 8px 0 10px; }
+        .brand { font-size: 6px; }
+        .dataset { position: absolute; top: 29px; left: 11px; margin: 0; font-size: 4px; }
+        .toolbar button { min-width: 28px; padding: 0 4px; }
+        #column-host:focus-visible::after { inset: 42px 4px 83px; }
+        .readout { top: 46px; width: 93px; height: 126px; }
+        .legend { top: 49px; right: 8px; display: grid; gap: 4px; }
+        .kept-rail { height: 68px; grid-template-columns: 1fr; gap: 5px; padding: 7px 9px; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="preview-stage" data-preview-mechanism="trusted-isometric-picking-with-explicit-retention">
+      <div id="column-host" tabindex="0" aria-label="City load matrix. Hover or use arrow keys to inspect columns; drag to orbit; use W A S D for camera; Keep explicitly retains a candidate."></div>
+
+      <header class="topbar">
+        <div class="brand"><i>■</i> CIVIC GRID / LOAD MAP</div>
+        <div class="dataset">09:00 SNAPSHOT · 25 DISTRICTS</div>
+        <div class="toolbar">
+          <button type="button" id="undo-selection" disabled>Undo</button>
+          <button type="button" id="reset-view">Reset</button>
+          <button type="button" class="keep" id="keep-datum" disabled>Keep</button>
+        </div>
+      </header>
+
+      <section class="readout" id="candidate-readout" data-empty="true" aria-live="polite">
+        <span class="eyebrow">Candidate / hover + pick</span>
+        <h1>District<br>load</h1>
+        <span class="candidate-label">Current datum</span>
+        <output class="datum-name" id="datum-name">Move over a column</output>
+        <output class="datum-value" id="datum-value">—</output>
+        <span class="datum-unit">MW / live demand</span>
+      </section>
+
+      <div class="legend"><span>Low &lt;45</span><span>Watch 45–69</span><span>Peak 70+</span></div>
+
+      <section class="kept-rail" aria-label="Retained city datum and camera state">
+        <div>
+          <span class="kept-label">Retained district</span>
+          <output class="kept-value" id="kept-value">No district kept</output>
+        </div>
+        <div class="view-metrics">
+          <div><span class="metric-label">Orbit</span><strong id="orbit-value">−37°</strong></div>
+          <div><span class="metric-label">Pitch</span><strong id="pitch-value">31°</strong></div>
+        </div>
+      </section>
+
+      <span class="library-badge">p5.js · deterministic geometric picking</span>
+      <span class="scene-caption">hover / focus / pick creates candidate · Keep retains</span>
+    </main>
+    <script type="module" src="./src/pickable-extruded-data-columns-demo.js"></script>
+  </body>
+</html>

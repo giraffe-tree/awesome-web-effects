@@ -1938,6 +1938,48 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press('ArrowRight')
             elif index == 33:
                 page.locator('#undo-action').click()
+        elif demo["id"] == "pickable-extruded-data-columns":
+            if index == 4:
+                host_box = page.locator('#column-host').bounding_box()
+                safe_point = page.evaluate("window.__PREVIEW_INTERACTION_STATE__.safeOrbitPoint")
+                orbit_x = host_box["x"] + safe_point["x"]
+                orbit_y = host_box["y"] + safe_point["y"]
+                page.mouse.move(orbit_x, orbit_y)
+                page.mouse.down()
+            elif 5 <= index <= 8:
+                progress = (index - 4) / 4
+                page.mouse.move(orbit_x + 28 * progress, orbit_y - 10 * progress)
+            elif index == 9:
+                page.mouse.up()
+            elif index == 11:
+                host_box = page.locator('#column-host').bounding_box()
+                target = page.evaluate("window.__PREVIEW_INTERACTION_STATE__.pickTargets[3]")
+                page.mouse.move(host_box["x"] + target["x"], host_box["y"] + target["y"])
+            elif index == 12:
+                page.mouse.down()
+                page.mouse.up()
+            elif index == 14:
+                page.locator('#keep-datum').click()
+            elif index == 16:
+                host_box = page.locator('#column-host').bounding_box()
+                target = page.evaluate("window.__PREVIEW_INTERACTION_STATE__.pickTargets[9]")
+                page.mouse.move(host_box["x"] + target["x"], host_box["y"] + target["y"])
+            elif index == 18:
+                page.locator('#undo-selection').click()
+            elif index == 20:
+                page.locator('#reset-view').click()
+            elif index == 22:
+                page.locator('#column-host').focus()
+                page.keyboard.press('ArrowRight')
+            elif index == 23:
+                page.keyboard.press('ArrowDown')
+            elif index == 24:
+                page.keyboard.press('a')
+            elif index == 25:
+                page.keyboard.press('w')
+            elif index == 27:
+                page.locator('#keep-datum').focus()
+                page.keyboard.press('Enter')
         elif demo["id"] == "gooey-pixel-cursor-wake":
             if index == 3:
                 box = page.locator('#pixel-wake-host').bounding_box()
@@ -7551,6 +7593,74 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or page.locator('#sample-readout').text_content() != "samples 009200 → 022400"
         ):
             raise RuntimeError(f"{demo['id']} did not capture a real human trim, finite pause/resume audition, and retained podcast cut: {interaction!r}")
+    elif demo["id"] == "pickable-extruded-data-columns":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        if (
+            not assertion
+            or interaction["id"] != "pickable-extruded-data-columns"
+            or interaction["productTask"] != "Inspect and explicitly retain one district from a deterministic 09:00 city demand matrix."
+            or interaction["library"] != "p5@2.3.0"
+            or interaction["renderer"] != "canvas2d"
+            or interaction["mechanism"] != "deterministic named data drives 3D column height/color; face polygons drive trusted geometric picking"
+            or interaction["assetStrategy"] != "code-native"
+            or "raster pixels would not participate" not in interaction["imageGenDecision"]
+            or interaction["automaticCamera"]
+            or interaction["automaticRotation"]
+            or interaction["automaticSelection"]
+            or interaction["automaticCycle"]
+            or interaction["automaticFallback"]
+            or not interaction["initialStillVerified"]
+            or interaction["dataSource"] != "CIVIC_GRID_0900_STATIC_V1"
+            or interaction["dataCount"] != 25
+            or interaction["uniqueDatumIdentityCount"] != 25
+            or interaction["dataChecksum"] != 22112
+            or interaction["minimumValue"] != 33
+            or interaction["maximumValue"] != 96
+            or not interaction["heightMappingVerified"]
+            or not interaction["colorMappingVerified"]
+            or interaction["columnGeometryCount"] != 25
+            or interaction["facePolygonCount"] != 100
+            or len(interaction["pickTargets"]) != 25
+            or interaction["projectedHeightChecksum"] != 426413
+            or interaction["phase"] != "retained"
+            or interaction["candidateIndex"] != 18
+            or interaction["retainedIndex"] != 18
+            or interaction["candidateId"] != "tech-park"
+            or interaction["retainedId"] != "tech-park"
+            or abs(interaction["camera"]["yaw"] - -.73) > .001
+            or abs(interaction["camera"]["pitch"] - .595) > .001
+            or interaction["trustedPointerInputCount"] != 2
+            or interaction["trustedKeyboardInputCount"] != 4
+            or interaction["trustedControlInputCount"] != 4
+            or interaction["syntheticRejectedCount"] != 0
+            or interaction["cameraDragCount"] != 1
+            or interaction["keyboardCameraCount"] != 2
+            or interaction["cameraMutationCount"] != 6
+            or interaction["pointerHoverCount"] != 2
+            or interaction["pointerPickCount"] != 1
+            or interaction["keyboardCandidateCount"] != 2
+            or interaction["pickTestCount"] != 4
+            or interaction["pickHitCount"] != 3
+            or interaction["pickMissCount"] != 1
+            or interaction["pickingMismatchCount"] != 0
+            or interaction["datumIdentityMismatchCount"] != 0
+            or interaction["candidateChangeCount"] != 4
+            or interaction["candidateRetainedSeparationCount"] != 5
+            or interaction["keepCount"] != 2
+            or interaction["retainVersion"] != 2
+            or interaction["undoCount"] != 1
+            or interaction["resetCount"] != 1
+            or interaction["prematureCommitCount"] != 0
+            or interaction["retainedChangeOutsideKeepCount"] != 0
+            or interaction["undoDepth"] != 1
+            or interaction["drawCount"] <= 0
+            or interaction["canvasCoverage"] < .98
+            or page.locator('#kept-value').text_content() != "Tech Park · 84 MW · kept v2"
+            or page.locator('#orbit-value').text_content() != "-42°"
+            or page.locator('#pitch-value').text_content() != "34°"
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture real 3D datum picking, camera revision, and explicitly retained Tech Park load: {interaction!r}")
     elif demo["id"] == "gooey-pixel-cursor-wake":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")

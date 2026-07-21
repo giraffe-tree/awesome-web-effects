@@ -1,40 +1,344 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Motion — Clip Shape Theme Reveal</title>
-  <link rel="stylesheet" href="./shared.css">
-  <style>
-    :root{--preview-background:#08111c}
-    .theme-stage,.theme-layer{position:absolute;inset:0}
-    .theme-stage{background:#08111c;color:#edf6ff}
-    .theme-layer{z-index:5;background:#f4ebd5;color:#242017;clip-path:circle(0 at 84% 22%)}
-    .theme-art{position:absolute;right:22px;bottom:19px;width:156px;height:103px;border:1px solid currentColor}
-    .theme-art:before,.theme-art:after{content:"";position:absolute;border:1px solid currentColor;border-radius:50%}
-    .theme-art:before{width:76px;height:76px;left:37px;top:13px}
-    .theme-art:after{width:112px;height:33px;left:19px;top:34px}
-    .theme-copy{position:absolute;z-index:4;left:14px;top:49px;pointer-events:none}
-    .theme-copy small{font:800 6px/1 ui-monospace;letter-spacing:.16em;opacity:.72}
-    .theme-copy h1{width:108px;margin:8px 0 0;font:950 18px/.84 system-ui;letter-spacing:-.055em}
-    .theme-layer .theme-copy{color:#242017}
-    .theme-layer .theme-copy small{color:#705c3f;opacity:1}
-    .theme-toggle{position:absolute;z-index:8;right:22px;top:18px;width:31px;height:31px;border:1px solid currentColor;border-radius:50%;background:transparent;color:inherit;font-size:13px;cursor:pointer}
-    .library-badge{background:#08111ccc}
-  </style>
-</head>
-<body>
-  <main class="preview-stage theme-stage" id="theme-stage" data-preview-mechanism="origin-aware-clip-theme-reveal">
-    <section class="theme-copy"><small>THEME TRANSITION / ORIGIN</small><h1>DAYLIGHT EXPANDS FROM THE CLICK.</h1></section>
-    <div class="theme-art"></div>
-    <div class="theme-layer" id="theme-layer">
-      <section class="theme-copy"><small>THEME TRANSITION / ORIGIN</small><h1>DAYLIGHT EXPANDS FROM THE CLICK.</h1></section>
-      <div class="theme-art"></div>
-    </div>
-    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">☼</button>
-    <span class="library-badge">Motion · clip-path theme reveal</span>
-    <span class="scene-caption">circle radius expands from invocation point</span>
-  </main>
-  <script type="module" src="./src/clip-shape-theme-reveal-demo.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Motion — Reader Mode Clip Reveal</title>
+    <link rel="stylesheet" href="./shared.css" />
+    <style>
+      :root {
+        --preview-background: #eee9dc;
+        --day-paper: #eee9dc;
+        --day-ink: #20251f;
+        --day-leaf: #47714e;
+        --night-paper: #09131b;
+        --night-panel: #101e28;
+        --night-ink: #e6edf0;
+        --amber: #f7b65c;
+        color-scheme: light;
+      }
+
+      * { box-sizing: border-box; }
+      button { font: inherit; }
+
+      .reader-stage,
+      .reader-mode {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+
+      .reader-stage {
+        color: var(--day-ink);
+        background: var(--day-paper);
+      }
+
+      .reader-mode {
+        background:
+          linear-gradient(90deg, rgba(32, 37, 31, .045) 1px, transparent 1px) 0 0 / 24px 100%,
+          linear-gradient(rgba(32, 37, 31, .04) 1px, transparent 1px) 0 0 / 100% 24px,
+          var(--day-paper);
+      }
+
+      .reader-mode--focus {
+        z-index: 5;
+        color: var(--night-ink);
+        background:
+          linear-gradient(90deg, rgba(230, 237, 240, .035) 1px, transparent 1px) 0 0 / 24px 100%,
+          linear-gradient(rgba(230, 237, 240, .028) 1px, transparent 1px) 0 0 / 100% 24px,
+          var(--night-paper);
+        clip-path: circle(0px at 84% 18%);
+      }
+
+      .reader-shell {
+        position: absolute;
+        top: 44px;
+        right: 10px;
+        bottom: 9px;
+        left: 10px;
+        display: grid;
+        grid-template-columns: minmax(74px, 31%) minmax(104px, 1fr) minmax(72px, 24%);
+        overflow: hidden;
+        border: 1px solid rgba(32, 37, 31, .17);
+        border-radius: 8px;
+        background: rgba(250, 248, 240, .72);
+        box-shadow: 0 14px 34px rgba(42, 43, 34, .1);
+      }
+
+      .reader-mode--focus .reader-shell {
+        border-color: rgba(230, 237, 240, .14);
+        background: rgba(10, 21, 29, .82);
+        box-shadow: 0 14px 34px rgba(0, 0, 0, .25);
+      }
+
+      .mode-image {
+        position: relative;
+        min-width: 0;
+        overflow: hidden;
+        background: #bdc5b4;
+      }
+
+      .mode-image img {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: calc(var(--crop-index) * -100%);
+        width: 200%;
+        height: 100%;
+        max-width: none;
+        object-fit: fill;
+      }
+
+      .mode-image::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, transparent 35%, rgba(22, 28, 22, .42));
+        pointer-events: none;
+      }
+
+      .image-caption {
+        position: absolute;
+        z-index: 2;
+        right: 7px;
+        bottom: 6px;
+        left: 7px;
+        color: white;
+        font: 850 clamp(6px, 1.15vw, 9px)/1.25 ui-monospace, monospace;
+        letter-spacing: .09em;
+        text-transform: uppercase;
+      }
+
+      .article-pane {
+        position: relative;
+        display: grid;
+        align-content: start;
+        gap: 5px;
+        min-width: 0;
+        padding: clamp(8px, 1.8vw, 15px);
+        background: rgba(255, 255, 255, .4);
+      }
+
+      .reader-mode--focus .article-pane { background: rgba(10, 20, 28, .58); }
+
+      .article-kicker,
+      .mode-status,
+      .tool-label,
+      .annotation,
+      .chapter-row,
+      .quiet-state,
+      .focus-index,
+      .switch-label {
+        font-size: clamp(6px, 1.15vw, 9px);
+        font-weight: 900;
+        letter-spacing: .11em;
+        text-transform: uppercase;
+      }
+
+      .article-kicker { color: var(--day-leaf); }
+      .reader-mode--focus .article-kicker { color: var(--amber); }
+
+      .article-title {
+        max-width: 290px;
+        font-family: Georgia, 'Times New Roman', serif;
+        font-size: clamp(13px, 3vw, 25px);
+        font-weight: 600;
+        line-height: .92;
+        letter-spacing: -.045em;
+      }
+
+      .article-lines {
+        display: grid;
+        gap: 3px;
+        margin-top: 2px;
+      }
+
+      .reading-line {
+        height: clamp(3px, .72vw, 6px);
+        border-radius: 999px;
+        background: rgba(32, 37, 31, .17);
+        transition: opacity .16s linear, background .16s linear;
+      }
+
+      .reading-line:nth-child(2) { width: 92%; }
+      .reading-line:nth-child(3) { width: 84%; }
+      .reading-line:nth-child(4) { width: 96%; }
+      .reading-line:nth-child(5) { width: 70%; }
+
+      .reader-mode--focus .reading-line { height: clamp(4px, .82vw, 7px); background: rgba(230, 237, 240, .13); }
+      .reader-mode--focus[data-focus-line="0"] .reading-line:not(:nth-child(1)),
+      .reader-mode--focus[data-focus-line="1"] .reading-line:not(:nth-child(2)),
+      .reader-mode--focus[data-focus-line="2"] .reading-line:not(:nth-child(3)),
+      .reader-mode--focus[data-focus-line="3"] .reading-line:not(:nth-child(4)),
+      .reader-mode--focus[data-focus-line="4"] .reading-line:not(:nth-child(5)) { opacity: .28; }
+      .reader-mode--focus[data-focus-line="0"] .reading-line:nth-child(1),
+      .reader-mode--focus[data-focus-line="1"] .reading-line:nth-child(2),
+      .reader-mode--focus[data-focus-line="2"] .reading-line:nth-child(3),
+      .reader-mode--focus[data-focus-line="3"] .reading-line:nth-child(4),
+      .reader-mode--focus[data-focus-line="4"] .reading-line:nth-child(5) { background: var(--amber); opacity: 1; }
+
+      .annotation {
+        align-self: end;
+        width: fit-content;
+        margin-top: auto;
+        padding: 4px 5px;
+        border-left: 2px solid var(--day-leaf);
+        color: rgba(32, 37, 31, .6);
+        background: rgba(71, 113, 78, .07);
+      }
+
+      .reader-tools {
+        display: grid;
+        align-content: start;
+        gap: 6px;
+        padding: clamp(7px, 1.5vw, 12px);
+        border-left: 1px solid rgba(32, 37, 31, .13);
+        background: rgba(238, 233, 220, .72);
+      }
+
+      .reader-mode--focus .reader-tools {
+        border-color: rgba(230, 237, 240, .1);
+        background: rgba(15, 30, 40, .84);
+      }
+
+      .mode-status { color: var(--day-leaf); }
+      .reader-mode--focus .mode-status { color: var(--amber); }
+      .tool-label { color: rgba(32, 37, 31, .42); }
+      .reader-mode--focus .tool-label { color: rgba(230, 237, 240, .42); }
+
+      .chapter-map { display: grid; gap: 5px; }
+      .chapter-row { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 4px; color: rgba(32, 37, 31, .6); }
+      .chapter-row::after { content: ""; height: 3px; border-radius: 99px; background: rgba(32, 37, 31, .11); box-shadow: inset calc(var(--fill) * 1px) 0 0 var(--day-leaf); }
+
+      .focus-tool { display: grid; gap: 6px; }
+      .focus-scale { display: grid; grid-template-columns: repeat(5, 1fr); gap: 3px; }
+      .focus-tick { height: 13px; border: 1px solid rgba(230, 237, 240, .15); border-radius: 3px; background: rgba(230, 237, 240, .03); }
+      .focus-tick[data-active="true"] { border-color: var(--amber); background: rgba(247, 182, 92, .2); }
+      .quiet-state { color: rgba(230, 237, 240, .62); line-height: 1.35; }
+      .focus-index { color: var(--amber); }
+
+      .theme-switcher {
+        position: absolute;
+        z-index: 12;
+        top: 9px;
+        right: 10px;
+        display: flex;
+        gap: 3px;
+        padding: 3px;
+        border: 1px solid rgba(32, 37, 31, .2);
+        border-radius: 999px;
+        background: rgba(245, 242, 231, .84);
+        box-shadow: 0 5px 20px rgba(21, 25, 21, .1);
+        backdrop-filter: blur(10px);
+      }
+
+      .theme-choice {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        min-height: 23px;
+        padding: 0 8px;
+        border: 0;
+        border-radius: 999px;
+        color: rgba(32, 37, 31, .58);
+        background: transparent;
+        cursor: pointer;
+        outline: none;
+      }
+
+      .theme-choice::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+      .theme-choice[aria-pressed="true"] { color: white; background: #26332a; }
+      .theme-choice[data-theme-target="focus"][aria-pressed="true"] { background: #142634; }
+      .theme-choice:focus-visible { box-shadow: 0 0 0 2px var(--amber); }
+
+      .transition-readout {
+        position: absolute;
+        z-index: 11;
+        top: 13px;
+        left: clamp(135px, 27vw, 208px);
+        color: rgba(32, 37, 31, .5);
+        font: 850 clamp(6px, 1vw, 8px)/1 ui-monospace, monospace;
+        letter-spacing: .09em;
+        text-transform: uppercase;
+        pointer-events: none;
+      }
+
+      .reader-stage[data-theme="focus"] .transition-readout { color: rgba(230, 237, 240, .56); }
+      .library-badge { color: var(--day-ink); background: rgba(245, 242, 231, .9); border-color: rgba(32, 37, 31, .18); }
+      .reader-stage[data-theme="focus"] ~ .library-badge { color: var(--night-ink); background: rgba(9, 19, 27, .88); }
+      .scene-caption { display: none; }
+
+      @media (max-width: 430px) and (max-height: 250px) {
+        .switch-label { display: none; }
+        .theme-choice { width: 24px; justify-content: center; padding: 0; }
+        .transition-readout {
+          left: 174px;
+          width: 66px;
+          overflow: hidden;
+          white-space: nowrap;
+        }
+      }
+
+      @media (max-aspect-ratio: 4 / 5) {
+        .reader-shell {
+          top: 46px;
+          grid-template-columns: 1fr;
+          grid-template-rows: 31% 44% 25%;
+        }
+        .reader-tools { border-top: 1px solid rgba(32, 37, 31, .13); border-left: 0; }
+        .reader-mode--focus .reader-tools { border-color: rgba(230, 237, 240, .1); }
+        .chapter-map { grid-template-columns: repeat(3, 1fr); }
+        .annotation { margin-top: 2px; }
+        .transition-readout { top: 38px; left: 12px; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="preview-stage">
+      <section class="reader-stage" id="reader-stage" data-preview-mechanism="trusted-origin-aware-finite-clip-theme-reveal-with-functional-reader-mode-swap" data-theme="research" data-phase="waiting">
+        <section class="reader-mode reader-mode--research" id="research-mode" data-reader-mode="research">
+          <article class="reader-shell">
+            <figure class="mode-image"><img src="./assets/clip-shape-theme-reveal/reader-mode-diptych.jpg" alt="Daylight research desk beside a garden window" style="--crop-index:0" draggable="false" /><figcaption class="image-caption">Field notes · daylight source</figcaption></figure>
+            <section class="article-pane">
+              <span class="article-kicker">Chapter 04 · Living systems</span>
+              <h1 class="article-title">The garden remembers every visitor.</h1>
+              <div class="article-lines" aria-label="Article excerpt"><span class="reading-line"></span><span class="reading-line"></span><span class="reading-line"></span><span class="reading-line"></span><span class="reading-line"></span></div>
+              <aside class="annotation">3 annotations visible</aside>
+            </section>
+            <aside class="reader-tools">
+              <output class="mode-status">Research mode</output>
+              <span class="tool-label">Chapter map</span>
+              <div class="chapter-map"><span class="chapter-row" style="--fill:22">01</span><span class="chapter-row" style="--fill:38">02</span><span class="chapter-row" style="--fill:55">03</span></div>
+            </aside>
+          </article>
+        </section>
+
+        <section class="reader-mode reader-mode--focus" id="focus-mode" data-reader-mode="focus" data-focus-line="2" aria-hidden="true">
+          <article class="reader-shell">
+            <figure class="mode-image"><img src="./assets/clip-shape-theme-reveal/reader-mode-diptych.jpg" alt="Night reading desk lit by one amber task lamp" style="--crop-index:1" draggable="false" /><figcaption class="image-caption">Quiet desk · low-glare source</figcaption></figure>
+            <section class="article-pane">
+              <span class="article-kicker">Chapter 04 · Focus passage</span>
+              <h1 class="article-title">Read one line at the speed of attention.</h1>
+              <div class="article-lines" aria-label="Focus passage"><span class="reading-line"></span><span class="reading-line"></span><span class="reading-line"></span><span class="reading-line"></span><span class="reading-line"></span></div>
+              <aside class="annotation" hidden>Annotations hidden</aside>
+            </section>
+            <aside class="reader-tools">
+              <output class="mode-status">Focus mode</output>
+              <span class="tool-label">Line focus · ↑ ↓</span>
+              <div class="focus-tool"><div class="focus-scale"><span class="focus-tick"></span><span class="focus-tick"></span><span class="focus-tick" data-active="true"></span><span class="focus-tick"></span><span class="focus-tick"></span></div><output class="focus-index" id="focus-index">Line 03 / 05</output><span class="quiet-state">Annotations hidden<br />Wide leading enabled</span></div>
+            </aside>
+          </article>
+        </section>
+
+        <nav class="theme-switcher" aria-label="Reader mode">
+          <button class="theme-choice" id="theme-research" data-theme-target="research" type="button" aria-pressed="true"><span class="switch-label">Research</span></button>
+          <button class="theme-choice" id="theme-focus" data-theme-target="focus" type="button" aria-pressed="false"><span class="switch-label">Focus</span></button>
+        </nav>
+        <output class="transition-readout" id="transition-readout">Research · annotations on</output>
+      </section>
+      <span class="library-badge">Motion · reader mode clip</span>
+      <span class="scene-caption">new mode expands from the human invocation point and withdraws to it</span>
+    </main>
+    <script type="module" src="./src/clip-shape-theme-reveal-demo.js"></script>
+  </body>
 </html>

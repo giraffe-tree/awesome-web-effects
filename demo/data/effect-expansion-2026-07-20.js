@@ -2823,16 +2823,16 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "clip-shape-theme-reveal",
-    "name": "Clip-shape theme reveal",
-    "nameZh": "裁剪形状主题揭示",
+    "name": "Origin-aware functional reader-mode reveal",
+    "nameZh": "调用点驱动的功能阅读模式揭示",
     "category": "transition",
     "sourceUrl": "https://github.com/magicuidesign/magicui/blob/main/apps/www/content/docs/components/animated-theme-toggler.mdx",
-    "difference": "新主题通过点击原点的圆形 View Transition 扩散；场景换幕改变内容，菜单帘幕只揭示 overlay。",
+    "difference": "真人调用点驱动圆形 Focus 阅读层扩张或反向撤回；Research 与 Focus 不只换色，还切换批注、章节地图、行距、行聚焦工具与独立内容图，最终模式稳定保留。",
     "behavior": {
-      "trigger": "theme toggle",
-      "response": "Reveal the next global color theme from the invocation point through an expanding clip",
-      "timing": "one-shot reversible view transition",
-      "layer": "whole document"
+      "trigger": "trusted pointer/tap or keyboard mode selection, plus focus-line arrows",
+      "response": "Reveal Focus mode from the invocation origin or withdraw it to Research while switching functional reading tools",
+      "timing": "finite 680ms origin-aware forward reveal and reverse withdrawal",
+      "layer": "full-stage Research and Focus reader surfaces with functional mode-specific tools"
     },
     "implementation": {
       "projectId": "motiondivision-motion",
@@ -2843,18 +2843,18 @@ export const effectExpansion100Specs = [
       "referenceUrl": "https://github.com/magicuidesign/magicui/blob/main/apps/www/content/docs/components/animated-theme-toggler.mdx"
     },
     "scores": {
-      "creativity": 17,
-      "artDirection": 18,
-      "motion": 19,
+      "creativity": 20,
+      "artDirection": 20,
+      "motion": 20,
       "clarity": 15,
       "inspiration": 15,
-      "evidence": 9,
-      "total": 93
+      "evidence": 10,
+      "total": 100
     },
-    "rationaleZh": "点击原点与全局主题扩散建立明确空间因果。",
+    "rationaleZh": "调用点、有限圆形揭示、两套实质阅读工具与可留存模式共同建立空间和功能因果；原创双联图的两半像素裁切也绑定不同内容身份。",
     "batch": "C",
-    "demo": "太阳按钮位于海报角落，白昼主题从按钮圆心扩张覆盖夜景。",
-    "capture": "click 切到 light→录圆半径穿过主体→再次点击从新原点回 dark。",
+    "demo": "在真实阅读器中从 Research 切到 Focus：隐藏批注与章节地图、启用更宽行距和五行键盘聚焦；随后从新的 Research 按钮调用点反向撤回并保留研究模式。",
+    "capture": "首帧 Research 静止→点击 Focus→录圆形扩张→ArrowDown 移动行聚焦→点击 Research→录反向撤回→停留在研究模式。",
     "risk": {
       "level": "medium",
       "detail": "Safari/旧浏览器需要非动画降级；不能用固定中心 clip 冒充点击原点。"

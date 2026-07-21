@@ -1633,6 +1633,17 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press('Enter')
             elif 31 <= index <= 35:
                 page.wait_for_timeout(120)
+        elif demo["id"] == "clip-shape-theme-reveal":
+            if index == 4:
+                page.locator('#theme-focus').click()
+            elif 5 <= index <= 12:
+                page.wait_for_timeout(100)
+            elif index == 15:
+                page.keyboard.press('ArrowDown')
+            elif index == 19:
+                page.locator('#theme-research').click()
+            elif 20 <= index <= 27:
+                page.wait_for_timeout(100)
         elif demo["id"] == "gooey-pixel-cursor-wake":
             if index == 3:
                 box = page.locator('#pixel-wake-host').bounding_box()
@@ -6083,6 +6094,86 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["geometryMeasureCount"] <= 0
         ):
             raise RuntimeError(f"{demo['id']} did not capture a real retained pixel-evidenced FST-09 defect annotation after reselect and undo: {interaction!r}")
+    elif demo["id"] == "clip-shape-theme-reveal":
+        interaction = page.evaluate("window.__READER_THEME_STATE__")
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        pixel_signatures = interaction["imageCropPixelSignatures"]
+        transition_signature = [(record["direction"], record["from"], record["to"]) for record in interaction["transitionRecords"]]
+        if (
+            not assertion
+            or interaction["task"] != "human-switches-between-functional-research-and-focus-reader-modes-through-an-origin-aware-finite-clip-reveal-and-withdrawal"
+            or interaction["claimedLibrary"] != "motion@12.42.2"
+            or interaction["mechanism"] != "trusted-click-tap-or-keyboard-selection-computes-the-invocation-origin-and-finite-motion-radius-needed-to-cover-or-withdraw-the-focus-reader-layer"
+            or interaction["assetStrategy"] != "one-imagegen-diptych-provides-two-distinct-functional-reader-mode-crops-verified-by-runtime-pixel-signatures"
+            or interaction["assetGenerationTool"] != "openai-built-in-imagegen"
+            or interaction["assetSha256"] != "03b7131211b5d53c9106c670b82228b22857e5ca4d8c055ca6f1e3f10c73d054"
+            or interaction["automaticDayNightCycle"]
+            or interaction["automaticThemeSelection"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticTimeline"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or interaction["previewClockMutationCount"] != 0
+            or interaction["phase"] != "retained"
+            or interaction["selectedTheme"] != "research"
+            or interaction["previousTheme"] != "focus"
+            or interaction["targetTheme"] != "research"
+            or interaction["transitioning"]
+            or not interaction["resultHeld"]
+            or not interaction["resultValidated"]
+            or interaction["inputCount"] != 3
+            or interaction["trustedInputCount"] != 3
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["pointerThemeInputCount"] != 2
+            or interaction["keyboardThemeInputCount"] != 0
+            or interaction["keyboardFocusInputCount"] != 1
+            or interaction["originSource"] != "trusted-pointer-invocation"
+            or not interaction["originInsideStage"]
+            or interaction["clipRadius"] != 0
+            or interaction["clipProgress"] != 1
+            or interaction["transitionStartCount"] != 2
+            or interaction["transitionCompleteCount"] != 2
+            or interaction["themeChangeCount"] != 2
+            or interaction["motionControlCount"] != 2
+            or interaction["motionStartCount"] != 2
+            or interaction["motionCompleteCount"] != 2
+            or interaction["forwardRevealCount"] != 1
+            or interaction["reverseWithdrawCount"] != 1
+            or interaction["focusLineIndex"] != 3
+            or interaction["focusLineChangeCount"] != 1
+            or interaction["focusModeEngagementCount"] != 1
+            or len(interaction["transitionRecords"]) != 2
+            or transition_signature != [("forward-reveal", "research", "focus"), ("reverse-withdraw", "focus", "research")]
+            or not all(record["trusted"] and record["completed"] and record["retained"] for record in interaction["transitionRecords"])
+            or page.locator('#focus-mode').get_attribute('aria-hidden') != "true"
+            or interaction["researchAnnotationCount"] != 1
+            or interaction["researchChapterMapCount"] != 3
+            or interaction["researchLineCount"] != 5
+            or interaction["focusAnnotationCount"] != 0
+            or interaction["focusToolCount"] != 1
+            or interaction["focusLineCount"] != 5
+            or interaction["focusLineHeight"] <= interaction["researchLineHeight"]
+            or not interaction["functionalDifferenceValidated"]
+            or not interaction["imageReady"]
+            or interaction["imageNaturalWidth"] != 1200
+            or interaction["imageNaturalHeight"] != 800
+            or interaction["imageAspectRatio"] != 1.5
+            or interaction["imageReferenceCount"] != 2
+            or interaction["imageCropIndices"] != [0, 1]
+            or len(pixel_signatures) != 2
+            or len(set(pixel_signatures)) != 2
+            or any(len(signature.rsplit(':', 1)[-1]) != 8 or any(character not in "0123456789abcdef" for character in signature.rsplit(':', 1)[-1]) for signature in pixel_signatures)
+            or abs(interaction["researchWidth"] - interaction["stageWidth"]) > 1
+            or abs(interaction["researchHeight"] - interaction["stageHeight"]) > 1
+            or abs(interaction["focusWidth"] - interaction["stageWidth"]) > 1
+            or abs(interaction["focusHeight"] - interaction["stageHeight"]) > 1
+            or interaction["layerCoverageX"] < .995
+            or interaction["layerCoverageY"] < .995
+            or not interaction["initialStillVerified"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a real origin-aware round trip between functionally distinct Research and Focus reader modes: {interaction!r}")
     elif demo["id"] == "gooey-pixel-cursor-wake":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")

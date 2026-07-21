@@ -1,2 +1,66 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Motion — Scrubbed Word Blur Rotate Reveal</title><link rel="stylesheet" href="./shared.css"><style>
-:root{--preview-background:#eee9dd;color-scheme:light}.word-stage{position:absolute;inset:0;padding:45px 16px 20px;color:#191d19}.word-stage small{font:800 6px/1 ui-monospace;letter-spacing:.13em}.word-line{display:flex;flex-wrap:wrap;gap:0 7px;width:286px;margin:16px 0 0;font:950 28px/.88 system-ui;letter-spacing:-.065em}.word-line span{display:inline-block;transform-origin:left bottom}.word-line .accent{color:#f05c48}.scrub-rail{position:absolute;left:17px;right:17px;bottom:17px;height:2px;background:#1f281f25}.scrub-rail i{display:block;width:100%;height:100%;background:#222c24;transform:scaleX(0);transform-origin:left}.library-badge{color:#202720;background:#faf5e8dc;border-color:#20272020}.scene-caption{display:none}</style></head><body><main class="preview-stage"><div class="word-stage" id="word-stage" data-preview-mechanism="motion-word-scrub" tabindex="0" aria-label="Scroll or use arrow keys to scrub the word reveal"><small>SCROLL / SENTENCE</small><h1 class="word-line"><span>MAKE</span><span>THE</span><span class="accent">COMPLEX</span><span>FEEL</span><span>SIMPLE.</span></h1><div class="scrub-rail"><i id="word-progress"></i></div></div><span class="library-badge">Motion · word scrub</span></main><script type="module" src="./src/scrubbed-word-blur-rotate-reveal-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Motion — Human-scrubbed Report Conclusion</title>
+  <link rel="stylesheet" href="./shared.css">
+  <style>
+    :root{--preview-background:#eee9dd;color-scheme:light}
+    .preview-stage{overflow:hidden;background:#eee9dd;color:#172019}
+    .word-stage{position:absolute;inset:0;padding:43px 15px 25px;outline:0;touch-action:none;cursor:ns-resize;user-select:none}
+    .word-stage:focus-visible{box-shadow:inset 0 0 0 2px #ef5a43}
+    .report-meta{display:flex;align-items:center;gap:7px;color:#647067;font:800 5.5px/1 ui-monospace;letter-spacing:.13em;text-transform:uppercase}
+    .report-meta i{width:15px;height:1px;background:#ef5a43}
+    .word-line{display:flex;align-content:flex-start;flex-wrap:wrap;gap:1px 6px;max-width:288px;margin:13px 0 0;font:900 20px/.91 system-ui;letter-spacing:-.055em}
+    .word-line span{display:inline-block;transform-origin:left bottom;will-change:transform,filter,opacity}
+    .word-line .accent{color:#ef5a43}
+    .reader-foot{position:absolute;left:15px;right:15px;bottom:13px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:8px}
+    .chapter-label,.progress-label{color:#667168;font:800 5px/1 ui-monospace;letter-spacing:.1em;text-transform:uppercase}
+    .scrub-rail{height:2px;overflow:hidden;background:#19251b22}
+    .scrub-rail i{display:block;width:100%;height:100%;background:#172019;transform:scaleX(0);transform-origin:left}
+    .chapter-dots{position:absolute;left:50%;bottom:8px;display:flex;gap:4px;transform:translateX(-50%)}
+    .chapter-dots i{width:3px;height:3px;border-radius:50%;background:#18211a2b}
+    .chapter-dots i[data-active="true"]{background:#ef5a43}
+    .reader-state{position:absolute;z-index:3;right:10px;top:10px;display:flex;align-items:center;gap:6px;padding:5px 7px;border:1px solid #1720191c;border-radius:99px;background:#faf6ebcc;backdrop-filter:blur(6px);color:#334036;font:800 5.5px/1 ui-monospace;letter-spacing:.1em;text-transform:uppercase;pointer-events:none}
+    .reader-state i{width:4px;height:4px;border-radius:50%;background:#a2aaa3}
+    .reader-state[data-complete="true"] i{background:#ef5a43;box-shadow:0 0 0 2px #ef5a4320}
+    .library-badge{color:#202720;background:#faf5e8dc;border-color:#20272020}
+    .scene-caption{display:none}
+    @media (min-width:500px){
+      .word-stage{padding:86px 30px 47px}
+      .report-meta{font-size:10px;gap:12px}.report-meta i{width:30px}
+      .word-line{max-width:660px;margin-top:25px;gap:3px 12px;font-size:43px}
+      .reader-foot{left:30px;right:30px;bottom:27px;gap:16px}
+      .chapter-label,.progress-label{font-size:8px}.scrub-rail{height:3px}
+      .reader-state{right:20px;top:18px;padding:8px 11px;font-size:9px}
+    }
+    @media (orientation:portrait){
+      .word-stage{padding:52px 15px 43px}
+      .word-line{max-width:210px;margin-top:25px;gap:2px 7px;font-size:25px;line-height:.92}
+      .reader-foot{bottom:25px}
+      .chapter-dots{bottom:12px}
+      .reader-state span{display:none}.reader-state{padding:6px;min-width:0}
+    }
+  </style>
+</head>
+<body>
+  <main class="preview-stage" id="word-reader-stage">
+    <article class="word-stage" id="word-stage" data-preview-mechanism="motion-trusted-word-order-scrub" tabindex="0" role="region" aria-label="Report conclusion reader. Scroll, drag upward, or use arrow keys to reveal the sentence word by word.">
+      <div class="report-meta"><i></i><span>Field note 04 / Conclusion</span></div>
+      <h1 class="word-line" id="word-line">
+        <span>TEAMS</span><span>MOVED</span><span class="accent">FASTER</span><span>WHEN</span><span>EVERY</span><span>HANDOFF</span><span>ENDED</span><span>WITH</span><span>ONE</span><span>VISIBLE,</span><span>SHARED</span><span>DECISION.</span>
+      </h1>
+      <div class="reader-foot">
+        <span class="chapter-label" id="chapter-label">01 · SIGNAL</span>
+        <div class="scrub-rail" aria-hidden="true"><i id="word-progress"></i></div>
+        <span class="progress-label" id="progress-label">00%</span>
+      </div>
+      <div class="chapter-dots" aria-hidden="true"><i data-active="true"></i><i></i><i></i></div>
+    </article>
+    <div class="reader-state" id="reader-state" data-complete="false" aria-live="polite"><i></i><span id="reader-state-label">Scroll to read</span></div>
+    <span class="library-badge">Motion · human word scrub</span>
+  </main>
+  <script type="module" src="./src/scrubbed-word-blur-rotate-reveal-demo.js"></script>
+</body>
+</html>

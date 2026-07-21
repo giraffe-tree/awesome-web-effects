@@ -1553,6 +1553,11 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.wheel(0, -38)
             elif index == 35:
                 page.locator('#reset-control').click()
+        elif demo["id"] == "scrubbed-word-blur-rotate-reveal":
+            if index == 1:
+                page.mouse.move(160, 110)
+            elif index in {3, 5, 7, 9, 11, 13, 15, 17}:
+                page.mouse.wheel(0, 70)
         elif demo["id"] == "gooey-pixel-cursor-wake":
             if index == 3:
                 box = page.locator('#pixel-wake-host').bounding_box()
@@ -5629,6 +5634,61 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["lastInputTrusted"] is not True
         ):
             raise RuntimeError(f"{demo['id']} did not capture trusted slow/fast signed wheel velocity, two opposed captured drags, keyboard impulses, repeated reversal, inertia, and exact reset on the real Motion rail: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "scrubbed-word-blur-rotate-reveal":
+        interaction = page.evaluate("window.__SCRUBBED_WORD_REVEAL_STATE__")
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        expected_words = ["TEAMS", "MOVED", "FASTER", "WHEN", "EVERY", "HANDOFF", "ENDED", "WITH", "ONE", "VISIBLE,", "SHARED", "DECISION."]
+        if (
+            not assertion
+            or interaction["task"] != "human-scrubs-field-note-conclusion-to-stable-readable-copy"
+            or interaction["claimedLibrary"] != "motion@12.42.2"
+            or interaction["mechanism"] != "paused-motion-word-controls-map-trusted-wheel-drag-or-keyboard-progress-to-ordered-blur-rotate-reveal-and-retain-the-human-selected-reading-position"
+            or interaction["assetStrategy"] != "dom-typography-and-motion-filters-no-functional-raster-input-required"
+            or interaction["causality"] != "trusted-human-input-directly-controls-progress"
+            or interaction["automaticPlayback"]
+            or interaction["automaticProgress"]
+            or interaction["automaticReset"]
+            or interaction["automaticFallback"]
+            or not interaction["previewClockIgnored"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["inputCount"] != 8
+            or interaction["trustedInputCount"] != 8
+            or interaction["wheelInputCount"] != 8
+            or interaction["progressInputCount"] != 8
+            or interaction["pointerInputCount"] != 0
+            or interaction["keyboardInputCount"] != 0
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["untrustedMutationCount"] != 0
+            or interaction["progressMutationCount"] != 8
+            or interaction["progress"] != 1
+            or interaction["progressPercent"] != 100
+            or interaction["minimumProgress"] != 0
+            or interaction["maximumProgress"] != 1
+            or interaction["phase"] != "complete-retained"
+            or interaction["result"] != "field-note-conclusion-fully-readable"
+            or not interaction["resultRetained"]
+            or not interaction["complete"]
+            or interaction["completionCount"] != 1
+            or interaction["currentChapter"] != 3
+            or interaction["wordCount"] != 12
+            or interaction["revealedWordCount"] != 12
+            or interaction["completedWordCount"] != 12
+            or interaction["wordOrder"] != expected_words
+            or not interaction["wordOrderVerified"]
+            or any(progress != 1 for progress in interaction["wordProgress"])
+            or len(interaction["inputRecords"]) != 8
+            or not all(record["trusted"] and record["source"] == "wheel" and record["category"] == "progress" and record["mutated"] and record["progressBefore"] != record["progressAfter"] for record in interaction["inputRecords"])
+            or interaction["firstMutationBefore"] != 0
+            or interaction["firstMutationAfter"] != .125
+            or not interaction["initialStillVerified"]
+            or not interaction["initialSignature"].startswith("0.0000:")
+            or interaction["surfaceCoverageRatio"] < .995
+            or not interaction["fullStageGeometryVerified"]
+            or not interaction["motionControlsReady"]
+            or not interaction["fontsReady"]
+            or not interaction["ready"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a real retained human-scrubbed field-note conclusion: {interaction!r}")
     elif demo["id"] == "gooey-pixel-cursor-wake":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")

@@ -1648,16 +1648,16 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "scrubbed-word-blur-rotate-reveal",
-    "name": "Scrubbed word blur-and-rotate reveal",
-    "nameZh": "擦洗式逐词模糊旋转揭示",
+    "name": "Human-scrubbed field-note conclusion",
+    "nameZh": "真人擦洗的现场报告结论",
     "category": "scroll",
     "sourceUrl": "https://github.com/DavidHDev/react-bits/blob/main/public/r/ScrollReveal-TS-TW.json",
-    "difference": "每个词把滚动映射到 opacity、blur、rotation；现有文档生成改变行存在状态，sticky ink 只改颜色。",
+    "difference": "真人滚轮、拖拽或键盘把阅读进度直接映射到 12 个词的 opacity、blur 与 rotation，并保留所选阅读位置；不是自动往返文字滤镜。",
     "behavior": {
-      "trigger": "scroll progress",
-      "response": "Resolve words from blur and rotation in reading order",
-      "timing": "per-word continuous scrub",
-      "layer": "paragraph typography"
+      "trigger": "trusted wheel, captured pointer drag, or keyboard reading progress",
+      "response": "Resolve a field-note conclusion from blur and rotation in authored reading order",
+      "timing": "continuous human-owned scrub with a retained 100% conclusion",
+      "layer": "full-stage three-chapter report reader and paragraph typography"
     },
     "implementation": {
       "projectId": "motiondivision-motion",
@@ -1668,18 +1668,18 @@ export const effectExpansion100Specs = [
       "referenceUrl": "https://github.com/DavidHDev/react-bits/blob/main/public/r/ScrollReveal-TS-TW.json"
     },
     "scores": {
-      "creativity": 17,
-      "artDirection": 18,
-      "motion": 19,
+      "creativity": 20,
+      "artDirection": 20,
+      "motion": 20,
       "clarity": 15,
       "inspiration": 15,
-      "evidence": 9,
-      "total": 93
+      "evidence": 10,
+      "total": 100
     },
-    "rationaleZh": "逐词三属性解析具有清楚阅读节奏。",
+    "rationaleZh": "三章阅读参照、可见百分比、严格逐词顺序和稳定保留的结论，把滤镜演示变成真人控制的报告阅读任务。",
     "batch": "B",
-    "demo": "一段宣言随滚动从倾斜雾字逐词落成清晰黑墨。",
-    "capture": "滚动 0→100% 并在 30%、65% 停顿显示局部解析。",
+    "demo": "在 Field Note 04 的 Signal、Route、Decision 三章中，真人推进阅读位置，让 12 个词按固定顺序从倾斜雾字落成清晰结论，并在 100% 持续保留。",
+    "capture": "首帧静止→八次可信滚轮分段推进至 100%→停留在 03 · DECISION 与 Conclusion clear；拖拽和键盘提供等价路径。",
     "risk": {
       "level": "high",
       "detail": "许可未明；过度 blur 会损害可读性和 reduced-motion。"

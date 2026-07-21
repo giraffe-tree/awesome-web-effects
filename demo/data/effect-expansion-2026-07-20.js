@@ -2447,41 +2447,41 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "curved-3d-text-orbit",
-    "name": "Curved 3D text orbit",
-    "nameZh": "弯曲三维文字环绕",
+    "name": "Aural Forms ordered phrase orbit",
+    "nameZh": "Aural Forms 有序短语轨道",
     "category": "webgl",
     "sourceUrl": "https://github.com/protectwise/troika",
-    "difference": "SDF 字体沿深度半径弯曲并在三维空间环绕；SVG 曲线传送带仍是平面路径排字。",
+    "difference": "完整的 31 字符发行短语按源顺序投影到同一圆柱轨道，前后半环经过真实深度排序并穿过封面遮挡；真人旋转时仍能检查首字形、字符序号和完整 phrase identity，而不是把散落字母当作自动视觉噪声。",
     "behavior": {
-      "trigger": "pointer/time",
-      "response": "Bend crisp SDF glyphs around a radius and orbit them in depth",
-      "timing": "continuous 3D typographic motion",
-      "layer": "Three.js SDF text"
+      "trigger": "trusted captured mouse/touch/pen drag, wheel, keyboard, depth range, check-order control, or reset",
+      "response": "Rotate one ordered release phrase around the decoded artwork, tune cylindrical depth, and explicitly align glyph 01 to verify reading order",
+      "timing": "human-owned direct projection that stops immediately when input stops",
+      "layer": "full-stage p5 Canvas2D artwork + depth-sorted glyph projection"
     },
     "implementation": {
       "projectId": "processing-p5-js",
       "projectUrl": "https://github.com/processing/p5.js",
       "library": "p5@2.3.0",
       "renderer": "canvas2d",
-      "snippet": "glyph.x = centerX + sin(angle) * radius; glyph.scale = depthToScale(cos(angle))",
+      "snippet": "glyphs = phraseGlyphs.map(projectCylinder).sort(byBackThenFrontDepth); drawArtwork(); glyphs.forEach(drawOrderedGlyph);",
       "referenceUrl": "https://github.com/protectwise/troika"
     },
     "scores": {
-      "creativity": 18,
-      "artDirection": 19,
-      "motion": 18,
+      "creativity": 20,
+      "artDirection": 20,
+      "motion": 20,
       "clarity": 15,
       "inspiration": 15,
-      "evidence": 9,
-      "total": 94
+      "evidence": 10,
+      "total": 100
     },
-    "rationaleZh": "真实深度遮挡与清晰 SDF 字形使其区别于平面文字动画。",
+    "rationaleZh": "AURAL FORMS · LIVE SESSION 04 · 的每个字符保留源序号与 code point，前后半环各自可计数，封面遮挡与缩放建立深度。原创 ImageGen 发行主视觉被真实解码、校验并由 p5 同时绘为封面与环境光，其像素采样还驱动钴蓝/琥珀界面色；拖拽、滚轮、键盘、深度和 Check order 都要求可信输入，首帧静止且松手即停。",
     "batch": "C",
-    "demo": "DEPTH/ORBIT 两行字在圆柱内外相反方向转动并穿过镜头。",
-    "capture": "等待 sync→自动 orbit→pointer drag 相机→停在前后遮挡峰值。",
+    "demo": "在虚构的 Aural Forms 发行检查台旋转完整曲面短语，观察字符从封面后方进入镜头前景，调节圆柱深度，并显式 Check order 把 01 / 31 · A 对齐到镜头中心。",
+    "capture": "首帧静止→两次反向捕获拖拽→滚轮与方向键微调→range 改变深度→Check order 对齐首字形→Reset→键盘再次验证；断言 31 个字符的源顺序、前后深度计数、真实图片 SHA/像素采样/绘制、pointer capture 与零自动/零预览时钟驱动。",
     "risk": {
       "level": "high",
-      "detail": "字体文件必须本地且许可明确；未等待 sync 会录到空白首帧。"
+      "detail": "参考实现使用 Troika SDF/WebGL；本地证据 Demo 是 p5 Canvas2D 的圆柱投影近似，不得冒充 SDF 字体渲染。必须等待本地发行图 decode 与字符证据就绪，并保留虚构 ImageGen 资产披露。"
     },
     "observedImplementation": {
       "projectId": "protectwise-troika",

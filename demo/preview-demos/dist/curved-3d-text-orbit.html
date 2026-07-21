@@ -1,7 +1,311 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p5.js — Curved 3D Text Orbit</title><style>:root{--preview-background:#100a16}#orbit-text-host{position:absolute;inset:0;cursor:ew-resize}#orbit-text-host canvas{width:100%!important;height:100%!important}.orbit-copy{position:absolute;z-index:4;left:13px;top:48px;color:#fff1ff;pointer-events:none}.orbit-copy small{font:800 6px/1 ui-monospace;letter-spacing:.16em;color:#ff81df}.orbit-copy h1{width:92px;margin:8px 0 0;font:950 18px/.84 system-ui;letter-spacing:-.055em}.depth-axis{position:absolute;z-index:4;right:12px;top:12px;color:#d7a7ff;font:800 6px/1 ui-monospace}.library-badge{background:#100a16c9}</style>  <script type="module" crossorigin src="./assets/curved-3d-text-orbit-DGDnE7eG.js"></script>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>p5.js — Aural Forms Type Orbit</title>
+  <style>
+    :root {
+      --preview-background: #050811;
+      --ink: #f4f0e9;
+      --muted: rgba(226, 232, 245, .55);
+      --hairline: rgba(210, 225, 255, .18);
+      --sample-cobalt: rgb(67, 111, 194);
+      --sample-amber: rgb(223, 151, 66);
+      --u: min(.3125vw, .5556vh);
+      color-scheme: dark;
+    }
+
+    * { box-sizing: border-box; }
+
+    .orbit-stage {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: #050811;
+      color: var(--ink);
+      isolation: isolate;
+    }
+
+    .orbit-stage::after {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      background:
+        linear-gradient(90deg, rgba(5, 8, 17, .84) 0%, rgba(5, 8, 17, .54) 31%, transparent 53%, rgba(5, 8, 17, .1) 100%),
+        linear-gradient(180deg, rgba(5, 8, 17, .38), transparent 24%, transparent 72%, rgba(5, 8, 17, .7));
+      content: "";
+      pointer-events: none;
+    }
+
+    #orbit-text-host {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      cursor: grab;
+      outline: none;
+      touch-action: none;
+    }
+
+    #orbit-text-host[data-dragging="true"] { cursor: grabbing; }
+    #orbit-text-host canvas { display: block; width: 100% !important; height: 100% !important; }
+    #orbit-text-host:focus-visible::after {
+      position: absolute;
+      inset: calc(5 * var(--u));
+      border: max(1px, calc(1 * var(--u))) solid var(--sample-amber);
+      border-radius: calc(5 * var(--u));
+      content: "";
+      pointer-events: none;
+    }
+
+    .release-header {
+      position: absolute;
+      z-index: 6;
+      top: calc(10 * var(--u));
+      right: calc(12 * var(--u));
+      left: calc(13 * var(--u));
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--muted);
+      font: 800 max(3px, calc(4.5 * var(--u)))/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+
+    .release-status {
+      display: inline-flex;
+      align-items: center;
+      gap: calc(5 * var(--u));
+      color: var(--ink);
+    }
+
+    .release-status::before {
+      width: calc(4 * var(--u));
+      height: calc(4 * var(--u));
+      border-radius: 50%;
+      background: var(--sample-amber);
+      box-shadow: 0 0 0 calc(2 * var(--u)) color-mix(in srgb, var(--sample-amber), transparent 82%);
+      content: "";
+    }
+
+    .release-copy {
+      position: absolute;
+      z-index: 6;
+      top: calc(44 * var(--u));
+      left: calc(16 * var(--u));
+      width: calc(94 * var(--u));
+      pointer-events: none;
+    }
+
+    .release-kicker,
+    .phrase-label,
+    .front-readout,
+    .control-help,
+    .control-button,
+    .depth-control span,
+    .depth-control output {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      text-transform: uppercase;
+    }
+
+    .release-kicker {
+      color: var(--sample-amber);
+      font-size: max(3px, calc(4.5 * var(--u)));
+      font-weight: 900;
+      letter-spacing: .17em;
+    }
+
+    .release-copy h1 {
+      margin: calc(7 * var(--u)) 0 0;
+      font: 560 calc(31 * var(--u))/.76 Georgia, "Times New Roman", serif;
+      letter-spacing: -.07em;
+    }
+
+    .release-copy h1 em { color: var(--sample-cobalt); font-weight: inherit; }
+
+    .phrase-label {
+      display: block;
+      width: calc(100 * var(--u));
+      margin-top: calc(10 * var(--u));
+      color: var(--muted);
+      font-size: max(3px, calc(4 * var(--u)));
+      font-weight: 750;
+      line-height: 1.5;
+      letter-spacing: .08em;
+    }
+
+    .phrase-label strong {
+      display: block;
+      margin-top: calc(3 * var(--u));
+      color: var(--ink);
+      font-size: max(3px, calc(4.5 * var(--u)));
+      letter-spacing: .03em;
+    }
+
+    .front-readout {
+      position: absolute;
+      z-index: 6;
+      top: calc(39 * var(--u));
+      right: calc(14 * var(--u));
+      display: grid;
+      min-width: calc(59 * var(--u));
+      padding: calc(6 * var(--u)) calc(7 * var(--u));
+      border: max(1px, calc(1 * var(--u))) solid var(--hairline);
+      border-radius: calc(4 * var(--u));
+      background: rgba(5, 8, 17, .62);
+      backdrop-filter: blur(calc(5 * var(--u)));
+      color: var(--muted);
+      font-size: max(3px, calc(3.5 * var(--u)));
+      font-weight: 800;
+      line-height: 1.35;
+      letter-spacing: .11em;
+      pointer-events: none;
+    }
+
+    .front-readout strong {
+      margin-top: calc(2 * var(--u));
+      color: var(--ink);
+      font-size: max(4px, calc(7 * var(--u)));
+      letter-spacing: .04em;
+    }
+
+    .control-dock {
+      position: absolute;
+      z-index: 8;
+      right: calc(13 * var(--u));
+      bottom: calc(10 * var(--u));
+      left: calc(13 * var(--u));
+      display: flex;
+      min-height: calc(28 * var(--u));
+      align-items: flex-end;
+      border-top: max(1px, calc(1 * var(--u))) solid var(--hairline);
+      pointer-events: none;
+    }
+
+    .control-help {
+      display: grid;
+      align-self: center;
+      color: var(--muted);
+      font-size: max(3px, calc(3.5 * var(--u)));
+      font-weight: 800;
+      line-height: 1.5;
+      letter-spacing: .1em;
+    }
+
+    .control-help strong { color: var(--ink); font-size: max(3px, calc(4 * var(--u))); }
+
+    .depth-control {
+      display: grid;
+      width: calc(75 * var(--u));
+      margin: 0 0 calc(5 * var(--u)) auto;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: calc(5 * var(--u));
+      color: var(--muted);
+      font-size: max(3px, calc(3.5 * var(--u)));
+      font-weight: 850;
+      letter-spacing: .08em;
+      pointer-events: auto;
+    }
+
+    .depth-control input {
+      width: 100%;
+      height: calc(12 * var(--u));
+      margin: 0;
+      accent-color: var(--sample-cobalt);
+      cursor: ew-resize;
+    }
+
+    .depth-control output { min-width: calc(15 * var(--u)); color: var(--ink); text-align: right; }
+
+    .action-group {
+      display: flex;
+      margin: 0 0 calc(3 * var(--u)) calc(7 * var(--u));
+      gap: calc(4 * var(--u));
+      pointer-events: auto;
+    }
+
+    .control-button {
+      min-height: calc(20 * var(--u));
+      padding: 0 calc(8 * var(--u));
+      border: max(1px, calc(1 * var(--u))) solid var(--hairline);
+      border-radius: 999px;
+      background: rgba(5, 8, 17, .75);
+      color: var(--ink);
+      font-size: max(3px, calc(3.7 * var(--u)));
+      font-weight: 900;
+      letter-spacing: .09em;
+      cursor: pointer;
+    }
+
+    .control-button:hover,
+    .control-button:focus-visible { border-color: var(--sample-amber); outline: none; }
+    .control-button.primary { border-color: color-mix(in srgb, var(--sample-cobalt), white 18%); background: var(--sample-cobalt); color: #fff; }
+    .orbit-stage[data-inspecting="true"] .control-button.primary { border-color: var(--sample-amber); background: var(--sample-amber); color: #100b08; }
+
+    .orbit-stage .library-badge {
+      top: auto;
+      right: calc(13 * var(--u));
+      bottom: calc(46 * var(--u));
+      left: auto;
+      padding: calc(2 * var(--u)) calc(4 * var(--u));
+      border-color: var(--hairline);
+      background: rgba(5, 8, 17, .66);
+      color: var(--muted);
+      font-size: max(3px, calc(3.3 * var(--u)));
+      white-space: nowrap;
+      backdrop-filter: blur(calc(5 * var(--u)));
+    }
+
+    @media (max-width: 200px), (max-height: 110px) {
+      .release-copy, .front-readout, .depth-control, .library-badge { display: none; }
+      .control-dock { min-height: calc(18 * var(--u)); }
+      .control-help span { display: none; }
+      .action-group { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #orbit-text-host { cursor: default; }
+    }
+  </style>
+  <script type="module" crossorigin src="./assets/curved-3d-text-orbit-DeCslMgA.js"></script>
   <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
   <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
   <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
-  <link rel="modulepreload" crossorigin href="./assets/batch-c-utils-g_3IBZ2b.js">
   <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage" data-preview-mechanism="cylindrical-glyph-projection"><div id="orbit-text-host" tabindex="0" aria-label="Move horizontally or use arrow keys to orbit two curved text bands"></div><section class="orbit-copy"><small>TYPE CYLINDER / ±Z</small><h1>WORDS WRAP THROUGH DEPTH.</h1></section><span class="depth-axis">BACK ← Z → FRONT</span><span class="library-badge">p5.js · projected glyph orbit</span><span class="scene-caption">each glyph owns angle, radius and depth</span></main></body></html>
+</head>
+<body>
+  <main id="orbit-stage" class="preview-stage orbit-stage" data-preview-mechanism="human-driven-cylindrical-glyph-projection" data-inspecting="false">
+    <div id="orbit-text-host" tabindex="0" role="application" aria-label="Drag, wheel, or use the arrow keys to rotate the curved release-title orbit. Press Enter to check phrase order."></div>
+
+    <header class="release-header" aria-hidden="true">
+      <span>Fictional release system · AFS–04</span>
+      <span id="release-status" class="release-status">Lockup stationary</span>
+    </header>
+
+    <section class="release-copy" aria-label="Fictional music release details">
+      <span class="release-kicker">Listening room · 22′14″ · release 04</span>
+      <h1>Aural<br><em>Forms</em></h1>
+      <span class="phrase-label">Tracked phrase<strong>“AURAL FORMS · LIVE SESSION 04 ·”</strong></span>
+    </section>
+
+    <aside class="front-readout" aria-live="polite">
+      <span>Front glyph</span>
+      <strong id="front-glyph">01 / 31 · A</strong>
+    </aside>
+
+    <footer class="control-dock">
+      <span class="control-help"><strong id="interaction-mode">Drag to orbit</strong><span>Wheel · touch · ← → · Enter checks order</span></span>
+      <label class="depth-control" for="depth-control"><span>Depth</span><input id="depth-control" type="range" min="52" max="96" value="76" step="1"><output id="depth-output" for="depth-control">76</output></label>
+      <span class="action-group">
+        <button id="inspect-control" class="control-button primary" type="button">Check order</button>
+        <button id="reset-control" class="control-button" type="button">Reset</button>
+      </span>
+    </footer>
+
+    <span class="library-badge">p5.js · decoded image + ordered glyph projection</span>
+  </main>
+</body>
+</html>

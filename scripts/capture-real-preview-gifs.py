@@ -1617,6 +1617,45 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.locator('#jolt-button').click()
             elif index == 35:
                 page.wait_for_timeout(620)
+        elif demo["id"] == "curved-3d-text-orbit":
+            if index == 2:
+                page.mouse.move(112, 92)
+                page.mouse.down()
+            elif index in (3, 4):
+                page.mouse.move(266, 92, steps=5)
+            elif index == 5:
+                page.mouse.up()
+            elif index == 8:
+                page.mouse.move(258, 102)
+                page.mouse.down()
+            elif index in (9, 10):
+                page.mouse.move(78, 102, steps=5)
+            elif index == 11:
+                page.mouse.up()
+            elif index == 13:
+                page.mouse.wheel(0, 96)
+            elif index == 15:
+                page.locator('#orbit-text-host').focus()
+                page.keyboard.press("ArrowRight")
+            elif index == 16:
+                page.keyboard.press("PageDown")
+            elif index == 18:
+                page.locator('#depth-control').focus()
+                for _ in range(4):
+                    page.keyboard.press("ArrowUp")
+            elif index == 21:
+                page.locator('#inspect-control').click()
+            elif index == 24:
+                page.locator('#reset-control').click()
+            elif index == 27:
+                page.locator('#orbit-text-host').focus()
+                page.keyboard.press("ArrowLeft")
+            elif index == 28:
+                page.keyboard.press("PageUp")
+            elif index == 31:
+                page.keyboard.press("Enter")
+            elif index == 35:
+                page.wait_for_timeout(420)
         elif demo["id"] == "refractive-glass-transmission-sculpture":
             viewport_width = page.viewport_size["width"]
             viewport_height = page.viewport_size["height"]
@@ -3765,6 +3804,79 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["lastInputTrusted"] is not True
         ):
             raise RuntimeError(f"{demo['id']} did not capture trusted slow/fast captured traces, keyboard sampling, reset, four unique decoded ImageGen frames, and a nonempty final visual-memory path: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "curved-3d-text-orbit":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-music-release-curved-type-lockup-review"
+            or interaction["acceptedInputs"] != ["wheel", "mouse", "touch", "pen", "keyboard", "control"]
+            or not interaction["userInputRequired"]
+            or not interaction["trustedInputOnly"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticCruise"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["previewClockDriven"]
+            or interaction["previewClockMutationCount"] != 0
+            or interaction["syntheticInputDispatch"]
+            or interaction["finiteInputInertiaOnly"]
+            or interaction["inertiaEnabled"]
+            or not interaction["firstFrameStatic"]
+            or not interaction["initialStaticVerified"]
+            or interaction["mode"] != "order-checked"
+            or interaction["dragging"]
+            or interaction["pointerCaptured"]
+            or interaction["activePointerId"] is not None
+            or interaction["activePointerType"] is not None
+            or interaction["pointerCaptureCount"] != 2
+            or interaction["pointerReleaseCount"] != 2
+            or interaction["pointerCancelCount"] != 0
+            or interaction["dragMoveCount"] < 8
+            or interaction["inputCount"] < 25
+            or interaction["inputCount"] != interaction["trustedInputCount"]
+            or interaction["rejectedUntrustedCount"] != 0
+            or interaction["pointerInputCount"] < 20
+            or interaction["wheelInputCount"] != 1
+            or interaction["keyboardInputCount"] < 5
+            or interaction["controlInputCount"] < 6
+            or interaction["rotationMutationCount"] < 10
+            or interaction["depthMutationCount"] < 5
+            or interaction["inspectionCount"] != 2
+            or interaction["resetCount"] != 1
+            or interaction["positiveInputCount"] < 3
+            or interaction["negativeInputCount"] < 3
+            or interaction["reversalCount"] < 3
+            or interaction["lastInputType"] != "keyboard"
+            or interaction["lastInputTrusted"] is not True
+            or interaction["phrase"] != "AURAL FORMS · LIVE SESSION 04 ·"
+            or interaction["phraseGlyphCount"] != 31
+            or interaction["projectedGlyphCount"] != 31
+            or not interaction["glyphOrderIntegrity"]
+            or interaction["backGlyphCount"] <= 0
+            or interaction["frontGlyphCount"] <= 0
+            or interaction["backGlyphCount"] + interaction["frontGlyphCount"] != 31
+            or interaction["frontGlyphIndex"] != 0
+            or interaction["frontGlyphCharacter"] != "A"
+            or interaction["artworkSourceKind"] != "project-local-imagegen-asset"
+            or interaction["artworkByteLength"] != 217189
+            or interaction["artworkSha256"] != "f34450cfd9f5215367008aea71c719dde3c1d6df848f85c3e4e86203c1e08c1c"
+            or interaction["artworkWidth"] != 960
+            or interaction["artworkHeight"] != 960
+            or not interaction["artworkDecoded"]
+            or not interaction["artworkDimensionsValid"]
+            or interaction["artworkSampledPixelCount"] != 1600
+            or len(interaction["artworkSampleChecksum"]) != 8
+            or not interaction["artworkPaletteDistinct"]
+            or not interaction["paletteDrivenInterface"]
+            or interaction["artworkDrawCount"] < 2
+            or not interaction["p5Ready"]
+            or not interaction["canvas2dReady"]
+            or interaction["drawCount"] < 10
+            or interaction["previewRenderCount"] < 30
+            or len(interaction["ledger"]) < 20
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture two opposed trusted drags, wheel/keyboard/depth controls, order inspection/reset, all 31 depth-sorted source glyphs, and a verified local ImageGen artwork without automatic, inertial, synthetic, or capture-clock motion: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "collision-reactive-3d-physics-stack":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_STATE__")

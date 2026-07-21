@@ -2165,16 +2165,16 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "pointer-reactive-cell-grid",
-    "name": "Pointer-reactive cell grid",
-    "nameZh": "指针响应单元格网格",
+    "name": "Human-confirmed cell-distance diagnostic",
+    "nameZh": "真人确认的单元格距离诊断",
     "category": "pointer",
     "sourceUrl": "https://github.com/DavidHDev/react-bits/blob/main/public/r/CursorGrid-TS-TW.json",
-    "difference": "持久几何网格按指针距离调制每格描边/填充并产生点击波；不是像素尾流的二值亮灭。",
+    "difference": "真人 proximity 连续采样确定性距离场，只有显式点击或键盘确认才产生一次有限脉冲并提交 H4 密度漂移结论；不是自动轨迹、自动 pulse 或无任务的网格形变。",
     "behavior": {
-      "trigger": "pointer move/click",
-      "response": "Modulate cell geometry by pointer distance and emit a radial click pulse",
-      "timing": "continuous distance field plus impulse",
-      "layer": "Canvas/WebGL cell grid"
+      "trigger": "trusted mouse/touch/pen proximity plus explicit pointer or keyboard confirmation",
+      "response": "Continuously sample the distance field, identify H4, and retain one confirmed density-drift diagnostic",
+      "timing": "direct proximity modulation plus one 720ms finite confirmation pulse",
+      "layer": "full-stage p5 Relay 07 diagnostic matrix and retained conclusion"
     },
     "implementation": {
       "projectId": "processing-p5-js",
@@ -2185,18 +2185,18 @@ export const effectExpansion100Specs = [
       "referenceUrl": "https://github.com/DavidHDev/react-bits/blob/main/public/r/CursorGrid-TS-TW.json"
     },
     "scores": {
-      "creativity": 17,
-      "artDirection": 18,
-      "motion": 18,
+      "creativity": 20,
+      "artDirection": 20,
+      "motion": 20,
       "clarity": 15,
-      "inspiration": 14,
-      "evidence": 9,
-      "total": 91
+      "inspiration": 15,
+      "evidence": 10,
+      "total": 100
     },
-    "rationaleZh": "连续距离场和点击冲击与其他 cursor trail 明确不同。",
+    "rationaleZh": "Relay 07 把 proximity 与 click pulse 分成“扫描”和“确认”两种职责；H4 的距离采样、有限脉冲与稳定诊断结论都有可信输入和运行证据。",
     "batch": "B",
-    "demo": "一面等距方格随指针弯曲成浅坑，点击时脉冲扩散。",
-    "capture": "pointer 横穿→停中心→click→等待脉冲越过四周。",
+    "demo": "一张 Relay 07 密度审计矩阵，操作员先以距离场定位异常，再显式确认 H4 并保留诊断结果。",
+    "capture": "真人从远处扫描到 H4，点击确认，录下单次有限脉冲及最终 Cell H4 Confirmed 状态。",
     "risk": {
       "level": "high",
       "detail": "许可未明；需验证网格主体而非文字说明承担辨识度。"

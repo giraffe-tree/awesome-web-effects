@@ -1569,6 +1569,13 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.up()
             elif index == 19:
                 page.wait_for_timeout(260)
+        elif demo["id"] == "pointer-reactive-cell-grid":
+            if index == 2:
+                page.mouse.move(137, 70)
+            elif index == 5:
+                page.mouse.move(226, 100, steps=4)
+            elif index == 7:
+                page.mouse.click(226, 100)
         elif demo["id"] == "metaball-blob-cursor":
             if index == 3:
                 page.locator('#finish-cobalt').hover()
@@ -5650,6 +5657,56 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not any(record["mutated"] for record in interaction["transitionRecords"])
         ):
             raise RuntimeError(f"{demo['id']} did not capture a real retained gooey signal route: {interaction!r}")
+    elif demo["id"] == "pointer-reactive-cell-grid":
+        interaction = page.evaluate("window.__POINTER_REACTIVE_CELL_GRID_STATE__")
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        if (
+            not assertion
+            or interaction["task"] != "operator-locates-and-confirms-density-drift-cell-h4"
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["mechanism"] != "trusted-human-proximity-continuously-modulates-a-distance-field-while-an-explicit-confirmation-creates-one-finite-cell-pulse-and-retained-diagnostic-result"
+            or interaction["assetStrategy"] != "code-native-deterministic-cell-matrix-no-functional-raster-input-required"
+            or interaction["automaticPlayback"]
+            or interaction["automaticTrajectory"]
+            or interaction["automaticPulse"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["phase"] != "confirmed"
+            or interaction["result"] != "cell-h4-density-drift-confirmed"
+            or not interaction["resultRetained"]
+            or interaction["confirmedCell"] != "H4"
+            or interaction["proximityInputCount"] < 2
+            or interaction["confirmationInputCount"] != 1
+            or interaction["pointerInputCount"] != interaction["inputCount"]
+            or interaction["inputCount"] != interaction["trustedInputCount"]
+            or interaction["inputCount"] < 3
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["untrustedMutationCount"] != 0
+            or interaction["maximumDistanceInfluence"] <= .95
+            or interaction["distanceFieldSampleCount"] < 3
+            or interaction["distanceFieldSignature"] == "idle"
+            or interaction["influencedCellCount"] <= 0
+            or interaction["minimumTargetDistance"] is None
+            or interaction["minimumTargetDistance"] > 1
+            or interaction["pulseStartCount"] != 1
+            or interaction["pulseCompletionCount"] != 1
+            or interaction["correctConfirmationCount"] != 1
+            or interaction["incorrectConfirmationCount"] != 0
+            or interaction["activePulseCount"] != 0
+            or interaction["pulseProgress"] != 1
+            or interaction["transitionFrameCount"] < 4
+            or len(interaction["confirmationRecords"]) != 1
+            or not interaction["confirmationRecords"][0]["correct"]
+            or not interaction["confirmationRecords"][0]["committed"]
+            or not interaction["confirmationRecords"][0]["trusted"]
+            or not interaction["initialStillVerified"]
+            or interaction["canvasCoverageRatio"] < .995
+            or not interaction["fullStageGeometryVerified"]
+            or not interaction["ready"]
+            or not interaction["p5InstanceReady"]
+            or not interaction["canvas2dReady"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a real proximity scan and finite retained H4 diagnostic: {interaction!r}")
     elif demo["id"] == "metaball-blob-cursor":
         interaction = page.evaluate("window.__METABALL_TARGET_STATE__")
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")

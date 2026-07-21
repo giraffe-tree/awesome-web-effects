@@ -1,8 +1,73 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p5.js — Pointer-reactive Cell Grid</title><style>
-:root{--preview-background:#11141a}#cell-host{position:absolute;inset:0;cursor:crosshair}#cell-host canvas{width:100%!important;height:100%!important}.cell-copy{position:absolute;z-index:3;left:13px;top:46px;color:white;pointer-events:none}.cell-copy small{font:800 6px/1 ui-monospace;letter-spacing:.12em;color:#98a3b0}.cell-copy h1{width:96px;margin:9px 0 0;font:950 19px/.82 system-ui;letter-spacing:-.06em}.cell-readout{position:absolute;z-index:3;right:11px;bottom:10px;color:#bac4d098;font:700 6px/1 ui-monospace}.library-badge{background:#0e1218c8}.scene-caption{display:none}</style>  <script type="module" crossorigin src="./assets/pointer-reactive-cell-grid-CirnmBuR.js"></script>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>p5.js — Human-routed Cell Diagnostic</title>
+  <style>
+    :root{--preview-background:#0b1116}
+    .preview-stage{overflow:hidden;background:#0b1116;color:#edf4ed}
+    #cell-host{position:absolute;inset:0;cursor:crosshair;outline:0;touch-action:none}
+    #cell-host:focus-visible{box-shadow:inset 0 0 0 2px #d8ff7a}
+    #cell-host canvas{display:block;width:100%!important;height:100%!important}
+    .diagnostic-copy{position:absolute;z-index:3;left:13px;top:45px;width:78px;pointer-events:none}
+    .diagnostic-kicker,.task-code,.mode-label{font:800 5.5px/1.15 ui-monospace;letter-spacing:.14em;text-transform:uppercase}
+    .diagnostic-kicker{color:#8e9da1}
+    .diagnostic-copy h1{margin:7px 0 6px;font:900 17px/.86 system-ui;letter-spacing:-.055em}
+    .diagnostic-copy p{margin:0;color:#8e9da1;font:650 6px/1.35 ui-monospace;letter-spacing:.02em}
+    .task-code{display:inline-flex;margin-top:8px;padding:5px 6px;border:1px solid #d8ff7a55;border-radius:99px;color:#d8ff7a;background:#d8ff7a0c}
+    .diagnostic-status{position:absolute;z-index:3;right:10px;top:10px;display:flex;align-items:center;gap:6px;padding:5px 7px;border:1px solid #ffffff18;border-radius:99px;background:#071014c9;backdrop-filter:blur(6px);pointer-events:none}
+    .status-dot{width:4px;height:4px;border-radius:50%;background:#8e9da1;box-shadow:0 0 0 2px #8e9da122}
+    .diagnostic-status[data-phase="scanning"] .status-dot,.diagnostic-status[data-phase="confirming"] .status-dot{background:#d8ff7a;box-shadow:0 0 8px #d8ff7a}
+    .diagnostic-status[data-phase="confirmed"] .status-dot{background:#70f0d0;box-shadow:0 0 8px #70f0d0}
+    .mode-label{color:#c9d3d1;letter-spacing:.1em}
+    .diagnostic-result{position:absolute;z-index:3;right:11px;bottom:9px;text-align:right;pointer-events:none}
+    .diagnostic-result strong{display:block;color:#edf4ed;font:800 6px/1.15 ui-monospace;letter-spacing:.08em}
+    .diagnostic-result span{display:block;margin-top:3px;color:#77878b;font:650 5px/1 ui-monospace;letter-spacing:.08em}
+    .library-badge{background:#071014c9}
+    .scene-caption{display:none}
+    @media (min-width:500px){
+      .diagnostic-copy{left:28px;top:89px;width:150px}
+      .diagnostic-kicker,.task-code,.mode-label{font-size:9px}
+      .diagnostic-copy h1{margin-top:12px;font-size:34px}
+      .diagnostic-copy p{font-size:10px}
+      .task-code{margin-top:14px;padding:8px 10px}
+      .diagnostic-status{right:20px;top:18px;padding:7px 10px}
+      .diagnostic-result{right:22px;bottom:17px}
+      .diagnostic-result strong{font-size:9px}.diagnostic-result span{font-size:7px}
+    }
+    @media (orientation:portrait){
+      .diagnostic-copy{left:14px;top:46px;width:178px}
+      .diagnostic-copy h1{margin:6px 0 5px;font-size:20px}
+      .diagnostic-copy p{max-width:160px}
+      .task-code{margin-top:6px}
+      .diagnostic-status{padding:6px;min-width:0}
+      .diagnostic-status .mode-label{display:none}
+    }
+  </style>
+  <script type="module" crossorigin src="./assets/pointer-reactive-cell-grid-jGAH2n_H.js"></script>
   <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
   <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
   <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
-  <link rel="modulepreload" crossorigin href="./assets/batch-b-utils-CmA_lC0Z.js">
   <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage" data-preview-mechanism="p5-reactive-grid"><div id="cell-host" tabindex="0" aria-label="Move the pointer or arrow keys to disturb the responsive cell grid"></div><section class="cell-copy"><small>GRID / PROXIMITY</small><h1>EVERY CELL FEELS THE POINTER.</h1></section><span class="cell-readout" id="cell-readout">RADIUS 58</span><span class="library-badge">p5.js · reactive cells</span></main></body></html>
+</head>
+<body>
+  <main class="preview-stage" id="cell-grid-stage" data-preview-mechanism="p5-trusted-proximity-and-confirmation-grid">
+    <div id="cell-host" tabindex="0" role="application" aria-label="Cell diagnostic matrix. Move to scan, click to confirm cell H4, or use arrow keys and Enter."></div>
+    <section class="diagnostic-copy" aria-hidden="true">
+      <span class="diagnostic-kicker">Relay 07 / Density audit</span>
+      <h1>FIND THE DRIFT.</h1>
+      <p>Move to scan · click to confirm</p>
+      <span class="task-code">Target / H4</span>
+    </section>
+    <div class="diagnostic-status" id="grid-status" data-phase="idle" aria-live="polite">
+      <i class="status-dot"></i><span class="mode-label" id="status-label">Awaiting scan</span>
+    </div>
+    <div class="diagnostic-result" aria-live="polite">
+      <strong id="result-label">NO CELL CONFIRMED</strong>
+      <span id="proximity-label">PROXIMITY —</span>
+    </div>
+    <span class="library-badge">p5.js · operator diagnostic</span>
+  </main>
+</body>
+</html>

@@ -1,8 +1,455 @@
-<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Cellular Automata Hover Bloom</title><style>:root{--preview-background:#06100a}canvas{width:100%;height:100%;image-rendering:pixelated}.copy{position:absolute;left:14px;top:49px;width:101px;color:#edf9e8}.copy small{font:800 6px monospace;letter-spacing:.14em;color:#85ed7b}.copy h1{margin:8px 0;font:950 20px/.84 system-ui;letter-spacing:-.06em}.generation{position:absolute;right:11px;bottom:11px;color:#9eff92;font:800 6px monospace}.scene-caption{display:none}</style>  <script type="module" crossorigin src="./assets/cellular-automata-hover-bloom-CE1TU25e.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
-  <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
-  <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
-  <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
-  <link rel="modulepreload" crossorigin href="./assets/expansion-b-utils-CD_J0IHW.js">
-  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage"><canvas tabindex="0" aria-label="Pointer seeds a deterministic cellular automaton"></canvas><section class="copy"><small>LIFE / SEED 24</small><h1>HOVER TO GROW A CITY.</h1></section><span class="generation" id="generation">GEN 000</span><span class="library-badge">p5.js · cellular life</span></main></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>p5.js — Human-operated Roof Recovery Lab</title>
+    <link rel="icon" href="data:,">
+    <style>
+      :root {
+        --preview-background: #07120f;
+        color-scheme: dark;
+      }
+
+      button,
+      input { font: inherit; }
+
+      .bloom-stage {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        background: #07120f;
+        color: #f2f2df;
+        outline: none;
+        touch-action: none;
+        user-select: none;
+      }
+
+      .bloom-stage:focus-visible {
+        box-shadow: inset 0 0 0 2px #d8f37a;
+      }
+
+      .canvas-host,
+      .canvas-host canvas,
+      .field-grade,
+      .field-grid {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .canvas-host canvas { cursor: crosshair; }
+
+      .field-grade,
+      .field-grid {
+        z-index: 2;
+        pointer-events: none;
+      }
+
+      .field-grade {
+        background:
+          linear-gradient(90deg, rgba(5, 15, 12, .6), transparent 34%, transparent 71%, rgba(5, 13, 11, .28)),
+          linear-gradient(180deg, rgba(5, 13, 11, .2), transparent 28%, transparent 66%, rgba(4, 11, 9, .66));
+      }
+
+      .field-grid {
+        opacity: .14;
+        background-image:
+          linear-gradient(rgba(219, 241, 194, .16) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(219, 241, 194, .16) 1px, transparent 1px);
+        background-size: clamp(12px, 4.2vw, 30px) clamp(12px, 4.2vw, 30px);
+        mask-image: linear-gradient(90deg, #000, rgba(0, 0, 0, .2) 68%, #000);
+      }
+
+      .topline,
+      .brief,
+      .probe-card,
+      .lab-console,
+      .preview-stage .library-badge {
+        position: absolute;
+        z-index: 8;
+      }
+
+      .topline {
+        top: clamp(7px, 2.7vw, 19px);
+        left: clamp(8px, 3vw, 22px);
+        right: clamp(8px, 3vw, 22px);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        pointer-events: none;
+      }
+
+      .brand,
+      .field-status,
+      .eyebrow,
+      .brief p,
+      .probe-label,
+      .probe-value,
+      .reading-label,
+      .reading-value,
+      .control,
+      .threshold-label,
+      .help,
+      .preview-stage .library-badge {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-weight: 800;
+        letter-spacing: .11em;
+        text-transform: uppercase;
+      }
+
+      .brand,
+      .field-status {
+        display: flex;
+        align-items: center;
+        gap: clamp(4px, 1vw, 7px);
+        color: rgba(238, 242, 220, .74);
+        font-size: clamp(4px, 1.2vw, 8px);
+        white-space: nowrap;
+      }
+
+      .brand::before {
+        width: clamp(12px, 3.2vw, 23px);
+        height: 1px;
+        background: #d8f37a;
+        content: "";
+      }
+
+      .field-status::before {
+        width: clamp(4px, .9vw, 7px);
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: #8ee6b0;
+        box-shadow: 0 0 10px rgba(142, 230, 176, .75);
+        content: "";
+      }
+
+      .brief {
+        top: 23%;
+        left: clamp(8px, 3.8vw, 28px);
+        width: min(34%, 250px);
+        pointer-events: none;
+      }
+
+      .eyebrow {
+        color: #d8f37a;
+        font-size: clamp(4px, 1.1vw, 8px);
+      }
+
+      .brief h1 {
+        max-width: 220px;
+        margin: clamp(4px, 1.2vw, 9px) 0 0;
+        font: 740 clamp(14px, 5.4vw, 41px)/.82 Georgia, "Times New Roman", serif;
+        letter-spacing: -.065em;
+        text-wrap: balance;
+      }
+
+      .brief p {
+        max-width: 210px;
+        margin: clamp(5px, 1.3vw, 10px) 0 0;
+        color: rgba(238, 241, 219, .57);
+        font-size: clamp(4px, 1.05vw, 8px);
+        line-height: 1.4;
+      }
+
+      .probe-card {
+        top: 23%;
+        right: clamp(8px, 3.8vw, 28px);
+        display: grid;
+        width: clamp(64px, 18vw, 132px);
+        gap: clamp(4px, 1vw, 8px);
+        padding: clamp(6px, 1.4vw, 11px);
+        border: 1px solid rgba(218, 239, 200, .22);
+        border-radius: clamp(7px, 1.8vw, 13px);
+        background: rgba(7, 18, 15, .7);
+        box-shadow: 0 14px 35px rgba(0, 0, 0, .22);
+        backdrop-filter: blur(12px);
+        pointer-events: none;
+      }
+
+      .probe-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 4px;
+      }
+
+      .probe-label {
+        color: rgba(235, 239, 215, .53);
+        font-size: clamp(3px, .85vw, 6px);
+      }
+
+      .probe-zone {
+        display: flex;
+        align-items: center;
+        gap: clamp(3px, .8vw, 6px);
+      }
+
+      .probe-zone::before {
+        width: clamp(5px, 1.4vw, 10px);
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: #8ee6b0;
+        box-shadow: 0 0 9px rgba(142, 230, 176, .6);
+        content: "";
+      }
+
+      .bloom-stage[data-zone="heat"] .probe-zone::before { background: #ed9a58; box-shadow: 0 0 9px rgba(237, 154, 88, .64); }
+      .bloom-stage[data-zone="lane"] .probe-zone::before { background: #e8e4cd; box-shadow: none; }
+      .bloom-stage[data-zone="damp"] .probe-zone::before { background: #66c6b6; }
+
+      .probe-value {
+        color: #f1f1dc;
+        font-size: clamp(4px, 1.35vw, 10px);
+      }
+
+      .probe-metrics {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: clamp(3px, .8vw, 6px);
+      }
+
+      .probe-metric {
+        display: grid;
+        gap: 2px;
+        padding-top: clamp(3px, .8vw, 6px);
+        border-top: 1px solid rgba(231, 239, 215, .16);
+      }
+
+      .probe-metric span:first-child {
+        color: rgba(235, 239, 215, .47);
+        font: 750 clamp(3px, .75vw, 6px)/1 ui-monospace, monospace;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+      }
+
+      .probe-metric strong {
+        color: #edf0d7;
+        font: 800 clamp(5px, 1.35vw, 10px)/1 ui-monospace, monospace;
+      }
+
+      .lab-console {
+        left: clamp(8px, 3vw, 22px);
+        right: clamp(8px, 3vw, 22px);
+        bottom: clamp(7px, 2.5vw, 18px);
+        display: grid;
+        grid-template-columns: 1fr auto auto;
+        align-items: center;
+        gap: clamp(5px, 1.5vw, 12px);
+        padding: clamp(6px, 1.3vw, 10px);
+        border: 1px solid rgba(221, 239, 201, .2);
+        border-radius: clamp(8px, 2vw, 14px);
+        background: rgba(5, 15, 12, .78);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, .27);
+        backdrop-filter: blur(14px);
+      }
+
+      .readings {
+        display: grid;
+        grid-template-columns: repeat(3, auto);
+        align-items: center;
+        justify-content: start;
+        gap: clamp(6px, 2vw, 16px);
+      }
+
+      .reading {
+        display: grid;
+        gap: 2px;
+      }
+
+      .reading-label {
+        color: rgba(232, 239, 213, .43);
+        font-size: clamp(3px, .72vw, 5px);
+      }
+
+      .reading-value {
+        color: #f1f2dc;
+        font-size: clamp(6px, 1.8vw, 13px);
+      }
+
+      .threshold {
+        display: grid;
+        grid-template-columns: auto minmax(36px, 8vw) auto;
+        align-items: center;
+        gap: clamp(3px, .7vw, 6px);
+      }
+
+      .threshold-label {
+        color: rgba(235, 240, 216, .58);
+        font-size: clamp(3px, .75vw, 6px);
+      }
+
+      .threshold input {
+        width: 100%;
+        min-width: 0;
+        height: clamp(8px, 2.1vw, 15px);
+        margin: 0;
+        accent-color: #d8f37a;
+        cursor: ew-resize;
+      }
+
+      .threshold-output {
+        color: #d8f37a;
+        font: 850 clamp(4px, 1.05vw, 8px)/1 ui-monospace, monospace;
+      }
+
+      .controls {
+        display: flex;
+        align-items: center;
+        gap: clamp(3px, .7vw, 6px);
+      }
+
+      .control {
+        min-width: 0;
+        padding: clamp(4px, 1vw, 8px) clamp(5px, 1.2vw, 9px);
+        border: 1px solid rgba(224, 239, 207, .25);
+        border-radius: 999px;
+        background: rgba(223, 238, 204, .08);
+        color: rgba(241, 243, 221, .82);
+        font-size: clamp(3px, .8vw, 6px);
+        cursor: pointer;
+        transition: background 100ms ease, color 100ms ease, transform 100ms ease;
+      }
+
+      .control:hover,
+      .control:focus-visible {
+        background: rgba(216, 243, 122, .16);
+        color: #f5f6dd;
+        outline: none;
+      }
+
+      .control:active { transform: scale(.96); }
+      .control[data-primary] { border-color: rgba(216, 243, 122, .52); background: #d8f37a; color: #132016; }
+      .control:disabled { opacity: .38; cursor: default; }
+
+      .help {
+        position: absolute;
+        z-index: 7;
+        right: clamp(10px, 3.3vw, 24px);
+        bottom: clamp(45px, 16vw, 114px);
+        max-width: 210px;
+        color: rgba(235, 239, 215, .48);
+        font-size: clamp(3px, .78vw, 6px);
+        line-height: 1.4;
+        text-align: right;
+        text-transform: uppercase;
+        pointer-events: none;
+      }
+
+      .preview-stage .library-badge {
+        top: auto;
+        left: auto;
+        right: clamp(8px, 3vw, 22px);
+        bottom: clamp(46px, 16.5vw, 118px);
+        padding: clamp(3px, .8vw, 6px) clamp(5px, 1.1vw, 8px);
+        border-color: rgba(216, 243, 122, .25);
+        background: rgba(5, 15, 12, .72);
+        color: #d8f37a;
+        font-size: clamp(3px, .78vw, 6px);
+        backdrop-filter: blur(10px);
+      }
+
+      @media (max-aspect-ratio: 1.7/1) {
+        .brief { top: 20%; }
+        .probe-card { top: 20%; }
+      }
+
+      @media (max-width: 360px) {
+        .brief { top: 25%; width: 30%; }
+        .brief p,
+        .help { display: none; }
+        .probe-card { top: 25%; }
+        .lab-console { grid-template-columns: 1fr auto; }
+        .threshold { grid-column: 1; grid-row: 2; }
+        .controls { grid-column: 2; grid-row: 1 / span 2; }
+        .preview-stage .library-badge { bottom: clamp(42px, 23vw, 82px); }
+      }
+
+      @media (max-width: 180px) {
+        .brief { top: 19%; width: 34%; }
+        .brief .eyebrow { display: none; }
+        .brief h1 { max-width: 48px; margin-top: 0; font-size: 7px; line-height: .78; }
+        .probe-card { display: none; }
+        .topline .field-status { display: none; }
+        .lab-console {
+          grid-template-columns: 1fr auto auto;
+          gap: 3px;
+          padding: 3px;
+        }
+        .readings { gap: 5px; }
+        .reading:nth-child(3) { display: none; }
+        .reading-label,
+        .threshold-label,
+        .threshold-output { display: none; }
+        .threshold { grid-column: auto; grid-row: auto; grid-template-columns: 24px; }
+        .controls { grid-column: auto; grid-row: auto; }
+        .control { padding: 2px 3px; }
+        .preview-stage .library-badge { bottom: 26px; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .control { transition: none; }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/cellular-automata-hover-bloom-CPw_gzYv.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+    <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
+    <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main id="bloom-stage" class="preview-stage bloom-stage" tabindex="0" aria-label="Interactive green-roof cellular recovery lab. Drag to seed viable cells, then step the simulation manually.">
+      <div class="canvas-host" data-canvas-host aria-hidden="true"></div>
+      <div class="field-grade"></div>
+      <div class="field-grid"></div>
+
+      <header class="topline">
+        <span class="brand">North roof · plot 07</span>
+        <span class="field-status">human-step lab · paused</span>
+      </header>
+
+      <section class="brief" aria-hidden="true">
+        <span class="eyebrow">Recovery field lab / 07</span>
+        <h1>Grow where the roof can hold.</h1>
+        <p>Drag viable plots to seed. Advance one measured generation at a time.</p>
+      </section>
+
+      <aside class="probe-card" aria-live="polite">
+        <div class="probe-head">
+          <span class="probe-label">Pixel probe</span>
+          <span class="probe-label" data-probe-coordinate>C24 / R13</span>
+        </div>
+        <div class="probe-zone">
+          <strong class="probe-value" data-probe-zone>viable moss</strong>
+        </div>
+        <div class="probe-metrics">
+          <span class="probe-metric"><span>Moisture</span><strong data-probe-moisture>—</strong></span>
+          <span class="probe-metric"><span>Heat risk</span><strong data-probe-heat>—</strong></span>
+        </div>
+      </aside>
+
+      <p class="help">Pointer probes · drag plants · Enter steps · Z undoes · R resets</p>
+      <span class="library-badge">p5.js · pixel-grown life</span>
+
+      <section class="lab-console" aria-label="Experiment controls">
+        <div class="readings" aria-live="polite">
+          <span class="reading"><span class="reading-label">Generation</span><strong class="reading-value" data-reading="generation">00</strong></span>
+          <span class="reading"><span class="reading-label">Live cells</span><strong class="reading-value" data-reading="live">000</strong></span>
+          <span class="reading"><span class="reading-label">Recovery</span><strong class="reading-value" data-reading="recovery">0%</strong></span>
+        </div>
+        <label class="threshold">
+          <span class="threshold-label">Tolerance</span>
+          <input id="tolerance" type="range" min="22" max="62" value="38" step="1" aria-label="Growth tolerance">
+          <output class="threshold-output" for="tolerance" data-tolerance-output>38</output>
+        </label>
+        <div class="controls">
+          <button class="control" type="button" data-bloom-action="undo">Undo</button>
+          <button class="control" type="button" data-bloom-action="reset">Reset</button>
+          <button class="control" type="button" data-bloom-action="step" data-primary>Step +1</button>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

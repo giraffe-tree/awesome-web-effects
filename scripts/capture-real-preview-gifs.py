@@ -1849,6 +1849,52 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 25:
                 route = page.evaluate("window.__PREVIEW_INTERACTION_STATE__.routeEvidence")
                 page.mouse.move(route[5]["u"] * 320, route[5]["v"] * 180)
+        elif demo["id"] == "cellular-automata-hover-bloom":
+            if index == 3:
+                page.mouse.move(122, 93)
+            elif index == 5:
+                page.mouse.move(122, 93)
+                page.mouse.down()
+            elif index == 6:
+                page.mouse.move(132, 88, steps=3)
+            elif index == 7:
+                page.mouse.move(142, 82, steps=3)
+            elif index == 8:
+                page.mouse.move(152, 76, steps=3)
+            elif index == 9:
+                page.mouse.move(162, 72, steps=3)
+            elif index == 10:
+                page.mouse.up()
+            elif index in (12, 14):
+                page.locator('[data-bloom-action="step"]').click()
+            elif index == 16:
+                page.locator("#tolerance").focus()
+                page.keyboard.press("ArrowLeft")
+            elif index == 17:
+                page.keyboard.press("ArrowLeft")
+            elif index == 19:
+                page.locator("#bloom-stage").focus()
+                page.keyboard.press("ArrowRight")
+            elif index == 20:
+                page.keyboard.press("Space")
+            elif index == 22:
+                page.keyboard.press("Enter")
+            elif index == 24:
+                page.locator('[data-bloom-action="undo"]').click()
+            elif index == 26:
+                page.locator('[data-bloom-action="reset"]').click()
+            elif index == 28:
+                page.mouse.move(130, 104)
+            elif index == 29:
+                page.mouse.down()
+            elif index == 30:
+                page.mouse.move(145, 98, steps=3)
+            elif index == 31:
+                page.mouse.move(160, 91, steps=3)
+            elif index == 32:
+                page.mouse.up()
+            elif index == 34:
+                page.locator('[data-bloom-action="step"]').click()
         elif demo["id"] == "elastic-voronoi-focus-mosaic":
             if index == 3:
                 page.mouse.move(294, 41)
@@ -5155,6 +5201,101 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["ready"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture a trusted six-fix pixel-derived night route, explicit confirmation, undo, keyboard reacquisition, and final reseal without automatic stitching: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "cellular-automata-hover-bloom":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-image-sampled-green-roof-recovery-lab"
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["mechanism"] != "p5-renders-human-stepped-cellular-life-constrained-by-same-origin-browser-sampled-roof-pixels"
+            or interaction["acceptedInputs"] != ["mouse-hover", "mouse-drag", "touch-drag", "pen-drag", "keyboard", "button-control", "range-control"]
+            or not interaction["userInputRequired"]
+            or not interaction["strictTrustedInputGuard"]
+            or not interaction["initialFrameStatic"]
+            or not interaction["initialStillVerified"]
+            or interaction["automaticCycle"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or interaction["previewClockCallCount"] < 36
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["inputCount"] < 20
+            or interaction["humanInputCausalityCount"] != interaction["inputCount"]
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["pointerEnterCount"] < 1
+            or interaction["pointerDownCount"] != 2
+            or interaction["pointerMoveCount"] < 12
+            or interaction["pointerUpCount"] != 2
+            or interaction["pointerCancelCount"] != 0
+            or interaction["pointerCaptureCount"] != 2
+            or interaction["pointerCaptureReleaseCount"] != 2
+            or interaction["dragMoveCount"] < 8
+            or interaction["keyboardInputCount"] != 3
+            or interaction["buttonActivationCount"] != 5
+            or interaction["rangeInputCount"] != 2
+            or interaction["hoverMutationCount"] < 5
+            or interaction["paintMutationCount"] < 2
+            or interaction["stepCount"] != 4
+            or interaction["undoCount"] != 1
+            or interaction["resetCount"] != 1
+            or interaction["ruleMutationCount"] != 2
+            or interaction["humanMutationCount"] < 10
+            or interaction["maximumHistoryDepth"] < 4
+            or interaction["visitedCellCount"] < 8
+            or interaction["generation"] != 1
+            or interaction["tolerance"] != 38
+            or interaction["currentFieldChecksum"] == interaction["initialFieldChecksum"]
+            or not interaction["fieldChangedByHuman"]
+            or interaction["activePointerId"] is not None
+            or interaction["pointerCaptured"]
+            or interaction["lastInputTrusted"] is not True
+            or interaction["lastInputKind"] != "button-step"
+            or interaction["lastPointerType"] != "mouse"
+            or interaction["assetFetchCount"] != 1
+            or interaction["assetResponseStatus"] != 200
+            or not interaction["assetSameOrigin"]
+            or interaction["assetMimeType"] != "image/jpeg"
+            or interaction["assetByteLength"] != 461364
+            or interaction["assetSha256"] != "1072ce13e2e5c01aa72879efce186a04c2db8bf1dacfdfbc117132d494620c78"
+            or not interaction["assetShaMatchesExpected"]
+            or not interaction["browserImageDecoded"]
+            or interaction["sourceNaturalWidth"] != 960
+            or interaction["sourceNaturalHeight"] != 640
+            or not interaction["browserCanvasReadback"]
+            or interaction["sampledWidth"] != 96
+            or interaction["sampledHeight"] != 54
+            or interaction["sampledPixelCount"] != 5184
+            or interaction["sampledPixelByteLength"] != 20736
+            or len(interaction["sampledPixelSha256"]) != 64
+            or not interaction["sampledPixelSha256"].strip("0")
+            or interaction["distinctSampleColorCount"] <= 350
+            or interaction["sampledLumaRange"] <= 130
+            or interaction["cellCount"] != 1296
+            or interaction["visibleCellCount"] != 1296
+            or interaction["viableCellCount"] <= 220
+            or interaction["viableCellCount"] >= 1000
+            or interaction["heatCellCount"] <= 100
+            or interaction["dampCellCount"] <= 20
+            or interaction["laneCellCount"] <= 50
+            or interaction["initialLiveCellCount"] < 6
+            or interaction["initialLiveCellCount"] > 12
+            or not interaction["p5InstanceReady"]
+            or not interaction["p5CanvasReady"]
+            or not interaction["p5ImageDecoded"]
+            or interaction["p5ImageWidth"] != 960
+            or interaction["p5ImageHeight"] != 640
+            or interaction["p5ImagePixelLength"] != 2457600
+            or interaction["p5DrawCount"] < 10
+            or interaction["completedDrawCount"] < 10
+            or interaction["stageCoverageRatio"] < .98
+            or interaction["canvasCoverageRatio"] < .98
+            or not interaction["runtimeAssertionPassed"]
+            or not interaction["ready"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture trusted pixel-probed roof seeding, finite manual generations, rule adjustment, undo/reset, and a retained final field without automatic evolution: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "elastic-voronoi-focus-mosaic":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

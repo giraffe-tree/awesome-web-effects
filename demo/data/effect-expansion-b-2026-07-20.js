@@ -167,12 +167,12 @@ export const effectExpansion150BatchB = [
     scores: score(20, 20, 20, 15, 15, 10), rationaleZh: '一张原创 ImageGen 三联现场图被同源 fetch、精确 SHA 校验、浏览器解码并分成三个 64×64 像素证据裁切；虚构仓库、山脊中转与诊所照片随最近站点真实切换。真人捕获拖拽、range、键盘和站点按钮可在路线任意位置停留和反向，暂停的 Motion 控制器同时驱动路线描边，SVG 弧长还统一约束药箱坐标、切线、里程和检查点，没有 autoplay、排练、fallback、合成输入或预览时钟变异。'
   },
   {
-    id: 'cellular-automata-hover-bloom', order: 144, name: 'Cellular automata hover bloom', nameZh: '元胞自动机悬停生长', category: 'canvas', sourceUrl: 'https://github.com/shiffman/The-Nature-of-Code-Examples-p5.js',
-    difference: '指针注入的细胞遵循 Conway 规则演化成像素城市，录制任意时间都可由初始种子重算。',
-    behavior: { trigger: 'pointer seed and animation time', response: 'A seeded cellular field blooms, competes, and decays under Life rules', timing: 'discrete deterministic generations', layer: 'pixel automaton canvas' },
-    prompt: '实现固定初始种子的 Conway Life；每帧从初态重算到目标代数，指针可注入一个稳定小型种群。',
-    implementation: p5Implementation("new p5(p => { p.draw = () => drawLife(p, evolve(initialSeed, targetGeneration)); });", 'https://github.com/shiffman/The-Nature-of-Code-Examples-p5.js'),
-    scores: score(19, 18, 19, 15, 15, 10), rationaleZh: '代数计数、规则生长和用户播种因果完整，像素城市形态鲜明。'
+    id: 'cellular-automata-hover-bloom', order: 144, name: 'North Roof recovery field lab', nameZh: 'North Roof 屋顶恢复实验场', category: 'canvas', sourceUrl: 'https://github.com/processing/p5.js',
+    difference: '把自动闪烁的抽象元胞变成一座可人工操作的屋顶更新实验场：航拍图的真实像素决定每格的耐受度、湿度、热风险和禁种通道，用户亲手播种、擦除并逐代推进。',
+    behavior: { trigger: 'trusted hover, captured pointer paint, range, keyboard, or visible control', response: 'Probe roof evidence, paint only viable plots, adjust tolerance, then advance, undo, or reset one finite generation at a time', timing: 'human-stepped, static between inputs, and reversible', layer: 'full-stage p5 roof image, pixel-classified automaton, probe, and lab controls' },
+    prompt: '制作一个全舞台绿色屋顶更新实验台：同源加载并精确校验一张 ImageGen 航拍图，用浏览器像素采样把颜色转成可种植、热胁迫、潮湿通道和检修路，再让真人通过鼠标/触控/笔捕获拖画、键盘、耐受度滑杆和 Step/Undo/Reset 控件有限推进元胞。首帧与每次操作后保持静止，禁止 autoplay、排练、fallback、合成输入或预览时钟驱动。',
+    implementation: p5Implementation("p.noLoop(); const evidence = sampleRoofPixels(sourceImage); stage.addEventListener('pointermove', paintOnlyFromTrustedInput); stepButton.addEventListener('click', () => { field = evolveOneGeneration(field, evidence, tolerance); p.redraw(); });", 'https://github.com/processing/p5.js'),
+    scores: score(20, 20, 20, 15, 15, 10), rationaleZh: '原创 ImageGen 屋顶图经过同源 fetch、精确源 SHA、浏览器与 p5 双解码，并被读取为 96×54 像素证据；每个 2×2 样本块真实决定 48×27 网格中的适生度、湿度、热风险、检修路排除及局部生灭阈值。可信 hover、捕获式鼠标/触控/笔拖画、键盘、range 与可见 Step/Undo/Reset 控件共同拥有探测、播种、擦除、规则和代际，所有结果都停住等待下一次输入。'
   },
   {
     id: 'spring-loaded-split-flap-counter', order: 145, name: 'Harbor Hall seat-release proof', nameZh: 'Harbor Hall 座席放票核验', category: 'animation', sourceUrl: 'https://github.com/motiondivision/motion',

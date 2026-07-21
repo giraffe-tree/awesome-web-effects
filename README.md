@@ -225,7 +225,7 @@ Scene graphs, creative coding, physics, drawing tools, and 2D renderers.
 | [Flow field ribbon advection](https://giraffe-tree.github.io/awesome-web-effects/#flow-field-ribbon-advection) | [p5.js](https://github.com/processing/p5.js) | **93/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#flow-field-ribbon-advection) |
 | [Delaunay triangulated light sweep](https://giraffe-tree.github.io/awesome-web-effects/#delaunay-triangulated-light-sweep) | [p5.js](https://github.com/processing/p5.js) | **91/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#delaunay-triangulated-light-sweep) |
 | [Polar waveform sundial](https://giraffe-tree.github.io/awesome-web-effects/#polar-waveform-sundial) | [p5.js](https://github.com/processing/p5.js) | **96/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#polar-waveform-sundial) |
-| [Seeded sandpile avalanche](https://giraffe-tree.github.io/awesome-web-effects/#seeded-sandpile-avalanche) | [p5.js](https://github.com/processing/p5.js) | **96/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#seeded-sandpile-avalanche) |
+| [Ridge 12 slope load cell](https://giraffe-tree.github.io/awesome-web-effects/#seeded-sandpile-avalanche) | [p5.js](https://github.com/processing/p5.js) | **100/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#seeded-sandpile-avalanche) |
 | [Signed distance neon metropolis](https://giraffe-tree.github.io/awesome-web-effects/#signed-distance-neon-metropolis) | [p5.js](https://github.com/processing/p5.js) | **96/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#signed-distance-neon-metropolis) |
 | [Mizu Press marbling proof](https://giraffe-tree.github.io/awesome-web-effects/#flowfield-paper-marbling) | [p5.js](https://github.com/processing/p5.js) | **100/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#flowfield-paper-marbling) |
 | [Topographic wave contour reveal](https://giraffe-tree.github.io/awesome-web-effects/#topographic-wave-contour-reveal) | [p5.js](https://github.com/processing/p5.js) | **96/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#topographic-wave-contour-reveal) |
@@ -282,7 +282,7 @@ Scene graphs, creative coding, physics, drawing tools, and 2D renderers.
 - 150 verified previews: 2 official captures and 148 captures from runnable local demos; 0 missing.
 - Human review scores creativity, art direction, motion craft, legibility, creative transfer and evidence quality.
 - Admission requires 80/100 plus core-dimension minimums. Popularity never overrides the gate.
-- The verified GIF set is 25.99 MiB; every preview is 320×180, at most three seconds and below 1 MiB.
+- The verified GIF set is 26.02 MiB; every preview is 320×180, at most three seconds and below 1 MiB.
 - Stars are a 2026-07-20 snapshot. Recommendation sources and observed AI homepages remain separate relationships.
 
 Read the [current 396-candidate admission audit](research/demo-admission-audit-2026-07-20.md), the [100-company homepage research](research/ai-native-homepages-100.md), and the [preview provenance manifest](demo/gifs/provenance.json).

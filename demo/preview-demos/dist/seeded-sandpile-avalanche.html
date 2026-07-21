@@ -1,8 +1,415 @@
-<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Seeded Sandpile Avalanche</title><style>:root{--preview-background:#100c08}canvas{width:100%;height:100%;image-rendering:pixelated}.copy{position:absolute;left:14px;top:49px;width:100px;color:#fff0d6}.copy small{font:800 6px monospace;letter-spacing:.14em;color:#ffb64f}.copy h1{margin:8px 0;font:950 20px/.84 system-ui;letter-spacing:-.06em}.grains{position:absolute;right:11px;bottom:11px;color:#ffc76f;font:800 6px monospace}.scene-caption{display:none}</style>  <script type="module" crossorigin src="./assets/seeded-sandpile-avalanche-2ukyOtC8.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
-  <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
-  <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
-  <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
-  <link rel="modulepreload" crossorigin href="./assets/expansion-b-utils-CD_J0IHW.js">
-  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage"><canvas tabindex="0" aria-label="A deterministic Abelian sandpile topples into color bands"></canvas><section class="copy"><small>TOPPLE / REPEAT</small><h1>ONE GRAIN MOVES A MOUNTAIN.</h1></section><span class="grains" id="grain-count">GRAINS 0000</span><span class="library-badge">p5.js · sandpile avalanche</span></main></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>p5.js — Ridge 12 Load / Avalanche Inspector</title>
+    <style>
+      :root {
+        --preview-background: #161410;
+        color-scheme: dark;
+      }
+
+      button,
+      input { font: inherit; }
+
+      .sandpile-stage {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        isolation: isolate;
+        background: #161410;
+        color: #f5edd8;
+        cursor: crosshair;
+        outline: none;
+        touch-action: none;
+        user-select: none;
+      }
+
+      .sandpile-stage:focus-visible {
+        box-shadow: inset 0 0 0 2px #f5cf62;
+      }
+
+      .terrain-canvas,
+      .terrain-canvas canvas,
+      .terrain-grade,
+      .terrain-grain {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .terrain-canvas,
+      .terrain-grade,
+      .terrain-grain { pointer-events: none; }
+
+      .terrain-grade {
+        z-index: 2;
+        background:
+          linear-gradient(180deg, #17120be8 0%, #17120b20 28%, #17120b12 58%, #17120be6 100%),
+          linear-gradient(90deg, #17120bcf 0%, #17120b2b 30%, transparent 62%, #17120b59 100%);
+      }
+
+      .terrain-grain {
+        z-index: 3;
+        opacity: .12;
+        mix-blend-mode: soft-light;
+        background-image: radial-gradient(#fff8dc80 .45px, transparent .65px);
+        background-size: 3px 3px;
+      }
+
+      .topbar {
+        position: absolute;
+        z-index: 7;
+        top: 10px;
+        left: 11px;
+        right: 11px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 9px;
+        pointer-events: none;
+      }
+
+      .site-id {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+      }
+
+      .site-mark {
+        display: grid;
+        width: 23px;
+        height: 23px;
+        place-items: center;
+        flex: 0 0 auto;
+        border: 1px solid #f6e7bd60;
+        border-radius: 50%;
+        background: #16110b8c;
+        color: #f5cf62;
+        font: 900 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        backdrop-filter: blur(8px);
+      }
+
+      .site-copy strong,
+      .site-copy span {
+        display: block;
+        text-transform: uppercase;
+      }
+
+      .site-copy strong {
+        font: 900 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .14em;
+      }
+
+      .site-copy span {
+        margin-top: 4px;
+        color: #e8ddc49d;
+        font: 750 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .1em;
+      }
+
+      .sandpile-stage .library-badge {
+        position: static;
+        max-width: 130px;
+        padding: 5px 7px;
+        border-color: #f6e7bd38;
+        background: #16110b8c;
+        color: #f4ecd7;
+        font: 850 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .1em;
+        white-space: nowrap;
+        backdrop-filter: blur(8px);
+      }
+
+      .hero-copy {
+        position: absolute;
+        z-index: 6;
+        top: 49%;
+        left: 11px;
+        width: min(116px, 36vw);
+        transform: translateY(-50%);
+        pointer-events: none;
+      }
+
+      .hero-copy .eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: #f5cf62;
+        font: 900 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .16em;
+        text-transform: uppercase;
+      }
+
+      .hero-copy .eyebrow::before {
+        width: 13px;
+        height: 2px;
+        background: #f5cf62;
+        box-shadow: 0 0 8px #f5cf62;
+        content: "";
+      }
+
+      .hero-copy h1 {
+        margin: 6px 0 0;
+        font: 650 clamp(15px, 4.2vw, 32px)/.87 Georgia, "Times New Roman", serif;
+        letter-spacing: -.052em;
+      }
+
+      .hero-copy p {
+        max-width: 106px;
+        margin: 7px 0 0;
+        color: #e5dac1b7;
+        font: 720 4.5px/1.42 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .075em;
+        text-transform: uppercase;
+      }
+
+      .probe-card {
+        position: absolute;
+        z-index: 6;
+        top: 47%;
+        right: 11px;
+        min-width: 66px;
+        padding: 7px 8px;
+        border: 1px solid #f6e7bd42;
+        border-radius: 2px;
+        background: #16110b91;
+        transform: translateY(-50%);
+        pointer-events: none;
+        backdrop-filter: blur(8px);
+      }
+
+      .probe-card span,
+      .probe-card strong {
+        display: block;
+        text-transform: uppercase;
+      }
+
+      .probe-card span {
+        color: #e3d8c09b;
+        font: 800 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .12em;
+      }
+
+      .probe-card strong {
+        margin-top: 4px;
+        color: #fff2cc;
+        font: 900 7px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+
+      .probe-card .risk-stable { color: #b8dcc6; }
+      .probe-card .risk-watch { color: #f5cf62; }
+      .probe-card .risk-release { color: #ff8d6f; }
+
+      .bottom-panel {
+        position: absolute;
+        z-index: 8;
+        right: 11px;
+        bottom: 9px;
+        left: 11px;
+        display: grid;
+        grid-template-columns: auto minmax(68px, 1fr) auto;
+        align-items: end;
+        gap: 8px;
+        pointer-events: none;
+      }
+
+      .load-summary {
+        min-width: 69px;
+        padding: 5px 7px;
+        border-left: 1px solid #f6e7bd67;
+        background: #16110b62;
+        backdrop-filter: blur(6px);
+      }
+
+      .load-summary span,
+      .load-summary strong {
+        display: block;
+        white-space: nowrap;
+        text-transform: uppercase;
+      }
+
+      .load-summary span {
+        color: #e3d8c09b;
+        font: 800 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .12em;
+      }
+
+      .load-summary strong {
+        margin-top: 5px;
+        color: #fff2cc;
+        font: 900 7px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+
+      .load-control {
+        display: grid;
+        min-width: 0;
+        gap: 4px;
+        padding: 5px 8px;
+        border: 1px solid #f6e7bd3e;
+        border-radius: 999px;
+        background: #16110b91;
+        pointer-events: auto;
+        backdrop-filter: blur(8px);
+      }
+
+      .load-control label {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        color: #e9dfc8bf;
+        font: 850 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+      }
+
+      .load-control output { color: #f5cf62; }
+
+      .load-control input {
+        width: 100%;
+        height: 3px;
+        margin: 0;
+        accent-color: #f5cf62;
+        cursor: ew-resize;
+      }
+
+      .actions {
+        display: flex;
+        gap: 4px;
+        pointer-events: auto;
+      }
+
+      .actions button {
+        min-width: 28px;
+        min-height: 22px;
+        padding: 0 6px;
+        border: 1px solid #f6e7bd46;
+        border-radius: 999px;
+        background: #16110ba3;
+        color: #f3ead5;
+        cursor: pointer;
+        font: 900 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        backdrop-filter: blur(8px);
+      }
+
+      .actions button:first-child {
+        border-color: #f5cf6282;
+        background: #f5cf62;
+        color: #241a0c;
+      }
+
+      .actions button:hover,
+      .actions button:focus-visible {
+        border-color: #fff1c4;
+        outline: none;
+        transform: translateY(-1px);
+      }
+
+      .actions button:disabled {
+        opacity: .42;
+        cursor: default;
+        transform: none;
+      }
+
+      .scene-caption { display: none; }
+
+      @media (max-width: 220px), (max-height: 110px) {
+        .topbar { top: 5px; left: 6px; right: 6px; }
+        .site-mark { width: 15px; height: 15px; font-size: 4px; }
+        .site-copy span,
+        .hero-copy p,
+        .sandpile-stage .library-badge { display: none; }
+        .site-copy strong { font-size: 4px; }
+        .hero-copy { left: 6px; width: 47px; }
+        .hero-copy .eyebrow { font-size: 3px; gap: 3px; }
+        .hero-copy .eyebrow::before { width: 7px; height: 1px; }
+        .hero-copy h1 { margin-top: 4px; font-size: 8px; }
+        .probe-card { right: 6px; min-width: 39px; padding: 4px; }
+        .probe-card span { font-size: 3px; }
+        .probe-card strong { margin-top: 3px; font-size: 4px; }
+        .bottom-panel { right: 6px; bottom: 4px; left: 6px; grid-template-columns: auto 1fr; gap: 4px; }
+        .load-summary { min-width: 36px; padding: 3px 4px; }
+        .load-summary span { font-size: 3px; }
+        .load-summary strong { margin-top: 3px; font-size: 4px; }
+        .load-control { display: none; }
+        .actions { justify-self: end; gap: 2px; }
+        .actions button { min-width: 17px; min-height: 14px; padding: 0 3px; font-size: 3px; }
+        .actions button:nth-child(3) { display: none; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .actions button { transition: none; }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/seeded-sandpile-avalanche-CFhaJ8RO.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+    <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
+    <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main
+      class="preview-stage sandpile-stage"
+      id="sandpile-stage"
+      tabindex="0"
+      role="application"
+      aria-label="Human-operated Ridge 12 terrain load and seeded sandpile avalanche inspection"
+      aria-describedby="sandpile-instructions"
+      data-preview-mechanism="p5-image-seeded-abelian-sandpile-human-load-inspection"
+      data-input-policy="trusted-only"
+    >
+      <div class="terrain-canvas" id="terrain-canvas" aria-hidden="true"></div>
+      <div class="terrain-grade" aria-hidden="true"></div>
+      <div class="terrain-grain" aria-hidden="true"></div>
+
+      <header class="topbar">
+        <div class="site-id">
+          <span class="site-mark">12</span>
+          <span class="site-copy">
+            <strong>Ridge / load cell</strong>
+            <span>Fictional aggregate test slope</span>
+          </span>
+        </div>
+        <span class="library-badge">p5.js · pixel-seeded sandpile</span>
+      </header>
+
+      <section class="hero-copy">
+        <span class="eyebrow">Live stability proof</span>
+        <h1>Load the slope. See where it gives.</h1>
+        <p id="sandpile-instructions">Hover to inspect. Drag to deposit. Space steps, Z undoes, R resets.</p>
+      </section>
+
+      <aside class="probe-card" aria-live="polite">
+        <span>Probe zone</span>
+        <strong id="probe-zone">DRY SAND</strong>
+        <span style="margin-top:6px">Release risk</span>
+        <strong class="risk-watch" id="probe-risk">WATCH</strong>
+      </aside>
+
+      <section class="bottom-panel">
+        <div class="load-summary" aria-live="polite">
+          <span>Applied / topples</span>
+          <strong><span id="grain-count" style="display:inline">0000</span> / <span id="topple-count" style="display:inline">000</span></strong>
+        </div>
+
+        <div class="load-control">
+          <label for="load-size"><span>Deposit packet</span><output id="load-readout" for="load-size">12 grains</output></label>
+          <input id="load-size" type="range" min="4" max="24" step="1" value="12" aria-label="Deposit packet size" />
+        </div>
+
+        <div class="actions" aria-label="Sandpile controls">
+          <button type="button" data-sand-action="deposit" title="Deposit at probe (Enter)">Load</button>
+          <button type="button" data-sand-action="step" title="One finite toppling wave (Space)">Step</button>
+          <button type="button" data-sand-action="undo" title="Undo last load (Z)" disabled>Undo</button>
+          <button type="button" data-sand-action="reset" title="Reset proof (R)">Reset</button>
+        </div>
+      </section>
+
+      <span class="scene-caption">Decoded evidence pixels seed material and stability; trusted human load exposes a finite Abelian avalanche.</span>
+    </main>
+  </body>
+</html>

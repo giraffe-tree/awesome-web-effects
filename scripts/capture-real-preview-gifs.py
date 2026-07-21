@@ -1849,6 +1849,40 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 25:
                 route = page.evaluate("window.__PREVIEW_INTERACTION_STATE__.routeEvidence")
                 page.mouse.move(route[5]["u"] * 320, route[5]["v"] * 180)
+        elif demo["id"] == "seeded-sandpile-avalanche":
+            if index == 2:
+                page.mouse.move(225, 70)
+            elif index == 4:
+                page.locator("#load-size").focus()
+                page.keyboard.press("ArrowRight")
+            elif index == 6:
+                page.mouse.move(150, 65)
+                page.mouse.down()
+            elif index == 7:
+                page.mouse.move(180, 75, steps=2)
+            elif index == 8:
+                page.mouse.move(210, 90, steps=2)
+            elif index == 9:
+                page.mouse.move(240, 105, steps=2)
+            elif index == 10:
+                page.mouse.move(270, 120, steps=2)
+            elif index == 11:
+                page.mouse.up()
+            elif index == 13:
+                page.locator('[data-sand-action="step"]').click()
+            elif index == 15:
+                page.locator('[data-sand-action="undo"]').click()
+            elif index == 17:
+                page.locator('[data-sand-action="reset"]').click()
+            elif index == 19:
+                page.locator('[data-sand-action="deposit"]').click()
+            elif index == 21:
+                page.locator("#sandpile-stage").focus()
+                page.keyboard.press("Space")
+            elif index == 23:
+                page.keyboard.press("z")
+            elif index == 25:
+                page.keyboard.press("Enter")
         elif demo["id"] == "flowfield-paper-marbling":
             if index == 2:
                 page.mouse.move(180, 80)
@@ -5350,6 +5384,115 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["ready"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture a trusted six-fix pixel-derived night route, explicit confirmation, undo, keyboard reacquisition, and final reseal without automatic stitching: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "seeded-sandpile-avalanche":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-fictional-slope-load-and-avalanche-inspection"
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["mechanism"] != "decoded-raster-pixels-seed-material-stability-and-abelian-sandpile-load"
+            or interaction["acceptedInputs"] != ["mouse-hover", "mouse-drag", "touch-drag", "pen-drag", "keyboard", "button", "range"]
+            or not interaction["userInputRequired"]
+            or not interaction["strictTrustedInputGuard"]
+            or not interaction["initialFrameStatic"]
+            or not interaction["initialStillVerified"]
+            or interaction["automaticCycle"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["previewClockMutationCount"] != 0
+            or interaction["nonInputVisualMutationCountAfterReady"] != 0
+            or interaction["inputCount"] != interaction["trustedInputCount"]
+            or interaction["inputCount"] < 20
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["pointerEnterCount"] < 1
+            or interaction["hoverProbeCount"] < 1
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerDragCount"] < 8
+            or interaction["pointerReleaseCount"] != 1
+            or interaction["pointerCancelCount"] != 0
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerCaptureReleaseCount"] != 1
+            or interaction["activePointerId"] is not None
+            or interaction["pointerCaptured"]
+            or interaction["depositMutationCount"] < 10
+            or interaction["stepMutationCount"] != 2
+            or interaction["probeMutationCount"] < 1
+            or interaction["packetMutationCount"] != 1
+            or interaction["undoCount"] != 2
+            or interaction["resetCount"] != 1
+            or interaction["buttonInputCount"] != 4
+            or interaction["keyboardInputCount"] != 3
+            or interaction["rangeInputCount"] != 1
+            or interaction["mouseInputCount"] < 10
+            or interaction["touchInputCount"] != 0
+            or interaction["penInputCount"] != 0
+            or interaction["humanMutationCount"] < 18
+            or interaction["packetSize"] != interaction["initialPacketSize"]
+            or interaction["appliedGrainCount"] <= 0
+            or interaction["totalToppleCount"] <= 0
+            or interaction["toppleWaveCount"] != 2
+            or interaction["loadedCellCount"] <= 0
+            or interaction["maximumCellLoad"] <= 3
+            or interaction["undoDepth"] != 2
+            or interaction["lastInputKind"] != "keyboard"
+            or interaction["lastInputSource"] != "keyboard-enter"
+            or interaction["lastInputTrusted"] is not True
+            or interaction["lastPointerType"] != "mouse"
+            or len(interaction["transitionRecords"]) < 15
+            or any(record["trusted"] is not True for record in interaction["transitionRecords"])
+            or interaction["assetFetchCount"] != 1
+            or interaction["assetResponseStatus"] != 200
+            or "image/jpeg" not in interaction["assetMimeType"]
+            or not interaction["assetSameOrigin"]
+            or interaction["assetByteLength"] != 383665
+            or interaction["assetSha256"] != "9f43f0bc952f91ef389e3cfa6ec75bc9ccd32ed8bb9038c122420b3c8980c02d"
+            or not interaction["assetShaMatchesExpected"]
+            or not interaction["browserImageDecoded"]
+            or interaction["sourceNaturalWidth"] != 960
+            or interaction["sourceNaturalHeight"] != 640
+            or not interaction["p5ImageDecoded"]
+            or interaction["p5ImageClass"] != "p5.Image"
+            or interaction["p5ImageWidth"] != 960
+            or interaction["p5ImageHeight"] != 640
+            or interaction["p5ImagePixelLength"] != 2457600
+            or interaction["gridColumns"] != 60
+            or interaction["gridRows"] != 36
+            or interaction["sampledPixelCount"] != 2160
+            or interaction["sampledPixelByteLength"] != 8640
+            or len(interaction["sampledPixelSha256"]) != 64
+            or not interaction["sampledPixelSha256"].strip("0")
+            or interaction["sampledPixelChecksum"] <= 0
+            or interaction["distinctSampleColorCount"] <= 220
+            or interaction["sampledLuminanceRange"] <= .48
+            or interaction["materialClassCount"] != 5
+            or len(interaction["materialCellCounts"]) != 5
+            or any(count <= 8 for count in interaction["materialCellCounts"])
+            or sum(interaction["materialCellCounts"]) != 2160
+            or interaction["terrainRiskRange"] <= .68
+            or interaction["terrainRiskChecksum"] <= 0
+            or interaction["seedCellCount"] != 2160
+            or interaction["seedGrainCount"] <= 2160
+            or interaction["seedGrainCount"] >= 6480
+            or interaction["seedChecksum"] <= 0
+            or not interaction["rasterDrivenEvidenceReady"]
+            or interaction["p5CanvasWidth"] != 320
+            or interaction["p5CanvasHeight"] != 180
+            or interaction["p5ImageDrawCount"] < 1
+            or interaction["materialCellDrawCount"] != 2160
+            or interaction["loadedCellDrawCount"] <= 0
+            or interaction["p5CompletedDrawCount"] < 15
+            or interaction["initialCanvasSignature"] == 0
+            or interaction["currentCanvasSignature"] == 0
+            or interaction["initialCanvasSignature"] == interaction["currentCanvasSignature"]
+            or not interaction["runtimeAssertionPassed"]
+            or not interaction["ready"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture trusted terrain probing, a captured load path, finite Abelian waves, undo/reset, and a final retained pixel-seeded slope load without automatic toppling: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "flowfield-paper-marbling":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

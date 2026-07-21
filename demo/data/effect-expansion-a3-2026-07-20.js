@@ -35,12 +35,12 @@ export const effectExpansion150BatchA3 = [
     scores: scores(19, 19, 18, 15, 15, 10), rationaleZh: '声纹轮廓与日晷指针共享相位，科学仪器般的视觉语言完整。'
   },
   {
-    id: 'seeded-sandpile-avalanche', order: 123, name: 'Seeded sandpile avalanche', nameZh: '固定种子沙堆雪崩', category: 'canvas', sourceUrl: 'https://github.com/shiffman/The-Nature-of-Code-Examples-p5.js',
-    difference: '中心沙粒按 Abelian sandpile 四邻域规则反复崩塌，最终颜色直接编码每格余数，不是落沙物理。',
-    behavior: { trigger: 'pointer grain count or animation frame', response: 'A central heap topples into deterministic four-color avalanche bands', timing: 'discrete relaxation to stable state', layer: 'cellular sandpile canvas' },
-    prompt: '实现四邻域 Abelian sandpile；从中心加入确定数量沙粒，迭代到稳定态并按每格 0–3 余数着色。',
-    implementation: p5("new p5(p => { p.draw = () => drawSandpile(p, stabilize(centerHeap(grainCount))); });", 'https://github.com/shiffman/The-Nature-of-Code-Examples-p5.js'),
-    scores: scores(19, 18, 19, 15, 15, 10), rationaleZh: '雪崩规则、粒数读数和四值色带构成可核验的离散系统，结果稳定。'
+    id: 'seeded-sandpile-avalanche', order: 123, name: 'Ridge 12 slope load cell', nameZh: 'Ridge 12 坡面负载实验场', category: 'canvas', sourceUrl: 'https://github.com/shiffman/The-Nature-of-Code-Examples-p5.js',
+    difference: '把居中的自动像素雪崩变成一块可探测、可加载、可单步和可撤销的坡面稳定性实验场；真实航拍像素为每格分类材质、风险与初始沙粒，而不是用一套同质规则填满画布。',
+    behavior: { trigger: 'trusted hover, captured pointer deposition, range, keyboard, or visible load/step/undo/reset control', response: 'Probe source-defined terrain, deposit finite packets along a human path, advance one Abelian wave, then undo or restore the evidence field', timing: 'human-stepped finite toppling that stays still between inputs', layer: 'full-stage p5 terrain orthomosaic, 60×36 material/risk grid, retained load cells, probe, counts, and controls' },
+    prompt: '制作一个全舞台坡面负载实验场：同源加载并精确校验一张 ImageGen 航拍坡面证据图，用 60×36 真实像素分类玄武岩、湿粉砂、基岩、松散碎石和干砂，派生风险与初始 Abelian 沙堆。真人通过 hover 探测、捕获式鼠标/触控/笔拖动加载、packet range、键盘及 Load/Step/Undo/Reset 控件有限推进四邻域释放；每次结果停住，禁止 autoplay、排练、fallback、合成输入或预览时钟变异。',
+    implementation: p5("p.noLoop(); const terrain = sourcePixels.map(classifyMaterialAndRisk); stage.addEventListener('pointermove', depositOnlyFromCapturedTrustedInput); stepButton.addEventListener('click', () => { applyOneAbelianToppleWave(field); p.redraw(); });", 'https://github.com/processing/p5.js'),
+    scores: scores(20, 20, 20, 15, 15, 10), rationaleZh: '原创 ImageGen 坡面图经过同源 fetch、精确源 SHA、浏览器与 p5 双解码，并读取为 60×36 / 2,160 像素；像素明度和色彩关系真实决定五类材质、局部风险、4,207 粒初始场以及之后的释放路径。可信 hover、捕获拖动、range、键盘和可见按钮拥有探测、加载、有限波、撤销与重置，所有状态静止等待下一次输入。'
   },
   {
     id: 'signed-distance-neon-metropolis', order: 124, name: 'Signed distance neon metropolis', nameZh: '有符号距离霓虹都市', category: 'canvas', sourceUrl: 'https://github.com/terkelg/awesome-creative-coding',

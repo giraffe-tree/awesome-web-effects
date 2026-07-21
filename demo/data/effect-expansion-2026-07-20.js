@@ -2635,16 +2635,16 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "handle-connected-animated-node-editor",
-    "name": "Handle-connected animated node editor",
-    "nameZh": "手柄连线动画节点编辑器",
+    "name": "Human-confirmed AI graph payload",
+    "nameZh": "真人确认的 AI 图工作流载荷",
     "category": "vector",
     "sourceUrl": "https://github.com/xyflow/xyflow",
-    "difference": "用户从 source handle 建立真实拓扑，成功后流光沿边运行；DOM beam 只连接预先存在的节点。",
+    "difference": "真人拖动节点会重测 DOM handle 并重算 SVG 边，从 Model output 拖到 Review input 才建立持久拓扑；显式 Run 发送一次有限 payload，到达后仅产生候选，Confirm 后才保留输出。",
     "behavior": {
-      "trigger": "node drag / handle connect",
-      "response": "Create topology from handles and animate data flow through the new edge",
-      "timing": "direct manipulation with persistent graph state",
-      "layer": "DOM/SVG node canvas"
+      "trigger": "trusted node drag, output-to-input connection, explicit run, and explicit confirmation",
+      "response": "Recompute measured edge geometry, create persistent topology, transport one payload, then retain the approved workflow output",
+      "timing": "direct graph editing plus one finite 500ms human-started payload transaction",
+      "layer": "full-stage FlowForge DOM nodes, SVG edges, Motion payload, and result rail"
     },
     "implementation": {
       "projectId": "motiondivision-motion",
@@ -2655,18 +2655,18 @@ export const effectExpansion100Specs = [
       "referenceUrl": "https://github.com/xyflow/xyflow"
     },
     "scores": {
-      "creativity": 15,
-      "artDirection": 17,
-      "motion": 18,
+      "creativity": 20,
+      "artDirection": 20,
+      "motion": 20,
       "clarity": 15,
       "inspiration": 15,
-      "evidence": 9,
-      "total": 89
+      "evidence": 10,
+      "total": 100
     },
-    "rationaleZh": "拓扑编辑与流动反馈结合，区别于被动力网络和装饰连线。",
+    "rationaleZh": "实测 DOM 端口、持久拓扑、有限 Motion 载荷、到达候选与显式确认构成完整 AI 工作流事务，区别于预写连线和循环流光。",
     "batch": "C",
-    "demo": "输入、模型、输出三节点，用户拖线成功后下游节点逐步点亮。",
-    "capture": "从 Input handle 拖到 Model→再连 Output→移动中间节点观察边更新。",
+    "demo": "在 FlowForge 中移动 Plan builder、撤销，真人建立 Model→Review 边；重置后用键盘重建边，Run 一次计划载荷并确认保留 3-step launch plan。",
+    "capture": "首帧静止→拖节点并 Undo→真人 handle 连边→Reset→键盘移动/连边→Run→观察载荷沿边到达→候选停留→Confirm→保留 JSON valid 输出。",
     "risk": {
       "level": "medium",
       "detail": "必须真实 handle-to-handle pointer；预写 SVG 连线不合格。"

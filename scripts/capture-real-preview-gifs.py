@@ -1854,6 +1854,57 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.locator('#keep-event').hover()
             elif index == 21:
                 page.locator('#keep-event').click()
+        elif demo["id"] == "handle-connected-animated-node-editor":
+            if index == 4:
+                box = page.locator('[data-node="model"]').bounding_box()
+                model_drag_x = box["x"] + box["width"] * .5
+                model_drag_y = box["y"] + box["height"] * .5
+                page.mouse.move(model_drag_x, model_drag_y)
+                page.mouse.down()
+            elif 5 <= index <= 7:
+                progress = (index - 4) / 3
+                page.mouse.move(model_drag_x + 14 * progress, model_drag_y + 10 * progress)
+            elif index == 8:
+                page.mouse.up()
+            elif index == 9:
+                page.locator('#undo-graph').click()
+            elif index == 10:
+                source_box = page.locator('#model-output').bounding_box()
+                target_box = page.locator('#review-input').bounding_box()
+                edge_start_x = source_box["x"] + source_box["width"] * .5
+                edge_start_y = source_box["y"] + source_box["height"] * .5
+                edge_target_x = target_box["x"] + target_box["width"] * .5
+                edge_target_y = target_box["y"] + target_box["height"] * .5
+                page.mouse.move(edge_start_x, edge_start_y)
+                page.mouse.down()
+            elif 11 <= index <= 14:
+                progress = (index - 10) / 4
+                page.mouse.move(edge_start_x + (edge_target_x - edge_start_x) * progress, edge_start_y + (edge_target_y - edge_start_y) * progress)
+            elif index == 15:
+                page.mouse.up()
+            elif index == 16:
+                page.locator('#reset-graph').click()
+            elif index == 17:
+                page.locator('[data-node="model"]').focus()
+                page.keyboard.press('ArrowRight')
+            elif index == 18:
+                page.keyboard.press('ArrowDown')
+            elif index == 19:
+                page.locator('#model-output').focus()
+                page.keyboard.press('Enter')
+            elif index == 20:
+                page.locator('#review-input').focus()
+                page.keyboard.press('Enter')
+            elif index == 22:
+                page.locator('#run-workflow').focus()
+                page.keyboard.press('Enter')
+            elif 23 <= index <= 28:
+                page.wait_for_timeout(83)
+            elif index == 29:
+                page.evaluate("async () => await window.__PREVIEW_WAIT_FOR_IDLE__()")
+            elif index == 31:
+                page.locator('#confirm-output').focus()
+                page.keyboard.press('Enter')
         elif demo["id"] == "gooey-pixel-cursor-wake":
             if index == 3:
                 box = page.locator('#pixel-wake-host').bounding_box()
@@ -7233,6 +7284,66 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or page.locator('#review-output').text_content() != "KEPT #C426 · 8.2°C"
         ):
             raise RuntimeError(f"{demo['id']} did not capture three real one-in/one-out cold-room samples and a retained 8.2°C event: {interaction!r}")
+    elif demo["id"] == "handle-connected-animated-node-editor":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        model_position = interaction["nodePositions"]["model"]
+        if (
+            not assertion
+            or interaction["id"] != "handle-connected-animated-node-editor"
+            or interaction["productTask"] != "Build, run, and explicitly approve an AI launch-planning workflow."
+            or interaction["library"] != "motion@12.42.2"
+            or interaction["renderer"] != "svg"
+            or interaction["mechanism"] != "trusted node drag recomputes handle geometry; trusted output-to-input gesture creates a persistent edge; Motion transports one finite payload"
+            or interaction["assetStrategy"] != "code-native"
+            or "raster pixels would not drive" not in interaction["imageGenDecision"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticConnection"]
+            or interaction["automaticPulse"]
+            or interaction["automaticCycle"]
+            or interaction["automaticFallback"]
+            or not interaction["initialStillVerified"]
+            or interaction["phase"] != "confirmed"
+            or abs(model_position["x"] - .408) > .001
+            or abs(model_position["y"] - .318) > .001
+            or interaction["trustedPointerInputCount"] != 2
+            or interaction["nodeDragCount"] != 1
+            or interaction["trustedKeyboardInputCount"] != 4
+            or interaction["keyboardNodeMoveCount"] != 2
+            or interaction["trustedControlInputCount"] != 4
+            or interaction["connectionIntentCount"] != 2
+            or interaction["connectionCompletionCount"] != 2
+            or interaction["connectionTransitCount"] < 5
+            or interaction["edgeCreateCount"] != 2
+            or interaction["pointerEdgeCreateCount"] != 1
+            or interaction["keyboardEdgeCreateCount"] != 1
+            or interaction["persistentEdgeCount"] != 1
+            or interaction["seedEdgeCount"] != 1
+            or interaction["payloadRunCount"] != 1
+            or interaction["payloadArrivalCount"] != 1
+            or interaction["candidateCreateCount"] != 1
+            or interaction["confirmCount"] != 1
+            or interaction["contentCommitCount"] != 1
+            or interaction["candidate"] is not None
+            or interaction["retainedResult"] != "3-step launch plan · JSON valid"
+            or interaction["contentTransitCount"] < 2
+            or interaction["retainedStableDuringTransitCount"] != interaction["contentTransitCount"]
+            or interaction["prematureCandidateCount"] != 0
+            or interaction["prematureCommitCount"] != 0
+            or interaction["retainedChangeOutsideConfirmCount"] != 0
+            or interaction["undoCount"] != 1
+            or interaction["resetCount"] != 1
+            or interaction["nodeGeometryMutationCount"] < 5
+            or interaction["edgePathChangeCount"] < 5
+            or interaction["geometryRecomputeCount"] <= 0
+            or not interaction["edgePathSignature"].startswith("M")
+            or len(interaction["edgePathSignature"]) <= 20
+            or interaction["svgCoverage"] < .98
+            or not page.locator('#flow-dot').get_attribute('hidden') == ""
+            or not page.locator('#flow-halo').get_attribute('hidden') == ""
+            or page.locator('#retained-output').text_content() != "3-step launch plan · JSON valid"
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a real handle-built graph, finite arrived payload, and explicitly retained AI result: {interaction!r}")
     elif demo["id"] == "gooey-pixel-cursor-wake":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")

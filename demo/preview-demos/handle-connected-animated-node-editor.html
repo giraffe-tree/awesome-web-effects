@@ -1,1 +1,279 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Motion — Handle Connected Animated Node Editor</title><link rel="stylesheet" href="./shared.css"><style>:root{--preview-background:#080d12}.node-canvas{position:absolute;inset:0;background:radial-gradient(circle at 1px 1px,#26333e 1px,transparent 1px);background-size:16px 16px}.edge-layer{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}.edge{fill:none;stroke:#6ee7c7;stroke-width:1.4;stroke-dasharray:5 7}.node{position:absolute;z-index:3;width:68px;padding:9px 8px;border:1px solid #3c4c58;border-radius:8px;background:#101922;color:#eff9ff;box-shadow:0 9px 20px #0006;touch-action:none}.node small{display:block;margin-bottom:6px;color:#7290a2;font:700 5px/1 ui-monospace;letter-spacing:.12em}.node strong{font:850 9px/1 system-ui}.node.input{left:21px;top:102px}.node.model{left:147px;top:56px}.node.output{right:18px;top:106px}.handle{position:absolute;top:50%;width:9px;height:9px;margin-top:-4.5px;border:2px solid #081017;border-radius:50%;background:#6ee7c7;cursor:crosshair}.handle.in{left:-5px}.handle.out{right:-5px}.flow-dot{fill:#fff4a5}.editor-copy{position:absolute;z-index:4;left:13px;top:41px;color:#eff9ff;pointer-events:none}.editor-copy small{font:800 6px/1 ui-monospace;letter-spacing:.15em;color:#6ee7c7}.editor-copy h1{width:104px;margin:8px 0 0;font:950 16px/.86 system-ui;letter-spacing:-.05em}.library-badge{background:#080d12c9}</style></head><body><main class="preview-stage node-canvas" id="node-canvas" data-preview-mechanism="handle-to-handle-topology"><svg class="edge-layer" id="edge-layer" viewBox="0 0 320 180"><path class="edge" id="edge-a"/><path class="edge" id="edge-b"/><circle class="flow-dot" id="flow-dot" r="3"/></svg><section class="editor-copy"><small>GRAPH / HANDLE MODE</small><h1>CONNECT AN IDEA TO AN OUTCOME.</h1></section><article class="node input" data-node="input"><small>SOURCE</small><strong>BRIEF</strong><button class="handle out" data-from="input" aria-label="Connect Brief"></button></article><article class="node model" data-node="model"><button class="handle in" data-to="model" aria-label="Input to Model"></button><small>TRANSFORM</small><strong>MODEL</strong><button class="handle out" data-from="model" aria-label="Connect Model"></button></article><article class="node output" data-node="output"><button class="handle in" data-to="output" aria-label="Input to Output"></button><small>DESTINATION</small><strong>SCENE</strong></article><span class="library-badge">Motion · measured SVG edges</span><span class="scene-caption">drag nodes · connect output handle to input handle</span></main><script type="module" src="./src/handle-connected-animated-node-editor-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Motion — Handle Connected Animated Node Editor</title>
+    <link rel="stylesheet" href="./shared.css">
+    <style>
+      :root {
+        --preview-background: #07110f;
+        --ink: #ecf7f1;
+        --muted: #789089;
+        --line: #233a34;
+        --panel: #0d1b18;
+        --mint: #83f7c6;
+        --lime: #d7ff63;
+        --violet: #aa92ff;
+        color-scheme: dark;
+      }
+
+      button { font: inherit; }
+
+      .node-canvas {
+        background:
+          radial-gradient(circle at 78% 10%, rgba(170, 146, 255, .14), transparent 27%),
+          radial-gradient(circle at 1px 1px, rgba(131, 247, 198, .11) 1px, transparent 1.2px),
+          #07110f;
+        background-size: auto, 16px 16px, auto;
+      }
+
+      .edge-layer {
+        position: absolute;
+        z-index: 1;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+        pointer-events: none;
+      }
+      .edge { fill: none; stroke-linecap: round; }
+      .edge.seed { stroke: #3f5d54; stroke-width: 1.4; }
+      .edge.user { stroke: var(--mint); stroke-width: 2; }
+      .edge.draft { stroke: var(--lime); stroke-width: 1.5; stroke-dasharray: 4 4; }
+      .flow-halo { fill: rgba(215, 255, 99, .2); }
+      .flow-dot { fill: var(--lime); stroke: #07110f; stroke-width: 1.5; }
+
+      .topbar {
+        position: absolute;
+        z-index: 8;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 9px 0 12px;
+        border-bottom: 1px solid rgba(131, 247, 198, .16);
+        background: rgba(7, 17, 15, .74);
+        backdrop-filter: blur(9px);
+      }
+      .brand,
+      .status,
+      .node-kind,
+      .result-label,
+      .metric,
+      .toolbar button {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        text-transform: uppercase;
+        letter-spacing: .1em;
+      }
+      .brand { color: var(--ink); font-size: 6px; font-weight: 900; }
+      .brand b { color: var(--mint); }
+      .status { margin-left: auto; margin-right: 6px; color: var(--muted); font-size: 5px; font-weight: 800; }
+      .status[data-state="transmitting"] { color: var(--lime); }
+      .status[data-state="candidate"] { color: var(--violet); }
+      .status[data-state="confirmed"] { color: var(--mint); }
+
+      .toolbar { display: flex; gap: 3px; }
+      .toolbar button {
+        height: 19px;
+        min-width: 27px;
+        padding: 0 5px;
+        border: 1px solid #315048;
+        border-radius: 4px;
+        background: #0c1a17;
+        color: #a8b9b3;
+        cursor: pointer;
+        font-size: 4.5px;
+        font-weight: 900;
+      }
+      .toolbar button:hover,
+      .toolbar button:focus-visible { border-color: var(--mint); outline: 2px solid rgba(131, 247, 198, .2); outline-offset: 1px; }
+      .toolbar button:disabled { opacity: .3; cursor: default; }
+      .toolbar .run { border-color: #5c7330; color: var(--lime); }
+      .toolbar .confirm { border-color: #5b4a9d; color: #dcd4ff; }
+
+      .node {
+        position: absolute;
+        z-index: 4;
+        width: 78px;
+        height: 48px;
+        padding: 8px 9px;
+        border: 1px solid #2a443d;
+        border-radius: 8px;
+        background: linear-gradient(145deg, rgba(20, 38, 33, .98), rgba(10, 23, 20, .98));
+        color: var(--ink);
+        box-shadow: 0 10px 26px rgba(0, 0, 0, .26);
+        cursor: grab;
+        touch-action: none;
+        user-select: none;
+      }
+      .node:active { cursor: grabbing; }
+      .node:focus-visible { outline: 2px solid var(--mint); outline-offset: 2px; }
+      .node[data-node="model"] { border-color: rgba(170, 146, 255, .52); }
+      .node[data-node="review"] { border-color: rgba(215, 255, 99, .38); }
+      .node-kind { display: block; color: var(--muted); font-size: 4.5px; font-weight: 900; }
+      .node strong { display: block; margin-top: 5px; font-size: 9px; line-height: .92; letter-spacing: -.035em; }
+      .node .metric { display: block; margin-top: 5px; color: #6f8880; font-size: 4px; font-weight: 800; }
+
+      .port,
+      .handle {
+        position: absolute;
+        z-index: 6;
+        top: 50%;
+        width: 28px;
+        height: 28px;
+        margin-top: -14px;
+        border: 0;
+        border-radius: 50%;
+        background: transparent;
+      }
+      .port.in,
+      .handle.in { left: -14px; }
+      .port.out,
+      .handle.out { right: -14px; }
+      .port::after,
+      .handle::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 8px;
+        height: 8px;
+        transform: translate(-50%, -50%);
+        border: 2px solid #07110f;
+        border-radius: 50%;
+        background: #557168;
+        box-shadow: 0 0 0 1px #7b9890;
+      }
+      .handle { cursor: crosshair; touch-action: none; }
+      .handle::after { background: var(--mint); box-shadow: 0 0 0 1px var(--mint), 0 0 10px rgba(131, 247, 198, .35); }
+      .handle.in::after { background: var(--lime); box-shadow: 0 0 0 1px var(--lime), 0 0 10px rgba(215, 255, 99, .28); }
+      .handle:focus-visible { outline: 2px solid var(--lime); outline-offset: -2px; }
+      .handle[data-armed="true"]::after { transform: translate(-50%, -50%) scale(1.35); }
+
+      .result-rail {
+        position: absolute;
+        z-index: 7;
+        left: 9px;
+        right: 9px;
+        bottom: 7px;
+        height: 34px;
+        display: grid;
+        grid-template-columns: 1fr 1.2fr;
+        gap: 7px;
+        align-items: center;
+        padding: 5px 8px;
+        border: 1px solid rgba(131, 247, 198, .16);
+        border-radius: 7px;
+        background: rgba(9, 23, 19, .92);
+        box-shadow: 0 10px 24px rgba(0, 0, 0, .28);
+      }
+      .result-label { color: #658078; font-size: 4px; font-weight: 900; }
+      .retained,
+      .candidate { display: block; margin-top: 3px; color: #dcebe6; font: 800 5.2px/1.1 system-ui; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .candidate { color: #a696e7; }
+      .candidate[data-ready="true"] { color: var(--lime); }
+      .result-rail[data-active="true"] { border-color: rgba(215, 255, 99, .46); }
+
+      .library-badge,
+      .scene-caption { display: none; }
+
+      @media (min-width: 500px) {
+        .node-canvas { background-size: auto, 24px 24px, auto; }
+        .topbar { height: 48px; padding: 0 22px; }
+        .brand { font-size: 10px; }
+        .status { margin-right: 14px; font-size: 8px; }
+        .toolbar { gap: 7px; }
+        .toolbar button { height: 32px; min-width: 53px; padding: 0 10px; border-radius: 7px; font-size: 7px; }
+        .node { width: 145px; height: 82px; padding: 15px 17px; border-radius: 14px; }
+        .node-kind { font-size: 7px; }
+        .node strong { margin-top: 10px; font-size: 18px; }
+        .node .metric { margin-top: 9px; font-size: 7px; }
+        .port,
+        .handle { width: 44px; height: 44px; margin-top: -22px; }
+        .port.in,
+        .handle.in { left: -22px; }
+        .port.out,
+        .handle.out { right: -22px; }
+        .port::after,
+        .handle::after { width: 12px; height: 12px; border-width: 3px; }
+        .result-rail { left: 22px; right: 22px; bottom: 16px; height: 64px; padding: 10px 16px; border-radius: 12px; }
+        .result-label { font-size: 7px; }
+        .retained,
+        .candidate { margin-top: 6px; font-size: 11px; }
+      }
+
+      @media (max-aspect-ratio: 4/5) {
+        .topbar { height: 38px; padding: 0 8px 0 10px; }
+        .brand { font-size: 6px; }
+        .status { position: absolute; top: 29px; left: 11px; margin: 0; font-size: 4px; }
+        .toolbar button { min-width: 25px; padding: 0 4px; font-size: 4px; }
+        .node { width: 92px; height: 50px; }
+        .result-rail { height: 64px; grid-template-columns: 1fr; gap: 3px; padding: 7px 9px; }
+        .result-rail > div { min-width: 0; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="preview-stage node-canvas" id="node-canvas" data-preview-mechanism="trusted-handle-edge-and-confirmed-payload-workflow">
+      <svg class="edge-layer" id="edge-layer" aria-hidden="true">
+        <path class="edge seed" id="seed-edge"></path>
+        <path class="edge user" id="user-edge"></path>
+        <path class="edge draft" id="draft-edge"></path>
+        <circle class="flow-halo" id="flow-halo" r="8" hidden></circle>
+        <circle class="flow-dot" id="flow-dot" r="4" hidden></circle>
+      </svg>
+
+      <header class="topbar">
+        <div class="brand"><b>◆</b> FLOWFORGE / AGENT GRAPH</div>
+        <output class="status" id="graph-status" data-state="ready">Connect model → review</output>
+        <div class="toolbar">
+          <button type="button" id="undo-graph" disabled>Undo</button>
+          <button type="button" id="reset-graph">Reset</button>
+          <button type="button" class="run" id="run-workflow" disabled>Run</button>
+          <button type="button" class="confirm" id="confirm-output" disabled>Confirm</button>
+        </div>
+      </header>
+
+      <article class="node" data-node="source" tabindex="0" aria-label="Prompt source node; use arrow keys to move">
+        <span class="node-kind">Input / brief</span>
+        <strong>Launch<br>prompt</strong>
+        <span class="metric">1.2 KB · ready</span>
+        <span class="port out" aria-hidden="true"></span>
+      </article>
+
+      <article class="node" data-node="model" tabindex="0" aria-label="AI model node; drag or use arrow keys to move">
+        <span class="port in" aria-hidden="true"></span>
+        <span class="node-kind">AI / transform</span>
+        <strong>Plan<br>builder</strong>
+        <span class="metric">structured JSON</span>
+        <button class="handle out" id="model-output" aria-label="Start connection from Plan builder output"></button>
+      </article>
+
+      <article class="node" data-node="review" tabindex="0" aria-label="Human review node; drag or use arrow keys to move">
+        <button class="handle in" id="review-input" aria-label="Complete connection into Human review"></button>
+        <span class="node-kind">Gate / human</span>
+        <strong>Review<br>desk</strong>
+        <span class="metric">confirmation required</span>
+      </article>
+
+      <section class="result-rail" id="result-rail" aria-label="Workflow output state">
+        <div>
+          <span class="result-label">Retained output</span>
+          <output class="retained" id="retained-output">No approved result</output>
+        </div>
+        <div>
+          <span class="result-label">Arrival candidate</span>
+          <output class="candidate" id="candidate-output">Run after connecting a real edge</output>
+        </div>
+      </section>
+
+      <span class="library-badge">Motion · finite payload transport</span>
+      <span class="scene-caption">drag nodes · connect handles · run · confirm</span>
+    </main>
+    <script type="module" src="./src/handle-connected-animated-node-editor-demo.js"></script>
+  </body>
+</html>

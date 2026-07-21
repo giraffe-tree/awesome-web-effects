@@ -1,1 +1,366 @@
-<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pixel Sort Hover Wipe</title><link rel="stylesheet" href="./shared.css"><style>:root{--preview-background:#0c0f12}canvas{width:100%;height:100%}.copy{position:absolute;left:14px;top:49px;width:100px;color:#f5f2ea}.copy small{font:800 6px monospace;letter-spacing:.13em;color:#ffb53f}.copy h1{margin:8px 0;font:950 20px/.84 system-ui;letter-spacing:-.06em}.mode{position:absolute;right:12px;bottom:12px;color:#ffc661;font:800 6px monospace}.scene-caption{display:none}</style></head><body><main class="preview-stage"><canvas tabindex="0" aria-label="Pointer wipe sorts image pixels by luminance"></canvas><section class="copy"><small>LUMA REORDER</small><h1>WIPE THE IMAGE INTO DATA.</h1></section><span class="mode">HOVER / COLUMN SORT</span><span class="library-badge">p5.js · pixel sort</span></main><script type="module" src="./src/pixel-sort-hover-wipe-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>p5.js — Human-driven Pixel Sort Inspection</title>
+    <link rel="stylesheet" href="./shared.css" />
+    <style>
+      :root {
+        --preview-background: #071015;
+        color-scheme: dark;
+      }
+
+      button { font: inherit; }
+
+      .sort-stage {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        background: #071015;
+        color: #f1f3ed;
+        cursor: ew-resize;
+        outline: none;
+        touch-action: none;
+        user-select: none;
+      }
+
+      .sort-stage:focus-visible {
+        box-shadow: inset 0 0 0 2px #ff6a3d;
+      }
+
+      .canvas-host,
+      .canvas-host canvas {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .canvas-host { pointer-events: none; }
+
+      .image-grade,
+      .image-noise {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        pointer-events: none;
+      }
+
+      .image-grade {
+        background:
+          linear-gradient(180deg, #06111952 0%, transparent 22%, transparent 66%, #061015d1 100%),
+          linear-gradient(90deg, #06101575 0%, transparent 28%, transparent 76%, #0610154d 100%);
+      }
+
+      .image-noise {
+        background-image: radial-gradient(#fff2 .5px, transparent .65px);
+        background-size: 3px 3px;
+        mix-blend-mode: soft-light;
+        opacity: .13;
+      }
+
+      .topbar {
+        position: absolute;
+        z-index: 5;
+        top: 12px;
+        left: 13px;
+        right: 13px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        pointer-events: none;
+      }
+
+      .identity {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        min-width: 0;
+      }
+
+      .identity-mark {
+        display: grid;
+        width: 23px;
+        height: 23px;
+        flex: 0 0 auto;
+        place-items: center;
+        border: 1px solid #f1f3ed8c;
+        border-radius: 50%;
+        background: #07101575;
+        font: 900 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: -.02em;
+        backdrop-filter: blur(8px);
+      }
+
+      .identity-copy { min-width: 0; }
+
+      .identity-copy strong,
+      .identity-copy span {
+        display: block;
+        text-transform: uppercase;
+      }
+
+      .identity-copy strong {
+        font: 850 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .14em;
+        white-space: nowrap;
+      }
+
+      .identity-copy span {
+        margin-top: 4px;
+        color: #d3dedc;
+        font: 750 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .11em;
+      }
+
+      .signal-status {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 7px;
+        border: 1px solid #fff3;
+        border-radius: 999px;
+        background: #07101587;
+        color: #d9e5e2;
+        font: 850 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+        white-space: nowrap;
+        backdrop-filter: blur(8px);
+      }
+
+      .signal-status::before {
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background: #66ebdf;
+        box-shadow: 0 0 8px #66ebdf;
+        content: "";
+      }
+
+      .side-label {
+        position: absolute;
+        z-index: 4;
+        top: 50%;
+        left: 12px;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        transform: translateY(-50%) rotate(-90deg) translateY(-16px);
+        transform-origin: center;
+        color: #dbe4e0b8;
+        font: 850 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .17em;
+        text-transform: uppercase;
+        pointer-events: none;
+      }
+
+      .side-label::before {
+        width: 18px;
+        height: 1px;
+        background: currentColor;
+        content: "";
+      }
+
+      .inspection-panel {
+        position: absolute;
+        z-index: 6;
+        left: 13px;
+        right: 13px;
+        bottom: 12px;
+        display: grid;
+        grid-template-columns: minmax(96px, 1.5fr) auto auto;
+        align-items: end;
+        gap: 14px;
+        pointer-events: none;
+      }
+
+      .frame-title { min-width: 0; }
+
+      .frame-title .eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: #ff8057;
+        font: 900 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .15em;
+        text-transform: uppercase;
+      }
+
+      .frame-title .eyebrow::before {
+        width: 12px;
+        height: 2px;
+        background: #ff6840;
+        content: "";
+      }
+
+      .frame-title h1 {
+        overflow: hidden;
+        margin: 5px 0 0;
+        font: 660 clamp(15px, 4.1vw, 34px)/.86 Georgia, "Times New Roman", serif;
+        letter-spacing: -.055em;
+        text-overflow: ellipsis;
+        text-wrap: nowrap;
+      }
+
+      .readout {
+        min-width: 65px;
+        padding: 7px 8px 6px;
+        border-left: 1px solid #fff4;
+        background: #07101538;
+        backdrop-filter: blur(6px);
+      }
+
+      .readout span,
+      .readout strong {
+        display: block;
+        white-space: nowrap;
+        text-transform: uppercase;
+      }
+
+      .readout span {
+        color: #becbc7;
+        font: 800 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .12em;
+      }
+
+      .readout strong {
+        margin-top: 5px;
+        font: 900 7px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .05em;
+      }
+
+      .readout-mode { display: none; }
+
+      .mode-controls {
+        display: flex;
+        align-items: center;
+        align-self: end;
+        padding: 3px;
+        border: 1px solid #fff3;
+        border-radius: 999px;
+        background: #0710159c;
+        pointer-events: auto;
+        backdrop-filter: blur(9px);
+      }
+
+      .mode-choice {
+        min-width: 45px;
+        padding: 6px 8px;
+        border: 0;
+        border-radius: 999px;
+        background: transparent;
+        color: #c6d0cd;
+        font: 900 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+
+      .mode-choice[aria-pressed="true"] {
+        background: #ff6840;
+        color: #101010;
+      }
+
+      .mode-choice:focus-visible { outline: 1px solid #fff; outline-offset: 1px; }
+
+      .interaction-hint {
+        position: absolute;
+        z-index: 5;
+        right: 14px;
+        top: 49px;
+        color: #e0e6e2cf;
+        font: 800 4px/1.3 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .12em;
+        text-align: right;
+        text-transform: uppercase;
+        pointer-events: none;
+      }
+
+      .runtime-ledger {
+        position: fixed;
+        width: 1px;
+        height: 1px;
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .library-badge { display: none; }
+
+      @media (max-width: 420px), (max-height: 235px) {
+        .inspection-panel { left: 9px; right: 9px; bottom: 8px; gap: 6px; }
+        .frame-title h1 { font-size: 14px; }
+        .readout { min-width: 52px; padding: 6px; }
+        .mode-choice { min-width: 36px; padding: 6px; }
+      }
+
+      @media (max-width: 190px), (max-height: 105px) {
+        .topbar { top: 6px; left: 7px; right: 7px; }
+        .identity-mark { width: 16px; height: 16px; font-size: 4px; }
+        .identity-copy strong { font-size: 4px; }
+        .identity-copy span,
+        .signal-status,
+        .side-label,
+        .interaction-hint { display: none; }
+        .inspection-panel { left: 7px; right: 7px; bottom: 6px; grid-template-columns: minmax(58px, 1fr) auto; gap: 5px; }
+        .frame-title .eyebrow { font-size: 3px; }
+        .frame-title h1 { margin-top: 3px; font-size: 10px; }
+        .readout { min-width: 38px; padding: 4px 5px; }
+        .readout span { font-size: 3px; }
+        .readout strong { margin-top: 3px; font-size: 5px; }
+        .mode-controls { position: absolute; right: 0; bottom: 22px; padding: 2px; }
+        .mode-choice { min-width: 24px; padding: 4px 5px; font-size: 3px; }
+      }
+    </style>
+  </head>
+  <body>
+    <main
+      id="sort-stage"
+      class="preview-stage sort-stage"
+      tabindex="0"
+      role="application"
+      aria-label="Image fault inspection. Move or drag horizontally to sort real photograph columns. Use arrow keys for the boundary and M, 1, or 2 for the sort mode."
+      data-preview-mechanism="p5-real-photo-column-pixel-sort"
+    >
+      <div id="sort-canvas-host" class="canvas-host" aria-hidden="true"></div>
+      <div class="image-grade" aria-hidden="true"></div>
+      <div class="image-noise" aria-hidden="true"></div>
+
+      <header class="topbar" aria-hidden="true">
+        <div class="identity">
+          <span class="identity-mark">F07</span>
+          <span class="identity-copy"><strong>Signal Archive</strong><span>Frame integrity desk · 03</span></span>
+        </div>
+        <span class="signal-status">Source verified</span>
+      </header>
+
+      <span class="side-label" aria-hidden="true">Clean frame / sorted evidence</span>
+      <span class="interaction-hint" aria-hidden="true">Move / drag to inspect<br />Arrows · M to switch</span>
+
+      <footer class="inspection-panel">
+        <section class="frame-title" aria-hidden="true">
+          <span class="eyebrow">Archive anomaly · 19:42 UTC</span>
+          <h1>North Relay, after squall</h1>
+        </section>
+        <span class="readout readout-boundary" aria-live="polite">
+          <span>Sorted field</span>
+          <strong id="boundary-readout">0%</strong>
+        </span>
+        <span class="readout readout-mode" aria-live="polite">
+          <span>Column key</span>
+          <strong id="mode-readout">Luma ↑</strong>
+        </span>
+        <nav class="mode-controls" aria-label="Pixel sort key">
+          <button class="mode-choice" type="button" data-sort-mode="luma" aria-pressed="true">01 Luma</button>
+          <button class="mode-choice" type="button" data-sort-mode="hue" aria-pressed="false">02 Hue</button>
+        </nav>
+      </footer>
+
+      <output id="runtime-ledger" class="runtime-ledger" aria-hidden="true"></output>
+      <span class="library-badge">p5.js · pixel sort</span>
+    </main>
+    <script type="module" src="./src/pixel-sort-hover-wipe-demo.js"></script>
+  </body>
+</html>

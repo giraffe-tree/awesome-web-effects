@@ -143,12 +143,12 @@ export const effectExpansion150BatchB = [
     scores: score(18, 19, 18, 15, 15, 10), rationaleZh: '蓝图网格、组件语义和组装次序共同构成可读的空间建设过程。'
   },
   {
-    id: 'pixel-sort-hover-wipe', order: 141, name: 'Pixel sort hover wipe', nameZh: '像素排序悬停擦除', category: 'canvas', sourceUrl: 'https://github.com/snorpey/glitch-canvas',
-    difference: '扫描线左侧真实按列重排像素亮度，右侧保持原始程序化图像，不是 CSS 拉伸故障。',
-    behavior: { trigger: 'pointer position', response: 'A wipe boundary sorts completed image columns by luminance', timing: 'continuous reversible data transform', layer: 'image pixel buffer' },
-    prompt: '生成固定程序化风景，按指针边界逐列读取像素并按亮度排序，再写回 ImageData。',
-    implementation: p5Implementation("new p5(p => { p.draw = () => p.drawingContext.putImageData(sortColumns(source, progress), 128, 25); });", 'https://github.com/snorpey/glitch-canvas'),
-    scores: score(19, 18, 18, 15, 15, 10), rationaleZh: '原图与排序结果并排可见，数据重排机制能够直接核验。'
+    id: 'pixel-sort-hover-wipe', order: 141, name: 'North Relay pixel-sort inspection', nameZh: 'North Relay 照片像素排序检查', category: 'canvas', sourceUrl: 'https://github.com/snorpey/glitch-canvas',
+    difference: 'A human-owned wipe compares one verified editorial photograph against two real 480-column pixel buffers sorted in-place by luminance or hue; the left side is transformed image data and the right side remains the same source frame, not a CSS stretch or procedural landscape.',
+    behavior: { trigger: 'trusted mouse hover, captured mouse/touch/pen drag, keyboard command, or sort-mode control', response: 'Hold a boundary at any point and compare the original relay-station frame with its actual per-column Luma or Hue ordering', timing: 'human-paced direct reversible inspection with no automatic sweep', layer: 'full-stage p5 source and sorted image buffers' },
+    prompt: 'Build a live image-forensics inspection from one decoded 960×640 fictional relay-station photograph. Precompute genuine 480×270 per-column luminance and hue sorts, then let trusted hover, captured drag, keyboard, and mode controls hold the comparison boundary at any position without autoplay.',
+    implementation: p5Implementation("const sorted = sortEveryColumn(sourcePixels, mode); p.image(sortedFrame, 0, 0, wipeWidth, h, 0, 0, sortedColumns, sampleH);", 'https://github.com/snorpey/glitch-canvas'),
+    scores: score(20, 20, 20, 15, 15, 10), rationaleZh: '一张原创 ImageGen 火山海岸中继站照片被真实 fetch、SHA-256 校验并由 p5 解码为 960×640 像素；480×270 采样缓冲的每一列分别按亮度和色相重排，单调性错误为零且各有超过 12.8 万像素发生位置变化。真人 hover、捕获拖拽、键盘与模式按钮直接拥有边界和排序缓冲，首帧保持原图且无自动扫描、fallback、合成输入或预览时钟变更。'
   },
   {
     id: 'kinetic-variable-font-axis', order: 142, name: 'Kinetic variable font axis', nameZh: '动态可变字体轴', category: 'vector', sourceUrl: 'https://github.com/arrowtype/recursive',

@@ -1579,6 +1579,50 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("Shift+ArrowDown")
             elif index == 29:
                 page.keyboard.press("ArrowLeft")
+        elif demo["id"] == "pixel-sort-hover-wipe":
+            if index == 1:
+                page.mouse.move(96, 88)
+            elif index == 3:
+                page.mouse.move(96, 92)
+                page.mouse.down()
+            elif index == 4:
+                page.mouse.move(178, 92, steps=4)
+            elif index == 5:
+                page.mouse.move(270, 92, steps=4)
+            elif index == 6:
+                page.mouse.up()
+            elif index == 8:
+                page.mouse.move(280, 102)
+                page.mouse.down()
+            elif index == 9:
+                page.mouse.move(176, 102, steps=4)
+            elif index == 10:
+                page.mouse.move(64, 102, steps=4)
+            elif index == 11:
+                page.mouse.up()
+            elif index == 13:
+                page.locator('[data-sort-mode="hue"]').click()
+            elif index == 15:
+                page.locator('#sort-stage').focus()
+                page.keyboard.press("Home")
+            elif index == 17:
+                page.keyboard.press("End")
+            elif index == 19:
+                page.keyboard.press("1")
+            elif index == 21:
+                page.keyboard.press("2")
+            elif index in (23, 25):
+                page.keyboard.press("ArrowLeft")
+            elif index == 27:
+                page.keyboard.press("Home")
+            elif index == 29:
+                page.keyboard.press("ArrowRight")
+            elif index == 31:
+                page.keyboard.press("End")
+            elif index == 33:
+                page.locator('[data-sort-mode="luma"]').click()
+            elif index == 34:
+                page.locator('[data-sort-mode="hue"]').click()
         elif demo["id"] == "accordion-image-slices":
             if index == 2:
                 page.mouse.move(95, 94)
@@ -3844,6 +3888,95 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["lastInputTrusted"] is not True
         ):
             raise RuntimeError(f"{demo['id']} did not capture trusted slow/fast captured traces, keyboard sampling, reset, four unique decoded ImageGen frames, and a nonempty final visual-memory path: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "pixel-sort-hover-wipe":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-real-photo-column-pixel-sort-inspection"
+            or interaction["mechanism"] != "real-photo-pixels-sorted-within-every-column-by-luma-or-hue"
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["acceptedInputs"] != ["mouse-hover", "mouse-drag", "touch-drag", "pen-drag", "keyboard", "button-control"]
+            or interaction["automaticCycle"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or interaction["previewClockMutationCount"] != 0
+            or not interaction["renderIgnoresPreviewClock"]
+            or not interaction["userInputRequired"]
+            or not interaction["initialFrameStatic"]
+            or interaction["initialBoundary"] != 0
+            or interaction["boundary"] != 1
+            or interaction["mode"] != "hue"
+            or interaction["inputCount"] < 35
+            or interaction["pointerEnterCount"] < 1
+            or interaction["pointerDownCount"] != 2
+            or interaction["pointerMoveCount"] < 18
+            or interaction["pointerReleaseCount"] != 2
+            or interaction["pointerCaptureCount"] != 2
+            or interaction["pointerReleaseCaptureCount"] != 2
+            or interaction["keyboardInputCount"] < 9
+            or interaction["buttonActivationCount"] < 3
+            or interaction["boundaryMutationCount"] < 25
+            or interaction["modeMutationCount"] < 5
+            or interaction["humanInputCausalityCount"] != interaction["boundaryMutationCount"] + interaction["modeMutationCount"]
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["activePointerId"] is not None
+            or interaction["pointerCaptured"]
+            or interaction["minHumanBoundary"] != 0
+            or interaction["maxHumanBoundary"] != 1
+            or interaction["maxBoundaryDelta"] < .8
+            or interaction["firstHumanInputBoundaryBefore"] != 0
+            or interaction["firstHumanInputBoundaryAfter"] <= 0
+            or interaction["lastInputKind"] != "mouse-hue"
+            or interaction["lastInputTrusted"] is not True
+            or interaction["lastPointerType"] != "mouse"
+            or interaction["assetFetchCount"] != 1
+            or interaction["assetResponseStatus"] != 200
+            or not interaction["assetSameOrigin"]
+            or interaction["assetByteLength"] != 158215
+            or interaction["assetSha256"] != "91c7edd0dbb343180c435606415ab32ecd39b4a501b8ee6e678ba4b14f351003"
+            or not interaction["assetShaMatchesExpected"]
+            or not interaction["browserImageDecoded"]
+            or interaction["sourceNaturalWidth"] != 960
+            or interaction["sourceNaturalHeight"] != 640
+            or not interaction["p5ImageDecoded"]
+            or interaction["p5ImageClass"] != "p5.Image"
+            or interaction["p5ImageWidth"] != 960
+            or interaction["p5ImageHeight"] != 640
+            or interaction["p5ImagePixelLength"] != 2457600
+            or interaction["sampledWidth"] != 480
+            or interaction["sampledHeight"] != 270
+            or interaction["sampledPixelCount"] != 129600
+            or interaction["sampledByteLength"] != 518400
+            or len(interaction["sourcePixelSha256"]) != 64
+            or any(character not in "0123456789abcdef" for character in interaction["sourcePixelSha256"])
+            or interaction["distinctSampleColorCount"] <= 160
+            or interaction["sourceAlphaFailureCount"] != 0
+            or interaction["lumaSortedColumnCount"] != 480
+            or interaction["hueSortedColumnCount"] != 480
+            or interaction["sortedPixelWriteCount"] != 259200
+            or interaction["lumaMonotonicViolationCount"] != 0
+            or interaction["hueMonotonicViolationCount"] != 0
+            or interaction["lumaDifferencePixelCount"] <= interaction["sampledPixelCount"] * .95
+            or interaction["hueDifferencePixelCount"] <= interaction["sampledPixelCount"] * .95
+            or not interaction["p5InstanceReady"]
+            or not interaction["p5CanvasReady"]
+            or interaction["p5CanvasWidth"] != 320
+            or interaction["p5CanvasHeight"] != 180
+            or interaction["renderCount"] < 30
+            or interaction["p5DrawCount"] < 15
+            or interaction["sortedColumnsRendered"] != 480
+            or interaction["maxSortedColumnsRendered"] != 480
+            or interaction["sortedPixelsRendered"] != 129600
+            or interaction["renderPixelSource"] != "hue-sorted-real-photo-buffer"
+            or not interaction["assetEvidenceReady"]
+            or not interaction["sortEvidenceReady"]
+            or not interaction["ready"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture trusted hover, two opposed captured drags, keyboard endpoints, two real luma/hue 480-column pixel buffers, exact local ImageGen asset identity, and zero automatic or preview-clock mutation: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "accordion-image-slices":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

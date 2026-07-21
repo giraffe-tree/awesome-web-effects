@@ -63,12 +63,12 @@ export const effectExpansion150BatchB = [
     scores: score(19, 19, 19, 15, 15, 10), rationaleZh: '热场被翻译为清晰的晶体生长语言，颜色和几何反馈均有因果。'
   },
   {
-    id: 'peelable-paper-corner-reveal', order: 131, name: 'Peelable paper corner reveal', nameZh: '可剥纸张角揭示', category: 'pointer', sourceUrl: 'https://github.com/motiondivision/motion',
-    difference: '纸面裁切、折角尺寸、阴影和下层档案同步变化，区别于卡片翻转或简单角标。',
-    behavior: { trigger: 'drag or timed rehearsal', response: 'The lower corner peels back to expose a persistent second layer', timing: 'continuous reversible material gesture', layer: 'paper card surface' },
-    prompt: '实现可拖动纸角，使用同一进度同步 clip-path、多边形折角尺寸、投影和下层显露。',
-    implementation: motionImplementation("const peel = animate(fold, { opacity: [.94, 1, .94] }, { duration: 3 }); paper.style.clipPath = polygon;", 'https://github.com/motiondivision/motion'),
-    scores: score(18, 19, 19, 15, 15, 10), rationaleZh: '材料厚度与下层内容通过几何和光影共同建立，动作有真实触感。'
+    id: 'peelable-paper-corner-reveal', order: 131, name: 'Night Garden ticket access peel', nameZh: 'Night Garden 票券兑换揭角', category: 'pointer', sourceUrl: 'https://github.com/motiondivision/motion',
+    difference: 'A human-owned five-point paper clip, lifted fold, and shadow uncover the persistent redemption layer of one credible event ticket; the same verified artwork moves from monochrome face evidence to the full-colour access result, rather than flipping a card or animating an empty corner badge.',
+    behavior: { trigger: 'trusted captured mouse/touch/pen peel, keyboard command, or explicit ticket control', response: 'Hold the paper at an intermediate corner or cross the completion threshold to reveal the Night Garden access code beneath', timing: 'direct reversible drag plus finite input-owned completion or cancellation', layer: 'full-stage ticket face, folded paper corner, and redemption layer' },
+    prompt: 'Build a live fictional event ticket whose corner is directly peeled by trusted human input. Seek one paused Motion controller from pointer distance, synchronize a five-point clip, fold geometry, shadow, ARIA state, and a meaningful access layer, then settle only after the user crosses an explicit threshold.',
+    implementation: motionImplementation("const geometry = animate(0, 1, { duration: 1, onUpdate: applyPeelGeometry }); geometry.pause(); geometry.time = humanProgress;", 'https://github.com/motiondivision/motion'),
+    scores: score(20, 20, 20, 15, 15, 10), rationaleZh: 'Night Garden 虚构票券把原创 ImageGen 夜间温室主视觉同时用于黑白票面与全彩兑换层；浏览器真实 fetch、SHA-256、双 DOM decode 与像素采样均可核验。真人捕获拖拽可保持中间揭角，低阈值有限回封、高阈值有限完成，键盘与按钮也能显式控制；首帧封闭，无自动循环、rehearsal、fallback、合成输入或预览时钟变更。'
   },
   {
     id: 'radial-calendar-time-zoom', order: 132, name: 'Radial calendar time zoom', nameZh: '径向日历时间缩放', category: 'vector', sourceUrl: 'https://github.com/d3/d3-shape',

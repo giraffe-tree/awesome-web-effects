@@ -1438,7 +1438,7 @@
       "originUrl": "https://github.com/motiondivision/motion",
       "demoSourcePath": "demo/preview-demos/peelable-paper-corner-reveal.html",
       "libraryVersion": "motion@12.42.2",
-      "generatedAt": "2026-07-20",
+      "generatedAt": "2026-07-21",
       "outputPath": "demo/gifs/captured/peelable-paper-corner-reveal.gif",
       "usageBasis": "original local mechanism demo using motion@12.42.2; verify license https://github.com/motiondivision/motion/blob/HEAD/LICENSE.md"
     },

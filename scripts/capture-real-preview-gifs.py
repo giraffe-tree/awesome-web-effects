@@ -1579,6 +1579,66 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("Shift+ArrowDown")
             elif index == 29:
                 page.keyboard.press("ArrowLeft")
+        elif demo["id"] == "peelable-paper-corner-reveal":
+            handle_box = page.locator("#peel-handle").bounding_box()
+            ticket_box = page.locator("#ticket").bounding_box()
+            if not handle_box or not ticket_box:
+                raise RuntimeError("peelable-paper-corner-reveal controls have no visible geometry")
+            handle_x = handle_box["x"] + handle_box["width"] / 2
+            handle_y = handle_box["y"] + handle_box["height"] / 2
+            if index == 1:
+                page.mouse.move(handle_x, handle_y)
+            elif index == 2:
+                page.mouse.down()
+            elif index == 3:
+                page.mouse.move(handle_x - 12, handle_y - 5, steps=3)
+            elif index == 4:
+                page.mouse.up()
+            elif index == 5:
+                page.wait_for_timeout(360)
+            elif index == 7:
+                page.mouse.move(handle_x, handle_y)
+            elif index == 8:
+                page.mouse.down()
+            elif index == 9:
+                page.mouse.move(
+                    handle_x - ticket_box["width"] * .22,
+                    handle_y - ticket_box["height"] * .14,
+                    steps=5,
+                )
+            elif index == 10:
+                page.mouse.up()
+            elif index == 13:
+                page.mouse.move(handle_x, handle_y)
+            elif index == 14:
+                page.mouse.down()
+            elif index == 15:
+                page.mouse.move(
+                    handle_x - ticket_box["width"] * .58,
+                    handle_y - ticket_box["height"] * .38,
+                    steps=6,
+                )
+            elif index == 16:
+                page.mouse.up()
+            elif index == 17:
+                page.wait_for_timeout(360)
+            elif index == 20:
+                page.locator("#peel-handle").focus()
+                page.keyboard.press("Home")
+            elif index == 21:
+                page.keyboard.press("ArrowRight")
+            elif index == 22:
+                page.keyboard.press("ArrowUp")
+            elif index == 23:
+                page.keyboard.press("End")
+            elif index == 25:
+                page.locator("#peel-toggle").click()
+            elif index == 26:
+                page.wait_for_timeout(360)
+            elif index == 29:
+                page.locator("#peel-toggle").click()
+            elif index == 30:
+                page.wait_for_timeout(360)
         elif demo["id"] == "pixel-sort-hover-wipe":
             if index == 1:
                 page.mouse.move(96, 88)
@@ -3888,6 +3948,94 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["lastInputTrusted"] is not True
         ):
             raise RuntimeError(f"{demo['id']} did not capture trusted slow/fast captured traces, keyboard sampling, reset, four unique decoded ImageGen frames, and a nonempty final visual-memory path: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "peelable-paper-corner-reveal":
+        page.wait_for_function(
+            "window.__PREVIEW_INTERACTION_STATE__.phase === 'revealed' && window.__PREVIEW_INTERACTION_STATE__.progress === 1",
+            timeout=2_000,
+        )
+        assertion = page.evaluate("async () => await window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-fictional-ticket-corner-peel-and-code-reveal"
+            or interaction["claimedLibrary"] != "motion@12.42.2"
+            or interaction["mechanism"] != "pointer-distance-seeks-motion-controller-that-drives-paper-clip-and-fold-geometry"
+            or interaction["acceptedInputs"] != ["mouse-drag", "touch-drag", "pen-drag", "keyboard", "button-control"]
+            or interaction["automaticCycle"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or interaction["previewClockMutationCount"] != 0
+            or not interaction["renderIgnoresPreviewClock"]
+            or not interaction["userInputRequired"]
+            or not interaction["initialFrameStatic"]
+            or interaction["initialProgress"] != 0
+            or interaction["progress"] != 1
+            or interaction["phase"] != "revealed"
+            or interaction["inputCount"] < 25
+            or interaction["pointerDownCount"] != 3
+            or interaction["pointerMoveCount"] < 14
+            or interaction["pointerReleaseCount"] != 3
+            or interaction["pointerCancelCount"] != 0
+            or interaction["pointerCaptureCount"] != 3
+            or interaction["pointerReleaseCaptureCount"] != 3
+            or interaction["keyboardInputCount"] != 4
+            or interaction["buttonActivationCount"] != 2
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["humanProgressMutationCount"] < 35
+            or interaction["directDragMutationCount"] < 14
+            or interaction["inputOwnedAnimationCount"] < 4
+            or interaction["inputOwnedAnimationFrameCount"] < 20
+            or interaction["completedRevealCount"] < 3
+            or interaction["cancelledRevealCount"] < 3
+            or interaction["heldMidpointCount"] < 1
+            or interaction["lastInputKind"] != "button-control"
+            or interaction["lastInputTrusted"] is not True
+            or interaction["lastPointerType"] != "mouse"
+            or interaction["activePointerId"] is not None
+            or interaction["pointerCaptured"]
+            or interaction["maxHumanProgress"] != 1
+            or interaction["minHumanProgress"] != 0
+            or interaction["maxDragDistance"] < .6
+            or interaction["firstHumanProgressBefore"] != 0
+            or interaction["firstHumanProgressAfter"] <= 0
+            or interaction["lastSettledOutcome"] != "completed"
+            or interaction["geometrySeekCount"] < 40
+            or abs(interaction["peelXPercent"] - 78) > .001
+            or abs(interaction["peelYPercent"] - 96) > .001
+            or abs(interaction["foldXPercent"] - 46) > .001
+            or abs(interaction["foldYPercent"] - 57) > .001
+            or abs(interaction["foldLiftDegrees"] - 8) > .001
+            or abs(interaction["revealedTriangleAreaRatio"] - .3744) > .0001
+            or interaction["clipPointCount"] != 5
+            or interaction["motionControllerCount"] != 1
+            or interaction["motionControllerDuration"] != 1
+            or not interaction["motionControllerPaused"]
+            or interaction["assetFetchCount"] != 1
+            or interaction["assetResponseStatus"] != 200
+            or not interaction["assetSameOrigin"]
+            or interaction["assetByteLength"] != 285540
+            or interaction["assetSha256"] != "6ff542786473f5fd4652b22a934ffedcbed46de13ef1736b8e8195f5c6b61abe"
+            or not interaction["assetShaMatchesExpected"]
+            or not interaction["browserImageDecoded"]
+            or interaction["sourceNaturalWidth"] != 960
+            or interaction["sourceNaturalHeight"] != 640
+            or interaction["domImageDecodedCount"] != 2
+            or interaction["assetPixelSampleCount"] != 1536
+            or interaction["assetPixelByteLength"] != 6144
+            or len(interaction["assetPixelChecksum"]) != 8
+            or interaction["distinctSampleColorCount"] <= 80
+            or interaction["sampledLumaRange"] <= 140
+            or interaction["stageCoverageRatio"] <= .66
+            or interaction["ticketAspectRatio"] <= 1.75
+            or interaction["renderCallCount"] < 36
+            or not interaction["assetEvidenceReady"]
+            or not interaction["ready"]
+            or not interaction["runtimeAssertionPassed"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture trusted cancelled, held, completed, keyboard, and button ticket-peel paths with verified dual-use artwork and zero automatic or preview-clock mutation: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "pixel-sort-hover-wipe":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

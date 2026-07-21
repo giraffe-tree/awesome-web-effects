@@ -1,1 +1,413 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p5.js — Boids Flock Pointer Avoidance</title><link rel="stylesheet" href="./shared.css"><style>:root{--preview-background:#09131a}.a2-stage{background:linear-gradient(145deg,#081117,#102a31);color:#eefef8}.p5-host{position:absolute;inset:0;cursor:crosshair;touch-action:none}.p5-host canvas{width:100%!important;height:100%!important}.copy{position:absolute;z-index:3;left:15px;top:47px;width:118px;pointer-events:none}.copy h1{margin:0;font:900 18px/.88 Georgia,serif;letter-spacing:-.045em}.copy p{margin:9px 0 0;color:#8fcfc0;font:700 6px/1.45 ui-monospace;letter-spacing:.09em;text-transform:uppercase}.readout{position:absolute;z-index:3;right:12px;bottom:11px;color:#8fcfc0;font:700 6px/1 ui-monospace}.scene-caption{display:none}</style></head><body><main class="preview-stage a2-stage"><div class="p5-host" data-p5-host tabindex="0" aria-label="Move the pointer or arrow keys to steer the flock"></div><section class="copy"><h1>THE FLOCK MAKES ROOM.</h1><p>cohesion · alignment · avoidance</p></section><span class="readout">42 AGENTS / LIVE VECTOR FIELD</span><span class="library-badge">p5.js · deterministic boids</span></main><script type="module" src="./src/boids-flock-pointer-avoidance-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>p5.js — Berth 06 Crowd Clearance Field</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="./shared.css" />
+    <style>
+      :root {
+        --preview-background: #071116;
+        color-scheme: dark;
+      }
+
+      button,
+      input { font: inherit; }
+
+      .clearance-stage {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        isolation: isolate;
+        background: #071116;
+        color: #f3f4eb;
+        user-select: none;
+      }
+
+      .field-surface,
+      .field-surface canvas,
+      .field-grade,
+      .field-grain {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .field-surface {
+        z-index: 1;
+        cursor: crosshair;
+        outline: none;
+        touch-action: none;
+      }
+
+      .field-surface:focus-visible {
+        box-shadow: inset 0 0 0 2px #c8ffdc;
+      }
+
+      .field-surface canvas,
+      .field-grade,
+      .field-grain { pointer-events: none; }
+
+      .field-grade {
+        z-index: 2;
+        background:
+          linear-gradient(180deg, #061319d8 0%, #06131925 28%, transparent 57%, #051116df 100%),
+          linear-gradient(90deg, #061319b8 0%, #06131924 30%, transparent 70%, #06131968 100%);
+      }
+
+      .field-grain {
+        z-index: 3;
+        opacity: .1;
+        mix-blend-mode: soft-light;
+        background-image: radial-gradient(#fff9 .45px, transparent .65px);
+        background-size: 3px 3px;
+      }
+
+      .topbar {
+        position: absolute;
+        z-index: 7;
+        top: 10px;
+        right: 11px;
+        left: 11px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 9px;
+        pointer-events: none;
+      }
+
+      .station-id {
+        display: flex;
+        align-items: center;
+        min-width: 0;
+        gap: 7px;
+      }
+
+      .station-mark {
+        display: grid;
+        width: 24px;
+        height: 24px;
+        flex: 0 0 auto;
+        place-items: center;
+        border: 1px solid #c8ffdc78;
+        border-radius: 50%;
+        background: #06151bc7;
+        color: #c8ffdc;
+        font: 950 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        backdrop-filter: blur(8px);
+      }
+
+      .station-copy strong,
+      .station-copy span {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        text-transform: uppercase;
+      }
+
+      .station-copy strong {
+        font: 900 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .15em;
+      }
+
+      .station-copy span {
+        margin-top: 4px;
+        color: #dfeae4a2;
+        font: 760 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .12em;
+      }
+
+      .clearance-stage .library-badge {
+        position: static;
+        max-width: 134px;
+        padding: 5px 7px;
+        border-color: #dffff043;
+        background: #06151bc7;
+        color: #f1fff7;
+        font: 850 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .11em;
+        white-space: nowrap;
+        backdrop-filter: blur(8px);
+      }
+
+      .brief {
+        position: absolute;
+        z-index: 7;
+        top: 48%;
+        left: 12px;
+        width: min(112px, 35vw);
+        transform: translateY(-50%);
+        pointer-events: none;
+      }
+
+      .brief .eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        color: #c8ffdc;
+        font: 900 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .16em;
+        text-transform: uppercase;
+      }
+
+      .brief .eyebrow::before {
+        width: 12px;
+        height: 2px;
+        border-radius: 2px;
+        background: #c8ffdc;
+        box-shadow: 0 0 8px #9fffc8;
+        content: "";
+      }
+
+      .brief h1 {
+        margin: 6px 0 0;
+        color: #fffdf3;
+        font: 650 clamp(14px, 4.2vw, 30px)/.87 Georgia, "Times New Roman", serif;
+        letter-spacing: -.052em;
+      }
+
+      .brief p {
+        max-width: 104px;
+        margin: 7px 0 0;
+        color: #dfebe4b6;
+        font: 760 4px/1.42 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+      }
+
+      .risk-readout {
+        position: absolute;
+        z-index: 8;
+        right: 11px;
+        top: 47%;
+        min-width: 68px;
+        padding: 7px 8px;
+        border: 1px solid #e9fff05a;
+        border-radius: 2px;
+        background: #06151bc4;
+        transform: translateY(-50%);
+        pointer-events: none;
+        backdrop-filter: blur(8px);
+      }
+
+      .risk-readout span,
+      .risk-readout strong {
+        display: block;
+        text-transform: uppercase;
+      }
+
+      .risk-readout span {
+        color: #d9e7df9d;
+        font: 800 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .12em;
+      }
+
+      .risk-readout strong {
+        margin-top: 4px;
+        color: #c8ffdc;
+        font: 950 8px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+
+      .risk-readout .risk-watch { color: #ffdc8e; }
+      .risk-readout .risk-divert { color: #ff967a; }
+
+      .risk-readout small {
+        display: block;
+        margin-top: 4px;
+        color: #dce9e2ad;
+        font: 800 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+      }
+
+      .bottom-panel {
+        position: absolute;
+        z-index: 9;
+        right: 11px;
+        bottom: 9px;
+        left: 11px;
+        display: grid;
+        grid-template-columns: auto minmax(66px, 1fr) auto;
+        align-items: end;
+        gap: 7px;
+        pointer-events: none;
+      }
+
+      .step-ledger {
+        min-width: 62px;
+        padding: 5px 7px;
+        border-left: 1px solid #c8ffdc72;
+        background: #06151b70;
+        backdrop-filter: blur(7px);
+      }
+
+      .step-ledger span,
+      .step-ledger strong {
+        display: block;
+        white-space: nowrap;
+        text-transform: uppercase;
+      }
+
+      .step-ledger span {
+        color: #d9e7dfa0;
+        font: 800 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .12em;
+      }
+
+      .step-ledger strong {
+        margin-top: 4px;
+        color: #f1fff7;
+        font: 950 7px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+
+      .radius-control {
+        display: grid;
+        min-width: 0;
+        gap: 4px;
+        padding: 5px 8px;
+        border: 1px solid #dffff047;
+        border-radius: 999px;
+        background: #06151bc4;
+        pointer-events: auto;
+        backdrop-filter: blur(8px);
+      }
+
+      .radius-control label {
+        display: flex;
+        justify-content: space-between;
+        gap: 6px;
+        color: #dce9e2ad;
+        font: 850 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+      }
+
+      .radius-control output { color: #c8ffdc; }
+
+      .radius-control input {
+        width: 100%;
+        min-width: 48px;
+        height: 5px;
+        margin: 0;
+        accent-color: #c8ffdc;
+        cursor: ew-resize;
+      }
+
+      .actions {
+        display: flex;
+        gap: 3px;
+        padding: 3px;
+        border: 1px solid #dffff047;
+        border-radius: 999px;
+        background: #06151bc4;
+        pointer-events: auto;
+        backdrop-filter: blur(8px);
+      }
+
+      .actions button {
+        min-width: 29px;
+        height: 18px;
+        padding: 0 7px;
+        border: 0;
+        border-radius: 999px;
+        background: transparent;
+        color: #e9f6ef;
+        font: 900 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+
+      .actions button:hover,
+      .actions button:focus-visible {
+        outline: none;
+        background: #c8ffdc;
+        color: #09231a;
+      }
+
+      .actions button:disabled {
+        cursor: default;
+        opacity: .35;
+      }
+
+      @media (max-width: 220px) {
+        .topbar { top: 6px; right: 6px; left: 6px; }
+        .station-mark { width: 19px; height: 19px; }
+        .station-copy,
+        .clearance-stage .library-badge { display: none; }
+        .brief { display: none; }
+        .risk-readout { top: 6px; right: 6px; min-width: 46px; padding: 5px; transform: none; }
+        .risk-readout small { display: none; }
+        .bottom-panel { right: 6px; bottom: 5px; left: 6px; grid-template-columns: 1fr auto; gap: 3px; }
+        .step-ledger { display: none; }
+        .radius-control { padding: 4px 6px; }
+        .radius-control label span { display: none; }
+        .actions { padding: 2px; }
+        .actions button { min-width: 20px; height: 15px; padding: 0 4px; }
+        .actions button span { display: none; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        * { scroll-behavior: auto !important; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="preview-stage clearance-stage" id="clearance-stage" data-preview-mechanism="p5-boids-raster-egress-field">
+      <div
+        class="field-surface"
+        id="clearance-surface"
+        tabindex="0"
+        role="application"
+        aria-label="Berth 06 evacuation routing field. Move or drag the exclusion zone; use arrow keys to steer, Enter to step, Z to undo, and R to reset."
+      ></div>
+      <div class="field-grade" aria-hidden="true"></div>
+      <div class="field-grain" aria-hidden="true"></div>
+
+      <header class="topbar">
+        <div class="station-id">
+          <span class="station-mark">B06</span>
+          <div class="station-copy">
+            <strong>North Quay / Berth 06</strong>
+            <span>Live clearance rehearsal · human-held</span>
+          </div>
+        </div>
+        <span class="library-badge">p5.js · decoded survey pixels</span>
+      </header>
+
+      <section class="brief" aria-hidden="true">
+        <span class="eyebrow">Operator field</span>
+        <h1>Make room before the crowd moves.</h1>
+        <p>Place the exclusion zone. Drag to test a route. The flock only advances when you do.</p>
+      </section>
+
+      <aside class="risk-readout" aria-live="polite">
+        <span>Route status</span>
+        <strong id="route-status">READY</strong>
+        <small id="route-evidence">survey loading</small>
+      </aside>
+
+      <footer class="bottom-panel">
+        <div class="step-ledger" aria-live="polite">
+          <span>Human steps</span>
+          <strong><span id="step-count">00</span> / <span id="agent-count">--</span> agents</strong>
+        </div>
+
+        <div class="radius-control">
+          <label for="clearance-radius"><span>Exclusion radius</span><output id="radius-output">18 m</output></label>
+          <input id="clearance-radius" type="range" min="12" max="30" step="2" value="18" aria-label="Exclusion radius in metres" />
+        </div>
+
+        <div class="actions" aria-label="Simulation controls">
+          <button type="button" data-clearance-action="undo" disabled aria-label="Undo last human step">↶ <span>Undo</span></button>
+          <button type="button" data-clearance-action="step" aria-label="Advance flock one step">→ <span>Step</span></button>
+          <button type="button" data-clearance-action="reset" aria-label="Reset field">↺ <span>Reset</span></button>
+        </div>
+      </footer>
+    </main>
+    <script type="module" src="./src/boids-flock-pointer-avoidance-demo.js"></script>
+  </body>
+</html>

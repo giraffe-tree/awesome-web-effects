@@ -2479,6 +2479,26 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("ArrowRight")
             elif index == 25:
                 page.locator("#lock-button").click()
+        elif demo["id"] == "boids-flock-pointer-avoidance":
+            if index == 4:
+                page.locator("#clearance-radius").focus()
+                page.keyboard.press("End")
+            elif index == 6:
+                page.mouse.move(90, 145)
+            elif index == 10:
+                page.mouse.down()
+            elif index == 11:
+                page.mouse.move(120, 135)
+            elif index == 12:
+                page.mouse.move(150, 125)
+            elif index == 13:
+                page.mouse.move(180, 115)
+            elif index == 14:
+                page.mouse.move(210, 105)
+            elif index == 15:
+                page.mouse.move(240, 95)
+            elif index == 16:
+                page.mouse.up()
         elif demo["id"] == "poisson-constellation-bloom":
             if index == 2:
                 page.mouse.move(170, 92)
@@ -7880,6 +7900,107 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["ready"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture trusted material-aware TIDE rope editing, exact source-pixel profiles, full-stage native SVG deformation, and a retained firm locked proof without automatic behavior: assertion={assertion!r}; interaction={interaction!r}; coverage={coverage!r}")
+    elif demo["id"] == "boids-flock-pointer-avoidance":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-fictional-terminal-crowd-clearance-route-test"
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["mechanism"] != "decoded-survey-luminance-chroma-and-edges-drive-boids-navigation-risk-and-avoidance"
+            or interaction["acceptedInputs"] != ["mouse-hover", "captured-mouse-drag", "captured-touch-drag", "captured-pen-drag", "keyboard", "range-control", "visible-buttons"]
+            or not interaction["userInputRequired"]
+            or not interaction["strictTrustedInputGuard"]
+            or not interaction["initialFrameStatic"]
+            or not interaction["initialStaticConfirmed"]
+            or interaction["automaticCycle"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["previewClockMutationCount"] != 0
+            or interaction["nonInputVisualMutationCountAfterReady"] != 0
+            or interaction["inputCount"] < 9
+            or interaction["trustedInputCount"] != interaction["inputCount"]
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["humanMutationCount"] < 10
+            or interaction["humanSimulationStepCount"] < 5
+            or interaction["pointerEnterCount"] < 1
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerMoveCount"] < 6
+            or interaction["pointerDragCount"] < 5
+            or interaction["pointerReleaseCount"] != 1
+            or interaction["pointerCancelCount"] != 0
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerCaptureReleaseCount"] != 1
+            or interaction["pointerCaptured"]
+            or interaction["hoverMutationCount"] < 1
+            or interaction["dragMutationCount"] < 5
+            or interaction["radiusMutationCount"] < 1
+            or interaction["rangeInputCount"] < 1
+            or interaction["zoneRadiusMetres"] != 30
+            or interaction["buttonInputCount"] != 0
+            or interaction["keyboardInputCount"] != 0
+            or interaction["currentVisualStateChecksum"] == interaction["initialVisualStateChecksum"]
+            or interaction["agentStateChecksum"] == interaction["initialAgentStateChecksum"]
+            or interaction["minimumClearanceScore"] > 40
+            or interaction["clearanceScore"] < 80
+            or interaction["agentsInsideExclusion"] != 0
+            or interaction["routeConclusion"] != "CLEAR"
+            or interaction["routeConclusionMutationCount"] < 2
+            or interaction["assetFetchCount"] != 1
+            or interaction["assetResponseStatus"] != 200
+            or not interaction["assetSameOrigin"]
+            or not interaction["assetMimeType"].startswith("image/jpeg")
+            or interaction["assetByteLength"] != 235229
+            or interaction["assetSha256"] != "944859c4123d5446e09e45f55a273d636c5e0cfde082ee57e44d563aea74232e"
+            or not interaction["assetShaMatchesExpected"]
+            or not interaction["browserImageDecoded"]
+            or interaction["sourceNaturalWidth"] != 960
+            or interaction["sourceNaturalHeight"] != 640
+            or interaction["sourcePixelCount"] != 614400
+            or not interaction["p5ImageDecoded"]
+            or interaction["p5ImageClass"] != "p5.Image"
+            or interaction["p5ImageWidth"] != 960
+            or interaction["p5ImageHeight"] != 640
+            or interaction["p5ImagePixelLength"] != 2457600
+            or interaction["sampledWidth"] != 96
+            or interaction["sampledHeight"] != 54
+            or interaction["sampledPixelCount"] != 5184
+            or interaction["sampledByteLength"] != 20736
+            or len(interaction["sampledPixelSha256"]) != 64
+            or not interaction["sampledPixelSha256"].strip("0")
+            or interaction["sampledPixelChecksum"] <= 0
+            or interaction["distinctSampleColorCount"] <= 250
+            or interaction["nonzeroSampleByteCount"] <= 15552
+            or interaction["sampledLuminanceRange"] <= .45
+            or interaction["sampledEdgeRange"] <= .35
+            or interaction["navigationRiskRange"] <= .45
+            or interaction["highRiskCellCount"] <= 250
+            or interaction["safeCellCount"] <= 400
+            or interaction["edgeSampleCount"] != 10218
+            or interaction["fieldCoordinateChecksum"] <= 0
+            or not interaction["fieldEvidenceReady"]
+            or interaction["agentCount"] < 30
+            or interaction["agentCount"] > 42
+            or not interaction["agentCountDerivedFromPixels"]
+            or interaction["avoidanceWeight"] < 1.2
+            or interaction["avoidanceWeight"] > 2.6
+            or not interaction["avoidanceWeightDerivedFromPixels"]
+            or not interaction["p5InstanceReady"]
+            or not interaction["p5CanvasReady"]
+            or interaction["p5CanvasWidth"] != 320
+            or interaction["p5CanvasHeight"] != 180
+            or interaction["p5CompletedDrawCount"] < 8
+            or interaction["p5ImageDrawCount"] < 1
+            or interaction["boidDrawCount"] < interaction["agentCount"]
+            or not interaction["animationSettled"]
+            or not interaction["runtimeAssertionPassed"]
+            or not interaction["ready"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture trusted CLEAR-to-DIVERT-to-CLEAR terminal egress routing, exact source-pixel risk evidence, finite boid steps, and a retained full-stage result without automatic simulation: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "poisson-constellation-bloom":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

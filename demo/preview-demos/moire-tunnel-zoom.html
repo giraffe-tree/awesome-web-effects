@@ -1,1 +1,322 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p5.js — Moiré Tunnel Zoom</title><link rel="stylesheet" href="./shared.css"><style>:root{--preview-background:#f2efdf;color-scheme:light}.expansion-stage{position:absolute;inset:0;overflow:hidden;cursor:zoom-in}.expansion-stage canvas{display:block}.library-badge{color:#191611;background:#fffbe9dc;border-color:#19161122}.scene-caption{color:#211d1684}</style></head><body><main class="preview-stage"><div class="expansion-stage" id="expansion-stage" data-preview-mechanism="p5-moire-tunnel" tabindex="0" aria-label="Move the pointer to bend the moire tunnel vanishing point"></div><span class="library-badge">p5.js · moiré tunnel</span><span class="scene-caption">offset rings turn flat linework into accelerating depth</span></main><script type="module" src="./src/moire-tunnel-zoom-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>p5.js — Optical Channel Tunnel Inspection</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="./shared.css">
+    <style>
+      :root {
+        --preview-background: #071017;
+        --ink: #e5e0d4;
+        --accent: #80b3bc;
+        --alert: #d8674e;
+        color-scheme: dark;
+      }
+
+      button, input { font: inherit; }
+
+      .tunnel-stage {
+        position: absolute;
+        inset: 0;
+        overflow: clip;
+        background: #071017;
+        color: var(--ink);
+        outline: none;
+        touch-action: none;
+        user-select: none;
+      }
+
+      .tunnel-stage:focus-visible { box-shadow: inset 0 0 0 2px #dda574; }
+
+      .moire-surface,
+      .moire-surface canvas {
+        position: absolute;
+        inset: 0;
+        width: 100% !important;
+        height: 100% !important;
+      }
+
+      .moire-surface { z-index: 1; }
+      .moire-surface canvas { display: block; }
+
+      .signal-grid {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        opacity: .24;
+        background:
+          linear-gradient(90deg, transparent 49.8%, #d8e3df17 50%, transparent 50.2%),
+          linear-gradient(transparent 49.8%, #d8e3df12 50%, transparent 50.2%),
+          repeating-linear-gradient(90deg, transparent 0 47px, #d8e3df0b 48px),
+          repeating-linear-gradient(0deg, transparent 0 23px, #d8e3df0a 24px);
+        pointer-events: none;
+      }
+
+      .mission,
+      .channel-card,
+      .channel-rail,
+      .tunnel-controls,
+      .source-status {
+        position: absolute;
+        z-index: 8;
+      }
+
+      .mission {
+        top: 10%;
+        left: 4%;
+        width: min(28%, 198px);
+        text-shadow: 0 2px 16px #000;
+        pointer-events: none;
+      }
+
+      .mission-kicker,
+      .mission-copy,
+      .channel-label,
+      .channel-metrics,
+      .channel-rail,
+      .tunnel-controls,
+      .source-status {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-weight: 820;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+      }
+
+      .mission-kicker {
+        color: var(--alert);
+        font-size: clamp(5px, 1vw, 8px);
+      }
+
+      .mission h1 {
+        margin: clamp(6px, 1.2vw, 9px) 0 0;
+        font: 930 clamp(16px, 4.3vw, 31px)/.86 system-ui, sans-serif;
+        letter-spacing: -.06em;
+      }
+
+      .mission-copy {
+        max-width: 28em;
+        margin: clamp(6px, 1.2vw, 9px) 0 0;
+        color: #e0e6e0b0;
+        font-size: clamp(4px, .77vw, 6px);
+        line-height: 1.46;
+      }
+
+      .channel-card {
+        bottom: 20%;
+        left: 4%;
+        width: min(27%, 190px);
+        padding: clamp(7px, 1.25vw, 10px);
+        border: 1px solid #e0e8df2c;
+        border-radius: clamp(7px, 1.4vw, 10px);
+        background: #071017c9;
+        box-shadow: inset 0 1px #ffffff0e, 0 12px 28px #0007;
+        backdrop-filter: blur(11px);
+        pointer-events: none;
+      }
+
+      .channel-label {
+        display: flex;
+        justify-content: space-between;
+        gap: 6px;
+        color: #adb9b2;
+        font-size: clamp(4px, .72vw, 5px);
+      }
+
+      .channel-label b { color: var(--accent); }
+
+      .channel-card strong {
+        display: block;
+        margin-top: clamp(4px, .8vw, 6px);
+        color: var(--conclusion, #e9d5c1);
+        font: 900 clamp(11px, 2.5vw, 18px)/.9 system-ui, sans-serif;
+        letter-spacing: -.045em;
+      }
+
+      .channel-metrics {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 3px 6px;
+        margin-top: clamp(5px, 1vw, 8px);
+        color: #c6d0c9a3;
+        font-size: clamp(3px, .6vw, 5px);
+      }
+
+      .channel-metrics span:nth-child(even) { text-align: right; }
+
+      .channel-rail {
+        top: 6%;
+        right: 4%;
+        display: flex;
+        gap: clamp(4px, .8vw, 6px);
+        font-size: clamp(4px, .68vw, 5px);
+      }
+
+      .channel-rail button {
+        min-width: clamp(22px, 5vw, 36px);
+        padding: clamp(4px, .75vw, 6px) clamp(5px, .9vw, 7px);
+        border: 1px solid #dfe8df32;
+        border-radius: 999px;
+        background: #071017c4;
+        color: #dbe4dd;
+        font: inherit;
+        letter-spacing: inherit;
+        text-transform: inherit;
+        cursor: pointer;
+      }
+
+      .channel-rail button[data-selected="true"] {
+        border-color: color-mix(in srgb, var(--accent) 72%, white);
+        background: color-mix(in srgb, var(--accent) 28%, #071017 72%);
+        color: #fff;
+        box-shadow: 0 0 15px color-mix(in srgb, var(--accent) 35%, transparent);
+      }
+
+      .channel-rail button:focus-visible { outline: 2px solid #e3a173; outline-offset: 2px; }
+
+      .source-status {
+        right: 4%;
+        bottom: 20.5%;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        color: #dce4deaa;
+        font-size: clamp(4px, .68vw, 5px);
+        text-shadow: 0 2px 8px #000;
+        pointer-events: none;
+      }
+
+      .source-status i {
+        width: 5px;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: #8fd1b4;
+        box-shadow: 0 0 8px #8fd1b4;
+      }
+
+      .tunnel-controls {
+        right: 4%;
+        bottom: 5%;
+        left: 4%;
+        display: flex;
+        align-items: center;
+        gap: clamp(5px, 1vw, 9px);
+        min-height: clamp(19px, 4.2vw, 30px);
+        padding: 0 clamp(7px, 1.2vw, 10px);
+        border: 1px solid #dbe5df2f;
+        border-radius: 999px;
+        background: #071017dd;
+        box-shadow: inset 0 1px #ffffff0d, 0 9px 25px #0008;
+        font-size: clamp(4px, .67vw, 5px);
+        backdrop-filter: blur(12px);
+      }
+
+      .tunnel-controls label {
+        display: flex;
+        flex: 1 1 85px;
+        align-items: center;
+        gap: 6px;
+        min-width: 0;
+        color: #c4d0c9a8;
+      }
+
+      .tunnel-controls input {
+        min-width: 34px;
+        flex: 1 1 90px;
+        height: 2px;
+        accent-color: var(--accent);
+      }
+
+      .tunnel-controls output { min-width: 2.4em; color: var(--accent); }
+
+      .tunnel-controls button {
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: #e1e8e2;
+        font: inherit;
+        letter-spacing: inherit;
+        text-transform: inherit;
+        cursor: pointer;
+      }
+
+      .tunnel-controls button[data-action="assess"] { color: #e9906d; }
+      .tunnel-controls button:hover,
+      .tunnel-controls button:focus-visible { color: var(--accent); outline: none; }
+
+      .source-image,
+      .source-evidence { display: none; }
+
+      @media (max-width: 420px) {
+        .mission { width: 31%; }
+        .channel-card { width: 29%; }
+      }
+
+      @media (max-width: 220px), (max-height: 115px) {
+        .library-badge { display: none; }
+        .mission { top: 8%; width: 33%; }
+        .mission h1 { margin-top: 2px; font-size: 8px; }
+        .mission-copy { display: none; }
+        .channel-card { bottom: 21%; width: 31%; padding: 4px; }
+        .channel-card strong { margin-top: 2px; font-size: 7px; }
+        .channel-metrics { display: none; }
+        .channel-rail { top: 4%; gap: 2px; }
+        .channel-rail button { min-width: 16px; padding: 2px 3px; font-size: 3px; }
+        .source-status { display: none; }
+        .tunnel-controls { min-height: 13px; gap: 4px; padding: 0 4px; font-size: 3px; }
+        .tunnel-controls label > span { display: none; }
+        .tunnel-controls input { min-width: 20px; }
+      }
+    </style>
+  </head>
+  <body>
+    <main
+      id="tunnel-stage"
+      class="preview-stage tunnel-stage"
+      tabindex="0"
+      aria-label="Human-operated optical signal tunnel inspection. Move the vanishing point and drag to scrub interference depth."
+    >
+      <div id="moire-surface" class="moire-surface" aria-hidden="true"></div>
+      <div class="signal-grid"></div>
+
+      <header class="mission">
+        <div class="mission-kicker">Optical gate · master 07</div>
+        <h1>Inspect the signal depth.</h1>
+        <p class="mission-copy">Move the axis; drag to scrub the finite tunnel. Source frequencies set each channel.</p>
+      </header>
+
+      <section class="channel-card" aria-live="polite">
+        <div class="channel-label"><span>Interference gate</span><b data-channel-status>Unassessed</b></div>
+        <strong data-channel-conclusion>CH-01 / WATCH</strong>
+        <div class="channel-metrics">
+          <span data-reading="rings">Rings —</span><span data-reading="axis">Axis —</span>
+          <span data-reading="risk">Risk —</span><span data-reading="depth">Depth 08</span>
+        </div>
+      </section>
+
+      <nav id="channel-rail" class="channel-rail" aria-label="Pixel-derived optical channels">
+        <button type="button" data-channel="0" aria-label="Inspect optical channel 1">CH 01</button>
+        <button type="button" data-channel="1" aria-label="Inspect optical channel 2">CH 02</button>
+        <button type="button" data-channel="2" aria-label="Inspect optical channel 3">CH 03</button>
+        <button type="button" data-channel="3" aria-label="Inspect optical channel 4">CH 04</button>
+      </nav>
+
+      <div class="source-status"><i></i><span data-source-status>Decoding calibration master</span></div>
+
+      <div class="tunnel-controls">
+        <label for="tunnel-depth"><span>Tunnel depth</span><input id="tunnel-depth" type="range" min="0" max="100" value="8" aria-label="Moiré tunnel inspection depth"><output data-depth-output>08</output></label>
+        <button type="button" data-action="previous">Previous</button>
+        <button type="button" data-action="next">Next</button>
+        <button type="button" data-action="assess">Assess</button>
+        <button type="button" data-action="undo">Undo</button>
+        <button type="button" data-action="reset">Reset</button>
+      </div>
+
+      <img id="source-image" class="source-image" alt="" aria-hidden="true">
+      <canvas id="source-evidence" class="source-evidence" width="96" height="54" aria-hidden="true"></canvas>
+      <span class="library-badge">p5.js · decoded optical master</span>
+    </main>
+    <script type="module" src="./src/moire-tunnel-zoom-demo.js"></script>
+  </body>
+</html>

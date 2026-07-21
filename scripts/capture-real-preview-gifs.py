@@ -2608,6 +2608,39 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.locator('[data-slit-target="0.58"]').click()
             elif index == 33:
                 page.mouse.move(154, 95)
+        elif demo["id"] == "moire-tunnel-zoom":
+            if index == 3:
+                page.mouse.move(171, 76)
+            elif index == 6:
+                page.mouse.down()
+            elif index == 7:
+                page.mouse.move(188, 84, steps=2)
+            elif index == 8:
+                page.mouse.move(208, 96, steps=2)
+            elif index == 9:
+                page.mouse.move(232, 108, steps=2)
+            elif index == 10:
+                page.mouse.up()
+            elif index == 13:
+                page.locator('[data-channel="1"]').click()
+            elif index == 16:
+                page.locator("#tunnel-depth").focus()
+                page.keyboard.press("ArrowRight")
+                page.keyboard.press("ArrowRight")
+            elif index == 19:
+                page.locator('[data-action="assess"]').click()
+            elif index == 22:
+                page.locator('[data-action="next"]').click()
+            elif index == 24:
+                page.locator('[data-action="assess"]').click()
+            elif index == 27:
+                page.locator('[data-action="undo"]').click()
+            elif index == 30:
+                page.locator("#tunnel-stage").focus()
+                page.keyboard.press("ArrowLeft")
+                page.keyboard.press("ArrowUp")
+            elif index == 33:
+                page.locator('[data-action="reset"]').click()
         elif demo["id"] == "poisson-constellation-bloom":
             if index == 2:
                 page.mouse.move(170, 92)
@@ -8487,6 +8520,128 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["ready"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture a trusted full-stage editorial Draft-to-Release time-slit inspection with exact source evidence, multiple changed bands and a retained pixel-proven PASS without automatic motion: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "moire-tunnel-zoom":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        profile_pixel_total = sum(profile["samplePixelCount"] for profile in interaction["channelProfiles"])
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-pixel-evidenced-optical-channel-inspection"
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["renderer"] != "canvas2d"
+            or interaction["mechanism"] != "trusted-human-input-scrubs-a-finite-p5-moire-tunnel-over-a-browser-decoded-optical-master"
+            or interaction["assetMechanismRole"] != "exact-source-pixels-determine-channel-line-density-ring-count-axis-ellipse-ratio-accent-vanishing-point-risk-and-inspection-conclusion"
+            or interaction["causality"] != "trusted-human-input-only"
+            or interaction["acceptedInputs"] != ["mouse-hover", "captured-mouse-drag", "captured-touch-drag", "captured-pen-drag", "keyboard", "range-control", "channel-buttons", "visible-action-buttons"]
+            or not interaction["userInputRequired"]
+            or not interaction["strictTrustedInputGuard"]
+            or not interaction["initialFrameStatic"]
+            or not interaction["initialStillVerified"]
+            or interaction["automaticCycle"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticTimeline"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["visualMutationFromPreviewClock"]
+            or interaction["previewClockMutationCount"] != 0
+            or interaction["inputCount"] < 18
+            or interaction["trustedInputCount"] != interaction["inputCount"]
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["humanInputCausalityCount"] < 14
+            or interaction["humanVisualMutationCount"] < 12
+            or interaction["hoverInputCount"] < 1
+            or interaction["pointerMoveCount"] < 7
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerDragCount"] < 6
+            or interaction["pointerUpCount"] != 1
+            or interaction["pointerCancelCount"] != 0
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerCaptureReleaseCount"] != 1
+            or interaction["pointerCaptured"]
+            or interaction["dragging"]
+            or interaction["activePointerId"] is not None
+            or interaction["mouseInputCount"] < 9
+            or interaction["touchInputCount"] != 0
+            or interaction["penInputCount"] != 0
+            or interaction["keyboardInputCount"] != 2
+            or interaction["rangeInputCount"] != 2
+            or interaction["channelButtonInputCount"] != 1
+            or interaction["actionButtonInputCount"] != 5
+            or interaction["assessmentCount"] != 2
+            or interaction["undoCount"] != 1
+            or interaction["resetCount"] != 1
+            or interaction["selectedChannelIndex"] != 0
+            or interaction["selectedChannelId"] != "CH-01"
+            or interaction["selectedChannelConclusion"] != "AWAIT"
+            or interaction["assessedChannelCount"] != 0
+            or interaction["depth"] != 8
+            or interaction["maximumDepth"] <= interaction["initialDepth"]
+            or interaction["lastInputKind"] != "action-button"
+            or interaction["lastInputSource"] != "reset"
+            or interaction["lastInputTrusted"] is not True
+            or interaction["lastPointerType"] != "mouse"
+            or interaction["pointerTypesSeen"] != ["mouse"]
+            or interaction["sourceAssetKind"] != "built-in-imagegen-fictional-optical-calibration-master"
+            or not interaction["sourceAssetFictional"]
+            or interaction["assetFetchCount"] != 1
+            or interaction["assetResponseStatus"] != 200
+            or not interaction["assetMimeType"].startswith("image/jpeg")
+            or not interaction["assetSameOrigin"]
+            or interaction["assetByteLength"] != 270948
+            or interaction["assetSha256"] != "08529c25ab1262a8b675f82671859c6febaa3326e7b4d199ae640b2ffd6e6eec"
+            or not interaction["assetShaMatchesExpected"]
+            or not interaction["browserImageDecoded"]
+            or interaction["sourceNaturalWidth"] != 960
+            or interaction["sourceNaturalHeight"] != 640
+            or interaction["sourcePixelCount"] != 614400
+            or not interaction["browserCanvasReadback"]
+            or interaction["sampledWidth"] != 96
+            or interaction["sampledHeight"] != 54
+            or interaction["sampledPixelCount"] != 5184
+            or interaction["sampledPixelByteLength"] != 20736
+            or len(interaction["sampledPixelSha256"]) != 64
+            or not interaction["sampledPixelSha256"].strip("0")
+            or interaction["sampledOpaquePixelCount"] != 5184
+            or interaction["distinctSampleColorCount"] <= 80
+            or interaction["sampledLuminanceRange"] <= .25
+            or interaction["sampledLuminanceStdDev"] <= .06
+            or interaction["sampledEdgeMean"] <= .008
+            or interaction["apertureCandidateCount"] < 8
+            or interaction["apertureCentroidU"] < interaction["apertureRegion"]["x0"]
+            or interaction["apertureCentroidU"] > interaction["apertureRegion"]["x1"]
+            or interaction["apertureCentroidV"] < interaction["apertureRegion"]["y0"]
+            or interaction["apertureCentroidV"] > interaction["apertureRegion"]["y1"]
+            or interaction["channelProfileCount"] != 4
+            or len(interaction["channelProfiles"]) != 4
+            or profile_pixel_total <= 2600
+            or any(profile["samplePixelCount"] <= 500 for profile in interaction["channelProfiles"])
+            or interaction["distinctRingCountCount"] != 4
+            or interaction["minimumChannelDensityDelta"] <= .001
+            or interaction["distinctAxisDegreeCount"] < 2
+            or interaction["channelAxisDegreeSpan"] <= 1
+            or interaction["distinctRiskCount"] < 3
+            or len(interaction["profileEvidenceChecksum"]) != 8
+            or not interaction["pixelEvidenceBoundToDensity"]
+            or not interaction["pixelEvidenceBoundToVanishingPoint"]
+            or not interaction["pixelEvidenceBoundToConclusion"]
+            or not interaction["p5InstanceReady"]
+            or not interaction["p5CanvasReady"]
+            or not interaction["p5NoLoop"]
+            or interaction["p5CompletedDrawCount"] < 12
+            or interaction["p5SourceDrawCount"] < 1
+            or interaction["stageWidth"] != 320
+            or interaction["stageHeight"] != 180
+            or interaction["canvasWidth"] != 320
+            or interaction["canvasHeight"] != 180
+            or interaction["stageCoverageRatio"] < .98
+            or interaction["canvasCoverageRatio"] < .98
+            or not interaction["runtimeAssertionPassed"]
+            or not interaction["ready"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a trusted full-stage four-channel optical Moire calibration with exact source evidence, finite p5 depth changes, assessment/undo/reset and no automatic tunnel motion: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "poisson-constellation-bloom":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

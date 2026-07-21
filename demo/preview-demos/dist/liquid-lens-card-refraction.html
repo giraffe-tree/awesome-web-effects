@@ -1,8 +1,380 @@
-<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Liquid Lens Card Refraction</title><style>:root{--preview-background:#0d1930}.preview-stage{background:radial-gradient(circle at 75% 35%,#ff7d5455,transparent 30%),linear-gradient(135deg,#0d1930,#172b4e)}.copy{position:absolute;left:14px;top:50px;color:#eef6ff;width:100px}.copy small{font:800 6px monospace;letter-spacing:.14em;color:#8fdfff}.copy h1{margin:8px 0;font:950 20px/.84 system-ui;letter-spacing:-.065em}.card{position:absolute;left:143px;top:38px;width:146px;height:108px;border:1px solid #fff3;border-radius:18px;background:repeating-linear-gradient(115deg,#fb7e52 0 18px,#ffc768 19px 36px,#4cd2dc 37px 54px,#6f65dc 55px 72px);overflow:hidden}.card::after{content:"REFRACT";position:absolute;left:16px;bottom:13px;color:#fff;font:950 18px/.8 system-ui;letter-spacing:-.07em}.lens{position:absolute;width:69px;height:69px;border-radius:50%;left:var(--x,38px);top:var(--y,20px);backdrop-filter:blur(2px) saturate(1.7) hue-rotate(28deg);background:#fff1;border:1px solid #fff9;box-shadow:inset -10px -12px 18px #0b164077,inset 9px 7px 14px #fff8,0 10px 24px #06102788;transform:scale(var(--s,1))}.scene-caption{display:none}</style>  <script type="module" crossorigin src="./assets/liquid-lens-card-refraction-C8uuI-Pq.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
-  <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
-  <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
-  <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
-  <link rel="modulepreload" crossorigin href="./assets/expansion-b-utils-CD_J0IHW.js">
-  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage"><section class="copy"><small>OPTICAL SURFACE</small><h1>DRAG A LIQUID LENS.</h1></section><div class="card" tabindex="0"><i class="lens" id="lens"></i></div><span class="library-badge">CSS backdrop-filter · lens</span></main></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>CSS Backdrop Filter — Human-driven Pressing Inspection Lens</title>
+    <link rel="icon" href="data:,">
+    <style>
+      :root {
+        --preview-background: #071011;
+        color-scheme: dark;
+      }
+
+      button { font: inherit; }
+
+      .inspection-stage {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        background: #071011;
+        color: #f1eee5;
+        cursor: crosshair;
+        outline: none;
+        touch-action: none;
+        user-select: none;
+      }
+
+      .inspection-stage:focus-visible {
+        box-shadow: inset 0 0 0 2px #e9ba63;
+      }
+
+      .pressing-photo,
+      .photo-grade,
+      .photo-grain {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .pressing-photo {
+        z-index: 1;
+        object-fit: cover;
+        object-position: 50% 50%;
+        pointer-events: none;
+      }
+
+      .photo-grade,
+      .photo-grain {
+        z-index: 2;
+        pointer-events: none;
+      }
+
+      .photo-grade {
+        background:
+          linear-gradient(90deg, rgba(3,10,11,.82) 0%, rgba(3,10,11,.28) 30%, transparent 58%),
+          linear-gradient(180deg, rgba(3,10,11,.54) 0%, transparent 28%, transparent 65%, rgba(3,10,11,.76) 100%);
+      }
+
+      .photo-grain {
+        background-image: radial-gradient(rgba(255,255,255,.19) .45px, transparent .55px);
+        background-size: 3px 3px;
+        mix-blend-mode: soft-light;
+        opacity: .12;
+      }
+
+      .topline {
+        position: absolute;
+        z-index: 7;
+        top: clamp(7px,3.8vw,20px);
+        left: clamp(8px,4.2vw,30px);
+        right: clamp(8px,4.2vw,30px);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        color: rgba(239,238,225,.84);
+        pointer-events: none;
+      }
+
+      .specimen-id,
+      .surface-status {
+        display: flex;
+        align-items: center;
+        gap: clamp(4px,1.5vw,10px);
+        font: 850 clamp(4px,1.45vw,10px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .14em;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+
+      .specimen-id::before {
+        width: clamp(13px,4vw,29px);
+        height: 1px;
+        background: #e9ba63;
+        content: "";
+      }
+
+      .surface-status::before {
+        width: clamp(3px,.9vw,6px);
+        height: clamp(3px,.9vw,6px);
+        border-radius: 50%;
+        background: #8fd9c7;
+        box-shadow: 0 0 9px rgba(143,217,199,.85);
+        content: "";
+      }
+
+      .title-block {
+        position: absolute;
+        z-index: 7;
+        left: clamp(9px,4.2vw,30px);
+        bottom: clamp(12px,8vw,52px);
+        width: min(39%, 275px);
+        pointer-events: none;
+      }
+
+      .title-block small {
+        display: block;
+        color: #8fd9c7;
+        font: 900 clamp(4px,1.45vw,10px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .17em;
+        text-transform: uppercase;
+      }
+
+      .title-block h1 {
+        margin: clamp(5px,1.8vw,13px) 0 0;
+        font: 650 clamp(11px,5.15vw,37px)/.86 Georgia, "Times New Roman", serif;
+        letter-spacing: -.055em;
+      }
+
+      .title-block p {
+        margin: clamp(5px,1.7vw,12px) 0 0;
+        color: rgba(239,238,225,.66);
+        font: 800 clamp(4px,1.35vw,9px)/1.35 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+      }
+
+      .liquid-lens {
+        --lens-x: 66%;
+        --lens-y: 48%;
+        --lens-radius: 49% 51% 44% 56% / 55% 44% 56% 45%;
+        --lens-tilt: -1deg;
+        position: absolute;
+        z-index: 5;
+        left: var(--lens-x);
+        top: var(--lens-y);
+        width: clamp(34px,22vw,128px);
+        aspect-ratio: 1;
+        overflow: hidden;
+        border: 1px solid rgba(255,249,228,.72);
+        border-radius: var(--lens-radius);
+        background: rgba(220,250,242,.08);
+        box-shadow:
+          inset 8px 7px 16px rgba(255,255,255,.28),
+          inset -11px -12px 19px rgba(1,18,20,.52),
+          0 12px 25px rgba(0,4,5,.52),
+          0 0 0 1px rgba(85,159,151,.18);
+        transform: translate(-50%,-50%) rotate(var(--lens-tilt));
+        -webkit-backdrop-filter: blur(.65px) saturate(1.3) contrast(1.13) brightness(1.05);
+        backdrop-filter: blur(.65px) saturate(1.3) contrast(1.13) brightness(1.05);
+        transition: border-radius 140ms ease, box-shadow 140ms ease, transform 80ms linear;
+        pointer-events: none;
+        will-change: left, top, border-radius, background-position;
+      }
+
+      .lens-sample {
+        position: absolute;
+        inset: 0;
+        background-repeat: no-repeat;
+        filter: contrast(1.08) saturate(1.11);
+        opacity: .9;
+        transform: scale(1.025);
+      }
+
+      .liquid-lens::before {
+        position: absolute;
+        z-index: 2;
+        inset: 3%;
+        border: 1px solid rgba(255,255,255,.19);
+        border-radius: inherit;
+        background:
+          radial-gradient(circle at 31% 24%, rgba(255,255,255,.46) 0 1.5%, transparent 10%),
+          linear-gradient(132deg, rgba(255,255,255,.2), transparent 26%, transparent 70%, rgba(3,25,27,.25));
+        content: "";
+      }
+
+      .liquid-lens::after {
+        position: absolute;
+        z-index: 3;
+        left: 50%;
+        top: 50%;
+        width: 12%;
+        aspect-ratio: 1;
+        border: 1px solid rgba(242,230,192,.76);
+        border-radius: 50%;
+        box-shadow: 0 0 0 1px rgba(4,17,18,.45);
+        transform: translate(-50%,-50%);
+        content: "";
+      }
+
+      .crosshair {
+        position: absolute;
+        z-index: 4;
+        inset: 0;
+        opacity: .7;
+      }
+
+      .crosshair::before,
+      .crosshair::after {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        background: rgba(239,225,184,.75);
+        transform: translate(-50%,-50%);
+        content: "";
+      }
+
+      .crosshair::before { width: 22%; height: 1px; }
+      .crosshair::after { width: 1px; height: 22%; }
+
+      .lens-readout {
+        position: absolute;
+        z-index: 7;
+        left: var(--readout-x, 66%);
+        top: var(--readout-y, 48%);
+        padding: clamp(3px,.8vw,6px) clamp(4px,1.2vw,9px);
+        border: 1px solid rgba(238,228,195,.28);
+        border-radius: 999px;
+        background: rgba(3,12,13,.64);
+        color: #efe3bd;
+        font: 900 clamp(4px,1.35vw,9px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .11em;
+        transform: translate(-50%, calc(-50% + clamp(25px,14vw,78px)));
+        white-space: nowrap;
+        pointer-events: none;
+        backdrop-filter: blur(7px);
+      }
+
+      .zoom-controls {
+        position: absolute;
+        z-index: 9;
+        right: clamp(7px,3.8vw,27px);
+        bottom: clamp(7px,3.8vw,22px);
+        display: flex;
+        align-items: center;
+        gap: 2px;
+        padding: 3px;
+        border: 1px solid rgba(238,230,205,.24);
+        border-radius: 999px;
+        background: rgba(3,12,13,.72);
+        box-shadow: 0 8px 18px rgba(0,0,0,.24);
+        cursor: default;
+        backdrop-filter: blur(8px);
+      }
+
+      .zoom-controls button,
+      .zoom-controls output {
+        display: grid;
+        min-width: clamp(18px,6.5vw,44px);
+        height: clamp(18px,6.5vw,44px);
+        place-items: center;
+        border: 0;
+        border-radius: 50%;
+      }
+
+      .zoom-controls button {
+        background: transparent;
+        color: #f2ecdf;
+        cursor: pointer;
+        font: 800 clamp(8px,2.6vw,18px)/1 system-ui, sans-serif;
+      }
+
+      .zoom-controls button:hover,
+      .zoom-controls button:focus-visible {
+        outline: none;
+        background: #e9ba63;
+        color: #071011;
+      }
+
+      .zoom-controls output {
+        min-width: clamp(28px,8.6vw,60px);
+        color: #8fd9c7;
+        font: 900 clamp(4px,1.35vw,9px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .07em;
+      }
+
+      .inspection-stage .library-badge {
+        top: auto;
+        left: clamp(8px,4.2vw,30px);
+        bottom: clamp(7px,3.8vw,22px);
+        max-width: 39%;
+        padding: clamp(3px,.9vw,6px) clamp(5px,1.5vw,10px);
+        border-color: rgba(238,230,205,.18);
+        background: rgba(3,12,13,.7);
+        color: rgba(241,238,226,.77);
+        font-size: clamp(4px,1.25vw,9px);
+        white-space: nowrap;
+        backdrop-filter: blur(8px);
+      }
+
+      .scene-caption { display: none; }
+
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0,0,0,0);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      @media (max-width: 200px), (max-height: 105px) {
+        .title-block { bottom: 23px; width: 42%; }
+        .title-block p,
+        .surface-status,
+        .lens-readout,
+        .inspection-stage .library-badge { display: none; }
+        .zoom-controls { right: 5px; bottom: 5px; padding: 1px; }
+        .zoom-controls button,
+        .zoom-controls output { min-width: 15px; height: 15px; }
+        .zoom-controls output { min-width: 22px; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .liquid-lens { transition: none; }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/liquid-lens-card-refraction-Cx8abV8r.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+    <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main
+      class="inspection-stage preview-stage"
+      id="inspection-stage"
+      data-preview-mechanism="css-backdrop-filter-local-photo-refraction"
+      tabindex="0"
+      role="application"
+      aria-label="Human-operated vinyl pressing inspection lens"
+      aria-describedby="lens-instructions"
+    >
+      <img class="pressing-photo" id="pressing-photo" alt="AI-generated fictional translucent vinyl pressing on a dark inspection surface">
+      <div class="photo-grade" aria-hidden="true"></div>
+      <div class="photo-grain" aria-hidden="true"></div>
+
+      <header class="topline" aria-hidden="true">
+        <span class="specimen-id">PRESSING / 017</span>
+        <span class="surface-status">GROOVE MAP · READY</span>
+      </header>
+
+      <section class="title-block" aria-hidden="true">
+        <small>Surface inspection</small>
+        <h1>READ THE<br>PRESSING.</h1>
+        <p>Drag lens · arrows move</p>
+      </section>
+
+      <div class="liquid-lens" id="liquid-lens" aria-hidden="true">
+        <span class="lens-sample" id="lens-sample"></span>
+        <i class="crosshair"></i>
+      </div>
+      <output class="lens-readout" id="lens-readout" aria-live="polite">1.48× · 66/48</output>
+
+      <div class="zoom-controls" aria-label="Lens magnification controls">
+        <button type="button" data-lens-action="zoom-out" aria-label="Decrease magnification">−</button>
+        <output id="zoom-readout" aria-label="Current magnification">1.48×</output>
+        <button type="button" data-lens-action="zoom-in" aria-label="Increase magnification">+</button>
+        <button type="button" data-lens-action="reset" aria-label="Reset lens position and magnification">↺</button>
+      </div>
+
+      <p class="sr-only" id="lens-instructions">Move the pointer or press and drag to inspect the pressing. Touch and pen drags use pointer capture. Arrow keys move the lens, plus and minus change magnification, and Home resets it.</p>
+      <span class="library-badge">CSS backdrop-filter · live local pixels</span>
+      <span class="scene-caption">local product raster → movable magnified sample → trusted human inspection</span>
+    </main>
+  </body>
+</html>

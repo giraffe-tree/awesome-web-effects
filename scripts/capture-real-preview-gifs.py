@@ -1579,6 +1579,38 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("Shift+ArrowDown")
             elif index == 29:
                 page.keyboard.press("ArrowLeft")
+        elif demo["id"] == "liquid-lens-card-refraction":
+            if index == 1:
+                page.mouse.move(260, 110)
+            elif index == 4:
+                page.mouse.move(80, 60, steps=4)
+            elif index == 7:
+                page.mouse.move(100, 120)
+            elif index == 8:
+                page.mouse.down()
+            elif index == 9:
+                page.mouse.move(220, 70, steps=6)
+            elif index == 10:
+                page.mouse.up()
+            elif index in (13, 15):
+                page.locator('[data-lens-action="zoom-in"]').click()
+            elif index == 17:
+                page.locator('[data-lens-action="zoom-out"]').click()
+            elif index == 20:
+                page.locator("#inspection-stage").focus()
+                page.keyboard.press("ArrowLeft")
+            elif index == 21:
+                page.keyboard.press("ArrowUp")
+            elif index == 23:
+                page.keyboard.press("+")
+            elif index == 25:
+                page.keyboard.press("ArrowRight")
+            elif index == 27:
+                page.keyboard.press("Home")
+            elif index == 30:
+                page.locator('[data-lens-action="zoom-in"]').click()
+            elif index == 32:
+                page.locator('[data-lens-action="reset"]').click()
         elif demo["id"] == "orbital-card-constellation":
             if index == 1:
                 page.mouse.move(160, 100)
@@ -4008,6 +4040,101 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["lastInputTrusted"] is not True
         ):
             raise RuntimeError(f"{demo['id']} did not capture trusted slow/fast captured traces, keyboard sampling, reset, four unique decoded ImageGen frames, and a nonempty final visual-memory path: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "liquid-lens-card-refraction":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-fictional-vinyl-pressing-surface-inspection"
+            or interaction["claimedLibrary"] != "motion@12.42.2"
+            or interaction["mechanism"] != "same-local-photo-underlay-and-magnified-lens-sample-with-live-backdrop-filter"
+            or interaction["assetMechanismRole"] != "local-raster-is-both-visible-underlay-and-the-lens-refraction-pixel-source"
+            or interaction["acceptedInputs"] != ["mouse-hover", "mouse-drag", "touch-drag", "pen-drag", "keyboard", "button-control"]
+            or not interaction["userInputRequired"]
+            or not interaction["strictTrustedInputGuard"]
+            or not interaction["initialFrameStatic"]
+            or not interaction["initialStillVerified"]
+            or interaction["automaticCycle"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["previewClockMutationCount"] != 0
+            or interaction["nonInputVisualMutationCountAfterReady"] != 0
+            or abs(interaction["x"] - .66) > .001
+            or abs(interaction["y"] - .48) > .001
+            or abs(interaction["zoom"] - 1.48) > .001
+            or interaction["inputCount"] < 22
+            or interaction["trustedInputCount"] != interaction["inputCount"]
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["pointerEnterCount"] < 1
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerMoveCount"] < 12
+            or interaction["pointerReleaseCount"] != 1
+            or interaction["pointerCancelCount"] != 0
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerCaptureReleaseCount"] != 1
+            or interaction["keyboardInputCount"] != 5
+            or interaction["buttonActivationCount"] != 5
+            or interaction["hoverMutationCount"] < 5
+            or interaction["dragMutationCount"] < 6
+            or interaction["keyboardMutationCount"] != 5
+            or interaction["buttonMutationCount"] != 5
+            or interaction["lensPositionMutationCount"] < 15
+            or interaction["zoomMutationCount"] < 7
+            or interaction["humanVisualMutationCount"] < 21
+            or interaction["humanInputCausalityCount"] != interaction["humanVisualMutationCount"]
+            or interaction["activePointerId"] is not None
+            or interaction["activePointerType"] != "none"
+            or interaction["pointerCaptured"]
+            or interaction["lastInputKind"] != "button"
+            or interaction["lastInputTrusted"] is not True
+            or interaction["lastPointerType"] != "mouse"
+            or interaction["firstHumanStateBefore"] == interaction["firstHumanStateAfter"]
+            or interaction["maximumPositionDelta"] <= .15
+            or interaction["minimumHumanZoom"] > 1.48
+            or interaction["maximumHumanZoom"] < 1.72
+            or interaction["lensSampleMappingCount"] < interaction["humanVisualMutationCount"] + 1
+            or interaction["stageWidth"] != 320
+            or interaction["stageHeight"] != 180
+            or interaction["stageCoverageRatio"] <= .98
+            or interaction["photoCoverageRatio"] <= .98
+            or interaction["lensWidth"] < 33
+            or abs(interaction["lensWidth"] - interaction["lensHeight"]) >= 1
+            or "blur(" not in interaction["computedBackdropFilter"]
+            or "saturate(" not in interaction["computedBackdropFilter"]
+            or interaction["computedLensBackgroundImage"] == "none"
+            or interaction["assetFetchCount"] != 1
+            or interaction["assetResponseStatus"] != 200
+            or not interaction["assetSameOrigin"]
+            or "image/jpeg" not in interaction["assetMimeType"]
+            or interaction["assetByteLength"] != 301656
+            or interaction["assetSha256"] != "cd293bfc9c71a8c97b1ad98a3fec14a5afd9676add17806dafa5c79312fbeaeb"
+            or not interaction["assetShaMatchesExpected"]
+            or not interaction["browserImageDecoded"]
+            or interaction["sourceNaturalWidth"] != 960
+            or interaction["sourceNaturalHeight"] != 640
+            or interaction["domImageDecodedCount"] != 1
+            or interaction["sampledPixelCount"] != 1536
+            or interaction["sampledPixelByteLength"] != 6144
+            or len(interaction["sourcePixelChecksum"]) != 8
+            or interaction["distinctSampleColorCount"] <= 180
+            or interaction["sampledLumaRange"] <= 150
+            or interaction["alphaFailureCount"] != 0
+            or interaction["motionControllerCount"] != 1
+            or interaction["motionControllerDuration"] != 1
+            or not interaction["motionControllerPaused"]
+            or abs(interaction["motionControllerZoom"] - interaction["zoom"]) >= .001
+            or interaction["motionControllerSeekCount"] < 7
+            or interaction["motionControllerUpdateCount"] < 7
+            or interaction["previewRenderCount"] < 36
+            or not interaction["assetEvidenceReady"]
+            or not interaction["ready"]
+            or not interaction["runtimeAssertionPassed"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture trusted hover, captured drag, keyboard and optical controls over one verified full-stage pressing photograph, a human-sought paused Motion zoom controller, and zero automatic mutation: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "orbital-card-constellation":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

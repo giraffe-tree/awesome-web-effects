@@ -87,12 +87,12 @@ export const effectExpansion150BatchB = [
     scores: score(19, 18, 19, 15, 15, 10), rationaleZh: '粒子来源能精确回到字形，解体前后语义连续且视觉变化显著。'
   },
   {
-    id: 'liquid-lens-card-refraction', order: 134, name: 'Liquid lens card refraction', nameZh: '液态透镜卡片折射', category: 'pointer', sourceUrl: 'https://github.com/w3c/fxtf-drafts',
-    difference: '不规则透镜移动时改变下方条纹的模糊、饱和度、色相和内反光，而非单纯玻璃卡。',
-    behavior: { trigger: 'pointer movement', response: 'A deforming optical lens refracts the patterned card underneath', timing: 'continuous pointer-linked refraction', layer: 'card optical surface' },
-    prompt: '实现可拖动不规则透镜，用 backdrop-filter、内阴影和动态边界共同表现折射。',
-    implementation: motionImplementation("const lensMotion = animate(lens, { opacity: [.94, 1, .94] }, { duration: 3 }); lens.style.backdropFilter = filter;", 'https://github.com/w3c/fxtf-drafts'),
-    scores: score(18, 19, 18, 15, 15, 10), rationaleZh: '高对比底纹让折射结果可核验，透镜边缘和材质语言完整。'
+    id: 'liquid-lens-card-refraction', order: 134, name: 'Pressing surface liquid-lens inspection', nameZh: '唱片压片液态镜片检查', category: 'pointer', sourceUrl: 'https://github.com/w3c/fxtf-drafts',
+    difference: 'A human moves an irregular optical lens across one verified full-stage pressing photograph; the lens resamples those same committed pixels at a Motion-controlled magnification while a live backdrop filter, internal reflection, border deformation, and exact sample mapping reveal groove detail instead of filtering generic colour stripes.',
+    behavior: { trigger: 'trusted mouse hover, captured mouse/touch/pen drag, keyboard command, or visible zoom/reset control', response: 'Move and magnify a liquid lens over the fictional pressing to inspect grooves and material inclusions at any chosen point', timing: 'human-paced direct reversible inspection with a paused Motion zoom controller', layer: 'full-stage source photograph and same-pixel optical lens' },
+    prompt: 'Build a live vinyl pressing inspection from one verified local photograph. Use trusted input to position an irregular lens, seek a paused Motion controller for zoom, and map the same source pixels into a magnified sample with real backdrop-filter optics; every state must hold without autoplay.',
+    implementation: motionImplementation("const zoom = animate(1.12, 1.95, { duration: 1, onUpdate: syncOptics }); zoom.pause(); zoom.time = humanZoomProgress; lens.style.backdropFilter = 'blur(.65px) saturate(1.3) contrast(1.13)';", 'https://github.com/w3c/fxtf-drafts'),
+    scores: score(20, 20, 20, 15, 15, 10), rationaleZh: '原创 ImageGen 唱片压片照片既是全舞台底图，也是镜片放大采样源；同源 fetch、SHA-256、DOM decode 与 1,536 像素采样均可核验。真人 hover、捕获拖拽、键盘和可见缩放/复位控件拥有位置与倍率，暂停的 Motion 控制器值与实时镜片倍率一致；首帧静止，无自动循环、rehearsal、fallback、合成输入或预览时钟变更。'
   },
   {
     id: 'accordion-depth-tunnel-navigation', order: 135, name: 'Accordion depth tunnel navigation', nameZh: '手风琴景深隧道导航', category: 'transition', sourceUrl: 'https://github.com/motiondivision/motion',

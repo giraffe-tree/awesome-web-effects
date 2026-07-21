@@ -6,8 +6,8 @@
   "license": "Apache-2.0",
   "upstream": "https://github.com/google/GNM",
   "binary": "gnm-head-v3-demo.bin",
-  "binaryByteLength": 2510180,
-  "binarySha256": "aeffad1803449242edf81e7d81f52554ddcbdb6030e135da6967d9bf899e7e80",
+  "binaryByteLength": 2724128,
+  "binarySha256": "83634cf3b0b641ed85ab3f1791d750de744bcba725753350abc6b4e4764d8971",
   "vertexCount": 17821,
   "triangleCount": 35324,
   "quadCount": 17662,
@@ -58,6 +58,50 @@
     "wink_left",
     "pucker"
   ],
+  "jointNames": [
+    "neck",
+    "head",
+    "left_eye",
+    "right_eye"
+  ],
+  "jointParentIndices": [
+    -1,
+    0,
+    1,
+    1
+  ],
+  "principlePoseBase": {
+    "identityIndex": 1,
+    "identityStrength": 1.0,
+    "expressionWeights": [
+      0.30000001192092896,
+      0.44999998807907104,
+      0.0,
+      0.0
+    ],
+    "rotations": [
+      [
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.3199999928474426,
+        0.0
+      ],
+      [
+        0.0,
+        -0.1599999964237213,
+        0.0
+      ],
+      [
+        0.0,
+        -0.1599999964237213,
+        0.0
+      ]
+    ]
+  },
   "normalization": {
     "center": [
       -6.895512342453003e-05,
@@ -156,6 +200,36 @@
       "shape": [
         4,
         17821,
+        3
+      ],
+      "dtype": "float32"
+    },
+    "principlePoseDelta": {
+      "byteOffset": 2510180,
+      "byteLength": 213852,
+      "length": 53463,
+      "shape": [
+        17821,
+        3
+      ],
+      "dtype": "float32"
+    },
+    "principleBindJoints": {
+      "byteOffset": 2724032,
+      "byteLength": 48,
+      "length": 12,
+      "shape": [
+        4,
+        3
+      ],
+      "dtype": "float32"
+    },
+    "principlePosedJoints": {
+      "byteOffset": 2724080,
+      "byteLength": 48,
+      "length": 12,
+      "shape": [
+        4,
         3
       ],
       "dtype": "float32"

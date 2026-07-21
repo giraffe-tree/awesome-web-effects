@@ -114,6 +114,75 @@ def compute_normals(vertices: np.ndarray, triangles: np.ndarray) -> np.ndarray:
     return (normals / np.maximum(lengths, 1e-8)).astype(np.float32)
 
 
+def axis_angle_matrices(rotations: np.ndarray) -> np.ndarray:
+    """Rodrigues rotation matrices matching GNM's NumPy implementation."""
+    matrices = []
+    for rotation in rotations:
+        angle = float(np.linalg.norm(rotation))
+        if angle < 1e-8:
+            matrices.append(np.eye(3, dtype=np.float32))
+            continue
+        axis = rotation / angle
+        x, y, z = axis
+        skew = np.array(((0, -z, y), (z, 0, -x), (-y, x, 0)), dtype=np.float32)
+        matrix = np.eye(3, dtype=np.float32)
+        matrix += np.sin(angle) * skew + (1 - np.cos(angle)) * (skew @ skew)
+        matrices.append(matrix)
+    return np.stack(matrices).astype(np.float32)
+
+
+def joint_transforms_world(
+    joints: np.ndarray,
+    rotations: np.ndarray,
+    parents: np.ndarray,
+) -> np.ndarray:
+    rotation_matrices = axis_angle_matrices(rotations)
+    local_transforms = []
+    for index, rotation in enumerate(rotation_matrices):
+        transform = np.eye(4, dtype=np.float32)
+        transform[:3, :3] = rotation
+        transform[:3, 3] = (
+            joints[index] if index == 0 else joints[index] - joints[parents[index]]
+        )
+        local_transforms.append(transform)
+    world_transforms = [local_transforms[0]]
+    for index in range(1, len(local_transforms)):
+        world_transforms.append(world_transforms[parents[index]] @ local_transforms[index])
+    return np.stack(world_transforms)
+
+
+def pose_vertices(
+    bind_vertices: np.ndarray,
+    joints: np.ndarray,
+    rotations: np.ndarray,
+    parents: np.ndarray,
+    skinning_weights: np.ndarray,
+    pose_correctives_regressor: np.ndarray,
+) -> tuple[np.ndarray, np.ndarray]:
+    rotation_matrices = axis_angle_matrices(rotations)
+    pose_features = (rotation_matrices - np.eye(3, dtype=np.float32)).reshape(-1)
+    pose_correctives = (pose_features @ pose_correctives_regressor).reshape(-1, 3)
+    corrected_vertices = bind_vertices + pose_correctives
+
+    world_transforms = joint_transforms_world(joints, rotations, parents)
+    rotated_joint_positions = np.einsum(
+        "jik,jk->ji", world_transforms[:, :3, :3], joints
+    )
+    offsets = np.zeros_like(world_transforms)
+    offsets[:, :3, 3] = rotated_joint_positions
+    skinning_transforms = world_transforms - offsets
+
+    homogeneous = np.concatenate(
+        (corrected_vertices, np.ones((corrected_vertices.shape[0], 1), dtype=np.float32)),
+        axis=1,
+    )
+    posed = np.einsum(
+        "jv,jmn,vn->vm", skinning_weights, skinning_transforms, homogeneous
+    )[:, :3]
+    posed_joints = world_transforms[:, :3, 3]
+    return posed.astype(np.float32), posed_joints.astype(np.float32)
+
+
 def component_ids(model: np.lib.npyio.NpzFile) -> tuple[list[str], np.ndarray]:
     group_names = model["vertex_group_names"].tolist()
     component_names = model["mesh_component_names"].tolist()
@@ -201,21 +270,70 @@ def build(output_dir: Path, cache_dir: Path) -> None:
         balanced_identity_condition = np.array(
             [0.5, 0.5, 0.25, 0.25, 0.25, 0.25], dtype=np.float32
         )
+        identity_coefficients = []
         identity_deltas = []
         for _, seed in IDENTITIES:
             latent = np.random.default_rng(seed).normal(size=64).astype(np.float32)
             coefficients = decode(identity_layers, latent, balanced_identity_condition)
+            identity_coefficients.append(coefficients)
             delta = np.tensordot(coefficients, vertex_identity_basis, axes=(0, 0)) * scale
             identity_deltas.append(delta.astype(np.float32))
 
+        expression_coefficients = []
         expression_deltas = []
         for _, label_index, seed in EXPRESSIONS:
             latent = np.random.default_rng(seed).normal(size=64).astype(np.float32)
             label = np.zeros(20, dtype=np.float32)
             label[label_index] = 1
             coefficients = decode(expression_layers, latent, label)
+            expression_coefficients.append(coefficients)
             delta = np.tensordot(coefficients, expression_basis, axes=(0, 0)) * scale
             expression_deltas.append(delta.astype(np.float32))
+
+        principle_identity_index = 1
+        principle_expression_weights = np.array([0.3, 0.45, 0.0, 0.0], dtype=np.float32)
+        principle_identity = identity_coefficients[principle_identity_index]
+        principle_expression = np.einsum(
+            "i,ij->j", principle_expression_weights, np.stack(expression_coefficients)
+        )
+        principle_bind_vertices = (
+            template
+            + np.tensordot(principle_identity, vertex_identity_basis, axes=(0, 0))
+            + np.tensordot(principle_expression, expression_basis, axes=(0, 0))
+        )
+        principle_bind_joints = (
+            np.asarray(model["template_joint_positions"], dtype=np.float32)
+            + np.tensordot(
+                principle_identity,
+                np.asarray(model["joint_identity_basis"], dtype=np.float32),
+                axes=(0, 0),
+            )
+        )
+        principle_rotations = np.array(
+            ((0, 0, 0), (0, 0.32, 0), (0, -0.16, 0), (0, -0.16, 0)),
+            dtype=np.float32,
+        )
+        joint_parents = np.asarray(model["joint_parent_indices"], dtype=np.int32)
+        principle_posed_vertices, principle_posed_joints = pose_vertices(
+            principle_bind_vertices,
+            principle_bind_joints,
+            principle_rotations,
+            joint_parents,
+            np.asarray(model["skinning_weights"], dtype=np.float32),
+            np.asarray(model["pose_correctives_regressor"], dtype=np.float32),
+        )
+        principle_bind_normalized = ((principle_bind_vertices - center) * scale).astype(
+            np.float32
+        )
+        principle_pose_delta = (
+            (principle_posed_vertices - center) * scale - principle_bind_normalized
+        ).astype(np.float32)
+        principle_bind_joints_normalized = (
+            (principle_bind_joints - center) * scale
+        ).astype(np.float32)
+        principle_posed_joints_normalized = (
+            (principle_posed_joints - center) * scale
+        ).astype(np.float32)
 
         colors = np.asarray([COMPONENT_COLORS[index] for index in part_ids], dtype=np.float32)
 
@@ -229,6 +347,9 @@ def build(output_dir: Path, cache_dir: Path) -> None:
         add_array(payload, arrays, "edgeIndices", edges)
         add_array(payload, arrays, "identityDeltas", np.stack(identity_deltas))
         add_array(payload, arrays, "expressionDeltas", np.stack(expression_deltas))
+        add_array(payload, arrays, "principlePoseDelta", principle_pose_delta)
+        add_array(payload, arrays, "principleBindJoints", principle_bind_joints_normalized)
+        add_array(payload, arrays, "principlePosedJoints", principle_posed_joints_normalized)
 
         output_dir.mkdir(parents=True, exist_ok=True)
         binary_path = output_dir / "gnm-head-v3-demo.bin"
@@ -254,6 +375,14 @@ def build(output_dir: Path, cache_dir: Path) -> None:
             "componentRanges": ranges,
             "identityMorphNames": [name for name, _ in IDENTITIES],
             "expressionMorphNames": [name for name, _, _ in EXPRESSIONS],
+            "jointNames": model["joint_names"].tolist(),
+            "jointParentIndices": joint_parents.tolist(),
+            "principlePoseBase": {
+                "identityIndex": principle_identity_index,
+                "identityStrength": 1.0,
+                "expressionWeights": principle_expression_weights.tolist(),
+                "rotations": principle_rotations.tolist(),
+            },
             "normalization": {"center": center.tolist(), "scale": float(scale)},
             "sourceFiles": {
                 name: {"url": spec["url"], "sha256": spec["sha256"]}

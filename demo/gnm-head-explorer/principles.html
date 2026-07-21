@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="用真实 GNM Head 模型数据解释参数化三维人头的工作原理。">
+  <title>GNM 原理图解 — 从统计基底到三维人头</title>
+  <link rel="stylesheet" href="./principles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="./principles.html" aria-label="GNM 原理图解首页">
+      <span>G/NM</span>
+      <small>PRINCIPLE<br>ATLAS</small>
+    </a>
+    <nav aria-label="页面导航">
+      <a href="#equation">核心公式</a>
+      <a href="#pipeline">计算过程</a>
+      <a href="#boundaries">能力边界</a>
+    </nav>
+    <a class="lab-link" href="./index.html">打开参数实验室 <span aria-hidden="true">↗</span></a>
+  </header>
+
+  <main>
+    <section class="hero" id="equation">
+      <div class="hero-copy">
+        <p class="eyebrow">GOOGLE GNM HEAD / EXPLAINED</p>
+        <h1>GNM 不在“画”一张脸。<br><em>它在计算一张脸。</em></h1>
+        <p class="hero-deck">它把人的头部拆成平均形状、身份差异、表情变化和骨骼姿态，再把这些因素重新组合成拓扑一致的三维网格。</p>
+      </div>
+
+      <div class="formula" aria-label="GNM 核心计算公式">
+        <span class="formula-result" data-formula="result">V</span>
+        <span class="operator">=</span>
+        <span class="formula-function" data-formula="pose">W</span>
+        <span class="paren">(</span>
+        <span data-formula="template">T̄</span>
+        <span class="operator">+</span>
+        <span data-formula="identity">B<sub>id</sub>β</span>
+        <span class="operator">+</span>
+        <span data-formula="expression">B<sub>exp</sub>ψ</span>
+        <span class="operator">+</span>
+        <span data-formula="pose">P(θ)</span>
+        <span class="comma">,</span>
+        <span data-formula="pose">J(β), θ</span>
+        <span class="paren">)</span>
+        <span class="operator">+</span>
+        <span data-formula="result">t</span>
+      </div>
+      <p class="formula-caption">先在绑定姿态中叠加形状，再用姿态修正与线性混合蒙皮变换全部顶点。</p>
+    </section>
+
+    <section class="principle-lab" aria-labelledby="lab-title">
+      <div class="step-rail" role="group" aria-label="GNM 计算步骤">
+        <p id="lab-title">沿着公式运行</p>
+        <button type="button" class="step-button is-active" data-step="0" aria-pressed="true">
+          <span>00</span><strong>平均模板</strong><small>MEAN</small>
+        </button>
+        <button type="button" class="step-button" data-step="1" aria-pressed="false">
+          <span>01</span><strong>身份形状</strong><small>IDENTITY</small>
+        </button>
+        <button type="button" class="step-button" data-step="2" aria-pressed="false">
+          <span>02</span><strong>面部表情</strong><small>EXPRESSION</small>
+        </button>
+        <button type="button" class="step-button" data-step="3" aria-pressed="false">
+          <span>03</span><strong>骨骼姿态</strong><small>POSE + LBS</small>
+        </button>
+        <button type="button" class="step-button" data-step="4" aria-pressed="false">
+          <span>04</span><strong>输出网格</strong><small>MESH</small>
+        </button>
+      </div>
+
+      <div class="model-stage">
+        <canvas id="principle-canvas" aria-label="根据当前步骤变化的真实 GNM Head 三维模型"></canvas>
+        <svg id="joint-overlay" viewBox="0 0 100 100" preserveAspectRatio="none" aria-label="GNM 四关节层级图">
+          <g class="joint-lines"></g>
+          <g class="joint-points"></g>
+        </svg>
+        <div class="stage-grid" aria-hidden="true"></div>
+        <div class="stage-label">
+          <span>ACTUAL GNM V3 GEOMETRY</span>
+          <strong id="stage-mode">MEAN TEMPLATE</strong>
+        </div>
+        <div class="stage-proof" id="stage-proof">LOADING / VERIFYING</div>
+        <div class="axis-marker" aria-hidden="true"><i></i><b>X</b><em>Y</em></div>
+      </div>
+
+      <article class="step-explanation" aria-live="polite">
+        <p class="step-count" id="step-count">STEP 00 / 04</p>
+        <h2 id="step-title">从平均头模开始</h2>
+        <p id="step-body">GNM 先定义一个所有样本共享的平均网格。它决定了顶点编号、面片连接和 UV 布局，是后续所有变化的共同坐标系。</p>
+        <div class="step-equation" id="step-equation">V<sub>0</sub> = T̄</div>
+        <dl class="step-facts" id="step-facts">
+          <div><dt>顶点</dt><dd>17,821</dd></div>
+          <div><dt>三角面</dt><dd>35,324</dd></div>
+        </dl>
+        <p class="step-note" id="step-note">改变步骤时，右侧始终是同一套真实 GNM 拓扑。</p>
+      </article>
+    </section>
+
+    <section class="pipeline-section" id="pipeline">
+      <div class="section-intro">
+        <p class="eyebrow">THE COMPUTATION PIPELINE</p>
+        <h2>把复杂的人脸变化，压缩成少量可解释参数。</h2>
+        <p>关键不是生成更多多边形，而是让每种变化发生在正确的空间里，并保持顶点一一对应。</p>
+      </div>
+
+      <ol class="pipeline-list">
+        <li>
+          <span class="pipeline-index">A</span>
+          <div class="pipeline-visual scan-visual" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i>
+          </div>
+          <div>
+            <h3>统一拓扑</h3>
+            <p>大量三维扫描先被配准到同一套顶点结构。于是第 8230 号顶点在每张脸上表达同一个局部位置，模型才有可能学习“如何变化”。</p>
+          </div>
+        </li>
+        <li>
+          <span class="pipeline-index">B</span>
+          <div class="pipeline-visual basis-visual" aria-hidden="true">
+            <i></i><i></i><i></i><i></i>
+          </div>
+          <div>
+            <h3>学习统计基底</h3>
+            <p>身份差异被压进 253 个方向，表情变化被压进 383 个方向。每个方向都是覆盖全部顶点的一组位移，而参数 β、ψ 决定叠加多少。</p>
+          </div>
+        </li>
+        <li>
+          <span class="pipeline-index">C</span>
+          <div class="pipeline-visual rig-visual" aria-hidden="true">
+            <i></i><i></i><i></i><i></i>
+            <svg viewBox="0 0 120 90"><path d="M60 78L60 48M60 48L37 27M60 48L83 27"/></svg>
+          </div>
+          <div>
+            <h3>骨骼与蒙皮</h3>
+            <p>颈部、头部和两只眼球组成四关节层级。线性混合蒙皮按照每个顶点的权重传播旋转；姿态修正项 P(θ) 再补偿单纯蒙皮产生的形变误差。</p>
+          </div>
+        </li>
+        <li>
+          <span class="pipeline-index">D</span>
+          <div class="pipeline-visual output-visual" aria-hidden="true">
+            <span>β</span><span>ψ</span><span>θ</span><b>→</b><strong>V</strong>
+          </div>
+          <div>
+            <h3>同一函数，双向使用</h3>
+            <p>给定参数可以合成新头模；反过来，也可以优化参数去贴合图像、视频或扫描。因为计算过程可微，它能直接嵌入 PyTorch、JAX、TensorFlow 的训练流程。</p>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <section class="inside-section">
+      <div class="section-intro compact">
+        <p class="eyebrow">ONE COHERENT HEAD</p>
+        <h2>它建模的不只是“一张脸皮”。</h2>
+      </div>
+      <div class="anatomy-strip" aria-label="GNM Head 六个几何组件">
+        <div><span class="swatch skin"></span><strong>皮肤与头部</strong><small>SKIN</small></div>
+        <div><span class="swatch eye"></span><strong>左眼球</strong><small>LEFT EYE</small></div>
+        <div><span class="swatch eye"></span><strong>右眼球</strong><small>RIGHT EYE</small></div>
+        <div><span class="swatch teeth"></span><strong>上牙与牙龈</strong><small>UPPER</small></div>
+        <div><span class="swatch teeth"></span><strong>下牙与牙龈</strong><small>LOWER</small></div>
+        <div><span class="swatch tongue"></span><strong>舌头</strong><small>TONGUE</small></div>
+      </div>
+    </section>
+
+    <section class="boundaries-section" id="boundaries">
+      <div class="boundary-heading">
+        <p class="eyebrow">READ THE MODEL CORRECTLY</p>
+        <h2>GNM 是几何底座，<br>不是完整数字人。</h2>
+      </div>
+      <div class="boundary-columns">
+        <div>
+          <h3><span>✓</span>它擅长</h3>
+          <ul>
+            <li>稳定、拓扑一致的人头几何</li>
+            <li>解耦身份、表情、视线与姿态</li>
+            <li>合成数据、动画、拟合和神经渲染</li>
+            <li>提供 NumPy、PyTorch、JAX、TensorFlow 实现</li>
+          </ul>
+        </div>
+        <div>
+          <h3><span>×</span>它不直接提供</h3>
+          <ul>
+            <li>头发、皮肤材质、毛孔和照片级着色</li>
+            <li>从单张照片开箱即用地重建真人</li>
+            <li>完整人体、服装和制作级 DCC 插件</li>
+            <li>覆盖所有身份群体的无偏统计空间</li>
+          </ul>
+        </div>
+      </div>
+      <p class="fairness-note"><strong>数据边界：</strong>官方说明当前身份采样器使用二元性别与四个宽泛人口类别。这些标签无法完整表达真实世界的人类差异，在人脸分析与生成应用中需要单独评估代表性和公平性。</p>
+    </section>
+
+    <section class="closing-section">
+      <p>看懂公式之后，亲手改变它。</p>
+      <h2>同一张拓扑，<br>可以成为无数张脸。</h2>
+      <a href="./index.html">进入 GNM Head 参数实验室 <span aria-hidden="true">→</span></a>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>基于 Google GNM Head v3 官方开源数据制作 · Apache 2.0</p>
+    <div>
+      <a href="https://github.com/google/GNM" target="_blank" rel="noreferrer">官方仓库 ↗</a>
+      <a href="./THIRD_PARTY_NOTICES.md">第三方声明</a>
+    </div>
+  </footer>
+
+  <script type="module" src="./principles.js"></script>
+</body>
+</html>

@@ -1689,6 +1689,34 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("ArrowLeft")
             elif index == 29:
                 page.keyboard.press("Enter")
+        elif demo["id"] == "radar-sweep-annotation-reveal":
+            if index == 2:
+                page.mouse.move(92, 29)
+            elif index == 5:
+                page.mouse.move(130, 103)
+            elif index == 7:
+                page.mouse.down()
+            elif index == 8:
+                page.mouse.move(249, 137, steps=4)
+            elif index == 9:
+                page.mouse.move(244, 45, steps=4)
+            elif index == 10:
+                page.mouse.up()
+            elif index in (13, 15, 17, 19):
+                page.locator('[data-radar-action="next"]').click()
+            elif index == 21:
+                page.locator("#survey-surface").focus()
+                page.keyboard.press("[")
+            elif index == 23:
+                page.keyboard.press("]")
+            elif index == 25:
+                page.keyboard.press("ArrowRight")
+            elif index == 27:
+                page.keyboard.press("ArrowLeft")
+            elif index == 30:
+                page.locator('[data-radar-action="reset"]').click()
+            elif index == 32:
+                page.locator('[data-radar-action="next"]').click()
         elif demo["id"] == "kinetic-paper-fold-map":
             if index == 1:
                 page.mouse.move(280, 100)
@@ -4562,6 +4590,98 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["ready"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture trusted hover, captured orbit, keyboard and reversible booking controls over twelve image-derived studio-hour states on one paused Motion needle: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "radar-sweep-annotation-reveal":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-fictional-storm-port-thermal-anomaly-inspection"
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["mechanism"] != "committed-multispectral-pixels-cluster-anomalies-and-human-aimed-beam-reveals-their-annotations"
+            or interaction["acceptedInputs"] != ["mouse-hover", "mouse-drag", "touch-drag", "pen-drag", "keyboard", "button-control"]
+            or interaction["automaticCycle"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or not interaction["renderIgnoresPreviewClock"]
+            or not interaction["userInputRequired"]
+            or not interaction["initialFrameStatic"]
+            or not interaction["initialStaticConfirmed"]
+            or interaction["inputCount"] < 23
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["pointerEnterCount"] < 1
+            or interaction["pointerMoveCount"] < 10
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerReleaseCount"] != 1
+            or interaction["pointerCancelCount"] != 0
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerReleaseCaptureCount"] != 1
+            or interaction["keyboardInputCount"] != 4
+            or interaction["buttonActivationCount"] != 6
+            or interaction["ignoredInputCount"] != 0
+            or interaction["beamMutationCount"] < 15
+            or interaction["targetNavigationCount"] != 7
+            or interaction["resetActionCount"] != 1
+            or interaction["revealCount"] < 5
+            or interaction["maximumDiscoveredTargetCount"] != 4
+            or interaction["discoveredTargetCount"] != 1
+            or interaction["activeTargetIndex"] != 0
+            or interaction["navigationTargetIndex"] != 0
+            or interaction["maximumBeamDeltaFromInitial"] < 1
+            or interaction["activePointerId"] is not None
+            or interaction["pointerCaptured"]
+            or interaction["lastInputKind"] != "button-next"
+            or interaction["lastInputTrusted"] is not True
+            or interaction["lastPointerType"] != "mouse"
+            or interaction["assetFetchCount"] != 1
+            or interaction["assetResponseStatus"] != 200
+            or not interaction["assetSameOrigin"]
+            or interaction["assetByteLength"] != 274991
+            or interaction["assetSha256"] != "a6179b9be47d700e55f452f44ce82b285b692d7d0a99e8521a78434e4fdb9329"
+            or not interaction["assetShaMatchesExpected"]
+            or not interaction["browserImageDecoded"]
+            or interaction["sourceNaturalWidth"] != 960
+            or interaction["sourceNaturalHeight"] != 640
+            or not interaction["p5ImageDecoded"]
+            or interaction["p5ImageClass"] != "p5.Image"
+            or interaction["p5ImageWidth"] != 960
+            or interaction["p5ImageHeight"] != 640
+            or interaction["p5ImagePixelLength"] != 2457600
+            or interaction["sampledWidth"] != 96
+            or interaction["sampledHeight"] != 54
+            or interaction["sampledPixelCount"] != 5184
+            or interaction["sampledByteLength"] != 20736
+            or len(interaction["sourcePixelSha256"]) != 64
+            or not interaction["sourcePixelShaMatchesExpected"]
+            or interaction["distinctSampleColorCount"] <= 1200
+            or interaction["warmMaskPixelCount"] < 70
+            or interaction["warmMaskPixelCount"] > 180
+            or interaction["rawWarmComponentCount"] < 4
+            or interaction["filteredWarmComponentCount"] != 4
+            or interaction["targetCount"] != 4
+            or len(interaction["targetPixelCounts"]) != 4
+            or any(count < 8 for count in interaction["targetPixelCounts"])
+            or interaction["targetCoordinateChecksum"] <= 0
+            or not interaction["targetCoordinateChecksumMatchesExpected"]
+            or len(interaction["targetEvidence"]) != 4
+            or any(target["pixelCount"] < 8 or not .08 < target["u"] < .92 or not .08 < target["v"] < .92 for target in interaction["targetEvidence"])
+            or not interaction["assetEvidenceReady"]
+            or not interaction["pixelEvidenceReady"]
+            or not interaction["p5InstanceReady"]
+            or not interaction["p5CanvasReady"]
+            or interaction["p5CanvasWidth"] != 320
+            or interaction["p5CanvasHeight"] != 180
+            or interaction["p5CompletedDrawCount"] < 20
+            or interaction["renderCount"] < 36
+            or interaction["previewClockIgnoredCount"] < 36
+            or interaction["previewClockMutationCount"] != 0
+            or interaction["initialVisualStateChecksum"] == interaction["currentVisualStateChecksum"]
+            or not interaction["runtimeAssertionPassed"]
+            or not interaction["ready"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture trusted human beam aiming, all four pixel-clustered Storm Port anomalies, keyboard navigation, explicit reset, and retained post-reset evidence without an automatic sweep: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "kinetic-paper-fold-map":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

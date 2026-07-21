@@ -1,1 +1,301 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p5.js — Radar-sweep Annotation Reveal</title><link rel="stylesheet" href="./shared.css"><style>:root{--preview-background:#06110d}.expansion-stage{position:absolute;inset:0;overflow:hidden;cursor:crosshair}.expansion-stage canvas{display:block}.library-badge{background:#06110dd8}.scene-caption{color:#9fffc6a2}</style></head><body><main class="preview-stage"><div class="expansion-stage" id="expansion-stage" data-preview-mechanism="p5-radar-annotation" tabindex="0" aria-label="Move the pointer to steer the radar sweep across hidden annotations"></div><span class="library-badge">p5.js · angular reveal</span><span class="scene-caption">only the passing beam makes evidence legible</span></main><script type="module" src="./src/radar-sweep-annotation-reveal-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>p5.js — Human-aimed Port Anomaly Radar</title>
+  <link rel="stylesheet" href="./shared.css">
+  <style>
+    :root {
+      color-scheme: dark;
+      --preview-background: #03111c;
+      --ink: #e7f7f5;
+      --muted: #9bb7bb;
+      --cyan: #82f7dc;
+      --amber: #ffb14a;
+      --line: rgba(184, 231, 231, .26);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-width: 0;
+      overflow: hidden;
+      background: var(--preview-background);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    button { font: inherit; }
+
+    .mission-stage {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      isolation: isolate;
+      background: #03111c;
+    }
+
+    .mission-stage::after {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      content: "";
+      background:
+        linear-gradient(180deg, rgba(1, 9, 17, .72) 0, rgba(1, 9, 17, .03) 29%, rgba(1, 9, 17, .04) 63%, rgba(1, 9, 17, .78) 100%),
+        linear-gradient(90deg, rgba(1, 9, 17, .52), transparent 29%, transparent 72%, rgba(1, 9, 17, .22));
+      box-shadow: inset 0 0 0 1px rgba(164, 229, 222, .08);
+    }
+
+    .survey-surface,
+    .survey-canvas-host,
+    .survey-canvas-host canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .survey-surface {
+      z-index: 1;
+      outline: none;
+      cursor: crosshair;
+      touch-action: none;
+    }
+
+    .survey-surface:focus-visible::after {
+      position: absolute;
+      inset: 4px;
+      content: "";
+      border: 1px solid rgba(130, 247, 220, .82);
+      border-radius: 2px;
+      pointer-events: none;
+    }
+
+    .survey-canvas-host canvas { display: block; }
+
+    .hud {
+      position: absolute;
+      z-index: 4;
+      pointer-events: none;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      text-shadow: 0 1px 8px rgba(0, 0, 0, .78);
+    }
+
+    .mission-header {
+      top: clamp(8px, 5.2vh, 20px);
+      left: clamp(8px, 3vw, 22px);
+      right: clamp(8px, 3vw, 22px);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .mission-kicker,
+    .mission-status,
+    .finding-kicker,
+    .evidence-copy,
+    .input-guide {
+      margin: 0;
+      font-size: clamp(6px, 1.35vw, 10px);
+      line-height: 1.2;
+    }
+
+    .mission-title {
+      max-width: 25ch;
+      margin: clamp(3px, .8vh, 7px) 0 0;
+      font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+      font-size: clamp(13px, 3.55vw, 27px);
+      font-weight: 760;
+      letter-spacing: -.055em;
+      line-height: .95;
+      text-transform: none;
+    }
+
+    .mission-kicker { color: var(--cyan); }
+
+    .mission-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: rgba(231, 247, 245, .82);
+      white-space: nowrap;
+    }
+
+    .mission-status::before {
+      width: 6px;
+      height: 6px;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 10px rgba(130, 247, 220, .8);
+      content: "";
+    }
+
+    .finding-panel {
+      right: clamp(8px, 3vw, 22px);
+      bottom: clamp(8px, 4.4vh, 18px);
+      width: min(29vw, 220px);
+      min-width: 104px;
+      padding: clamp(6px, 1.3vw, 10px) clamp(7px, 1.4vw, 12px);
+      border: 1px solid var(--line);
+      background: rgba(2, 14, 23, .72);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, .28);
+      backdrop-filter: blur(8px);
+    }
+
+    .finding-kicker { color: var(--muted); }
+
+    .finding-code {
+      margin: 3px 0 1px;
+      color: var(--ink);
+      font-size: clamp(9px, 2.15vw, 16px);
+      font-weight: 760;
+      letter-spacing: -.02em;
+      line-height: 1;
+    }
+
+    .evidence-copy {
+      overflow: hidden;
+      color: var(--amber);
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .input-guide {
+      left: clamp(8px, 3vw, 22px);
+      bottom: clamp(10px, 5vh, 21px);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: rgba(231, 247, 245, .8);
+    }
+
+    .input-guide strong { color: var(--cyan); }
+
+    .controls {
+      position: absolute;
+      z-index: 6;
+      left: 50%;
+      bottom: clamp(7px, 3.7vh, 15px);
+      display: flex;
+      gap: 4px;
+      transform: translateX(-50%);
+    }
+
+    .controls button {
+      min-width: 35px;
+      min-height: 25px;
+      padding: 5px 8px;
+      border: 1px solid rgba(196, 237, 232, .28);
+      border-radius: 2px;
+      background: rgba(2, 14, 23, .72);
+      color: rgba(231, 247, 245, .88);
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-size: clamp(6px, 1.2vw, 9px);
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      backdrop-filter: blur(8px);
+      cursor: pointer;
+    }
+
+    .controls button:hover,
+    .controls button:focus-visible {
+      border-color: rgba(130, 247, 220, .85);
+      outline: none;
+      background: rgba(18, 62, 66, .82);
+      color: #fff;
+    }
+
+    .mission-stage .library-badge {
+      top: auto;
+      right: auto;
+      bottom: clamp(8px, 4.4vh, 18px);
+      left: clamp(8px, 3vw, 22px);
+      z-index: 5;
+      border-color: rgba(130, 247, 220, .26);
+      background: rgba(2, 14, 23, .74);
+      color: rgba(218, 247, 243, .84);
+      backdrop-filter: blur(8px);
+    }
+
+    .mission-stage[data-has-input="true"] .input-guide { opacity: 0; }
+
+    @media (max-width: 420px), (max-height: 220px) {
+      .finding-panel { width: 31vw; }
+      .input-guide { bottom: 40px; }
+      .mission-stage .library-badge { bottom: 8px; }
+      .controls { bottom: 8px; }
+    }
+
+    @media (max-width: 230px), (max-height: 108px) {
+      .mission-header { top: 6px; left: 6px; right: 6px; }
+      .mission-title { margin-top: 2px; max-width: 16ch; }
+      .mission-status span:last-child,
+      .finding-kicker,
+      .evidence-copy,
+      .input-guide,
+      .mission-stage .library-badge { display: none; }
+      .finding-panel {
+        right: 5px;
+        bottom: 5px;
+        width: auto;
+        min-width: 0;
+        padding: 4px 5px;
+        background: rgba(2, 14, 23, .58);
+      }
+      .finding-code { margin: 0; font-size: 7px; }
+      .controls { left: 5px; bottom: 5px; transform: none; gap: 2px; }
+      .controls button {
+        min-width: 22px;
+        min-height: 18px;
+        padding: 2px 4px;
+        font-size: 0;
+      }
+      .controls button::first-letter { font-size: 7px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { scroll-behavior: auto !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="preview-stage mission-stage" id="mission-stage" data-preview-mechanism="p5-pixel-derived-human-aimed-radar-annotation-discovery" data-has-input="false">
+    <div class="survey-surface" id="survey-surface" tabindex="0" role="application" aria-label="Fictional port roof inspection. Point or drag to aim the radar beam at warm image-derived anomalies. Use arrow keys to rotate, bracket keys to choose an anomaly, and Home to reset.">
+      <div class="survey-canvas-host" id="survey-canvas-host" aria-hidden="true"></div>
+    </div>
+
+    <header class="mission-header hud">
+      <div>
+        <p class="mission-kicker">Sector M-04 · training survey</p>
+        <h1 class="mission-title">Find the storm heat leaks.</h1>
+      </div>
+      <p class="mission-status"><span id="mission-status">4 image-derived anomalies</span></p>
+    </header>
+
+    <section class="finding-panel hud" aria-live="polite" aria-atomic="true">
+      <p class="finding-kicker" id="finding-kicker">Beam awaiting human input</p>
+      <p class="finding-code" id="finding-code">AIM TO INSPECT</p>
+      <p class="evidence-copy" id="evidence-copy">pixels decide the finding</p>
+    </section>
+
+    <p class="input-guide hud"><strong>POINT</strong> to aim · <strong>DRAG</strong> to sweep</p>
+
+    <div class="controls" aria-label="Radar target controls">
+      <button type="button" data-radar-action="previous" aria-label="Aim at previous image-derived anomaly">‹ Prev</button>
+      <button type="button" data-radar-action="next" aria-label="Aim at next image-derived anomaly">Next ›</button>
+      <button type="button" data-radar-action="reset" aria-label="Reset the human radar scan">Reset</button>
+    </div>
+
+    <span class="library-badge">p5.js · real pixel clustering</span>
+  </main>
+  <script type="module" src="./src/radar-sweep-annotation-reveal-demo.js"></script>
+</body>
+</html>

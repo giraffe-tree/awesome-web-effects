@@ -1,0 +1,164 @@
+{
+  "format": "gnm-head-explorer-v1",
+  "model": "Google GNM Head",
+  "version": "3.0",
+  "variant": "head",
+  "license": "Apache-2.0",
+  "upstream": "https://github.com/google/GNM",
+  "binary": "gnm-head-v3-demo.bin",
+  "binaryByteLength": 2510180,
+  "binarySha256": "aeffad1803449242edf81e7d81f52554ddcbdb6030e135da6967d9bf899e7e80",
+  "vertexCount": 17821,
+  "triangleCount": 35324,
+  "quadCount": 17662,
+  "identityDimension": 253,
+  "expressionDimension": 383,
+  "componentNames": [
+    "skin",
+    "left_eye",
+    "right_eye",
+    "upper_teeth_and_gums",
+    "lower_teeth_and_gums",
+    "tongue"
+  ],
+  "componentRanges": {
+    "skin": {
+      "indexOffset": 0,
+      "indexCount": 74460
+    },
+    "left_eye": {
+      "indexOffset": 74460,
+      "indexCount": 4536
+    },
+    "right_eye": {
+      "indexOffset": 78996,
+      "indexCount": 4536
+    },
+    "upper_teeth_and_gums": {
+      "indexOffset": 83532,
+      "indexCount": 8484
+    },
+    "lower_teeth_and_gums": {
+      "indexOffset": 92016,
+      "indexCount": 8484
+    },
+    "tongue": {
+      "indexOffset": 100500,
+      "indexCount": 5472
+    }
+  },
+  "identityMorphNames": [
+    "identity_a",
+    "identity_b",
+    "identity_c"
+  ],
+  "expressionMorphNames": [
+    "happy",
+    "surprise",
+    "wink_left",
+    "pucker"
+  ],
+  "normalization": {
+    "center": [
+      -6.895512342453003e-05,
+      0.23633597791194916,
+      0.0271456316113472
+    ],
+    "scale": 5.035890102386475
+  },
+  "sourceFiles": {
+    "model": {
+      "url": "https://raw.githubusercontent.com/google/GNM/main/gnm/shape/data/versions/v3_0/gnm_head.npz",
+      "sha256": "9ddfe70b2d5a14716f2a1580ddf7eeaddf6f83cbd34169cebc4add76bf659261"
+    },
+    "expression_decoder": {
+      "url": "https://raw.githubusercontent.com/google/GNM/main/gnm/shape/data/semantic_sampler/expression_decoder_model.h5",
+      "sha256": "5eba165f8a414f73b24be96963d0a17e708c0856739ed85a19031f318dfb51e6"
+    },
+    "identity_decoder": {
+      "url": "https://raw.githubusercontent.com/google/GNM/main/gnm/shape/data/semantic_sampler/identity_decoder_model.h5",
+      "sha256": "1f069bf4975620e25a053772719a35678c9cfe6121e58bc4276a3515b53ac142"
+    }
+  },
+  "arrays": {
+    "templatePositions": {
+      "byteOffset": 0,
+      "byteLength": 213852,
+      "length": 53463,
+      "shape": [
+        17821,
+        3
+      ],
+      "dtype": "float32"
+    },
+    "templateNormals": {
+      "byteOffset": 213852,
+      "byteLength": 213852,
+      "length": 53463,
+      "shape": [
+        17821,
+        3
+      ],
+      "dtype": "float32"
+    },
+    "componentColors": {
+      "byteOffset": 427704,
+      "byteLength": 213852,
+      "length": 53463,
+      "shape": [
+        17821,
+        3
+      ],
+      "dtype": "float32"
+    },
+    "componentIds": {
+      "byteOffset": 641556,
+      "byteLength": 17821,
+      "length": 17821,
+      "shape": [
+        17821
+      ],
+      "dtype": "uint8"
+    },
+    "triangleIndices": {
+      "byteOffset": 659380,
+      "byteLength": 211944,
+      "length": 105972,
+      "shape": [
+        105972
+      ],
+      "dtype": "uint16"
+    },
+    "edgeIndices": {
+      "byteOffset": 871324,
+      "byteLength": 141892,
+      "length": 70946,
+      "shape": [
+        70946
+      ],
+      "dtype": "uint16"
+    },
+    "identityDeltas": {
+      "byteOffset": 1013216,
+      "byteLength": 641556,
+      "length": 160389,
+      "shape": [
+        3,
+        17821,
+        3
+      ],
+      "dtype": "float32"
+    },
+    "expressionDeltas": {
+      "byteOffset": 1654772,
+      "byteLength": 855408,
+      "length": 213852,
+      "shape": [
+        4,
+        17821,
+        3
+      ],
+      "dtype": "float32"
+    }
+  }
+}

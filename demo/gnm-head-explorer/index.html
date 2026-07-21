@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="使用真实 Google GNM Head v3 拓扑与参数基底的交互式浏览器实验。">
+  <title>GNM Head Explorer — Parametric Human Study</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="masthead">
+      <a class="brand" href="https://github.com/google/GNM" target="_blank" rel="noreferrer" aria-label="打开 Google GNM GitHub 仓库">
+        <span class="brand-mark" aria-hidden="true">G/NM</span>
+        <span class="brand-copy">Generative<br>aNthropometric Model</span>
+      </a>
+      <p class="edition">OPEN MODEL STUDY <span>№ 01</span></p>
+      <div class="release-note">
+        <span class="live-dot" aria-hidden="true"></span>
+        <span>GNM HEAD V3</span>
+        <span>APACHE 2.0</span>
+      </div>
+    </header>
+
+    <section class="workspace">
+      <aside class="control-panel" aria-label="GNM 参数控制">
+        <div class="intro-copy">
+          <p class="eyebrow">PARAMETRIC PORTRAIT LAB</p>
+          <h1>一张脸，<br><em>636</em> 个维度。</h1>
+          <p>这里不是拟态插画。屏幕上是 Google 开源的真实 GNM Head 拓扑；控件直接混合它的身份与表情参数空间。</p>
+        </div>
+
+        <section class="control-group identity-group">
+          <div class="section-heading">
+            <span>01 / IDENTITY</span>
+            <output id="identity-output" for="identity-strength">68%</output>
+          </div>
+          <div class="identity-selector" role="group" aria-label="选择匿名身份样本">
+            <button type="button" class="identity-button" data-identity="0" aria-pressed="false">A</button>
+            <button type="button" class="identity-button is-active" data-identity="1" aria-pressed="true">B</button>
+            <button type="button" class="identity-button" data-identity="2" aria-pressed="false">C</button>
+            <span>固定采样 / 匿名</span>
+          </div>
+          <label class="range-row" for="identity-strength">
+            <span>形状强度</span>
+            <input id="identity-strength" type="range" min="0" max="1" value="0.68" step="0.01">
+          </label>
+        </section>
+
+        <section class="control-group expression-group">
+          <div class="section-heading">
+            <span>02 / EXPRESSION MIX</span>
+            <span class="dimension-note">383D BASIS</span>
+          </div>
+          <label class="range-row" for="happy">
+            <span>愉悦 <small>HAPPY</small></span>
+            <input id="happy" data-expression="0" type="range" min="0" max="1" value="0.35" step="0.01">
+            <output for="happy">35</output>
+          </label>
+          <label class="range-row" for="surprise">
+            <span>惊讶 <small>SURPRISE</small></span>
+            <input id="surprise" data-expression="1" type="range" min="0" max="1" value="0" step="0.01">
+            <output for="surprise">00</output>
+          </label>
+          <label class="range-row" for="wink">
+            <span>左眨眼 <small>WINK L</small></span>
+            <input id="wink" data-expression="2" type="range" min="0" max="1" value="0" step="0.01">
+            <output for="wink">00</output>
+          </label>
+          <label class="range-row" for="pucker">
+            <span>抿嘴 <small>PUCKER</small></span>
+            <input id="pucker" data-expression="3" type="range" min="0" max="1" value="0" step="0.01">
+            <output for="pucker">00</output>
+          </label>
+        </section>
+
+        <section class="control-group preset-group">
+          <div class="section-heading"><span>03 / STUDIES</span></div>
+          <div class="preset-grid" role="group" aria-label="表情预设">
+            <button type="button" data-preset="neutral" aria-pressed="false">中性</button>
+            <button type="button" class="is-active" data-preset="portrait" aria-pressed="true">肖像</button>
+            <button type="button" data-preset="surprised" aria-pressed="false">惊讶</button>
+            <button type="button" data-preset="character" aria-pressed="false">角色</button>
+          </div>
+        </section>
+
+        <div class="model-proof">
+          <span>MODEL PAYLOAD</span>
+          <strong id="payload-proof">VERIFYING…</strong>
+          <span>REAL GNM GEOMETRY</span>
+        </div>
+      </aside>
+
+      <section class="viewer-panel" aria-label="交互式 GNM 头部模型">
+        <canvas id="gnm-canvas" tabindex="0" aria-label="GNM Head 三维视图。拖动旋转，滚轮缩放，方向键微调。"></canvas>
+
+        <div class="loading-screen" id="loading-screen" role="status" aria-live="polite">
+          <div class="loading-glyph" aria-hidden="true"><span></span><span></span><span></span></div>
+          <p id="loading-status">读取 GNM 拓扑</p>
+        </div>
+
+        <div class="viewer-heading">
+          <p>GNM / HEAD</p>
+          <h2>V3<sup>.0</sup></h2>
+        </div>
+
+        <div class="viewer-tools">
+          <div class="segmented-control" role="group" aria-label="显示模式">
+            <button type="button" class="is-active" data-mode="surface" aria-pressed="true">SURFACE</button>
+            <button type="button" data-mode="anatomy" aria-pressed="false">ANATOMY</button>
+          </div>
+          <button type="button" class="icon-control" id="topology-toggle" aria-pressed="false">
+            <span class="topology-icon" aria-hidden="true"></span>
+            TOPOLOGY
+          </button>
+          <button type="button" class="icon-control" id="reset-view">RESET VIEW</button>
+        </div>
+
+        <div class="coordinate-labels" aria-hidden="true">
+          <span class="axis-y">Y</span>
+          <span class="axis-x">X</span>
+          <span class="axis-z">Z</span>
+        </div>
+
+        <div class="viewer-caption">
+          <p><span class="drag-mark" aria-hidden="true"></span>拖动旋转 · 滚轮缩放 · 双击复位</p>
+          <p id="render-status">WEBGL / INITIALIZING</p>
+        </div>
+
+        <dl class="model-stats">
+          <div><dt>VERTICES</dt><dd id="vertex-count">17,821</dd></div>
+          <div><dt>TRIANGLES</dt><dd id="triangle-count">35,324</dd></div>
+          <div><dt>IDENTITY</dt><dd>253D</dd></div>
+          <div><dt>EXPRESSION</dt><dd>383D</dd></div>
+          <div><dt>PARTS</dt><dd>06</dd></div>
+        </dl>
+
+        <div class="component-legend" id="component-legend" aria-label="解剖组件图例">
+          <span><i class="skin"></i>SKIN</span>
+          <span><i class="eyes"></i>EYES</span>
+          <span><i class="teeth"></i>TEETH</span>
+          <span><i class="tongue"></i>TONGUE</span>
+        </div>
+      </section>
+    </section>
+
+    <footer class="page-footer">
+      <p>Independent educational demo · Actual model data derived from <a href="https://github.com/google/GNM" target="_blank" rel="noreferrer">google/GNM</a></p>
+      <p>不含照片重建、纹理生成或完整推理栈 <span>2026.07</span></p>
+    </footer>
+  </main>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

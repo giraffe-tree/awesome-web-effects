@@ -3,36 +3,61 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Motion — Animated DOM Node Connection Beam</title>
+  <title>Motion — Measured AI File Pipeline</title>
   <style>
-    :root{--preview-background:#08110f}
-    .beam-stage{position:absolute;inset:0;background:radial-gradient(circle at 54% 52%,#183c344f,transparent 42%)}
-    .beam-svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-    .beam-path{fill:none;stroke:#72f3c5;stroke-width:1.5;stroke-dasharray:7 9;filter:drop-shadow(0 0 4px #72f3c5)}
-    .beam-node{position:absolute;z-index:3;width:42px;height:42px;border:1px solid #62ba9d;border-radius:50%;display:grid;place-items:center;background:#0d211c;color:#dcfff2;font:900 6px/1 ui-monospace;box-shadow:0 0 24px #40d8a933}
-    .beam-node.a{left:112px;top:118px}
-    .beam-node.b{right:29px;top:105px}
-    .beam-node.hub{left:143px;top:66px;width:50px;height:50px;border-color:#ffcc75;background:#2b2011}
-    .beam-copy{position:absolute;z-index:4;left:13px;top:42px;color:#e9fff7;pointer-events:none}
-    .beam-copy small{font:800 6px/1 ui-monospace;letter-spacing:.16em;color:#72f3c5}
-    .beam-copy h1{width:96px;margin:8px 0 0;font:950 16px/.86 system-ui;letter-spacing:-.05em}
-    .library-badge{background:#08110fc9}
+    :root{--preview-background:#0b1114}
+    .beam-stage{position:absolute;inset:0;overflow:hidden;background:#0b1114;color:#ecf4f0}
+    .beam-stage::before{content:"";position:absolute;inset:0;background-image:linear-gradient(#ffffff08 1px,transparent 1px),linear-gradient(90deg,#ffffff08 1px,transparent 1px);background-size:16px 16px;mask-image:linear-gradient(90deg,transparent,#000 28%,#000)}
+    .beam-svg{position:absolute;z-index:1;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+    .beam-path{fill:none;stroke:#52645e;stroke-width:1.2;vector-effect:non-scaling-stroke}
+    .beam-path.active{stroke:#74efc0;stroke-width:1.55;filter:drop-shadow(0 0 4px #74efc088)}
+    .beam-packet{fill:#d8ff73;stroke:#0b1114;stroke-width:2;opacity:0;transform-box:fill-box;transform-origin:center}
+    .pipeline-copy{position:absolute;z-index:4;left:13px;top:45px;width:82px;pointer-events:none}
+    .pipeline-copy small,.node-kicker,.node-meta,.pipeline-state,.result-panel,.pipeline-control{font-family:ui-monospace,monospace;text-transform:uppercase}
+    .pipeline-copy small{color:#74efc0;font-size:5.5px;font-weight:850;line-height:1;letter-spacing:.14em}
+    .pipeline-copy h1{margin:8px 0 0;font:900 16px/.88 system-ui;letter-spacing:-.055em}
+    .pipeline-copy p{margin:7px 0 0;color:#73827c;font:650 5.5px/1.35 ui-monospace}
+    .pipeline-node{position:absolute;z-index:3;box-sizing:border-box;width:64px;height:42px;padding:7px 8px;border:1px solid #566a62;border-radius:7px;background:#121d1a;color:#e9f4ef;box-shadow:0 8px 24px #0003;text-align:left;outline:0}
+    button.pipeline-node{cursor:grab}.pipeline-node:focus-visible{border-color:#d8ff73;box-shadow:0 0 0 2px #d8ff7320}
+    .pipeline-node.processor{width:72px;height:48px;border-color:#5877dc;background:#111c31}.pipeline-node.review{width:62px;border-color:#806d4f;background:#211b13}
+    .node-kicker{display:block;color:#74847d;font-size:4.5px;font-weight:900;line-height:1;letter-spacing:.11em}.processor .node-kicker{color:#8ca5ff}.review .node-kicker{color:#d7b776}
+    .node-title{display:block;margin-top:5px;font:850 8px/.95 system-ui;letter-spacing:-.025em}.node-meta{display:block;margin-top:4px;color:#75857e;font-size:4px;font-weight:750;line-height:1;letter-spacing:.06em}
+    .node-port{position:absolute;width:5px;height:5px;border:1px solid #0b1114;border-radius:50%;background:#74efc0;box-shadow:0 0 0 1px #74efc066}.node-port.in{left:-3px;top:50%;transform:translateY(-50%)}.node-port.out{right:-3px;top:50%;transform:translateY(-50%)}
+    .pipeline-controls{position:absolute;z-index:7;right:10px;top:10px;display:flex;gap:5px}
+    .pipeline-control{height:25px;padding:0 8px;border:1px solid #ffffff24;border-radius:99px;background:#111a18db;color:#dce8e2;font-size:5.5px;font-weight:900;letter-spacing:.08em;cursor:pointer;backdrop-filter:blur(6px)}
+    .pipeline-control.primary{border-color:#d8ff7375;color:#d8ff73}.pipeline-control:focus-visible{outline:1px solid #d8ff73;outline-offset:2px}.pipeline-control:disabled{opacity:.45;cursor:not-allowed}
+    .pipeline-state{position:absolute;z-index:4;right:10px;bottom:9px;display:flex;align-items:center;gap:5px;color:#8d9a94;font-size:4.5px;font-weight:800;letter-spacing:.09em;pointer-events:none}.pipeline-state i{width:4px;height:4px;border-radius:50%;background:#60706a}.pipeline-state[data-phase="transmitting"] i{background:#d8ff73;box-shadow:0 0 7px #d8ff73}.pipeline-state[data-phase="complete"] i{background:#74efc0}
+    .result-panel{position:absolute;z-index:4;left:13px;bottom:9px;max-width:112px;color:#788881;font-size:4.5px;font-weight:800;line-height:1.35;letter-spacing:.08em;pointer-events:none}.result-panel strong{display:block;color:#dbe9e2;font-size:5px}.result-panel[data-ready="true"] strong{color:#74efc0}
+    .library-badge{background:#08110fd9}.scene-caption{display:none}
+    @media (min-width:500px){
+      .beam-stage::before{background-size:32px 32px}.pipeline-copy{left:28px;top:88px;width:155px}.pipeline-copy small{font-size:10px}.pipeline-copy h1{margin-top:14px;font-size:33px}.pipeline-copy p{margin-top:13px;font-size:9px}
+      .pipeline-node{width:120px;height:76px;padding:13px 15px;border-radius:12px}.pipeline-node.processor{width:136px;height:88px}.pipeline-node.review{width:118px;height:76px}.node-kicker{font-size:8px}.node-title{margin-top:9px;font-size:15px}.node-meta{margin-top:7px;font-size:7px}.node-port{width:8px;height:8px}.node-port.in{left:-5px}.node-port.out{right:-5px}
+      .pipeline-controls{right:20px;top:18px;gap:8px}.pipeline-control{height:38px;padding:0 13px;font-size:8px}.pipeline-state{right:20px;bottom:17px;font-size:7px}.result-panel{left:28px;bottom:17px;max-width:220px;font-size:7px}.result-panel strong{font-size:9px}
+    }
+    @media (orientation:portrait){
+      .pipeline-copy{left:14px;top:48px;width:190px}.pipeline-copy h1{font-size:22px}.pipeline-copy p{max-width:155px}
+      .pipeline-controls{top:10px}.pipeline-control{padding:0 7px}.result-panel{left:14px;bottom:28px;max-width:128px}.pipeline-state{right:12px;bottom:12px}
+    }
   </style>
-  <script type="module" crossorigin src="./assets/animated-dom-node-connection-beam-29E5ZhjS.js"></script>
+  <script type="module" crossorigin src="./assets/animated-dom-node-connection-beam-DDSGhc6I.js"></script>
   <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
   <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
-  <link rel="modulepreload" crossorigin href="./assets/batch-c-utils-g_3IBZ2b.js">
   <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
 </head>
 <body>
-  <main class="preview-stage beam-stage" id="beam-stage" data-preview-mechanism="measured-dom-anchor-beams">
-    <svg class="beam-svg" viewBox="0 0 320 180"><path class="beam-path" id="beam-left"/><path class="beam-path" id="beam-right"/></svg>
-    <section class="beam-copy"><small>LIVE ROUTING / DOM</small><h1>LIGHT STAYS ATTACHED TO MOVING TOOLS.</h1></section>
-    <button class="beam-node a" id="beam-a">INPUT</button>
-    <div class="beam-node hub" id="beam-hub">MODEL</div>
-    <button class="beam-node b" id="beam-b">OUTPUT</button>
-    <span class="library-badge">Motion · measured animated beams</span>
-    <span class="scene-caption">DOMRect anchors recompute both Bézier paths</span>
+  <main class="preview-stage beam-stage" id="beam-stage" data-preview-mechanism="measured-dom-boundary-ai-file-pipeline">
+    <svg class="beam-svg" id="beam-svg" aria-hidden="true"><path class="beam-path" id="beam-left"/><path class="beam-path" id="beam-right"/><circle class="beam-packet" id="beam-packet" r="4" cx="0" cy="0"/></svg>
+    <section class="pipeline-copy" aria-hidden="true"><small>AI FILE ROUTE / 04</small><h1>Send the audit into review.</h1><p>Drag the file or switch layout. Every beam remeasures its DOM edge.</p></section>
+    <button class="pipeline-node source" id="source-node" type="button" aria-label="Source file site-audit.pdf. Drag it or use arrow keys to move it."><span class="node-kicker">SOURCE FILE</span><span class="node-title">site-audit.pdf</span><span class="node-meta">24 pages · 1.8 MB</span><i class="node-port out"></i></button>
+    <div class="pipeline-node processor" id="processor-node"><i class="node-port in"></i><span class="node-kicker">AI PARSER</span><span class="node-title">Extract findings</span><span class="node-meta" id="processor-meta">Schema ready</span><i class="node-port out"></i></div>
+    <div class="pipeline-node review" id="review-node"><i class="node-port in"></i><span class="node-kicker">REVIEW</span><span class="node-title" id="review-title">Awaiting packet</span><span class="node-meta" id="review-meta">No result</span></div>
+    <div class="pipeline-controls">
+      <button class="pipeline-control" id="layout-toggle" type="button">STACK VIEW</button>
+      <button class="pipeline-control primary" id="send-packet" type="button">SEND FILE</button>
+    </div>
+    <div class="result-panel" id="result-panel" data-ready="false"><strong id="result-title">REVIEW NOT STARTED</strong><span id="result-detail">Move a node, then send the file.</span></div>
+    <div class="pipeline-state" id="pipeline-state" data-phase="idle"><i></i><span id="state-label">ROUTE READY · IDLE</span></div>
+    <span class="library-badge">Motion · measured AI pipeline</span>
   </main>
 </body>
 </html>

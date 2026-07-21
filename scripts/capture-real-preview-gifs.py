@@ -1644,6 +1644,11 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.locator('#theme-research').click()
             elif 20 <= index <= 27:
                 page.wait_for_timeout(100)
+        elif demo["id"] == "animated-dom-node-connection-beam":
+            if index == 3:
+                page.locator('#layout-toggle').click()
+            elif index == 13:
+                page.locator('#send-packet').click()
         elif demo["id"] == "gooey-pixel-cursor-wake":
             if index == 3:
                 box = page.locator('#pixel-wake-host').bounding_box()
@@ -6174,6 +6179,96 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["initialStillVerified"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture a real origin-aware round trip between functionally distinct Research and Focus reader modes: {interaction!r}")
+    elif demo["id"] == "animated-dom-node-connection-beam":
+        interaction = page.evaluate("window.__DOM_CONNECTION_PIPELINE_STATE__")
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        if (
+            not assertion
+            or interaction["task"] != "human-routes-site-audit-file-through-ai-parser-and-explicitly-sends-it-to-review"
+            or interaction["claimedLibrary"] != "motion@12.42.2"
+            or interaction["mechanism"] != "real-domrect-boundary-intersections-recompute-two-svg-beziers-after-trusted-drag-keyboard-or-layout-input-and-an-explicit-send-moves-one-finite-packet-before-committing-review"
+            or interaction["assetStrategy"] != "code-native-dom-svg-and-file-metadata-no-functional-raster-input-required"
+            or interaction["causality"] != "trusted-human-input-only"
+            or interaction["automaticPlayback"]
+            or interaction["automaticDrift"]
+            or interaction["automaticPulse"]
+            or interaction["automaticSend"]
+            or interaction["automaticFallback"]
+            or not interaction["previewClockOnlyAdvancesHumanStartedTransitions"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["inputCount"] != 2
+            or interaction["trustedInputCount"] != 2
+            or interaction["pointerInputCount"] != 2
+            or interaction["keyboardInputCount"] != 0
+            or interaction["layoutInputCount"] != 1
+            or interaction["sendInputCount"] != 1
+            or interaction["dragInputCount"] != 0
+            or interaction["keyboardMoveInputCount"] != 0
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["untrustedMutationCount"] != 0
+            or interaction["lastInputKind"] != "send-pointer"
+            or interaction["lastInputTrusted"] is not True
+            or interaction["layout"] != "stack"
+            or interaction["targetLayout"] != "stack"
+            or interaction["layoutTransitionActive"]
+            or interaction["layoutTransitionProgress"] != 1
+            or interaction["layoutStartCount"] != 1
+            or interaction["layoutCompletionCount"] != 1
+            or interaction["layoutFrameCount"] < 4
+            or len(interaction["layoutRecords"]) != 1
+            or interaction["layoutRecords"][0]["from"] != "flow"
+            or interaction["layoutRecords"][0]["to"] != "stack"
+            or not interaction["layoutRecords"][0]["trusted"]
+            or not interaction["layoutRecords"][0]["completed"]
+            or interaction["humanGeometryMutationCount"] != 1
+            or interaction["geometryMeasureCount"] <= 4
+            or interaction["routeRevisionCount"] <= 4
+            or interaction["pathCount"] != 2
+            or not all(length > 6 for length in interaction["pathLengths"])
+            or interaction["pathGeometrySignature"].count('C') != 2
+            or len(interaction["anchors"]) != 2
+            or len(interaction["nodeBounds"]) != 3
+            or not interaction["anchorBoundaryVerified"]
+            or interaction["anchorRegistrationMaxError"] != 0
+            or interaction["transferActive"]
+            or interaction["transferProgress"] != 1
+            or interaction["sendStartCount"] != 1
+            or interaction["processorReceiptCount"] != 1
+            or interaction["arrivalCount"] != 1
+            or interaction["transferFrameCount"] < 5
+            or interaction["transferDuration"] != 1.12
+            or interaction["packetLeg"] != "arrived"
+            or interaction["packetRegistrationError"] != 0
+            or interaction["payloadSignature"] != "site-audit.pdf:24-pages:1.8mb:schema-a11y-performance-content"
+            or not interaction["payloadRetained"]
+            or interaction["phase"] != "complete-retained"
+            or interaction["result"] != "site-audit-structured-review-ready"
+            or not interaction["resultRetained"]
+            or interaction["reviewResult"] != "18-findings-3-priority-review-ready"
+            or interaction["reviewFindingCount"] != 18
+            or interaction["reviewPriorityCount"] != 3
+            or interaction["prematureResultCount"] != 0
+            or len(interaction["transferRecords"]) != 1
+            or not interaction["transferRecords"][0]["trusted"]
+            or not interaction["transferRecords"][0]["arrived"]
+            or not interaction["transferRecords"][0]["committed"]
+            or interaction["transferRecords"][0]["payloadSignature"] != interaction["payloadSignature"]
+            or not interaction["initialStillVerified"]
+            or not interaction["fullStageGeometryVerified"]
+            or interaction["svgCoverageRatio"] < .995
+            or not interaction["motionControlReady"]
+            or not interaction["fontsReady"]
+            or not interaction["ready"]
+            or page.locator('#result-panel').get_attribute('data-ready') != "true"
+            or page.locator('#result-title').text_content() != "18 FINDINGS · REVIEW READY"
+            or page.locator('#result-detail').text_content() != "3 priority checks retained for human review."
+            or page.locator('#review-title').text_content() != "Review ready"
+            or page.locator('#review-meta').text_content() != "3 priority items"
+            or page.locator('.beam-path.active').count() != 0
+            or page.locator('#send-packet').is_disabled()
+            or page.locator('#layout-toggle').is_disabled()
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a real DOM-bound site-audit packet transfer with an arrival-gated review result: {interaction!r}")
     elif demo["id"] == "gooey-pixel-cursor-wake":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")

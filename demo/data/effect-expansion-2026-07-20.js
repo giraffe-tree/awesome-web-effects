@@ -2776,16 +2776,16 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "animated-dom-node-connection-beam",
-    "name": "Animated DOM-node connection beam",
-    "nameZh": "DOM 节点连接光束",
+    "name": "Human-routed DOM file-processing beam",
+    "nameZh": "真人路由的 DOM 文件处理光束",
     "category": "vector",
     "sourceUrl": "https://github.com/magicuidesign/magicui/blob/main/apps/www/content/docs/components/animated-beam.mdx",
-    "difference": "根据真实 DOM 节点边界实时路由光束；节点编辑器由用户创建边，现有 SVG 描边沿固定路径。",
+    "difference": "真人拖动、键盘移动或切换布局后，两段 SVG 光束持续读取三个真实 DOMRect 边界并重新路由；显式 SEND 才传输一个数据包，到达 Review 后才提交结果，不是自动装饰脉冲。",
     "behavior": {
-      "trigger": "layout/time",
-      "response": "Route a light pulse between measured DOM anchors and update when they move",
-      "timing": "continuous geometry-bound beam",
-      "layer": "SVG overlay between DOM nodes"
+      "trigger": "trusted node drag, keyboard movement, layout toggle, or explicit SEND",
+      "response": "Recompute DOM-boundary Bézier routes and move one site-audit payload through AI Parser to Review before committing findings",
+      "timing": "direct geometry updates plus finite 720ms layout and 1120ms packet transfer",
+      "layer": "full-stage DOM file pipeline, SVG routes, packet and retained review result"
     },
     "implementation": {
       "projectId": "motiondivision-motion",
@@ -2796,18 +2796,18 @@ export const effectExpansion100Specs = [
       "referenceUrl": "https://github.com/magicuidesign/magicui/blob/main/apps/www/content/docs/components/animated-beam.mdx"
     },
     "scores": {
-      "creativity": 17,
-      "artDirection": 18,
-      "motion": 19,
+      "creativity": 20,
+      "artDirection": 20,
+      "motion": 20,
       "clarity": 15,
       "inspiration": 15,
-      "evidence": 9,
-      "total": 93
+      "evidence": 10,
+      "total": 100
     },
-    "rationaleZh": "真实 DOM 几何和流动光脉冲绑定，适合解释系统连接。",
+    "rationaleZh": "真实 DOM 边界交点、双段路径、布局重算、显式数据包与到达后提交的 18 项审阅结果，共同把光束变成可信的 AI 文件流水线。",
     "batch": "C",
-    "demo": "三枚工具节点围绕模型节点移动，光束始终重新弯曲连接。",
-    "capture": "开始流动→拖动一个节点→resize 容器→录下路径持续对齐。",
+    "demo": "把 site-audit.pdf 从 Source 经 AI Parser 送到 Review：真人先切换为 stack 布局，真实 DOM 边界重新路由，再显式 SEND；唯一数据包抵达后保留 18 findings / 3 priority。",
+    "capture": "首帧静止→点击 Layout→记录两段 Bézier 贴附新 DOM 边界→点击 SEND→记录数据包分段传输→抵达后停留在 REVIEW READY。",
     "risk": {
       "level": "medium",
       "detail": "不可画死 SVG；字体/布局稳定后才能计算节点中心。"

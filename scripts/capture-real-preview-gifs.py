@@ -1558,6 +1558,21 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.move(160, 110)
             elif index in {3, 5, 7, 9, 11, 13, 15, 17}:
                 page.mouse.wheel(0, 70)
+        elif demo["id"] == "bubble-to-navigation-morph":
+            if index == 3:
+                page.locator('#nav-toggle').click()
+            elif 4 <= index <= 9:
+                page.wait_for_timeout(100)
+            elif index == 11:
+                page.locator('.nav-link').nth(1).click()
+            elif index == 16:
+                page.locator('#nav-toggle').click()
+            elif 17 <= index <= 22:
+                page.wait_for_timeout(100)
+            elif index == 26:
+                page.locator('#nav-toggle').click()
+            elif 27 <= index <= 33:
+                page.wait_for_timeout(100)
         elif demo["id"] == "gooey-pixel-cursor-wake":
             if index == 3:
                 box = page.locator('#pixel-wake-host').bounding_box()
@@ -5689,6 +5704,71 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["ready"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture a real retained human-scrubbed field-note conclusion: {interaction!r}")
+    elif demo["id"] == "bubble-to-navigation-morph":
+        page.wait_for_function("window.__PREVIEW_INTERACTION_STATE__.isOpen && window.__PREVIEW_INTERACTION_STATE__.activeAnimationCount === 0 && window.__PREVIEW_INTERACTION_STATE__.morphCompletionCount === 3", timeout=2000)
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        if (
+            not assertion
+            or interaction["task"] != "human-opens-a-structured-immersive-story-navigation-and-retains-a-section-choice"
+            or interaction["claimedLibrary"] != "motion@12.42.2"
+            or interaction["mechanism"] != "trusted-toggle-morphs-a-compact-bubble-into-large-operable-information-architecture"
+            or interaction["assetStrategy"] != "code-native-css-landscape-and-svg-contours-no-functional-raster-input-required"
+            or interaction["imageGenerationDecision"] != "omitted-because-raster-imagery-would-be-decorative-and-would-not-drive-navigation-or-morph-geometry"
+            or "|".join(interaction["informationArchitecture"]) != "Story|Field Log|Visit"
+            or interaction["automaticToggle"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticFallback"]
+            or interaction["captureClockDriven"]
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["untrustedInputPolicy"] != "reject-before-toggle-or-link-mutation"
+            or interaction["untrustedMutationCount"] != 0
+            or not interaction["initialStillVerified"]
+            or interaction["inputCount"] != 4
+            or interaction["trustedInputCount"] != 4
+            or interaction["pointerInputCount"] != 4
+            or interaction["keyboardInputCount"] != 0
+            or interaction["toggleInputCount"] != 3
+            or interaction["toggleCount"] != 3
+            or interaction["linkInputCount"] != 1
+            or interaction["linkActivationCount"] != 1
+            or interaction["openCount"] != 2
+            or interaction["closeCount"] != 1
+            or interaction["morphTransitionCount"] != 3
+            or interaction["morphCompletionCount"] != 3
+            or interaction["activeAnimationCount"] != 0
+            or interaction["lastTransitionDuration"] != .58
+            or not interaction["targetOpen"]
+            or not interaction["isOpen"]
+            or interaction["phase"] != "open-stable"
+            or interaction["morphProgress"] != 1
+            or not interaction["contentVisible"]
+            or page.locator('#nav-toggle').get_attribute('aria-expanded') != "true"
+            or interaction["selectedIndex"] != 1
+            or interaction["selectedSection"] != "Field Log"
+            or interaction["result"] != "field-log-section-retained"
+            or interaction["selectionChangeCount"] != 1
+            or interaction["selectionRetainedAcrossCloseCount"] < 1
+            or page.locator('.nav-link[data-selected="true"]').count() != 1
+            or page.locator('#nav-result').text_content() != "FIELD LOG · SELECTED"
+            or abs(interaction["expandedWidth"] - 296) > 1
+            or abs(interaction["expandedHeight"] - 150) > 1
+            or abs(interaction["shellWidth"] - 296) > 1
+            or abs(interaction["shellHeight"] - 150) > 1
+            or interaction["operableLinkCount"] != 3
+            or interaction["minimumLinkHeight"] < 44
+            or interaction["minimumLinkWidth"] < 44
+            or not interaction["linksWithinShell"]
+            or not interaction["shellWithinStage"]
+            or interaction["stageCoverageRatio"] < .995
+            or len(interaction["transitionRecords"]) != 4
+            or not all(record["trusted"] for record in interaction["transitionRecords"])
+            or interaction["renderCount"] <= 0
+            or interaction["geometryMeasureCount"] <= 0
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a real retained Field Atlas section choice through a finite bubble navigation morph: {interaction!r}")
     elif demo["id"] == "gooey-pixel-cursor-wake":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")

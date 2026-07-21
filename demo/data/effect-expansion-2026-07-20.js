@@ -1742,16 +1742,16 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "bubble-to-navigation-morph",
-    "name": "Bubble-to-navigation morph",
-    "nameZh": "气泡到导航变形",
+    "name": "Human-opened field atlas bubble navigation",
+    "nameZh": "真人打开的野外图鉴气泡导航",
     "category": "transition",
     "sourceUrl": "https://github.com/DavidHDev/react-bits/blob/main/public/r/BubbleMenu-TS-TW.json",
-    "difference": "圆形控制通过多个气泡协调扩张为导航面，不是 clip 帘幕或分层板平移。",
+    "difference": "真人把 56px 紧凑气泡有限扩张为可操作的 Story、Field Log、Visit 信息架构，并让章节选择跨关闭持续保留；不是自动气泡装饰或 clip 帘幕。",
     "behavior": {
-      "trigger": "menu toggle",
-      "response": "Grow a compact bubble cluster into a full navigation surface",
-      "timing": "coordinated shape morph",
-      "layer": "navigation overlay"
+      "trigger": "trusted click, tap, Enter/Space, Escape, or link activation",
+      "response": "Morph a compact field-atlas bubble into a structured, operable navigation surface and retain the chosen section",
+      "timing": "finite 580ms human-owned open/close morph",
+      "layer": "full-stage immersive field story and responsive navigation overlay"
     },
     "implementation": {
       "projectId": "motiondivision-motion",
@@ -1762,18 +1762,18 @@ export const effectExpansion100Specs = [
       "referenceUrl": "https://github.com/DavidHDev/react-bits/blob/main/public/r/BubbleMenu-TS-TW.json"
     },
     "scores": {
-      "creativity": 18,
-      "artDirection": 19,
-      "motion": 19,
+      "creativity": 20,
+      "artDirection": 20,
+      "motion": 20,
       "clarity": 15,
       "inspiration": 15,
-      "evidence": 9,
-      "total": 95
+      "evidence": 10,
+      "total": 100
     },
-    "rationaleZh": "气泡传播和表面成形具有明确形状叙事。",
+    "rationaleZh": "紧凑锚点、响应式信息架构、可操作链接和跨关闭保留的章节选择，让形状变形同时完成真实导航任务。",
     "batch": "B",
-    "demo": "右下角三个气泡沿弧线汇合，铺展成全屏菜单星图。",
-    "capture": "click 打开→停在气泡汇合峰值→键盘关闭→复位。",
+    "demo": "在 Field Atlas 沉浸式详情页中，真人把右下 56px 气泡打开为 Story、Field Log、Visit 三栏导航，选择 Field Log 后关闭并重开，选择仍被明确保留。",
+    "capture": "首帧静止→点击打开→选择 Field Log→点击关闭→再次打开→停留在 FIELD LOG · SELECTED；键盘 Enter/Space 与 Escape 提供等价路径。",
     "risk": {
       "level": "high",
       "detail": "许可未明；需避免与 clip-path menu 只做外观差异。"

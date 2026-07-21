@@ -1,2 +1,43 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Motion — Bubble to Navigation Morph</title><link rel="stylesheet" href="./shared.css"><style>
-:root{--preview-background:#e5ff70;color-scheme:light}.bubble-stage{position:absolute;inset:0;overflow:hidden;color:#1a211a}.bubble-copy{position:absolute;left:15px;top:48px;width:105px}.bubble-copy small{font:800 6px/1 ui-monospace;letter-spacing:.12em}.bubble-copy h1{margin:9px 0 0;font:950 20px/.82 system-ui;letter-spacing:-.06em}.nav-bubble{position:absolute;right:17px;top:62px;width:58px;height:58px;border:1px solid #19221a;border-radius:50%;background:#171d19;color:white;overflow:hidden;cursor:pointer;transform-origin:right center}.bubble-mark{position:absolute;right:18px;top:18px;width:20px;height:20px}.bubble-mark::before,.bubble-mark::after{content:'';position:absolute;left:0;right:0;top:6px;height:1px;background:white}.bubble-mark::after{top:13px}.bubble-links{position:absolute;left:17px;top:0;height:100%;display:flex;align-items:center;gap:19px;opacity:0;white-space:nowrap;font:800 7px/1 system-ui;letter-spacing:.05em}.library-badge{color:#202820;background:#f1ffa8dd;border-color:#20282020}.scene-caption{display:none}</style></head><body><main class="preview-stage"><div class="bubble-stage"><section class="bubble-copy"><small>NAV / MORPH</small><h1>A SMALL IDEA OPENS A WHOLE SYSTEM.</h1></section><button class="nav-bubble" id="nav-bubble" data-preview-mechanism="motion-bubble-nav" type="button" aria-expanded="false" aria-label="Toggle navigation"><span class="bubble-links" id="bubble-links">WORK <b>ABOUT</b> CONTACT</span><i class="bubble-mark"></i></button></div><span class="library-badge">Motion · bubble morph</span></main><script type="module" src="./src/bubble-to-navigation-morph-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Motion — Story Navigation Bubble</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="./shared.css">
+  <style>
+    :root{--preview-background:#b9c8b0;color-scheme:dark;--ink:#162018;--paper:#eef0e6;--acid:#e7ff58}
+    #story-stage{background:linear-gradient(155deg,#d4d9c5 0 42%,#93aa91 42% 62%,#2b4a3b 62%);color:var(--ink)}
+    .landscape-lines{position:absolute;inset:0;width:100%;height:100%;opacity:.42;pointer-events:none}.story-bar{position:absolute;z-index:2;top:10px;left:12px;display:flex;align-items:center;gap:7px;font:850 6px/1 ui-monospace;letter-spacing:.12em;text-transform:uppercase}.story-bar::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--acid);border:1px solid #162018;box-shadow:0 0 0 3px #e7ff5844}
+    .story-copy{position:absolute;z-index:2;left:13px;top:46px;pointer-events:none}.story-copy small{font:800 5px/1 ui-monospace;letter-spacing:.15em;color:#435846}.story-copy h1{width:145px;margin:8px 0 0;font:950 21px/.84 system-ui;letter-spacing:-.06em}.story-copy p{width:118px;margin:8px 0 0;font:650 6px/1.35 system-ui;color:#405143}.chapter-meta{position:absolute;z-index:2;left:13px;bottom:12px;pointer-events:none;font:800 5px/1.35 ui-monospace;letter-spacing:.11em;color:#d7e1d5}.chapter-meta b{color:var(--acid)}
+    .nav-shade{position:absolute;z-index:5;inset:0;background:#1016118a;opacity:0;pointer-events:none;backdrop-filter:blur(0)}
+    .nav-shell{position:absolute;z-index:8;right:12px;top:12px;width:56px;height:56px;border:1px solid #ffffff32;border-radius:50%;background:#172019;color:#f4f6ed;overflow:hidden;box-shadow:0 15px 40px #10161066;transform-origin:100% 0}
+    .nav-toggle{position:absolute;z-index:3;right:0;top:0;width:56px;height:56px;padding:0;border:0;border-radius:50%;background:transparent;color:inherit;cursor:pointer;outline:none}.nav-toggle:focus-visible{box-shadow:inset 0 0 0 2px var(--acid)}.nav-toggle-lines{position:absolute;left:50%;top:50%;width:20px;height:14px;translate:-50% -50%}.nav-toggle-lines::before,.nav-toggle-lines::after{content:"";position:absolute;left:0;width:20px;height:1.5px;border-radius:2px;background:currentColor;transition:transform .18s ease,top .18s ease}.nav-toggle-lines::before{top:3px}.nav-toggle-lines::after{top:10px}.nav-shell[data-open="true"] .nav-toggle{width:42px;height:42px}.nav-shell[data-open="true"] .nav-toggle-lines::before{top:6px;transform:rotate(45deg)}.nav-shell[data-open="true"] .nav-toggle-lines::after{top:6px;transform:rotate(-45deg)}
+    .nav-content{position:absolute;inset:0;padding:15px 14px 12px;opacity:0;visibility:hidden;pointer-events:none}.nav-heading{padding-right:42px}.nav-heading small{display:block;font:750 5px/1 ui-monospace;letter-spacing:.14em;color:#93a196}.nav-heading strong{display:block;margin-top:5px;font:900 11px/1 system-ui;letter-spacing:-.025em}.nav-links{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:11px}.nav-link{position:relative;display:flex;min-width:0;min-height:48px;flex-direction:column;justify-content:center;padding:8px 9px;border:1px solid #ffffff24;border-radius:10px;background:#ffffff0b;color:#f4f6ed;text-decoration:none;outline:none}.nav-link:hover,.nav-link:focus-visible{border-color:#e7ff588f;background:#e7ff5812}.nav-link[data-selected="true"]{border-color:var(--acid);background:var(--acid);color:#172019}.nav-link b{font:900 7px/1 system-ui;letter-spacing:.04em}.nav-link span{margin-top:5px;font:650 5px/1.2 ui-monospace;letter-spacing:.06em;opacity:.66}.nav-footer{display:flex;align-items:center;justify-content:space-between;margin-top:8px;font:750 5px/1 ui-monospace;letter-spacing:.1em;color:#92a095}.nav-footer output{color:var(--acid)}
+    @media(max-width:270px){.story-copy h1{font-size:19px}.story-copy p{display:none}.nav-content{padding:14px}.nav-heading strong{font-size:13px}.nav-links{grid-template-columns:1fr;gap:6px;margin-top:12px}.nav-link{min-height:48px;padding:7px 10px}.nav-link span{margin-top:3px}.nav-footer{margin-top:9px}}
+  </style>
+</head>
+<body>
+  <main id="story-stage" class="preview-stage" data-preview-mechanism="motion-bubble-to-structured-navigation">
+    <svg class="landscape-lines" viewBox="0 0 320 180" preserveAspectRatio="none" aria-hidden="true"><path d="M-20 137C41 89 70 158 124 117S206 72 342 128M-25 149C30 104 78 169 134 128S231 84 347 141M-18 159C45 119 88 176 148 140S244 103 340 151" fill="none" stroke="#f4f6ed" stroke-width="1"/><circle cx="245" cy="69" r="24" fill="#e7ff58" fill-opacity=".58"/></svg>
+    <span class="story-bar">Field Atlas / Detail 03</span>
+    <section class="story-copy"><small>ALPINE NIGHT LAB</small><h1>WHERE THE RIDGELINE STARTS TO GLOW.</h1><p>An immersive field note about nocturnal habitats above the last tree line.</p></section>
+    <span class="chapter-meta"><b id="section-chip">STORY</b><br><span id="section-detail">CHAPTER 03 · READING</span></span>
+    <div id="nav-shade" class="nav-shade" aria-hidden="true"></div>
+    <section id="nav-shell" class="nav-shell" data-open="false" aria-label="Story navigation">
+      <button id="nav-toggle" class="nav-toggle" type="button" aria-expanded="false" aria-controls="story-links" aria-label="Open story navigation"><span class="nav-toggle-lines" aria-hidden="true"></span></button>
+      <div id="nav-content" class="nav-content" aria-hidden="true">
+        <header class="nav-heading"><small>FIELD ATLAS / NAVIGATION</small><strong>Explore this story</strong></header>
+        <nav id="story-links" class="nav-links" aria-label="Story sections">
+          <a class="nav-link" href="#story" data-section="Story" data-selected="true"><b>01 · STORY</b><span>Read the chapter</span></a>
+          <a class="nav-link" href="#field-log" data-section="Field Log" data-selected="false"><b>02 · FIELD LOG</b><span>Species & signals</span></a>
+          <a class="nav-link" href="#visit" data-section="Visit" data-selected="false"><b>03 · VISIT</b><span>Plan the route</span></a>
+        </nav>
+        <footer class="nav-footer"><span>TAP A SECTION</span><output id="nav-result">STORY · CURRENT</output></footer>
+      </div>
+    </section>
+  </main>
+  <script type="module" src="./src/bubble-to-navigation-morph-demo.js"></script>
+</body>
+</html>

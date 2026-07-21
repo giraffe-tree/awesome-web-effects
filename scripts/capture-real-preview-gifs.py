@@ -1917,6 +1917,28 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("z")
             elif index == 25:
                 page.keyboard.press("Enter")
+        elif demo["id"] == "signed-distance-neon-metropolis":
+            if index == 2:
+                page.mouse.move(250, 116)
+            elif index == 5:
+                page.mouse.down()
+            elif index == 6:
+                page.mouse.move(220, 105, steps=2)
+            elif index == 7:
+                page.mouse.move(190, 90, steps=2)
+            elif index == 8:
+                page.mouse.move(165, 76, steps=3)
+            elif index == 9:
+                page.mouse.up()
+            elif index == 12:
+                page.locator("#clearance-buffer").focus()
+                page.keyboard.press("ArrowRight")
+                page.keyboard.press("ArrowRight")
+            elif index == 16:
+                page.locator("#clearance-canvas-host").focus()
+                page.keyboard.press("ArrowLeft")
+            elif index == 20:
+                page.locator('[data-action="pin"]').click()
         elif demo["id"] == "flowfield-paper-marbling":
             if index == 2:
                 page.mouse.move(180, 80)
@@ -5772,6 +5794,131 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["ready"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture trusted terrain probing, a captured load path, finite Abelian waves, undo/reset, and a final retained pixel-seeded slope load without automatic toppling: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "signed-distance-neon-metropolis":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-night-city-right-of-way-clearance-inspection"
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["renderer"] != "canvas2d"
+            or interaction["mechanism"] != "committed-image-pixels-form-building-occupancy-mask-and-signed-distance-field-queried-by-trusted-human-input"
+            or interaction["acceptedInputs"] != ["mouse-hover", "captured-mouse-drag", "captured-touch-drag", "captured-pen-drag", "keyboard", "native-range", "visible-buttons"]
+            or not interaction["userInputRequired"]
+            or not interaction["strictTrustedInputGuard"]
+            or not interaction["initialFrameStatic"]
+            or not interaction["initialStaticConfirmed"]
+            or interaction["automaticCycle"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticOrbit"]
+            or interaction["automaticTimeline"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["previewClockMutationCount"] != 0
+            or interaction["nonInputFieldMutationCount"] != 0
+            or interaction["inputCount"] < 13
+            or interaction["trustedInputCount"] != interaction["inputCount"]
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["pointerEnterCount"] < 1
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerMoveCount"] < 8
+            or interaction["pointerReleaseCount"] != 1
+            or interaction["pointerCancelCount"] != 0
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerCaptureReleaseCount"] != 1
+            or interaction["hoverMutationCount"] < 1
+            or interaction["dragMutationCount"] < 6
+            or interaction["keyboardInputCount"] != 1
+            or interaction["keyboardMutationCount"] != 1
+            or interaction["rangeInputCount"] != 2
+            or interaction["rangeMutationCount"] != 2
+            or interaction["buttonActivationCount"] != 1
+            or interaction["buttonMutationCount"] != 1
+            or interaction["pinToggleCount"] != 1
+            or interaction["pinCount"] != 1
+            or not interaction["pinned"]
+            or interaction["resetCount"] != 0
+            or interaction["requiredBufferMetres"] != 8
+            or interaction["maximumHumanBufferMetres"] != 8
+            or interaction["minimumHumanSignedDistanceMetres"] >= 0
+            or interaction["maximumHumanSignedDistanceMetres"] <= 0
+            or interaction["maximumProbeTravel"] <= .05
+            or interaction["humanVisualMutationCount"] < 10
+            or interaction["humanInputCausalityCount"] != interaction["humanVisualMutationCount"]
+            or interaction["activePointerId"] is not None
+            or interaction["pointerCaptured"]
+            or interaction["dragging"]
+            or interaction["lastInputKind"] != "visible-button"
+            or interaction["lastInputSource"] != "pin"
+            or interaction["lastInputTrusted"] is not True
+            or interaction["lastPointerType"] != "mouse"
+            or interaction["assetFetchCount"] != 1
+            or interaction["assetResponseStatus"] != 200
+            or not interaction["assetMimeType"].startswith("image/jpeg")
+            or not interaction["assetSameOrigin"]
+            or interaction["assetByteLength"] != 345787
+            or interaction["assetSha256"] != "8b46933f1b6da5075914f317d723fc3f27c38b853035de6e892004b1c9700263"
+            or not interaction["assetShaMatchesExpected"]
+            or not interaction["assetByteLengthMatchesExpected"]
+            or not interaction["browserImageDecoded"]
+            or interaction["sourceNaturalWidth"] != 960
+            or interaction["sourceNaturalHeight"] != 640
+            or interaction["sourcePixelCount"] != 614400
+            or not interaction["browserCanvasReadback"]
+            or interaction["sampledWidth"] != 128
+            or interaction["sampledHeight"] != 72
+            or interaction["sampledPixelCount"] != 9216
+            or interaction["sampledPixelByteLength"] != 36864
+            or len(interaction["sampledPixelSha256"]) != 64
+            or not interaction["sampledPixelSha256"].strip("0")
+            or interaction["nonzeroSampleByteCount"] <= 27648
+            or interaction["opaqueSamplePixelCount"] != 9216
+            or interaction["distinctQuantizedColorCount"] < 400
+            or interaction["minimumSampleLuma"] >= 20
+            or interaction["maximumSampleLuma"] <= 210
+            or interaction["sampleLumaMean"] <= 65
+            or interaction["sampleLumaMean"] >= 115
+            or interaction["sampleLumaStdDev"] <= 55
+            or interaction["sampleLumaStdDev"] >= 95
+            or interaction["occupiedCellCount"] + interaction["streetCellCount"] != 9216
+            or interaction["occupiedCellRatio"] < .25
+            or interaction["occupiedCellRatio"] > .58
+            or interaction["connectedBuildingMassCount"] < 12
+            or interaction["connectedBuildingMassCount"] > 35
+            or interaction["boundaryCellCount"] < 1200
+            or interaction["boundaryCellCount"] > 4200
+            or interaction["signedDistanceCellCount"] != 9216
+            or interaction["minimumSignedDistanceMetres"] > -6
+            or interaction["maximumSignedDistanceMetres"] < 7
+            or interaction["positiveStreetDistanceCellCount"] <= 3200
+            or interaction["negativeBuildingDistanceCellCount"] <= 1800
+            or interaction["clearanceContourCellCount"] <= 1000
+            or interaction["fieldChecksum"] <= 0
+            or not interaction["pixelEvidenceReady"]
+            or not interaction["pixelEvidenceBoundToField"]
+            or not interaction["p5InstanceReady"]
+            or not interaction["p5CanvasReady"]
+            or not interaction["p5ImageDecoded"]
+            or interaction["p5ImageClass"] != "p5.Image"
+            or interaction["p5ImageWidth"] != 960
+            or interaction["p5ImageHeight"] != 640
+            or interaction["p5ImagePixelLength"] != 2457600
+            or interaction["p5CanvasWidth"] != 320
+            or interaction["p5CanvasHeight"] != 180
+            or interaction["p5CompletedDrawCount"] < 10
+            or interaction["renderCount"] < 36
+            or interaction["previewClockIgnoredCount"] < 36
+            or interaction["stageCoverageRatio"] <= .98
+            or interaction["canvasCoverageRatio"] <= .98
+            or interaction["initialVisualChecksum"] == interaction["currentVisualChecksum"]
+            or interaction["runtimeAssertCount"] < 2
+            or not interaction["runtimeAssertionPassed"]
+            or not interaction["ready"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture trusted full-stage night-city hover, captured clearance drag, signed positive/negative pixel distance, 8 m buffer adjustment, keyboard nudge, and a pinned finding without automatic skyline motion: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "flowfield-paper-marbling":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

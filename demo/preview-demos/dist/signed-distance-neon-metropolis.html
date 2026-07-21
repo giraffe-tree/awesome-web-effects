@@ -1,8 +1,331 @@
-<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Signed Distance Neon Metropolis</title><style>:root{--preview-background:#030615}canvas{width:100%;height:100%}.copy{position:absolute;left:14px;top:49px;width:99px;color:#f4f5ff}.copy small{font:800 6px monospace;letter-spacing:.14em;color:#62e8ff}.copy h1{margin:8px 0;font:950 20px/.84 system-ui;letter-spacing:-.06em}.sdf{position:absolute;right:11px;bottom:11px;color:#8ef2ff;font:800 6px monospace}.scene-caption{display:none}</style>  <script type="module" crossorigin src="./assets/signed-distance-neon-metropolis-qucEezTK.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
-  <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
-  <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
-  <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
-  <link rel="modulepreload" crossorigin href="./assets/expansion-b-utils-CD_J0IHW.js">
-  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage"><canvas tabindex="0" aria-label="Signed distance fields outline a neon city"></canvas><section class="copy"><small>DISTANCE / CITY</small><h1>LIGHT KNOWS EVERY EDGE.</h1></section><span class="sdf">SDF UNION · 07</span><span class="library-badge">p5.js · signed distance city</span></main></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>p5.js — Nocturne Clearance Field</title>
+    <link rel="icon" href="data:,">
+    <style>
+      :root {
+        --preview-background: #04060a;
+        --cyan: #60f5ff;
+        --magenta: #ff4acb;
+        --amber: #ffd590;
+        color-scheme: dark;
+      }
+
+      * { box-sizing: border-box; }
+      button, input { font: inherit; }
+
+      .clearance-stage {
+        --survey-image: none;
+        position: absolute;
+        inset: 0;
+        overflow: clip;
+        isolation: isolate;
+        background: #04060a;
+        color: #f8f4e9;
+        outline: none;
+        user-select: none;
+      }
+
+      .clearance-stage::before {
+        position: absolute;
+        inset: -2%;
+        z-index: -3;
+        background-image:
+          linear-gradient(90deg, #02040ac7 0 22%, #03050a28 53%, #02040a75),
+          linear-gradient(#02040a30, #02040aa3),
+          var(--survey-image);
+        background-position: center;
+        background-size: cover;
+        filter: saturate(.78) contrast(1.08) brightness(.43);
+        transform: scale(1.045);
+        content: "";
+      }
+
+      .clearance-stage::after {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        background:
+          linear-gradient(90deg, transparent 49.8%, #ffffff0b 50%, transparent 50.2%),
+          repeating-linear-gradient(0deg, transparent 0 11px, #ffffff06 12px);
+        mix-blend-mode: screen;
+        content: "";
+        pointer-events: none;
+      }
+
+      .clearance-stage:focus-visible { box-shadow: inset 0 0 0 2px var(--cyan); }
+
+      #clearance-canvas-host {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        touch-action: none;
+        cursor: crosshair;
+      }
+
+      #clearance-canvas-host canvas {
+        display: block;
+        width: 100% !important;
+        height: 100% !important;
+        outline: none;
+      }
+
+      #clearance-canvas-host:focus-visible {
+        outline: 2px solid var(--cyan);
+        outline-offset: -4px;
+      }
+
+      .clearance-header {
+        position: absolute;
+        z-index: 5;
+        top: clamp(9px, 4.4%, 24px);
+        left: clamp(10px, 3.6%, 26px);
+        width: min(36%, 244px);
+        pointer-events: none;
+        text-shadow: 0 2px 16px #000;
+      }
+
+      .kicker,
+      .header-note,
+      .clearance-readout,
+      .probe-meta,
+      .probe-copy,
+      .clearance-controls,
+      .interaction-hint {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-weight: 800;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+      }
+
+      .kicker {
+        color: var(--cyan);
+        font-size: clamp(5px, 1.15vw, 8px);
+      }
+
+      .clearance-header h1 {
+        margin: clamp(5px, 1.2vw, 9px) 0 0;
+        font: 930 clamp(16px, 4.8vw, 35px)/.85 system-ui, sans-serif;
+        letter-spacing: -.07em;
+      }
+
+      .header-note {
+        margin: clamp(6px, 1.4vw, 10px) 0 0;
+        color: #e9edf1a8;
+        font-size: clamp(4px, .86vw, 7px);
+        line-height: 1.45;
+      }
+
+      .clearance-readout {
+        position: absolute;
+        z-index: 6;
+        top: clamp(9px, 4.4%, 24px);
+        right: clamp(9px, 3.3%, 24px);
+        width: clamp(74px, 21vw, 150px);
+        padding: clamp(7px, 1.7vw, 12px);
+        border: 1px solid #dffbff40;
+        border-radius: clamp(8px, 1.8vw, 13px);
+        background: #05080cbd;
+        box-shadow: inset 0 1px #ffffff0c, 0 16px 38px #0009;
+        backdrop-filter: blur(12px);
+        pointer-events: none;
+      }
+
+      .probe-meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 6px;
+        color: #d5e3e6a0;
+        font-size: clamp(4px, .82vw, 6px);
+      }
+
+      .probe-meta i {
+        width: clamp(5px, 1vw, 8px);
+        height: clamp(5px, 1vw, 8px);
+        border-radius: 50%;
+        background: var(--status-color, var(--cyan));
+        box-shadow: 0 0 11px var(--status-color, var(--cyan));
+      }
+
+      .clearance-readout strong {
+        display: block;
+        margin-top: clamp(5px, 1.2vw, 9px);
+        color: var(--status-color, var(--cyan));
+        font: 930 clamp(12px, 3.5vw, 25px)/.88 system-ui, sans-serif;
+        letter-spacing: -.055em;
+      }
+
+      .clearance-readout output {
+        display: block;
+        margin-top: clamp(3px, .7vw, 5px);
+        color: #f8f3e6;
+        font-size: clamp(6px, 1.4vw, 10px);
+      }
+
+      .probe-copy {
+        display: block;
+        margin-top: clamp(4px, 1vw, 7px);
+        color: #d9e1e3a0;
+        font-size: clamp(4px, .76vw, 6px);
+        line-height: 1.45;
+      }
+
+      .clearance-controls {
+        position: absolute;
+        z-index: 7;
+        right: clamp(9px, 3.3%, 24px);
+        bottom: clamp(9px, 4.6%, 24px);
+        left: clamp(9px, 3.3%, 24px);
+        display: grid;
+        grid-template-columns: auto minmax(40px, 1fr) auto auto auto;
+        align-items: center;
+        gap: clamp(4px, 1vw, 8px);
+        padding: clamp(5px, 1.15vw, 8px);
+        border: 1px solid #dbfaff36;
+        border-radius: 999px;
+        background: #03060bd6;
+        box-shadow: 0 14px 36px #000b;
+        backdrop-filter: blur(14px);
+      }
+
+      .clearance-controls label,
+      .clearance-controls output {
+        color: #dfe8e9b8;
+        font-size: clamp(4px, .82vw, 6px);
+        white-space: nowrap;
+      }
+
+      .clearance-controls output {
+        min-width: clamp(24px, 5vw, 36px);
+        color: var(--amber);
+        text-align: center;
+      }
+
+      .clearance-controls input {
+        width: 100%;
+        height: clamp(14px, 3vw, 22px);
+        margin: 0;
+        accent-color: var(--magenta);
+        cursor: ew-resize;
+      }
+
+      .clearance-controls button {
+        min-width: clamp(26px, 6.2vw, 44px);
+        height: clamp(18px, 3.8vw, 28px);
+        padding: 0 clamp(5px, 1.2vw, 9px);
+        border: 1px solid #d9f7ff45;
+        border-radius: 999px;
+        background: #10151bd9;
+        color: #edf5f5;
+        font-size: clamp(4px, .8vw, 6px);
+        cursor: pointer;
+      }
+
+      .clearance-controls button:hover,
+      .clearance-controls button:focus-visible {
+        border-color: var(--cyan);
+        outline: none;
+        color: var(--cyan);
+      }
+
+      .clearance-controls button[aria-pressed="true"] {
+        border-color: var(--magenta);
+        background: #451b43;
+        color: #ffd8f5;
+      }
+
+      .interaction-hint {
+        position: absolute;
+        z-index: 6;
+        left: clamp(10px, 3.6%, 26px);
+        bottom: clamp(43px, 18%, 82px);
+        color: #f2f4f0a3;
+        font-size: clamp(4px, .8vw, 6px);
+        pointer-events: none;
+      }
+
+      .interaction-hint b { color: var(--magenta); }
+
+      .library-badge {
+        z-index: 8;
+        top: auto;
+        right: auto;
+        bottom: clamp(42px, 17.5%, 78px);
+        left: clamp(10px, 3.6%, 26px);
+        transform: translateY(135%);
+      }
+
+      @media (max-width: 420px) {
+        .clearance-header { width: 41%; }
+        .clearance-header h1 { max-width: 100px; }
+        .header-note { display: none; }
+        .clearance-readout { width: 26%; }
+        .probe-copy { display: none; }
+        .clearance-controls { grid-template-columns: auto 1fr auto auto; }
+        .clearance-controls output { display: none; }
+        .clearance-controls button[data-action="reset"] { display: none; }
+      }
+
+      @media (max-width: 190px) {
+        .clearance-header { top: 8px; left: 8px; }
+        .clearance-header h1 { font-size: 10px; }
+        .kicker { font-size: 4px; }
+        .clearance-readout { top: 7px; right: 7px; width: 50px; padding: 5px; }
+        .clearance-readout strong { font-size: 8px; }
+        .clearance-readout output { font-size: 5px; }
+        .clearance-controls { right: 7px; bottom: 7px; left: 7px; padding: 3px; }
+        .clearance-controls label { display: none; }
+        .clearance-controls button { min-width: 24px; height: 14px; padding: 0 4px; font-size: 4px; }
+        .interaction-hint, .library-badge { display: none; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        * { scroll-behavior: auto !important; }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/signed-distance-neon-metropolis-DnF3PRPN.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+    <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
+    <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main id="clearance-stage" class="preview-stage clearance-stage" data-preview-mechanism="signed-distance-neon-metropolis">
+      <div
+        id="clearance-canvas-host"
+        tabindex="0"
+        role="application"
+        aria-label="Night-city signed-distance clearance map. Move the pointer, drag, or use arrow keys to inspect a street position."
+      ></div>
+
+      <header class="clearance-header">
+        <span class="kicker">Nocturne / right-of-way</span>
+        <h1>KEEP THE NIGHT OPEN.</h1>
+        <p class="header-note">Rooftop pixels define the city mass. Human input tests the remaining street clearance.</p>
+      </header>
+
+      <aside id="clearance-readout" class="clearance-readout" aria-live="polite">
+        <span class="probe-meta"><span>Probe <b id="probe-code">Q-01</b></span><i></i></span>
+        <strong id="clearance-verdict">READY</strong>
+        <output id="clearance-distance">— M EDGE</output>
+        <span id="clearance-detail" class="probe-copy">Move across a lane to inspect its signed margin.</span>
+      </aside>
+
+      <p class="interaction-hint"><b>Drag</b> probe · arrows nudge · adjust buffer</p>
+
+      <section class="clearance-controls" aria-label="Clearance controls">
+        <label for="clearance-buffer">Safety buffer</label>
+        <input id="clearance-buffer" type="range" min="3" max="12" step="1" value="6" aria-label="Required clearance buffer">
+        <output id="buffer-output" for="clearance-buffer">6 M</output>
+        <button type="button" data-action="pin" aria-pressed="false">Pin</button>
+        <button type="button" data-action="reset">Reset</button>
+      </section>
+
+      <span class="library-badge">p5.js · image-seeded SDF</span>
+    </main>
+  </body>
+</html>

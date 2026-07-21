@@ -43,12 +43,12 @@ export const effectExpansion150BatchA3 = [
     scores: scores(20, 20, 20, 15, 15, 10), rationaleZh: '原创 ImageGen 坡面图经过同源 fetch、精确源 SHA、浏览器与 p5 双解码，并读取为 60×36 / 2,160 像素；像素明度和色彩关系真实决定五类材质、局部风险、4,207 粒初始场以及之后的释放路径。可信 hover、捕获拖动、range、键盘和可见按钮拥有探测、加载、有限波、撤销与重置，所有状态静止等待下一次输入。'
   },
   {
-    id: 'signed-distance-neon-metropolis', order: 124, name: 'Signed distance neon metropolis', nameZh: '有符号距离霓虹都市', category: 'canvas', sourceUrl: 'https://github.com/terkelg/awesome-creative-coding',
-    difference: '每个像素计算到六座矩形建筑并集的有符号距离，以边界距离产生霓虹光晕，而非预画线框城市。',
-    behavior: { trigger: 'pointer height or animation frame', response: 'Signed distance contours illuminate building unions as the skyline shifts', timing: 'continuous analytical distance shading', layer: 'SDF city canvas' },
-    prompt: '为六个矩形建筑实现 box SDF 与 min-union，在低分辨率栅格中按距离绝对值绘制霓虹边缘。',
-    implementation: p5("new p5(p => { p.draw = () => rasterSdfUnion(p.drawingContext, buildings, skylineShift); });", 'https://github.com/terkelg/awesome-creative-coding'),
-    scores: scores(19, 19, 18, 15, 15, 10), rationaleZh: '分析距离场直接形成建筑轮廓与光晕，机制与画面高度一致。'
+    id: 'signed-distance-neon-metropolis', order: 124, name: 'Nocturne right-of-way clearance', nameZh: 'Nocturne 夜间通行余量检查', category: 'canvas', sourceUrl: 'https://github.com/terkelg/awesome-creative-coding',
+    difference: '把六个假想矩形的自动霓虹轮廓改为真实夜间俯视图的可查询通行余量：暖色屋顶像素形成负距离建筑质量，暗色街道形成正距离开放空间。',
+    behavior: { trigger: 'trusted hover, captured mouse/touch/pen drag, keyboard, native safety-buffer range, or visible Pin/Reset control', response: 'Move a probe through the pixel-derived signed-distance field, compare the measured margin with the selected buffer, and retain a CLEAR, TIGHT, or BLOCKED finding', timing: 'human-owned finite redraws that remain static between inputs', layer: 'full-stage p5 source atlas, signed-distance contours, probe, clearance verdict, safety buffer, and pin state' },
+    prompt: '制作一个全舞台夜间城市通行余量检查器：同源加载并精确校验一张 ImageGen 俯视城市图，读取 128×72 像素，以暖亮屋顶生成建筑占用掩膜，以暗色街道生成开放空间，再计算带正负号的距离场、建筑连通块和边界。真人通过 hover、捕获式鼠标/触控/笔拖动、键盘、原生 safety-buffer range 与 Pin/Reset 控件移动探针，实时给出 CLEAR/TIGHT/BLOCKED 并保留结果；首帧与每次操作后必须静止，禁止自动 skyline、播放、排练、fallback、合成输入或预览时钟变更。',
+    implementation: p5("p.noLoop(); const occupancy = sourcePixels.map(pixel => warmRoofMask(pixel)); const sdf = signedDistanceTransform(occupancy); canvas.addEventListener('pointermove', queryOnlyFromTrustedHumanInput); p.redraw();", 'https://github.com/processing/p5.js'),
+    scores: scores(20, 20, 20, 15, 15, 10), rationaleZh: '原创 ImageGen 夜间俯视城市图经同源 fetch、精确源 SHA、浏览器与 p5 双解码，并读取为 128×72 / 9,216 像素；3,695 个建筑单元、5,521 个街道单元、22 个建筑质量块和正负距离共同生成真实查询场。可信 hover、捕获拖拽、键盘、range 与 Pin/Reset 决定探针、缓冲和结论，Canvas 全舞台覆盖且没有自动动画。'
   },
   {
     id: 'flowfield-paper-marbling', order: 125, name: 'Mizu Press marbling proof', nameZh: 'Mizu Press 纸纹打样台', category: 'canvas', sourceUrl: 'https://github.com/processing/p5.js',

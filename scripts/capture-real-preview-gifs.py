@@ -1258,6 +1258,49 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.locator('.sample-control[data-sample="reset"]').click()
             elif index == 35:
                 page.wait_for_timeout(320)
+        elif demo["id"] == "draggable-rigid-body-poster-pile":
+            if index == 2:
+                page.locator('#next-poster').click()
+            elif index == 4:
+                page.locator('#place-poster').click()
+            elif index == 6:
+                page.locator('#reset-posters').click()
+            elif index == 8:
+                page.locator('#poster-canvas').focus()
+                page.keyboard.press("3")
+            elif index == 9:
+                page.keyboard.press("ArrowLeft")
+            elif index == 10:
+                page.keyboard.press("Shift+ArrowLeft")
+            elif index == 11:
+                page.keyboard.press("Enter")
+            elif index == 13:
+                page.locator('#reset-posters').click()
+            elif index == 15:
+                page.mouse.move(235, 105)
+                page.mouse.down()
+            elif index == 16:
+                page.mouse.move(210, 100, steps=2)
+            elif index == 17:
+                page.mouse.move(174, 94, steps=2)
+            elif index == 18:
+                page.mouse.move(132, 88, steps=2)
+            elif index == 19:
+                page.mouse.move(98, 82, steps=2)
+            elif index == 20:
+                page.mouse.up()
+            elif index == 22:
+                page.wait_for_timeout(260)
+            elif index == 25:
+                page.wait_for_timeout(420)
+            elif index == 28:
+                page.wait_for_timeout(520)
+            elif index == 30:
+                page.locator('#previous-poster').click()
+            elif index == 32:
+                page.locator('#place-poster').click()
+            elif index == 35:
+                page.wait_for_timeout(260)
         elif demo["id"] == "four-corner-hover-crop-marks":
             if index == round(.35 * args.fps):
                 page.mouse.move(92, 78)
@@ -2712,6 +2755,39 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["renderIgnoresPreviewClock"] is not True
         ):
             raise RuntimeError(f"{demo['id']} did not capture trusted facade/pool/horizon QA probes, pointer drag, keyboard sampling, input-derived WebGL recovery, and explicit reset: {interaction!r}")
+    elif demo["id"] == "draggable-rigid-body-poster-pile":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__POSTER_TABLE_STATE__")
+        physics = page.evaluate("window.__POSTER_TABLE_PHYSICS__")
+        if (
+            not assertion
+            or interaction["automaticPath"]
+            or interaction["captureClockDriven"]
+            or interaction["syntheticEvents"]
+            or not interaction["imagesReady"]
+            or interaction["imageDimensions"] != [[639, 1000], [639, 1000], [800, 1000], [800, 1000]]
+            or interaction["inputCount"] < 11
+            or interaction["pointerInputCount"] < 1
+            or interaction["keyboardInputCount"] < 4
+            or interaction["controlInputCount"] < 5
+            or interaction["throwCount"] < 1
+            or interaction["resetCount"] < 2
+            or interaction["phase"] != "idle"
+            or interaction["selectedIndex"] != 2
+            or interaction["shortlistId"] != "paper"
+            or interaction["lastSource"] != "control-review"
+            or interaction["lastPointerType"] != "mouse"
+            or interaction["pointerCaptured"]
+            or interaction["motionActive"]
+            or interaction["activeBodyId"] is not None
+            or physics["solver"] != "oriented-rectangle-sat"
+            or not physics["impulseResponse"]
+            or not physics["angularImpulse"]
+            or not physics["wallCollisions"]
+            or physics["collisionCount"] < 1
+            or physics["integrationSteps"] < 1
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture trusted controls, keyboard placement, a real captured pointer throw, collisions, and an explicit final shortlist: assertion={assertion!r}; interaction={interaction!r}; physics={physics!r}")
     elif demo["id"] == "four-corner-hover-crop-marks":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         if (

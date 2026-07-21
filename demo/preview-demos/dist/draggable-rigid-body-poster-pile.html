@@ -1,8 +1,355 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p5.js — Draggable Rigid-body Poster Pile</title><style>
-:root{--preview-background:#d8d3c7;color-scheme:light}#poster-canvas{position:absolute;inset:0;width:100%;height:100%;cursor:grab;touch-action:none}.poster-copy{position:absolute;z-index:4;left:13px;top:46px;width:70px;color:#20241f;pointer-events:none}.poster-copy small{font:800 6px/1 ui-monospace;letter-spacing:.12em}.poster-copy h1{margin:9px 0 0;font:950 16px/.82 system-ui;letter-spacing:-.06em}.gravity-label{position:absolute;z-index:4;right:12px;bottom:11px;color:#3740389c;font:750 6px/1 ui-monospace;letter-spacing:.1em}.library-badge{color:#232a23;background:#eee9dcd9;border-color:#20282020}.scene-caption{display:none}</style>  <script type="module" crossorigin src="./assets/draggable-rigid-body-poster-pile-CCvVxVIz.js"></script>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>p5.js — Human-operated Poster Selection Table</title>
+  <style>
+    :root {
+      --preview-background: #d6d0c2;
+      color-scheme: light;
+    }
+
+    * { box-sizing: border-box; }
+
+    body { overflow: hidden; }
+
+    .poster-stage {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      min-height: 100%;
+      overflow: hidden;
+      isolation: isolate;
+      background: #d6d0c2;
+      color: #171a17;
+      user-select: none;
+    }
+
+    #poster-host,
+    #poster-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    #poster-canvas {
+      display: block;
+      cursor: grab;
+      touch-action: none;
+      outline: none;
+    }
+
+    .poster-stage[data-phase="dragging"] #poster-canvas { cursor: grabbing; }
+
+    #poster-canvas:focus-visible {
+      box-shadow: inset 0 0 0 3px #171a17, inset 0 0 0 6px #dfff46;
+    }
+
+    .desk-header,
+    .desk-status,
+    .desk-instructions,
+    .poster-controls,
+    .library-badge {
+      position: absolute;
+      z-index: 5;
+    }
+
+    .desk-header {
+      top: clamp(15px, 4.7vh, 32px);
+      left: clamp(15px, 4vw, 30px);
+      width: min(38%, 274px);
+      pointer-events: none;
+    }
+
+    .desk-kicker {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 13px;
+      font: 780 clamp(7px, .95vw, 11px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .desk-kicker::before {
+      width: clamp(18px, 3.2vw, 34px);
+      height: 2px;
+      content: "";
+      background: #171a17;
+    }
+
+    .desk-header h1 {
+      margin: 0;
+      max-width: 7.2em;
+      font: 900 clamp(26px, 5.9vw, 57px)/.83 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: -.073em;
+      text-transform: uppercase;
+    }
+
+    .desk-header h1 span { color: #4f4aff; }
+
+    .desk-header p {
+      max-width: 240px;
+      margin: 14px 0 0;
+      font: 630 clamp(9px, 1.25vw, 13px)/1.3 system-ui, sans-serif;
+      color: #31362f;
+    }
+
+    .desk-status {
+      top: clamp(14px, 4.5vh, 30px);
+      right: clamp(14px, 3vw, 25px);
+      display: grid;
+      min-width: clamp(110px, 20vw, 164px);
+      padding: 10px 12px 11px;
+      border: 1px solid rgb(23 26 23 / 35%);
+      background: rgb(243 239 225 / 88%);
+      box-shadow: 0 7px 25px rgb(28 30 24 / 8%);
+      backdrop-filter: blur(8px);
+      pointer-events: none;
+    }
+
+    .status-label,
+    .status-meta {
+      font: 750 clamp(6px, .8vw, 9px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+
+    .status-label { color: #595e55; }
+
+    #selection-output {
+      margin: 5px 0 7px;
+      font: 860 clamp(12px, 1.8vw, 20px)/1 system-ui, sans-serif;
+      letter-spacing: -.04em;
+    }
+
+    .status-meta {
+      display: flex;
+      justify-content: space-between;
+      padding-top: 7px;
+      border-top: 1px solid rgb(23 26 23 / 18%);
+      color: #343932;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #65a95f;
+      box-shadow: 0 0 0 3px rgb(101 169 95 / 16%);
+    }
+
+    .poster-stage:not([data-phase="idle"]) .status-dot {
+      background: #ff5d38;
+      box-shadow: 0 0 0 3px rgb(255 93 56 / 16%);
+    }
+
+    .poster-controls {
+      right: clamp(14px, 3vw, 25px);
+      bottom: clamp(13px, 3.4vh, 23px);
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .poster-controls button {
+      min-width: 38px;
+      min-height: 32px;
+      padding: 0 11px;
+      border: 1px solid rgb(23 26 23 / 42%);
+      border-radius: 999px;
+      color: #171a17;
+      background: rgb(243 239 225 / 90%);
+      font: 790 clamp(7px, .85vw, 10px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+    }
+
+    .poster-controls button:hover,
+    .poster-controls button:focus-visible {
+      border-color: #171a17;
+      background: #dfff46;
+      outline: none;
+    }
+
+    .poster-controls .place-button {
+      color: #f5f1e5;
+      background: #171a17;
+    }
+
+    .poster-controls .place-button:hover,
+    .poster-controls .place-button:focus-visible { color: #171a17; }
+
+    .desk-instructions {
+      left: clamp(15px, 4vw, 30px);
+      bottom: clamp(15px, 4vh, 28px);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      max-width: 45%;
+      pointer-events: none;
+    }
+
+    .desk-instructions strong {
+      font: 800 clamp(7px, .85vw, 10px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .desk-instructions span {
+      font: 600 clamp(8px, 1vw, 11px)/1.25 system-ui, sans-serif;
+      color: #4c5149;
+    }
+
+    .library-badge {
+      right: clamp(14px, 3vw, 25px);
+      top: 50%;
+      transform: rotate(90deg) translateX(50%);
+      transform-origin: right center;
+      color: #171a17;
+      background: transparent;
+      border-color: rgb(23 26 23 / 24%);
+      pointer-events: none;
+    }
+
+    @media (max-width: 420px) {
+      .desk-header {
+        top: 10px;
+        left: 10px;
+        width: 39%;
+      }
+
+      .desk-kicker { margin-bottom: 6px; }
+      .desk-header h1 { font-size: clamp(17px, 7.8vw, 30px); }
+      .desk-header p { display: none; }
+
+      .desk-status {
+        top: 9px;
+        right: 9px;
+        min-width: 91px;
+        padding: 7px 8px;
+      }
+
+      #selection-output { margin: 3px 0 4px; }
+      .status-meta { padding-top: 4px; }
+
+      .poster-controls {
+        right: 8px;
+        bottom: 8px;
+        gap: 3px;
+      }
+
+      .poster-controls button {
+        min-width: 28px;
+        min-height: 23px;
+        padding: 0 7px;
+      }
+
+      .desk-instructions {
+        left: 10px;
+        bottom: 9px;
+        max-width: 35%;
+      }
+
+      .desk-instructions span,
+      .library-badge { display: none; }
+    }
+
+    @media (max-width: 180px), (max-height: 100px) {
+      .desk-header {
+        top: 5px;
+        left: 6px;
+        width: 43%;
+      }
+
+      .desk-kicker {
+        gap: 3px;
+        margin-bottom: 3px;
+        font-size: 4px;
+      }
+
+      .desk-kicker::before { width: 7px; height: 1px; }
+      .desk-header h1 { font-size: 10px; line-height: .85; }
+
+      .desk-status {
+        top: 4px;
+        right: 4px;
+        min-width: 52px;
+        padding: 4px;
+      }
+
+      .status-label,
+      .status-meta { font-size: 3.5px; }
+      #selection-output { margin: 2px 0; font-size: 6px; }
+      .status-dot { width: 3px; height: 3px; box-shadow: none; }
+
+      .poster-controls {
+        right: 3px;
+        bottom: 3px;
+        gap: 2px;
+      }
+
+      .poster-controls button {
+        min-width: 16px;
+        min-height: 12px;
+        padding: 0 3px;
+        border-radius: 8px;
+        font-size: 3.5px;
+      }
+
+      .desk-instructions {
+        left: 5px;
+        bottom: 4px;
+      }
+
+      .desk-instructions strong { font-size: 3.5px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .poster-controls button { transition: none; }
+    }
+  </style>
+  <script type="module" crossorigin src="./assets/draggable-rigid-body-poster-pile-B_i32nPq.js"></script>
   <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
   <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
   <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
-  <link rel="modulepreload" crossorigin href="./assets/batch-b-utils-CmA_lC0Z.js">
   <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage" data-preview-mechanism="p5-poster-physics"><div id="poster-host"><canvas id="poster-canvas" tabindex="0" aria-label="Drag the top poster or press arrow keys to disturb the pile"></canvas></div><section class="poster-copy"><small>PHYSICS / PRINT</small><h1>POSTERS WITH WEIGHT.</h1></section><span class="gravity-label">GRAVITY 9.81</span><span class="library-badge">p5.js · rigid pile</span></main></body></html>
+</head>
+<body>
+  <main id="poster-stage" class="poster-stage" aria-label="Interactive arts festival poster selection table" data-preview-mechanism="p5-human-dragged-rigid-poster-table" data-phase="idle" data-selected="3" data-shortlist="none" data-automatic-path="false" data-capture-clock-driven="false">
+    <div id="poster-host">
+      <canvas id="poster-canvas" tabindex="0" aria-label="Drag and throw a poster into the review lane. Use number keys or previous and next controls to choose a poster, arrow keys to move it, Shift plus arrows to rotate it, Enter to shortlist, and Escape to reset."></canvas>
+    </div>
+
+    <header class="desk-header">
+      <div class="desk-kicker">Open call · 26</div>
+      <h1>Pick the poster that <span>moves.</span></h1>
+      <p>Drag a print out of the pile, throw it across the table, then place one in the review lane.</p>
+    </header>
+
+    <section class="desk-status" aria-label="Poster selection status" aria-live="polite">
+      <span class="status-label">Current decision</span>
+      <output id="selection-output">Nothing shortlisted</output>
+      <span class="status-meta"><span id="motion-output">Table still</span><i class="status-dot" aria-hidden="true"></i></span>
+    </section>
+
+    <nav class="poster-controls" aria-label="Poster selection controls">
+      <button id="previous-poster" type="button" aria-label="Select previous poster">Prev</button>
+      <button id="next-poster" type="button" aria-label="Select next poster">Next</button>
+      <button id="place-poster" class="place-button" type="button" aria-label="Place selected poster in review lane">Review</button>
+      <button id="reset-posters" type="button" aria-label="Reset poster pile">Reset</button>
+    </nav>
+
+    <div class="desk-instructions" aria-hidden="true">
+      <strong>Drag · throw · compare</strong>
+      <span>Pointer / touch / pen · arrows move · Shift rotates</span>
+    </div>
+
+    <span class="library-badge">p5.js · image-backed rigid bodies</span>
+  </main>
+</body>
+</html>

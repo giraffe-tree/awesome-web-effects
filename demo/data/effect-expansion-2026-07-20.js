@@ -1366,41 +1366,41 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "draggable-rigid-body-poster-pile",
-    "name": "Draggable rigid-body poster pile",
-    "nameZh": "可抓取刚体海报堆",
+    "name": "Image-backed festival poster review table",
+    "nameZh": "图像驱动的艺术节海报评审桌",
     "category": "canvas",
     "sourceUrl": "https://github.com/liabru/matter-js",
-    "difference": "海报受重力、旋转和碰撞传递；Muuri 只在布局网格中避让，不模拟刚体。",
+    "difference": "四张原创图像海报以定向矩形 SAT 发生位置修正、线性/摩擦/角冲量和墙面反弹，并能被真人甩入评审区。",
     "behavior": {
-      "trigger": "pointer drag / gravity",
-      "response": "Drop, collide, grab, and throw typographic poster bodies",
-      "timing": "fixed-step persistent physics",
-      "layer": "Canvas 2D world"
+      "trigger": "trusted pointer drag/release, keyboard impulses, or explicit selection controls",
+      "response": "Grab, push, throw, collide, rotate, and shortlist one image-backed festival poster",
+      "timing": "static first frame; input-started requestAnimationFrame simulation with capped delta and three collision substeps",
+      "layer": "full-bleed p5 Canvas table, four image-textured rigid bodies, review lane, and shortlist controls"
     },
     "implementation": {
       "projectId": "processing-p5-js",
       "projectUrl": "https://github.com/processing/p5.js",
       "library": "p5@2.3.0",
       "renderer": "canvas2d",
-      "snippet": "new p5(p => { p.setup = () => p.createCanvas(innerWidth, innerHeight); p.draw = () => stepPosterBodies(p); });",
+      "snippet": "const hit = collisionBetween(a,b); if (hit) resolveCollision(a,b,draggedBody);",
       "referenceUrl": "https://github.com/liabru/matter-js"
     },
     "scores": {
-      "creativity": 17,
-      "artDirection": 18,
+      "creativity": 19,
+      "artDirection": 20,
       "motion": 19,
-      "clarity": 15,
+      "clarity": 16,
       "inspiration": 15,
       "evidence": 9,
-      "total": 93
+      "total": 96
     },
-    "rationaleZh": "刚体碰撞和抓取让编辑海报具备可复述的物理行为。",
+    "rationaleZh": "四种完全不同的原创海报让抓取、层级、碰撞和 shortlist 选择都有可辨对象；真实 SAT 与冲量则让投掷结果来自操作而非预演。",
     "batch": "B",
-    "demo": "六张窄海报落入框内，用户抓起一张再次砸入堆栈。",
-    "capture": "固定时间步预落 1s→真实拖拽海报→释放碰撞→等待静止。",
+    "demo": "虚构艺术节的四张 ImageGen 海报在 p5 Canvas 评审桌上形成真实刚体堆；用户可用鼠标/触控/笔抓取甩投并推动其他海报，也可用键盘施加位移/角冲量或直接送入 review lane。",
+    "capture": "真实按钮选择与 Review、键盘选片/位移/角冲量/Enter、显式 Reset，再捕获鼠标把顶层海报甩入 review lane，等待碰撞衰减后以控制按钮确认最终 shortlist。",
     "risk": {
       "level": "medium",
-      "detail": "必须固定初始姿态和时间步，禁止随机挑选好看录屏。"
+      "detail": "必须使用本地解码图片和真实碰撞响应；固定初始姿态，禁止自动路径、合成事件或捕获时钟驱动。"
     },
     "observedImplementation": {
       "projectId": "liabru-matter-js",

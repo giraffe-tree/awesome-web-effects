@@ -1460,23 +1460,23 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "pointer-injected-gpu-fluid",
-    "name": "Pointer-injected GPU fluid",
-    "nameZh": "指针注入 GPU 流体",
+    "name": "Stage haze colour lab",
+    "nameZh": "舞台烟雾配色实验室",
     "category": "webgl",
     "sourceUrl": "https://github.com/PavelDoGreat/WebGL-Fluid-Simulation",
-    "difference": "指针把速度和染料真实注入流场；现有粒子涡旋和星空不解流体方程。",
+    "difference": "真人拖拽把速度、压力和三种灯光 gel 染料注入真实双 FBO 流场，并能暂停评估、保存配色和清场重做。",
     "behavior": {
-      "trigger": "pointer drag",
-      "response": "Inject velocity and dye into an advecting fluid framebuffer",
-      "timing": "continuous dissipating simulation",
-      "layer": "full-bleed WebGL canvas"
+      "trigger": "trusted mouse/touch/pen drag, keyboard injector, gel controls, and explicit pause/save/clear",
+      "response": "Inject velocity and cyan/rose/amber dye, evaluate the dissipating mix, then save or clear the lighting look",
+      "timing": "static first frame; simulation advances only for queued human splats and their finite dissipating consequence",
+      "layer": "full-bleed regl canvas, velocity/dye/pressure/divergence framebuffers, injector reticle, and colour-review controls"
     },
     "implementation": {
       "projectId": "regl-project-regl",
       "projectUrl": "https://github.com/regl-project/regl",
       "library": "regl@2.1.1",
       "renderer": "webgl",
-      "snippet": "const drawFluid = regl({ frag: fluidFragment, uniforms: { time: regl.prop('time'), pointer: regl.prop('pointer') }, count: 3 });",
+      "snippet": "advectVelocity(); computeDivergence(); for(let i=0;i<9;i++) solvePressure(); subtractPressure(); advectDye();",
       "referenceUrl": "https://github.com/PavelDoGreat/WebGL-Fluid-Simulation"
     },
     "scores": {
@@ -1485,16 +1485,16 @@ export const effectExpansion100Specs = [
       "motion": 20,
       "clarity": 15,
       "inspiration": 15,
-      "evidence": 9,
-      "total": 98
+      "evidence": 10,
+      "total": 99
     },
-    "rationaleZh": "卷吸、混色和耗散构成强烈且独立的生成材质。",
+    "rationaleZh": "把流体炫技变成舞台烟雾配色任务：拖拽速度与压力进入真实流体管线，混色状态、暂停评估和 Save Look 让结果可使用。",
     "batch": "B",
-    "demo": "深蓝流体中以固定紫、橙染料画两次 S 曲线。",
-    "capture": "固定模拟分辨率→执行两条 pointer 轨迹→等待涡旋耗散→复位。",
+    "demo": "Stage Haze Colour Lab 使用 regl 的 velocity/dye ping-pong、divergence、九次 pressure Jacobi、pressure-gradient 校正和耗散；真人注入 CYAN/ROSE/AMBER，Pause/Resume 评估并 Save Look。",
+    "capture": "真实鼠标双向拖拽注入 CYAN 与 ROSE，显式 Pause/Resume；方向键移动键盘 injector、3 选择 AMBER、Space 注入，随后 Save Look 并以 Clear 返回静止空场，断言全程无自动路径。",
     "risk": {
       "level": "high",
-      "detail": "GPU 差异和时间步会影响复现；需固定输入并逐机验收。"
+      "detail": "必须保留真实 framebuffer 流体管线和可信输入账本；自动 splat、自动路径、CSS 烟雾或 preview-clock 注入均不合格。"
     },
     "observedImplementation": {
       "projectId": "paveldogreat-webgl-fluid",

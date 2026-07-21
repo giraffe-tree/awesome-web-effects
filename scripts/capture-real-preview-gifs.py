@@ -1344,6 +1344,58 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.locator('#density-down').click()
             elif index == 35:
                 page.locator('#lock-button').click()
+        elif demo["id"] == "pointer-injected-gpu-fluid":
+            if index == 2:
+                page.mouse.move(92, 132)
+                page.mouse.down()
+            elif index == 3:
+                page.mouse.move(122, 116, steps=2)
+            elif index == 4:
+                page.mouse.move(152, 98, steps=2)
+            elif index == 5:
+                page.mouse.move(180, 82, steps=2)
+            elif index == 6:
+                page.mouse.move(204, 70, steps=2)
+            elif index == 7:
+                page.mouse.up()
+            elif index == 9:
+                page.wait_for_timeout(260)
+            elif index == 10:
+                page.locator('.gel[data-gel="magenta"]').click()
+            elif index == 11:
+                page.mouse.move(236, 126)
+                page.mouse.down()
+            elif index == 12:
+                page.mouse.move(212, 108, steps=2)
+            elif index == 13:
+                page.mouse.move(184, 92, steps=2)
+            elif index == 14:
+                page.mouse.move(154, 76, steps=2)
+            elif index == 15:
+                page.mouse.move(126, 62, steps=2)
+            elif index == 16:
+                page.mouse.up()
+            elif index == 18:
+                page.locator('#pause-control').click()
+            elif index == 20:
+                page.locator('#pause-control').click()
+            elif index == 22:
+                page.locator('#fluid-canvas').focus()
+                page.keyboard.press("ArrowRight")
+            elif index == 23:
+                page.keyboard.press("ArrowUp")
+            elif index == 24:
+                page.keyboard.press("3")
+            elif index == 25:
+                page.keyboard.press("Space")
+            elif index == 27:
+                page.locator('#save-control').click()
+            elif index == 29:
+                page.wait_for_timeout(260)
+            elif index == 31:
+                page.locator('#clear-control').click()
+            elif index == 35:
+                page.wait_for_timeout(320)
         elif demo["id"] == "four-corner-hover-crop-marks":
             if index == round(.35 * args.fps):
                 page.mouse.move(92, 78)
@@ -2873,6 +2925,52 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["redrawRequestCount"] < 16
         ):
             raise RuntimeError(f"{demo['id']} did not capture a trusted pointer/keyboard art-direction pass, parameter changes, reset, and explicit sleeve lock: {interaction!r}")
+    elif demo["id"] == "pointer-injected-gpu-fluid":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__FLUID_INTERACTION_STATE__")
+        input_state = page.locator('.preview-stage').get_attribute('data-input-state')
+        if (
+            not assertion
+            or interaction["task"] != "stage-haze-colour-mix-review"
+            or interaction["acceptedInputs"] != ["mouse", "touch", "pen", "keyboard", "control"]
+            or interaction["automaticPath"]
+            or interaction["automaticInjection"]
+            or interaction["previewClockDriven"]
+            or interaction["syntheticEvents"]
+            or not interaction["userInputRequired"]
+            or not interaction["initialFrameStatic"]
+            or not interaction["initialChecksumStable"]
+            or interaction["inputCount"] < 21
+            or interaction["pointerInputCount"] < 12
+            or interaction["keyboardInputCount"] < 4
+            or interaction["controlInputCount"] < 5
+            or interaction["pointerCaptureCount"] < 2
+            or interaction["pointerReleaseCount"] < 2
+            or interaction["pointerMoveInjectionCount"] < 8
+            or interaction["keyboardInjectionCount"] < 1
+            or interaction["gelSelectionCount"] < 2
+            or interaction["pauseToggleCount"] < 2
+            or interaction["saveCount"] < 1
+            or interaction["clearCount"] < 1
+            or interaction["totalInjections"] < 11
+            or interaction["maxInjections"] < 11
+            or interaction["simulationSteps"] < 10
+            or interaction["framebufferPasses"] < 100
+            or interaction["selectedGel"] != "amber"
+            or interaction["paused"]
+            or interaction["saved"]
+            or interaction["pointerDown"]
+            or interaction["pointerId"] is not None
+            or interaction["pendingSplats"]
+            or interaction["injections"] != 0
+            or any(interaction["gelWeights"].values())
+            or interaction["activeFrames"] != 0
+            or interaction["lastInputKind"] != "control"
+            or interaction["lastInputSource"] != "control-clear"
+            or interaction["lastInputTrusted"] is not True
+            or input_state != "idle"
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture trusted bidirectional pointer colour injection, keyboard injection, pause/resume, save, and explicit clear on the real framebuffer pipeline: assertion={assertion!r}; input_state={input_state!r}; interaction={interaction!r}")
     elif demo["id"] == "four-corner-hover-crop-marks":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         if (

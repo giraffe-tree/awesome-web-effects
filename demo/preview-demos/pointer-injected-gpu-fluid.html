@@ -3,30 +3,209 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>regl — Pointer-injected GPU Fluid</title>
+    <title>regl — Stage Haze Colour Lab</title>
     <link rel="stylesheet" href="./shared.css" />
     <style>
-      :root { --preview-background: #03040a; }
-      #fluid-canvas { position: absolute; inset: 0; width: 100%; height: 100%; cursor: crosshair; }
-      .fluid-copy { position: absolute; z-index: 4; left: 14px; top: 49px; width: 105px; color: white; pointer-events: none; }
-      .fluid-copy p { margin: 0; color: #93a0c2; font: 750 6px/1.35 ui-monospace, monospace; letter-spacing: .11em; text-transform: uppercase; }
-      .fluid-copy h1 { margin: 7px 0 0; font: 900 21px/.82 system-ui, sans-serif; letter-spacing: -.065em; }
-      .inject-reticle { position: absolute; z-index: 5; width: 18px; height: 18px; border: 1px solid #fff9; border-radius: 50%; translate: -50% -50%; pointer-events: none; }
-      .inject-reticle::before, .inject-reticle::after { content: ''; position: absolute; left: 50%; top: 50%; background: white; translate: -50% -50%; }
-      .inject-reticle::before { width: 26px; height: 1px; }
-      .inject-reticle::after { width: 1px; height: 26px; }
-      .fluid-meter { position: absolute; z-index: 4; right: 12px; bottom: 13px; color: #c9d3eea6; font: 700 6px/1 ui-monospace, monospace; letter-spacing: .12em; pointer-events: none; }
-      .library-badge { background: #070914b8; }
+      :root {
+        --preview-background: #05070a;
+        --ink: #f1f5f5;
+        --muted: #8b999b;
+        --line: rgba(229, 244, 242, .14);
+        --panel: rgba(7, 11, 13, .78);
+      }
+      * { box-sizing: border-box; }
+      body { overflow: hidden; background: var(--preview-background); color: var(--ink); }
+      .preview-stage { background: #05070a; isolation: isolate; }
+      #fluid-canvas {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        cursor: crosshair;
+        touch-action: none;
+      }
+      #fluid-canvas:focus-visible { outline: 1px solid #dffdf8; outline-offset: -4px; }
+      .chrome { position: absolute; z-index: 3; inset: 0; pointer-events: none; }
+      .topbar {
+        position: absolute;
+        top: 12px;
+        left: 14px;
+        right: 14px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .identity { display: flex; align-items: center; gap: 9px; min-width: 0; }
+      .mark {
+        width: 8px;
+        height: 8px;
+        border: 2px solid #ebf7f5;
+        border-radius: 50%;
+        box-shadow: inset 0 0 0 1px #05070a;
+      }
+      .eyebrow, .micro {
+        margin: 0;
+        font: 720 6px/1.3 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .13em;
+        text-transform: uppercase;
+      }
+      .identity .micro { color: var(--muted); margin-top: 2px; }
+      .controls { display: flex; gap: 4px; pointer-events: auto; }
+      button {
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: rgba(4, 8, 10, .67);
+        color: #c6d0d0;
+        font: 750 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .09em;
+        text-transform: uppercase;
+        min-height: 22px;
+        padding: 0 8px;
+        backdrop-filter: blur(8px);
+      }
+      button:hover { border-color: rgba(229, 244, 242, .36); color: white; }
+      button:focus-visible { outline: 1px solid white; outline-offset: 2px; }
+      button:disabled { opacity: .35; cursor: not-allowed; }
+      #save-control:not(:disabled) { background: #e7f3f0; color: #081012; border-color: #e7f3f0; }
+      .intro {
+        position: absolute;
+        left: 14px;
+        top: 52px;
+        width: min(202px, 48vw);
+        text-shadow: 0 2px 22px #000;
+      }
+      .intro h1 { margin: 4px 0 7px; font: 720 clamp(18px, 4.3vw, 37px)/.88 system-ui, sans-serif; letter-spacing: -.065em; }
+      .intro p { margin: 0; max-width: 185px; color: #9aaaaa; font: 600 7px/1.4 system-ui, sans-serif; }
+      .dock {
+        position: absolute;
+        left: 14px;
+        right: 14px;
+        bottom: 13px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 10px;
+      }
+      .palette { display: flex; align-items: center; gap: 4px; pointer-events: auto; }
+      .gel {
+        display: grid;
+        grid-template-columns: 8px auto;
+        align-items: center;
+        gap: 5px;
+        min-width: 58px;
+        justify-content: start;
+      }
+      .gel::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--gel); box-shadow: 0 0 11px color-mix(in srgb, var(--gel) 72%, transparent); }
+      .gel[aria-pressed="true"] { border-color: rgba(255,255,255,.68); color: white; background: rgba(14, 22, 24, .9); }
+      .status {
+        min-width: 112px;
+        padding-left: 10px;
+        border-left: 1px solid var(--line);
+        text-align: right;
+      }
+      .status-output { margin: 3px 0 0; font: 720 10px/1 system-ui, sans-serif; letter-spacing: -.02em; }
+      .status-detail { margin: 4px 0 0; color: var(--muted); font: 700 6px/1 ui-monospace, monospace; letter-spacing: .08em; text-transform: uppercase; }
+      .reticle {
+        --reticle-color: #31dff3;
+        position: absolute;
+        z-index: 2;
+        left: 50%;
+        top: 55%;
+        width: 19px;
+        height: 19px;
+        border: 1px solid color-mix(in srgb, var(--reticle-color) 74%, transparent);
+        border-radius: 50%;
+        translate: -50% -50%;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 120ms ease;
+      }
+      .reticle::before, .reticle::after { content: ''; position: absolute; inset: 50% auto auto 50%; background: var(--reticle-color); translate: -50% -50%; }
+      .reticle::before { width: 25px; height: 1px; }
+      .reticle::after { width: 1px; height: 25px; }
+      .reticle[data-visible="true"] { opacity: .84; }
+      .reticle[data-injecting="true"] { box-shadow: 0 0 18px var(--reticle-color); scale: .86; }
+      .state-pill {
+        position: absolute;
+        left: 50%;
+        top: 14px;
+        translate: -50% 0;
+        padding: 5px 8px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: var(--panel);
+        color: #a9b5b4;
+        font: 700 6px/1 ui-monospace, monospace;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        backdrop-filter: blur(8px);
+      }
+      .state-pill[data-state="mixing"] { color: #edf8f6; }
+      .state-pill[data-state="saved"] { color: #97f5cc; border-color: rgba(151,245,204,.35); }
+      .scene-caption, .library-badge { display: none; }
+      @media (max-width: 360px) {
+        .topbar { top: 7px; left: 8px; right: 8px; }
+        .identity .micro, .intro p, .state-pill { display: none; }
+        .intro { left: 8px; top: 38px; width: 120px; }
+        .intro h1 { font-size: 19px; }
+        .dock { left: 8px; right: 8px; bottom: 7px; }
+        button { min-height: 20px; padding: 0 6px; font-size: 5px; }
+        .gel { grid-template-columns: 7px; min-width: 21px; width: 21px; padding: 0 6px; }
+        .gel span { display: none; }
+        .status { min-width: 83px; }
+        .status-output { font-size: 8px; }
+        .status-detail { font-size: 5px; }
+      }
+      @media (max-width: 180px) {
+        .intro { display: none; }
+        .mark { width: 7px; height: 7px; }
+        .identity .eyebrow { display: none; }
+        .controls { gap: 2px; }
+        button { padding: 0 4px; }
+        .dock { align-items: center; }
+        .status { display: none; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .reticle { transition: none; }
+      }
     </style>
   </head>
   <body>
-    <main class="preview-stage" data-preview-mechanism="regl-pointer-fluid">
-      <canvas id="fluid-canvas" tabindex="0" aria-label="Move the pointer or use arrow keys to inject color into the GPU fluid field"></canvas>
-      <section class="fluid-copy"><p>Velocity / dye injection</p><h1>TOUCH<br />THE FLOW</h1></section>
-      <div class="inject-reticle" id="inject-reticle" aria-hidden="true"></div>
-      <span class="fluid-meter" id="fluid-meter">CURL 0.00</span>
-      <span class="library-badge">regl · fragment field</span>
-      <span class="scene-caption">pointer pressure bends the chromatic current</span>
+    <main class="preview-stage" data-preview-mechanism="regl-framebuffer-fluid" data-input-state="idle">
+      <canvas id="fluid-canvas" tabindex="0" aria-label="Stage haze colour lab. Drag to inject the selected gel into the fluid field. Arrow keys move the injector and Space injects."></canvas>
+      <div class="reticle" id="inject-reticle" data-visible="false" data-injecting="false" aria-hidden="true"></div>
+      <div class="chrome">
+        <header class="topbar">
+          <div class="identity">
+            <span class="mark" aria-hidden="true"></span>
+            <div><p class="eyebrow">Luma / Haze lab</p><p class="micro">West stage · Look 03</p></div>
+          </div>
+          <div class="controls" aria-label="Simulation controls">
+            <button id="pause-control" type="button" aria-pressed="false">Pause</button>
+            <button id="clear-control" type="button">Clear</button>
+            <button id="save-control" type="button" disabled>Save look</button>
+          </div>
+        </header>
+        <section class="intro">
+          <p class="eyebrow">Live fog colour study</p>
+          <h1>Shape the<br />haze.</h1>
+          <p>Drag a gel through the field. Speed sets the current; colour shows the blend.</p>
+        </section>
+        <div class="state-pill" id="state-pill" data-state="idle" role="status" aria-live="polite">Ready · drag to inject</div>
+        <footer class="dock">
+          <div class="palette" aria-label="Gel colour">
+            <button class="gel" type="button" data-gel="cyan" aria-pressed="true" style="--gel:#31dff3"><span>Cyan 202</span></button>
+            <button class="gel" type="button" data-gel="magenta" aria-pressed="false" style="--gel:#ef3b9b"><span>Rose 046</span></button>
+            <button class="gel" type="button" data-gel="amber" aria-pressed="false" style="--gel:#ff9b32"><span>Amber 104</span></button>
+          </div>
+          <section class="status" aria-label="Current result">
+            <p class="eyebrow">Mix balance</p>
+            <p class="status-output" id="mix-output">No haze yet</p>
+            <p class="status-detail" id="mode-output">Live advection</p>
+          </section>
+        </footer>
+      </div>
     </main>
     <script type="module" src="./src/pointer-injected-gpu-fluid-demo.js"></script>
   </body>

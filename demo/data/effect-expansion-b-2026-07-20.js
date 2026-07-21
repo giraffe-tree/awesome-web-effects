@@ -135,12 +135,12 @@ export const effectExpansion150BatchB = [
     scores: score(18, 18, 19, 15, 15, 10), rationaleZh: '符号、质量中心和轨道带共同表达界面重力，主体行为清楚。'
   },
   {
-    id: 'scroll-stitched-isometric-blueprint', order: 140, name: 'Scroll stitched isometric blueprint', nameZh: '滚动拼装等轴蓝图', category: 'scroll', sourceUrl: 'https://github.com/jdan/isomer',
-    difference: '五个架构模块从视口外按语义次序落入等轴坐标并组成一张蓝图，不是卡片入场。',
-    behavior: { trigger: 'scroll progress or pointer vertical progress', response: 'Architecture blocks stitch into fixed isometric destinations', timing: 'staggered progress-linked assembly', layer: 'isometric blueprint' },
-    prompt: '实现五个带标签的等轴模块，以滚动进度按序移动到固定网格并更新组装百分比。',
-    implementation: motionImplementation("const assembly = animate(iso, { opacity: [.94, 1, .94] }, { duration: 3 }); blocks.forEach(stitchToGrid);", 'https://github.com/jdan/isomer'),
-    scores: score(18, 19, 18, 15, 15, 10), rationaleZh: '蓝图网格、组件语义和组装次序共同构成可读的空间建设过程。'
+    id: 'scroll-stitched-isometric-blueprint', order: 140, name: 'North Spur field-node commissioning', nameZh: 'North Spur 边缘节点装配验收', category: 'scroll', sourceUrl: 'https://github.com/motiondivision/motion',
+    difference: 'Five named hardware modules seek five independent paused Motion controls in dependency order and reveal the same verified as-built acceptance photograph from base to telemetry cap; this is not a generic card entrance or anonymous architecture stack.',
+    behavior: { trigger: 'trusted wheel, captured vertical mouse/touch/pen drag, keyboard command, or module checkpoint', response: 'Seat base, power/thermal, compute, network, and telemetry modules in order while the as-built proof advances toward Verified', timing: 'direct reversible human scrub over five paused one-second Motion controls', layer: 'full-stage CSS3D assembly field and acceptance proof card' },
+    prompt: 'Build a human-operated remote edge-node commissioning view. Create five paused Motion controls with unique off-grid starts and dependency-ordered local progress; trusted wheel, captured vertical drag, keyboard, and checkpoints must seek them directly. Sample five regions from one verified local completion photograph into the module materials and reveal that same proof only with human progress, without autoplay.',
+    implementation: motionImplementation("controls = modules.map((node,i) => { const c = animate(node, { x:[start[i].x,0], y:[start[i].y,0], opacity:[.34,1] }, { duration:1, autoplay:false }); c.pause(); return c; }); controls.forEach((c,i) => c.time = clamp(progress*5-i));", 'https://github.com/motiondivision/motion'),
+    scores: score(20, 20, 20, 15, 15, 10), rationaleZh: '五个具名硬件层、依赖顺序和验收照片形成完整装配任务；原创节点照片的五个真实像素区域同时驱动 CSS3D 材料色与 proof card。真人滚轮、捕获拖拽、键盘或检查点可停在任意进度并反向拆解，首帧静止。'
   },
   {
     id: 'pixel-sort-hover-wipe', order: 141, name: 'North Relay pixel-sort inspection', nameZh: 'North Relay 照片像素排序检查', category: 'canvas', sourceUrl: 'https://github.com/snorpey/glitch-canvas',

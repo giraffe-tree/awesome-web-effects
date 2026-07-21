@@ -1579,6 +1579,37 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("Shift+ArrowDown")
             elif index == 29:
                 page.keyboard.press("ArrowLeft")
+        elif demo["id"] == "scroll-stitched-isometric-blueprint":
+            if index in (1, 3, 5):
+                page.mouse.wheel(0, 120)
+            elif index == 7:
+                page.mouse.move(140, 120)
+                page.mouse.down()
+            elif index == 8:
+                page.mouse.move(140, 80, steps=4)
+            elif index == 9:
+                page.mouse.up()
+            elif index == 12:
+                page.locator('.module-button[data-module="base-rail"]').click()
+            elif index == 14:
+                page.locator('.module-button[data-module="compute-chassis"]').click()
+            elif index == 16:
+                page.locator('.module-button[data-module="network-switch"]').click()
+            elif index == 18:
+                page.locator('.module-button[data-module="telemetry-cap"]').click()
+            elif index == 21:
+                page.locator("#blueprint-stage").focus()
+                page.keyboard.press("PageUp")
+            elif index == 23:
+                page.keyboard.press("ArrowUp")
+            elif index == 25:
+                page.keyboard.press("Home")
+            elif index == 27:
+                page.keyboard.press("End")
+            elif index == 30:
+                page.mouse.wheel(0, -120)
+            elif index in (32, 34):
+                page.mouse.wheel(0, 120)
         elif demo["id"] == "kinetic-paper-fold-map":
             if index == 1:
                 page.mouse.move(280, 100)
@@ -4147,6 +4178,111 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["lastInputTrusted"] is not True
         ):
             raise RuntimeError(f"{demo['id']} did not capture trusted slow/fast captured traces, keyboard sampling, reset, four unique decoded ImageGen frames, and a nonempty final visual-memory path: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "scroll-stitched-isometric-blueprint":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-dependency-ordered-field-edge-node-assembly-and-acceptance"
+            or interaction["claimedLibrary"] != "motion@12.42.2"
+            or interaction["mechanism"] != "trusted-scroll-and-captured-vertical-scrub-seek-five-paused-motion-css3d-controls"
+            or interaction["moduleOrder"] != ["base-rail", "power-thermal", "compute-chassis", "network-switch", "telemetry-cap"]
+            or interaction["moduleCount"] != 5
+            or interaction["acceptedInputs"] != ["wheel", "mouse-drag", "touch-drag", "pen-drag", "keyboard", "module-button"]
+            or not interaction["userInputRequired"]
+            or not interaction["strictTrustedInputGuard"]
+            or not interaction["initialFrameStatic"]
+            or not interaction["initialStillVerified"]
+            or interaction["automaticPath"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticTimeline"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or interaction["previewClockMutationCount"] != 0
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["inputCount"] != 20
+            or interaction["trustedInputCount"] != interaction["inputCount"]
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["wheelInputCount"] != 6
+            or interaction["wheelConsumedCount"] != 5
+            or interaction["wheelBoundaryReleaseCount"] != 1
+            or interaction["pointerInputCount"] != 6
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerMoveCount"] != 4
+            or interaction["pointerReleaseCount"] != 1
+            or interaction["pointerCancelCount"] != 0
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerCaptureReleaseCount"] != 1
+            or interaction["dragSessionCount"] != 1
+            or interaction["dragMutationCount"] != 4
+            or interaction["keyboardInputCount"] != 4
+            or interaction["keyboardSeekCount"] != 4
+            or interaction["moduleButtonInputCount"] != 4
+            or interaction["moduleSelectionCount"] != 4
+            or interaction["progressMutationCount"] < 17
+            or interaction["humanProgressMutationCount"] != interaction["progressMutationCount"]
+            or interaction["nonInputProgressMutationCount"] != 0
+            or interaction["humanInputCausalityCount"] != interaction["humanProgressMutationCount"]
+            or interaction["minHumanProgress"] != 0
+            or interaction["maxHumanProgress"] != 1
+            or interaction["maxHumanDelta"] < .99
+            or interaction["progress"] != 1
+            or interaction["phase"] != "online"
+            or interaction["completedModuleCount"] != 5
+            or interaction["currentModuleId"] != "acceptance-complete"
+            or interaction["moduleLocalProgresses"] != [1, 1, 1, 1, 1]
+            or interaction["assemblyOrderViolationCount"] != 0
+            or interaction["lastInputKind"] != "wheel"
+            or interaction["lastInputTrusted"] is not True
+            or interaction["lastWheelDefaultPrevented"] is not False
+            or interaction["lastPointerType"] != "mouse"
+            or interaction["dragActive"]
+            or interaction["activePointerId"] is not None
+            or interaction["pointerCaptured"]
+            or interaction["firstHumanInput"]["kind"] != "wheel"
+            or interaction["firstHumanInput"]["before"] != 0
+            or abs(interaction["firstHumanInput"]["after"] - .18) > .001
+            or interaction["lastHumanInput"]["kind"] != "wheel"
+            or interaction["lastHumanInput"]["before"] != 1
+            or interaction["lastHumanInput"]["after"] != 1
+            or interaction["motionControlCount"] != 5
+            or interaction["controlBuildCount"] < 1
+            or interaction["controlSeekCount"] < 90
+            or interaction["controlTimeSpread"] > .001
+            or len(interaction["geometryEndpoints"]) != 5
+            or any(endpoint["endX"] != 0 or endpoint["endY"] != 0 for endpoint in interaction["geometryEndpoints"])
+            or interaction["assetFetchCount"] != 1
+            or interaction["assetResponseStatus"] != 200
+            or not interaction["assetSameOrigin"]
+            or "image/jpeg" not in interaction["assetMimeType"]
+            or interaction["assetByteLength"] != 162992
+            or interaction["assetSha256"] != "133ab6080f9c43f720c1c681445b55bb3f82994a724e7910c2e38300c649c424"
+            or not interaction["assetShaMatchesExpected"]
+            or not interaction["assetDecoded"]
+            or interaction["assetNaturalWidth"] != 960
+            or interaction["assetNaturalHeight"] != 640
+            or interaction["proofImageCount"] != 2
+            or interaction["proofImagesDecoded"] != 2
+            or not interaction["proofUsesCommittedAsset"]
+            or interaction["sampleWidth"] != 96
+            or interaction["sampleHeight"] != 64
+            or interaction["sampledPixelCount"] != 6144
+            or interaction["sampledByteLength"] != 24576
+            or len(interaction["sampledPixelSha256"]) != 64
+            or interaction["sampledOpaquePixelCount"] != 6144
+            or interaction["materialRegionCount"] != 5
+            or len(interaction["materialSamples"]) != 5
+            or interaction["materialSamplePixelCount"] <= 500
+            or interaction["distinctMaterialColorCount"] < 4
+            or not interaction["materialBindingsVerified"]
+            or interaction["proofReveal"] != 1
+            or interaction["renderCount"] < 36
+            or interaction["previewClockCallCount"] < 36
+            or not interaction["ready"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture trusted wheel progress with boundary release, a captured vertical drag, dependency checkpoints, reversible keyboard seeks, five paused Motion controls, and pixel-bound proof over the verified as-built node photo: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "kinetic-paper-fold-map":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

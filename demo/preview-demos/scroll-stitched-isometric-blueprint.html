@@ -1,1 +1,573 @@
-<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Scroll Stitched Isometric Blueprint</title><link rel="stylesheet" href="./shared.css"><style>:root{--preview-background:#05214a}.preview-stage{background:linear-gradient(#0a3471,#05214a);color:#d9f3ff}.preview-stage::before{content:"";position:absolute;inset:0;background:linear-gradient(30deg,#75c7ff12 1px,transparent 1px),linear-gradient(150deg,#75c7ff12 1px,transparent 1px);background-size:18px 31px}.copy{position:absolute;left:14px;top:49px;width:99px}.copy small{font:800 6px monospace;letter-spacing:.14em;color:#65dfff}.copy h1{margin:8px 0;font:950 20px/.84 system-ui;letter-spacing:-.06em}.iso{position:absolute;left:139px;top:24px;width:170px;height:143px}.block{position:absolute;width:62px;height:48px;transform:rotate(30deg) skewX(-30deg) scaleY(.86) translate(var(--x),var(--y));border:1px solid #8ee9ff;background:#63d3ff22;box-shadow:inset 0 0 18px #57e3ff22;opacity:var(--o)}.block::after{content:attr(data-label);position:absolute;left:7px;top:7px;color:#e8fbff;font:900 7px monospace;transform:skewX(30deg) rotate(-30deg) scaleY(1.16)}.progress{position:absolute;right:13px;bottom:12px;color:#6de7ff;font:800 6px monospace}.scene-caption{display:none}</style></head><body><main class="preview-stage" tabindex="0"><section class="copy"><small>SCROLL ASSEMBLY</small><h1>BUILD THE PLAN IN DEPTH.</h1></section><div class="iso" id="iso"><i class="block" data-label="CORE"></i><i class="block" data-label="DATA"></i><i class="block" data-label="API"></i><i class="block" data-label="EDGE"></i><i class="block" data-label="UI"></i></div><span class="progress" id="blueprint-progress">ASSEMBLY 00%</span><span class="library-badge">Motion · isometric stitch</span></main><script type="module" src="./src/scroll-stitched-isometric-blueprint-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Motion — Field Node Assembly Blueprint</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="./shared.css" />
+    <style>
+      :root {
+        --preview-background: #081311;
+        --paper: #e8e1cf;
+        --ink: #14201d;
+        --cyan: #77d7cf;
+        --copper: #c8784f;
+        --green: #a8d690;
+        color-scheme: dark;
+      }
+
+      button { font: inherit; }
+
+      .blueprint-stage {
+        --assembly-progress: 0;
+        --proof-inset: 100%;
+        --module-width: clamp(74px, 25vw, 168px);
+        --module-height: clamp(24px, 8.1vw, 53px);
+        position: absolute;
+        inset: 0;
+        overflow: clip;
+        background:
+          radial-gradient(circle at 35% 50%, #1c454150, transparent 43%),
+          linear-gradient(145deg, #091512, #11221e 64%, #07100f);
+        color: #edf1e8;
+        outline: none;
+        touch-action: none;
+        user-select: none;
+      }
+
+      .blueprint-stage::before {
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(#8ebbb512 1px, transparent 1px),
+          linear-gradient(90deg, #8ebbb512 1px, transparent 1px);
+        background-size: clamp(12px, 3.1vw, 26px) clamp(12px, 3.1vw, 26px);
+        mask-image: radial-gradient(circle at 34% 47%, #000 18%, transparent 75%);
+        content: "";
+        pointer-events: none;
+      }
+
+      .blueprint-stage:focus-visible { box-shadow: inset 0 0 0 2px #f1e8d2; }
+
+      .assembly-shell {
+        position: absolute;
+        inset: clamp(26px, 7.4vh, 38px) clamp(10px, 3.3vw, 27px) clamp(20px, 5.8vh, 30px);
+        display: grid;
+        grid-template-rows: clamp(18px, 5.6vh, 28px) minmax(0, 1fr) clamp(17px, 5.2vh, 27px);
+        gap: clamp(4px, 1.7vh, 8px);
+        min-height: 0;
+      }
+
+      .assembly-head,
+      .assembly-footer {
+        display: flex;
+        align-items: center;
+        min-width: 0;
+      }
+
+      .assembly-head { justify-content: space-between; gap: 12px; }
+
+      .program-mark,
+      .assembly-status,
+      .field-label,
+      .proof-kicker,
+      .proof-status,
+      .datum-label,
+      .drag-hint,
+      .module-button,
+      .progress-readout {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-weight: 850;
+        letter-spacing: .105em;
+        text-transform: uppercase;
+      }
+
+      .program-mark {
+        overflow: hidden;
+        color: #afc0ba;
+        font-size: clamp(5px, 1.12vw, 8px);
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .program-mark strong { color: #f4f0e5; }
+
+      .assembly-status {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex: 0 0 auto;
+        color: #dce7df;
+        font-size: clamp(5px, 1.05vw, 7px);
+        white-space: nowrap;
+      }
+
+      .assembly-status::before {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: #7d918a;
+        box-shadow: 0 0 0 3px #7d918a20;
+        content: "";
+      }
+
+      .blueprint-stage[data-phase="online"] .assembly-status::before {
+        background: var(--green);
+        box-shadow: 0 0 9px #a8d690;
+      }
+
+      .assembly-workspace {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) clamp(72px, 24vw, 172px);
+        gap: clamp(6px, 2vw, 15px);
+        min-height: 0;
+      }
+
+      .assembly-field,
+      .proof-card {
+        position: relative;
+        min-width: 0;
+        min-height: 0;
+        overflow: clip;
+        border: 1px solid #77918a55;
+        border-radius: clamp(8px, 2.3vw, 16px);
+        box-shadow: inset 0 1px #ffffff0b, 0 16px 35px #0004;
+      }
+
+      .assembly-field {
+        background:
+          linear-gradient(#7acfc414 1px, transparent 1px),
+          linear-gradient(90deg, #7acfc414 1px, transparent 1px),
+          radial-gradient(ellipse at 52% 76%, #31534a9c, #0b1815 69%);
+        background-size: clamp(13px, 3.7vw, 27px) clamp(13px, 3.7vw, 27px);
+        cursor: ns-resize;
+        perspective: 700px;
+      }
+
+      .assembly-field::after {
+        position: absolute;
+        right: 13%;
+        bottom: 7%;
+        left: 14%;
+        height: 13%;
+        border-radius: 50%;
+        background: #000a;
+        filter: blur(clamp(6px, 2vw, 14px));
+        opacity: calc(.22 + var(--assembly-progress) * .55);
+        content: "";
+        pointer-events: none;
+      }
+
+      .field-label,
+      .datum-label,
+      .drag-hint {
+        position: absolute;
+        z-index: 14;
+        color: #9cafaa;
+        font-size: clamp(4px, .92vw, 6px);
+        pointer-events: none;
+      }
+
+      .field-label { top: 9px; left: 10px; }
+      .datum-label { right: 9px; bottom: 8px; color: #83bcb4; }
+      .drag-hint { left: 10px; bottom: 8px; color: #d3d9d1; }
+
+      .datum-plane {
+        position: absolute;
+        z-index: 2;
+        left: 50%;
+        bottom: 6%;
+        width: min(70%, 340px);
+        height: 38%;
+        transform: translateX(-50%) rotateX(64deg) rotateZ(-36deg);
+        transform-style: preserve-3d;
+        border: 1px solid #7bcbc056;
+        background:
+          linear-gradient(#9bd7d016 1px, transparent 1px),
+          linear-gradient(90deg, #9bd7d016 1px, transparent 1px),
+          #10231f5c;
+        background-size: 12px 12px;
+        box-shadow: 0 0 30px #4bbdad10;
+        pointer-events: none;
+      }
+
+      .datum-plane::before,
+      .datum-plane::after {
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        border: 1px solid #c8eee8a6;
+        border-radius: 50%;
+        content: "";
+      }
+      .datum-plane::before { top: 7px; left: 7px; }
+      .datum-plane::after { right: 7px; bottom: 7px; }
+
+      .target-ghost,
+      .module-flight {
+        position: absolute;
+        left: 50%;
+        top: var(--final-y);
+        width: var(--module-width);
+        height: var(--module-height);
+        margin-left: calc(var(--module-width) / -2);
+        transform-style: preserve-3d;
+        pointer-events: none;
+      }
+
+      .target-ghost {
+        z-index: 3;
+        transform: rotateX(59deg) rotateZ(-37deg);
+        border: 1px dashed #86d2c754;
+        border-radius: 3px;
+        opacity: .42;
+      }
+
+      .module-flight { z-index: calc(5 + var(--index)); will-change: transform, opacity; }
+
+      .iso-module {
+        position: absolute;
+        inset: 0;
+        transform: rotateX(59deg) rotateZ(-37deg);
+        transform-style: preserve-3d;
+      }
+
+      .module-plane {
+        position: absolute;
+        inset: 0;
+        border: 1px solid color-mix(in srgb, var(--material) 68%, #d9fff6);
+        border-radius: 3px;
+        background: color-mix(in srgb, var(--material) 86%, #101b18);
+        box-shadow: inset 0 0 12px #0003;
+        transform: translateZ(var(--depth));
+      }
+
+      .module-plane:nth-child(1) { --depth: 0px; filter: brightness(.44); }
+      .module-plane:nth-child(2) { --depth: 2px; filter: brightness(.58); }
+      .module-plane:nth-child(3) { --depth: 4px; filter: brightness(.72); }
+      .module-plane:nth-child(4) {
+        --depth: 7px;
+        background:
+          linear-gradient(110deg, #fff2, transparent 24%, #0002 78%),
+          color-mix(in srgb, var(--material) 88%, #23322e);
+        box-shadow: inset 0 1px #ffffff36, 0 5px 12px #0008;
+      }
+
+      .module-detail {
+        position: absolute;
+        inset: 20% 9%;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 6px;
+        transform: translateZ(8px);
+        color: #edf7f1;
+        font: 900 clamp(3px, .78vw, 6px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .09em;
+        text-shadow: 0 1px 3px #000;
+      }
+
+      .module-detail::after {
+        width: 34%;
+        height: 35%;
+        border-top: 2px solid #d9fff196;
+        border-bottom: 2px solid #07110e8f;
+        background: repeating-linear-gradient(90deg, #07110eb5 0 2px, transparent 2px 4px);
+        content: "";
+      }
+
+      .module-flight[data-module="network-switch"] .module-detail::after {
+        width: 42%;
+        height: 38%;
+        border: 0;
+        background: repeating-linear-gradient(90deg, #06100edb 0 5px, #7ed7cbaa 5px 6px);
+      }
+
+      .module-flight[data-module="telemetry-cap"] .module-detail::before,
+      .module-flight[data-module="telemetry-cap"] .module-detail::after {
+        width: 2px;
+        height: 75%;
+        border: 0;
+        border-radius: 99px;
+        background: #d8eee7;
+        box-shadow: 0 0 0 1px #0b1513;
+        content: "";
+      }
+
+      .module-flight[data-module="telemetry-cap"] .module-detail span { flex: 1; }
+
+      .proof-card {
+        display: grid;
+        grid-template-rows: auto minmax(0, 1fr) auto;
+        gap: 6px;
+        padding: clamp(7px, 1.9vw, 13px);
+        background: #e9e2d2;
+        color: var(--ink);
+      }
+
+      .proof-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 4px;
+      }
+
+      .proof-kicker,
+      .proof-status { font-size: clamp(3px, .82vw, 6px); white-space: nowrap; }
+      .proof-kicker { color: #5e6d68; }
+      .proof-status { color: #8d5d43; }
+      .blueprint-stage[data-phase="online"] .proof-status { color: #35714b; }
+
+      .proof-window {
+        --proof-inset: 100%;
+        position: relative;
+        min-height: 0;
+        overflow: clip;
+        border-radius: clamp(5px, 1.4vw, 10px);
+        background: #101715;
+        box-shadow: inset 0 0 0 1px #17201d38;
+      }
+
+      .proof-photo {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: 56% 50%;
+        pointer-events: none;
+      }
+
+      .proof-photo--baseline { filter: grayscale(1) contrast(.83) brightness(.52); }
+      .proof-photo--verified { clip-path: inset(var(--proof-inset) 0 0 0); }
+
+      .proof-window::after {
+        position: absolute;
+        inset: 0;
+        border: 1px solid #ffffff3b;
+        border-radius: inherit;
+        background: linear-gradient(180deg, transparent 55%, #07100ea8);
+        content: "";
+        pointer-events: none;
+      }
+
+      .proof-scan {
+        position: absolute;
+        z-index: 3;
+        right: 0;
+        left: 0;
+        top: var(--proof-inset);
+        height: 1px;
+        background: #f0d29e;
+        box-shadow: 0 0 9px #f0d29e;
+        opacity: calc(.22 + var(--assembly-progress) * .72);
+        pointer-events: none;
+      }
+
+      .proof-meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: #66716d;
+        font: 850 clamp(3px, .75vw, 5px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .07em;
+        text-transform: uppercase;
+      }
+
+      .material-swatches { display: flex; gap: 2px; }
+      .material-swatch {
+        width: clamp(4px, 1.2vw, 8px);
+        aspect-ratio: 1;
+        border: 1px solid #15201d33;
+        border-radius: 50%;
+        background: var(--sample-color, #87948e);
+      }
+
+      .assembly-footer { gap: clamp(5px, 1.5vw, 11px); }
+
+      .progress-readout {
+        min-width: clamp(31px, 9vw, 63px);
+        color: #d8e1da;
+        font-size: clamp(4px, .92vw, 6px);
+        white-space: nowrap;
+      }
+
+      .module-controls {
+        position: relative;
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        flex: 1;
+        gap: clamp(2px, .65vw, 5px);
+        min-width: 0;
+      }
+
+      .module-controls::before {
+        position: absolute;
+        z-index: -1;
+        top: 50%;
+        right: 0;
+        left: 0;
+        height: 1px;
+        background: #68807867;
+        content: "";
+      }
+
+      .module-button {
+        position: relative;
+        min-width: 0;
+        min-height: clamp(16px, 4.5vh, 25px);
+        overflow: hidden;
+        border: 1px solid #62756f75;
+        border-radius: 999px;
+        background: #101e1adf;
+        color: #879a94;
+        font-size: clamp(3px, .76vw, 5px);
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        cursor: pointer;
+      }
+
+      .module-button::before {
+        display: inline-block;
+        width: 4px;
+        height: 4px;
+        margin-right: 4px;
+        border-radius: 50%;
+        background: var(--sample-color, #87948e);
+        content: "";
+        vertical-align: 1px;
+      }
+
+      .module-button.is-complete {
+        border-color: color-mix(in srgb, var(--sample-color) 72%, #d6eee5);
+        background: color-mix(in srgb, var(--sample-color) 19%, #101e1a);
+        color: #eff5ef;
+      }
+
+      .module-button.is-current { box-shadow: 0 0 0 1px #f0e4cc; }
+      .module-button:focus-visible { outline: 2px solid #f0e4cc; outline-offset: 2px; }
+
+      .preview-stage .library-badge {
+        padding: 4px 7px;
+        border-color: #7d989051;
+        background: #0b1714d9;
+        color: #cfe0da;
+        font-size: clamp(4px, .94vw, 7px);
+        white-space: nowrap;
+      }
+
+      .scene-caption { right: 12px; left: auto; color: #7e928c; }
+
+      @media (max-width: 380px) and (min-height: 115px) {
+        .assembly-shell { inset: 26px 9px 18px; grid-template-rows: 17px minmax(0, 1fr) 17px; gap: 4px; }
+        .assembly-workspace { grid-template-columns: minmax(0, 1fr) 72px; gap: 6px; }
+        .proof-card { gap: 4px; padding: 6px; }
+        .module-button { padding: 0 3px; }
+        .module-button span { display: none; }
+        .module-button::after { content: attr(data-index); }
+        .scene-caption { display: none; }
+      }
+
+      @media (max-width: 210px), (max-height: 114px) {
+        .assembly-shell { inset: 4px; grid-template-rows: minmax(0, 1fr) 11px; gap: 3px; }
+        .assembly-head { display: none; }
+        .assembly-workspace { grid-template-columns: minmax(0, 1fr) 38px; gap: 3px; }
+        .assembly-field, .proof-card { border-radius: 5px; }
+        .proof-card { grid-template-rows: minmax(0, 1fr); padding: 2px; }
+        .proof-head, .proof-meta, .field-label, .datum-label, .drag-hint { display: none; }
+        .assembly-footer { gap: 3px; }
+        .progress-readout { min-width: 20px; font-size: 3px; }
+        .module-controls { gap: 2px; }
+        .module-button { min-height: 10px; padding: 0; border-radius: 3px; font-size: 0; }
+        .module-button::before { width: 3px; height: 3px; margin: 0; }
+        .module-button::after { display: none; }
+        .preview-stage .library-badge, .scene-caption { display: none; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .module-flight { will-change: auto; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="preview-stage" aria-label="Field edge node assembly blueprint">
+      <section
+        id="blueprint-stage"
+        class="blueprint-stage"
+        data-preview-mechanism="motion-human-scrubbed-isometric-field-node-assembly"
+        data-phase="staged"
+        role="slider"
+        tabindex="0"
+        aria-label="Assemble a five-module field node with wheel, vertical drag, keyboard, or module controls"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        aria-valuenow="0"
+        aria-valuetext="No modules seated"
+      >
+        <div class="assembly-shell">
+          <header class="assembly-head">
+            <span class="program-mark"><strong>North Spur 04</strong> · remote edge commissioning</span>
+            <output id="assembly-status" class="assembly-status">0 / 5 · datum open</output>
+          </header>
+
+          <div class="assembly-workspace">
+            <div id="assembly-field" class="assembly-field" aria-label="Captured vertical assembly scrub surface">
+              <span class="field-label">Dependency-locked build order</span>
+              <span class="drag-hint">scroll ↓ · drag ↑</span>
+              <span class="datum-label">ISO datum C-17</span>
+              <div class="datum-plane" aria-hidden="true"></div>
+
+              <i class="target-ghost" style="--final-y:67%" aria-hidden="true"></i>
+              <i class="target-ghost" style="--final-y:55%" aria-hidden="true"></i>
+              <i class="target-ghost" style="--final-y:43%" aria-hidden="true"></i>
+              <i class="target-ghost" style="--final-y:31%" aria-hidden="true"></i>
+              <i class="target-ghost" style="--final-y:19%" aria-hidden="true"></i>
+
+              <div class="module-flight" data-module="base-rail" data-index="1" data-final-y="67" style="--index:1;--final-y:67%;--material:#52615c">
+                <div class="iso-module"><i class="module-plane"></i><i class="module-plane"></i><i class="module-plane"></i><i class="module-plane"></i><span class="module-detail"><span>01 BASE RAIL</span></span></div>
+              </div>
+              <div class="module-flight" data-module="power-thermal" data-index="2" data-final-y="55" style="--index:2;--final-y:55%;--material:#9f6546">
+                <div class="iso-module"><i class="module-plane"></i><i class="module-plane"></i><i class="module-plane"></i><i class="module-plane"></i><span class="module-detail"><span>02 PWR + THERM</span></span></div>
+              </div>
+              <div class="module-flight" data-module="compute-chassis" data-index="3" data-final-y="43" style="--index:3;--final-y:43%;--material:#424947">
+                <div class="iso-module"><i class="module-plane"></i><i class="module-plane"></i><i class="module-plane"></i><i class="module-plane"></i><span class="module-detail"><span>03 COMPUTE</span></span></div>
+              </div>
+              <div class="module-flight" data-module="network-switch" data-index="4" data-final-y="31" style="--index:4;--final-y:31%;--material:#286f79">
+                <div class="iso-module"><i class="module-plane"></i><i class="module-plane"></i><i class="module-plane"></i><i class="module-plane"></i><span class="module-detail"><span>04 NETWORK</span></span></div>
+              </div>
+              <div class="module-flight" data-module="telemetry-cap" data-index="5" data-final-y="19" style="--index:5;--final-y:19%;--material:#333a38">
+                <div class="iso-module"><i class="module-plane"></i><i class="module-plane"></i><i class="module-plane"></i><i class="module-plane"></i><span class="module-detail"><span>05 TELEMETRY</span></span></div>
+              </div>
+            </div>
+
+            <aside class="proof-card" aria-label="As-built image acceptance proof">
+              <div class="proof-head"><span class="proof-kicker">As-built target</span><output id="proof-status" class="proof-status">Pending</output></div>
+              <div id="proof-window" class="proof-window">
+                <img class="proof-photo proof-photo--baseline" alt="Fictional assembled North Spur edge node in monochrome reference state" />
+                <img class="proof-photo proof-photo--verified" alt="Fictional assembled North Spur edge node in verified color state" />
+                <i class="proof-scan" aria-hidden="true"></i>
+              </div>
+              <div class="proof-meta"><span>5 material reads</span><span id="material-swatches" class="material-swatches" aria-label="Five colors sampled from the reference image"></span></div>
+            </aside>
+          </div>
+
+          <footer class="assembly-footer">
+            <output id="progress-readout" class="progress-readout">BUILD 00%</output>
+            <nav id="module-controls" class="module-controls" aria-label="Assembly module checkpoints">
+              <button class="module-button" type="button" data-module="base-rail" data-index="1" data-progress="0.2" aria-label="Seat base rail, checkpoint 1 of 5"><span>Base</span></button>
+              <button class="module-button" type="button" data-module="power-thermal" data-index="2" data-progress="0.4" aria-label="Seat power and thermal module, checkpoint 2 of 5"><span>Power</span></button>
+              <button class="module-button" type="button" data-module="compute-chassis" data-index="3" data-progress="0.6" aria-label="Seat compute chassis, checkpoint 3 of 5"><span>Compute</span></button>
+              <button class="module-button" type="button" data-module="network-switch" data-index="4" data-progress="0.8" aria-label="Seat network switch, checkpoint 4 of 5"><span>Network</span></button>
+              <button class="module-button" type="button" data-module="telemetry-cap" data-index="5" data-progress="1" aria-label="Seat telemetry cap and run acceptance, checkpoint 5 of 5"><span>Telemetry</span></button>
+            </nav>
+          </footer>
+        </div>
+      </section>
+      <span class="library-badge">Motion · human-stitched CSS3D</span>
+      <span class="scene-caption">wheel, captured vertical drag, keys, or checkpoints</span>
+    </main>
+    <script type="module" src="./src/scroll-stitched-isometric-blueprint-demo.js"></script>
+  </body>
+</html>

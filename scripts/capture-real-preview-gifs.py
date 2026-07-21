@@ -1682,6 +1682,29 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.up()
             elif index == 18:
                 page.locator('#undo-decision').click()
+        elif demo["id"] == "linked-brush-to-zoom-chart":
+            if index == 3:
+                geometry = page.evaluate("window.__PREVIEW_INTERACTION_STATE__.brushGeometry")
+                page.mouse.move(geometry["rightHandleX"], (geometry["top"] + geometry["bottom"]) / 2)
+                page.mouse.down()
+            elif 4 <= index <= 10:
+                geometry = page.evaluate("window.__PREVIEW_INTERACTION_STATE__.brushGeometry")
+                progress = (index - 3) / 7
+                x = geometry["left"] + (geometry["right"] - geometry["left"]) * (.36 + (.72 - .36) * progress)
+                page.mouse.move(x, (geometry["top"] + geometry["bottom"]) / 2)
+            elif index == 11:
+                page.mouse.up()
+            elif index == 14:
+                page.locator('#keep-window').click()
+            elif index == 18:
+                page.locator('#brush-host').focus()
+                page.keyboard.press('Home')
+            elif index == 20:
+                page.keyboard.press('ArrowRight')
+            elif index == 23:
+                page.keyboard.press('End')
+            elif index == 26:
+                page.keyboard.press('Enter')
         elif demo["id"] == "gooey-pixel-cursor-wake":
             if index == 3:
                 box = page.locator('#pixel-wake-host').bounding_box()
@@ -6464,6 +6487,103 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["initialPixelHash"] == "00000000"
         ):
             raise RuntimeError(f"{demo['id']} did not capture a real confirm-reselect-undo city-air attribution with retained NW-03 evidence: {interaction!r}")
+    elif demo["id"] == "linked-brush-to-zoom-chart":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        if (
+            not assertion
+            or interaction["task"] != "human-isolates-recomputes-and-retains-a-bearing-vibration-anomaly-window"
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["mechanism"] != "trusted-overview-brush-or-keyboard-range-recomputes-the-focus-chart-over-the-identical-time-domain"
+            or interaction["assetStrategy"] != "code-native-deterministic-bearing-telemetry-no-functional-raster-input-required"
+            or interaction["imageGenerationDecision"] != "omitted-because-raster-pixels-would-not-define-or-recompute-the-time-series-domain"
+            or interaction["causality"] != "trusted-human-input-only"
+            or interaction["automaticWindowTravel"]
+            or interaction["automaticRoundTrip"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticFallback"]
+            or interaction["captureClockDriven"]
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["untrustedInputPolicy"] != "reject-before-brush-or-decision-mutation"
+            or interaction["untrustedMutationCount"] != 0
+            or interaction["sourceDataSampleCount"] != 144
+            or interaction["sourceDataChecksum"] != 2192331280
+            or interaction["sourceDataMinimum"] != 1.721
+            or interaction["sourceDataMaximum"] != 7.15
+            or interaction["sourceAnomalyThreshold"] != 4.5
+            or interaction["sourceAnomalySampleCount"] != 12
+            or not interaction["dataDeterministic"]
+            or interaction["dataRandomness"]
+            or not interaction["initialStillVerified"]
+            or interaction["initialSelectionSignature"] != "0.12|0.36"
+            or interaction["inputCount"] != 14
+            or interaction["trustedInputCount"] != 14
+            or interaction["pointerInputCount"] != 9
+            or interaction["keyboardInputCount"] != 4
+            or interaction["controlInputCount"] != 1
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerMoveCount"] != 7
+            or interaction["pointerUpCount"] != 1
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerCaptureReleaseCount"] != 1
+            or interaction["ignoredPointerCount"] != 0
+            or interaction["rangeMutationCount"] != 10
+            or interaction["pointerRangeMutationCount"] != 7
+            or interaction["keyboardRangeMutationCount"] != 3
+            or interaction["backwardReviewCount"] != 1
+            or abs(interaction["maximumSelectionEnd"] - .72) > .001
+            or interaction["keyboardAdjustmentCount"] != 1
+            or interaction["resetCount"] != 1
+            or interaction["anomalyPresetCount"] != 1
+            or interaction["commitInputCount"] != 2
+            or interaction["commitCount"] != 2
+            or interaction["decisionClearCount"] != 1
+            or interaction["firstHumanSelectionBefore"] != [.12, .36]
+            or interaction["firstHumanSelectionAfter"] != [.42, .58]
+            or interaction["selection"] != [.42, .58]
+            or interaction["minimumSelectionWidth"] != .08
+            or interaction["dragActive"]
+            or interaction["activePointerId"] is not None
+            or interaction["dragMode"] is not None
+            or interaction["focusStartIndex"] != 60
+            or interaction["focusEndIndex"] != 83
+            or interaction["focusSampleCount"] != 24
+            or interaction["focusMinimum"] != 2.667
+            or interaction["focusMaximum"] != 7.15
+            or interaction["focusPeakIndex"] != 71
+            or interaction["focusAnomalySampleCount"] != 12
+            or interaction["focusDomainLabel"] != "10:00 — 13:50"
+            or not interaction["linkedDomainVerified"]
+            or interaction["retainedSelection"] != [.42, .58]
+            or interaction["retainedStartIndex"] != 60
+            or interaction["retainedEndIndex"] != 83
+            or interaction["retainedPeak"] != 7.15
+            or interaction["retainedAnomalySampleCount"] != 12
+            or interaction["retainedConclusion"] != "bearing-b7-anomaly-review-required"
+            or not interaction["decisionRetained"]
+            or interaction["phase"] != "range-decision-retained"
+            or interaction["result"] != "bearing-b7-anomaly-review-required"
+            or interaction["focusRecomputeCount"] <= interaction["rangeMutationCount"]
+            or interaction["overviewDomainStartIndex"] != 0
+            or interaction["overviewDomainEndIndex"] != 143
+            or not interaction["p5InstanceReady"]
+            or not interaction["canvas2dReady"]
+            or interaction["canvasCoverageRatio"] < .995
+            or not interaction["fullStageGeometryVerified"]
+            or not interaction["brushWithinStage"]
+            or not interaction["focusWithinStage"]
+            or len(interaction["transitionRecords"]) != 12
+            or not all(record["trusted"] for record in interaction["transitionRecords"])
+            or page.locator('#decision-card').get_attribute('data-alert') != "true"
+            or page.locator('#decision-output').text_content() != "RETAINED · 7.15 MM/S PEAK"
+            or interaction["renderCount"] <= 0
+            or interaction["drawCount"] <= 0
+            or interaction["completedDrawCount"] <= 0
+            or interaction["geometryMeasureCount"] <= 0
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a real retained Bearing B7 anomaly window through linked brush-domain recomputation: {interaction!r}")
     elif demo["id"] == "gooey-pixel-cursor-wake":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")

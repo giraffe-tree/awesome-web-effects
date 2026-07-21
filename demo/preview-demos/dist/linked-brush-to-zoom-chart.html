@@ -1,7 +1,32 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p5.js — Linked Brush to Zoom Chart</title><style>:root{--preview-background:#0c1010}#brush-host{position:absolute;inset:0;cursor:ew-resize}#brush-host canvas{width:100%!important;height:100%!important}.brush-copy{position:absolute;z-index:5;left:13px;top:42px;color:#f5f9ee;pointer-events:none}.brush-copy small{font:800 6px/1 ui-monospace;letter-spacing:.16em;color:#b6dc66}.brush-copy h1{width:96px;margin:8px 0 0;font:950 17px/.85 system-ui;letter-spacing:-.055em}.domain{position:absolute;right:12px;top:12px;z-index:5;color:#b6dc66;font:900 7px/1 ui-monospace}.library-badge{background:#0c1010c9}</style>  <script type="module" crossorigin src="./assets/linked-brush-to-zoom-chart-f3RPN5Kb.js"></script>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>p5.js — Bearing Telemetry Brush Review</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root{--preview-background:#09100e;--lime:#d8f58d;--amber:#ff9d5b;--ink:#eef4e9}
+    #telemetry-stage{background:radial-gradient(circle at 74% 24%,#173127 0,transparent 38%),#09100e;color:var(--ink)}#brush-host{position:absolute;inset:0;cursor:crosshair;outline:none;touch-action:none}#brush-host:focus-visible{box-shadow:inset 0 0 0 2px #d8f58d66}#brush-host canvas{width:100%!important;height:100%!important}
+    .telemetry-bar{position:absolute;z-index:5;left:11px;right:11px;top:9px;display:flex;justify-content:space-between;pointer-events:none;font:800 5px/1 ui-monospace;letter-spacing:.13em;text-transform:uppercase}.telemetry-bar span:first-child{display:flex;align-items:center;gap:6px}.telemetry-bar span:first-child::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--lime);box-shadow:0 0 8px #d8f58d99}.telemetry-bar span:last-child{color:#84998c}
+    .brush-copy{position:absolute;z-index:5;left:12px;top:37px;width:82px;pointer-events:none}.brush-copy small{font:800 5px/1 ui-monospace;letter-spacing:.14em;color:var(--lime)}.brush-copy h1{margin:7px 0 0;font:950 16px/.86 system-ui;letter-spacing:-.05em}.brush-copy p{margin:7px 0 0;font:600 5px/1.35 system-ui;color:#899a8e}
+    .domain-readout{position:absolute;z-index:6;right:12px;top:27px;text-align:right;pointer-events:none}.domain-readout small{display:block;font:750 5px/1 ui-monospace;letter-spacing:.11em;color:#839589}.domain-readout output{display:block;margin-top:4px;font:900 7px/1 ui-monospace;letter-spacing:.07em;color:var(--lime)}
+    .decision-rail{position:absolute;z-index:8;left:11px;right:11px;bottom:8px;display:flex;align-items:flex-end;justify-content:space-between;pointer-events:none}.keep-button{min-width:80px;min-height:36px;padding:0 9px;border:1px solid #d8f58d55;border-radius:9px;background:#111b17df;color:var(--lime);cursor:pointer;pointer-events:auto;font:850 5px/1 ui-monospace;letter-spacing:.1em}.keep-button:focus-visible{outline:1px solid var(--lime);outline-offset:2px}.decision-card{text-align:right}.decision-card small{display:block;font:750 5px/1 ui-monospace;letter-spacing:.11em;color:#819287}.decision-card output{display:block;margin-top:4px;font:900 6px/1 ui-monospace;letter-spacing:.07em;color:#e8eee8}.decision-card[data-alert="true"] output{color:var(--amber)}
+    @media(max-width:270px){.brush-copy{top:37px;width:150px}.brush-copy h1{font-size:17px;width:150px}.brush-copy p{display:none}.domain-readout{top:70px;left:12px;right:auto;text-align:left}.telemetry-bar span:last-child{display:none}.decision-card small{display:none}.keep-button{min-height:40px}}
+  </style>
+  <script type="module" crossorigin src="./assets/linked-brush-to-zoom-chart-C3Z2TI8Y.js"></script>
   <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
   <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
   <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
-  <link rel="modulepreload" crossorigin href="./assets/batch-c-utils-g_3IBZ2b.js">
   <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage" data-preview-mechanism="linked-brush-domain"><div id="brush-host" tabindex="0" aria-label="Drag either selection handle or the entire overview brush to rescale the focus chart"></div><section class="brush-copy"><small>CLIMATE SIGNAL / LINKED</small><h1>BRUSH A WINDOW. RESCALE THE STORY.</h1></section><output class="domain" id="domain">DAY 024 — 084</output><span class="library-badge">p5.js · linked chart brush</span><span class="scene-caption">overview selection continuously remaps focus domain</span></main></body></html>
+</head>
+<body>
+  <main id="telemetry-stage" class="preview-stage" data-preview-mechanism="p5-linked-brush-recomputed-time-domain">
+    <div id="brush-host" tabindex="0" role="application" aria-label="Bearing telemetry. Drag the overview brush or handles, use arrow keys to adjust, Home to reset, End for the anomaly window, and Enter to keep the range."></div>
+    <header class="telemetry-bar"><span>Plant 04 / Drive Train</span><span>p5.js · linked telemetry</span></header>
+    <section class="brush-copy"><small>BEARING B7 / RMS</small><h1>ISOLATE THE VIBRATION EVENT.</h1><p>Brush the overview. The focus chart recomputes the same time domain.</p></section>
+    <span class="domain-readout"><small>FOCUS WINDOW</small><output id="domain-output">02:50 — 08:40</output></span>
+    <footer class="decision-rail"><button id="keep-window" class="keep-button" type="button">KEEP RANGE</button><span id="decision-card" class="decision-card" data-alert="false"><small>RANGE DECISION</small><output id="decision-output">NO WINDOW RETAINED</output></span></footer>
+  </main>
+</body>
+</html>

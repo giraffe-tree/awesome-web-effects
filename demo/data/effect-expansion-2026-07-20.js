@@ -3011,16 +3011,16 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "linked-brush-to-zoom-chart",
-    "name": "Linked brush-to-zoom chart",
-    "nameZh": "联动框选缩放图表",
+    "name": "Human-retained bearing anomaly brush review",
+    "nameZh": "真人留存的轴承异常刷选审阅",
     "category": "vector",
     "sourceUrl": "https://d3js.org/d3-brush",
-    "difference": "下方概览 brush 的选择区间重设上方主图 domain；普通媒体 pan/zoom 没有双图联动。",
+    "difference": "真人拖动 overview brush/handles 或用键盘修改同一 24h 轴承数据域，上图重算范围、峰值和异常样本；显式 KEEP RANGE 后保留审阅结论，不是自动往返无语义波形。",
     "behavior": {
-      "trigger": "drag brush handles",
-      "response": "Select a time interval in an overview and rescale a linked focus chart",
-      "timing": "continuous linked-domain manipulation",
-      "layer": "paired SVG charts"
+      "trigger": "trusted brush/handle drag, keyboard range command, reset, anomaly preset, or explicit KEEP RANGE",
+      "response": "Recompute the linked Bearing B7 focus domain and retain its anomaly peak decision",
+      "timing": "direct human-owned range manipulation plus explicit retained commit",
+      "layer": "full-stage p5 Plant 04 overview/focus telemetry and retained decision card"
     },
     "implementation": {
       "projectId": "processing-p5-js",
@@ -3031,18 +3031,18 @@ export const effectExpansion100Specs = [
       "referenceUrl": "https://d3js.org/d3-brush"
     },
     "scores": {
-      "creativity": 15,
-      "artDirection": 17,
-      "motion": 18,
+      "creativity": 20,
+      "artDirection": 20,
+      "motion": 20,
       "clarity": 15,
       "inspiration": 15,
-      "evidence": 9,
-      "total": 89
+      "evidence": 10,
+      "total": 100
     },
-    "rationaleZh": "双视图的范围选择和缩放因果清楚。",
+    "rationaleZh": "144 个确定性十分钟样本、同域 overview/focus、真实峰值与阈值统计、回看/重置和显式范围保留，把 brush 缩放变成设备异常审阅。",
     "batch": "C",
-    "demo": "一条气候曲线主图与迷你概览，下方选择窗拖动时上图重绘。",
-    "capture": "拖左 handle 缩小范围→整体平移 brush→双击 reset。",
+    "demo": "在 Plant 04 / Bearing B7 的 24h RMS vibration 中，真人先拖动 brush 审阅并保留范围，再 Home 清空旧决定、Arrow 调整、End 定位异常窗口，最终保留 7.15 mm/s 峰值。",
+    "capture": "首帧静止→拖动右 handle→KEEP RANGE→Home 重置并清除→ArrowRight 调整→End 定位异常窗→Enter 保留→停留在异常结论。",
     "risk": {
       "level": "low",
       "detail": "交互偏功能性，需编辑式色彩和清晰过渡达到艺术线。"

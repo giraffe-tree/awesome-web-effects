@@ -239,7 +239,7 @@ Scene graphs, creative coding, physics, drawing tools, and 2D renderers.
 | [North Spur night-route calibration](https://giraffe-tree.github.io/awesome-web-effects/#cursor-drawn-constellation-thread) | [p5.js](https://github.com/processing/p5.js) | **100/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#cursor-drawn-constellation-thread) |
 | [Coastscan restoration evidence field](https://giraffe-tree.github.io/awesome-web-effects/#elastic-voronoi-focus-mosaic) | [p5.js](https://github.com/processing/p5.js) | **100/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#elastic-voronoi-focus-mosaic) |
 | [Chromatic channel drag portrait](https://giraffe-tree.github.io/awesome-web-effects/#chromatic-channel-drag-portrait) | [p5.js](https://github.com/processing/p5.js) | **95/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#chromatic-channel-drag-portrait) |
-| [Procedural folding kaleidoscope](https://giraffe-tree.github.io/awesome-web-effects/#procedural-folding-kaleidoscope) | [p5.js](https://github.com/processing/p5.js) | **98/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#procedural-folding-kaleidoscope) |
+| [Wrapping-print folding sampler](https://giraffe-tree.github.io/awesome-web-effects/#procedural-folding-kaleidoscope) | [p5.js](https://github.com/processing/p5.js) | **100/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#procedural-folding-kaleidoscope) |
 
 <a id="webgl"></a>
 
@@ -282,7 +282,7 @@ Scene graphs, creative coding, physics, drawing tools, and 2D renderers.
 - 150 verified previews: 2 official captures and 148 captures from runnable local demos; 0 missing.
 - Human review scores creativity, art direction, motion craft, legibility, creative transfer and evidence quality.
 - Admission requires 80/100 plus core-dimension minimums. Popularity never overrides the gate.
-- The verified GIF set is 25.42 MiB; every preview is 320×180, at most three seconds and below 1 MiB.
+- The verified GIF set is 25.36 MiB; every preview is 320×180, at most three seconds and below 1 MiB.
 - Stars are a 2026-07-20 snapshot. Recommendation sources and observed AI homepages remain separate relationships.
 
 Read the [current 396-candidate admission audit](research/demo-admission-audit-2026-07-20.md), the [100-company homepage research](research/ai-native-homepages-100.md), and the [preview provenance manifest](demo/gifs/provenance.json).

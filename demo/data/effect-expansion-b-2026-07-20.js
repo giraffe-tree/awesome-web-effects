@@ -215,11 +215,11 @@ export const effectExpansion150BatchB = [
     scores: score(18, 19, 18, 15, 15, 10), rationaleZh: '真实肖像的发丝、面部与肩线提供稳定参照，拖拽或键盘输入后的通道分离和弹簧归位都清晰可辨。'
   },
   {
-    id: 'procedural-folding-kaleidoscope', order: 150, name: 'Procedural folding kaleidoscope', nameZh: '程序化折叠万花筒', category: 'canvas', sourceUrl: 'https://github.com/processing/p5.js',
-    difference: '指针改变真实镜像扇区数量，每个扇区用旋转加负缩放成对折叠，而非播放预制万花筒影片。',
-    behavior: { trigger: 'pointer position or animation frame', response: 'Procedural color geometry refolds into five to ten mirrored sectors', timing: 'continuous topology-preserving fold count', layer: 'kaleidoscope canvas' },
-    prompt: '用 Canvas clip、rotate 和 scale(-1,1) 构建成对镜像扇区，让指针连续选择五至十折。',
-    implementation: p5Implementation("new p5(p => { p.draw = () => drawMirroredSectors(p.drawingContext, foldCount); });", 'https://github.com/processing/p5.js'),
-    scores: score(19, 20, 19, 15, 15, 10), rationaleZh: '折数变化会重组整幅几何，镜像关系准确且色彩完成度突出。'
+    id: 'procedural-folding-kaleidoscope', order: 150, name: 'Wrapping-print folding sampler', nameZh: '包装印刷万花筒取样器', category: 'canvas', sourceUrl: 'https://github.com/processing/p5.js',
+    difference: '不再自动重组程序色块；一张真实包装印刷母版被局部取样并裁进成对镜像扇区，真人拖拽同时选择母版区域和 4–10 折拓扑，得到可复核的印刷纹样。',
+    behavior: { trigger: 'trusted hover, captured mouse/touch/pen drag, keyboard, or visible fewer/more/reset buttons', response: 'Sample a different source area, change fold count, and rebuild an exact alternating mirror topology with live ink-coverage evidence', timing: 'human-owned immediate p5 redraws that remain still between inputs', layer: 'full-stage p5 print sampler, source preview, mirrored sectors, fold readout, ink verdict, and controls' },
+    prompt: '制作一个全舞台包装印刷万花筒取样器：同源加载并精确校验一张 ImageGen 960×960 包装母版，创建真实 p5.Image，读取局部色彩、亮度与墨量，再用 Canvas clip、rotate 和 scale(-1,1) 把同一真实取样区域绘入 4–10 折/8–20 个交替镜像扇区。真人 hover、捕获 mouse/touch/pen 拖拽、键盘与 −/+/Reset 控制取样和折数；首帧及每次结果静止，禁止自动路径、播放、fallback、排练、合成输入或预览时钟变异。',
+    implementation: p5Implementation("verifiedPrintmasterPixels -> sampledInkEvidence; trustedSample + foldCount -> clipped alternating mirror sectors with p5.noLoop", 'https://github.com/processing/p5.js'),
+    scores: score(20, 20, 20, 15, 15, 10), rationaleZh: '原创 960×960 包装母版经同源 fetch、精确源 SHA 与 p5.Image 解码；当前局部像素真实决定色彩、亮度、墨量和 PRESS READY，折数决定 2× 面板、clip 与交替镜像拓扑。可信 hover、捕获拖拽、键盘和按钮拥有结果，完整舞台保持静止。'
   }
 ];

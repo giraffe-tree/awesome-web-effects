@@ -2641,6 +2641,29 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("ArrowUp")
             elif index == 33:
                 page.locator('[data-action="reset"]').click()
+        elif demo["id"] == "procedural-folding-kaleidoscope":
+            if index == 2:
+                page.mouse.move(230, 65)
+            elif index == 4:
+                page.mouse.move(246, 76)
+            elif index == 6:
+                page.mouse.move(224, 96)
+                page.mouse.down()
+            elif index == 7:
+                page.mouse.move(242, 101)
+            elif index == 8:
+                page.mouse.move(260, 108)
+            elif index == 9:
+                page.mouse.move(278, 116)
+            elif index == 10:
+                page.mouse.up()
+            elif index == 14:
+                page.locator("#fold-less").click()
+            elif index == 17:
+                page.locator("#fold-proof-canvas").focus()
+                page.keyboard.press("ArrowDown")
+            elif index == 20:
+                page.keyboard.press("ArrowLeft")
         elif demo["id"] == "poisson-constellation-bloom":
             if index == 2:
                 page.mouse.move(170, 92)
@@ -8642,6 +8665,95 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["ready"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture a trusted full-stage four-channel optical Moire calibration with exact source evidence, finite p5 depth changes, assessment/undo/reset and no automatic tunnel motion: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "procedural-folding-kaleidoscope":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-wrapping-paper-folding-proof"
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["mechanism"] != "local-raster-sampled-into-clipped-alternating-mirror-sectors"
+            or interaction["captureType"] != "interactive"
+            or interaction["causality"] != "trusted-human-input-only"
+            or interaction["acceptedInputs"] != ["mouse-hover", "mouse-drag", "touch-drag", "pen-drag", "keyboard", "button"]
+            or not interaction["userInputRequired"]
+            or not interaction["strictTrustedInputGuard"]
+            or interaction["automaticPath"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticFallback"]
+            or interaction["rehearsalMode"]
+            or interaction["previewClockDriven"]
+            or interaction["previewClockMutation"]
+            or interaction["visualMutationFromPreviewClock"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["nonInputMutationCount"] != 0
+            or not interaction["initialStillVerified"]
+            or interaction["inputCount"] < 10
+            or interaction["trustedInputCount"] != interaction["inputCount"]
+            or interaction["rejectedUntrustedCount"] != 0
+            or interaction["hoverInputCount"] < 3
+            or interaction["mouseInputCount"] < 5
+            or interaction["touchInputCount"] != 0
+            or interaction["penInputCount"] != 0
+            or interaction["keyboardInputCount"] != 2
+            or interaction["buttonInputCount"] != 1
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerDragCount"] != 3
+            or interaction["pointerReleaseCount"] != 1
+            or interaction["pointerCancelCount"] != 0
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerCaptureReleaseCount"] != 1
+            or interaction["pointerCaptured"]
+            or interaction["activePointerId"] is not None
+            or interaction["mutationCount"] < 9
+            or interaction["humanMutationCount"] != interaction["mutationCount"]
+            or interaction["foldMutationCount"] < 4
+            or interaction["sampleMutationCount"] < 7
+            or interaction["resetCount"] != 0
+            or interaction["lastInputKind"] != "keyboard"
+            or interaction["lastInputSource"] != "keyboard-ArrowLeft"
+            or interaction["lastInputTrusted"] is not True
+            or interaction["folds"] != 7
+            or interaction["currentSectorCount"] != 14
+            or interaction["currentMirroredSectorCount"] != 7
+            or interaction["currentClipCount"] != 14
+            or len(interaction["topologyRecords"]) != 14
+            or interaction["assetFetchCount"] != 1
+            or interaction["assetFetchStatus"] != 200
+            or not interaction["assetMimeType"].startswith("image/jpeg")
+            or interaction["assetByteLength"] != 578402
+            or interaction["assetSha256"] != "ce776202b72992c05a4e41e03d2e5ddc4f89289dc4599833b802aadab66af6a6"
+            or not interaction["assetChecksumVerified"]
+            or not interaction["assetDecoded"]
+            or interaction["assetDecodeCount"] != 1
+            or interaction["assetNaturalWidth"] != 960
+            or interaction["assetNaturalHeight"] != 960
+            or not interaction["p5ImageCreated"]
+            or interaction["p5ImagePixelCount"] != 921600
+            or interaction["p5ImagePixelByteLength"] != 3686400
+            or interaction["sourcePixelChecksum"] <= 0
+            or interaction["sourceDistinctColorBuckets"] <= 100
+            or interaction["sourceLuminanceRange"] <= 150
+            or interaction["samplePixelCount"] <= 1000
+            or interaction["samplePixelChecksum"] <= 0
+            or interaction["sampleDistinctColorBuckets"] <= 32
+            or interaction["sampleLuminanceRange"] <= 72
+            or interaction["sampleInkCoverage"] <= .08
+            or interaction["sampleInkCoverage"] >= .96
+            or interaction["printVerdict"] != "PRESS READY"
+            or not interaction["p5CanvasCreated"]
+            or interaction["p5DrawCount"] < 9
+            or interaction["p5ImageDrawCalls"] < interaction["currentSectorCount"] + 1
+            or interaction["sourcePreviewDrawCalls"] <= 0
+            or interaction["topologySectorDrawCalls"] < interaction["currentSectorCount"]
+            or interaction["lastDrawnAssetSha256"] != interaction["expectedAssetSha256"]
+            or interaction["renderedSampleCount"] <= 1000
+            or interaction["renderedPixelChecksum"] <= 0
+            or interaction["renderedLuminanceRange"] <= 150
+            or not interaction["ready"]
+            or not interaction["listenersBound"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a trusted full-stage wrapping-print kaleidoscope sampler with exact p5.Image source evidence, seven-fold alternating mirror topology and no automatic motion: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "poisson-constellation-bloom":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

@@ -1,8 +1,129 @@
-<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Procedural Folding Kaleidoscope</title><style>:root{--preview-background:#140a20}canvas{width:100%;height:100%}.copy{position:absolute;left:14px;top:49px;width:101px;color:#fff4ff}.copy small{font:800 6px monospace;letter-spacing:.14em;color:#ff9bf5}.copy h1{margin:8px 0;font:950 20px/.84 system-ui;letter-spacing:-.06em}.folds{position:absolute;right:11px;bottom:11px;color:#ffbcfa;font:800 6px monospace}.scene-caption{display:none}</style>  <script type="module" crossorigin src="./assets/procedural-folding-kaleidoscope-CLs5i5Lu.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
-  <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
-  <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
-  <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
-  <link rel="modulepreload" crossorigin href="./assets/expansion-b-utils-CD_J0IHW.js">
-  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage"><canvas tabindex="0" aria-label="Pointer changes the folding count of a procedural kaleidoscope"></canvas><section class="copy"><small>MIRROR GEOMETRY</small><h1>FOLD COLOR INTO ORDER.</h1></section><span class="folds" id="fold-count">FOLDS 06</span><span class="library-badge">p5.js · kaleidoscope</span></main></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>p5.js — Folding Print Proof</title>
+    <style>
+      :root { --preview-background: #efe6d3; color-scheme: light; }
+      .fold-proof-stage { background: #efe6d3; }
+      #fold-proof-canvas {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+        cursor: crosshair;
+        outline: none;
+        touch-action: none;
+      }
+      #fold-proof-canvas:active { cursor: ew-resize; }
+      #fold-proof-canvas:focus-visible { box-shadow: inset 0 0 0 2px #f04a2c; }
+      .fold-controls {
+        position: absolute;
+        z-index: 8;
+        top: 5.5%;
+        right: 3.4%;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+        border: 1px solid rgba(38,19,42,.42);
+        border-radius: 999px;
+        background: rgba(247,239,220,.91);
+        box-shadow: 0 5px 18px rgba(53,29,45,.12);
+        backdrop-filter: blur(8px);
+      }
+      .fold-controls button,
+      .fold-controls output {
+        min-width: clamp(17px,4vw,29px);
+        height: clamp(16px,4vw,27px);
+        border: 0;
+        border-right: 1px solid rgba(38,19,42,.17);
+        background: transparent;
+        color: #28142c;
+        font: 850 clamp(6px,1.35vw,10px)/1 ui-monospace, monospace;
+      }
+      .fold-controls button {
+        cursor: pointer;
+        transition: background-color 120ms ease, color 120ms ease;
+      }
+      .fold-controls button:hover,
+      .fold-controls button:focus-visible {
+        background: #28142c;
+        color: #f5ead5;
+        outline: none;
+      }
+      .fold-controls output {
+        display: grid;
+        min-width: clamp(43px,10.5vw,76px);
+        place-items: center;
+        white-space: nowrap;
+      }
+      .fold-controls button:last-child { border-right: 0; }
+      .fold-proof-stage .library-badge {
+        top: 5.5%;
+        left: 3.6%;
+        padding: clamp(3px,.75vw,5px) clamp(5px,1.2vw,8px);
+        border-color: rgba(247,239,220,.24);
+        background: rgba(27,12,31,.74);
+        color: #f4e8d2;
+        font-size: clamp(4px,.95vw,7px);
+      }
+      .fold-proof-stage .scene-caption { display: none; }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0,0,0,0);
+        white-space: nowrap;
+        border: 0;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .fold-controls button { transition: none; }
+      }
+      @media (max-width: 180px) {
+        .fold-proof-stage .library-badge { display: none; }
+        .fold-controls { top: 4px; right: 4px; }
+        .fold-controls button,
+        .fold-controls output { min-width: 13px; height: 13px; font-size: 4px; }
+        .fold-controls output { min-width: 31px; }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/procedural-folding-kaleidoscope-C52AEuja.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+    <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
+    <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main
+      class="preview-stage fold-proof-stage"
+      id="fold-proof-stage"
+      data-preview-mechanism="p5-image-sampled-mirrored-folding-print-proof"
+    >
+      <canvas
+        id="fold-proof-canvas"
+        tabindex="0"
+        role="slider"
+        aria-label="Interactive wrapping-paper kaleidoscope folding proof"
+        aria-describedby="fold-proof-instructions"
+        aria-valuemin="4"
+        aria-valuemax="10"
+        aria-valuenow="6"
+        aria-valuetext="6 folds, 12 mirrored print panels"
+      ></canvas>
+      <div class="fold-controls" aria-label="Folding proof controls">
+        <button id="fold-less" type="button" aria-label="Use one fewer fold">−</button>
+        <output id="fold-count" aria-live="polite">06 FOLDS</output>
+        <button id="fold-more" type="button" aria-label="Use one more fold">+</button>
+        <button id="fold-reset" type="button" aria-label="Reset folding proof">↺</button>
+      </div>
+      <p class="sr-only" id="fold-proof-instructions">Move the mouse to sample a different part of the print. Drag horizontally to change the number of folds. Touch and pen drag are supported. Use left and right arrow keys to change fold count, up and down to move the print sample, Home or End for minimum or maximum folds, and R to reset.</p>
+      <span class="library-badge">p5.js · live print proof</span>
+      <span class="scene-caption">generated print pixels are folded into mirrored p5 sectors by human input</span>
+    </main>
+  </body>
+</html>

@@ -1652,6 +1652,43 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.locator('.stop-control[data-stop-index="0"]').click()
             elif index == 32:
                 page.locator('.stop-control[data-stop-index="2"]').click()
+        elif demo["id"] == "radial-calendar-time-zoom":
+            if index == 2:
+                page.mouse.move(310, 90)
+            elif index == 3:
+                page.mouse.move(312, 92, steps=2)
+            elif index == 5:
+                page.mouse.down()
+            elif index == 6:
+                page.mouse.move(270, 155, steps=3)
+            elif index == 7:
+                page.mouse.move(236, 172, steps=3)
+            elif index == 8:
+                page.mouse.move(175, 135, steps=3)
+            elif index == 9:
+                page.mouse.move(158, 90, steps=3)
+            elif index == 10:
+                page.mouse.move(190, 25, steps=3)
+            elif index == 11:
+                page.mouse.move(236, 15, steps=3)
+            elif index == 12:
+                page.mouse.up()
+            elif index in (15, 16, 17):
+                page.locator('[data-calendar-action="next"]').click()
+            elif index == 19:
+                page.locator('[data-calendar-action="confirm"]').click()
+            elif index == 21:
+                page.locator("#schedule-stage").focus()
+                page.keyboard.press("Escape")
+            elif index == 23:
+                page.locator('[data-calendar-action="confirm"]').click()
+            elif index == 25:
+                page.locator("#schedule-stage").focus()
+                page.keyboard.press("ArrowRight")
+            elif index == 27:
+                page.keyboard.press("ArrowLeft")
+            elif index == 29:
+                page.keyboard.press("Enter")
         elif demo["id"] == "kinetic-paper-fold-map":
             if index == 1:
                 page.mouse.move(280, 100)
@@ -4421,6 +4458,110 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["ready"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture a trusted reversible route inspection across mouse capture, range, keyboard and three field-evidence checkpoints on one paused Motion arc-length control: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "radial-calendar-time-zoom":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        mutation_total = (
+            interaction["hoverMutationCount"]
+            + interaction["dragMutationCount"]
+            + interaction["keyboardMutationCount"]
+            + interaction["buttonMutationCount"]
+        )
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-fictional-studio-hour-selection-from-image-sampled-occupancy-atlas"
+            or interaction["claimedLibrary"] != "motion@12.42.2"
+            or interaction["renderer"] != "svg"
+            or interaction["mechanism"] != "trusted-human-input-seeks-paused-motion-controller-driving-svg-radial-time-needle"
+            or interaction["assetMechanismRole"] != "visible-local-atlas-pixels-are-sampled-by-sector-to-classify-each-booking-slot"
+            or interaction["acceptedInputs"] != ["mouse-hover", "mouse-drag", "touch-drag", "pen-drag", "keyboard", "button-control"]
+            or not interaction["userInputRequired"]
+            or not interaction["strictTrustedInputGuard"]
+            or not interaction["initialFrameStatic"]
+            or interaction["automaticCycle"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["previewClockMutationCount"] != 0
+            or interaction["inputCount"] < 27
+            or interaction["trustedInputCount"] != interaction["inputCount"]
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["pointerEnterCount"] < 1
+            or interaction["hoverMoveCount"] < 2
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerMoveCount"] < 12
+            or interaction["pointerReleaseCount"] != 1
+            or interaction["pointerCancelCount"] != 0
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerCaptureReleaseCount"] != 1
+            or interaction["keyboardInputCount"] != 4
+            or interaction["buttonActivationCount"] != 5
+            or interaction["hoverMutationCount"] < 1
+            or interaction["dragMutationCount"] < 4
+            or interaction["keyboardMutationCount"] != 2
+            or interaction["buttonMutationCount"] != 3
+            or interaction["humanSelectionMutationCount"] != mutation_total
+            or interaction["humanInputCausalityCount"] != interaction["humanSelectionMutationCount"]
+            or interaction["confirmationCount"] != 3
+            or interaction["clearConfirmationCount"] != 2
+            or interaction["blockedConfirmationAttemptCount"] != 0
+            or interaction["visitedSlotCount"] < 7
+            or interaction["visitedSlotCount"] != len(interaction["visitedSlots"])
+            or interaction["firstHumanIndexBefore"] != 5
+            or interaction["firstHumanIndexAfter"] == 5
+            or interaction["lastInputKind"] != "keyboard"
+            or interaction["lastInputTrusted"] is not True
+            or interaction["lastPointerType"] != "mouse"
+            or interaction["activePointerId"] is not None
+            or interaction["pointerCaptured"]
+            or interaction["selectedIndex"] != 2
+            or interaction["selectedHour"] != 10
+            or interaction["selectedStatus"] != "open"
+            or not interaction["confirmed"]
+            or interaction["confirmedIndex"] != 2
+            or interaction["motionControllerCount"] != 1
+            or interaction["motionControllerDuration"] != 1
+            or not interaction["motionControllerPaused"]
+            or abs(interaction["motionControllerIndex"] - 2) > .03
+            or interaction["motionControllerSeekCount"] < 9
+            or interaction["motionControllerUpdateCount"] < 9
+            or interaction["assetFetchCount"] != 1
+            or interaction["assetResponseStatus"] != 200
+            or not interaction["assetSameOrigin"]
+            or "image/jpeg" not in interaction["assetMimeType"]
+            or interaction["assetByteLength"] != 176900
+            or interaction["assetSha256"] != "da602594965cf7c28078fabb04edc20bfad72e243ac62778a868f143c5cd5989"
+            or not interaction["assetShaMatchesExpected"]
+            or not interaction["browserImageDecoded"]
+            or interaction["sourceNaturalWidth"] != 960
+            or interaction["sourceNaturalHeight"] != 640
+            or interaction["sampledWidth"] != 96
+            or interaction["sampledHeight"] != 64
+            or interaction["sampledPixelCount"] != 6144
+            or interaction["sampledPixelByteLength"] != 24576
+            or len(interaction["sourcePixelChecksum"]) != 8
+            or interaction["distinctSampleColorCount"] <= 500
+            or interaction["sampledLumaRange"] <= 180
+            or interaction["sectorSamplePixelCount"] != 144
+            or len(interaction["sectorSampleChecksum"]) != 8
+            or len(interaction["availabilityBySlot"]) != 12
+            or any(slot["sampleCount"] != 12 or slot["hour"] != slot["index"] + 8 for slot in interaction["availabilityBySlot"])
+            or interaction["availabilityOpenCount"] < 4
+            or interaction["availabilityLimitedCount"] < 2
+            or interaction["availabilityBlockedCount"] < 2
+            or interaction["availabilityOpenCount"] + interaction["availabilityLimitedCount"] + interaction["availabilityBlockedCount"] != 12
+            or not interaction["assetEvidenceReady"]
+            or interaction["stageCoverageRatio"] <= .96
+            or interaction["dialCoverageRatio"] <= .16
+            or not interaction["initialStillVerified"]
+            or interaction["previewRenderCount"] < 36
+            or not interaction["runtimeAssertionPassed"]
+            or not interaction["ready"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture trusted hover, captured orbit, keyboard and reversible booking controls over twelve image-derived studio-hour states on one paused Motion needle: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "kinetic-paper-fold-map":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

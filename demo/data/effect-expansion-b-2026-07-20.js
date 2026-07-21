@@ -71,12 +71,12 @@ export const effectExpansion150BatchB = [
     scores: score(20, 20, 20, 15, 15, 10), rationaleZh: 'Night Garden 虚构票券把原创 ImageGen 夜间温室主视觉同时用于黑白票面与全彩兑换层；浏览器真实 fetch、SHA-256、双 DOM decode 与像素采样均可核验。真人捕获拖拽可保持中间揭角，低阈值有限回封、高阈值有限完成，键盘与按钮也能显式控制；首帧封闭，无自动循环、rehearsal、fallback、合成输入或预览时钟变更。'
   },
   {
-    id: 'radial-calendar-time-zoom', order: 132, name: 'Radial calendar time zoom', nameZh: '径向日历时间缩放', category: 'vector', sourceUrl: 'https://github.com/d3/d3-shape',
-    difference: '月份、周段和日期被编码到三层同心弧，指针沿角度选择一天，而不是线性时间轴。',
-    behavior: { trigger: 'pointer progress', response: 'Concentric schedule arcs rotate beneath a needle and resolve one day', timing: 'continuous radial scrub with discrete date readout', layer: 'SVG calendar dial' },
-    prompt: '实现三层同心日历弧和固定选针，横向输入映射到 360 度并更新离散日期。',
-    implementation: motionImplementation("const dial = animate(svg, { opacity: [.94, 1, .94] }, { duration: 3 }); needle.setAttribute('transform', `rotate(${angle})`);", 'https://github.com/d3/d3-shape', 'svg'),
-    scores: score(19, 18, 18, 15, 15, 10), rationaleZh: '径向结构使时间层级可视化，连续角度与离散日期的对应清楚。'
+    id: 'radial-calendar-time-zoom', order: 132, name: 'Northlight studio quiet-hour finder', nameZh: 'Northlight 工作室安静时段查找器', category: 'vector', sourceUrl: 'https://github.com/motiondivision/motion',
+    difference: '把装饰性的径向日期换成一项真实预约决策：同一张俯视工作室图的十二个扇区像素生成 08:00–19:00 的开放、有限或维护状态，选针、时段详情与 Hold 操作始终同步。',
+    behavior: { trigger: 'trusted mouse hover, captured mouse/touch/pen orbit, keyboard, or visible previous/next/hold control', response: 'Inspect an image-derived one-hour slot, compare capacity and maintenance state, then place or release a reversible hold', timing: 'human-owned discrete seek through one paused Motion controller', layer: 'full-stage booking brief, SVG radial selector, and decoded occupancy atlas' },
+    prompt: '制作一个可真人操作的环形工作室预约器。浏览器必须同源加载、精确校验并采样一张本地 ImageGen 俯视占用图，让十二个扇区的真实颜色和亮度决定 12 个小时的可用状态。鼠标悬停、捕获拖拽、触控、笔、键盘和按钮只 seek 一个暂停的 Motion 选针控制器；用户可确认或取消时段，首帧静止且无自动轮播。',
+    implementation: motionImplementation("const needle = animate(0, 11, { duration: 1, ease: 'linear', onUpdate: applyNeedle }); needle.pause(); needle.time = selectedIndex / 11;", 'https://github.com/motiondivision/motion', 'svg'),
+    scores: score(20, 20, 20, 15, 15, 10), rationaleZh: '原创 ImageGen 960×640 圆形工作室俯视图被真实 fetch、SHA-256 校验、浏览器解码并采样为 96×64；十二个径向扇区各贡献 12 个像素样本，直接生成开放、有限和维护时段。真人 hover、捕获 mouse/touch/pen drag、键盘与 Previous/Next/Hold 可往返检查并确认，暂停的 Motion 控制器只响应可信输入；全舞台适配 720、320 和 144 宽度，无自动循环、排练、fallback、合成输入或预览时钟变异。'
   },
   {
     id: 'typography-particle-disassembly-field', order: 133, name: 'Typography particle disassembly field', nameZh: '字体粒子解体场', category: 'canvas', sourceUrl: 'https://github.com/timdream/wordcloud2.js',

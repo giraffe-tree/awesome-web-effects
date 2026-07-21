@@ -1,8 +1,493 @@
-<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Radial Calendar Time Zoom</title><style>:root{--preview-background:#f3efe5}.preview-stage{background:#f3efe5;color:#1e2d2a}svg{position:absolute;right:6px;top:18px;width:205px;height:155px}.ring{fill:none;stroke:#1e2d2a26}.arc{fill:none;stroke-width:8;stroke-linecap:round}.needle{stroke:#ef5c41;stroke-width:2}.copy{position:absolute;left:14px;top:49px;width:99px}.copy small{font:900 6px monospace;letter-spacing:.13em;color:#a94635}.copy h1{margin:8px 0;font:950 21px/.84 system-ui;letter-spacing:-.06em}.date{position:absolute;left:14px;bottom:17px;font:900 10px monospace}.library-badge{color:#1e2d2a;background:#fff9;border-color:#1e2d2a44}.scene-caption{display:none}</style>  <script type="module" crossorigin src="./assets/radial-calendar-time-zoom-BoSzjUxB.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
-  <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
-  <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
-  <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
-  <link rel="modulepreload" crossorigin href="./assets/expansion-b-utils-CD_J0IHW.js">
-  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage" tabindex="0"><section class="copy"><small>YEAR / ORBIT</small><h1>ZOOM INTO A DAY.</h1></section><svg viewBox="0 0 205 155"><g transform="translate(109 77)"><circle class="ring" r="67"/><circle class="ring" r="49"/><circle class="ring" r="31"/><g id="calendar-arcs"></g><line id="calendar-needle" class="needle" x1="0" y1="0" x2="0" y2="-72"/><circle r="5" fill="#ef5c41"/></g></svg><b class="date" id="calendar-date">JUL · 20</b><span class="library-badge">SVG · temporal zoom</span></main></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Motion — Human-driven Studio Orbit Scheduler</title>
+    <link rel="icon" href="data:,">
+    <style>
+      :root {
+        --preview-background: #07131d;
+        color-scheme: dark;
+      }
+
+      button { font: inherit; }
+
+      .schedule-stage {
+        --dial-scale: 1;
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        background:
+          radial-gradient(circle at 75% 52%, rgba(135, 183, 152, .12), transparent 37%),
+          linear-gradient(112deg, #07131d 0%, #0a1b27 54%, #08151f 100%);
+        color: #f2f0e7;
+        outline: none;
+        touch-action: none;
+        user-select: none;
+      }
+
+      .schedule-stage:focus-visible {
+        box-shadow: inset 0 0 0 2px #e7b75e;
+      }
+
+      .grid,
+      .vignette {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+      }
+
+      .grid {
+        opacity: .2;
+        background-image:
+          linear-gradient(rgba(166, 203, 194, .12) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(166, 203, 194, .12) 1px, transparent 1px);
+        background-size: clamp(15px, 4.2vw, 30px) clamp(15px, 4.2vw, 30px);
+        mask-image: linear-gradient(90deg, #000, transparent 72%);
+      }
+
+      .vignette {
+        background:
+          linear-gradient(90deg, rgba(4, 12, 19, .28), transparent 50%),
+          radial-gradient(circle at 50% 50%, transparent 46%, rgba(2, 8, 12, .34));
+      }
+
+      .topline {
+        position: absolute;
+        z-index: 8;
+        top: clamp(7px, 3.2vw, 23px);
+        left: clamp(8px, 3.8vw, 27px);
+        right: clamp(8px, 3.8vw, 27px);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        pointer-events: none;
+      }
+
+      .brand,
+      .live-status,
+      .eyebrow,
+      .availability,
+      .time-meta,
+      .orbit-help,
+      .control,
+      .confirm,
+      .library-badge {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-weight: 800;
+        letter-spacing: .115em;
+        text-transform: uppercase;
+      }
+
+      .brand,
+      .live-status {
+        display: flex;
+        align-items: center;
+        gap: clamp(4px, 1vw, 8px);
+        color: rgba(238, 240, 228, .72);
+        font-size: clamp(4px, 1.35vw, 9px);
+        white-space: nowrap;
+      }
+
+      .brand::before {
+        width: clamp(12px, 3.5vw, 25px);
+        height: 1px;
+        background: #e7b75e;
+        content: "";
+      }
+
+      .live-status::before {
+        width: clamp(4px, 1vw, 7px);
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: #9bcfb3;
+        box-shadow: 0 0 9px rgba(155, 207, 179, .75);
+        content: "";
+      }
+
+      .brief {
+        position: absolute;
+        z-index: 6;
+        left: clamp(9px, 4.3vw, 31px);
+        top: 25%;
+        width: 37%;
+        max-width: 290px;
+      }
+
+      .eyebrow {
+        color: #e7b75e;
+        font-size: clamp(4px, 1.35vw, 10px);
+      }
+
+      .brief h1 {
+        margin: clamp(4px, 1.5vw, 11px) 0 0;
+        font: 620 clamp(14px, 5.5vw, 42px)/.82 Georgia, "Times New Roman", serif;
+        letter-spacing: -.06em;
+      }
+
+      .brief p {
+        max-width: 245px;
+        margin: clamp(5px, 1.5vw, 11px) 0 0;
+        color: rgba(231, 237, 226, .57);
+        font: 650 clamp(4px, 1.2vw, 9px)/1.42 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+      }
+
+      .selection-card {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        align-items: end;
+        gap: clamp(5px, 1.5vw, 11px);
+        margin-top: clamp(8px, 2.6vw, 19px);
+        padding-top: clamp(6px, 1.8vw, 13px);
+        border-top: 1px solid rgba(236, 237, 223, .18);
+      }
+
+      .selected-time {
+        color: #f7f2df;
+        font: 850 clamp(15px, 5.3vw, 40px)/.8 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: -.075em;
+      }
+
+      .time-meta {
+        display: grid;
+        gap: 2px;
+        color: rgba(237, 238, 223, .6);
+        font-size: clamp(4px, 1.05vw, 8px);
+        line-height: 1.18;
+      }
+
+      .time-meta strong { color: #f1ecdc; }
+
+      .availability {
+        grid-column: 1 / -1;
+        display: flex;
+        align-items: center;
+        gap: clamp(4px, 1.2vw, 8px);
+        color: #a8d6ba;
+        font-size: clamp(4px, 1.15vw, 9px);
+      }
+
+      .availability::before {
+        width: clamp(5px, 1.3vw, 9px);
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: currentColor;
+        box-shadow: 0 0 10px color-mix(in srgb, currentColor 72%, transparent);
+        content: "";
+      }
+
+      .schedule-stage[data-status="limited"] .availability { color: #e7b75e; }
+      .schedule-stage[data-status="blocked"] .availability { color: #e57a66; }
+
+      .dial-shell {
+        position: absolute;
+        z-index: 4;
+        top: 50%;
+        right: clamp(-10px, 1.2vw, 9px);
+        width: min(59vw, 89vh);
+        aspect-ratio: 1;
+        overflow: hidden;
+        border: 1px solid rgba(222, 232, 215, .2);
+        border-radius: 50%;
+        background: #091923;
+        box-shadow:
+          0 22px 60px rgba(0, 0, 0, .48),
+          0 0 0 clamp(3px, .8vw, 6px) rgba(7, 20, 29, .9),
+          0 0 0 clamp(4px, 1.15vw, 9px) rgba(212, 225, 207, .1);
+        transform: translateY(-50%) scale(var(--dial-scale));
+        transform-origin: 50% 50%;
+        cursor: crosshair;
+        touch-action: none;
+      }
+
+      .dial-shell:focus-visible {
+        box-shadow: 0 0 0 2px #e7b75e, 0 22px 60px rgba(0, 0, 0, .48);
+      }
+
+      .atlas-image,
+      .atlas-grade,
+      .calendar-svg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .atlas-image {
+        object-fit: cover;
+        object-position: center;
+        filter: saturate(.82) contrast(1.09) brightness(.78);
+        pointer-events: none;
+      }
+
+      .atlas-grade {
+        background:
+          radial-gradient(circle, rgba(8, 18, 23, .03) 0 32%, rgba(6, 16, 23, .12) 50%, rgba(4, 12, 18, .66) 82% 100%),
+          linear-gradient(135deg, rgba(224, 236, 211, .12), transparent 42%);
+        pointer-events: none;
+      }
+
+      .calendar-svg {
+        z-index: 3;
+        overflow: visible;
+        pointer-events: none;
+      }
+
+      .slot-arc {
+        fill: none;
+        stroke-width: 6;
+        stroke-linecap: round;
+        opacity: .72;
+        transition: opacity 90ms ease, stroke-width 90ms ease, filter 90ms ease;
+      }
+
+      .slot-arc[data-status="open"] { stroke: #a8d6ba; }
+      .slot-arc[data-status="limited"] { stroke: #e7b75e; }
+      .slot-arc[data-status="blocked"] { stroke: #e57a66; opacity: .46; }
+      .slot-arc[data-selected="true"] { stroke-width: 10; opacity: 1; filter: drop-shadow(0 0 4px currentColor); }
+
+      .slot-tick {
+        stroke: rgba(245, 243, 229, .5);
+        stroke-width: 1;
+      }
+
+      .needle {
+        transform-origin: 100px 100px;
+        will-change: transform;
+      }
+
+      .needle-line {
+        stroke: #f8f1d9;
+        stroke-width: 1.2;
+        stroke-linecap: round;
+        filter: drop-shadow(0 1px 4px rgba(2, 8, 12, .8));
+      }
+
+      .needle-dot {
+        fill: #e7b75e;
+        stroke: rgba(255, 251, 231, .8);
+        stroke-width: 1;
+      }
+
+      .center-status {
+        position: absolute;
+        z-index: 4;
+        left: 50%;
+        top: 50%;
+        display: grid;
+        place-items: center;
+        width: 38%;
+        aspect-ratio: 1;
+        padding: 8%;
+        border: 1px solid rgba(235, 236, 216, .24);
+        border-radius: 50%;
+        background: rgba(5, 15, 21, .73);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, .34), inset 0 0 18px rgba(202, 226, 204, .06);
+        transform: translate(-50%, -50%);
+        text-align: center;
+        backdrop-filter: blur(5px);
+        pointer-events: none;
+      }
+
+      .center-status span,
+      .center-status small {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        text-transform: uppercase;
+      }
+
+      .center-status span {
+        font-size: clamp(9px, 3vw, 23px);
+        font-weight: 900;
+        letter-spacing: -.06em;
+      }
+
+      .center-status small {
+        color: rgba(236, 239, 224, .64);
+        font-size: clamp(3px, .95vw, 7px);
+        font-weight: 800;
+        letter-spacing: .1em;
+      }
+
+      .orbit-help {
+        position: absolute;
+        z-index: 7;
+        right: calc(min(59vw, 89vh) * .05);
+        bottom: clamp(5px, 2.6vw, 18px);
+        color: rgba(236, 239, 225, .48);
+        font-size: clamp(3px, .9vw, 7px);
+        pointer-events: none;
+      }
+
+      .controls {
+        position: absolute;
+        z-index: 10;
+        left: clamp(9px, 4.3vw, 31px);
+        bottom: clamp(8px, 4vw, 28px);
+        display: flex;
+        align-items: center;
+        gap: clamp(4px, 1.1vw, 8px);
+      }
+
+      .control,
+      .confirm {
+        min-width: clamp(24px, 7vw, 50px);
+        min-height: clamp(18px, 5.4vw, 39px);
+        border: 1px solid rgba(235, 239, 224, .22);
+        border-radius: 999px;
+        background: rgba(7, 20, 29, .82);
+        color: rgba(242, 240, 226, .82);
+        font-size: clamp(4px, 1.05vw, 8px);
+        cursor: pointer;
+        backdrop-filter: blur(7px);
+      }
+
+      .control:hover,
+      .control:focus-visible,
+      .confirm:hover,
+      .confirm:focus-visible {
+        border-color: #e7b75e;
+        color: #fff8df;
+        outline: none;
+      }
+
+      .confirm {
+        min-width: clamp(68px, 18vw, 128px);
+        border-color: rgba(168, 214, 186, .48);
+        background: #b8d9bc;
+        color: #09201f;
+      }
+
+      .confirm[disabled] {
+        border-color: rgba(229, 122, 102, .28);
+        background: rgba(229, 122, 102, .15);
+        color: rgba(244, 218, 208, .46);
+        cursor: not-allowed;
+      }
+
+      .schedule-stage[data-confirmed="true"] .confirm {
+        border-color: #e7b75e;
+        background: #e7b75e;
+        color: #14201e;
+      }
+
+      .schedule-stage .library-badge {
+        top: auto;
+        left: auto;
+        right: clamp(8px, 3.8vw, 27px);
+        bottom: clamp(7px, 3vw, 21px);
+        padding: clamp(3px, .9vw, 6px) clamp(5px, 1.4vw, 10px);
+        border-color: rgba(235, 238, 219, .2);
+        background: rgba(4, 13, 19, .72);
+        color: rgba(238, 239, 225, .7);
+        font-size: clamp(3px, .9vw, 7px);
+      }
+
+      .sample-canvas { display: none; }
+      .scene-caption { display: none; }
+
+      @media (max-aspect-ratio: 1.56) {
+        .brief { width: 35%; }
+        .brief p { display: none; }
+        .dial-shell { right: -2.5%; width: min(62vw, 88vh); }
+        .orbit-help { display: none; }
+      }
+
+      @media (max-width: 220px) {
+        .brief { top: 28%; width: 34%; }
+        .brief h1 { font-size: clamp(9px, 5.5vw, 14px); }
+        .time-meta { display: none; }
+        .selection-card { display: block; }
+        .availability { margin-top: 4px; }
+        .controls { gap: 2px; }
+        .control { min-width: 18px; padding: 0 5px; }
+        .confirm { min-width: 52px; padding: 0 7px; }
+        .dial-shell { right: -4%; width: min(63vw, 86vh); }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .slot-arc { transition: none; }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/radial-calendar-time-zoom-CXAJwbf-.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+    <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main
+      class="preview-stage schedule-stage"
+      id="schedule-stage"
+      data-preview-mechanism="motion-paused-controller-image-sampled-radial-time-selector"
+      data-status="open"
+      data-confirmed="false"
+      tabindex="0"
+      aria-label="Northlight studio radial schedule. Use the pointer, arrow keys, or controls to choose and hold a time."
+    >
+      <div class="grid" aria-hidden="true"></div>
+      <div class="vignette" aria-hidden="true"></div>
+
+      <header class="topline" aria-hidden="true">
+        <span class="brand">Northlight / studio 02</span>
+        <span class="live-status">Pixel scan ready</span>
+      </header>
+
+      <section class="brief" aria-live="polite">
+        <span class="eyebrow">Sunday · 27 September</span>
+        <h1>Find a quiet hour.</h1>
+        <p>The venue scan classifies each bay. Orbit the dial to inspect one-hour holds.</p>
+        <div class="selection-card">
+          <strong class="selected-time" id="selected-time">13:00</strong>
+          <span class="time-meta"><strong id="slot-label">Studio 02</strong><span id="slot-detail">14 seats · daylight</span></span>
+          <span class="availability" id="availability">Open · scan 164</span>
+        </div>
+      </section>
+
+      <div
+        class="dial-shell"
+        id="calendar-dial"
+        role="slider"
+        tabindex="0"
+        aria-label="Studio time selector"
+        aria-valuemin="8"
+        aria-valuemax="19"
+        aria-valuenow="13"
+        aria-valuetext="13:00, open"
+      >
+        <img
+          class="atlas-image"
+          id="atlas-image"
+          src="./assets/studio-occupancy-atlas-DJDFMPye.jpg"
+          alt="Fictional overhead occupancy atlas of a twelve-bay circular studio"
+          draggable="false"
+        >
+        <div class="atlas-grade" aria-hidden="true"></div>
+        <svg class="calendar-svg" viewBox="0 0 200 200" aria-hidden="true">
+          <g id="slot-arcs"></g>
+          <g id="slot-ticks"></g>
+          <g class="needle" id="calendar-needle">
+            <line class="needle-line" x1="100" y1="100" x2="100" y2="20"></line>
+            <circle class="needle-dot" cx="100" cy="18" r="3.8"></circle>
+          </g>
+        </svg>
+        <div class="center-status" aria-hidden="true">
+          <span id="center-time">13</span>
+          <small id="center-state">open bay</small>
+        </div>
+      </div>
+
+      <div class="controls" aria-label="Schedule controls">
+        <button class="control" type="button" data-calendar-action="previous" aria-label="Previous time">−</button>
+        <button class="confirm" id="confirm-slot" type="button" data-calendar-action="confirm">Hold 13:00</button>
+        <button class="control" type="button" data-calendar-action="next" aria-label="Next time">+</button>
+      </div>
+
+      <span class="orbit-help">Drag orbit · arrows · enter to hold</span>
+      <span class="library-badge">Motion · image pixels</span>
+      <canvas class="sample-canvas" id="sample-canvas" width="96" height="64" aria-hidden="true"></canvas>
+    </main>
+  </body>
+</html>

@@ -1,1 +1,44 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p5.js — Pressure Shaped Freehand Stroke</title><link rel="stylesheet" href="./shared.css"><style>:root{--preview-background:#f1eee6;color-scheme:light}#pressure-host{position:absolute;inset:0;cursor:crosshair}#pressure-host canvas{width:100%!important;height:100%!important}.pressure-copy{position:absolute;z-index:5;left:14px;top:43px;color:#25231f;pointer-events:none}.pressure-copy small{font:800 6px/1 ui-monospace;letter-spacing:.16em;color:#245fff}.pressure-copy h1{width:101px;margin:8px 0 0;font:950 17px/.86 system-ui;letter-spacing:-.05em}.pressure-value{position:absolute;right:12px;top:12px;z-index:5;color:#245fff;font:900 7px/1 ui-monospace}.library-badge{background:#f1eee6d9;color:#25231f;border-color:#615d5355}.scene-caption{color:#615d53}</style></head><body><main class="preview-stage" data-preview-mechanism="pressure-to-outline-geometry"><div id="pressure-host" tabindex="0" aria-label="Draw with pointer pressure; the filled outline expands and contracts with pressure"></div><section class="pressure-copy"><small>FREEHAND / PRESSURE</small><h1>ONE LINE BECOMES A RIBBON.</h1></section><output class="pressure-value" id="pressure-value">PRESSURE 0.10</output><span class="library-badge">p5.js · pressure outline</span><span class="scene-caption">PointerEvent.pressure → variable-width polygon</span></main><script type="module" src="./src/pressure-shaped-freehand-stroke-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>p5.js — Pressure-Shaped Proof Annotation</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="./shared.css">
+  <style>
+    :root{--preview-background:#0b1114;color-scheme:dark;--paper:#d9e2dc;--muted:#87958f;--ink:#ff7058;--mint:#a8f0c6}
+    #proof-stage{overflow:hidden;background:#0b1114;color:var(--paper)}
+    #pressure-host{position:absolute;inset:0;cursor:crosshair;outline:none;touch-action:none}
+    #pressure-host:focus-visible{box-shadow:inset 0 0 0 2px #ff705866}
+    #pressure-host canvas{width:100%!important;height:100%!important}
+    .proof-header{position:absolute;z-index:7;left:11px;right:11px;top:9px;display:flex;align-items:center;justify-content:space-between;pointer-events:none;font:850 5px/1 ui-monospace;letter-spacing:.13em;text-transform:uppercase}
+    .proof-header span:first-child{display:flex;align-items:center;gap:6px}.proof-header span:first-child::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--ink);box-shadow:0 0 0 3px #ff70581c}.proof-header span:last-child{color:#66736e}
+    .proof-copy{position:absolute;z-index:6;left:12px;top:39px;width:80px;pointer-events:none}.proof-copy small{font:800 5px/1 ui-monospace;letter-spacing:.14em;color:var(--ink)}.proof-copy h1{margin:7px 0 0;font:950 15px/.87 system-ui;letter-spacing:-.055em}.proof-copy p{margin:7px 0 0;font:650 5px/1.35 system-ui;color:var(--muted)}
+    .pressure-panel{position:absolute;z-index:10;right:11px;top:27px;width:96px;padding:6px 7px;border:1px solid #d9e2dc24;border-radius:8px;background:#10191ce8;box-shadow:0 5px 16px #0004}.pressure-panel label{display:flex;align-items:center;justify-content:space-between;font:800 5px/1 ui-monospace;letter-spacing:.1em;color:#83918c}.pressure-panel output{color:var(--ink);font-weight:950}.pressure-panel input{display:block;width:100%;height:12px;margin:3px 0 0;accent-color:var(--ink);cursor:ew-resize}.pressure-source{display:block;margin-top:2px;color:#66736e;font:750 4px/1 ui-monospace;letter-spacing:.08em;text-align:right}
+    .proof-status{position:absolute;z-index:7;right:12px;bottom:49px;pointer-events:none;text-align:right}.proof-status small{display:block;font:750 5px/1 ui-monospace;letter-spacing:.11em;color:#6f7c77}.proof-status output{display:block;margin-top:4px;font:900 6px/1 ui-monospace;letter-spacing:.06em;color:#a5b0ac}.proof-status[data-retained="true"] output{color:var(--mint)}
+    .proof-controls{position:absolute;z-index:11;left:11px;right:11px;bottom:8px;display:flex;align-items:center;gap:5px}.keyboard-hint{margin-right:auto;color:#697772;font:750 4px/1.25 ui-monospace;letter-spacing:.06em;pointer-events:none}.proof-action{height:34px;min-width:42px;padding:0 8px;border:1px solid #d9e2dc24;border-radius:8px;background:#121c1f;color:#93a09b;cursor:pointer;font:850 5px/1 ui-monospace;letter-spacing:.08em}.proof-action:disabled{opacity:.35;cursor:not-allowed}.proof-action:focus-visible{outline:1px solid var(--ink);outline-offset:1px}.proof-action.confirm{border-color:#a8f0c65c;background:#14241d;color:var(--mint)}
+    @media(max-width:270px){.proof-header span:last-child{display:none}.proof-copy{top:39px;width:195px}.proof-copy h1{width:180px;font-size:17px}.proof-copy p{width:190px}.pressure-panel{top:96px;width:104px}.proof-status{bottom:54px}.proof-controls{gap:4px}.keyboard-hint{display:none}.proof-action{height:40px;flex:1;padding:0 5px}.proof-action.confirm{flex:1.35}}
+  </style>
+</head>
+<body>
+  <main id="proof-stage" class="preview-stage" data-preview-mechanism="trusted-pressure-samples-to-variable-width-p5-outline">
+    <div id="pressure-host" tabindex="0" role="application" aria-label="Packaging proof annotation surface. Draw with pressure, use the visible pressure control for a mouse, use arrow keys to move, brackets to change pressure, Space to lower or lift the keyboard pen, Enter to confirm, Z to undo, and R to reset."></div>
+    <header class="proof-header"><span>Carton Dieline / Proof 04</span><span>p5.js · pressure geometry</span></header>
+    <section class="proof-copy"><small>STRUCTURAL REVIEW</small><h1>MAKE THE CONCERN CARRY WEIGHT.</h1><p>Use a light note and a firm mark. Pen pressure—or this explicit mouse control—shapes the ink.</p></section>
+    <section class="pressure-panel" aria-label="Explicit pressure control for mouse and keyboard input">
+      <label for="pressure-control"><span>INK PRESSURE</span><output id="pressure-value">35%</output></label>
+      <input id="pressure-control" type="range" min="10" max="100" step="5" value="35" aria-label="Annotation pressure">
+      <span id="pressure-source" class="pressure-source">MANUAL INPUT</span>
+    </section>
+    <span id="proof-status" class="proof-status" data-retained="false"><small>REVIEW STATE</small><output id="status-output">AWAITING HUMAN MARK</output></span>
+    <footer class="proof-controls">
+      <span class="keyboard-hint">ARROWS DRAW · [ ] PRESSURE · SPACE PEN</span>
+      <button id="undo-stroke" class="proof-action" type="button" disabled>UNDO</button>
+      <button id="reset-proof" class="proof-action" type="button" disabled>RESET</button>
+      <button id="confirm-proof" class="proof-action confirm" type="button">CONFIRM</button>
+    </footer>
+  </main>
+  <script type="module" src="./src/pressure-shaped-freehand-stroke-demo.js"></script>
+</body>
+</html>

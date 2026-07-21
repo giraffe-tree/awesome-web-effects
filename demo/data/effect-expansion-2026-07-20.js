@@ -3152,16 +3152,16 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "pressure-shaped-freehand-stroke",
-    "name": "Pressure-shaped freehand stroke",
-    "nameZh": "压力塑形自由笔触",
+    "name": "Human-pressure packaging proof marks",
+    "nameZh": "真人压力塑形的包装校样批注",
     "category": "canvas",
     "sourceUrl": "https://github.com/steveruizok/perfect-freehand",
-    "difference": "raw pressure 样本被转换为可填充变宽轮廓；签名墨迹以速度滤波为主。",
+    "difference": "真人 pen pressure 或可见鼠标压力控制值逐点生成 p5 可变宽封闭轮廓；轻批注与重勾选并存，显式确认后保留包装校样决定。",
     "behavior": {
-      "trigger": "pointer pressure / drag",
-      "response": "Convert raw pressure points into a smooth filled outline",
-      "timing": "continuous pressure-aware geometry",
-      "layer": "Canvas/SVG freehand surface"
+      "trigger": "trusted pen/mouse drag with hardware or visible manual pressure, then explicit confirmation",
+      "response": "Convert each pressure sample into continuous variable-width proof-mark geometry and retain the review",
+      "timing": "live pressure-aware geometry plus explicit retained commit",
+      "layer": "full-stage p5 carton dieline review surface and DOM controls"
     },
     "implementation": {
       "projectId": "processing-p5-js",
@@ -3172,21 +3172,21 @@ export const effectExpansion100Specs = [
       "referenceUrl": "https://github.com/steveruizok/perfect-freehand"
     },
     "scores": {
-      "creativity": 17,
-      "artDirection": 17,
-      "motion": 19,
+      "creativity": 20,
+      "artDirection": 20,
+      "motion": 20,
       "clarity": 15,
       "inspiration": 15,
-      "evidence": 9,
-      "total": 92
+      "evidence": 10,
+      "total": 100
     },
-    "rationaleZh": "压力与轮廓几何直接对应，适合笔刷和批注创作。",
+    "rationaleZh": "两笔十八个真人样本、0.20→0.85 压力区间、7.02px 宽差、包装结构稿语境与显式确认共同证明压力直接塑造可用批注几何。",
     "batch": "C",
-    "demo": "同一条蛇形线随模拟 pressure 从针尖逐渐变成宽阔色带。",
-    "capture": "派发固定 pressure 0.1→0.9→0.2 的 pointer 轨迹→undo→重播。",
+    "demo": "在 Carton 14 包装结构稿上将可见压力调为 20% 画轻批注，再调为 85% 画重勾选，最后确认并保留两笔校样意见。",
+    "capture": "首帧空白静止→真人键盘调整 20% 压力→拖画轻批注→调整 85%→拖画重勾选→点击 Confirm→停留在 APPROVED WITH 2 MARKS。",
     "risk": {
       "level": "medium",
-      "detail": "鼠标 pressure 常固定，capture 必须合成真实 PointerEvent pressure 并记录。"
+      "detail": "鼠标 pressure 常固定，必须提供可见、可信且可键盘操作的压力控制；不得合成或派发伪造 PointerEvent。"
     },
     "observedImplementation": {
       "projectId": "steveruizok-perfect-freehand",

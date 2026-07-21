@@ -1767,6 +1767,39 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.locator('#undo-stroke').click()
             elif index == 26:
                 page.locator('#confirm-signature').click()
+        elif demo["id"] == "pressure-shaped-freehand-stroke":
+            if index == 2:
+                page.locator('#pressure-control').focus()
+                page.keyboard.press('Home')
+                page.keyboard.press('ArrowRight')
+                page.keyboard.press('ArrowRight')
+            elif index == 4:
+                page.mouse.move(131.7, 75.6)
+                page.mouse.down()
+            elif 5 <= index <= 10:
+                progress = (index - 4) / 6
+                page.mouse.move(131.7 + (211.7 - 131.7) * progress, 75.6 + (82.3 - 75.6) * progress)
+                if index == 10:
+                    page.mouse.up()
+            elif index == 11:
+                page.locator('#pressure-control').focus()
+                page.keyboard.press('End')
+                page.keyboard.press('ArrowLeft')
+                page.keyboard.press('ArrowLeft')
+                page.keyboard.press('ArrowLeft')
+            elif index == 13:
+                page.mouse.move(221.9, 95.7)
+                page.mouse.down()
+            elif 14 <= index <= 18:
+                progress = (index - 13) / 5
+                page.mouse.move(221.9 + (246.5 - 221.9) * progress, 95.7 + (110.8 - 95.7) * progress)
+            elif 19 <= index <= 23:
+                progress = (index - 18) / 5
+                page.mouse.move(246.5 + (289.6 - 246.5) * progress, 110.8 + (68.0 - 110.8) * progress)
+                if index == 23:
+                    page.mouse.up()
+            elif index == 25:
+                page.locator('#confirm-proof').click()
         elif demo["id"] == "gooey-pixel-cursor-wake":
             if index == 3:
                 box = page.locator('#pixel-wake-host').bounding_box()
@@ -6945,6 +6978,74 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or page.locator('#clear-signature').is_disabled()
         ):
             raise RuntimeError(f"{demo['id']} did not capture a real velocity-mapped contract signature, revision, and retained confirmation: {interaction!r}")
+    elif demo["id"] == "pressure-shaped-freehand-stroke":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        if (
+            not assertion
+            or interaction["id"] != "pressure-shaped-freehand-stroke"
+            or interaction["task"] != "human-annotates-a-packaging-proof-with-pressure-shaped-ink-and-explicitly-confirms-or-revises-the-mark"
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["mechanism"] != "trusted-pointer-pressure-or-visible-manual-pressure-maps-directly-to-variable-width-p5-outline-geometry"
+            or interaction["assetStrategy"] != "code-native-dieline-and-trusted-pressure-sample-geometry-no-functional-raster-input-required"
+            or interaction["imageGenerationDecision"] != "omitted-because-raster-pixels-would-not-drive-pressure-sampling-width-mapping-or-review-retention"
+            or interaction["causality"] != "trusted-human-input-only"
+            or interaction["automaticDrawing"]
+            or interaction["automaticStrokePlayback"]
+            or interaction["authoredFallbackStroke"]
+            or interaction["automaticFallback"]
+            or interaction["previewClockDriven"]
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["untrustedInputPolicy"] != "reject-before-pressure-point-stroke-or-review-decision-mutation"
+            or interaction["untrustedMutationCount"] != 0
+            or not interaction["initialBlankVerified"]
+            or not interaction["reviewRetained"]
+            or interaction["phase"] != "review-retained"
+            or interaction["result"] != "pressure-shaped-packaging-review-retained"
+            or interaction["strokeCount"] != 2
+            or interaction["pointCount"] != 18
+            or interaction["segmentCount"] != 16
+            or interaction["pointerDownCount"] != 2
+            or interaction["pointerMoveCount"] != 16
+            or interaction["pointerUpCount"] != 2
+            or interaction["pointerCaptureCount"] != 2
+            or interaction["pointerCaptureReleaseCount"] != 2
+            or interaction["manualPressureInputCount"] != 7
+            or interaction["manualPressureSampleCount"] != 18
+            or interaction["hardwarePressureSampleCount"] != 0
+            or abs(interaction["minimumObservedPressure"] - .2) > .001
+            or abs(interaction["maximumObservedPressure"] - .85) > .001
+            or abs(interaction["pressureRange"] - .65) > .001
+            or abs(interaction["minimumObservedWidth"] - 3.36) > .001
+            or abs(interaction["maximumObservedWidth"] - 10.38) > .001
+            or abs(interaction["widthRange"] - 7.02) > .001
+            or not interaction["pressureWidthMappingVerified"]
+            or interaction["widthMappingErrorMaximum"] >= .001
+            or interaction["confirmationCount"] != 1
+            or interaction["rejectedConfirmationCount"] != 0
+            or interaction["retainedStrokeCount"] != 2
+            or interaction["retainedPointCount"] != 18
+            or abs(interaction["retainedPressureRange"] - .65) > .001
+            or not isinstance(interaction["retainedGeometryChecksum"], int)
+            or interaction["retainedGeometryChecksum"] <= 1000
+            or interaction["inputCount"] != 28
+            or interaction["trustedInputCount"] != 28
+            or interaction["pointerInputCount"] != 20
+            or interaction["keyboardInputCount"] != 0
+            or interaction["controlInputCount"] != 8
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or not interaction["allPointsWithinBoundary"]
+            or not interaction["boundaryWithinStage"]
+            or not interaction["fullStageGeometryVerified"]
+            or interaction["canvasCoverageRatio"] < .995
+            or not interaction["p5InstanceReady"]
+            or not interaction["canvas2dReady"]
+            or not interaction["ready"]
+            or page.locator('#proof-status').get_attribute('data-retained') != "true"
+            or page.locator('#status-output').text_content() != "APPROVED WITH 2 MARKS"
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture real light/firm pressure-shaped packaging proof marks and retained review: {interaction!r}")
     elif demo["id"] == "gooey-pixel-cursor-wake":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")

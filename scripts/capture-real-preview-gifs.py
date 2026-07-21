@@ -1573,6 +1573,33 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.locator('#nav-toggle').click()
             elif 27 <= index <= 33:
                 page.wait_for_timeout(100)
+        elif demo["id"] == "drag-thrown-card-stack":
+            if index in {3, 18}:
+                box = page.locator('.throw-card[data-active="true"]').bounding_box()
+                page.mouse.move(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2)
+            elif index == 4:
+                page.mouse.down()
+            elif index == 6:
+                box = page.locator('.throw-card[data-active="true"]').bounding_box()
+                page.mouse.move(box["x"] + box["width"] / 2 + 10, box["y"] + box["height"] / 2 + 2)
+            elif index == 9:
+                box = page.locator('#stack-field').bounding_box()
+                page.mouse.move(box["x"] + box["width"] / 2 + 24, box["y"] + box["height"] / 2 + 3)
+            elif index == 11:
+                page.mouse.up()
+            elif 12 <= index <= 17:
+                page.wait_for_timeout(80)
+            elif index == 19:
+                page.mouse.down()
+            elif index == 20:
+                box = page.locator('.throw-card[data-active="true"]').bounding_box()
+                center_x = box["x"] + box["width"] / 2
+                center_y = box["y"] + box["height"] / 2
+                page.mouse.move(center_x + 24, center_y - 2)
+                page.mouse.move(center_x + 120, center_y - 8)
+                page.mouse.up()
+            elif 21 <= index <= 27:
+                page.wait_for_timeout(80)
         elif demo["id"] == "gooey-pixel-cursor-wake":
             if index == 3:
                 box = page.locator('#pixel-wake-host').bounding_box()
@@ -5769,6 +5796,77 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["geometryMeasureCount"] <= 0
         ):
             raise RuntimeError(f"{demo['id']} did not capture a real retained Field Atlas section choice through a finite bubble navigation morph: {interaction!r}")
+    elif demo["id"] == "drag-thrown-card-stack":
+        interaction = page.evaluate("window.__THROW_STACK_STATE__")
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        pixel_signatures = interaction["cropPixelSignatures"]
+        if (
+            not assertion
+            or interaction["task"] != "human-release-velocity-settles-a-rental-card-or-advances-the-shortlist-with-retained-decisions"
+            or interaction["claimedLibrary"] != "motion@12.42.2"
+            or interaction["mechanism"] != "trusted-drag-samples-real-release-velocity-then-finite-motion-settlement-either-restores-the-card-or-transfers-active-order-to-the-next-listing"
+            or interaction["assetStrategy"] != "one-imagegen-triptych-is-cropped-into-three-functional-listing-identities-and-verified-by-distinct-runtime-pixel-signatures"
+            or interaction["assetGenerationTool"] != "openai-built-in-imagegen"
+            or interaction["assetSha256"] != "7e443914677b8439cd18048b3ad26381e54b49b7c0237f8ecad7224d72568efd"
+            or interaction["automaticThrow"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticCycle"]
+            or interaction["automaticTimeline"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or interaction["previewClockMutationCount"] != 0
+            or interaction["phase"] != "advanced"
+            or interaction["settlementKind"] != "fast-pass"
+            or interaction["landingZone"] != "passed-right"
+            or interaction["activeCardIndex"] != 1
+            or interaction["previousListingId"] != "cedar-cove"
+            or interaction["activeListingId"] != "atlas-loft"
+            or interaction["inputCount"] != interaction["trustedInputCount"]
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["pointerDownCount"] != 2
+            or interaction["pointerMoveCount"] != 4
+            or interaction["pointerUpCount"] != 2
+            or interaction["pointerCaptured"]
+            or interaction["pointerCaptureCount"] != 2
+            or interaction["pointerCaptureReleaseCount"] != 2
+            or interaction["releaseSampleCount"] != 2
+            or interaction["releaseSpeed"] < .52
+            or interaction["slowSettlementCount"] != 1
+            or interaction["fastSettlementCount"] != 1
+            or interaction["settlementStartCount"] != 2
+            or interaction["settlementCompleteCount"] != 2
+            or interaction["motionControlCount"] != 3
+            or interaction["motionStartCount"] != 3
+            or interaction["motionCompleteCount"] != 3
+            or not all(record["completed"] and record["trusted"] and 0 < record["duration"] <= .62 for record in interaction["motionRecords"])
+            or interaction["retainedDecisionCount"] != 2
+            or interaction["heldDecisionCount"] != 1
+            or interaction["passedDecisionCount"] != 1
+            or len(interaction["decisionHistory"]) != 2
+            or [decision["kind"] for decision in interaction["decisionHistory"]] != ["slow-hold", "fast-pass"]
+            or any(decision["listingId"] != "cedar-cove" for decision in interaction["decisionHistory"])
+            or interaction["cardsAdvancedCount"] != 1
+            or interaction["orderTakeoverCount"] != 1
+            or not interaction["resultHeld"]
+            or not interaction["resultValidated"]
+            or not interaction["imageReady"]
+            or interaction["imageNaturalWidth"] != 1200
+            or interaction["imageNaturalHeight"] != 800
+            or interaction["imageAspectRatio"] != 1.5
+            or interaction["imageReferenceCount"] != 3
+            or interaction["cropIndices"] != [2, 1, 0]
+            or len(pixel_signatures) != 3
+            or len(set(pixel_signatures)) != 3
+            or any(len(signature.rsplit(':', 1)[-1]) != 8 or any(character not in "0123456789abcdef" for character in signature.rsplit(':', 1)[-1]) for signature in pixel_signatures)
+            or not interaction["initialStillVerified"]
+            or interaction["humanMutationCount"] <= 0
+            or interaction["nonInputMutationCount"] != 0
+            or not (.3 <= interaction["geometryCoverageX"] <= .98)
+            or not (.35 <= interaction["geometryCoverageY"] <= .9)
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture real slow-hold and fast-pass rental decisions with a retained card-order takeover: {interaction!r}")
     elif demo["id"] == "gooey-pixel-cursor-wake":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")

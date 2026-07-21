@@ -1930,16 +1930,16 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "drag-thrown-card-stack",
-    "name": "Drag-thrown card stack",
-    "nameZh": "拖拽甩出卡片堆",
+    "name": "Release-velocity rental discovery stack",
+    "nameZh": "释放速度驱动的房源发现卡组",
     "category": "pointer",
     "sourceUrl": "https://github.com/DavidHDev/react-bits/blob/main/public/r/Stack-TS-TW.json",
-    "difference": "前卡按真实拖拽速度甩到堆底，其余卡弹簧前移；不是刚体自由碰撞或网格重排。",
+    "difference": "真人拖拽的真实释放速度决定前卡是慢放回落并记录 HELD，还是快速甩出并让下一房源接管顶层；两个决策都被保留，不是自动投掷或固定演示路径。",
     "behavior": {
-      "trigger": "pointer drag/release",
-      "response": "Throw the front card behind the deck and spring the next card forward",
-      "timing": "gesture velocity + ordered deck state",
-      "layer": "card stack"
+      "trigger": "trusted captured pointer drag/release or keyboard hold/pass command",
+      "response": "Settle Cedar Cove in place after a slow release or pass it right and transfer focus to Atlas Loft after a fast release",
+      "timing": "measured release velocity plus finite 620ms-or-shorter Motion settlement",
+      "layer": "full-stage Habitat rental discovery stack and retained decision history"
     },
     "implementation": {
       "projectId": "motiondivision-motion",
@@ -1950,18 +1950,18 @@ export const effectExpansion100Specs = [
       "referenceUrl": "https://github.com/DavidHDev/react-bits/blob/main/public/r/Stack-TS-TW.json"
     },
     "scores": {
-      "creativity": 18,
-      "artDirection": 18,
-      "motion": 19,
+      "creativity": 20,
+      "artDirection": 20,
+      "motion": 20,
       "clarity": 15,
       "inspiration": 15,
-      "evidence": 9,
-      "total": 94
+      "evidence": 10,
+      "total": 100
     },
-    "rationaleZh": "速度、顺序和堆叠身份同时变化，行为容易命名。",
+    "rationaleZh": "慢放与快甩产生可见的不同落点、房源身份与卡序接管结果；原创三联房源图的三个像素裁切也被运行时采样为不同卡片身份。",
     "batch": "B",
-    "demo": "五张摄影卡堆，用户把前卡向右上甩出，卡片绕回底层。",
-    "capture": "慢拖回弹→快速甩出→等待下一卡归位→再向反方向甩。",
+    "demo": "在 Habitat 房源发现卡组中，真人先慢放 Cedar Cove 使其回落并记录 HELD，再快速向右甩出，使 Atlas Loft 接管顶层并保留 PASSED 决策。",
+    "capture": "首帧静止→慢拖并释放→等待 HELD 回落→再次拖拽并快速甩出→等待 Atlas Loft 接管→保留两条决策历史；键盘提供等价路径。",
     "risk": {
       "level": "high",
       "detail": "许可未明；随机旋转要固定，防止 capture 不可复现。"

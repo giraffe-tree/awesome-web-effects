@@ -3,41 +3,380 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Motion — Drag-thrown Card Stack</title>
+    <title>Motion — Habitat Discovery Throw Stack</title>
     <link rel="stylesheet" href="./shared.css" />
     <style>
-      :root { --preview-background: #deff63; color-scheme: light; }
-      .throw-stage { position: absolute; inset: 0; overflow: hidden; cursor: grab; touch-action: none; }
-      .throw-stage.dragging { cursor: grabbing; }
-      .stack-shadow { position: absolute; left: 72px; top: 139px; width: 154px; height: 15px; border-radius: 50%; background: #20311e2f; filter: blur(8px); }
-      .throw-card { position: absolute; left: 88px; top: 42px; width: 144px; height: 101px; padding: 12px; border: 1px solid #18201b; border-radius: 17px; color: #18201b; box-shadow: 0 12px 0 #18201b16; transform-origin: 50% 90%; user-select: none; }
-      .throw-card:nth-of-type(1) { z-index: 1; background: #ff865c; transform: translateY(14px) scale(.91) rotate(6deg); }
-      .throw-card:nth-of-type(2) { z-index: 2; background: #7cc9ff; transform: translateY(8px) scale(.95) rotate(-4deg); }
-      .throw-card:nth-of-type(3) { z-index: 3; background: #fff9ec; }
-      .throw-card small { display: block; font: 800 6px/1 ui-monospace, monospace; letter-spacing: .13em; text-transform: uppercase; }
-      .throw-card strong { display: block; width: 105px; margin-top: 11px; font: 950 18px/.86 system-ui, sans-serif; letter-spacing: -.055em; }
-      .card-orbit { position: absolute; right: 9px; bottom: 10px; width: 31px; height: 31px; border: 1px solid currentColor; border-radius: 50%; }
-      .card-orbit::after { content: ''; position: absolute; left: 4px; top: 4px; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
-      .throw-vector { position: absolute; z-index: 6; left: 238px; top: 79px; width: 65px; height: 1px; background: #18201b; transform-origin: left; }
-      .throw-vector::after { content: ''; position: absolute; right: -1px; top: -3px; width: 6px; height: 6px; border-top: 1px solid; border-right: 1px solid; rotate: 45deg; }
-      .throw-label { position: absolute; z-index: 6; left: 243px; top: 62px; color: #1d261f; font: 800 6px/1 ui-monospace, monospace; letter-spacing: .1em; }
-      .reset-wipe { position: absolute; z-index: 0; inset: 0; pointer-events: none; background: #deff63; opacity: 0; }
-      .library-badge { color: #1b251d; background: #efffaacf; border-color: #1b251d2a; }
-      .scene-caption { color: #1d261f91; }
+      :root {
+        --preview-background: #e9eadf;
+        --paper: #e9eadf;
+        --ink: #171d19;
+        --acid: #d9ff4d;
+        --coral: #ff6647;
+        color-scheme: light;
+      }
+
+      * { box-sizing: border-box; }
+
+      .throw-stage {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        color: var(--ink);
+        background:
+          linear-gradient(90deg, rgba(23, 29, 25, .05) 1px, transparent 1px) 0 0 / 24px 100%,
+          linear-gradient(rgba(23, 29, 25, .045) 1px, transparent 1px) 0 0 / 100% 24px,
+          var(--paper);
+        touch-action: none;
+        user-select: none;
+        outline: none;
+      }
+
+      .throw-stage::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(circle at 17% 83%, rgba(217, 255, 77, .56), transparent 23%),
+          radial-gradient(circle at 82% 18%, rgba(255, 102, 71, .11), transparent 24%);
+        pointer-events: none;
+      }
+
+      .throw-stage:focus-visible::after {
+        content: "";
+        position: absolute;
+        z-index: 30;
+        inset: 4px;
+        border: 1px solid var(--coral);
+        border-radius: 5px;
+        pointer-events: none;
+      }
+
+      .masthead {
+        position: absolute;
+        z-index: 8;
+        top: 37px;
+        left: 12px;
+        display: grid;
+        gap: 2px;
+        pointer-events: none;
+      }
+
+      .eyebrow,
+      .deck-label,
+      .listing-kicker,
+      .listing-meta,
+      .release-value,
+      .zone-label,
+      .decision-line,
+      .history-item,
+      .keyboard-hint {
+        font-size: clamp(6px, 1.35vw, 10px);
+        font-weight: 900;
+        letter-spacing: .11em;
+        text-transform: uppercase;
+      }
+
+      .eyebrow { color: rgba(23, 29, 25, .48); }
+      .masthead strong {
+        font-size: clamp(12px, 3vw, 24px);
+        font-weight: 950;
+        line-height: .87;
+        letter-spacing: -.055em;
+      }
+
+      .stack-field {
+        position: absolute;
+        z-index: 3;
+        top: clamp(42px, 23vh, 76px);
+        left: clamp(24px, 13vw, 96px);
+        width: clamp(154px, 42vw, 304px);
+        height: clamp(108px, 58vh, 260px);
+      }
+
+      .stack-shadow {
+        position: absolute;
+        right: 6%;
+        bottom: -4%;
+        left: 6%;
+        height: 12%;
+        border-radius: 50%;
+        background: rgba(23, 29, 25, .22);
+        filter: blur(9px);
+      }
+
+      .throw-card {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        border: 1px solid rgba(23, 29, 25, .78);
+        border-radius: clamp(10px, 2vw, 17px);
+        color: #f9fbf4;
+        background: #243128;
+        box-shadow: 0 12px 23px rgba(27, 35, 29, .15);
+        transform-origin: 50% 88%;
+        cursor: grab;
+        will-change: transform, opacity;
+      }
+
+      .throw-card[data-active="true"] { cursor: grab; }
+      .throw-stage[data-dragging="true"] .throw-card[data-active="true"] { cursor: grabbing; }
+
+      .card-photo {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        background: #34433a;
+        pointer-events: none;
+      }
+
+      .card-photo img {
+        position: absolute;
+        top: 0;
+        left: calc(var(--crop-index) * -100%);
+        width: 300%;
+        height: 100%;
+        max-width: none;
+        object-fit: fill;
+        pointer-events: none;
+      }
+
+      .card-photo::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(180deg, rgba(7, 12, 9, .04) 20%, rgba(7, 12, 9, .2) 58%, rgba(7, 12, 9, .92) 100%),
+          linear-gradient(90deg, rgba(7, 12, 9, .28), transparent 44%);
+      }
+
+      .card-index {
+        position: absolute;
+        z-index: 2;
+        top: 8px;
+        right: 8px;
+        display: grid;
+        place-items: center;
+        min-width: 27px;
+        height: 17px;
+        padding: 0 5px;
+        border: 1px solid rgba(255, 255, 255, .48);
+        border-radius: 999px;
+        color: white;
+        background: rgba(12, 18, 14, .32);
+        font: 850 clamp(6px, 1vw, 8px)/1 ui-monospace, monospace;
+        backdrop-filter: blur(8px);
+      }
+
+      .listing-copy {
+        position: absolute;
+        z-index: 2;
+        right: 9px;
+        bottom: 8px;
+        left: 9px;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: end;
+        gap: 4px 7px;
+        pointer-events: none;
+      }
+
+      .listing-kicker { grid-column: 1 / -1; color: rgba(255, 255, 255, .66); }
+      .listing-name {
+        font-size: clamp(12px, 3.1vw, 25px);
+        font-weight: 950;
+        line-height: .86;
+        letter-spacing: -.045em;
+      }
+      .listing-meta { color: var(--acid); text-align: right; }
+
+      .decision-deck {
+        position: absolute;
+        z-index: 7;
+        top: clamp(48px, 25vh, 82px);
+        right: clamp(10px, 6vw, 42px);
+        width: clamp(108px, 32vw, 230px);
+        padding: clamp(7px, 1.4vw, 12px);
+        border: 1px solid rgba(23, 29, 25, .19);
+        border-radius: 8px;
+        background: rgba(249, 248, 241, .82);
+        box-shadow: 0 12px 28px rgba(23, 29, 25, .09);
+        backdrop-filter: blur(10px);
+      }
+
+      .deck-label { color: rgba(23, 29, 25, .48); }
+
+      .release-value {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 6px;
+        margin-top: 5px;
+        color: var(--coral);
+      }
+
+      .release-value strong {
+        color: var(--ink);
+        font-size: clamp(13px, 3vw, 25px);
+        letter-spacing: -.05em;
+      }
+
+      .velocity-track {
+        position: relative;
+        height: 8px;
+        margin: 5px 0 7px;
+        overflow: hidden;
+        border: 1px solid rgba(23, 29, 25, .2);
+        border-radius: 999px;
+        background: rgba(23, 29, 25, .06);
+      }
+
+      .velocity-track::after {
+        content: "";
+        position: absolute;
+        top: -2px;
+        bottom: -2px;
+        left: 43%;
+        width: 1px;
+        background: rgba(23, 29, 25, .45);
+      }
+
+      .velocity-fill {
+        width: calc(var(--release-meter, 0) * 100%);
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, var(--acid), var(--coral));
+      }
+
+      .settlement-zones {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4px;
+      }
+
+      .zone {
+        display: grid;
+        gap: 2px;
+        padding: 5px;
+        border: 1px solid rgba(23, 29, 25, .13);
+        border-radius: 4px;
+      }
+
+      .zone-label { color: rgba(23, 29, 25, .43); }
+      .zone strong { font-size: clamp(7px, 1.4vw, 11px); text-transform: uppercase; }
+      .zone[data-active="true"] { border-color: var(--coral); background: rgba(255, 102, 71, .08); }
+
+      .decision-line {
+        min-height: 15px;
+        margin-top: 7px;
+        color: var(--ink);
+        line-height: 1.25;
+      }
+
+      .history {
+        display: grid;
+        gap: 3px;
+        margin-top: 5px;
+      }
+
+      .history-item {
+        overflow: hidden;
+        color: rgba(23, 29, 25, .52);
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .history-item[data-filled="true"] { color: #37513f; }
+
+      .keyboard-hint {
+        position: absolute;
+        z-index: 6;
+        right: 11px;
+        bottom: 10px;
+        color: rgba(23, 29, 25, .52);
+        pointer-events: none;
+      }
+
+      .library-badge { color: var(--ink); background: rgba(242, 244, 224, .9); border-color: rgba(23, 29, 25, .18); }
+      .scene-caption { display: none; }
+
+      @media (max-aspect-ratio: 4 / 5) {
+        .masthead { top: 41px; }
+        .stack-field {
+          top: 72px;
+          right: 10px;
+          left: 10px;
+          width: auto;
+          height: 184px;
+        }
+        .decision-deck {
+          top: auto;
+          right: 10px;
+          bottom: 11px;
+          left: 10px;
+          width: auto;
+          padding: 7px 8px;
+        }
+        .decision-deck .deck-label,
+        .settlement-zones,
+        .history { display: none; }
+        .release-value { margin-top: 0; }
+        .velocity-track { margin: 3px 0; }
+        .decision-line { min-height: 8px; margin-top: 2px; }
+        .keyboard-hint { display: none; }
+      }
+
+      @media (max-width: 400px) and (max-height: 250px) {
+        .masthead,
+        .keyboard-hint { display: none; }
+      }
     </style>
   </head>
   <body>
     <main class="preview-stage">
-      <div class="throw-stage" id="throw-stage" data-preview-mechanism="motion-drag-throw" tabindex="0" aria-label="Drag the top card or press the right arrow key to throw it">
-        <div class="stack-shadow"></div>
-        <article class="throw-card"><small>Next / 03</small><strong>Make room for surprise.</strong><span class="card-orbit"></span></article>
-        <article class="throw-card" id="second-card"><small>Next / 02</small><strong>Momentum changes focus.</strong><span class="card-orbit"></span></article>
-        <article class="throw-card" id="top-card"><small>Active / 01</small><strong>Drag. Release. Discover.</strong><span class="card-orbit"></span></article>
-        <span class="throw-label">RELEASE VELOCITY</span><span class="throw-vector" id="throw-vector"></span>
-        <div class="reset-wipe" id="reset-wipe"></div>
-      </div>
-      <span class="library-badge">Motion · velocity throw</span>
-      <span class="scene-caption">drag the top card beyond the stack</span>
+      <section class="throw-stage" id="throw-stage" data-preview-mechanism="trusted-release-velocity-settles-or-advances-content-stack" data-dragging="false" tabindex="0" aria-label="Habitat discovery card stack. Drag and release the active card slowly to hold it or throw quickly to pass it. Use left arrow to hold and right arrow to pass.">
+        <header class="masthead">
+          <span class="eyebrow">Field list · 03 stays</span>
+          <strong>Find your<br />next quiet.</strong>
+        </header>
+
+        <section class="stack-field" id="stack-field" aria-live="polite">
+          <div class="stack-shadow"></div>
+          <article class="throw-card" data-card-index="2" data-listing-id="rain-house" data-active="false">
+            <div class="card-photo"><img src="./assets/drag-thrown-card-stack/habitat-discovery-triptych.jpg" alt="Dark glass cabin in a rainy alpine valley" style="--crop-index:2" draggable="false" /></div>
+            <span class="card-index">03 / 03</span>
+            <div class="listing-copy"><span class="listing-kicker">Aurland · Norway</span><strong class="listing-name">Rain House</strong><span class="listing-meta">€242<br />night</span></div>
+          </article>
+          <article class="throw-card" data-card-index="1" data-listing-id="atlas-loft" data-active="false">
+            <div class="card-photo"><img src="./assets/drag-thrown-card-stack/habitat-discovery-triptych.jpg" alt="Sunlit oak and plaster city loft" style="--crop-index:1" draggable="false" /></div>
+            <span class="card-index">02 / 03</span>
+            <div class="listing-copy"><span class="listing-kicker">Copenhagen · Denmark</span><strong class="listing-name">Atlas Loft</strong><span class="listing-meta">€215<br />night</span></div>
+          </article>
+          <article class="throw-card" id="active-card" data-card-index="0" data-listing-id="cedar-cove" data-active="true">
+            <div class="card-photo"><img src="./assets/drag-thrown-card-stack/habitat-discovery-triptych.jpg" alt="Warm cedar cabin on a misty northern coast" style="--crop-index:0" draggable="false" /></div>
+            <span class="card-index">01 / 03</span>
+            <div class="listing-copy"><span class="listing-kicker">Tofino · Canada</span><strong class="listing-name">Cedar Cove</strong><span class="listing-meta">€188<br />night</span></div>
+          </article>
+        </section>
+
+        <aside class="decision-deck">
+          <span class="deck-label">Release settlement</span>
+          <output class="release-value"><strong id="release-speed">0.00</strong><span>PX / MS</span></output>
+          <div class="velocity-track" aria-hidden="true"><div class="velocity-fill"></div></div>
+          <div class="settlement-zones">
+            <span class="zone" id="hold-zone" data-active="false"><span class="zone-label">Slow</span><strong>Hold card</strong></span>
+            <span class="zone" id="pass-zone" data-active="false"><span class="zone-label">Fast</span><strong>Pass + next</strong></span>
+          </div>
+          <output class="decision-line" id="decision-line">Drag the active stay</output>
+          <div class="history" aria-label="Retained decisions">
+            <span class="history-item" id="history-1" data-filled="false">01 · no decision</span>
+            <span class="history-item" id="history-2" data-filled="false">02 · no decision</span>
+          </div>
+        </aside>
+
+        <span class="keyboard-hint">← slow hold · → fast pass</span>
+      </section>
+      <span class="library-badge">Motion · release velocity</span>
+      <span class="scene-caption">slow settles · fast advances · decisions remain</span>
     </main>
     <script type="module" src="./src/drag-thrown-card-stack-demo.js"></script>
   </body>

@@ -1579,6 +1579,44 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("Shift+ArrowDown")
             elif index == 29:
                 page.keyboard.press("ArrowLeft")
+        elif demo["id"] == "collision-reactive-3d-physics-stack":
+            if index == 1:
+                page.locator('[data-payload="fragile"]').click()
+            elif index == 3:
+                page.mouse.click(128, 58)
+            elif index == 5:
+                page.wait_for_timeout(520)
+            elif index == 8:
+                page.wait_for_timeout(360)
+            elif index == 10:
+                page.locator('#jolt-button').click()
+            elif index == 11:
+                page.wait_for_timeout(500)
+            elif index == 14:
+                page.wait_for_timeout(500)
+            elif index == 18:
+                page.locator('#reset-button').click()
+            elif index == 20:
+                page.locator('#physics-host').focus()
+                page.keyboard.press("2")
+            elif index in (21, 22):
+                page.keyboard.press("ArrowRight")
+            elif index == 23:
+                page.keyboard.press("Space")
+            elif index == 24:
+                page.wait_for_timeout(520)
+            elif index == 28:
+                page.wait_for_timeout(360)
+            elif index == 30:
+                page.locator('[data-payload="fragile"]').click()
+            elif index == 31:
+                page.locator('#drop-button').click()
+            elif index == 32:
+                page.wait_for_timeout(520)
+            elif index == 34:
+                page.locator('#jolt-button').click()
+            elif index == 35:
+                page.wait_for_timeout(620)
         elif demo["id"] == "refractive-glass-transmission-sculpture":
             viewport_width = page.viewport_size["width"]
             viewport_height = page.viewport_size["height"]
@@ -3727,6 +3765,56 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["lastInputTrusted"] is not True
         ):
             raise RuntimeError(f"{demo['id']} did not capture trusted slow/fast captured traces, keyboard sampling, reset, four unique decoded ImageGen frames, and a nonempty final visual-memory path: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "collision-reactive-3d-physics-stack":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "human-triggered-parcel-impact-calibration"
+            or interaction["mechanism"] != "p5-webgl-fixed-step-aabb-rigid-body-collision-impulses"
+            or interaction["inputPolicy"] != "trusted-only"
+            or interaction["previewClockDriven"]
+            or interaction["autoplay"]
+            or interaction["autoStartAttempted"]
+            or interaction["rehearsalMode"]
+            or interaction["fallbackUsed"]
+            or interaction["syntheticInputUsed"]
+            or not interaction["firstFrameWasPaused"]
+            or interaction["initialFramePhysicsSteps"] != 0
+            or interaction["selectedPayload"] != "fragile"
+            or not interaction["simulationStartedByTrustedInput"]
+            or interaction["simulationActionCount"] < 5
+            or interaction["resetCount"] != 1
+            or interaction["dropCount"] < 3
+            or interaction["sideImpactCount"] < 2
+            or interaction["selectionCount"] < 3
+            or interaction["trustedInputCount"] < 11
+            or interaction["rejectedUntrustedCount"] != 0
+            or interaction["pointerInputCount"] < 7
+            or interaction["keyboardInputCount"] < 4
+            or interaction["controlInputCount"] != 0
+            or interaction["aimMutationCount"] < 2
+            or interaction["lastInputTrusted"] is not True
+            or interaction["lastInputKind"] != "pointer-control"
+            or interaction["physicsStepCount"] < 100
+            or interaction["bodyCollisionCount"] < 1
+            or interaction["floorCollisionCount"] < 1
+            or interaction["materialFlashMutationCount"] < 1
+            or interaction["peakImpulse"] <= 0
+            or interaction["peakRiskRatio"] < .65
+            or interaction["bodyCount"] < 6
+            or not interaction["webglReady"]
+            or interaction["assetCount"] != 3
+            or interaction["assetByteLength"] != 272053
+            or interaction["assetChecksum"] != 2809018893
+            or interaction["assetWidth"] != 512
+            or interaction["assetHeight"] != 512
+            or interaction["integratedTextureKeys"] != ["cold", "fragile", "heavy"]
+            or interaction["textureDrawCount"] < 5
+            or interaction["draws"] < 5
+            or len(interaction["interactionLedger"]) < 11
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture trusted aimed and controlled parcel drops, a side-impact sled, reset, keyboard aiming, fixed-step impulse feedback, and three decoded p5 WebGL package textures without automatic or capture-clock motion: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "refractive-glass-transmission-sculpture":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

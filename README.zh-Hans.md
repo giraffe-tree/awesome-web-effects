@@ -254,7 +254,7 @@
 | [最近边缘节点点阵地球](https://giraffe-tree.github.io/awesome-web-effects/#pointer-rotated-dot-matrix-globe) | [p5.js](https://github.com/processing/p5.js) | **93/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#pointer-rotated-dot-matrix-globe) |
 | [舞台烟雾配色实验室](https://giraffe-tree.github.io/awesome-web-effects/#pointer-injected-gpu-fluid) | [regl](https://github.com/regl-project/regl) | **99/100** | — | 5,557 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#pointer-injected-gpu-fluid) |
 | [滑杆控制 3D 爆炸装配](https://giraffe-tree.github.io/awesome-web-effects/#slider-controlled-exploded-3d-assembly) | [p5.js](https://github.com/processing/p5.js) | **94/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#slider-controlled-exploded-3d-assembly) |
-| [碰撞响应 3D 物理堆栈](https://giraffe-tree.github.io/awesome-web-effects/#collision-reactive-3d-physics-stack) | [p5.js](https://github.com/processing/p5.js) | **96/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#collision-reactive-3d-physics-stack) |
+| [包裹冲击校准堆栈](https://giraffe-tree.github.io/awesome-web-effects/#collision-reactive-3d-physics-stack) | [p5.js](https://github.com/processing/p5.js) | **100/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#collision-reactive-3d-physics-stack) |
 | [光下玻璃光学材质评审](https://giraffe-tree.github.io/awesome-web-effects/#refractive-glass-transmission-sculpture) | [p5.js](https://github.com/processing/p5.js) | **99/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#refractive-glass-transmission-sculpture) |
 | [电影式地图相机飞行](https://giraffe-tree.github.io/awesome-web-effects/#cinematic-map-camera-fly-to) | [p5.js](https://github.com/processing/p5.js) | **89/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#cinematic-map-camera-fly-to) |
 | [可拾取挤出数据柱](https://giraffe-tree.github.io/awesome-web-effects/#pickable-extruded-data-columns) | [p5.js](https://github.com/processing/p5.js) | **90/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#pickable-extruded-data-columns) |
@@ -282,7 +282,7 @@
 - 150 个已核验预览：2 个官方素材、148 个可运行本地 Demo 录制；缺失数为 0。
 - 人工评审覆盖创意、艺术完成度、动效编排、效果辨识、创作迁移和证据质量。
 - 准入要求 80/100，并同时通过核心维度最低分；流行度不能覆盖质量门槛。
-- 已核验 GIF 总计 24.56 MiB；每个预览为 320×180、最长三秒且小于 1 MiB。
+- 已核验 GIF 总计 24.62 MiB；每个预览为 320×180、最长三秒且小于 1 MiB。
 - Stars 是 2026-07-20 快照；“推荐实现”与“在哪家 AI 官网观察到”始终是两种关系。
 
 继续阅读 [396 个候选的准入审计](research/demo-admission-audit-2026-07-20.md)、[100 家 AI 公司主页特效调研](research/ai-native-homepages-100.md)与[预览来源清单](demo/gifs/provenance.json)。

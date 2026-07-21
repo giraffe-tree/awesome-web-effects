@@ -2259,41 +2259,41 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "collision-reactive-3d-physics-stack",
-    "name": "Collision-reactive 3D physics stack",
-    "nameZh": "碰撞响应 3D 物理堆栈",
+    "name": "Parcel impact calibration stack",
+    "nameZh": "包裹冲击校准堆栈",
     "category": "webgl",
     "sourceUrl": "https://github.com/pmndrs/react-three-rapier",
-    "difference": "3D 刚体碰撞按冲量改变可见状态；Matter 海报堆是二维且没有事件材质反馈。",
+    "difference": "三类真实纹理包装拥有不同质量、弹性、摩擦与冲击阈值；真人投放或侧撞后，120 Hz 固定步 AABB 碰撞的真实 impulse 同时驱动箱体闪光、冲击波、峰值读数和 SAFE/WATCH/LIMIT 判定。",
     "behavior": {
-      "trigger": "spawn/physics collision",
-      "response": "Drop rigid bodies and flash materials from real collision impulses",
-      "timing": "fixed-step persistent 3D physics",
-      "layer": "React Three Fiber scene"
+      "trigger": "trusted bay click, payload/drop/impact/reset control, or keyboard command",
+      "response": "Aim and drop a selected parcel or launch a side-impact sled, then expose collision severity against its material-specific handling limit",
+      "timing": "human-started finite 120 Hz fixed-step simulation that pauses after settling",
+      "layer": "full-stage p5 WebGL parcel calibration bay"
     },
     "implementation": {
       "projectId": "processing-p5-js",
       "projectUrl": "https://github.com/processing/p5.js",
       "library": "p5@2.3.0",
       "renderer": "webgl",
-      "snippet": "body.vy += gravity * dt; resolveContact(body, floor, collisionImpulse)",
+      "snippet": "for (fixedStep) { integrate(body); resolveAabbPair(a, b); recordImpact(rawImpulse, material.threshold); }",
       "referenceUrl": "https://github.com/pmndrs/react-three-rapier"
     },
     "scores": {
-      "creativity": 18,
-      "artDirection": 19,
+      "creativity": 20,
+      "artDirection": 20,
       "motion": 20,
       "clarity": 15,
       "inspiration": 15,
-      "evidence": 9,
-      "total": 96
+      "evidence": 10,
+      "total": 100
     },
-    "rationaleZh": "碰撞事件与发光波环建立清楚物理因果。",
+    "rationaleZh": "冷链硬壳、重载木箱与易碎陶瓷箱不再是同质方块：三张原创 ImageGen 包装面由 p5 解码并作为 WebGL texture 实际绘制，材质参数和限值各异。可信真人投放或侧撞才会启动有限物理，实际接触 impulse 同步改变纹理边缘闪光、冲击波、峰值与风险等级；首帧物理步数为零，录制时钟和合成事件不能推进模拟。",
     "batch": "C",
-    "demo": "半透明方块落在黑色基座，强碰撞激发不同亮度的波环。",
-    "capture": "点击生成三块→录第一次强碰撞→拖动一块砸入堆栈。",
+    "demo": "在 North Dock 包装实验室选择冷链、重载或易碎样本，瞄准后投放到现有货垛，观察碰撞峰值是否进入 WATCH/LIMIT，再用侧撞雪橇验证堆栈的横向承受能力并显式复位。",
+    "capture": "首帧静止→选择易碎样本并点击 bay 按位置投放→侧撞雪橇制造横向碰撞→Reset 恢复五箱静止货垛→键盘选重载箱、移动瞄点并投放→按钮再投易碎箱并二次侧撞，稳定记录 WATCH；断言真实 WebGL、三张纹理 fetch/decode/checksum/p5.texture、固定步碰撞、可信输入与零自动/零录制时钟驱动。",
     "risk": {
       "level": "high",
-      "detail": "WASM、固定时间步与无声可读反馈都需验证。"
+      "detail": "参考实现使用 Rapier/WASM，本地证据实现为 p5 WebGL 中可审计的固定步 AABB 刚体近似，不能冒充 Rapier；三个包装样本和处理限值均属虚构，必须保留资产披露与真实纹理集成断言。"
     },
     "observedImplementation": {
       "projectId": "pmndrs-react-three-rapier",

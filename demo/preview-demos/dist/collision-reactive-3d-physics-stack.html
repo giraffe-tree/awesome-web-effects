@@ -1,7 +1,444 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p5.js — Collision Reactive 3D Physics Stack</title><style>:root{--preview-background:#080b13}#physics-host{position:absolute;inset:0;cursor:copy}#physics-host canvas{width:100%!important;height:100%!important}.physics-copy{position:absolute;z-index:5;left:13px;top:48px;color:#f2f5ff;pointer-events:none}.physics-copy small{font:800 6px/1 ui-monospace;letter-spacing:.15em;color:#ffb65d}.physics-copy h1{width:104px;margin:8px 0 0;font:950 18px/.84 system-ui;letter-spacing:-.055em}.impact{position:absolute;right:12px;top:12px;z-index:5;color:#ffb65d;font:900 7px/1 ui-monospace}.library-badge{background:#080b13c9}</style>  <script type="module" crossorigin src="./assets/collision-reactive-3d-physics-stack-CIELiDy8.js"></script>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>p5.js — Parcel Impact Calibration</title>
+  <style>
+    :root {
+      --preview-background: #07100f;
+      --paper: #f1ead8;
+      --ink: #10221f;
+      --mint: #9fe4c8;
+      --amber: #ffc263;
+      --coral: #ff795f;
+    }
+
+    button { font: inherit; }
+
+    .preview-stage {
+      min-width: 0;
+      color: var(--paper);
+      background:
+        radial-gradient(circle at 42% 20%, rgba(96, 181, 154, .15), transparent 38%),
+        linear-gradient(145deg, #0a1916, #050b0a 76%);
+    }
+
+    #physics-host {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      outline: none;
+      cursor: crosshair;
+    }
+
+    #physics-host:focus-visible::after {
+      content: "";
+      position: absolute;
+      inset: 5px;
+      border: 1px solid var(--mint);
+      border-radius: 15px;
+      pointer-events: none;
+    }
+
+    #physics-host canvas {
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    .lab-header {
+      position: absolute;
+      z-index: 8;
+      top: 11px;
+      left: 13px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      pointer-events: none;
+    }
+
+    .lab-mark {
+      width: 23px;
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(159, 228, 200, .65);
+      border-radius: 7px;
+      color: var(--mint);
+      font: 900 9px/1 ui-monospace, monospace;
+      box-shadow: inset 0 0 16px rgba(159, 228, 200, .09);
+    }
+
+    .lab-kicker,
+    .lab-title,
+    .lab-subtitle,
+    .readout-label,
+    .readout-value,
+    .payload-name,
+    .payload-spec,
+    .hint {
+      margin: 0;
+    }
+
+    .lab-kicker {
+      color: rgba(241, 234, 216, .52);
+      font: 800 5.5px/1 ui-monospace, monospace;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .lab-title {
+      margin-top: 3px;
+      font: 820 clamp(9px, 1.7vw, 14px)/.95 system-ui, sans-serif;
+      letter-spacing: -.035em;
+    }
+
+    .status-pill {
+      position: absolute;
+      z-index: 9;
+      top: 13px;
+      right: clamp(75px, 25vw, 176px);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      color: rgba(241, 234, 216, .75);
+      font: 800 5.5px/1 ui-monospace, monospace;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+
+    .status-pill::before {
+      content: "";
+      width: 5px;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: var(--mint);
+      box-shadow: 0 0 10px var(--mint);
+    }
+
+    .status-pill[data-active="true"]::before {
+      background: var(--amber);
+      box-shadow: 0 0 12px var(--amber);
+    }
+
+    .inspector {
+      position: absolute;
+      z-index: 10;
+      top: 8px;
+      right: 8px;
+      bottom: 8px;
+      width: clamp(68px, 23vw, 164px);
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      padding: clamp(6px, 1.2vw, 11px);
+      border: 1px solid rgba(241, 234, 216, .13);
+      border-radius: clamp(9px, 1.8vw, 15px);
+      background: rgba(7, 15, 13, .8);
+      box-shadow: 0 15px 42px rgba(0, 0, 0, .28), inset 0 1px rgba(255, 255, 255, .045);
+      backdrop-filter: blur(14px);
+    }
+
+    .inspector-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 5px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid rgba(241, 234, 216, .11);
+    }
+
+    .inspector-head strong {
+      font: 850 clamp(7px, 1.2vw, 10px)/1 system-ui, sans-serif;
+      letter-spacing: -.02em;
+    }
+
+    .inspector-head span {
+      color: var(--mint);
+      font: 800 5px/1 ui-monospace, monospace;
+      letter-spacing: .1em;
+    }
+
+    .readouts {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px;
+    }
+
+    .readout {
+      min-width: 0;
+      padding: clamp(4px, .8vw, 7px);
+      border-radius: 7px;
+      background: rgba(241, 234, 216, .055);
+    }
+
+    .readout-label {
+      color: rgba(241, 234, 216, .45);
+      font: 750 4.5px/1 ui-monospace, monospace;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .readout-value {
+      margin-top: 4px;
+      color: var(--paper);
+      font: 900 clamp(8px, 1.45vw, 13px)/1 ui-monospace, monospace;
+      letter-spacing: -.05em;
+    }
+
+    #risk-readout[data-risk="watch"] { color: var(--amber); }
+    #risk-readout[data-risk="limit"] { color: var(--coral); }
+
+    .payload-label {
+      color: rgba(241, 234, 216, .42);
+      font: 800 4.5px/1 ui-monospace, monospace;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .payload-options {
+      display: grid;
+      gap: 3px;
+    }
+
+    .payload-option {
+      position: relative;
+      display: grid;
+      grid-template-columns: 9px minmax(0, 1fr);
+      gap: 6px;
+      align-items: center;
+      min-width: 0;
+      padding: clamp(4px, .75vw, 7px);
+      border: 1px solid transparent;
+      border-radius: 7px;
+      color: rgba(241, 234, 216, .56);
+      background: transparent;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .payload-option:hover,
+    .payload-option:focus-visible {
+      color: var(--paper);
+      outline: none;
+      border-color: rgba(241, 234, 216, .22);
+    }
+
+    .payload-option[aria-pressed="true"] {
+      color: var(--paper);
+      border-color: rgba(159, 228, 200, .5);
+      background: rgba(159, 228, 200, .09);
+    }
+
+    .payload-swatch {
+      width: 8px;
+      aspect-ratio: 1;
+      border-radius: 2px;
+      background: var(--swatch);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .28);
+    }
+
+    .payload-name {
+      overflow: hidden;
+      font: 800 clamp(5px, .95vw, 8px)/1 system-ui, sans-serif;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .payload-spec {
+      margin-top: 2px;
+      color: rgba(241, 234, 216, .35);
+      font: 650 4px/1 ui-monospace, monospace;
+      white-space: nowrap;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3px;
+      margin-top: auto;
+    }
+
+    .action {
+      min-width: 0;
+      min-height: 22px;
+      padding: 5px 4px;
+      border: 1px solid rgba(241, 234, 216, .16);
+      border-radius: 7px;
+      color: var(--paper);
+      background: rgba(241, 234, 216, .065);
+      font: 850 5px/1 ui-monospace, monospace;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .action:hover,
+    .action:focus-visible {
+      outline: none;
+      border-color: var(--mint);
+      background: rgba(159, 228, 200, .12);
+    }
+
+    .action.primary {
+      grid-column: 1 / -1;
+      color: #092019;
+      border-color: var(--mint);
+      background: var(--mint);
+    }
+
+    .hint {
+      position: absolute;
+      z-index: 7;
+      left: 13px;
+      bottom: 10px;
+      max-width: calc(72% - 18px);
+      color: rgba(241, 234, 216, .5);
+      font: 750 5.5px/1.25 ui-monospace, monospace;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+
+    .hint strong { color: var(--mint); }
+
+    .impact-note {
+      position: absolute;
+      z-index: 7;
+      left: 13px;
+      bottom: 27px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 7px;
+      border-left: 2px solid var(--mint);
+      color: rgba(241, 234, 216, .7);
+      background: rgba(7, 15, 13, .56);
+      font: 800 5px/1 ui-monospace, monospace;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+
+    .impact-note[data-level="watch"] { border-color: var(--amber); }
+    .impact-note[data-level="limit"] { border-color: var(--coral); }
+
+    .library-badge,
+    .scene-caption { display: none; }
+
+    @media (max-width: 430px) {
+      .lab-header { top: 8px; left: 9px; gap: 6px; }
+      .lab-mark { width: 18px; border-radius: 5px; font-size: 7px; }
+      .lab-kicker { font-size: 4px; }
+      .lab-title { margin-top: 2px; font-size: 9px; }
+      .status-pill { top: 9px; right: 80px; font-size: 4px; }
+      .inspector { top: 5px; right: 5px; bottom: 5px; width: 72px; padding: 5px; gap: 4px; border-radius: 9px; }
+      .inspector-head { padding-bottom: 4px; }
+      .inspector-head strong { font-size: 6px; }
+      .inspector-head span { display: none; }
+      .readout { padding: 4px; }
+      .readout-label { font-size: 3.5px; }
+      .readout-value { margin-top: 2px; font-size: 7px; }
+      .payload-label { display: none; }
+      .payload-option { grid-template-columns: 7px minmax(0, 1fr); gap: 4px; padding: 3px; }
+      .payload-swatch { width: 6px; }
+      .payload-name { font-size: 4.5px; }
+      .payload-spec { display: none; }
+      .action { min-height: 18px; padding: 3px 2px; font-size: 4px; border-radius: 5px; }
+      .hint { left: 9px; bottom: 7px; font-size: 4px; }
+      .impact-note { left: 9px; bottom: 20px; padding: 4px 5px; font-size: 4px; }
+    }
+
+    @media (max-width: 190px), (max-height: 100px) {
+      .lab-header { top: 4px; left: 5px; }
+      .lab-mark, .lab-kicker, .status-pill, .inspector-head, .readout-label, .payload-copy, .hint { display: none; }
+      .lab-title { font-size: 5px; letter-spacing: -.01em; }
+      .inspector { top: 3px; right: 3px; bottom: 3px; width: 38px; padding: 3px; gap: 2px; border-radius: 5px; }
+      .readouts { gap: 2px; }
+      .readout { padding: 2px; border-radius: 3px; }
+      .readout-value { margin: 0; font-size: 4px; }
+      .payload-options { grid-template-columns: repeat(3, 1fr); gap: 2px; }
+      .payload-option { display: grid; place-items: center; padding: 2px; border-radius: 3px; }
+      .payload-swatch { width: 6px; }
+      .actions { gap: 2px; }
+      .action { min-height: 12px; padding: 1px; font-size: 0; border-radius: 3px; }
+      .action::after { content: attr(data-short); font-size: 4px; }
+      .impact-note { left: 5px; bottom: 4px; max-width: 88px; padding: 2px 3px; font-size: 3.5px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .status-pill::before { box-shadow: none; }
+    }
+  </style>
+  <script type="module" crossorigin src="./assets/collision-reactive-3d-physics-stack-BlWJJJDo.js"></script>
   <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
   <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
   <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
-  <link rel="modulepreload" crossorigin href="./assets/batch-c-utils-g_3IBZ2b.js">
   <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage" data-preview-mechanism="fixed-step-collision-impulses"><div id="physics-host" tabindex="0" aria-label="Click to add a falling body, or press Space to strike the stack"></div><section class="physics-copy"><small>RIGID FIELD / FIXED STEP</small><h1>IMPACT LIGHTS THE STACK.</h1></section><output class="impact" id="impact-readout">IMPULSE 0.0</output><span class="library-badge">p5.js · fixed-step 3D physics</span><span class="scene-caption">gravity → contact impulse → emissive flash</span></main></body></html>
+</head>
+<body>
+  <main class="preview-stage" data-preview-mechanism="trusted-fixed-step-rigid-body-collision-impulses">
+    <div
+      id="physics-host"
+      tabindex="0"
+      role="application"
+      data-input-policy="trusted-only"
+      aria-label="Parcel impact calibration bay. Click the bay or press Space to drop the selected parcel. Press J to launch the side impact sled and R to reset."
+    ></div>
+
+    <header class="lab-header" aria-hidden="true">
+      <span class="lab-mark">04</span>
+      <div>
+        <p class="lab-kicker">North dock · handling lab</p>
+        <h1 class="lab-title">Parcel impact calibration</h1>
+      </div>
+    </header>
+
+    <div class="status-pill" id="simulation-status" data-active="false">Paused · human input required</div>
+
+    <aside class="inspector" aria-label="Impact test controls">
+      <div class="inspector-head">
+        <strong>Drop profile</strong>
+        <span>Fixed 120 Hz</span>
+      </div>
+
+      <div class="readouts" aria-live="polite">
+        <div class="readout">
+          <p class="readout-label">Peak impulse</p>
+          <p class="readout-value" id="impulse-readout">0.0 N·s</p>
+        </div>
+        <div class="readout">
+          <p class="readout-label">Package risk</p>
+          <p class="readout-value" id="risk-readout" data-risk="safe">SAFE</p>
+        </div>
+      </div>
+
+      <p class="payload-label">Payload / mass / limit</p>
+      <div class="payload-options" role="group" aria-label="Choose a parcel material">
+        <button class="payload-option" type="button" data-payload="cold" aria-pressed="true">
+          <span class="payload-swatch" style="--swatch:#2458c7"></span>
+          <span class="payload-copy"><span class="payload-name">Cold chain</span><span class="payload-spec">2.4 kg · 84 N·s</span></span>
+        </button>
+        <button class="payload-option" type="button" data-payload="heavy" aria-pressed="false">
+          <span class="payload-swatch" style="--swatch:#d49928"></span>
+          <span class="payload-copy"><span class="payload-name">Machine parts</span><span class="payload-spec">5.8 kg · 148 N·s</span></span>
+        </button>
+        <button class="payload-option" type="button" data-payload="fragile" aria-pressed="false">
+          <span class="payload-swatch" style="--swatch:#e86f50"></span>
+          <span class="payload-copy"><span class="payload-name">Ceramic sample</span><span class="payload-spec">1.2 kg · 28 N·s</span></span>
+        </button>
+      </div>
+
+      <div class="actions">
+        <button class="action primary" id="drop-button" type="button" data-short="↓" aria-label="Drop selected parcel">Drop sample</button>
+        <button class="action" id="jolt-button" type="button" data-short="→" aria-label="Launch side impact sled">Side impact</button>
+        <button class="action" id="reset-button" type="button" data-short="↺" aria-label="Reset calibration bay">Reset</button>
+      </div>
+    </aside>
+
+    <output class="impact-note" id="impact-note" data-level="safe">Ready bay · choose a parcel and drop</output>
+    <p class="hint"><strong>Click bay</strong> to aim-drop · 1–3 select · Space drop · J impact · R reset</p>
+  </main>
+</body>
+</html>

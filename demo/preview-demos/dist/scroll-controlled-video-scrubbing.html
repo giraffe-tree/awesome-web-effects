@@ -1,7 +1,349 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p5.js — Scroll Controlled Video Scrubbing</title><style>:root{--preview-background:#11100d}.video-stage{position:absolute;inset:0;background:#11100d}.video-window{position:absolute;right:18px;top:19px;width:184px;height:142px;border:1px solid #d1b87755;overflow:hidden;background:#201f19}.video-window video{width:100%;height:100%;object-fit:cover}.video-window:after{content:"";position:absolute;inset:7px;border:1px solid #fff4c830;pointer-events:none}.video-copy{position:absolute;z-index:5;left:13px;top:44px;color:#f7f1df;pointer-events:none}.video-copy small{font:800 6px/1 ui-monospace;letter-spacing:.16em;color:#d7bb72}.video-copy h1{width:102px;margin:8px 0 0;font:950 17px/.85 system-ui;letter-spacing:-.055em}.video-progress{position:absolute;z-index:6;left:13px;bottom:27px;width:91px;height:2px;background:#403c31}.video-progress span{display:block;height:100%;background:#d7bb72;transform-origin:left}.video-time{position:absolute;z-index:6;left:13px;bottom:12px;color:#d7bb72;font:900 6px/1 ui-monospace}.library-badge{background:#11100dca}</style>  <script type="module" crossorigin src="./assets/scroll-controlled-video-scrubbing-CXI1l9un.js"></script>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>p5.js — Growth Archive Video Scrubber</title>
+  <style>
+    :root {
+      --preview-background: #111713;
+      --ink: #f2f0e6;
+      --muted: #b6bdb1;
+      --leaf: #c9ef72;
+      --glass: rgba(13, 19, 15, .78);
+      --hairline: rgba(232, 240, 226, .24);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: var(--preview-background); }
+    button { font: inherit; }
+
+    .video-stage {
+      position: absolute;
+      inset: 0;
+      min-width: 0;
+      color: var(--ink);
+      background: #111713;
+      overflow: hidden;
+      isolation: isolate;
+      touch-action: none;
+      user-select: none;
+      cursor: ns-resize;
+    }
+
+    .video-stage[data-dragging="true"] { cursor: grabbing; }
+    .video-stage:focus-visible { box-shadow: inset 0 0 0 2px var(--leaf); }
+
+    .media-shell,
+    .scrub-video,
+    .measurement-canvas,
+    .film-shade { position: absolute; inset: 0; }
+
+    .media-shell { z-index: -1; background: #253229; }
+    .scrub-video { width: 100%; height: 100%; object-fit: cover; object-position: center 48%; }
+    .measurement-canvas { pointer-events: none; mix-blend-mode: screen; }
+    .measurement-canvas canvas { display: block; width: 100% !important; height: 100% !important; }
+    .film-shade {
+      background:
+        linear-gradient(90deg, rgba(7, 11, 8, .93) 0%, rgba(8, 12, 9, .72) 30%, rgba(8, 12, 9, .08) 62%, rgba(8, 12, 9, .2) 100%),
+        linear-gradient(0deg, rgba(7, 11, 8, .72) 0%, transparent 34%, rgba(7, 11, 8, .26) 100%);
+      pointer-events: none;
+    }
+
+    .topbar {
+      position: absolute;
+      z-index: 4;
+      inset: 14px 16px auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font: 760 7px/1.1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .brand-mark {
+      width: 14px;
+      height: 14px;
+      border: 1px solid var(--leaf);
+      border-radius: 50%;
+      position: relative;
+    }
+
+    .brand-mark::after {
+      content: "";
+      position: absolute;
+      inset: 4px;
+      border-radius: 50%;
+      background: var(--leaf);
+    }
+
+    .top-actions { display: flex; align-items: center; gap: 8px; }
+    .mode-pill,
+    .reset-control {
+      border: 1px solid var(--hairline);
+      border-radius: 999px;
+      color: var(--ink);
+      background: rgba(12, 17, 13, .58);
+      backdrop-filter: blur(10px);
+      font: 760 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+      padding: 8px 10px;
+    }
+
+    .reset-control { cursor: pointer; }
+    .reset-control:hover,
+    .reset-control:focus-visible { border-color: var(--leaf); color: var(--leaf); outline: none; }
+
+    .narrative {
+      position: absolute;
+      z-index: 3;
+      left: 18px;
+      top: 82px;
+      width: min(245px, 35vw);
+    }
+
+    .eyebrow,
+    .chapter-kicker,
+    .progress-meta,
+    .metric-label {
+      margin: 0;
+      color: var(--leaf);
+      font: 760 6px/1.25 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+
+    .narrative h1 {
+      margin: 10px 0 8px;
+      max-width: 230px;
+      font: 760 clamp(27px, 5vw, 45px)/.86 system-ui, sans-serif;
+      letter-spacing: -.065em;
+    }
+
+    .narrative-copy {
+      margin: 0;
+      max-width: 186px;
+      color: #d3d7ce;
+      font: 500 8px/1.4 system-ui, sans-serif;
+    }
+
+    .metrics {
+      display: flex;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .metric { display: grid; gap: 4px; }
+    .metric strong {
+      font: 680 12px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: -.04em;
+    }
+
+    .chapter-card {
+      position: absolute;
+      z-index: 3;
+      right: 16px;
+      top: 60px;
+      width: 152px;
+      padding: 12px;
+      border: 1px solid var(--hairline);
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+    }
+
+    .chapter-card h2 {
+      margin: 7px 0 5px;
+      font: 650 15px/1 system-ui, sans-serif;
+      letter-spacing: -.04em;
+    }
+
+    .chapter-card p:last-child {
+      margin: 0;
+      color: var(--muted);
+      font: 520 7px/1.35 system-ui, sans-serif;
+    }
+
+    .timeline {
+      position: absolute;
+      z-index: 5;
+      left: 18px;
+      right: 18px;
+      bottom: 14px;
+      display: grid;
+      grid-template-columns: 112px minmax(0, 1fr) 80px;
+      gap: 14px;
+      align-items: end;
+    }
+
+    .progress-meta { color: var(--ink); line-height: 1.45; }
+    .progress-meta span { display: block; color: var(--muted); letter-spacing: .08em; }
+
+    .chapter-rail { display: grid; gap: 8px; }
+    .chapter-buttons {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 4px;
+    }
+
+    .chapter-button {
+      min-width: 0;
+      padding: 0 0 5px;
+      border: 0;
+      border-bottom: 1px solid rgba(242, 240, 230, .24);
+      color: rgba(242, 240, 230, .5);
+      background: transparent;
+      text-align: left;
+      cursor: pointer;
+      font: 760 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .08em;
+    }
+
+    .chapter-button[aria-current="step"] { border-color: var(--leaf); color: var(--leaf); }
+    .chapter-button:focus-visible { outline: 1px solid var(--leaf); outline-offset: 3px; }
+
+    .progress-track { height: 3px; background: rgba(242, 240, 230, .2); overflow: hidden; }
+    .progress-fill { display: block; width: 100%; height: 100%; transform: scaleX(0); transform-origin: left; background: var(--leaf); }
+
+    .time-readout {
+      justify-self: end;
+      color: var(--ink);
+      font: 720 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: -.04em;
+    }
+
+    .interaction-hint {
+      position: absolute;
+      z-index: 5;
+      right: 18px;
+      bottom: 42px;
+      color: rgba(242, 240, 230, .68);
+      font: 720 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 430px), (max-height: 230px) {
+      .topbar { inset: 8px 9px auto; }
+      .brand { font-size: 5px; gap: 6px; }
+      .brand-mark { width: 10px; height: 10px; }
+      .brand-mark::after { inset: 3px; }
+      .mode-pill { display: none; }
+      .reset-control { font-size: 5px; padding: 6px 7px; }
+      .narrative { left: 9px; top: 35px; width: 105px; }
+      .eyebrow { font-size: 4px; }
+      .narrative h1 { margin: 5px 0; max-width: 110px; font-size: 20px; }
+      .narrative-copy { max-width: 92px; font-size: 5px; line-height: 1.3; }
+      .metrics { gap: 10px; margin-top: 9px; }
+      .metric-label { font-size: 4px; }
+      .metric strong { font-size: 7px; }
+      .chapter-card { right: 8px; top: 35px; width: 92px; padding: 7px; }
+      .chapter-kicker { font-size: 4px; }
+      .chapter-card h2 { margin: 4px 0 2px; font-size: 9px; }
+      .chapter-card p:last-child { font-size: 4px; }
+      .timeline { left: 9px; right: 9px; bottom: 7px; grid-template-columns: 50px 1fr 43px; gap: 7px; }
+      .progress-meta, .chapter-button { font-size: 4px; }
+      .chapter-buttons { gap: 2px; }
+      .chapter-button { padding-bottom: 3px; }
+      .chapter-rail { gap: 4px; }
+      .progress-track { height: 2px; }
+      .time-readout { font-size: 6px; }
+      .interaction-hint { display: none; }
+      .film-shade { background: linear-gradient(90deg, rgba(7, 11, 8, .9), rgba(7, 11, 8, .12) 60%, rgba(7, 11, 8, .25)); }
+    }
+
+    @media (max-width: 180px), (max-height: 100px) {
+      .topbar { inset: 4px 5px auto; }
+      .brand { font-size: 3px; gap: 3px; }
+      .brand-mark { width: 7px; height: 7px; }
+      .brand-mark::after { inset: 2px; }
+      .reset-control { font-size: 3px; padding: 4px 5px; }
+      .narrative { left: 5px; top: 20px; width: 44px; }
+      .eyebrow, .narrative-copy, .metrics, .chapter-card { display: none; }
+      .narrative h1 { margin: 0; width: 44px; font-size: 9px; line-height: .9; }
+      .timeline { left: 5px; right: 5px; bottom: 4px; grid-template-columns: 22px 1fr 23px; gap: 4px; }
+      .progress-meta { font-size: 3px; }
+      .progress-meta span { display: none; }
+      .chapter-buttons { display: none; }
+      .chapter-rail { gap: 0; }
+      .time-readout { font-size: 4px; }
+      .scrub-video { object-position: center center; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .001ms !important; animation-duration: .001ms !important; }
+    }
+  </style>
+  <script type="module" crossorigin src="./assets/scroll-controlled-video-scrubbing-DHaODku0.js"></script>
   <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
   <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
   <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
-  <link rel="modulepreload" crossorigin href="./assets/batch-c-utils-g_3IBZ2b.js">
   <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage video-stage" id="video-stage" data-preview-mechanism="scroll-to-video-current-time"><section class="video-copy"><small>BOTANICAL FILM / LOCAL</small><h1>SCROLL TO OPEN THE FLOWER.</h1></section><div class="video-window"><video id="scrub-video" muted playsinline></video></div><div class="video-progress"><span id="video-progress"></span></div><output class="video-time" id="video-time">00.00 / 03.00</output><span class="library-badge">p5.js · seekable WebM + HTMLVideoElement</span><span class="scene-caption">wheel progress maps directly to video.currentTime</span></main></body></html>
+</head>
+<body>
+  <main
+    class="preview-stage video-stage"
+    id="video-stage"
+    data-preview-mechanism="trusted-input-to-local-video-current-time"
+    data-input-policy="trusted-only"
+    data-dragging="false"
+    tabindex="0"
+    aria-label="Bean growth archive. Scroll or drag vertically to scrub the local video, use arrow keys, or choose a chapter."
+  >
+    <div class="media-shell" aria-hidden="true">
+      <video class="scrub-video" id="scrub-video" muted playsinline preload="auto"></video>
+      <div class="measurement-canvas" id="measurement-canvas"></div>
+      <div class="film-shade"></div>
+    </div>
+
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark"></span><span>Living Systems Unit<br>Growth Archive 04</span></div>
+      <div class="top-actions">
+        <span class="mode-pill">Paused · human scrub</span>
+        <button class="reset-control" id="reset-control" type="button">Reset study</button>
+      </div>
+    </header>
+
+    <section class="narrative">
+      <p class="eyebrow">Six-week greenhouse study</p>
+      <h1>Read growth frame by frame.</h1>
+      <p class="narrative-copy">Scroll, drag, or use the keyboard to inspect how one bean vine reaches first bloom.</p>
+      <div class="metrics" aria-label="Growth study metrics">
+        <div class="metric"><span class="metric-label">Study day</span><strong id="day-output">01</strong></div>
+        <div class="metric"><span class="metric-label">Canopy</span><strong id="canopy-output">02%</strong></div>
+      </div>
+    </section>
+
+    <aside class="chapter-card" aria-live="polite">
+      <p class="chapter-kicker" id="chapter-kicker">Chapter 01 / 05</p>
+      <h2 id="chapter-title">Emergence</h2>
+      <p id="chapter-description">The first shoot clears the soil line.</p>
+    </aside>
+
+    <p class="interaction-hint" id="interaction-hint">Wheel · vertical drag · arrows</p>
+
+    <div class="timeline">
+      <p class="progress-meta">Growth position<span id="progress-output">000% · Day 01</span></p>
+      <nav class="chapter-rail" aria-label="Growth chapters">
+        <div class="chapter-buttons">
+          <button class="chapter-button" type="button" data-progress="0" aria-current="step">01 Seed</button>
+          <button class="chapter-button" type="button" data-progress="0.25">02 Shoot</button>
+          <button class="chapter-button" type="button" data-progress="0.5">03 Climb</button>
+          <button class="chapter-button" type="button" data-progress="0.75">04 Canopy</button>
+          <button class="chapter-button" type="button" data-progress="1">05 Bloom</button>
+        </div>
+        <div class="progress-track" aria-hidden="true"><span class="progress-fill" id="video-progress"></span></div>
+      </nav>
+      <output class="time-readout" id="video-time">00.00 / 06.00</output>
+    </div>
+  </main>
+</body>
+</html>

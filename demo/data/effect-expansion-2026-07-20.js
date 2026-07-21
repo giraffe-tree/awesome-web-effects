@@ -3434,41 +3434,41 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "scroll-controlled-video-scrubbing",
-    "name": "Scroll-controlled video scrubbing",
-    "nameZh": "滚动控制视频擦洗",
+    "name": "Human-scrubbed greenhouse growth study",
+    "nameZh": "人控温室生长逐帧研究",
     "category": "scroll",
     "sourceUrl": "https://motion.dev/docs/react-use-scroll",
-    "difference": "规范化滚动进度直接设置视频 timecode；首屏影片按自身 duration 自动播放交接，文档回放改变 DOM 内容。",
+    "difference": "把滚轮、捕获拖拽、键盘或章节选择直接映射到一段真实本地 H.264 的 currentTime；五个原创生长阶段、逐帧媒体校验与 p5 测量标尺共同证明这是可逆的人工观察，不是自动播放或静帧替换。",
     "behavior": {
-      "trigger": "scroll progress",
-      "response": "Map section progress directly to the current time of one video",
-      "timing": "continuous reversible media scrub",
-      "layer": "video timeline"
+      "trigger": "trusted wheel, captured pointer drag, keyboard, chapter selection, or reset",
+      "response": "Seek one local greenhouse-growth video and update chapter, study-day, canopy, timecode, and p5 measurement evidence",
+      "timing": "direct, reversible, user-owned media scrub",
+      "layer": "full-stage local video + DOM study log + p5 measurement overlay"
     },
     "implementation": {
       "projectId": "processing-p5-js",
       "projectUrl": "https://github.com/processing/p5.js",
       "library": "p5@2.3.0",
       "renderer": "canvas2d",
-      "snippet": "video.currentTime = scrollProgress * (video.duration - 0.04)",
+      "snippet": "video.currentTime = clamp(progress, 0, 1) * (video.duration - 1 / 30)",
       "referenceUrl": "https://motion.dev/docs/react-use-scroll"
     },
     "scores": {
-      "creativity": 18,
-      "artDirection": 19,
-      "motion": 19,
+      "creativity": 19,
+      "artDirection": 20,
+      "motion": 20,
       "clarity": 15,
       "inspiration": 15,
-      "evidence": 9,
-      "total": 95
+      "evidence": 10,
+      "total": 99
     },
-    "rationaleZh": "滚动作为可逆媒体播放头，和自动视频/DOM 滚动机制都不同。",
+    "rationaleZh": "真人滚轮、拖拽、键盘和章节按钮拥有同一条六秒本地视频时间轴；五张原创温室关键帧形成可核验的生长连续性，真实 seekable/currentTime、视频进度、p5 标尺、媒体校验和与边界滚动释放共同证明交互成立。首帧暂停且没有自动播放、彩排、fallback、合成输入或预览时钟变更。",
     "batch": "C",
-    "demo": "一段原创花朵开合影片被固定在纸面窗口，滚动逐帧控制开放程度。",
-    "capture": "真实 scroll 0→65%→20%→100%，证明正向与反向 scrub。",
+    "demo": "在 Living Systems Unit 的六周温室研究中，用滚轮、横向拖拽、方向键或五个章节直接检查豆苗从出土到首次开花的六秒本地记录；舞台同步显示研究日、冠层百分比、章节说明和 p5 生长位置标尺。",
+    "capture": "首帧暂停→真实滚轮前进并验证末端向外滚动释放页面→Reset→两次捕获拖拽正向/反向定位→选择 First bloom→键盘切到 Climbing；断言本地 H.264 为 960×540、180 帧、6 秒且可 seek，五张关键帧均 decode 并拥有独立像素 checksum。",
     "risk": {
       "level": "medium",
-      "detail": "视频需关键帧密集且本地；不能通过切换预导出静帧模拟 currentTime。"
+      "detail": "视频必须本地、关键帧密集并真实修改 HTMLVideoElement.currentTime；不能用自动播放、预览时钟或五张预导出静帧的 DOM 切换冒充可逆 scrub。原创关键帧与视频记录的是虚构研究，不得表述为真实实验数据。"
     },
     "observedImplementation": {
       "projectId": "motiondivision-motion",

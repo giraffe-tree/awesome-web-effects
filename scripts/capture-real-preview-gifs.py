@@ -1868,6 +1868,52 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("End")
             elif index == 35:
                 page.wait_for_timeout(350)
+        elif demo["id"] == "scroll-controlled-video-scrubbing":
+            if index in (2, 4, 6, 8, 10, 12, 14, 15):
+                page.mouse.wheel(0, 520)
+            elif index == 16:
+                page.wait_for_timeout(320)
+            elif index == 17:
+                page.mouse.wheel(0, 520)
+            elif index == 18:
+                page.locator('#reset-control').click()
+            elif index == 19:
+                page.wait_for_timeout(260)
+            elif index == 20:
+                page.mouse.move(160, 46)
+                page.mouse.down()
+            elif index == 21:
+                page.mouse.move(160, 100, steps=4)
+            elif index == 22:
+                page.mouse.move(160, 152, steps=4)
+            elif index == 23:
+                page.mouse.up()
+            elif index == 24:
+                page.wait_for_timeout(260)
+            elif index == 25:
+                page.mouse.move(160, 150)
+                page.mouse.down()
+            elif index == 26:
+                page.mouse.move(160, 104, steps=4)
+            elif index == 27:
+                page.mouse.move(160, 62, steps=4)
+            elif index == 28:
+                page.mouse.up()
+            elif index == 29:
+                page.wait_for_timeout(260)
+            elif index == 30:
+                page.locator('.chapter-button[data-progress="1"]').click()
+            elif index == 31:
+                page.wait_for_timeout(260)
+            elif index == 32:
+                page.locator('#video-stage').focus()
+                page.keyboard.press("3")
+            elif index == 33:
+                page.wait_for_timeout(260)
+            elif index == 34:
+                page.keyboard.press("ArrowRight")
+            elif index == 35:
+                page.wait_for_timeout(260)
         elif demo["id"] == "four-corner-hover-crop-marks":
             if index == round(.35 * args.fps):
                 page.mouse.move(92, 78)
@@ -2253,6 +2299,7 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             "draggable-dome-gallery",
             "bending-webgl-gallery-ribbon",
             "live-hand-landmark-video-overlay",
+            "scroll-controlled-video-scrubbing",
         }:
             page.evaluate("time => window.__setPreviewTime(time)", preview_time)
         frame_path = frame_root / f"{index:04d}.png"
@@ -3954,6 +4001,61 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not {"play", "pause", "seek", "exercise", "calibration", "capture", "release", "reset"}.issubset(ledger_types)
         ):
             raise RuntimeError(f"{demo['id']} did not capture two trusted user-owned video play/pause cycles, direct local-video seeking, exercise changes, opposed captured overlay calibration drags, reset, nonzero video-frame checksums, and a final paused rehabilitation review: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "scroll-controlled-video-scrubbing":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "scrub-local-growth-video-by-human-input"
+            or interaction["acceptedInputs"] != ["wheel", "mouse", "touch", "pen", "keyboard", "control"]
+            or not interaction["userInputRequired"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticFallback"]
+            or interaction["automaticRehearsal"]
+            or interaction["previewClockDriven"]
+            or interaction["syntheticDispatch"]
+            or interaction["previewClockMutations"] != 0
+            or interaction["sourceKind"] != "project-local-static-url"
+            or interaction["inputPolicy"] != "trusted-only"
+            or interaction["capturePolicy"] != "pointer-capture"
+            or not interaction["ready"]
+            or not interaction["initialStaticVerified"]
+            or not interaction["seekConsistencyValid"]
+            or not interaction["chapterMappingVerified"]
+            or not interaction["boundaryReleaseMathVerified"]
+            or interaction["trustedInputCount"] < 20
+            or interaction["untrustedInputCount"] != 0
+            or interaction["wheelInputCount"] < 9
+            or interaction["keyboardInputCount"] < 2
+            or interaction["controlInputCount"] < 2
+            or interaction["captureCount"] != 2
+            or interaction["captureVerifiedCount"] != 2
+            or interaction["releaseCount"] != 2
+            or interaction["dragMoveCount"] < 8
+            or interaction["chapterControlCount"] < 1
+            or interaction["resetCount"] < 1
+            or interaction["resetControlCount"] < 1
+            or interaction["pageReleaseCount"] < 1
+            or interaction["seekRequestCount"] < 12
+            or interaction["seekSettledCount"] < 8
+            or interaction["playAttemptCount"] != 0
+            or interaction["lastInputTrusted"] is not True
+            or interaction["lastBoundaryReleaseTrusted"] is not True
+            or interaction["lastResetTrusted"] is not True
+            or not interaction["resetSnapshotValid"]
+            or interaction["dragging"]
+            or interaction["pointer"] is not None
+            or interaction["frameChecksums"] is None
+            or len(interaction["frameChecksums"]) != 5
+            or len(set(interaction["frameChecksums"])) != 5
+            or interaction["duration"] < 5.9
+            or interaction["duration"] > 6.1
+            or interaction["seekLimit"] < 5.8
+            or interaction["currentTime"] <= 0
+            or interaction["currentChapter"] not in (2, 3)
+            or interaction["overlayDrawCount"] < 8
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture trusted wheel, outward boundary release, reset, two opposed captured drags, chapter and keyboard selection against one real seekable local growth video: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "four-corner-hover-crop-marks":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         if (

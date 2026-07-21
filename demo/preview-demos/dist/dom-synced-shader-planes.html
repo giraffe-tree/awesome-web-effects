@@ -3,31 +3,354 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Curtains.js — DOM-synced Shader Plane</title>
+    <title>Curtains.js — DOM / GPU Media Registration</title>
     <style>
-      :root { --preview-background: radial-gradient(circle at 15% 20%, #273b67 0, #0a1020 42%, #050811 100%); }
-      #curtains-canvas { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
-      .dom-track { position: absolute; inset: 38px 18px 24px; z-index: 2; border: 1px dashed rgba(126, 183, 255, .3); border-radius: 18px; }
-      .shader-card { position: absolute; width: 132px; height: 88px; left: 18px; top: 48px; z-index: 3; border: 1px solid rgba(255,255,255,.45); border-radius: 16px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,.34); will-change: transform; }
-      .card-copy { position: absolute; inset: 0; z-index: 4; display: flex; flex-direction: column; justify-content: flex-end; padding: 11px; color: white; pointer-events: none; text-shadow: 0 1px 8px #000; }
-      .card-copy strong { font-size: 11px; letter-spacing: .04em; }
-      .card-copy small { margin-top: 2px; color: rgba(255,255,255,.72); font-size: 7px; }
-      .sync-line { position: absolute; z-index: 5; left: 22px; right: 22px; top: 145px; height: 2px; background: linear-gradient(90deg, #65d8ff, transparent); opacity: .7; }
+      :root {
+        --preview-background: #090d16;
+        color-scheme: dark;
+      }
+
+      * { box-sizing: border-box; }
+      button, input { font: inherit; }
+
+      .preview-stage {
+        position: relative;
+        min-height: 100vh;
+        overflow: hidden;
+        color: #f4f1e8;
+        background:
+          linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px),
+          radial-gradient(circle at 48% 38%, #18223a 0, #0b111e 45%, #070a10 100%);
+        background-size: 18px 18px, 18px 18px, auto;
+        user-select: none;
+      }
+
+      #curtains-canvas {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        pointer-events: none;
+      }
+
+      #curtains-canvas canvas { display: block; }
+
+      .bench-header {
+        position: absolute;
+        z-index: 6;
+        top: 7px;
+        left: 9px;
+        right: 9px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        pointer-events: none;
+      }
+
+      .bench-kicker,
+      .sync-readout {
+        display: inline-flex;
+        align-items: center;
+        min-height: 18px;
+        border: 1px solid rgba(255,255,255,.14);
+        border-radius: 999px;
+        background: rgba(5,8,14,.72);
+        backdrop-filter: blur(8px);
+        font: 700 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .13em;
+        text-transform: uppercase;
+      }
+
+      .bench-kicker { padding: 0 8px; color: #9eacc8; }
+      .bench-kicker b { margin-right: 5px; color: #f4b85f; }
+      .sync-readout { padding: 0 7px; color: #9ff4d2; }
+      .sync-readout::before {
+        width: 5px;
+        height: 5px;
+        margin-right: 5px;
+        border-radius: 50%;
+        background: currentColor;
+        box-shadow: 0 0 9px currentColor;
+        content: '';
+      }
+      .sync-readout[data-state="adjusting"] { color: #ffd480; }
+
+      .workbench {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+      }
+
+      .plane {
+        position: absolute;
+        z-index: 3;
+        left: 3.5%;
+        top: 18%;
+        width: 69%;
+        height: 76%;
+        overflow: hidden;
+        border-radius: 10px;
+        outline: none;
+        cursor: grab;
+        touch-action: none;
+        filter: drop-shadow(0 13px 17px rgba(0,0,0,.46));
+      }
+
+      .plane:active { cursor: grabbing; }
+      .plane:focus-visible { box-shadow: 0 0 0 2px #f4b85f, 0 0 0 5px rgba(244,184,95,.18); }
+      .plane > img { display: none; }
+
+      .media-ui {
+        position: absolute;
+        inset: 0;
+        z-index: 4;
+        border: 1px solid rgba(241,246,255,.94);
+        border-radius: inherit;
+        pointer-events: none;
+      }
+
+      .media-ui::after {
+        position: absolute;
+        inset: 4px;
+        border: 1px solid rgba(114,225,255,.55);
+        border-radius: 6px;
+        content: '';
+      }
+
+      .card-topline,
+      .card-footer {
+        position: absolute;
+        z-index: 2;
+        left: 8px;
+        right: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 6px;
+        font: 700 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .09em;
+        text-transform: uppercase;
+        text-shadow: 0 1px 5px #000;
+      }
+
+      .card-topline { top: 8px; }
+      .card-footer { bottom: 8px; }
+      .card-topline span,
+      .card-footer span {
+        padding: 4px 5px;
+        border: 1px solid rgba(255,255,255,.22);
+        border-radius: 999px;
+        background: rgba(4,7,12,.68);
+        backdrop-filter: blur(6px);
+      }
+      .card-topline span:last-child { color: #91efd0; }
+
+      .registration-cross {
+        position: absolute;
+        z-index: 3;
+        width: 10px;
+        height: 10px;
+        color: #ffcb72;
+      }
+      .registration-cross::before,
+      .registration-cross::after {
+        position: absolute;
+        background: currentColor;
+        content: '';
+      }
+      .registration-cross::before { left: 0; top: 0; width: 10px; height: 1px; }
+      .registration-cross::after { left: 0; top: 0; width: 1px; height: 10px; }
+      .registration-cross:nth-of-type(1) { left: 4px; top: 4px; }
+      .registration-cross:nth-of-type(2) { right: 4px; top: 4px; transform: rotate(90deg); }
+      .registration-cross:nth-of-type(3) { right: 4px; bottom: 4px; transform: rotate(180deg); }
+      .registration-cross:nth-of-type(4) { left: 4px; bottom: 4px; transform: rotate(270deg); }
+
+      .control-rail {
+        position: absolute;
+        z-index: 7;
+        top: 18%;
+        right: 2.5%;
+        width: 22%;
+        height: 76%;
+        min-width: 66px;
+        padding: 7px;
+        border: 1px solid rgba(255,255,255,.14);
+        border-radius: 10px;
+        background: rgba(8,12,20,.88);
+        box-shadow: 0 12px 24px rgba(0,0,0,.25);
+        backdrop-filter: blur(10px);
+        transition: none;
+      }
+
+      .control-rail h1 {
+        margin: 0 0 2px;
+        color: #f4f1e8;
+        font: 750 8px/.95 system-ui, sans-serif;
+        letter-spacing: -.02em;
+      }
+      .control-rail p {
+        margin: 0 0 7px;
+        color: #8794ad;
+        font: 600 5px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+      }
+
+      .metric {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 3px;
+        margin: 5px 0;
+        color: #8d9ab1;
+        font: 650 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        text-transform: uppercase;
+      }
+      .metric output { color: #f4f1e8; }
+
+      .scale-control { display: block; margin-top: 7px; }
+      .scale-control span {
+        display: flex;
+        justify-content: space-between;
+        color: #8d9ab1;
+        font: 650 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        text-transform: uppercase;
+      }
+      .scale-control output { color: #f4b85f; }
+      .scale-control input { width: 100%; height: 12px; margin: 2px 0 0; accent-color: #f4b85f; }
+
+      .layout-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4px;
+        margin-top: 5px;
+      }
+      .layout-actions button {
+        min-height: 18px;
+        padding: 0 3px;
+        border: 1px solid rgba(255,255,255,.16);
+        border-radius: 5px;
+        color: #aab5c8;
+        background: #111827;
+        font: 700 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+      .layout-actions button:hover,
+      .layout-actions button:focus-visible,
+      .layout-actions button[aria-pressed="true"] {
+        border-color: #f4b85f;
+        color: #10131a;
+        background: #f4b85f;
+        outline: none;
+      }
+      .layout-actions .reset { grid-column: 1 / -1; }
+
+      .human-cue {
+        position: absolute;
+        z-index: 6;
+        left: 8px;
+        bottom: 4px;
+        color: rgba(227,233,244,.6);
+        font: 600 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        pointer-events: none;
+      }
+
+      .preview-stage[data-layout="review"] .plane {
+        left: 14%;
+        top: 39%;
+        width: 82%;
+        height: 56%;
+      }
+      .preview-stage[data-layout="review"] .control-rail {
+        top: 17%;
+        left: 14%;
+        right: auto;
+        width: 82%;
+        height: 18%;
+        min-height: 31px;
+        padding: 5px 7px;
+        display: grid;
+        grid-template-columns: 1.25fr .8fr .8fr .95fr;
+        align-items: center;
+        gap: 7px;
+      }
+      .preview-stage[data-layout="review"] .control-heading p { margin: 1px 0 0; }
+      .preview-stage[data-layout="review"] .metric { margin: 0; }
+      .preview-stage[data-layout="review"] .scale-control { margin: 0; }
+      .preview-stage[data-layout="review"] .layout-actions { margin: 0; grid-template-columns: repeat(3, 1fr); }
+      .preview-stage[data-layout="review"] .layout-actions .reset { grid-column: auto; }
+
+      @media (max-width: 270px) {
+        .plane { left: 3%; width: 68%; }
+        .control-rail { right: 2%; width: 24%; min-width: 58px; padding: 5px; }
+        .control-rail h1 { font-size: 7px; }
+        .control-rail p { display: none; }
+        .layout-actions { grid-template-columns: 1fr; }
+        .layout-actions .reset { grid-column: auto; }
+        .preview-stage[data-layout="review"] .control-rail { left: 8%; width: 88%; grid-template-columns: 1fr .72fr .95fr; }
+        .preview-stage[data-layout="review"] .control-heading { display: none; }
+        .preview-stage[data-layout="review"] .plane { left: 8%; width: 88%; }
+      }
     </style>
-    <script type="module" crossorigin src="./assets/dom-synced-shader-planes-NGUQ1Ofa.js"></script>
+    <script type="module" crossorigin src="./assets/dom-synced-shader-planes-DFsn3nWs.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
     <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
   </head>
   <body>
-    <main class="preview-stage" aria-label="A live Curtains.js shader plane synchronized to a moving DOM card">
-      <div id="curtains-canvas"></div>
-      <div class="dom-track" aria-hidden="true"></div>
-      <div class="shader-card plane" id="shader-card">
-        <div class="card-copy"><strong>DOM → GPU</strong><small>one element, one shader plane</small></div>
-      </div>
-      <div class="sync-line" aria-hidden="true"></div>
-      <span class="library-badge">Curtains.js · Plane</span>
-      <span class="scene-caption">DOM bounds stay shader-synced</span>
+    <main class="preview-stage" id="registration-stage" data-layout="edit" aria-label="DOM media card and Curtains.js GPU plane registration calibration">
+      <div id="curtains-canvas" aria-hidden="true"></div>
+
+      <header class="bench-header" aria-hidden="true">
+        <span class="bench-kicker"><b>R·15</b> DOM / GPU registration</span>
+        <span class="sync-readout" id="sync-readout" data-state="locked">0.00 px · locked</span>
+      </header>
+
+      <section class="workbench" id="registration-workbench">
+        <article
+          class="plane"
+          id="shader-card"
+          tabindex="0"
+          role="group"
+          aria-label="可拖动媒体卡。方向键移动，加减号缩放，L 切换编排，Home 重置"
+        >
+          <img
+            id="media-source"
+            data-sampler="uMedia"
+            src="./assets/museum-media-registration-CZWHcRIE.jpg"
+            alt="蓝色玻璃展亭与琥珀色媒体灯箱"
+            draggable="false"
+          />
+          <div class="media-ui" aria-hidden="true">
+            <i class="registration-cross"></i><i class="registration-cross"></i><i class="registration-cross"></i><i class="registration-cross"></i>
+            <div class="card-topline"><span>Night collection · 07</span><span id="card-lock">GPU lock</span></div>
+            <div class="card-footer"><span>Blue pavilion</span><span id="card-bounds">DOM 221 × 137</span></div>
+          </div>
+        </article>
+
+        <aside class="control-rail" aria-label="媒体卡配准控制">
+          <div class="control-heading">
+            <h1>Media plane</h1>
+            <p>Move · scale · reflow</p>
+          </div>
+          <div class="metric"><span>Error</span><output id="error-output">0.00 px</output></div>
+          <div class="metric"><span>Updates</span><output id="update-output">01</output></div>
+          <label class="scale-control" for="scale-control">
+            <span>Scale <output id="scale-output">100%</output></span>
+            <input id="scale-control" type="range" min="78" max="112" value="100" step="1" />
+          </label>
+          <div class="layout-actions">
+            <button type="button" data-layout-action="edit" aria-pressed="true">Edit</button>
+            <button type="button" data-layout-action="review" aria-pressed="false">Review</button>
+            <button class="reset" type="button" id="reset-registration">Reset</button>
+          </div>
+        </aside>
+      </section>
+
+      <span class="human-cue">Drag the frame · keyboard enabled</span>
     </main>
   </body>
 </html>

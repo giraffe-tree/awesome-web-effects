@@ -122,8 +122,8 @@ export const reviewedDemoScores = {
     rationaleZh: '实例化粒子形成持续演化的涡旋流场，空间、节奏与色彩均达到完整生成艺术水准。'
   },
   'dom-synced-shader-planes': {
-    creativity: 18, artDirection: 19, motion: 18, clarity: 14, inspiration: 15, evidence: 10,
-    rationaleZh: 'DOM 边界内的虹彩着色器形变具有清晰材质签名，技术机制与视觉结果高度一致。'
+    creativity: 20, artDirection: 20, motion: 20, clarity: 15, inspiration: 15, evidence: 10,
+    rationaleZh: '真人移动、缩放或重排媒体卡后，Curtains.js 平面立即按真实 DOM 边界重算；可验证图片同时作为唯一 GPU 纹理和像素驱动的着色输入，实时误差读数证明同步成立。'
   },
   'accessible-interactive-3d-product-view': {
     creativity: 9, artDirection: 14, motion: 15, clarity: 15, inspiration: 13, evidence: 10,

@@ -746,17 +746,17 @@ const existingEffects = [
   {
     "id": "dom-synced-shader-planes",
     "category": "webgl",
-    "name": "DOM-bound iridescent shader plane",
-    "nameZh": "DOM 绑定虹彩着色器平面",
+    "name": "Human-calibrated DOM / GPU media registration",
+    "nameZh": "人工校准的 DOM / GPU 媒体配准",
     "addedIn": "2026-expansion",
     "research": null,
     "behavior": {
-      "trigger": "DOM movement or resize",
-      "response": "DOM-bound iridescent shader plane",
-      "timing": "continuously synchronized",
-      "layer": "DOM-bound WebGL surface"
+      "trigger": "trusted drag, scale, layout, or keyboard adjustment",
+      "response": "The Curtains.js image plane recomputes from the moved DOM card and reports the live registration error",
+      "timing": "one immediate synchronization after each human adjustment",
+      "layer": "Full-stage museum media registration workbench"
     },
-    "prompt": "Implement the \"DOM-bound iridescent shader plane\" (DOM 绑定虹彩着色器平面) web interaction effect in the current project.\n\nUse Curtains.js (martinlaxenaire/curtainsjs) as the recommended implementation unless the existing stack makes a dependency-free equivalent more appropriate. Recreate this specific webgl interaction, not a generic animation.\n\nInteraction contract:\n- Trigger: DOM movement or resize\n- Visual response: DOM-bound iridescent shader plane\n- Timing relationship: continuously synchronized\n- Page layer: DOM-bound WebGL surface\n\nRequirements:\n- Integrate with the existing design system and component structure.\n- Support keyboard and touch input whenever the interaction is actionable.\n- Respect prefers-reduced-motion with a clear non-animated fallback.\n- Avoid layout shift, scroll traps, inaccessible focus behavior, and unnecessary dependencies.\n- Keep the implementation responsive and clean up listeners, timers, and animation instances.\n\nStart from this minimal API shape:\n\n```js\nimport { Curtains, Plane } from 'curtainsjs';\nconst curtains = new Curtains({ container: 'canvas' });\nnew Plane(curtains, document.querySelector('.plane'), { vertexShader, fragmentShader });\n```\n\nReturn the working code, the files changed, and a short explanation of how to tune timing, easing, distance, and reduced-motion behavior.",
+    "prompt": "Implement the \"Human-calibrated DOM / GPU media registration\" (人工校准的 DOM / GPU 媒体配准) interaction in the current project.\n\nUse Curtains.js and one original local image as the actual plane texture. The browser-decoded pixels must determine a visible shader parameter, and the exact texture provenance must be verifiable.\n\nInteraction contract:\n- Trigger: trusted drag, scale, layout, or keyboard adjustment\n- Visual response: recompute the Curtains.js plane from the real DOM card bounds and report the registration error\n- Timing relationship: one immediate synchronization after each human adjustment\n- Page layer: full-stage media registration workbench\n\nRequirements:\n- Keep the initial frame and every between-input state still.\n- Support pointer capture, touch, pen, keyboard, a native scale range, layout controls, and reset.\n- Compare DOM, Curtains plane, and WebGL rectangles after every mutation.\n- Do not add automatic playback, rehearsal, fallback, or preview-clock mutation.\n- Keep the implementation responsive and clean up listeners and WebGL resources.\n\nStart from this minimal API shape:\n\n```js\nimport { Curtains, Plane } from 'curtainsjs';\nconst curtains = new Curtains({ container: 'canvas', autoRender: false });\nconst plane = new Plane(curtains, document.querySelector('.plane'), options);\nplane.updatePosition();\n```\n\nReturn working code, changed files, asset provenance, pixel evidence, and registration assertions.",
     "sources": [
       {
         "projectId": "martinlaxenaire-curtainsjs",
@@ -776,17 +776,17 @@ const existingEffects = [
     "admission": {
       "policyVersion": "2026-07-17",
       "scores": {
-        "creativity": 18,
-        "artDirection": 19,
-        "motion": 18,
-        "clarity": 14,
+        "creativity": 20,
+        "artDirection": 20,
+        "motion": 20,
+        "clarity": 15,
         "inspiration": 15,
         "evidence": 10
       },
-      "total": 94,
+      "total": 100,
       "decision": "admit",
       "reasonCode": "passed",
-      "rationaleZh": "DOM 边界内的虹彩着色器形变具有清晰材质签名，技术机制与视觉结果高度一致。"
+      "rationaleZh": "真人移动、缩放或重排媒体卡后，Curtains.js 平面立即按真实 DOM 边界重新配准；同一张可验证图片既是唯一 GPU 纹理，又以像素能量控制检查着色器，三套矩形误差与可见读数共同证明同步成立。"
     }
   }
 ];

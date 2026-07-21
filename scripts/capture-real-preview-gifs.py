@@ -2755,6 +2755,39 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.locator('[data-revision="shared-clarity"]').click()
             elif index == 24:
                 page.locator('#undo-revision').click()
+        elif demo["id"] == "dom-synced-shader-planes":
+            if index == 2:
+                page.mouse.move(118, 82)
+            elif index == 4:
+                page.locator('#scale-control').focus()
+                page.keyboard.press('Home')
+            elif index == 7:
+                page.mouse.move(92, 100)
+            elif index == 8:
+                page.mouse.down()
+            elif index == 9:
+                page.mouse.move(108, 95, steps=2)
+            elif index == 10:
+                page.mouse.move(126, 88, steps=2)
+            elif index == 11:
+                page.mouse.move(145, 80, steps=2)
+            elif index == 12:
+                page.mouse.move(160, 73, steps=2)
+            elif index == 13:
+                page.mouse.up()
+            elif index == 17:
+                page.locator('[data-layout-action="review"]').click()
+            elif index == 21:
+                page.locator('#shader-card').focus()
+                page.keyboard.press('ArrowLeft')
+            elif index == 22:
+                page.keyboard.press('ArrowUp')
+            elif index == 25:
+                page.keyboard.press('+')
+            elif index == 29:
+                page.locator('[data-layout-action="edit"]').click()
+            elif index == 33:
+                page.locator('#reset-registration').click()
         elif demo["id"] == "poisson-constellation-bloom":
             if index == 2:
                 page.mouse.move(170, 92)
@@ -9153,6 +9186,87 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["ready"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture two trusted finite headline revision passes with retained copy, explicit undo, full-stage geometry and no automatic motion: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "dom-synced-shader-planes":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-dom-media-card-to-gpu-shader-plane-registration-calibration"
+            or interaction["claimedLibrary"] != "curtainsjs@8.1.6"
+            or interaction["mechanism"] != "curtainsjs-plane-consumes-the-browser-decoded-image-texture-and-recomputes-its-webgl-plane-from-the-real-dom-card-bounds-after-trusted-human-move-scale-and-layout-input"
+            or interaction["acceptedInputs"] != ["trusted-mouse-hover", "captured-mouse-drag", "captured-touch-drag", "captured-pen-drag", "native-range-input", "visible-layout-buttons", "visible-reset-button", "keyboard"]
+            or not interaction["userInputRequired"]
+            or not interaction["strictTrustedInputGuard"]
+            or not interaction["initialFrameStatic"]
+            or interaction["automaticCycle"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["previewClockMutationCount"] != 0
+            or interaction["trustedInputCount"] < 12
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["hoverInputCount"] < 2
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerDragCount"] < 4
+            or interaction["pointerReleaseCount"] != 1
+            or interaction["pointerCancelCount"] != 0
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerCaptureReleaseCount"] != 1
+            or interaction["pointerCaptured"]
+            or interaction["activePointerId"] is not None
+            or interaction["rangeInputCount"] < 1
+            or interaction["layoutChangeCount"] < 2
+            or interaction["keyboardInputCount"] < 3
+            or interaction["buttonInputCount"] < 3
+            or interaction["resetCount"] != 1
+            or interaction["humanMutationCount"] < 10
+            or interaction["layout"] != "edit"
+            or interaction["scalePercent"] != 100
+            or abs(interaction["manualOffsetX"]) > .01
+            or abs(interaction["manualOffsetY"]) > .01
+            or interaction["assetFetchCount"] != 1
+            or interaction["assetResponseStatus"] != 200
+            or not interaction["assetMimeType"].startswith("image/jpeg")
+            or not interaction["assetSameOrigin"]
+            or interaction["assetByteLength"] != 132620
+            or interaction["assetSha256"] != "217bc3ea171d79543115d14c2b124dee525074ad89cd9679167575db84b9d7a1"
+            or not interaction["assetShaMatchesExpected"]
+            or not interaction["browserImageDecoded"]
+            or interaction["decodedWidth"] != 960
+            or interaction["decodedHeight"] != 600
+            or interaction["sampledWidth"] != 64
+            or interaction["sampledHeight"] != 40
+            or interaction["sampledPixelCount"] != 2560
+            or interaction["sampledOpaquePixelCount"] != 2560
+            or interaction["distinctSampleColorCount"] <= 120
+            or interaction["sampledLumaRange"] <= 150
+            or interaction["sampledBlueDominanceRatio"] <= .08
+            or interaction["sampledBlueDominanceRatio"] >= .75
+            or interaction["sampledWarmPixelRatio"] <= .015
+            or interaction["sampledWarmPixelRatio"] >= .3
+            or interaction["sampledEdgeMean"] <= 5
+            or interaction["sampledEdgeMean"] >= 45
+            or interaction["pixelDrivenImageEnergy"] <= .25
+            or interaction["pixelDrivenImageEnergy"] >= .95
+            or not interaction["pixelEvidenceBoundToShader"]
+            or not interaction["webglContextReady"]
+            or not interaction["curtainsPlaneReady"]
+            or interaction["planeTextureCount"] != 1
+            or not interaction["sourceUploadedToPlane"]
+            or interaction["planeUpdateCount"] < 12
+            or interaction["planeResizeCount"] < 5
+            or interaction["curtainsRenderCount"] < 12
+            or interaction["currentRegistrationError"] > .75
+            or interaction["maximumPostSyncError"] > .75
+            or interaction["registrationScore"] < 89
+            or interaction["successfulRegistrationChecks"] < 12
+            or interaction["cardCoverageRatio"] < .45
+            or not interaction["ready"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a trusted full-stage ImageGen-textured DOM/GPU registration calibration with drag, range, layout, keyboard and reset controls while preserving subpixel plane lock and no automatic motion: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "poisson-constellation-bloom":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

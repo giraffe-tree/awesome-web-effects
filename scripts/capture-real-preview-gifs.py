@@ -2825,6 +2825,25 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 25:
                 page.locator('#reader-viewport').focus()
                 page.keyboard.press('Home')
+        elif demo["id"] == "infinite-curved-text-conveyor":
+            if index == 3:
+                page.mouse.move(45, 100)
+                page.mouse.down()
+            elif index == 4:
+                page.mouse.move(78, 98, steps=2)
+            elif index == 5:
+                page.mouse.move(112, 94, steps=2)
+            elif index == 6:
+                page.mouse.move(150, 90, steps=2)
+            elif index == 7:
+                page.mouse.move(190, 87, steps=2)
+            elif index == 8:
+                page.mouse.move(230, 84, steps=2)
+            elif index == 9:
+                page.mouse.up()
+            elif index == 26:
+                page.locator('#route-field').focus()
+                page.keyboard.press('Home')
         elif demo["id"] == "poisson-constellation-bloom":
             if index == 2:
                 page.mouse.move(170, 92)
@@ -9450,6 +9469,72 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["controlStates"] != ["true", "false", "false"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture a trusted full-stage drag, chapter jump and keyboard return through three computed-background contrast states with a paused Motion track and no automatic navigation: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "infinite-curved-text-conveyor":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "human-routed-arena-wayfinding-ribbon-proof"
+            or interaction["mechanism"] != "trusted-drag-seeks-two-paused-motion-controls-that-offset-repeated-svg-text-paths-in-opposing-directions"
+            or interaction["claimedLibrary"] != "motion@12.42.2"
+            or interaction["assetStrategy"] != "code-native-authored-svg-routes-and-editorial-type-no-functional-raster-input-required"
+            or interaction["captureType"] != "interactive"
+            or interaction["causality"] != "trusted-human-input-only"
+            or interaction["acceptedInputs"] != ["captured-mouse-drag", "captured-touch-drag", "captured-pen-drag", "visible-direction-buttons", "keyboard-arrows-home-end-escape"]
+            or not interaction["userInputRequired"]
+            or not interaction["strictTrustedInputGuard"]
+            or interaction["automaticPath"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticCycle"]
+            or interaction["automaticTimeline"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["previewClockMutationCount"] != 0
+            or not interaction["initialFrameStatic"]
+            or not interaction["initialStillVerified"]
+            or interaction["inputCount"] != interaction["trustedInputCount"]
+            or interaction["inputCount"] < 8
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerDragCount"] < 5
+            or interaction["pointerReleaseCount"] != 1
+            or interaction["pointerCancelCount"] != 0
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerCaptureReleaseCount"] != 1
+            or interaction["pointerCaptured"]
+            or interaction["dragActive"]
+            or interaction["activePointerId"] is not None
+            or interaction["humanProgressMutationCount"] < 5
+            or interaction["nonInputProgressMutationCount"] != 0
+            or interaction["maximumHumanProgress"] < .5
+            or interaction["mouseInputCount"] < 7
+            or interaction["touchInputCount"] != 0
+            or interaction["penInputCount"] != 0
+            or interaction["buttonInputCount"] != 0
+            or interaction["keyboardInputCount"] < 1
+            or interaction["motionControlCount"] != 2
+            or not interaction["controlsBuiltWithoutAutoplay"]
+            or not interaction["motionControlsPaused"]
+            or interaction["motionSeekCount"] < 10
+            or interaction["motionSeekCount"] % 2 != 0
+            or interaction["motionTimeSpread"] != 0
+            or interaction["routePathCount"] != 2
+            or interaction["repeatedCopyCountPerPath"] != 4
+            or interaction["textPathCount"] != 8
+            or any(record["trusted"] is not True for record in interaction["transitionRecords"])
+            or interaction["progress"] != 0
+            or interaction["phase"] != "key-home"
+            or interaction["lastInputKind"] != "keyboard"
+            or interaction["lastInputSource"] != "key-Home"
+            or interaction["lastInputTrusted"] is not True
+            or not interaction["ready"]
+            or interaction["runtimeAssertCount"] < 2
+            or not interaction["runtimeAssertionPassed"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a trusted full-stage arena wayfinding ribbon calibration across two paused Motion-driven SVG text paths with captured drag, stable hold, keyboard reset and no automatic conveyor motion: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "poisson-constellation-bloom":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

@@ -908,14 +908,14 @@ const expansionEffects = [
     rationaleZh: '它把抽象的标题特效改造成可决策的文案审阅台：真人选择一个候选修订后，圆点沿实测字形与按钮位置完成一次有限的擦除、取回与写入，结果会保留并可显式撤销；首帧和无输入时完全静止。'
   },
   {
-    id: 'infinite-curved-text-conveyor', category: 'vector', name: 'Infinite curved text-path conveyor', nameZh: '无限曲线文字传送带', order: 21,
+    id: 'infinite-curved-text-conveyor', category: 'vector', name: 'Human-routed curved wayfinding ribbons', nameZh: '人工调校的曲线导视文字带', order: 21,
     company: 'Wispr Flow', homepage: 'https://wisprflow.ai/', observedAs: 'Infinite curved text-path conveyor',
-    difference: 'Repeated text is laid out by real SVG paths and circulates along intersecting curves with front-back depth, rather than translating a straight marquee rail.',
-    behavior: { trigger: 'animation frame', response: 'Repeated phrases travel continuously along crossing curved SVG paths', timing: 'seamless counter-moving loop', layer: 'SVG typography field' },
+    difference: 'A trusted captured drag seeks two paused Motion controls together, moving repeated venue messages in opposing directions along two authored crossing SVG paths.',
+    behavior: { trigger: 'trusted captured drag, direction button, or keyboard route command', response: 'Two repeated wayfinding ribbons move in opposing directions and retain the chosen route offset', timing: 'direct finite seek after human input only', layer: 'Full-stage arena wayfinding calibration field' },
     implementationName: 'Motion', projectId: 'motiondivision-motion', projectUrl: 'https://github.com/motiondivision/motion', referenceUrl: 'https://motion.dev/docs',
     snippet: "import { animate } from 'motion';\nanimate('#curve-a textPath', { attr: { startOffset: ['0%', '100%'] } }, { duration: 8, repeat: Infinity, ease: 'linear' });",
-    scores: { creativity: 18, artDirection: 19, motion: 19, clarity: 15, inspiration: 15, evidence: 10 },
-    rationaleZh: '两条真实曲线路径承载反向流动的排版，并通过交汇遮挡建立前后关系，和直线跑马灯有明确视觉差异。'
+    scores: { creativity: 20, artDirection: 20, motion: 20, clarity: 15, inspiration: 15, evidence: 10 },
+    rationaleZh: '真人拖拽、按钮或键盘同步 seek 两个暂停的 Motion 控制器，让场馆导视与末班提示沿两条真实 SVG 曲线反向移动并稳定停留；首帧和输入间完全静止，不再是自动跑马灯。'
   },
   {
     id: 'autonomous-agent-cursor-constellation', category: 'animation', name: 'Named-agent artifact handoff', nameZh: '具名 Agent 制品交接', order: 22,

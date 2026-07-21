@@ -170,8 +170,8 @@ export const reviewedDemoScores = {
     rationaleZh: '真人选择候选修订后，圆点沿实测字形与控件位置完成一次有限擦除、取回和写入；保留结果、显式撤销与静止首帧共同证明它是可用的文案审阅交互。'
   },
   'infinite-curved-text-conveyor': {
-    creativity: 18, artDirection: 19, motion: 19, clarity: 15, inspiration: 15, evidence: 10,
-    rationaleZh: '两条真实曲线路径承载反向流动的排版，并通过交汇遮挡建立前后关系，和直线跑马灯有明确视觉差异。'
+    creativity: 20, artDirection: 20, motion: 20, clarity: 15, inspiration: 15, evidence: 10,
+    rationaleZh: '真人输入同步 seek 两个暂停 Motion 控制器，场馆导视与末班提示沿两条真实 SVG 曲线反向移动并稳定停留；真实路径、输入计数和无自动循环共同证明机制。'
   },
   'autonomous-agent-cursor-constellation': {
     creativity: 20, artDirection: 20, motion: 20, clarity: 15, inspiration: 15, evidence: 10,

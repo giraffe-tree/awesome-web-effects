@@ -2212,49 +2212,49 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "slider-controlled-exploded-3d-assembly",
-    "name": "Slider-controlled exploded 3D assembly",
-    "nameZh": "滑杆控制 3D 爆炸装配",
+    "name": "FBL-06 field beacon exploded inspection",
+    "nameZh": "FBL-06 应急灯爆炸装配检查",
     "category": "webgl",
     "sourceUrl": "https://github.com/mrdoob/three.js",
-    "difference": "滑杆改变零件相对结构而非相机；现有 3D/Shader Demo 没有装配轴和可逆拆解。",
+    "difference": "真人进度把一台 FBL-06 便携应急灯的七个有名零件沿严格 X 轴装配顺序分离；玄武岩复合材料像素真实贴到电源壳与维修扣，而不是把无意义方块自动散开或移动相机。",
     "behavior": {
-      "trigger": "range drag",
-      "response": "Separate and recombine authored parts along assembly vectors",
-      "timing": "continuous reversible structural mapping",
-      "layer": "Three.js mesh assembly"
+      "trigger": "trusted range, captured mouse/touch/pen scrub, keyboard command, part control, or reset",
+      "response": "Separate seven semantic parts along their authored assembly vectors, stop at any service depth, and identify the inspected component",
+      "timing": "human-paced direct reversible structural mapping with no automatic rehearsal",
+      "layer": "full-stage p5 WebGL service assembly"
     },
     "implementation": {
       "projectId": "processing-p5-js",
       "projectUrl": "https://github.com/processing/p5.js",
       "library": "p5@2.3.0",
       "renderer": "webgl",
-      "snippet": "parts.forEach(part => translate(...part.axis.map(v => v * progress)))",
+      "snippet": "parts.forEach(part => { p.push(); p.translate(part.assembledX + part.explodeX * humanProgress, 0, 0); drawSemanticPart(p, part); p.pop(); });",
       "referenceUrl": "https://github.com/mrdoob/three.js"
     },
     "scores": {
-      "creativity": 17,
-      "artDirection": 19,
-      "motion": 18,
+      "creativity": 20,
+      "artDirection": 20,
+      "motion": 20,
       "clarity": 15,
       "inspiration": 15,
       "evidence": 10,
-      "total": 94
+      "total": 100
     },
-    "rationaleZh": "结构变化直接可见且无需外部模型资产。",
+    "rationaleZh": "七个零件拥有唯一身份、顺序、装配轴、端点和实时位置证据；原创 ImageGen 复合材料纹理同源 fetch、SHA-256、16,384 像素采样后复制为 p5.Image，并真实用于两个语义部件。Range、捕获拖拽、键盘、零件按钮和 Reset 全由可信真人输入拥有，首帧完整装配且无 autoplay、rehearsal、fallback、合成输入或预览时钟变更。",
     "batch": "C",
-    "demo": "原创轨道相机由六个程序化几何零件沿轴爆炸分解。",
-    "capture": "拖 range 0→1→.45→0；同时轻微 orbit 验证真实 3D。",
+    "demo": "FBL-06 便携应急灯由七个有名 WebGL 零件构成；真人可在完整装配、任意维修间距和完全拆解之间停留，并选择具体部件检查。",
+    "capture": "首帧保持完整装配；真人捕获拖拽至中间态，检查第 06 号电源壳，再用 Range 到达 100%，最后 Reset 回到 0%。",
     "risk": {
       "level": "medium",
-      "detail": "各部件轴必须有设计逻辑；单纯把方块散开会低分。"
+      "detail": "七个部件的身份、顺序、X± 轴、端点与纹理映射必须保持一致；纹理不能退化为 UI 背景，进度不能由录制时钟自动驱动。"
     },
     "observedImplementation": {
-      "projectId": "mrdoob-three-js",
-      "library": "three.js",
+      "projectId": "processing-p5-js",
+      "library": "p5@2.3.0",
       "renderer": "WebGL",
-      "snippet": "parts.forEach(p=>p.position.copy(p.userData.axis).multiplyScalar(progress))",
-      "projectUrl": "https://github.com/mrdoob/three.js",
-      "referenceUrl": "https://threejs.org/docs/"
+      "snippet": "p.texture(materialTexture); p.box(shellWidth, shellHeight, shellDepth);",
+      "projectUrl": "https://github.com/processing/p5.js",
+      "referenceUrl": "https://github.com/mrdoob/three.js"
     }
   },
   {

@@ -811,7 +811,7 @@
       "originUrl": "https://github.com/processing/p5.js",
       "demoSourcePath": "demo/preview-demos/slider-controlled-exploded-3d-assembly.html",
       "libraryVersion": "p5@2.3.0",
-      "generatedAt": "2026-07-20",
+      "generatedAt": "2026-07-21",
       "outputPath": "demo/gifs/captured/slider-controlled-exploded-3d-assembly.gif",
       "usageBasis": "original local mechanism demo using p5@2.3.0; verify license https://github.com/processing/p5.js/blob/HEAD/license.txt"
     },

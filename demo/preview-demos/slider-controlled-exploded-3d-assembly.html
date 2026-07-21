@@ -3,19 +3,287 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>p5.js — Exploded 3D Assembly</title>
+  <title>p5.js — Field Beacon Exploded Assembly</title>
   <link rel="stylesheet" href="./shared.css">
   <style>
-    :root{--preview-background:#071011}#assembly-host{position:absolute;inset:0;cursor:grab}#assembly-host:active{cursor:grabbing}#assembly-host canvas{width:100%!important;height:100%!important}.assembly-copy{position:absolute;z-index:4;left:14px;top:42px;color:#e9fff8;pointer-events:none}.assembly-copy small{font:800 6px/1 ui-monospace;letter-spacing:.18em;color:#78e6c4}.assembly-copy h1{width:112px;margin:8px 0 0;font:900 18px/.86 system-ui;letter-spacing:-.055em}.assembly-control{position:absolute;z-index:6;right:13px;bottom:13px;width:124px;display:grid;grid-template-columns:auto 1fr;gap:7px;align-items:center;color:#b9d6cc;font:800 6px/1 ui-monospace;letter-spacing:.1em}.assembly-control input{width:100%;accent-color:#78e6c4}.assembly-readout{position:absolute;z-index:4;right:13px;top:13px;color:#78e6c4;font:900 8px/1 ui-monospace}.library-badge{background:#05100ec9}.scene-caption{max-width:132px}</style>
+    :root {
+      --preview-background: #090d0d;
+      --ink: #edf3e8;
+      --muted: #89948b;
+      --line: rgba(224, 235, 224, .16);
+      --signal: #d9ff62;
+      --copper: #e59653;
+    }
+
+    button,
+    input { font: inherit; }
+
+    .assembly-stage {
+      background:
+        radial-gradient(circle at 60% 46%, rgba(92, 114, 94, .13), transparent 37%),
+        linear-gradient(118deg, #111817 0%, #090d0d 62%, #0c100e 100%);
+      color: var(--ink);
+      user-select: none;
+    }
+
+    .assembly-stage::before {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background-image:
+        linear-gradient(rgba(224, 235, 224, .035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(224, 235, 224, .035) 1px, transparent 1px);
+      background-size: 22px 22px;
+      content: '';
+      mask-image: linear-gradient(to bottom, transparent, #000 22%, #000 74%, transparent);
+      pointer-events: none;
+    }
+
+    #assembly-host {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      cursor: ew-resize;
+      outline: none;
+      touch-action: none;
+    }
+
+    #assembly-host:focus-visible::after {
+      position: absolute;
+      inset: 4px;
+      border: 1px solid rgba(217, 255, 98, .68);
+      border-radius: 12px;
+      content: '';
+      pointer-events: none;
+    }
+
+    #assembly-host[data-dragging="true"] { cursor: grabbing; }
+    #assembly-host canvas { width: 100% !important; height: 100% !important; }
+
+    .assembly-header {
+      position: absolute;
+      top: 12px;
+      left: 13px;
+      z-index: 4;
+      display: grid;
+      gap: 3px;
+      pointer-events: none;
+    }
+
+    .assembly-header span,
+    .assembly-readout small,
+    .inspection-card small,
+    .scrub-label,
+    .part-control,
+    .reset-control {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .assembly-header span { color: var(--signal); font-size: 6px; }
+    .assembly-header strong { font-size: 13px; line-height: .9; letter-spacing: -.045em; }
+
+    .assembly-readout {
+      position: absolute;
+      top: 12px;
+      right: 13px;
+      z-index: 4;
+      display: grid;
+      justify-items: end;
+      gap: 3px;
+      pointer-events: none;
+    }
+
+    .assembly-readout output { color: var(--signal); font: 900 14px/.9 ui-monospace, monospace; }
+    .assembly-readout small { color: var(--muted); font-size: 5px; }
+
+    .part-rail {
+      position: absolute;
+      top: 37px;
+      left: 13px;
+      z-index: 6;
+      display: flex;
+      gap: 3px;
+    }
+
+    .part-control,
+    .reset-control {
+      display: grid;
+      width: 21px;
+      height: 16px;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      background: rgba(7, 11, 10, .72);
+      color: #a6afa7;
+      font-size: 5px;
+      cursor: pointer;
+      backdrop-filter: blur(7px);
+    }
+
+    .part-control:hover,
+    .part-control:focus-visible,
+    .part-control[aria-pressed="true"] {
+      border-color: rgba(217, 255, 98, .72);
+      background: var(--signal);
+      color: #11160e;
+      outline: none;
+    }
+
+    .inspection-card {
+      position: absolute;
+      left: 13px;
+      bottom: 37px;
+      z-index: 4;
+      display: grid;
+      grid-template-columns: 24px auto;
+      gap: 7px;
+      align-items: center;
+      width: 119px;
+      padding-top: 6px;
+      border-top: 1px solid var(--line);
+      pointer-events: none;
+    }
+
+    .material-swatch {
+      width: 24px;
+      height: 24px;
+      border: 1px solid rgba(255, 255, 255, .2);
+      border-radius: 4px;
+      background: #242a28 center / cover;
+      box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .35);
+    }
+
+    .inspection-card div { display: grid; min-width: 0; gap: 3px; }
+    .inspection-card strong { overflow: hidden; font-size: 7px; line-height: 1; letter-spacing: -.015em; text-overflow: ellipsis; white-space: nowrap; }
+    .inspection-card small { color: var(--muted); font-size: 5px; white-space: nowrap; }
+
+    .scrub-control {
+      position: absolute;
+      right: 12px;
+      bottom: 10px;
+      left: 12px;
+      z-index: 7;
+      display: grid;
+      grid-template-columns: auto minmax(54px, 1fr) auto auto;
+      gap: 8px;
+      align-items: center;
+      min-height: 20px;
+      padding: 4px 5px 4px 8px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: rgba(7, 10, 9, .78);
+      backdrop-filter: blur(9px);
+    }
+
+    .scrub-label { color: #a5afa6; font-size: 5px; }
+    #assembly-range { width: 100%; min-width: 0; accent-color: var(--signal); cursor: ew-resize; }
+    .scrub-control output { min-width: 25px; color: var(--signal); font: 900 7px/1 ui-monospace, monospace; text-align: right; }
+    .reset-control { width: auto; height: 14px; padding: 0 5px; }
+    .reset-control:hover,
+    .reset-control:focus-visible { border-color: rgba(229, 150, 83, .72); color: #ffd5ae; outline: none; }
+
+    .assembly-stage .library-badge {
+      top: auto;
+      right: 13px;
+      bottom: 39px;
+      left: auto;
+      padding: 3px 6px;
+      border-color: var(--line);
+      background: rgba(7, 10, 9, .68);
+      color: #8f9991;
+      font-size: 5px;
+      white-space: nowrap;
+    }
+
+    .assembly-stage .scene-caption { display: none; }
+
+    @media (max-width: 220px), (max-height: 110px) {
+      .assembly-header { top: 6px; left: 7px; gap: 1px; }
+      .assembly-header span { font-size: 4px; }
+      .assembly-header strong { font-size: 8px; }
+      .assembly-readout { top: 6px; right: 7px; gap: 1px; }
+      .assembly-readout output { font-size: 8px; }
+      .assembly-readout small { display: none; }
+      .part-rail { top: 21px; left: 7px; gap: 2px; }
+      .part-control { width: 14px; height: 10px; border-radius: 2px; font-size: 3.5px; }
+      .inspection-card,
+      .assembly-stage .library-badge,
+      .scrub-label { display: none; }
+      .scrub-control {
+        right: 6px;
+        bottom: 5px;
+        left: 6px;
+        grid-template-columns: 1fr auto auto;
+        gap: 4px;
+        min-height: 12px;
+        padding: 2px 3px;
+        border-radius: 4px;
+      }
+      #assembly-range { height: 7px; }
+      .scrub-control output { min-width: 18px; font-size: 4px; }
+      .reset-control { height: 8px; padding: 0 3px; border-radius: 2px; font-size: 3px; }
+    }
+  </style>
 </head>
 <body>
-  <main class="preview-stage" data-preview-mechanism="range-mapped-3d-assembly">
-    <div id="assembly-host" tabindex="0" aria-label="Drag to orbit the assembly. Use the range slider or arrow keys to separate the parts."></div>
-    <section class="assembly-copy"><small>OPTICAL MODULE / 07</small><h1>SEE HOW THE MACHINE FITS.</h1></section>
-    <output class="assembly-readout" id="assembly-readout">00%</output>
-    <label class="assembly-control">EXPLODE <input id="assembly-range" type="range" min="0" max="100" value="0" aria-label="Assembly separation"></label>
-    <span class="library-badge">p5.js · WebGL assembly</span>
-    <span class="scene-caption">one control · seven authored assembly vectors</span>
+  <main
+    class="preview-stage assembly-stage"
+    id="assembly-stage"
+    data-preview-mechanism="trusted-human-scrub-to-semantic-webgl-part-separation"
+    data-input-policy="trusted-only"
+  >
+    <div
+      id="assembly-host"
+      tabindex="0"
+      role="slider"
+      aria-label="Exploded view of a portable field beacon. Drag horizontally or use arrow keys to separate its seven parts."
+      aria-valuemin="0"
+      aria-valuemax="100"
+      aria-valuenow="0"
+      aria-valuetext="Fully assembled"
+      data-dragging="false"
+    ></div>
+
+    <header class="assembly-header" aria-hidden="true">
+      <span>Field repair / station 06</span>
+      <strong>FBL—06 BEACON</strong>
+    </header>
+
+    <div class="assembly-readout" aria-hidden="true">
+      <output id="assembly-readout">000%</output>
+      <small id="assembly-mode">assembled · x datum</small>
+    </div>
+
+    <nav class="part-rail" id="part-controls" aria-label="Inspect a component">
+      <button class="part-control" type="button" data-part-index="0" aria-label="Inspect front guard" aria-pressed="false">01</button>
+      <button class="part-control" type="button" data-part-index="1" aria-label="Inspect sealed lens" aria-pressed="false">02</button>
+      <button class="part-control" type="button" data-part-index="2" aria-label="Inspect optical reflector" aria-pressed="false">03</button>
+      <button class="part-control" type="button" data-part-index="3" aria-label="Inspect LED emitter plate" aria-pressed="false">04</button>
+      <button class="part-control" type="button" data-part-index="4" aria-label="Inspect heat sink" aria-pressed="false">05</button>
+      <button class="part-control" type="button" data-part-index="5" aria-label="Inspect composite power shell" aria-pressed="false">06</button>
+      <button class="part-control" type="button" data-part-index="6" aria-label="Inspect rear service latch" aria-pressed="false">07</button>
+    </nav>
+
+    <aside class="inspection-card" aria-live="polite">
+      <span class="material-swatch" id="material-swatch" aria-hidden="true"></span>
+      <div>
+        <strong id="part-name">Assembly datum</strong>
+        <small id="part-spec">7 parts · primary axis X</small>
+      </div>
+    </aside>
+
+    <div class="scrub-control">
+      <label class="scrub-label" for="assembly-range">explode</label>
+      <input id="assembly-range" type="range" min="0" max="100" step="1" value="0" aria-label="Assembly separation">
+      <output id="range-output" for="assembly-range">000</output>
+      <button class="reset-control" id="reset-control" type="button">reset</button>
+    </div>
+
+    <span class="library-badge">p5.js · WebGL · local texture</span>
+    <span class="scene-caption">human scrub · seven semantic parts · no playback</span>
   </main>
   <script type="module" src="./src/slider-controlled-exploded-3d-assembly-demo.js"></script>
 </body>

@@ -1723,6 +1723,38 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("PageUp")
             elif index == 34:
                 page.keyboard.press("End")
+        elif demo["id"] == "slider-controlled-exploded-3d-assembly":
+            if index == 1:
+                page.mouse.move(68, 92)
+            elif index == 2:
+                page.mouse.down()
+            elif index == 3:
+                page.mouse.move(148, 92, steps=6)
+            elif index == 4:
+                page.mouse.up()
+            elif index == 8:
+                page.locator('.part-control[data-part-index="5"]').click()
+            elif index == 12:
+                page.locator("#assembly-range").focus()
+                page.keyboard.press("End")
+            elif index == 16:
+                page.locator("#assembly-host").focus()
+                page.keyboard.press("3")
+            elif index == 18:
+                page.keyboard.press("ArrowLeft")
+            elif index == 20:
+                page.keyboard.press("Home")
+            elif index == 22:
+                page.keyboard.press("End")
+            elif index == 25:
+                page.locator("#reset-control").click()
+            elif index == 28:
+                page.locator("#assembly-range").focus()
+                page.keyboard.press("ArrowRight")
+            elif index == 30:
+                page.keyboard.press("End")
+            elif index == 33:
+                page.locator("#reset-control").click()
         elif demo["id"] == "collision-reactive-3d-physics-stack":
             if index == 1:
                 page.locator('[data-payload="fragile"]').click()
@@ -4264,6 +4296,79 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or len(interaction["ledger"]) < 20
         ):
             raise RuntimeError(f"{demo['id']} did not capture two opposed trusted drags, wheel/keyboard/depth controls, order inspection/reset, all 31 depth-sorted source glyphs, and a verified local ImageGen artwork without automatic, inertial, synthetic, or capture-clock motion: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "slider-controlled-exploded-3d-assembly":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "inspect-fictional-field-beacon-exploded-assembly-by-human-input"
+            or interaction["acceptedInputs"] != ["range", "mouse", "touch", "pen", "keyboard", "part-control", "reset-control"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticFallback"]
+            or interaction["automaticRehearsal"]
+            or interaction["previewClockDriven"]
+            or interaction["previewClockMutations"] != 0
+            or interaction["syntheticDispatch"]
+            or interaction["inputPolicy"] != "trusted-only"
+            or interaction["capturePolicy"] != "horizontal-pointer-capture"
+            or interaction["renderer"] != "p5-webgl"
+            or not interaction["userInputRequired"]
+            or not interaction["initialStaticVerified"]
+            or interaction["progress"] != 0
+            or interaction["selectedPartId"] is not None
+            or interaction["inspectionMode"] != "assembled"
+            or interaction["activePointerId"] is not None
+            or interaction["pointerCaptured"]
+            or interaction["trustedInputCount"] < 18
+            or interaction["rejectedSyntheticInputCount"] != 0
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerMoveCount"] < 6
+            or interaction["pointerReleaseCount"] != 1
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerCaptureVerifiedCount"] != 1
+            or interaction["rangeInputCount"] != 3
+            or interaction["keyboardInputCount"] != 4
+            or interaction["partControlCount"] != 1
+            or interaction["resetControlCount"] != 2
+            or interaction["progressMutationCount"] < 16
+            or interaction["intermediateStopCount"] < 1
+            or interaction["endpointStartVisits"] < 4
+            or interaction["endpointEndVisits"] < 3
+            or not interaction["endpointMappingVerified"]
+            or not interaction["resetSnapshotVerified"]
+            or interaction["lastInputTrusted"] is not True
+            or interaction["lastInputType"] != "reset-control"
+            or interaction["semanticPartCount"] != 7
+            or interaction["partIdentitySequence"] != ["front-guard", "sealed-lens", "optical-reflector", "emitter-plate", "heat-sink", "power-shell", "service-latch"]
+            or interaction["partOrders"] != [1, 2, 3, 4, 5, 6, 7]
+            or interaction["assemblyAxes"] != ["X−", "X−", "X−", "X−", "X+", "X+", "X+"]
+            or not interaction["assemblyOrderVerified"]
+            or not interaction["positionOrderVerified"]
+            or interaction["lastPartPositions"] != [-64, -55, -42, -27, -10, 25, 52]
+            or interaction["assetSourceKind"] != "project-local-imagegen-material"
+            or interaction["assetFetchCount"] != 1
+            or not interaction["assetSameOrigin"]
+            or not interaction["assetResponseSameOrigin"]
+            or not interaction["assetDecoded"]
+            or interaction["assetWidth"] != 640
+            or interaction["assetHeight"] != 640
+            or interaction["assetByteLength"] != 178411
+            or interaction["assetSha256"] != "f1ef3b959a2f2e0d73ff718db8a4da5ffc560adb185751f3e9c241df9b992e5a"
+            or interaction["assetExpectedSha256"] != interaction["assetSha256"]
+            or interaction["assetSamplePixelCount"] != 16384
+            or interaction["assetSampleChecksum"] <= 0
+            or interaction["assetDistinctLuminanceBuckets"] < 5
+            or interaction["assetChromaSamples"] <= 100
+            or not interaction["p5TextureReady"]
+            or interaction["p5TexturePixelCount"] != 16384
+            or interaction["p5TextureChecksum"] != interaction["assetSampleChecksum"]
+            or interaction["textureApplyCount"] < 30
+            or set(interaction["texturedPartIds"]) != {"power-shell", "service-latch"}
+            or interaction["webglRenderCount"] < 15
+            or not interaction["listenersBound"]
+            or not interaction["ready"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a trusted intermediate scrub, semantic part inspection, real range and keyboard endpoints, exact reset, seven ordered WebGL parts, and verified ImageGen p5 texture use without automation: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "collision-reactive-3d-physics-stack":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_STATE__")

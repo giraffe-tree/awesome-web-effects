@@ -6,18 +6,440 @@
   <title>p5.js — Live Hand Landmark Video Overlay</title>
   <link rel="stylesheet" href="./shared.css">
   <style>
-    :root{--preview-background:#071319}.hand-frame{position:absolute;inset:0;background:#071319}.hand-frame video,.hand-frame>canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.hand-frame video{filter:saturate(.86) contrast(1.07)}#hand-overlay{pointer-events:none}.hand-copy{position:absolute;z-index:8;left:13px;top:45px;color:#e8fff8;pointer-events:none}.hand-copy small{font:800 6px/1 ui-monospace;letter-spacing:.15em;color:#75f4cf}.hand-copy h1{width:112px;margin:8px 0 0;font:950 18px/.84 system-ui;letter-spacing:-.055em}.hand-status{position:absolute;z-index:8;right:12px;top:12px;color:#75f4cf;font:900 7px/1 ui-monospace;letter-spacing:.1em}.library-badge{background:#06151aca}.scene-caption{color:#c5e5dd}</style>
+    :root {
+      --preview-background: #071527;
+      --ink: #f3f1e8;
+      --muted: #9daaad;
+      --line: rgba(231, 241, 238, .22);
+      --mint: #94ffd4;
+      --coral: #ff8c72;
+      --panel: rgba(5, 18, 30, .78);
+    }
+
+    * { box-sizing: border-box; }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: var(--preview-background);
+    }
+
+    button,
+    input { font: inherit; }
+
+    .preview-stage {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      color: var(--ink);
+      background: #071527;
+      isolation: isolate;
+    }
+
+    .hand-frame {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      overflow: hidden;
+      touch-action: none;
+      cursor: crosshair;
+      outline: 0;
+      background: #071527;
+    }
+
+    .hand-frame::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      pointer-events: none;
+      background:
+        linear-gradient(180deg, rgba(4, 14, 25, .62), transparent 24%, transparent 68%, rgba(4, 14, 25, .82)),
+        linear-gradient(90deg, rgba(4, 14, 25, .42), transparent 22%, transparent 78%, rgba(4, 14, 25, .38));
+    }
+
+    .hand-frame:focus-visible {
+      box-shadow: inset 0 0 0 2px var(--mint);
+    }
+
+    .hand-frame video,
+    #hand-overlay-host,
+    #hand-overlay-host canvas {
+      position: absolute;
+      inset: 0;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    .hand-frame video {
+      display: block;
+      object-fit: cover;
+      filter: saturate(.92) contrast(1.04);
+    }
+
+    #hand-overlay-host {
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    #hand-overlay-host canvas { display: block; }
+
+    .session-header,
+    .exercise-card,
+    .telemetry,
+    .sample-flag,
+    .transport {
+      position: absolute;
+      z-index: 5;
+    }
+
+    .session-header {
+      top: 12px;
+      left: 14px;
+      right: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(231, 241, 238, .18);
+      pointer-events: none;
+      font: 750 5.5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .session-header__status {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: #d5dedc;
+    }
+
+    .session-header__status::before {
+      content: "";
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--coral);
+      box-shadow: 0 0 10px rgba(255, 140, 114, .72);
+    }
+
+    .session-header__status[data-playing="true"]::before {
+      background: var(--mint);
+      box-shadow: 0 0 10px rgba(148, 255, 212, .82);
+    }
+
+    .exercise-card {
+      left: 18px;
+      top: 55px;
+      width: 146px;
+      pointer-events: none;
+    }
+
+    .exercise-card__number {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--mint);
+      font: 800 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+
+    .exercise-card h1 {
+      margin: 0;
+      max-width: 142px;
+      font: 600 30px/.84 Georgia, "Times New Roman", serif;
+      letter-spacing: -.06em;
+      text-wrap: balance;
+    }
+
+    .exercise-card h1 em {
+      display: block;
+      color: var(--mint);
+      font-weight: 500;
+    }
+
+    .exercise-card p {
+      width: 122px;
+      margin: 11px 0 0;
+      color: #c0cbc9;
+      font: 650 4.5px/1.48 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .085em;
+      text-transform: uppercase;
+    }
+
+    .telemetry {
+      top: 51px;
+      right: 16px;
+      width: 132px;
+      padding: 7px 10px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: var(--panel);
+      box-shadow: 0 12px 42px rgba(0, 0, 0, .24);
+      backdrop-filter: blur(10px);
+      pointer-events: none;
+    }
+
+    .telemetry-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 5px 0;
+      border-top: 1px solid rgba(231, 241, 238, .12);
+    }
+
+    .telemetry-row:first-child { border-top: 0; }
+
+    .telemetry-row span {
+      color: #94a3a4;
+      font: 700 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .telemetry-row strong {
+      color: var(--ink);
+      font: 750 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .04em;
+      text-align: right;
+    }
+
+    #landmark-output { color: var(--mint); }
+
+    .sample-flag {
+      top: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 6px 9px;
+      border: 1px solid rgba(231, 241, 238, .28);
+      border-radius: 999px;
+      color: #d8e1df;
+      background: rgba(5, 18, 30, .7);
+      pointer-events: none;
+      font: 750 4.5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      backdrop-filter: blur(8px);
+    }
+
+    .transport {
+      left: 16px;
+      right: 16px;
+      bottom: 9px;
+      display: grid;
+      grid-template-columns: auto minmax(120px, 1fr) auto auto;
+      align-items: center;
+      gap: 9px;
+      min-height: 41px;
+      padding-top: 9px;
+      border-top: 1px solid rgba(231, 241, 238, .24);
+    }
+
+    .transport button {
+      height: 25px;
+      padding: 0 10px;
+      border: 1px solid rgba(231, 241, 238, .28);
+      border-radius: 999px;
+      color: #e6ece9;
+      background: rgba(5, 18, 30, .72);
+      cursor: pointer;
+      font: 750 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .transport button:focus-visible,
+    .transport input:focus-visible {
+      outline: 1px solid var(--mint);
+      outline-offset: 2px;
+    }
+
+    #play-button {
+      min-width: 68px;
+      color: #0a1718;
+      border-color: var(--mint);
+      background: var(--mint);
+    }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: minmax(70px, 1fr) 42px;
+      align-items: center;
+      gap: 7px;
+      min-width: 0;
+    }
+
+    #seek-input {
+      width: 100%;
+      height: 14px;
+      margin: 0;
+      appearance: none;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    #seek-input::-webkit-slider-runnable-track {
+      height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--mint) var(--seek-progress, 0%), rgba(231, 241, 238, .26) var(--seek-progress, 0%));
+    }
+
+    #seek-input::-webkit-slider-thumb {
+      width: 8px;
+      height: 8px;
+      margin-top: -3px;
+      appearance: none;
+      border: 1px solid #071527;
+      border-radius: 50%;
+      background: var(--ink);
+      box-shadow: 0 0 0 1px var(--mint);
+    }
+
+    .timeline output {
+      color: #dce4e1;
+      text-align: right;
+      font: 700 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .05em;
+      white-space: nowrap;
+    }
+
+    .exercise-switch {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding: 3px;
+      gap: 2px;
+      border: 1px solid rgba(231, 241, 238, .24);
+      border-radius: 999px;
+      background: rgba(5, 18, 30, .72);
+    }
+
+    .exercise-switch button {
+      height: 19px;
+      padding: 0 8px;
+      border: 0;
+      background: transparent;
+      font-size: 4.5px;
+    }
+
+    .exercise-switch button[aria-pressed="true"] {
+      color: #071527;
+      background: var(--mint);
+    }
+
+    .transport-meta {
+      min-width: 67px;
+      color: #a8b4b3;
+      pointer-events: none;
+      font: 700 4px/1.35 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .08em;
+      text-align: right;
+      text-transform: uppercase;
+    }
+
+    #reset-button:disabled { opacity: .42; cursor: default; }
+
+    .library-badge { display: none; }
+
+    @media (max-width: 430px) {
+      .session-header { top: 7px; left: 9px; right: 9px; padding-bottom: 5px; font-size: 3.7px; }
+      .session-header__status { gap: 4px; }
+      .session-header__status::before { width: 3px; height: 3px; }
+      .exercise-card { left: 9px; top: 31px; width: 78px; }
+      .exercise-card__number { margin-bottom: 4px; font-size: 3px; }
+      .exercise-card h1 { max-width: 76px; font-size: 16px; }
+      .exercise-card p { display: none; }
+      .telemetry { top: 30px; right: 7px; width: 77px; padding: 4px 5px; border-radius: 5px; }
+      .telemetry-row { padding: 3px 0; }
+      .telemetry-row span { font-size: 2.8px; }
+      .telemetry-row strong { font-size: 3.8px; }
+      .sample-flag { top: 27px; padding: 4px 6px; font-size: 3px; }
+      .transport { left: 8px; right: 8px; bottom: 4px; grid-template-columns: auto minmax(62px, 1fr) auto; gap: 4px; min-height: 24px; padding-top: 5px; }
+      .transport button { height: 17px; padding: 0 6px; font-size: 3.4px; }
+      #play-button { min-width: 40px; }
+      .timeline { grid-template-columns: 1fr 26px; gap: 3px; }
+      .timeline output { font-size: 3.4px; }
+      .exercise-switch { padding: 2px; gap: 1px; }
+      .exercise-switch button { height: 13px; padding: 0 4px; font-size: 2.8px; }
+      .transport-meta { display: none; }
+      #reset-button { display: none; }
+    }
+
+    @media (max-width: 180px) {
+      .hand-frame::after { background: linear-gradient(180deg, rgba(4, 14, 25, .28), transparent 28%, rgba(4, 14, 25, .45)); }
+      .session-header { top: 3px; left: 4px; right: 4px; padding-bottom: 2px; font-size: 2.3px; }
+      .session-header__status { display: none; }
+      .exercise-card { top: 13px; left: 4px; width: 40px; }
+      .exercise-card__number { display: none; }
+      .exercise-card h1 { max-width: 40px; font-size: 7px; }
+      .telemetry { display: none; }
+      .sample-flag { top: 12px; padding: 2px 3px; font-size: 2.1px; }
+      .transport { left: 3px; right: 3px; bottom: 2px; grid-template-columns: auto minmax(34px, 1fr) auto; gap: 2px; min-height: 12px; padding-top: 2px; }
+      .transport button { height: 8px; padding: 0 3px; font-size: 2.2px; }
+      #play-button { min-width: 23px; }
+      .timeline { grid-template-columns: 1fr; }
+      .timeline output { display: none; }
+      #seek-input { height: 8px; }
+      #seek-input::-webkit-slider-thumb { width: 5px; height: 5px; margin-top: -1.5px; }
+      .exercise-switch { padding: 1px; }
+      .exercise-switch button { height: 6px; padding: 0 2px; font-size: 1.8px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+    }
+  </style>
 </head>
 <body>
-  <main class="preview-stage" data-preview-mechanism="video-frame-landmark-inference">
-    <div class="hand-frame" id="hand-frame" tabindex="0" aria-label="A generated video stream is analyzed frame by frame to detect and connect 21 hand landmarks">
-      <video id="hand-video" autoplay muted playsinline></video>
-      <canvas id="hand-overlay"></canvas>
+  <main id="hand-stage" class="preview-stage" data-preview-mechanism="local-video-deterministic-landmark-calibration">
+    <div id="hand-frame" class="hand-frame" role="application" tabindex="0" aria-label="Paused hand rehabilitation calibration sample. Space plays or pauses, arrow keys seek, E changes exercise, and dragging calibrates the landmark overlay.">
+      <video id="hand-video" muted playsinline preload="auto" poster="./assets/live-hand-landmark-video-overlay/hand-open-calibration-source.jpg">
+        <source src="./assets/live-hand-landmark-video-overlay/wrist-sweep-calibration.mp4" type="video/mp4">
+      </video>
+      <div id="hand-overlay-host" aria-hidden="true"></div>
     </div>
-    <section class="hand-copy"><small>VISION STREAM / LIVE</small><h1>GESTURE BECOMES GEOMETRY.</h1></section>
-    <output class="hand-status" id="hand-status">00 / 21</output>
-    <span class="library-badge">p5.js · video frame analysis</span>
-    <span class="scene-caption">color components → articulated landmarks</span>
+
+    <header class="session-header" aria-hidden="true">
+      <span>Motion clinic · Hand 04 · Local sample</span>
+      <span id="session-status" class="session-header__status" data-playing="false">Paused · input required</span>
+    </header>
+
+    <section class="exercise-card" aria-hidden="true">
+      <span id="exercise-number" class="exercise-card__number">Exercise 01 · mobility</span>
+      <h1 id="exercise-title">Wrist <em>sweep.</em></h1>
+      <p id="exercise-copy">Review lateral wrist control while the local calibration skeleton stays registered to the recorded hand.</p>
+    </section>
+
+    <aside class="telemetry" aria-label="Calibration telemetry">
+      <div class="telemetry-row"><span>Landmarks</span><strong id="landmark-output">21 / 21</strong></div>
+      <div class="telemetry-row"><span>Wrist angle</span><strong id="angle-output">0.0°</strong></div>
+      <div class="telemetry-row"><span>Frame</span><strong id="frame-output">00 / 45</strong></div>
+      <div class="telemetry-row"><span>Calibration</span><strong id="calibration-output">0 / 0 px</strong></div>
+    </aside>
+
+    <span class="sample-flag">Fictional local calibration sample · not live camera</span>
+
+    <footer class="transport">
+      <button id="play-button" type="button" aria-pressed="false">Play sample</button>
+      <label class="timeline">
+        <input id="seek-input" type="range" min="0" max="3" value="0" step="0.066667" aria-label="Seek calibration sample">
+        <output id="time-output">0.00 / 3.00</output>
+      </label>
+      <div class="exercise-switch" aria-label="Exercise selection">
+        <button id="sweep-button" type="button" aria-pressed="true">Sweep</button>
+        <button id="hold-button" type="button" aria-pressed="false">Hold</button>
+      </div>
+      <div class="transport-meta" aria-hidden="true">
+        <span id="input-output">Awaiting input</span><br>
+        <span>Drag = calibrate</span>
+      </div>
+      <button id="reset-button" type="button" disabled>Reset</button>
+    </footer>
+
+    <span class="library-badge">p5.js · deterministic video landmarks</span>
   </main>
   <script type="module" src="./src/live-hand-landmark-video-overlay-demo.js"></script>
 </body>

@@ -3340,41 +3340,41 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "live-hand-landmark-video-overlay",
-    "name": "Live hand-landmark video overlay",
-    "nameZh": "视频手部关键点叠加",
+    "name": "Hand rehabilitation landmark calibration",
+    "nameZh": "手部康复关键点校准",
     "category": "canvas",
     "sourceUrl": "https://github.com/google-ai-edge/mediapipe",
-    "difference": "模型从视频帧推导关节几何并保持手指身份；现有交互均不从媒体内容实时推理结构。",
+    "difference": "明确不是摄像头或模型推理：一段原创本地手腕扫动视频与同公式旋转的 21 个手工校准点逐帧对齐，让使用者检查骨架注册、拖动修正偏移并切换训练任务；不以预标注数据冒充实时检测。",
     "behavior": {
-      "trigger": "video frame inference",
-      "response": "Track articulated hand landmarks and draw a live skeleton and fingertip trails",
-      "timing": "continuous model-driven tracking",
-      "layer": "video + Canvas overlay"
+      "trigger": "trusted play, seek, exercise selection, calibration drag, or keyboard input",
+      "response": "Keep twenty-one deterministic landmarks registered to a local wrist-sweep video and let the operator correct overlay offset",
+      "timing": "user-owned playback or direct frame seeking",
+      "layer": "full-stage local video + p5 Canvas overlay"
     },
     "implementation": {
       "projectId": "processing-p5-js",
       "projectUrl": "https://github.com/processing/p5.js",
       "library": "p5@2.3.0",
       "renderer": "canvas2d",
-      "snippet": "analysis.drawImage(video); landmarks = connectedColorComponents(analysis.getImageData(...))",
+      "snippet": "angle = 0.10 * Math.sin(2 * Math.PI * frameTime / 3); landmarks = rotate(baseLandmarks, angle, calibrationOffset)",
       "referenceUrl": "https://github.com/google-ai-edge/mediapipe"
     },
     "scores": {
       "creativity": 19,
-      "artDirection": 18,
+      "artDirection": 20,
       "motion": 19,
       "clarity": 15,
       "inspiration": 15,
-      "evidence": 8,
-      "total": 94
+      "evidence": 10,
+      "total": 98
     },
-    "rationaleZh": "视觉模型推理直接产生动态骨架，机制独特且可验证。",
+    "rationaleZh": "真实本地视频、逐帧媒体 checksum、21 点与 23 条连线、同源变换公式和人工偏移校准共同把骨架叠加变成可信的康复动作质检；页面显式披露这是虚构本地校准样本而非实时摄像头或模型推理。",
     "batch": "C",
-    "demo": "许可明确的本地手势短片上绘制 21 点骨架，指尖留下三色轨迹。",
-    "capture": "播放固定 5s 视频→录制张手/捏合/指向三姿态→循环。",
+    "demo": "在 3 秒原创手腕扫动样本上检查 21 点骨架注册；明确播放/暂停或拖动 seek，切换 Wrist sweep / Stability hold，并用捕获拖拽修正关键点偏移。",
+    "capture": "首帧暂停→Play/Pause→真实 range seek→切换 Hold→两次相反方向校准拖拽→键盘逐帧与切换任务→第二次用户播放/暂停→Reset→再次校准；验证本地 H.264 元数据、视频帧变化、21 点/23 连线和可信输入账本。",
     "risk": {
-      "level": "high",
-      "detail": "模型/WASM 大，必须打包许可明确视频；预标注 JSON 不能冒充推理。"
+      "level": "medium",
+      "detail": "本 Demo 是被明确披露的确定性校准样本，不声称运行 MediaPipe、摄像头或实时推理；若改成检测产品，必须接入真实模型输出，不能用预标注坐标冒充。"
     },
     "observedImplementation": {
       "projectId": "google-ai-edge-mediapipe",

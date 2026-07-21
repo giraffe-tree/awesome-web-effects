@@ -1798,6 +1798,76 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 33:
                 page.locator('#gif-stage').focus()
                 page.keyboard.press("End")
+        elif demo["id"] == "live-hand-landmark-video-overlay":
+            if index == 2:
+                page.locator('#play-button').click()
+            elif index in (3, 4):
+                page.wait_for_timeout(360)
+            elif index == 5:
+                page.locator('#play-button').click()
+            elif index == 7:
+                box = page.locator('#seek-input').bounding_box()
+                page.mouse.move(box["x"] + 2, box["y"] + box["height"] * .5)
+                page.mouse.down()
+            elif index == 8:
+                box = page.locator('#seek-input').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * .56, box["y"] + box["height"] * .5, steps=4)
+            elif index == 9:
+                box = page.locator('#seek-input').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * .82, box["y"] + box["height"] * .5, steps=3)
+                page.mouse.up()
+            elif index == 10:
+                page.wait_for_timeout(350)
+            elif index == 11:
+                page.locator('#hold-button').click()
+            elif index == 13:
+                page.mouse.move(222, 104)
+                page.mouse.down()
+            elif index == 14:
+                page.mouse.move(236, 112, steps=3)
+            elif index == 15:
+                page.mouse.move(250, 120, steps=3)
+            elif index == 16:
+                page.mouse.up()
+            elif index == 18:
+                page.locator('#hand-frame').focus()
+                page.keyboard.press("ArrowLeft")
+            elif index == 19:
+                page.keyboard.press("ArrowRight")
+            elif index == 20:
+                page.keyboard.press("e")
+            elif index == 21:
+                page.locator('#seek-input').focus()
+                page.keyboard.press("Home")
+                page.wait_for_timeout(120)
+                page.locator('#hand-frame').focus()
+                page.keyboard.press("Space")
+            elif index == 22:
+                page.wait_for_timeout(420)
+            elif index == 23:
+                page.keyboard.press("Space")
+            elif index == 25:
+                page.locator('#hand-frame').focus()
+                page.keyboard.press("r")
+            elif index == 27:
+                page.locator('#hold-button').click()
+            elif index == 29:
+                page.mouse.move(222, 112)
+                page.mouse.down()
+            elif index == 30:
+                page.mouse.move(208, 105, steps=3)
+            elif index == 31:
+                page.mouse.move(194, 98, steps=3)
+            elif index == 32:
+                page.mouse.up()
+            elif index == 33:
+                page.locator('#hand-frame').focus()
+                page.keyboard.press("ArrowRight")
+            elif index == 34:
+                page.locator('#seek-input').focus()
+                page.keyboard.press("End")
+            elif index == 35:
+                page.wait_for_timeout(350)
         elif demo["id"] == "four-corner-hover-crop-marks":
             if index == round(.35 * args.fps):
                 page.mouse.move(92, 78)
@@ -2177,7 +2247,13 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("1")
             elif index == 34:
                 page.wait_for_timeout(500)
-        if demo["id"] not in {"emergent-particle-life-colonies", "velocity-reactive-marquee", "draggable-dome-gallery", "bending-webgl-gallery-ribbon"}:
+        if demo["id"] not in {
+            "emergent-particle-life-colonies",
+            "velocity-reactive-marquee",
+            "draggable-dome-gallery",
+            "bending-webgl-gallery-ribbon",
+            "live-hand-landmark-video-overlay",
+        }:
             page.evaluate("time => window.__setPreviewTime(time)", preview_time)
         frame_path = frame_root / f"{index:04d}.png"
         page.screenshot(path=str(frame_path), type="png")
@@ -3802,6 +3878,82 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["lastInputTrusted"] is not True
         ):
             raise RuntimeError(f"{demo['id']} did not capture two trusted range drags, transport and keyboard stepping, user-started variable-delay playback, reset, twelve unique complete native GIF frames, and disposal-aware final inspection: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "live-hand-landmark-video-overlay":
+        assertion = page.evaluate("async () => await window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        ledger_types = {entry["type"] for entry in interaction["ledger"]}
+        if (
+            not assertion
+            or interaction["task"] != "hand-rehabilitation-landmark-calibration"
+            or interaction["acceptedInputs"] != ["mouse", "touch", "pen", "keyboard", "control"]
+            or not interaction["userInputRequired"]
+            or interaction["sampleDisclosure"] != "fictional-local-calibration-sample-not-live-camera"
+            or interaction["landmarkSource"] != "hand-labeled-coordinates-deterministically-aligned-to-local-video-frames"
+            or interaction["automaticPlayback"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["previewClockDriven"]
+            or interaction["previewClockMutationCount"] != 0
+            or interaction["syntheticInputDispatch"]
+            or not interaction["userOwnedPlayback"]
+            or not interaction["firstFrameStatic"]
+            or not interaction["initialStaticVerified"]
+            or interaction["inputCount"] < 25
+            or interaction["inputCount"] != interaction["trustedInputCount"]
+            or interaction["rejectedUntrustedCount"] != 0
+            or interaction["pointerInputCount"] < 14
+            or interaction["mouseInputCount"] < 14
+            or interaction["keyboardInputCount"] < 7
+            or interaction["controlInputCount"] < 6
+            or interaction["playAuthorizationCount"] < 2
+            or interaction["playCount"] < 2
+            or interaction["pauseCount"] < 2
+            or interaction["seekCount"] < 7
+            or interaction["exerciseChangeCount"] < 3
+            or interaction["calibrationMutationCount"] < 6
+            or interaction["resetCount"] < 1
+            or interaction["pointerCaptureCount"] < 2
+            or interaction["pointerReleaseCount"] < 2
+            or interaction["dragUpdateCount"] < 6
+            or not interaction["sourceImageDimensionsValid"]
+            or interaction["sourceImageDecodedCount"] != 1
+            or interaction["sourceImageChecksum"] <= 0
+            or interaction["sourceImageSampledPixelCount"] != 5184
+            or not interaction["videoSourceVerified"]
+            or interaction["videoByteLength"] != 650861
+            or interaction["videoByteChecksum"] <= 0
+            or not interaction["videoMetadataReady"]
+            or not interaction["videoDataReady"]
+            or interaction["videoWidth"] != 960
+            or interaction["videoHeight"] != 540
+            or interaction["videoFrameCallbackCount"] < 2
+            or interaction["videoProgressMutationCount"] < 2
+            or interaction["videoFrameChecksum"] <= 0
+            or interaction["videoFrameChannelSum"] <= 0
+            or interaction["initialVideoFrameChecksum"] <= 0
+            or interaction["videoFrameChecksumChangeCount"] < 1
+            or len(interaction["videoFrameChecksums"]) < 2
+            or not interaction["p5Ready"]
+            or not interaction["overlayReady"]
+            or interaction["overlayPointCount"] != 21
+            or interaction["overlaySegmentCount"] != 23
+            or interaction["landmarkCount"] != 21
+            or interaction["currentLandmarkCount"] != 21
+            or not interaction["coordinateBoundsValid"]
+            or interaction["playing"]
+            or interaction["ended"]
+            or interaction["exerciseIndex"] != 1
+            or interaction["currentTime"] <= 0
+            or interaction["currentFrameIndex"] <= 0
+            or interaction["calibrationOffsetX"] == 0
+            or interaction["calibrationOffsetY"] == 0
+            or interaction["resultState"] != "paused-review"
+            or interaction["pointerCaptured"]
+            or interaction["activePointerId"] is not None
+            or interaction["activePointerType"] is not None
+            or not {"play", "pause", "seek", "exercise", "calibration", "capture", "release", "reset"}.issubset(ledger_types)
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture two trusted user-owned video play/pause cycles, direct local-video seeking, exercise changes, opposed captured overlay calibration drags, reset, nonzero video-frame checksums, and a final paused rehabilitation review: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "four-corner-hover-crop-marks":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         if (
@@ -4287,20 +4439,27 @@ def main() -> int:
     vite_log = log_root / "real-preview-vite.log"
     with vite_log.open("w") as log_handle:
         server_command = (
-            [sys.executable, "-m", "http.server", str(port), "--bind", "127.0.0.1", "--directory", str(ROOT / "demo")]
+            [
+                str(DEMO_ROOT / "node_modules" / ".bin" / "vite"),
+                "preview",
+                "--host", "127.0.0.1",
+                "--port", str(port),
+                "--strictPort",
+                "--logLevel", "silent",
+            ]
             if args.built
             else [require_command("npm"), "run", "dev", "--", "--host", "127.0.0.1", "--port", str(port), "--strictPort"]
         )
         server = subprocess.Popen(
             server_command,
-            cwd=ROOT if args.built else DEMO_ROOT,
+            cwd=DEMO_ROOT,
             stdout=log_handle,
             stderr=subprocess.STDOUT,
         )
 
     try:
         def demo_url(demo: dict) -> str:
-            path = demo["demoPath"] if args.built else f"{demo['id']}.html"
+            path = f"{demo['id']}.html"
             return f"{base_url}/{path}"
 
         wait_for_server(demo_url(demos[0]), server, vite_log)

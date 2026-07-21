@@ -1,7 +1,225 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p5.js — Orbital Card Constellation</title><style>:root{--preview-background:#090914}.expansion-stage{position:absolute;inset:0;overflow:hidden;cursor:pointer}.expansion-stage canvas{display:block}.library-badge{background:#090914d6}.scene-caption{color:#cdd1ff9a}</style>  <script type="module" crossorigin src="./assets/orbital-card-constellation-CZ0kKl5T.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
-  <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
-  <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
-  <link rel="modulepreload" crossorigin href="./assets/expansion-a-utils-anD0k7Pd.js">
-  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage"><div class="expansion-stage" id="expansion-stage" data-preview-mechanism="p5-orbital-cards" tabindex="0" aria-label="Click or press Enter to tighten the orbital card constellation"></div><span class="library-badge">p5.js · orbital layout</span><span class="scene-caption">five cards negotiate one moving center of gravity</span></main></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>p5.js — Human-directed Project Constellation</title>
+    <style>
+      :root {
+        --preview-background: #071116;
+        --ink: #f4f0e6;
+        --muted: #91a3a5;
+        --line: rgba(210, 232, 229, .23);
+        --signal: #ff7258;
+        --mint: #a7e8d8;
+        color-scheme: dark;
+      }
+
+      button { font: inherit; }
+
+      .constellation-stage {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        color: var(--ink);
+        background: #071116;
+        isolation: isolate;
+      }
+
+      .constellation-stage::after {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        pointer-events: none;
+        background:
+          linear-gradient(180deg, rgba(4, 10, 13, .4), transparent 26%, transparent 74%, rgba(4, 10, 13, .56)),
+          radial-gradient(circle at 50% 48%, transparent 42%, rgba(2, 8, 11, .36));
+        content: "";
+      }
+
+      .constellation-host {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        overflow: hidden;
+        cursor: grab;
+        outline: none;
+        touch-action: none;
+        user-select: none;
+      }
+
+      .constellation-host:active { cursor: grabbing; }
+
+      .constellation-host:focus-visible {
+        box-shadow: inset 0 0 0 2px var(--mint);
+      }
+
+      .constellation-host canvas {
+        position: absolute;
+        inset: 0;
+        width: 100% !important;
+        height: 100% !important;
+      }
+
+      .library-badge {
+        top: 9px;
+        left: 10px;
+        border-color: rgba(167, 232, 216, .3);
+        background: rgba(5, 14, 18, .78);
+        color: #dff7ef;
+        font-size: 6px;
+      }
+
+      .board-controls {
+        position: absolute;
+        z-index: 20;
+        top: 8px;
+        right: 9px;
+        display: flex;
+        gap: 4px;
+      }
+
+      .board-controls button {
+        min-height: 23px;
+        padding: 0 9px;
+        border: 1px solid rgba(218, 236, 231, .28);
+        border-radius: 999px;
+        color: #dbe8e5;
+        background: rgba(6, 16, 20, .8);
+        box-shadow: 0 7px 20px rgba(0, 0, 0, .24);
+        cursor: pointer;
+        font: 850 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+        backdrop-filter: blur(10px);
+      }
+
+      .board-controls button[aria-pressed="true"] {
+        border-color: var(--mint);
+        color: #071116;
+        background: var(--mint);
+      }
+
+      .board-controls button:focus-visible {
+        outline: 1px solid var(--signal);
+        outline-offset: 2px;
+      }
+
+      .scene-caption {
+        z-index: 20;
+        left: 10px;
+        bottom: 8px;
+        color: #a9bab9;
+        font: 800 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .13em;
+      }
+
+      .selection-readout {
+        position: absolute;
+        z-index: 20;
+        right: 10px;
+        bottom: 8px;
+        color: #f4f0e6;
+        font: 850 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .11em;
+        text-transform: uppercase;
+        pointer-events: none;
+      }
+
+      .selection-readout::before {
+        display: inline-block;
+        width: 5px;
+        height: 5px;
+        margin-right: 6px;
+        border-radius: 50%;
+        background: var(--signal);
+        box-shadow: 0 0 9px rgba(255, 114, 88, .85);
+        content: "";
+      }
+
+      #runtime-ledger {
+        position: fixed;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        clip-path: inset(50%);
+        white-space: nowrap;
+      }
+
+      @media (max-width: 190px), (max-height: 100px) {
+        .library-badge {
+          top: 4px;
+          left: 4px;
+          padding: 3px 5px;
+          font-size: 3px;
+        }
+
+        .board-controls {
+          top: 4px;
+          right: 4px;
+          gap: 2px;
+        }
+
+        .board-controls button {
+          min-height: 14px;
+          padding: 0 5px;
+          font-size: 3px;
+          letter-spacing: .08em;
+        }
+
+        .scene-caption {
+          left: 4px;
+          bottom: 4px;
+          font-size: 3px;
+          letter-spacing: .08em;
+        }
+
+        .scene-caption .desktop-only { display: none; }
+
+        .selection-readout {
+          right: 4px;
+          bottom: 4px;
+          font-size: 3px;
+        }
+
+        .selection-readout::before {
+          width: 3px;
+          height: 3px;
+          margin-right: 3px;
+        }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/orbital-card-constellation-YUz4CRFF.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+    <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
+    <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main class="preview-stage">
+      <section
+        class="constellation-stage"
+        id="constellation-stage"
+        data-preview-mechanism="p5-human-directed-project-orbital-constellation"
+        aria-label="Northline project relationship board"
+      >
+        <div
+          class="constellation-host"
+          id="constellation-host"
+          tabindex="0"
+          role="application"
+          aria-label="Drag to move and orbit the project constellation. Arrow keys move the project. Brackets orbit nodes. G gathers or expands. Enter selects the next relation."
+        ></div>
+        <span class="library-badge">p5.js · live relation board</span>
+        <div class="board-controls" aria-label="Constellation controls">
+          <button id="mode-control" type="button" aria-pressed="false" aria-label="Gather related work around the project">Gather</button>
+          <button id="evidence-control" type="button" aria-label="Select the next project relation">Next</button>
+        </div>
+        <span class="scene-caption">Drag project <span class="desktop-only">· arrows move · [ ] orbit · G gathers</span></span>
+        <output class="selection-readout" id="selection-readout" aria-live="polite">Field scan</output>
+        <output id="runtime-ledger" aria-hidden="true"></output>
+      </section>
+    </main>
+  </body>
+</html>

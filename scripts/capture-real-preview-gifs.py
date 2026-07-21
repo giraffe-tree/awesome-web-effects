@@ -1579,6 +1579,34 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("Shift+ArrowDown")
             elif index == 29:
                 page.keyboard.press("ArrowLeft")
+        elif demo["id"] == "orbital-card-constellation":
+            if index == 1:
+                page.mouse.move(160, 100)
+            elif index == 2:
+                page.mouse.down()
+            elif index == 3:
+                page.mouse.move(230, 66, steps=8)
+            elif index == 4:
+                page.mouse.up()
+            elif index == 8:
+                page.locator("#mode-control").click()
+            elif index == 11:
+                page.locator("#evidence-control").click()
+            elif index == 14:
+                page.locator("#constellation-host").focus()
+                page.keyboard.press("ArrowLeft")
+            elif index == 16:
+                page.keyboard.press("ArrowUp")
+            elif index == 18:
+                page.keyboard.press("]")
+            elif index == 20:
+                page.keyboard.press("[")
+            elif index == 22:
+                page.keyboard.press("g")
+            elif index == 24:
+                page.keyboard.press("g")
+            elif index == 27:
+                page.keyboard.press("Enter")
         elif demo["id"] == "peelable-paper-corner-reveal":
             handle_box = page.locator("#peel-handle").bounding_box()
             ticket_box = page.locator("#ticket").bounding_box()
@@ -3980,6 +4008,99 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["lastInputTrusted"] is not True
         ):
             raise RuntimeError(f"{demo['id']} did not capture trusted slow/fast captured traces, keyboard sampling, reset, four unique decoded ImageGen frames, and a nonempty final visual-memory path: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "orbital-card-constellation":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        expected_asset_shas = [
+            "08c0aef77854afa481b5274c6907f4f8f8bd867fcabd5843388b51c1aa31a699",
+            "a228f2ea088572a0df3d6cc5f0fcdddf3a5dd86251035285d22d2b49e19a7f5a",
+            "fdd6161ac7f4cce819c2d67a6e9b7d481ff271030cd44a26f57a9c3e07960532",
+        ]
+        if (
+            not assertion
+            or interaction["task"] != "human-directed-project-evidence-relationship-board"
+            or interaction["mechanism"] != "pointer-owned-gravity-center-with-static-elliptical-orbit-topology"
+            or interaction["acceptedInputs"] != ["mouse", "touch", "pen", "keyboard", "control"]
+            or not interaction["userInputRequired"]
+            or not interaction["strictTrustedInputGuard"]
+            or interaction["automaticOrbit"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticCruise"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["previewClockDriven"]
+            or interaction["previewClockMutation"]
+            or interaction["syntheticInputDispatch"]
+            or not interaction["renderIgnoresPreviewClock"]
+            or not interaction["firstFrameStatic"]
+            or not interaction["initialStaticVerified"]
+            or interaction["layoutMode"] != "gathered"
+            or interaction["initialLayoutMode"] != "expanded"
+            or interaction["selectedNodeIndex"] != 2
+            or interaction["selectedNodeId"] != "eelgrass-array"
+            or interaction["inputCount"] != 19
+            or interaction["trustedInputCount"] != 19
+            or interaction["rejectedUntrustedCount"] != 0
+            or interaction["pointerInputCount"] != 10
+            or interaction["mouseInputCount"] != 10
+            or interaction["touchInputCount"] != 0
+            or interaction["penInputCount"] != 0
+            or interaction["keyboardInputCount"] != 7
+            or interaction["controlInputCount"] != 2
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerMoveCount"] != 8
+            or interaction["pointerReleaseInputCount"] != 1
+            or interaction["pointerCancelCount"] != 0
+            or interaction["pointerCaptured"]
+            or interaction["activePointerId"] is not None
+            or interaction["activePointerType"] != "none"
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerReleaseCaptureCount"] != 1
+            or interaction["dragUpdateCount"] != 8
+            or interaction["relationMutationCount"] != 17
+            or interaction["gravityMutationCount"] != 10
+            or interaction["orbitMutationCount"] != 10
+            or interaction["modeMutationCount"] != 3
+            or interaction["selectionMutationCount"] != 2
+            or interaction["resetCount"] != 0
+            or interaction["lastInputKind"] != "keyboard"
+            or interaction["lastInputCause"] != "keyboard-enter"
+            or interaction["lastInputTrusted"] is not True
+            or len(interaction["inputLedger"]) != 17
+            or interaction["assetCount"] != 3
+            or interaction["sameOriginFetchCount"] != 3
+            or interaction["assetFetchFailureCount"] != 0
+            or interaction["assetDecodeCount"] != 3
+            or interaction["assetDecodeFailureCount"] != 0
+            or interaction["assetShaMatchCount"] != 3
+            or interaction["assetSha256"] != expected_asset_shas
+            or interaction["distinctAssetShaCount"] != 3
+            or len(interaction["assetPixelChecksums"]) != 3
+            or interaction["distinctPixelChecksumCount"] != 3
+            or interaction["sampledPixelCount"] != 4608
+            or interaction["sampledChannelCount"] != 18432
+            or interaction["assetInfluenceCount"] < 2
+            or not interaction["assetEvidenceReady"]
+            or len(interaction["assetEvidence"]) != 3
+            or interaction["p5ImageCount"] != 3
+            or interaction["p5ImagePixelTransferCount"] != 115200
+            or interaction["p5ImageDrawCount"] < 45
+            or not interaction["p5Ready"]
+            or not interaction["canvasReady"]
+            or interaction["nodeCount"] != 5
+            or interaction["evidenceNodeCount"] != 3
+            or interaction["taskNodeCount"] != 2
+            or interaction["topologyEdgeCount"] != 12
+            or len(set(interaction["topologyEdgePairs"])) != 12
+            or len(interaction["nodePositions"]) != 5
+            or len(interaction["edgeLengths"]) != 12
+            or not interaction["topologyGeometryValid"]
+            or interaction["maxEllipseResidual"] >= .00001
+            or interaction["minHubDistance"] <= 0
+            or interaction["drawCount"] < 20
+            or interaction["redrawRequestCount"] < 19
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a trusted project-center drag, gathered/expanded topology decisions, evidence selection, three ImageGen-derived p5 nodes, five named nodes, twelve unique edges, and zero automatic orbit: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "peelable-paper-corner-reveal":
         page.wait_for_function(
             "window.__PREVIEW_INTERACTION_STATE__.phase === 'revealed' && window.__PREVIEW_INTERACTION_STATE__.progress === 1",

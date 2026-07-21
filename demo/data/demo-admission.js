@@ -154,8 +154,8 @@ export const reviewedDemoScores = {
     rationaleZh: '原创近中远景观以真实分层次序交接，模糊峰值和色彩换幕清楚显示了“深度决定消失顺序”的核心机制。'
   },
   'dom-aware-drag-spawned-fish-flock': {
-    creativity: 20, artDirection: 18, motion: 20, clarity: 15, inspiration: 15, evidence: 10,
-    rationaleZh: '鱼群轨迹、拖拽指示和会呼吸的真实 DOM 障碍形成同一空间，分流再汇合的物理意图在缩略图中仍然清楚。'
+    creativity: 20, artDirection: 20, motion: 20, clarity: 15, inspiration: 15, evidence: 10,
+    rationaleZh: '首帧为空且完全静止；真人拖拽释放确定性鱼群，p5 实时读取 HTML 岛的 getBoundingClientRect，有限收束中触发预测避障并以零侵入的稳定结果保留。'
   },
   'synchronized-scenario-scene-handoff': {
     creativity: 19, artDirection: 19, motion: 20, clarity: 15, inspiration: 15, evidence: 10,

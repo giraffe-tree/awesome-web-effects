@@ -3780,6 +3780,17 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.move(319 - 318 * progress, 146)
             elif index == 34:
                 page.mouse.up()
+        elif demo["id"] == "dom-aware-drag-spawned-fish-flock":
+            if index == 3:
+                box = page.locator('#flock-stage').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * .07, box["y"] + box["height"] * .70)
+                page.mouse.down()
+                page.mouse.move(
+                    box["x"] + box["width"] * .93,
+                    box["y"] + box["height"] * .36,
+                    steps=24,
+                )
+                page.mouse.up()
         elif demo["id"] == "pointer-driven-multilayer-depth-stage":
             if index == 2:
                 page.locator('.view-control[data-view="left"]').click()
@@ -11263,6 +11274,48 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or min(interaction["bandCoverage"]) <= .05
         ):
             raise RuntimeError(f"{demo['id']} did not capture a real A-to-B-to-A ordinal-depth drag: {interaction!r}")
+    elif demo["id"] == "dom-aware-drag-spawned-fish-flock":
+        interaction = page.evaluate("window.__DOM_AWARE_FISH_STATE__")
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        if (
+            not assertion
+            or interaction["task"] != "trusted-human-drag-releases-a-school-that-avoids-a-measured-html-reef"
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["assetStrategy"] != "code-native-fish-and-measured-dom-obstacle-no-functional-raster-input-required"
+            or interaction["automaticPlayback"]
+            or interaction["automaticCycle"]
+            or interaction["automaticLoop"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["previewClockMutationBeforeInput"]
+            or interaction["phase"] != "held"
+            or interaction["settleProgress"] != 1
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerMoveCount"] < 12
+            or interaction["pointerReleaseCount"] != 1
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerCaptureReleaseCount"] != 1
+            or interaction["inputCount"] != interaction["trustedInputCount"]
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["fishCount"] != interaction["spawnCount"]
+            or interaction["fishCount"] < 8
+            or interaction["fishCount"] > 42
+            or interaction["rejectedObstacleSpawnCount"] <= 0
+            or interaction["avoidanceActivationCount"] <= 0
+            or interaction["uniqueAvoidingFishCount"] <= 0
+            or interaction["obstacleIntrusionCount"] != 0
+            or interaction["closestNormalizedObstacleDistance"] < .999
+            or interaction["obstacleBoundsSource"] != "getBoundingClientRect"
+            or interaction["measuredObstacleSampleCount"] < 1
+            or not interaction["obstacleBoundsValidated"]
+            or not interaction["canvasSizeValidated"]
+            or not interaction["stageCoverageValidated"]
+            or not interaction["initialStillVerified"]
+            or not interaction["finalResultValidated"]
+            or interaction["finalStableSignature"] == "none"
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a real finite fish release around measured DOM bounds: {interaction!r}")
     elif demo["id"] == "pointer-driven-multilayer-depth-stage":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         if (

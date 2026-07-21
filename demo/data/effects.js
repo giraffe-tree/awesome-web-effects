@@ -868,14 +868,14 @@ const expansionEffects = [
     rationaleZh: '原创近中远景观以真实分层次序交接，模糊峰值和色彩换幕清楚显示了“深度决定消失顺序”的核心机制。'
   },
   {
-    id: 'dom-aware-drag-spawned-fish-flock', category: 'canvas', name: 'DOM-aware drag-spawned fish flock', nameZh: '拖拽生成且避让 DOM 的鱼群', order: 17,
+    id: 'dom-aware-drag-spawned-fish-flock', category: 'canvas', name: 'Human-released DOM-avoiding fish school', nameZh: '真人释放并避让 DOM 的鱼群', order: 17,
     company: 'Sakana AI', homepage: 'https://sakana.ai/', observedAs: 'Drag-spawned DOM-aware fish flock',
-    difference: 'The flock shares a measured physics space with a live HTML obstacle and accepts drag-spawned members, unlike a decorative particle swarm or pointer trail.',
-    behavior: { trigger: 'pointer drag or animation frame', response: 'New fish join a flock that predicts and curves around a live DOM obstacle', timing: 'continuous flocking with anticipatory avoidance', layer: 'Canvas around interactive DOM' },
+    difference: 'Only a trusted human drag can release deterministic fish; their finite flocking pass predicts and avoids an obstacle measured from the live HTML island, then retains a stable, intrusion-free result.',
+    behavior: { trigger: 'trusted mouse, touch, or pen drag across the field', response: 'Spawn a deterministic school that coheres, separates, and predicts a safe route around the measured DOM reef', timing: '1.55-second finite settle after release; no movement before input or after the held result', layer: 'Full-stage p5 field sharing geometry with a live HTML reef' },
     implementationName: 'p5.js', projectId: 'processing-p5-js', projectUrl: 'https://github.com/processing/p5.js', referenceUrl: 'https://p5js.org/reference/',
     snippet: "import p5 from 'p5';\nnew p5(p => { p.mouseDragged = () => flock.add(p.mouseX, p.mouseY); p.draw = () => flock.avoid(button.getBoundingClientRect()).step(p); });",
-    scores: { creativity: 20, artDirection: 18, motion: 20, clarity: 15, inspiration: 15, evidence: 10 },
-    rationaleZh: '鱼群轨迹、拖拽指示和会呼吸的真实 DOM 障碍形成同一空间，分流再汇合的物理意图在缩略图中仍然清楚。'
+    scores: { creativity: 20, artDirection: 20, motion: 20, clarity: 15, inspiration: 15, evidence: 10 },
+    rationaleZh: '首帧为空且完全静止；真人拖拽释放确定性鱼群，p5 实时读取 HTML 岛的 getBoundingClientRect，有限收束中触发预测避障并以零侵入的稳定结果保留。'
   },
   {
     id: 'synchronized-scenario-scene-handoff', category: 'transition', name: 'Synchronized scenario scene handoff', nameZh: '多层同步场景换幕', order: 18,

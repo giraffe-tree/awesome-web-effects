@@ -5,25 +5,251 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>p5.js — DOM-aware Drag-spawned Fish Flock</title>
     <style>
-      :root { --preview-background: #07191d; }
-      #flock-stage { position: absolute; inset: 0; }
-      #flock-stage canvas { width: 100% !important; height: 100% !important; }
-      .flock-obstacle { position: absolute; z-index: 8; left: 111px; top: 61px; width: 98px; height: 58px; display: grid; place-items: center; border: 1px solid rgba(172,255,224,.42); border-radius: 50%; background: radial-gradient(circle at 45% 38%, rgba(96,229,196,.22), rgba(7,25,29,.92)); box-shadow: 0 0 28px rgba(73,223,185,.16); color: #d7fff3; font: 800 8px/1.2 ui-monospace, monospace; letter-spacing: .08em; text-align: center; text-transform: uppercase; animation: breathe 1.8s ease-in-out infinite; }
-      .flock-obstacle small { display: block; margin-top: 4px; color: rgba(215,255,243,.5); font-size: 5px; }
-      @keyframes breathe { 50% { transform: scale(1.06); box-shadow: 0 0 42px rgba(73,223,185,.27); } }
+      :root {
+        --preview-background: #06252a;
+        --foam: #e6fff7;
+        --mint: #7cf0c9;
+        --coral: #ff805f;
+        --ink: #072a2d;
+      }
+
+      .flock-preview {
+        color: var(--foam);
+        background:
+          radial-gradient(circle at 78% 19%, rgba(62, 173, 162, .24), transparent 30%),
+          linear-gradient(132deg, #052127, #073a3d 56%, #0b4a47);
+        user-select: none;
+      }
+
+      .flock-preview::before {
+        content: "";
+        position: absolute;
+        z-index: 0;
+        inset: 0;
+        pointer-events: none;
+        background:
+          repeating-linear-gradient(115deg, transparent 0 34px, rgba(198, 255, 238, .025) 35px 36px),
+          radial-gradient(circle at 18% 78%, rgba(124, 240, 201, .08), transparent 24%);
+      }
+
+      #flock-stage {
+        position: absolute;
+        z-index: 2;
+        inset: 0;
+        cursor: crosshair;
+        touch-action: none;
+        outline: none;
+      }
+
+      #flock-stage canvas {
+        width: 100% !important;
+        height: 100% !important;
+      }
+
+      #flock-stage:focus-visible::after {
+        content: "";
+        position: absolute;
+        inset: 5px;
+        border: 2px solid var(--coral);
+        border-radius: 10px;
+        pointer-events: none;
+      }
+
+      .masthead {
+        position: absolute;
+        z-index: 14;
+        top: 10px;
+        left: 12px;
+        display: grid;
+        gap: 2px;
+        pointer-events: none;
+      }
+
+      .eyebrow,
+      .field-state,
+      .school-stat,
+      .gesture-note,
+      .island-label,
+      .island-meta {
+        font-size: clamp(6px, 2.1vw, 9px);
+        font-weight: 900;
+        letter-spacing: .13em;
+        text-transform: uppercase;
+      }
+
+      .eyebrow { color: rgba(230, 255, 247, .57); }
+
+      .title {
+        font-size: clamp(12px, 5.2vw, 25px);
+        font-weight: 900;
+        line-height: .9;
+        letter-spacing: -.055em;
+      }
+
+      .field-state {
+        position: absolute;
+        z-index: 14;
+        top: 11px;
+        right: 12px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: rgba(230, 255, 247, .68);
+        pointer-events: none;
+      }
+
+      .field-state::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--mint);
+        box-shadow: 0 0 0 3px rgba(124, 240, 201, .12);
+      }
+
+      .flock-preview[data-phase="dragging"] .field-state::before,
+      .flock-preview[data-phase="settling"] .field-state::before {
+        background: var(--coral);
+        box-shadow: 0 0 0 3px rgba(255, 128, 95, .16);
+      }
+
+      .dom-island {
+        position: absolute;
+        z-index: 9;
+        left: 50%;
+        top: 48%;
+        width: clamp(84px, 29vw, 180px);
+        height: clamp(54px, 28vh, 96px);
+        display: grid;
+        place-items: center;
+        transform: translate(-50%, -50%);
+        border: 1px solid rgba(217, 255, 244, .55);
+        border-radius: 46% 54% 49% 51% / 58% 47% 53% 42%;
+        background:
+          radial-gradient(circle at 34% 30%, rgba(240, 255, 248, .2), transparent 25%),
+          linear-gradient(148deg, rgba(18, 87, 79, .97), rgba(5, 35, 39, .98));
+        box-shadow:
+          0 18px 50px rgba(0, 15, 19, .32),
+          inset 0 0 28px rgba(124, 240, 201, .1),
+          0 0 0 7px rgba(124, 240, 201, .04);
+        text-align: center;
+        pointer-events: none;
+      }
+
+      .dom-island::before,
+      .dom-island::after {
+        content: "";
+        position: absolute;
+        border: 1px solid rgba(124, 240, 201, .18);
+        border-radius: inherit;
+        pointer-events: none;
+      }
+
+      .dom-island::before { inset: -7px; }
+      .dom-island::after { inset: 7px; border-style: dashed; }
+
+      .island-copy { display: grid; gap: 4px; }
+      .island-label { color: var(--foam); }
+      .island-meta { color: rgba(230, 255, 247, .47); font-size: clamp(5px, 1.7vw, 7px); }
+
+      .gesture-note {
+        position: absolute;
+        z-index: 14;
+        left: 50%;
+        bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        transform: translateX(-50%);
+        padding: 6px 9px;
+        border: 1px solid rgba(230, 255, 247, .19);
+        border-radius: 999px;
+        background: rgba(3, 26, 30, .72);
+        color: rgba(230, 255, 247, .82);
+        backdrop-filter: blur(10px);
+        white-space: nowrap;
+        pointer-events: none;
+      }
+
+      .gesture-note::before {
+        content: "";
+        width: 14px;
+        height: 1px;
+        background: var(--coral);
+        box-shadow: 5px -2px 0 -0.25px var(--coral), 9px 2px 0 -0.25px var(--coral);
+      }
+
+      .school-stat {
+        position: absolute;
+        z-index: 14;
+        right: 12px;
+        bottom: 11px;
+        display: none;
+        gap: 4px;
+        color: rgba(230, 255, 247, .55);
+        text-align: right;
+        pointer-events: none;
+      }
+
+      .school-stat output {
+        color: var(--foam);
+        font-size: clamp(11px, 4.2vw, 19px);
+        line-height: .8;
+        letter-spacing: -.04em;
+      }
+
+      .flock-preview[data-has-result="true"] .gesture-note { left: 12px; transform: none; }
+      .flock-preview[data-has-result="true"] .school-stat { display: grid; }
+      .flock-preview[data-has-result="true"] .gesture-note::before { background: var(--mint); box-shadow: none; }
+
+      .library-badge {
+        top: auto;
+        bottom: 44px;
+        border-color: rgba(230, 255, 247, .16);
+        background: rgba(3, 26, 30, .64);
+        color: rgba(230, 255, 247, .66);
+      }
+
+      .flock-preview .scene-caption { display: none; }
+
+      @media (max-width: 270px) {
+        .masthead { top: 8px; left: 9px; }
+        .field-state { top: 9px; right: 9px; }
+        .field-state span { display: none; }
+        .dom-island { width: 56vw; height: 22vh; }
+        .gesture-note { bottom: 12px; max-width: calc(100% - 18px); overflow: hidden; text-overflow: ellipsis; }
+        .flock-preview[data-has-result="true"] .gesture-note { left: 9px; max-width: 132px; }
+        .school-stat { right: 9px; bottom: 12px; }
+        .library-badge { bottom: 44px; left: 9px; }
+      }
     </style>
-    <script type="module" crossorigin src="./assets/dom-aware-drag-spawned-fish-flock-CIcj3Su9.js"></script>
+    <script type="module" crossorigin src="./assets/dom-aware-drag-spawned-fish-flock-U_hoHkHC.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
     <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
     <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
     <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
   </head>
   <body>
-    <main class="preview-stage" aria-label="A school of fish is spawned by a drag gesture and curves around a measured HTML obstacle">
-      <div id="flock-stage" data-preview-mechanism="p5-dom-aware-flocking"></div>
-      <div class="flock-obstacle" id="flock-obstacle">Join the school<small>live DOM obstacle</small></div>
-      <span class="library-badge">p5.js · flocking field</span>
-      <span class="scene-caption">drag spawns fish · the school senses HTML</span>
+    <main class="preview-stage flock-preview" id="flock-preview" data-phase="waiting" data-has-result="false" aria-label="Drag through open water to release a school of fish that navigates around a measured HTML reef island">
+      <div class="masthead" aria-hidden="true">
+        <span class="eyebrow">Tidelab · field 04</span>
+        <strong class="title">School route</strong>
+      </div>
+      <div class="field-state" aria-live="polite"><span id="field-state">Awaiting gesture</span></div>
+      <div id="flock-stage" data-preview-mechanism="p5-trusted-drag-spawned-dom-aware-flocking" tabindex="0" role="application" aria-label="Interactive water field. Drag to release fish. The fish avoid the central HTML reef island."></div>
+      <aside class="dom-island" id="flock-obstacle" aria-label="Measured HTML reef obstacle">
+        <span class="island-copy">
+          <strong class="island-label">Reef checkpoint</strong>
+          <small class="island-meta">Live DOM island</small>
+        </span>
+      </aside>
+      <div class="gesture-note" id="gesture-note">Drag open water to release the school</div>
+      <div class="school-stat" aria-label="Current school size">
+        <output id="fish-count">00</output>
+        <span>fish routed</span>
+      </div>
+      <span class="library-badge">p5.js · measured DOM field</span>
+      <span class="scene-caption">Human drag releases fish that route around a live HTML island</span>
     </main>
   </body>
 </html>

@@ -1,1 +1,46 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p5.js — Cinematic Map Camera Fly-to</title><link rel="stylesheet" href="./shared.css"><style>:root{--preview-background:#071313}#map-host{position:absolute;inset:0;cursor:zoom-in}#map-host canvas{width:100%!important;height:100%!important}.map-copy{position:absolute;z-index:5;left:14px;top:48px;color:#e9fff8;pointer-events:none}.map-copy small{font:800 6px/1 ui-monospace;letter-spacing:.16em;color:#8df0c5}.map-copy h1{width:98px;margin:8px 0;font:950 18px/.84 system-ui;letter-spacing:-.055em}.map-copy p{margin:0;color:#8fb2aa;font:700 6px/1.3 ui-monospace}.camera-state{position:absolute;right:11px;top:11px;z-index:5;color:#8df0c5;font:800 6px/1.5 ui-monospace;text-align:right}.library-badge{background:#061211ca}</style></head><body><main class="preview-stage" data-preview-mechanism="projected-map-camera-fly"><div id="map-host" tabindex="0" aria-label="Click the city node or press Enter to fly the camera in and out"></div><section class="map-copy"><small>LOCAL VECTOR MAP / 01</small><h1>FLY INTO THE SIGNAL.</h1><p>NO REMOTE TILES</p></section><output class="camera-state" id="map-camera">ZOOM 1.00<br>PITCH 0°</output><span class="library-badge">p5.js · geographic camera</span><span class="scene-caption">center + zoom + pitch + bearing</span></main><script type="module" src="./src/cinematic-map-camera-fly-to-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>p5.js — Harbor Venue Camera Fly-to</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="./shared.css">
+  <style>
+    :root{--preview-background:#081720;color-scheme:dark;--ink:#edf3e5;--muted:#82948e;--lime:#c7f36b;--coral:#ff725c;--panel:#0b1b22e8}
+    #venue-stage{overflow:hidden;background:#081720;color:var(--ink)}
+    #map-host{position:absolute;inset:0;cursor:crosshair;outline:none;touch-action:manipulation}
+    #map-host:focus-visible{box-shadow:inset 0 0 0 2px #c7f36b66}
+    #map-host canvas{width:100%!important;height:100%!important}
+    .map-header{position:absolute;z-index:8;left:11px;right:11px;top:9px;display:flex;align-items:center;justify-content:space-between;pointer-events:none;font:850 5px/1 ui-monospace;letter-spacing:.13em;text-transform:uppercase}.map-header span:first-child{display:flex;align-items:center;gap:6px}.map-header span:first-child::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 3px #c7f36b17}.map-header span:last-child{color:#71847e}
+    .map-copy{position:absolute;z-index:7;left:12px;top:39px;width:clamp(78px,20vw,145px);pointer-events:none}.map-copy small{font:800 5px/1 ui-monospace;letter-spacing:.14em;color:var(--lime)}.map-copy h1{margin:7px 0 0;font:950 clamp(15px,3vw,22px)/.88 system-ui;letter-spacing:-.055em}.map-copy p{margin:7px 0 0;font:650 5px/1.35 system-ui;color:var(--muted)}
+    .place-list{position:absolute;z-index:11;left:11px;top:91px;width:clamp(79px,20vw,145px);display:grid;gap:3px}.place-button{height:clamp(17px,3.5vw,26px);padding:0 6px;border:1px solid #edf3e51c;border-radius:6px;background:#0c2027de;color:#91a39d;cursor:pointer;text-align:left;font:800 4.5px/1 ui-monospace;letter-spacing:.08em}.place-button::before{content:"";display:inline-block;width:4px;height:4px;margin-right:5px;border-radius:50%;background:#728781}.place-button:hover,.place-button:focus-visible,.place-button[data-requested="true"]{border-color:#c7f36b75;color:var(--ink);outline:none}.place-button[data-requested="true"]::before{background:var(--lime)}.place-button[data-arrived="true"]{background:#152c29;color:var(--lime)}
+    .camera-hud{position:absolute;z-index:8;right:11px;top:27px;pointer-events:none;text-align:right}.camera-hud small{display:block;font:750 5px/1 ui-monospace;letter-spacing:.11em;color:#71847e}.camera-hud output{display:block;margin-top:4px;font:900 6px/1.3 ui-monospace;letter-spacing:.06em;color:var(--ink)}
+    .route-state{position:absolute;z-index:8;right:12px;bottom:48px;pointer-events:none;text-align:right}.route-state small{display:block;font:750 4px/1 ui-monospace;letter-spacing:.11em;color:#71847e}.route-state output{display:block;margin-top:3px;font:900 5px/1 ui-monospace;letter-spacing:.06em;color:#9baba5}.route-state[data-flight="true"] output{color:var(--coral)}.route-state[data-retained="true"] output{color:var(--lime)}
+    .map-controls{position:absolute;z-index:12;left:95px;right:11px;bottom:8px;display:flex;align-items:center;justify-content:flex-end;gap:5px}.map-action{height:34px;min-width:45px;padding:0 8px;border:1px solid #edf3e522;border-radius:8px;background:#10242b;color:#899b95;cursor:pointer;font:850 5px/1 ui-monospace;letter-spacing:.07em}.map-action:disabled{opacity:.35;cursor:not-allowed}.map-action:focus-visible{outline:1px solid var(--lime);outline-offset:1px}.map-action.keep{min-width:72px;border-color:#c7f36b55;background:#172a25;color:var(--lime)}
+    @media(max-width:479px){.map-copy p{display:none}}
+    @media(min-width:480px){.place-list{top:136px}.map-controls{left:182px}.map-action{height:36px}.route-state{bottom:51px}}
+    @media(max-width:270px){.map-header span:last-child{display:none}.map-copy{top:38px;width:210px}.map-copy h1{width:190px;font-size:17px}.map-copy p{display:none}.place-list{left:11px;right:11px;top:88px;width:auto;grid-template-columns:repeat(3,1fr);gap:4px}.place-button{height:27px;padding:0 4px;text-align:center}.place-button::before{margin-right:3px}.camera-hud{top:122px}.route-state{bottom:57px}.map-controls{left:11px;gap:4px}.map-action{height:40px;flex:1;min-width:0;padding:0 5px}.map-action.keep{min-width:0;flex:1.35}}
+  </style>
+</head>
+<body>
+  <main id="venue-stage" class="preview-stage" data-preview-mechanism="trusted-place-selection-to-finite-center-zoom-pitch-bearing-camera-flight">
+    <div id="map-host" tabindex="0" role="application" aria-label="Harbor Arts Weekend venue map. Click a map pin or venue, or press 1, 2, or 3 to fly. Press Enter to keep an arrived venue, Backspace to return, and R to reset."></div>
+    <header class="map-header"><span>Port Meridian / Arts Weekend</span><span>p5.js · local vector map</span></header>
+    <section class="map-copy"><small>VENUE NAVIGATOR</small><h1>CHOOSE WHERE THE NIGHT LANDS.</h1><p>Pick a venue, review the camera arrival, then keep it for the route.</p></section>
+    <nav class="place-list" aria-label="Event venues">
+      <button class="place-button" type="button" data-place-id="archive-hall">01 · ARCHIVE</button>
+      <button class="place-button" type="button" data-place-id="salt-market">02 · MARKET</button>
+      <button class="place-button" type="button" data-place-id="pier-seven">03 · PIER 7</button>
+    </nav>
+    <span class="camera-hud"><small>CAMERA</small><output id="map-camera">Z 1.00 · P 0° · B 0°</output></span>
+    <span id="route-state" class="route-state" data-flight="false" data-retained="false"><small>ROUTE DECISION</small><output id="route-output">CHOOSE A VENUE</output></span>
+    <footer class="map-controls">
+      <button id="back-map" class="map-action" type="button" aria-label="Back or undo the last camera arrival" title="Back / undo" disabled>BACK</button>
+      <button id="reset-map" class="map-action" type="button" disabled>RESET</button>
+      <button id="keep-place" class="map-action keep" type="button">KEEP VENUE</button>
+    </footer>
+  </main>
+  <script type="module" src="./src/cinematic-map-camera-fly-to-demo.js"></script>
+</body>
+</html>

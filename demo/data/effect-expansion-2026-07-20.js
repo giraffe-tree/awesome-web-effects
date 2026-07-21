@@ -2353,16 +2353,16 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "cinematic-map-camera-fly-to",
-    "name": "Cinematic map camera fly-to",
-    "nameZh": "电影式地图相机飞行",
+    "name": "Human-kept harbor venue fly-to",
+    "nameZh": "真人留存的港区场地飞行导航",
     "category": "webgl",
     "sourceUrl": "https://github.com/maplibre/maplibre-gl-js",
-    "difference": "同时插值中心、缩放、俯仰与方位角；点阵地球只旋转球体，其他 3D 场景不含地理投影。",
+    "difference": "真人选择命名场地后，相机沿弧线同步插值中心、缩放、俯仰与方位角；抵达只形成候选，显式 Keep 才保留路线决定。",
     "behavior": {
-      "trigger": "click/timer",
-      "response": "Fly a projected map camera through center, zoom, pitch, and bearing",
-      "timing": "eased continuous geographic camera",
-      "layer": "MapLibre WebGL map"
+      "trigger": "trusted place click, map-pin click, or keyboard venue selection",
+      "response": "Fly a locally projected vector-map camera to one venue, then keep, revise, back, or reset the route decision",
+      "timing": "one finite 820ms curved camera flight per human selection",
+      "layer": "full-stage p5 canvas over dedicated local vector map data"
     },
     "implementation": {
       "projectId": "processing-p5-js",
@@ -2373,21 +2373,21 @@ export const effectExpansion100Specs = [
       "referenceUrl": "https://github.com/maplibre/maplibre-gl-js"
     },
     "scores": {
-      "creativity": 15,
-      "artDirection": 18,
-      "motion": 18,
+      "creativity": 17,
+      "artDirection": 19,
+      "motion": 19,
       "clarity": 15,
-      "inspiration": 14,
-      "evidence": 9,
-      "total": 89
+      "inspiration": 15,
+      "evidence": 10,
+      "total": 95
     },
-    "rationaleZh": "地理相机运动可成为电影式位置叙事。",
+    "rationaleZh": "港区海岸线、三个分区、九条命名道路与三个真实场地让相机运动拥有可读地理参照；真人选点、有限飞行、抵达候选与显式留存构成完整路线决策。",
     "batch": "C",
-    "demo": "无标签的本地矢量地图从全球视角飞入一枚发光城市节点。",
-    "capture": "点击城市→完整 flyTo→停 500ms→reset 回全球。",
+    "demo": "在 Port Meridian Arts Weekend 场地导航中，从静止港区总览选择 Pier Seven，观看中心、缩放、俯仰与方位角共同完成一次有限飞行，并在抵达后明确保留场地。",
+    "capture": "首帧保持总览静止→真人点击 Pier Seven→记录完整有限相机飞行与抵达候选→真人点击 Keep Venue→停在已保留路线；断言本地矢量数据、可信输入、相机校验和、历史栈与零自动巡航。",
     "risk": {
       "level": "high",
-      "detail": "GitHub SPDX 未断言；必须使用本地 style/GeoJSON，不能依赖远程瓦片。"
+      "detail": "不得依赖远程瓦片或自动 waypoint 巡航伪造互动；必须保留本地矢量数据、真实命名道路与场地、可信输入、有限飞行和显式路线留存证据。"
     },
     "observedImplementation": {
       "projectId": "maplibre-maplibre-gl-js",

@@ -1905,6 +1905,11 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 31:
                 page.locator('#confirm-output').focus()
                 page.keyboard.press('Enter')
+        elif demo["id"] == "cinematic-map-camera-fly-to":
+            if index == 4:
+                page.locator('[data-place-id="pier-seven"]').click()
+            elif index == 17:
+                page.locator('#keep-place').click()
         elif demo["id"] == "gooey-pixel-cursor-wake":
             if index == 3:
                 box = page.locator('#pixel-wake-host').bounding_box()
@@ -7344,6 +7349,95 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or page.locator('#retained-output').text_content() != "3-step launch plan · JSON valid"
         ):
             raise RuntimeError(f"{demo['id']} did not capture a real handle-built graph, finite arrived payload, and explicitly retained AI result: {interaction!r}")
+    elif demo["id"] == "cinematic-map-camera-fly-to":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        if (
+            not assertion
+            or interaction["id"] != "cinematic-map-camera-fly-to"
+            or interaction["task"] != "human-selects-a-local-map-venue-watches-one-finite-camera-flight-and-explicitly-keeps-or-revises-the-route-decision"
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["mechanism"] != "trusted-place-selection-starts-one-finite-curved-interpolation-of-camera-center-zoom-pitch-and-bearing-over-local-vector-map-data"
+            or interaction["assetStrategy"] != "dedicated-code-native-vector-map-data-directly-drives-coastline-district-roads-labels-places-hit-targets-and-camera-destinations"
+            or "raster-pixels-would-not-drive" not in interaction["imageGenerationDecision"]
+            or interaction["mapDataId"] != "harbor-arts-district-v1"
+            or interaction["mapDataChecksum"] != 198246722
+            or interaction["initialMapChecksum"] != 198246722
+            or interaction["vectorFeatureCount"] != 16
+            or interaction["vectorCoordinateCount"] != 78
+            or interaction["coastlinePointCount"] != 16
+            or interaction["districtCount"] != 3
+            or interaction["roadCount"] != 9
+            or interaction["namedRoadCount"] != 9
+            or interaction["placeCount"] != 3
+            or not interaction["vectorsWithinExtent"]
+            or interaction["automaticWaypointCruise"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticCycle"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["infiniteTimer"]
+            or interaction["previewClockStartsFlight"]
+            or not interaction["previewClockOnlyAdvancesTrustedFlight"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["untrustedMutationCount"] != 0
+            or not interaction["initialStillVerified"]
+            or interaction["overviewCameraChecksum"] != 2978103018
+            or interaction["flightStartCount"] != 1
+            or interaction["placeSelectionInputCount"] != 1
+            or interaction["flightCompletionCount"] != 1
+            or interaction["flightCancellationCount"] != 0
+            or interaction["cameraMutationCount"] < 4
+            or interaction["arrivalCount"] != 1
+            or interaction["activeFlightId"] != 1
+            or interaction["flightActive"]
+            or interaction["flightKind"] is not None
+            or interaction["flightProgress"] != 1
+            or abs(interaction["flightDuration"] - .82) > .001
+            or interaction["requestedPlaceId"] != "pier-seven"
+            or interaction["arrivedPlaceId"] != "pier-seven"
+            or interaction["camera"] != {"center": [730, 382], "zoom": 2.6, "pitch": .32, "bearing": -.2}
+            or interaction["currentCameraChecksum"] != 197782506
+            or len(interaction["arrivalStack"]) != 1
+            or interaction["navigationDepth"] != 1
+            or interaction["arrivalStack"][0]["placeId"] is not None
+            or interaction["arrivalStack"][0]["camera"] != {"center": [500, 320], "zoom": 1, "pitch": 0, "bearing": 0}
+            or not interaction["reviewRetained"]
+            or interaction["retainedPlace"] != {"id": "pier-seven", "name": "Pier Seven", "type": "Live stage", "point": [730, 382]}
+            or interaction["retainedCameraChecksum"] != 197782506
+            or interaction["retainedFlightId"] != 1
+            or interaction["phase"] != "venue-kept"
+            or interaction["result"] != "harbor-event-venue-kept-for-route"
+            or interaction["confirmationCount"] != 1
+            or interaction["businessCommitCount"] != 1
+            or interaction["rejectedConfirmationCount"] != 0
+            or interaction["prematureCommitCount"] != 0
+            or interaction["backInputCount"] != 0
+            or interaction["backCount"] != 0
+            or interaction["undoCount"] != 0
+            or interaction["resetCount"] != 0
+            or interaction["decisionClearCount"] != 0
+            or interaction["inputCount"] != 2
+            or interaction["trustedInputCount"] != 2
+            or interaction["pointerInputCount"] != 2
+            or interaction["keyboardInputCount"] != 0
+            or interaction["controlInputCount"] != 0
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or len(interaction["inputRecords"]) != 2
+            or len(interaction["flightRecords"]) != 1
+            or interaction["flightRecords"][0]["action"] != "complete"
+            or not interaction["flightRecords"][0]["trustedCausality"]
+            or not interaction["fullStageGeometryVerified"]
+            or not interaction["viewportWithinStage"]
+            or interaction["canvasCoverageRatio"] < .995
+            or not interaction["p5InstanceReady"]
+            or not interaction["canvas2dReady"]
+            or not interaction["ready"]
+            or page.locator('#route-state').get_attribute('data-retained') != "true"
+            or page.locator('#route-output').text_content() != "ROUTE KEEPS PIER SEVEN"
+            or page.locator('#map-camera').text_content() != "Z 2.60 · P 29° · B -11°"
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture one real human-requested local-vector camera flight and a retained Pier Seven route: {interaction!r}")
     elif demo["id"] == "gooey-pixel-cursor-wake":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")

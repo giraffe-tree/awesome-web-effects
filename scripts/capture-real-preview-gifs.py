@@ -2664,6 +2664,25 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("ArrowDown")
             elif index == 20:
                 page.keyboard.press("ArrowLeft")
+        elif demo["id"] == "elastic-baseline-letter-wave":
+            if index == 4:
+                page.mouse.move(80, 80)
+            elif index == 5:
+                page.mouse.down()
+            elif index == 6:
+                page.mouse.move(110, 65)
+            elif index == 7:
+                page.mouse.move(140, 50)
+            elif index == 8:
+                page.mouse.move(170, 65)
+            elif index == 9:
+                page.mouse.move(200, 85)
+            elif index == 10:
+                page.mouse.move(230, 60)
+            elif index == 11:
+                page.mouse.up()
+            elif index == 18:
+                page.locator('[data-baseline-action="settle"]').click()
         elif demo["id"] == "poisson-constellation-bloom":
             if index == 2:
                 page.mouse.move(170, 92)
@@ -8754,6 +8773,91 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["listenersBound"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture a trusted full-stage wrapping-print kaleidoscope sampler with exact p5.Image source evidence, seven-fold alternating mirror topology and no automatic motion: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "elastic-baseline-letter-wave":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-wayfinding-elastic-baseline-legibility-proof"
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["mechanism"] != "code-native-glyphs-inherit-position-and-tangent-from-a-24-node-finite-spring-baseline"
+            or interaction["assetStrategy"] != "code-native-glyph-mechanism-no-decorative-raster-required"
+            or interaction["captureType"] != "interactive"
+            or interaction["acceptedInputs"] != ["mouse-hover", "captured-mouse-drag", "captured-touch-drag", "captured-pen-drag", "keyboard", "range-control", "visible-buttons"]
+            or interaction["causality"] != "trusted-human-input-only"
+            or not interaction["userInputRequired"]
+            or not interaction["strictTrustedInputGuard"]
+            or not interaction["initialFrameStatic"]
+            or not interaction["initialStillVerified"]
+            or interaction["automaticCycle"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticWave"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["previewClockMutationCount"] != 0
+            or interaction["nonInputVisualMutationCountAfterReady"] != 0
+            or interaction["inputCount"] < 9
+            or interaction["trustedInputCount"] != interaction["inputCount"]
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["humanMutationCount"] < 8
+            or interaction["probeMutationCount"] < 6
+            or interaction["tensionMutationCount"] != 0
+            or interaction["baselineMutationCount"] < 8
+            or interaction["keyboardInputCount"] != 0
+            or interaction["rangeInputCount"] != 0
+            or interaction["buttonInputCount"] != 1
+            or interaction["pointerEnterCount"] < 1
+            or interaction["pointerMoveCount"] < 6
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerDragCount"] < 5
+            or interaction["pointerReleaseCount"] != 1
+            or interaction["pointerCancelCount"] != 0
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerCaptureReleaseCount"] != 1
+            or interaction["pointerCaptured"]
+            or interaction["dragging"]
+            or interaction["activePointerId"] is not None
+            or interaction["mouseInputCount"] < 8
+            or interaction["touchInputCount"] != 0
+            or interaction["penInputCount"] != 0
+            or interaction["resetCount"] != 0
+            or interaction["lastInputKind"] != "button"
+            or interaction["lastInputSource"] != "button-settle"
+            or interaction["lastInputTrusted"] is not True
+            or interaction["lastPointerType"] != "mouse"
+            or interaction["baselineNodeCount"] != 24
+            or interaction["glyphCount"] != 7
+            or interaction["solverIterationsPerInput"] != 12
+            or interaction["settleIterationsPerInput"] != 28
+            or interaction["solverBatchCount"] < 9
+            or interaction["settleBatchCount"] != 1
+            or interaction["solverIterationCount"] != interaction["solverBatchCount"] * 12 + interaction["settleBatchCount"] * 16
+            or interaction["minimumLegibilityScore"] > 80
+            or interaction["maximumDisplacementObserved"] <= .1
+            or interaction["maximumSlopeObserved"] <= .45
+            or interaction["legibilityVerdictMutationCount"] < 2
+            or interaction["legibilityScore"] < 98
+            or interaction["maximumDisplacement"] >= .01
+            or interaction["legibilityVerdict"] != "Route proof clear"
+            or interaction["baselineChecksum"] <= 0
+            or interaction["initialBaselineChecksum"] <= 0
+            or not interaction["glyphBoundsWithinCanvas"]
+            or interaction["glyphMetricCount"] != 7
+            or interaction["glyphOccludedByUiCount"] != 0
+            or interaction["baselineSegmentDrawCount"] != 23
+            or interaction["glyphDrawCount"] != 7
+            or not interaction["p5InstanceReady"]
+            or not interaction["p5CanvasReady"]
+            or interaction["p5CanvasWidth"] != 320
+            or interaction["p5CanvasHeight"] != 180
+            or interaction["p5CompletedDrawCount"] < 9
+            or not interaction["runtimeAssertionPassed"]
+            or not interaction["ready"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a trusted full-stage WAYFIND elastic-baseline legibility proof with finite solver batches, unclipped glyphs, optical strain and an explicit settled result without automatic wave motion: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "poisson-constellation-bloom":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

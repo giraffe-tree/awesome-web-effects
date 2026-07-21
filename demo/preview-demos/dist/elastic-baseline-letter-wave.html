@@ -1,7 +1,420 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p5.js — Elastic Baseline Letter Wave</title><style>:root{--preview-background:#f3ead4;color-scheme:light}.expansion-stage{position:absolute;inset:0;overflow:hidden;cursor:grab}.expansion-stage canvas{display:block}.library-badge{color:#151b1a;background:#fff7e4d8;border-color:#151b1a22}.scene-caption{color:#18211d87}</style>  <script type="module" crossorigin src="./assets/elastic-baseline-letter-wave-BLhEPNe5.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
-  <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
-  <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
-  <link rel="modulepreload" crossorigin href="./assets/expansion-a-utils-anD0k7Pd.js">
-  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage"><div class="expansion-stage" id="expansion-stage" data-preview-mechanism="p5-elastic-type" tabindex="0" aria-label="Move the pointer to pull the elastic typographic baseline"></div><span class="library-badge">p5.js · elastic typography</span><span class="scene-caption">letters inherit tension from one continuous baseline</span></main></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>p5.js — Human-operated Wayfinding Baseline Proof</title>
+    <link rel="icon" href="data:,">
+    <style>
+      :root {
+        --preview-background: #efe6d4;
+        --paper: #efe6d4;
+        --ink: #14201d;
+        --coral: #f15b48;
+        --blue: #315fa8;
+        color-scheme: light;
+      }
+
+      button,
+      input { font: inherit; }
+
+      .baseline-stage {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        isolation: isolate;
+        background: var(--paper);
+        color: var(--ink);
+        user-select: none;
+      }
+
+      .baseline-surface,
+      .baseline-surface canvas,
+      .paper-grade,
+      .paper-grain {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .baseline-surface {
+        z-index: 1;
+        cursor: ns-resize;
+        outline: none;
+        touch-action: none;
+      }
+
+      .baseline-surface[data-dragging="true"] { cursor: grabbing; }
+
+      .baseline-surface:focus-visible {
+        box-shadow: inset 0 0 0 2px var(--blue);
+      }
+
+      .baseline-surface canvas,
+      .paper-grade,
+      .paper-grain { pointer-events: none; }
+
+      .paper-grade {
+        z-index: 2;
+        background:
+          linear-gradient(180deg, #fff7e799 0%, transparent 24%, transparent 70%, #d7c9ad73 100%),
+          linear-gradient(90deg, #e1d4bc8a 0%, transparent 20%, transparent 81%, #fff9eb70 100%);
+      }
+
+      .paper-grain {
+        z-index: 3;
+        opacity: .12;
+        mix-blend-mode: multiply;
+        background-image: radial-gradient(#493d2d70 .42px, transparent .62px);
+        background-size: 3px 3px;
+      }
+
+      .topbar {
+        position: absolute;
+        z-index: 8;
+        top: 10px;
+        right: 11px;
+        left: 11px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 9px;
+        pointer-events: none;
+      }
+
+      .proof-id {
+        display: flex;
+        align-items: center;
+        min-width: 0;
+        gap: 7px;
+      }
+
+      .proof-mark {
+        display: grid;
+        width: 24px;
+        height: 24px;
+        flex: 0 0 auto;
+        place-items: center;
+        border: 1px solid #14201d4f;
+        border-radius: 50%;
+        background: #f8f0dfb8;
+        color: var(--blue);
+        font: 950 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        backdrop-filter: blur(7px);
+      }
+
+      .proof-copy strong,
+      .proof-copy span {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        text-transform: uppercase;
+      }
+
+      .proof-copy strong {
+        font: 950 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .15em;
+      }
+
+      .proof-copy span {
+        margin-top: 4px;
+        color: #14201d8f;
+        font: 800 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .11em;
+      }
+
+      .baseline-stage .library-badge {
+        position: static;
+        max-width: 128px;
+        padding: 5px 7px;
+        border-color: #14201d2d;
+        background: #f8f0dfbd;
+        color: var(--ink);
+        font: 900 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .11em;
+        white-space: nowrap;
+        backdrop-filter: blur(7px);
+      }
+
+      .brief {
+        position: absolute;
+        z-index: 7;
+        top: 29%;
+        left: 12px;
+        width: min(112px, 34vw);
+        pointer-events: none;
+      }
+
+      .brief span,
+      .brief p,
+      .strain-card,
+      .tension-control,
+      .actions button {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        text-transform: uppercase;
+      }
+
+      .brief span {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        color: var(--coral);
+        font-size: 4px;
+        font-weight: 950;
+        letter-spacing: .16em;
+      }
+
+      .brief span::before {
+        width: 12px;
+        height: 2px;
+        background: var(--coral);
+        content: "";
+      }
+
+      .brief p {
+        max-width: 104px;
+        margin: 6px 0 0;
+        color: #14201d9e;
+        font-size: 4px;
+        font-weight: 800;
+        line-height: 1.42;
+        letter-spacing: .08em;
+      }
+
+      .strain-card {
+        position: absolute;
+        z-index: 8;
+        top: 30%;
+        right: 11px;
+        min-width: 67px;
+        padding: 7px 8px;
+        border: 1px solid #14201d35;
+        background: #f8f0dfb8;
+        pointer-events: none;
+        backdrop-filter: blur(8px);
+      }
+
+      .strain-card span,
+      .strain-card strong,
+      .strain-card small { display: block; }
+
+      .strain-card span {
+        color: #14201d87;
+        font-size: 4px;
+        font-weight: 850;
+        letter-spacing: .12em;
+      }
+
+      .strain-card strong {
+        margin-top: 4px;
+        color: var(--blue);
+        font-size: 9px;
+        font-weight: 950;
+      }
+
+      .strain-card small {
+        margin-top: 4px;
+        color: #14201d99;
+        font-size: 4px;
+        font-weight: 850;
+        letter-spacing: .08em;
+      }
+
+      .strain-card strong[data-tone="watch"] { color: var(--coral); }
+
+      .bottom-panel {
+        position: absolute;
+        z-index: 10;
+        right: 11px;
+        bottom: 9px;
+        left: 11px;
+        display: grid;
+        grid-template-columns: auto minmax(70px, 1fr) auto;
+        align-items: end;
+        gap: 7px;
+        pointer-events: none;
+      }
+
+      .solver-ledger {
+        min-width: 65px;
+        padding: 5px 7px;
+        border-left: 1px solid #315fa875;
+        background: #f8f0df83;
+        backdrop-filter: blur(7px);
+      }
+
+      .solver-ledger span,
+      .solver-ledger strong {
+        display: block;
+        white-space: nowrap;
+        text-transform: uppercase;
+      }
+
+      .solver-ledger span {
+        color: #14201d82;
+        font: 850 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .12em;
+      }
+
+      .solver-ledger strong {
+        margin-top: 4px;
+        color: var(--ink);
+        font: 950 7px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+
+      .tension-control {
+        display: grid;
+        min-width: 0;
+        gap: 4px;
+        padding: 5px 8px;
+        border: 1px solid #14201d35;
+        border-radius: 999px;
+        background: #f8f0dfc9;
+        pointer-events: auto;
+        backdrop-filter: blur(8px);
+      }
+
+      .tension-control label {
+        display: flex;
+        justify-content: space-between;
+        gap: 6px;
+        color: #14201d92;
+        font-size: 4px;
+        font-weight: 900;
+        letter-spacing: .1em;
+      }
+
+      .tension-control output { color: var(--blue); }
+
+      .tension-control input {
+        width: 100%;
+        min-width: 48px;
+        height: 5px;
+        margin: 0;
+        accent-color: var(--blue);
+        cursor: ew-resize;
+      }
+
+      .actions {
+        display: flex;
+        gap: 3px;
+        padding: 3px;
+        border: 1px solid #14201d35;
+        border-radius: 999px;
+        background: #f8f0dfc9;
+        pointer-events: auto;
+        backdrop-filter: blur(8px);
+      }
+
+      .actions button {
+        min-width: 32px;
+        height: 18px;
+        padding: 0 7px;
+        border: 0;
+        border-radius: 999px;
+        background: transparent;
+        color: var(--ink);
+        cursor: pointer;
+        font-size: 4px;
+        font-weight: 950;
+        letter-spacing: .08em;
+      }
+
+      .actions button[data-baseline-action="settle"] {
+        background: var(--blue);
+        color: #fffaf0;
+      }
+
+      .actions button:hover,
+      .actions button:focus-visible {
+        outline: none;
+        background: var(--coral);
+        color: #fffaf0;
+      }
+
+      @media (max-width: 420px) {
+        .brief { display: none; }
+        .baseline-stage .library-badge { display: none; }
+        .strain-card { top: 10px; }
+        .strain-card span,
+        .strain-card small { display: none; }
+        .strain-card strong { margin-top: 0; }
+      }
+
+      @media (max-width: 220px) {
+        .topbar { top: 6px; right: 6px; left: 6px; }
+        .proof-mark { width: 19px; height: 19px; }
+        .proof-copy,
+        .baseline-stage .library-badge,
+        .brief { display: none; }
+        .strain-card { top: 6px; right: 6px; min-width: 44px; padding: 5px; }
+        .strain-card span,
+        .strain-card small { display: none; }
+        .strain-card strong { margin-top: 0; font-size: 6px; }
+        .bottom-panel { right: 6px; bottom: 5px; left: 6px; grid-template-columns: 1fr auto; gap: 3px; }
+        .solver-ledger { display: none; }
+        .tension-control { padding: 4px 6px; }
+        .tension-control label span { display: none; }
+        .actions { padding: 2px; }
+        .actions button { min-width: 22px; height: 15px; padding: 0 4px; font-size: 3px; }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/elastic-baseline-letter-wave-tYd5XfTP.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+    <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
+    <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main class="preview-stage baseline-stage" id="baseline-stage" data-preview-mechanism="p5-finite-elastic-glyph-baseline">
+      <div
+        class="baseline-surface"
+        id="baseline-surface"
+        tabindex="0"
+        role="application"
+        aria-label="Wayfinding baseline proof. Hover or drag vertically to bend the letter baseline, use arrow keys to move the probe, adjust tension, and settle or reset the proof."
+      ></div>
+      <div class="paper-grade" aria-hidden="true"></div>
+      <div class="paper-grain" aria-hidden="true"></div>
+
+      <header class="topbar">
+        <div class="proof-id">
+          <span class="proof-mark">W07</span>
+          <div class="proof-copy">
+            <strong>Harbor wayfinding / baseline proof</strong>
+            <span>Human-set letter tension · optical test 07</span>
+          </div>
+        </div>
+        <span class="library-badge">p5.js · 24-node spring</span>
+      </header>
+
+      <section class="brief" aria-hidden="true">
+        <span>Type tension probe</span>
+        <p>Move the proof pin. Each letter inherits the same continuous baseline and its local tangent.</p>
+      </section>
+
+      <aside class="strain-card" aria-live="polite">
+        <span>Optical legibility</span>
+        <strong id="legibility-score">100 / 100</strong>
+        <small id="strain-status">Baseline neutral</small>
+      </aside>
+
+      <footer class="bottom-panel">
+        <div class="solver-ledger" aria-live="polite">
+          <span>Finite solver</span>
+          <strong><span id="solver-batches">00</span> batches</strong>
+        </div>
+        <div class="tension-control">
+          <label for="baseline-tension"><span>Baseline tension</span><output id="tension-output">64%</output></label>
+          <input id="baseline-tension" type="range" min="35" max="95" step="5" value="65" aria-label="Elastic baseline tension">
+        </div>
+        <nav class="actions" aria-label="Baseline proof actions">
+          <button type="button" data-baseline-action="settle" aria-label="Settle the elastic baseline">Settle</button>
+          <button type="button" data-baseline-action="reset" aria-label="Reset the baseline proof">Reset</button>
+        </nav>
+      </footer>
+    </main>
+  </body>
+</html>

@@ -592,6 +592,15 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("Space")
             elif index == 35:
                 page.wait_for_timeout(340)
+        elif demo["id"] == "opposed-diagonal-offset-cta":
+            if index == 4:
+                page.locator('#offset-button').hover()
+            elif index == 7:
+                page.locator('#offset-button').click()
+            elif index == 22:
+                page.locator('#offset-button').click()
+            elif index == 33:
+                page.mouse.move(2, 2)
         elif demo["id"] == "ascii-orchestration-signal-sweep":
             if index == 3:
                 page.locator('#trace-button').click()
@@ -4542,6 +4551,56 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["lastTrustedEvent"] != "space-toggle"
         ):
             raise RuntimeError(f"{demo['id']} did not capture a real shared-baseline metadata/CTA handoff across hover, focus, activation, cancellation, and reset: {interaction!r}")
+    elif demo["id"] == "opposed-diagonal-offset-cta":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        runtime_assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        cta_text = page.locator('#cta-copy').inner_text().strip()
+        stock_text = page.locator('#stock-rail').inner_text().strip()
+        pressed = page.locator('#offset-button').get_attribute('aria-pressed')
+        if (
+            not runtime_assertion
+            or interaction["task"] != "human-controlled-limited-edition-cta-registration"
+            or interaction["claimedLibrary"] != "motion@12.42.2"
+            or interaction["assetStrategy"] != "code-native-print-layers-no-functional-raster-input-required"
+            or interaction["automaticPlayback"]
+            or interaction["automaticCycle"]
+            or interaction["automaticLoop"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["previewClockMutationBeforeInput"]
+            or not interaction["userInputRequired"]
+            or not interaction["strictTrustedInputGuard"]
+            or interaction["reserved"]
+            or interaction["pendingReserved"] is not None
+            or interaction["transactionActive"]
+            or interaction["finalStatus"] != "ready-to-reserve"
+            or interaction["pointerEnterCount"] < 1
+            or interaction["pointerActivationCount"] != 2
+            or interaction["trustedInputCount"] != interaction["inputCount"]
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["transactionStartCount"] != 2
+            or interaction["transactionCompleteCount"] != 2
+            or interaction["reservationCommitCount"] != 1
+            or interaction["reservationReleaseCount"] != 1
+            or interaction["contentMutationCount"] != 2
+            or interaction["prematureCommitCount"] != 0
+            or interaction["canceledTransactionCount"] != 0
+            or not interaction["opposedSeparationVerified"]
+            or not interaction["registrationContactVerified"]
+            or not interaction["deferredCommitVerified"]
+            or interaction["finiteTransitionStepCount"] < 16
+            or interaction["motionControlCreateCount"] != 4
+            or interaction["motionSeekCount"] < 60
+            or not interaction["geometryValidated"]
+            or interaction["stageCoverageRatio"] < .75
+            or cta_text.casefold() != "hold an edition"
+            or stock_text.casefold() != "12 copies remain"
+            or pressed != "false"
+        ):
+            raise RuntimeError(
+                f"{demo['id']} did not capture a real deferred print-registration reservation and release: "
+                f"state={interaction!r}; runtime={runtime_assertion!r}; cta={cta_text!r}; stock={stock_text!r}; pressed={pressed!r}"
+            )
     elif demo["id"] == "ascii-orchestration-signal-sweep":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         if (

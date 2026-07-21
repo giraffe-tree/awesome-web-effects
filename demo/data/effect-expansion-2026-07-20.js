@@ -332,16 +332,16 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "opposed-diagonal-offset-cta",
-    "name": "Opposed diagonal offset CTA",
-    "nameZh": "反向对冲斜移 CTA",
+    "name": "Human-registered edition reservation CTA",
+    "nameZh": "真人套印的限量版预留 CTA",
     "category": "pointer",
     "sourceUrl": "https://unstructured.io/",
-    "difference": "前景与底版沿相反对角线分离，active 时重新套印；不是单层按钮位移。",
+    "difference": "真实 hover/focus 让前景墨层与底版沿相反对角线分离；可信激活后两层先完成有限套印，随后才提交可撤销的限量版预留状态。",
     "behavior": {
-      "trigger": "hover/focus/press",
-      "response": "Separate two print layers diagonally, then snap them together on press",
-      "timing": "reversible two-layer transition",
-      "layer": "button surface"
+      "trigger": "trusted hover/focus plus pointer or keyboard activation",
+      "response": "Separate ink and backing plate, register them during one finite reservation transaction, then retain the committed hold",
+      "timing": "220ms intent separation plus 820ms finite commit transition",
+      "layer": "full-stage limited-edition product sheet and transactional CTA"
     },
     "implementation": {
       "projectId": "motiondivision-motion",
@@ -352,18 +352,18 @@ export const effectExpansion100Specs = [
       "referenceUrl": "https://unstructured.io/"
     },
     "scores": {
-      "creativity": 17,
-      "artDirection": 18,
-      "motion": 18,
+      "creativity": 20,
+      "artDirection": 20,
+      "motion": 20,
       "clarity": 15,
-      "inspiration": 14,
+      "inspiration": 15,
       "evidence": 10,
-      "total": 92
+      "total": 100
     },
-    "rationaleZh": "错版印刷感能清楚区分于普通 hover，但需要高完成度构图。",
+    "rationaleZh": "限量出版物信息让错位套印成为真实购买层级；两层在 hover/focus 时反向分离、激活后有限归位，并严格在过渡完成后才提交或撤销预留结果。",
     "batch": "A",
-    "demo": "版画式按钮用墨黑前景和酸绿底版表现错位与套印。",
-    "capture": "hover 分离→pointerdown 合拢→pointerup 弹回→leave 复位。",
+    "demo": "一张全舞台限量出版物产品页，用前景墨层与酸绿底版的错位、套印和库存文案完成可撤销预留。",
+    "capture": "真人 hover 分离→点击完成套印并保留预留→再次点击撤销→移出恢复首帧套印。",
     "risk": {
       "level": "low",
       "detail": "幅度过小会在 GIF 缩略图中消失，过大会像布局错误。"

@@ -1,3 +1,350 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>Motion — Opposed Diagonal Offset CTA</title><link rel="stylesheet" href="./shared.css"/><style>
-:root{--preview-background:#f04d39;color-scheme:light}.offset-stage{background:linear-gradient(145deg,#ff5a42,#dc382c);color:#18120f}.offset-copy{position:absolute;left:20px;top:45px;font:900 22px/.88 Georgia,serif;letter-spacing:-.06em}.offset-copy small{display:block;margin-top:9px;width:115px;font:900 6px/1.4 ui-monospace,monospace;letter-spacing:.11em;text-transform:uppercase}.offset-wrap{position:absolute;right:28px;top:66px;width:133px;height:49px}.offset-shadow,.offset-button{position:absolute;inset:0;border:2px solid #17120f}.offset-shadow{background:#ffe352}.offset-button{display:grid;place-items:center;background:#f7f0dd;color:#17120f;font:950 10px/1 ui-monospace,monospace;letter-spacing:.06em;text-transform:uppercase;cursor:pointer}.offset-button:active{filter:brightness(.92)}.offset-note{position:absolute;right:31px;bottom:34px;font:900 6px/1 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase}.offset-stage .library-badge{background:#ff5a42da;border-color:#18120f33;color:#18120f}.scene-caption{display:none}
-</style></head><body><main class="preview-stage offset-stage"><div class="offset-copy">MISREGISTER<br/>THE ACTION<small>hover separates · press reunites</small></div><div class="offset-wrap" id="offset-wrap"><i class="offset-shadow" id="offset-shadow"></i><button class="offset-button" id="offset-button" type="button">Make a mark ↗</button></div><span class="offset-note">opposed vectors · ±7px</span><span class="library-badge">Motion · block-print CTA</span><span class="scene-caption">foreground and backing plate move in opposite diagonal directions</span></main><script type="module" src="./src/opposed-diagonal-offset-cta-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Motion — Opposed Diagonal Offset CTA</title>
+  <link rel="stylesheet" href="./shared.css" />
+  <style>
+    :root {
+      --preview-background: #d8d0c1;
+      color-scheme: light;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    button { font: inherit; }
+
+    .offset-stage {
+      display: grid;
+      place-items: center;
+      padding: clamp(6px, 2.2vmin, 14px);
+      background:
+        linear-gradient(90deg, rgba(25, 22, 18, .08) 1px, transparent 1px) 0 0 / 24px 24px,
+        #d8d0c1;
+      color: #191612;
+    }
+
+    .press-sheet {
+      width: min(100%, 720px);
+      height: min(100%, 405px);
+      display: grid;
+      grid-template-columns: minmax(112px, .78fr) minmax(184px, 1.22fr);
+      grid-template-rows: clamp(20px, 11%, 34px) 1fr;
+      overflow: hidden;
+      border: 1.5px solid #191612;
+      background: #f4eee2;
+      box-shadow: 4px 4px 0 #191612;
+    }
+
+    .press-rail {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 0 clamp(8px, 2.3vw, 18px);
+      border-bottom: 1.5px solid #191612;
+      background: #f4eee2;
+      font: 800 clamp(6px, 1.4vw, 10px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .press-rail strong { color: #df3f32; }
+
+    .edition-mark {
+      position: relative;
+      min-width: 0;
+      overflow: hidden;
+      border-right: 1.5px solid #191612;
+      background: #df3f32;
+    }
+
+    .edition-index {
+      position: absolute;
+      z-index: 2;
+      top: clamp(8px, 4vmin, 20px);
+      left: clamp(9px, 3vmin, 22px);
+      font: 800 clamp(6px, 1.35vw, 10px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+
+    .edition-number {
+      position: absolute;
+      z-index: 2;
+      left: clamp(6px, 2vw, 16px);
+      bottom: clamp(5px, 1.8vmin, 14px);
+      font: 900 clamp(52px, 18vmin, 124px)/.72 Arial Black, Arial, sans-serif;
+      letter-spacing: -.1em;
+    }
+
+    .registration-shape,
+    .registration-shape::before,
+    .registration-shape::after {
+      position: absolute;
+      content: "";
+      transform: rotate(-39deg);
+    }
+
+    .registration-shape {
+      width: 18%;
+      height: 150%;
+      right: 18%;
+      top: -25%;
+      background: #d8ff39;
+    }
+
+    .registration-shape::before {
+      width: 155%;
+      height: 3px;
+      left: -28%;
+      top: 26%;
+      background: #191612;
+    }
+
+    .registration-shape::after {
+      width: 155%;
+      height: 3px;
+      left: -28%;
+      bottom: 26%;
+      background: #f4eee2;
+    }
+
+    .edition-body {
+      min-width: 0;
+      display: grid;
+      grid-template-rows: minmax(0, 1fr) auto;
+      padding: clamp(9px, 3vmin, 22px);
+      background:
+        radial-gradient(circle at 84% 18%, rgba(223, 63, 50, .1) 0 1px, transparent 1.5px) 0 0 / 9px 9px,
+        #f4eee2;
+    }
+
+    .edition-copy {
+      min-height: 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: clamp(8px, 2vw, 18px);
+      padding-bottom: clamp(7px, 2.2vmin, 17px);
+    }
+
+    .eyebrow {
+      margin: 0 0 clamp(3px, 1vmin, 8px);
+      color: #df3f32;
+      font: 900 clamp(6px, 1.4vw, 10px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .edition-copy h1 {
+      max-width: 13ch;
+      margin: 0;
+      font: 900 clamp(18px, 5vw, 39px)/.86 Arial Black, Arial, sans-serif;
+      letter-spacing: -.075em;
+      text-transform: uppercase;
+    }
+
+    .edition-facts {
+      display: grid;
+      gap: 4px;
+      min-width: clamp(52px, 15vw, 92px);
+      padding-bottom: 1px;
+      font: 800 clamp(5px, 1.2vw, 8px)/1.25 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .edition-facts span {
+      padding-top: 4px;
+      border-top: 1px solid rgba(25, 22, 18, .45);
+    }
+
+    .cta-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: end;
+      gap: clamp(7px, 2vw, 15px);
+    }
+
+    .reservation-state {
+      align-self: center;
+      min-width: 0;
+      color: #625c52;
+      font: 800 clamp(5px, 1.2vw, 8px)/1.35 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+    }
+
+    .reservation-state strong {
+      display: block;
+      color: #191612;
+      font-size: 1.22em;
+    }
+
+    .offset-wrap {
+      position: relative;
+      width: clamp(128px, 34vw, 235px);
+      height: clamp(42px, 13vmin, 72px);
+      margin: 6px 7px 7px 6px;
+      outline: none;
+    }
+
+    .offset-shadow,
+    .offset-button {
+      position: absolute;
+      inset: 0;
+      border: 1.5px solid #191612;
+      will-change: transform;
+    }
+
+    .offset-shadow {
+      z-index: 0;
+      background: #d8ff39;
+      pointer-events: none;
+    }
+
+    .offset-button {
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 7px;
+      padding: 0 clamp(9px, 2.6vw, 18px);
+      background: #191612;
+      color: #f4eee2;
+      cursor: pointer;
+      appearance: none;
+      text-align: left;
+      touch-action: manipulation;
+    }
+
+    .offset-button:focus-visible {
+      outline: 2px solid #2267ff;
+      outline-offset: 3px;
+    }
+
+    .cta-label {
+      display: grid;
+      gap: 3px;
+      min-width: 0;
+    }
+
+    .cta-label strong {
+      font: 900 clamp(8px, 2vw, 14px)/1 Arial Black, Arial, sans-serif;
+      letter-spacing: -.025em;
+      text-transform: uppercase;
+    }
+
+    .cta-label small {
+      color: #b8b0a4;
+      font: 700 clamp(5px, 1vw, 7px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .cta-arrow {
+      font: 900 clamp(17px, 4.7vmin, 30px)/1 Arial, sans-serif;
+    }
+
+    .offset-stage[data-reserved="true"] .offset-button {
+      background: #d8ff39;
+      color: #191612;
+    }
+
+    .offset-stage[data-reserved="true"] .cta-label small { color: #4b5518; }
+
+    .offset-stage[data-transaction="active"] .offset-button { cursor: progress; }
+
+    .offset-stage .library-badge {
+      top: auto;
+      right: auto;
+      bottom: clamp(8px, 2.5vmin, 16px);
+      left: clamp(8px, 2.5vmin, 16px);
+      max-width: 30%;
+      border: 1px solid rgba(25, 22, 18, .42);
+      background: rgba(244, 238, 226, .9);
+      color: #191612;
+      font-size: clamp(5px, 1vw, 7px);
+      backdrop-filter: none;
+    }
+
+    .scene-caption { display: none; }
+
+    @media (max-aspect-ratio: 4 / 5) {
+      .press-sheet {
+        grid-template-columns: 1fr;
+        grid-template-rows: 28px minmax(92px, .78fr) minmax(0, 1.22fr);
+      }
+
+      .edition-mark {
+        border-right: 0;
+        border-bottom: 1.5px solid #191612;
+      }
+
+      .edition-number { font-size: clamp(56px, 24vw, 86px); }
+      .edition-body { padding: clamp(11px, 5vw, 20px); }
+      .edition-copy { align-items: center; }
+      .edition-copy h1 { font-size: clamp(22px, 10vw, 34px); }
+      .edition-facts { min-width: 64px; }
+      .cta-row { grid-template-columns: 1fr; }
+      .reservation-state { display: flex; justify-content: space-between; gap: 8px; }
+      .offset-wrap { width: calc(100% - 13px); height: clamp(52px, 18vw, 66px); }
+      .offset-stage .library-badge { max-width: 44%; }
+    }
+  </style>
+</head>
+<body>
+  <main class="preview-stage offset-stage" id="offset-stage" data-reserved="false" data-transaction="idle">
+    <article class="press-sheet" aria-label="North Coast Press edition reservation">
+      <header class="press-rail">
+        <span>North Coast Press · Field Editions</span>
+        <strong id="stock-rail">12 copies remain</strong>
+      </header>
+
+      <section class="edition-mark" aria-hidden="true">
+        <span class="edition-index">No. 07 / Tide archive</span>
+        <span class="registration-shape"></span>
+        <span class="edition-number">07</span>
+      </section>
+
+      <section class="edition-body">
+        <div class="edition-copy">
+          <div>
+            <p class="eyebrow">A pocket field guide</p>
+            <h1>Margins of the tide</h1>
+          </div>
+          <div class="edition-facts" aria-label="Edition details">
+            <span>96 pages</span>
+            <span>2-colour risograph</span>
+            <span>Ships 14 Sep</span>
+          </div>
+        </div>
+
+        <div class="cta-row">
+          <p class="reservation-state" aria-live="polite">
+            <span>Edition status</span>
+            <strong id="reservation-copy">Ready to reserve</strong>
+          </p>
+
+          <div class="offset-wrap" id="offset-wrap">
+            <span class="offset-shadow" id="offset-shadow" aria-hidden="true"></span>
+            <button class="offset-button" id="offset-button" type="button" aria-pressed="false">
+              <span class="cta-label">
+                <strong id="cta-copy">Hold an edition</strong>
+                <small id="cta-detail">£24 · no charge today</small>
+              </span>
+              <span class="cta-arrow" aria-hidden="true">↗</span>
+            </button>
+          </div>
+        </div>
+      </section>
+    </article>
+
+    <span class="library-badge">Motion · opposed ink / plate</span>
+    <span class="scene-caption">Human input separates and registers two CTA layers before committing the reservation.</span>
+  </main>
+  <script type="module" src="./src/opposed-diagonal-offset-cta-demo.js"></script>
+</body>
+</html>

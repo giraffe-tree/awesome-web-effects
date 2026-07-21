@@ -1,1 +1,278 @@
-<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Offline Audio Spectral Ribbon</title><link rel="stylesheet" href="./shared.css"><style>:root{--preview-background:#07051a}canvas{width:100%;height:100%}.copy{position:absolute;left:14px;top:49px;width:101px;color:#f7f2ff}.copy small{font:800 6px monospace;letter-spacing:.14em;color:#fc70db}.copy h1{margin:8px 0;font:950 20px/.84 system-ui;letter-spacing:-.065em}.hz{position:absolute;right:12px;bottom:12px;color:#bea9ff;font:800 6px monospace}.scene-caption{display:none}</style></head><body><main class="preview-stage"><canvas tabindex="0" aria-label="Synthesized audio rendered as a spectral ribbon"></canvas><section class="copy"><small>OFFLINE SYNTH</small><h1>SOUND FOLDS INTO SILK.</h1></section><span class="hz">80HZ ━ 6.4KHZ</span><span class="library-badge">p5.js + Web Audio · spectrum</span></main><script type="module" src="./src/offline-audio-spectral-ribbon-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Offline Audio Spectral Ribbon</title>
+    <link rel="stylesheet" href="./shared.css">
+    <style>
+      :root {
+        --preview-background: #0b0d13;
+        --ink: #f3f1ea;
+        --muted: #8b929b;
+        --panel: #121720;
+        --cyan: #66e2d5;
+        --pink: #ff77b7;
+        --amber: #ffc767;
+        color-scheme: dark;
+      }
+
+      button,
+      select { font: inherit; }
+
+      .preview-stage {
+        background:
+          radial-gradient(circle at 82% 18%, rgba(255, 119, 183, .13), transparent 30%),
+          #0b0d13;
+        color: var(--ink);
+      }
+
+      #spectral-host,
+      #spectral-host canvas {
+        position: absolute;
+        inset: 0;
+        width: 100% !important;
+        height: 100% !important;
+      }
+      #spectral-host { z-index: 1; outline: none; }
+      #spectral-host canvas { pointer-events: none; }
+      #spectral-host:focus-visible::after {
+        content: "";
+        position: absolute;
+        inset: 31px 5px 43px 105px;
+        border: 2px solid rgba(102, 226, 213, .48);
+        border-radius: 8px;
+        pointer-events: none;
+      }
+
+      .topbar {
+        position: absolute;
+        z-index: 8;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 29px;
+        display: flex;
+        align-items: center;
+        padding: 0 9px 0 12px;
+        border-bottom: 1px solid rgba(102, 226, 213, .15);
+        background: rgba(11, 13, 19, .77);
+        backdrop-filter: blur(9px);
+      }
+
+      .brand,
+      .status,
+      .eyebrow,
+      .control-label,
+      .retained-label,
+      .metric-label,
+      .profile,
+      .toolbar button,
+      select,
+      .analyze {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        text-transform: uppercase;
+        letter-spacing: .1em;
+      }
+      .brand { font-size: 6px; font-weight: 950; }
+      .brand b { color: var(--cyan); }
+      .status { margin-left: auto; margin-right: 6px; color: var(--muted); font-size: 4.5px; font-weight: 850; }
+      .status[data-state="analyzing"] { color: var(--amber); }
+      .status[data-state="candidate"] { color: var(--pink); }
+      .status[data-state="retained"] { color: var(--cyan); }
+      .toolbar { display: flex; gap: 3px; }
+      .toolbar button {
+        height: 19px;
+        min-width: 29px;
+        padding: 0 5px;
+        border: 1px solid #303745;
+        border-radius: 4px;
+        background: #121720;
+        color: #929aa5;
+        cursor: pointer;
+        font-size: 4.5px;
+        font-weight: 900;
+      }
+      .toolbar button:hover,
+      .toolbar button:focus-visible { border-color: var(--cyan); outline: 2px solid rgba(102, 226, 213, .2); outline-offset: 1px; }
+      .toolbar button:disabled { opacity: .32; cursor: default; }
+      .toolbar .keep { border-color: #4c3b57; background: #211827; color: #ffc7e1; }
+
+      .controls {
+        position: absolute;
+        z-index: 6;
+        left: 10px;
+        top: 38px;
+        width: 91px;
+        height: 94px;
+        padding: 7px;
+        border: 1px solid #29313d;
+        border-radius: 8px;
+        background: rgba(18, 23, 32, .9);
+        box-shadow: 0 14px 34px rgba(0, 0, 0, .24);
+        backdrop-filter: blur(8px);
+      }
+      .eyebrow { color: #7f8995; font-size: 4.5px; font-weight: 900; }
+      .controls h1 { margin: 2px 0 0; font-size: 10px; line-height: .82; letter-spacing: -.045em; }
+      .profiles { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 3px; margin-top: 3px; }
+      .profile {
+        min-width: 0;
+        height: 16px;
+        padding: 0 2px;
+        border: 1px solid #303947;
+        border-radius: 4px;
+        background: transparent;
+        color: #77828e;
+        cursor: pointer;
+        font-size: 3.7px;
+        font-weight: 900;
+      }
+      .profile[aria-pressed="true"] { border-color: var(--pink); background: rgba(255, 119, 183, .12); color: #ffd3e8; }
+      .profile:focus-visible { outline: 2px solid rgba(255, 119, 183, .35); outline-offset: 1px; }
+      .parameter-row { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 2px; }
+      .control-label { color: #707b87; font-size: 3.8px; font-weight: 900; }
+      select,
+      .analyze {
+        width: 100%;
+        height: 16px;
+        margin-top: 1px;
+        border: 1px solid #303947;
+        border-radius: 4px;
+        background: #0c1017;
+        color: #dce2e6;
+        font-size: 4.5px;
+        font-weight: 900;
+      }
+      .analyze { margin-top: 0; border-color: #376e69; background: #122724; color: var(--cyan); cursor: pointer; }
+      .analyze:disabled { opacity: .4; cursor: default; }
+      select:focus-visible,
+      .analyze:focus-visible { outline: 2px solid rgba(102, 226, 213, .32); outline-offset: 1px; }
+
+      .chart-label {
+        position: absolute;
+        z-index: 4;
+        left: 112px;
+        top: 39px;
+        color: #737d89;
+        font: 850 4px/1 ui-monospace, monospace;
+        text-transform: uppercase;
+        letter-spacing: .1em;
+        pointer-events: none;
+      }
+      .chart-label strong { color: #c4cad0; }
+
+      .retained-rail {
+        position: absolute;
+        z-index: 7;
+        left: 10px;
+        right: 10px;
+        bottom: 7px;
+        height: 33px;
+        display: grid;
+        grid-template-columns: 1.3fr 1fr;
+        align-items: center;
+        gap: 7px;
+        padding: 5px 8px;
+        border: 1px solid #29313d;
+        border-radius: 7px;
+        background: rgba(17, 22, 30, .93);
+      }
+      .retained-label,
+      .metric-label { display: block; color: #727d89; font-size: 4px; font-weight: 900; }
+      .retained-value { display: block; margin-top: 3px; color: #dfe7e5; font: 850 5.3px/1 system-ui; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+      .metrics strong { display: block; margin-top: 3px; color: #d4dae0; font: 900 5.3px/1 ui-monospace, monospace; }
+
+      .library-badge,
+      .scene-caption { display: none; }
+
+      @media (min-width: 500px) {
+        .topbar { height: 47px; padding: 0 22px; }
+        .brand { font-size: 10px; }
+        .status { margin-right: 15px; font-size: 7px; }
+        .toolbar { gap: 7px; }
+        .toolbar button { height: 32px; min-width: 57px; padding: 0 11px; border-radius: 7px; font-size: 7px; }
+        #spectral-host:focus-visible::after { inset: 54px 11px 88px 236px; border-radius: 15px; }
+        .controls { left: 22px; top: 66px; width: 194px; height: 217px; padding: 17px; border-radius: 15px; }
+        .eyebrow { font-size: 7px; }
+        .controls h1 { margin-top: 9px; font-size: 26px; }
+        .profiles { gap: 7px; margin-top: 17px; }
+        .profile { height: 34px; border-radius: 7px; font-size: 6px; }
+        .parameter-row { gap: 10px; margin-top: 15px; }
+        .control-label { font-size: 6px; }
+        select,
+        .analyze { height: 34px; margin-top: 5px; border-radius: 7px; font-size: 7px; }
+        .analyze { margin-top: 0; }
+        .chart-label { left: 242px; top: 69px; font-size: 7px; }
+        .retained-rail { left: 22px; right: 22px; bottom: 16px; height: 62px; padding: 10px 16px; border-radius: 12px; }
+        .retained-label,
+        .metric-label { font-size: 7px; }
+        .retained-value { margin-top: 7px; font-size: 11px; }
+        .metrics strong { margin-top: 6px; font-size: 11px; }
+      }
+
+      @media (max-aspect-ratio: 4/5) {
+        .topbar { height: 38px; padding: 0 8px 0 10px; }
+        .brand { font-size: 6px; }
+        .status { position: absolute; top: 29px; left: 11px; margin: 0; font-size: 4px; }
+        .toolbar button { min-width: 28px; padding: 0 4px; }
+        #spectral-host:focus-visible::after { inset: 166px 5px 83px; }
+        .controls { top: 47px; width: 107px; height: 111px; }
+        .chart-label { left: 12px; top: 169px; }
+        .retained-rail { height: 68px; grid-template-columns: 1fr; gap: 5px; padding: 7px 9px; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="preview-stage" data-preview-mechanism="trusted-offline-audio-fft-candidate-retention">
+      <div id="spectral-host" tabindex="0" aria-label="Offline spectral analysis workspace. Use left and right arrows to choose a sound, up and down arrows to change FFT size, and Enter to analyze."></div>
+
+      <header class="topbar">
+        <div class="brand"><b>◒</b> SONIC QA / SPECTRAL DESK</div>
+        <output class="status" id="analysis-status" data-state="idle">Choose sound · analyze offline</output>
+        <div class="toolbar">
+          <button type="button" id="undo-result" disabled>Undo</button>
+          <button type="button" id="reset-analysis">Reset</button>
+          <button type="button" class="keep" id="keep-analysis" disabled>Keep</button>
+        </div>
+      </header>
+
+      <section class="controls" aria-label="Offline audio analysis controls">
+        <span class="eyebrow">Notification asset / candidate</span>
+        <h1>Sound<br>fingerprint</h1>
+        <div class="profiles" role="group" aria-label="Synthesized notification profile">
+          <button class="profile" type="button" data-profile="arrival" aria-pressed="true">Arrival</button>
+          <button class="profile" type="button" data-profile="warning" aria-pressed="false">Warning</button>
+          <button class="profile" type="button" data-profile="focus" aria-pressed="false">Focus</button>
+        </div>
+        <div class="parameter-row">
+          <label class="control-label">FFT bins
+            <select id="fft-size">
+              <option value="256">256</option>
+              <option value="512" selected>512</option>
+              <option value="1024">1024</option>
+            </select>
+          </label>
+          <button type="button" class="analyze" id="analyze-audio">Analyze</button>
+        </div>
+      </section>
+
+      <div class="chart-label"><strong>Ribbon / 20 frames × 24 bands</strong><br>80 Hz — 6.4 kHz · offline PCM</div>
+
+      <section class="retained-rail" aria-label="Retained analysis and spectral metrics">
+        <div>
+          <span class="retained-label">Retained fingerprint</span>
+          <output class="retained-value" id="retained-value">No analysis kept</output>
+        </div>
+        <div class="metrics">
+          <div><span class="metric-label">Peak</span><strong id="peak-value">— Hz</strong></div>
+          <div><span class="metric-label">PCM</span><strong id="pcm-value">idle</strong></div>
+        </div>
+      </section>
+
+      <span class="library-badge">p5.js + OfflineAudioContext · deterministic FFT</span>
+      <span class="scene-caption">select · analyze · candidate · Keep</span>
+    </main>
+    <script type="module" src="./src/offline-audio-spectral-ribbon-demo.js"></script>
+  </body>
+</html>

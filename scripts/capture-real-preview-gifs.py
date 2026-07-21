@@ -2003,6 +2003,51 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.up()
             elif index == 15:
                 page.locator('#confirm-proof').click()
+        elif demo["id"] == "offline-audio-spectral-ribbon":
+            if index == 3:
+                page.locator('[data-profile="warning"]').dispatch_event('click')
+            elif index == 4:
+                page.locator('[data-profile="warning"]').click()
+            elif index == 5:
+                page.locator('#analyze-audio').click()
+                analyzing = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+                if analyzing["phase"] != "analyzing" or analyzing["candidate"] is not None or analyzing["retained"] is not None:
+                    raise RuntimeError(f"{demo['id']} did not expose the first real offline-analysis state: {analyzing!r}")
+            elif index == 7:
+                page.evaluate("async () => await window.__PREVIEW_WAIT_FOR_IDLE__()")
+            elif index == 9:
+                page.locator('#keep-analysis').click()
+            elif index == 11:
+                page.locator('#spectral-host').focus()
+                page.keyboard.press('ArrowRight')
+            elif index == 12:
+                page.keyboard.press('ArrowUp')
+            elif index == 13:
+                page.keyboard.press('Enter')
+                analyzing = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+                if analyzing["phase"] != "analyzing" or analyzing["candidate"] is not None or analyzing["retained"] is None:
+                    raise RuntimeError(f"{demo['id']} did not preserve the retained result during the second real offline analysis: {analyzing!r}")
+            elif index == 15:
+                page.evaluate("async () => await window.__PREVIEW_WAIT_FOR_IDLE__()")
+            elif index == 18:
+                page.locator('#undo-result').click()
+            elif index == 20:
+                page.locator('#reset-analysis').click()
+            elif index == 22:
+                page.locator('#spectral-host').focus()
+                page.keyboard.press('ArrowRight')
+            elif index == 23:
+                page.keyboard.press('ArrowUp')
+            elif index == 24:
+                page.keyboard.press('Enter')
+                analyzing = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+                if analyzing["phase"] != "analyzing" or analyzing["candidate"] is not None or analyzing["retained"] is not None:
+                    raise RuntimeError(f"{demo['id']} did not expose the final real offline-analysis state after reset: {analyzing!r}")
+            elif index == 26:
+                page.evaluate("async () => await window.__PREVIEW_WAIT_FOR_IDLE__()")
+            elif index == 28:
+                page.locator('#keep-analysis').focus()
+                page.keyboard.press('Enter')
         elif demo["id"] == "hover-activated-image-marquee-menu":
             if index == 4:
                 page.locator('[data-index="2"]').hover()
@@ -4665,6 +4710,7 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             "bending-webgl-gallery-ribbon",
             "live-hand-landmark-video-overlay",
             "scroll-controlled-video-scrubbing",
+            "offline-audio-spectral-ribbon",
         }:
             page.evaluate("time => window.__setPreviewTime(time)", preview_time)
         frame_path = frame_root / f"{index:04d}.png"
@@ -7788,6 +7834,83 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or page.locator('#proof-output').text_content() != "KEPT · R / RITUAL"
         ):
             raise RuntimeError(f"{demo['id']} did not capture a real human-tuned WebGL mask proof with explicit R retention: {interaction!r}")
+    elif demo["id"] == "offline-audio-spectral-ribbon":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        candidate = interaction["candidate"] or {}
+        retained = interaction["retained"] or {}
+        if (
+            not assertion
+            or interaction["id"] != "offline-audio-spectral-ribbon"
+            or interaction["productTask"] != "Generate, inspect, and explicitly retain a notification-sound fingerprint without audible playback."
+            or interaction["library"] != "p5@2.3.0"
+            or interaction["audioApi"] != "OfflineAudioContext + deterministic radix-2 FFT"
+            or interaction["renderer"] != "canvas2d"
+            or interaction["mechanism"] != "trusted controls create a deterministic OfflineAudioContext PCM render; radix-2 FFT frames drive the spectral ribbon"
+            or interaction["assetStrategy"] != "code-native-deterministic-audio"
+            or "PCM samples and FFT bins are the functional inputs" not in interaction["imageGenDecision"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticAnalysis"]
+            or interaction["automaticCycle"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or not interaction["initialStillVerified"]
+            or not interaction["offlineAudioApiAvailable"]
+            or interaction["phase"] != "retained"
+            or interaction["selectedProfileId"] != "warning"
+            or interaction["selectedFftSize"] != 1024
+            or candidate.get("analysisId") != 3
+            or retained.get("analysisId") != 3
+            or candidate.get("profileId") != "warning"
+            or retained.get("profileId") != "warning"
+            or candidate.get("fftSize") != 1024
+            or retained.get("fftSize") != 1024
+            or candidate.get("spectralChecksum", 0) <= 1000
+            or retained.get("spectralChecksum") != candidate.get("spectralChecksum")
+            or candidate.get("peakHz", 0) <= 0
+            or retained.get("peakHz") != candidate.get("peakHz")
+            or interaction["spectralChecksum"] != candidate.get("spectralChecksum")
+            or interaction["peakHz"] != candidate.get("peakHz")
+            or interaction["trustedPointerInputCount"] != 1
+            or interaction["trustedKeyboardInputCount"] != 6
+            or interaction["trustedControlInputCount"] != 6
+            or interaction["syntheticRejectedCount"] != 1
+            or interaction["profileSelectCount"] != 3
+            or interaction["parameterChangeCount"] != 2
+            or interaction["analysisIntentCount"] != 3
+            or interaction["analysisCompletionCount"] != 3
+            or interaction["candidateCreateCount"] != 3
+            or interaction["minimumAnalysisStateMs"] != 240
+            or interaction["analysisVisibleDwellCount"] != 3
+            or interaction["lastAnalysisVisibleMs"] < 224
+            or interaction["offlineContextCreateCount"] != 3
+            or interaction["startRenderingCount"] != 3
+            or interaction["renderedBufferCount"] != 3
+            or interaction["renderedSampleCount"] != 12000
+            or interaction["nonZeroSampleCount"] < 11000
+            or interaction["pcmChecksum"] <= 0
+            or not (.08 < interaction["pcmRms"] < .2)
+            or interaction["fftCallCount"] != 60
+            or interaction["spectralFrameCount"] != 20
+            or interaction["frequencyBandCount"] != 24
+            or interaction["ribbonVertexCount"] != 480
+            or interaction["keepCount"] != 2
+            or interaction["retainVersion"] != 2
+            or interaction["undoCount"] != 1
+            or interaction["resetCount"] != 1
+            or interaction["retainedStableDuringInputEditCount"] != 5
+            or interaction["retainedStableDuringAnalysisCount"] != 3
+            or interaction["prematureCandidateCount"] != 0
+            or interaction["prematureCommitCount"] != 0
+            or interaction["retainedChangeOutsideKeepCount"] != 0
+            or interaction["analysisCancelCount"] != 0
+            or interaction["drawCount"] <= 0
+            or interaction["canvasCoverage"] < .98
+            or page.locator('#analysis-status').get_attribute('data-state') != "retained"
+            or not page.locator('#keep-analysis').is_disabled()
+            or page.locator('#retained-value').text_content() != "Warning pulse · 1024 FFT · kept v2"
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture three real OfflineAudioContext/FFT analyses with candidate-retained separation and explicit final retention: {interaction!r}")
     elif demo["id"] == "hover-activated-image-marquee-menu":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")

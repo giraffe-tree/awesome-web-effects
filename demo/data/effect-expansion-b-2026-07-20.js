@@ -119,12 +119,12 @@ export const effectExpansion150BatchB = [
     scores: score(18, 19, 19, 15, 15, 10), rationaleZh: '切片仍能重组成原图，手势错位具有强烈且可逆的视觉签名。'
   },
   {
-    id: 'offline-audio-spectral-ribbon', order: 138, name: 'Offline audio spectral ribbon', nameZh: '离线音频频谱丝带', category: 'canvas', sourceUrl: 'https://github.com/WebAudio/web-audio-api',
-    difference: '真实 OfflineAudioContext 生成扫频采样，再由多层曲线读取样本折叠成丝带，不是伪随机均衡器。',
-    behavior: { trigger: 'offline audio render and animation frame', response: 'Rendered oscillator samples bend twelve luminous spectral threads', timing: 'sample-accurate deterministic playback', layer: 'audio visualization canvas' },
-    prompt: '用 OfflineAudioContext 渲染一秒扫频音频，读取真实 channel data 并绘制十二层频谱丝带。',
-    implementation: p5Implementation("const buffer = await offline.startRendering(); new p5(p => { p.draw = () => drawRibbon(p, buffer.getChannelData(0)); });", 'https://github.com/WebAudio/web-audio-api'),
-    scores: score(19, 19, 19, 15, 15, 10), rationaleZh: '音频数据来源可核验，丝带层次与扫频变化形成鲜明艺术结果。'
+    id: 'offline-audio-spectral-ribbon', order: 138, name: 'Human-reviewed offline sound fingerprint', nameZh: '真人审阅的离线声音指纹', category: 'canvas', sourceUrl: 'https://github.com/WebAudio/web-audio-api',
+    difference: '真人选择通知音和 FFT 尺寸后，真实 OfflineAudioContext 才生成确定性 PCM；20 个 Hann-window 帧经 radix-2 FFT 形成 20×24 丝带，候选需显式 Keep 才成为留存结果。',
+    behavior: { trigger: 'trusted profile/FFT controls, explicit Analyze, Keep, Undo, Reset, or keyboard alternative', response: 'Render one inaudible notification candidate offline, derive its PCM/FFT fingerprint, compare it with any retained result, and explicitly keep or revise the decision', timing: 'one finite human-started offline render and FFT transaction with a 240ms minimum readable analysis state, then a static candidate or retained proof', layer: 'full-stage p5 spectral desk, sound parameters, live transaction status, candidate ribbon, retained ribbon, and evidence rail' },
+    prompt: 'Build a full-stage notification-sound QA desk using p5 and the Web Audio OfflineAudioContext. Let trusted controls or keyboard input choose Arrival, Warning, or Focus and 256/512/1024 FFT. Only explicit Analyze may create a fresh 0.75-second offline oscillator/filter/gain graph; read its 12,000 PCM samples, run 20 Hann-window radix-2 FFT frames, fold them into 24 bands, and draw the 20×24 ribbon. Preserve the old retained fingerprint while a new candidate is analyzed; Keep alone changes retention; Undo and Reset revise it. Start completely still and never autoplay, auto-analyze, cycle, rehearse, fall back, or use the preview clock as input.',
+    implementation: p5Implementation("const rendered = await new OfflineAudioContext(1,12000,16000).startRendering(); const ribbon = frames(rendered.getChannelData(0)).map(frame => radix2Fft(hann(frame))); p.noLoop(); p.redraw();", 'https://github.com/WebAudio/web-audio-api'),
+    scores: score(20, 20, 20, 15, 15, 10), rationaleZh: '三种通知音和三档 FFT 由真人选择；每次 Analyze 新建真实离线音频图，12,000 个 PCM 样本经过 20 次 Hann-window radix-2 FFT 汇成 480 个频谱顶点。候选与留存分离，Keep、Undo、Reset 可逆，初始及结果静止且没有任何可听播放。'
   },
   {
     id: 'gravity-well-icon-field', order: 139, name: 'Deep Field gravity lens inspector', nameZh: 'Deep Field 深空重力透镜检查台', category: 'canvas', sourceUrl: 'https://github.com/processing/p5.js',

@@ -2143,6 +2143,55 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.locator('[data-focus-action="next"]').click()
             elif index == 30:
                 page.locator('[data-focus-action="lock"]').click()
+        elif demo["id"] == "magnetic-pixel-sort-field":
+            if index == 2:
+                page.mouse.move(90, 66)
+            elif index == 4:
+                page.mouse.move(98, 68)
+                page.mouse.down()
+            elif index == 5:
+                page.mouse.move(120, 73, steps=2)
+            elif index == 6:
+                page.mouse.move(145, 79, steps=2)
+            elif index == 7:
+                page.mouse.move(170, 71, steps=2)
+            elif index == 8:
+                page.mouse.move(198, 62, steps=2)
+            elif index == 9:
+                page.mouse.up()
+            elif index == 12:
+                page.locator("#field-strength").focus()
+                page.keyboard.press("ArrowRight")
+            elif index == 14:
+                page.locator('[data-sort-action="commit"]').click()
+            elif index == 16:
+                page.locator('[data-sort-action="undo"]').click()
+            elif index == 18:
+                page.locator('[data-sort-action="restore"]').click()
+            elif index == 20:
+                page.mouse.move(200, 100)
+            elif index == 21:
+                page.mouse.down()
+            elif index == 22:
+                page.mouse.move(170, 120, steps=2)
+            elif index == 23:
+                page.mouse.move(145, 112, steps=2)
+            elif index == 24:
+                page.mouse.move(120, 100, steps=2)
+            elif index == 25:
+                page.mouse.up()
+            elif index == 27:
+                page.locator("#sort-surface").focus()
+                page.keyboard.press("ArrowRight")
+            elif index == 28:
+                page.keyboard.press("ArrowDown")
+            elif index == 30:
+                page.keyboard.press("Enter")
+            elif index == 32:
+                page.locator("#field-strength").focus()
+                page.keyboard.press("ArrowLeft")
+            elif index == 34:
+                page.locator('[data-sort-action="commit"]').click()
         elif demo["id"] == "kinetic-paper-fold-map":
             if index == 1:
                 page.mouse.move(280, 100)
@@ -6216,6 +6265,131 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["ready"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture trusted coastal-evidence hover, captured weighted-focus dragging, lock/reset/keyboard reversibility, and exact source-backed power-diagram topology without automatic focus: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "magnetic-pixel-sort-field":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-image-pixel-magnetic-media-recovery"
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["renderer"] != "canvas2d"
+            or interaction["mechanism"] != "same-origin-decoded-image-rgb-drives-p5-local-magnetic-pixel-sorting-axis-clusters-and-media-quality"
+            or interaction["acceptedInputs"] != ["mouse-hover", "captured-mouse-drag", "captured-touch-drag", "captured-pen-drag", "keyboard", "range-control", "visible-buttons"]
+            or not interaction["userInputRequired"]
+            or not interaction["strictTrustedInputGuard"]
+            or not interaction["initialFrameStatic"]
+            or not interaction["initialStaticConfirmed"]
+            or interaction["automaticCycle"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or interaction["previewClockMutationCount"] != 0
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["runtimeAssertCount"] < 2
+            or interaction["inputCount"] < 20
+            or interaction["humanInputCausalityCount"] != interaction["inputCount"]
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["pointerEnterCount"] < 1
+            or interaction["pointerDownCount"] != 2
+            or interaction["pointerMoveCount"] < 12
+            or interaction["pointerUpCount"] != 2
+            or interaction["pointerCancelCount"] != 0
+            or interaction["pointerCaptureCount"] != 2
+            or interaction["pointerCaptureReleaseCount"] != 2
+            or interaction["hoverMutationCount"] < 2
+            or interaction["dragMutationCount"] < 7
+            or interaction["keyboardInputCount"] != 3
+            or interaction["rangeInputCount"] != 2
+            or interaction["buttonActivationCount"] != 4
+            or interaction["commitCount"] != 3
+            or interaction["undoCount"] != 1
+            or interaction["restoreCount"] != 1
+            or interaction["sortPassCount"] < 10
+            or interaction["fieldMutationCount"] < 15
+            or interaction["humanMutationCount"] < 20
+            or interaction["fieldStrength"] != 22
+            or interaction["minimumFieldStrength"] != 22
+            or interaction["maximumFieldStrength"] != 24
+            or interaction["activeSortFieldCount"] < 5
+            or interaction["maximumSortFieldCount"] < interaction["activeSortFieldCount"]
+            or interaction["magnetTravelDistance"] < .5
+            or interaction["visitedFieldCount"] < 10
+            or interaction["sortedPixelCount"] <= 500
+            or interaction["sortedPixelRatio"] <= .03
+            or interaction["dragging"]
+            or interaction["pointerCaptured"]
+            or interaction["activePointerId"] is not None
+            or not interaction["magnetVisible"]
+            or interaction["lastInputKind"] != "button-commit"
+            or interaction["lastInputTrusted"] is not True
+            or interaction["lastPointerType"] != "mouse"
+            or interaction["assetFetchCount"] != 1
+            or interaction["assetResponseStatus"] != 200
+            or not interaction["assetSameOrigin"]
+            or interaction["assetByteLength"] != 269655
+            or interaction["assetSha256"] != "b8b8d852b997df2fca2fb6d0dda7b561c3eca97599d55c09195e6723062c5275"
+            or not interaction["assetShaMatchesExpected"]
+            or not interaction["browserImageDecoded"]
+            or interaction["sourceNaturalWidth"] != 960
+            or interaction["sourceNaturalHeight"] != 640
+            or interaction["sourcePixelCount"] != 614400
+            or interaction["sampledWidth"] != 160
+            or interaction["sampledHeight"] != 90
+            or interaction["sampledPixelCount"] != 14400
+            or interaction["sampledPixelByteLength"] != 57600
+            or len(interaction["sampledPixelSha256"]) != 64
+            or not interaction["sampledPixelSha256"].strip("0")
+            or interaction["distinctSampleColorCount"] <= 5000
+            or interaction["distinctSampleColorCount"] >= 14400
+            or interaction["nonzeroSampleByteCount"] <= 43200
+            or interaction["sampledLumaMinimum"] < 0
+            or interaction["sampledLumaMinimum"] >= 15
+            or interaction["sampledLumaMaximum"] <= 180
+            or interaction["sampledLumaMaximum"] > 255
+            or interaction["sampledLumaMean"] <= 60
+            or interaction["sampledLumaMean"] >= 110
+            or interaction["sampledLumaStdDev"] <= 45
+            or interaction["sampledLumaStdDev"] >= 75
+            or interaction["sampledSaturationMean"] <= .35
+            or interaction["sampledSaturationMean"] >= .7
+            or interaction["chromaticPixelCount"] <= 7000
+            or interaction["chromaticPixelCount"] >= 10000
+            or interaction["chromaticPixelRatio"] <= .45
+            or interaction["chromaticPixelRatio"] >= .72
+            or interaction["horizontalEdgeSampleCount"] != 14310
+            or interaction["verticalEdgeSampleCount"] != 14240
+            or interaction["horizontalEdgeMean"] <= .02
+            or interaction["horizontalEdgeMean"] >= .08
+            or interaction["verticalEdgeMean"] <= .01
+            or interaction["verticalEdgeMean"] >= .06
+            or interaction["edgeEnergyMean"] <= .02
+            or interaction["edgeEnergyMean"] >= .07
+            or interaction["recommendedSortAxis"] != "vertical"
+            or interaction["recommendedSortKey"] != "hue"
+            or interaction["hueClusterCount"] != 5
+            or len(interaction["hueClusterCenters"]) != 5
+            or len(interaction["hueClusterPixelCounts"]) != 5
+            or len(interaction["hueClusterColors"]) != 5
+            or sum(interaction["hueClusterPixelCounts"]) != interaction["chromaticPixelCount"]
+            or interaction["mediaQualityScore"] < 65
+            or interaction["mediaQualityScore"] > 90
+            or len(interaction["mediaQualityConclusion"]) <= 12
+            or not interaction["p5InstanceReady"]
+            or not interaction["p5CanvasReady"]
+            or not interaction["p5ImageDecoded"]
+            or interaction["p5ImageClass"] != "p5.Image"
+            or interaction["p5ImageWidth"] != 960
+            or interaction["p5ImageHeight"] != 640
+            or interaction["p5ImagePixelLength"] != 2457600
+            or interaction["stageCoverageRatio"] <= .98
+            or interaction["canvasCoverageRatio"] <= .98
+            or interaction["p5CompletedDrawCount"] < 20
+            or interaction["renderCount"] < 20
+            or not interaction["ready"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture trusted reversible source-pixel magnetic recovery, exact archive evidence, and a human-preserved final sort without automatic behavior: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "kinetic-paper-fold-map":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

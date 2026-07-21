@@ -1,7 +1,422 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p5.js — Magnetic Pixel-sort Field</title><style>:root{--preview-background:#111217}.expansion-stage{position:absolute;inset:0;overflow:hidden;cursor:crosshair}.expansion-stage canvas{display:block}.library-badge{background:#111217d4}.scene-caption{color:#dce0e99a}</style>  <script type="module" crossorigin src="./assets/magnetic-pixel-sort-field-Iu_VD_yf.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
-  <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
-  <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
-  <link rel="modulepreload" crossorigin href="./assets/expansion-a-utils-anD0k7Pd.js">
-  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage"><div class="expansion-stage" id="expansion-stage" data-preview-mechanism="p5-magnetic-pixel-sort" tabindex="0" aria-label="Move the pointer to magnetically sort the pixel field"></div><span class="library-badge">p5.js · pixel sorting</span><span class="scene-caption">a magnetic threshold reorganizes color by distance</span></main></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>p5.js — Archive Magnetic Pixel Sort</title>
+    <link rel="icon" href="data:," />
+    <style>
+      :root {
+        --preview-background: #0b0c0e;
+        color-scheme: dark;
+      }
+
+      * { box-sizing: border-box; }
+      button, input { font: inherit; }
+
+      .sort-stage {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        background: #0b0c0e;
+        color: #f5f0e4;
+        isolation: isolate;
+        user-select: none;
+      }
+
+      .sort-surface,
+      .sort-surface canvas,
+      .image-grade,
+      .paper-grain {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .sort-surface {
+        z-index: 1;
+        cursor: crosshair;
+        outline: none;
+        touch-action: none;
+      }
+
+      .sort-surface:focus-visible {
+        box-shadow: inset 0 0 0 2px #f3c54f;
+      }
+
+      .sort-surface canvas,
+      .image-grade,
+      .paper-grain { pointer-events: none; }
+
+      .image-grade {
+        z-index: 2;
+        background:
+          linear-gradient(180deg, #090b10a8 0%, transparent 30%, transparent 60%, #090a0ee8 100%),
+          linear-gradient(90deg, #07090cb8 0%, transparent 22%, transparent 78%, #07090ca8 100%);
+      }
+
+      .paper-grain {
+        z-index: 3;
+        opacity: .075;
+        mix-blend-mode: soft-light;
+        background-image: radial-gradient(#fff8 .45px, transparent .62px);
+        background-size: 3px 3px;
+      }
+
+      .topbar {
+        position: absolute;
+        z-index: 6;
+        top: clamp(7px, 2vw, 15px);
+        left: clamp(8px, 2.8vw, 20px);
+        right: clamp(8px, 2.8vw, 20px);
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 10px;
+        pointer-events: none;
+      }
+
+      .identity {
+        display: flex;
+        align-items: center;
+        gap: clamp(5px, 1.2vw, 9px);
+        min-width: 0;
+      }
+
+      .identity-mark {
+        display: grid;
+        width: clamp(21px, 5.2vw, 38px);
+        height: clamp(21px, 5.2vw, 38px);
+        flex: 0 0 auto;
+        place-items: center;
+        border: 1px solid #f3c54f80;
+        border-radius: 50%;
+        background: #101114c7;
+        color: #ffd46a;
+        font: 900 clamp(5px, 1vw, 8px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: -.03em;
+        backdrop-filter: blur(10px);
+      }
+
+      .identity-copy strong,
+      .identity-copy span {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        text-transform: uppercase;
+      }
+
+      .identity-copy strong {
+        font: 900 clamp(5px, .95vw, 7px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .15em;
+      }
+
+      .identity-copy span {
+        margin-top: 4px;
+        color: #f0e8d59c;
+        font: 750 clamp(4px, .76vw, 6px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .12em;
+      }
+
+      .sort-stage .library-badge {
+        position: static;
+        padding: clamp(4px, .9vw, 7px) clamp(6px, 1.25vw, 9px);
+        border-color: #f3c54f45;
+        background: #101114c7;
+        color: #fff8e7;
+        font: 850 clamp(4px, .78vw, 6px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .11em;
+        white-space: nowrap;
+        backdrop-filter: blur(10px);
+      }
+
+      .spectrum {
+        position: absolute;
+        z-index: 7;
+        top: clamp(37px, 10.3vw, 74px);
+        left: clamp(8px, 2.8vw, 20px);
+        display: grid;
+        grid-template-columns: repeat(5, clamp(15px, 3.9vw, 28px));
+        gap: 2px;
+        pointer-events: none;
+      }
+
+      .spectrum i {
+        height: clamp(3px, .7vw, 5px);
+        border-radius: 999px;
+        background: var(--cluster-color, #eee);
+        box-shadow: 0 0 0 1px #fff1;
+      }
+
+      .field-hint {
+        position: absolute;
+        z-index: 6;
+        top: 50%;
+        right: clamp(8px, 2.8vw, 20px);
+        display: grid;
+        max-width: 115px;
+        gap: 4px;
+        transform: translateY(-50%);
+        text-align: right;
+        pointer-events: none;
+      }
+
+      .field-hint span {
+        color: #ffd46a;
+        font: 900 clamp(4px, .8vw, 6px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .14em;
+        text-transform: uppercase;
+      }
+
+      .field-hint strong {
+        color: #fff9ec;
+        font: 600 clamp(8px, 1.75vw, 13px)/1.02 Georgia, "Times New Roman", serif;
+      }
+
+      .console {
+        position: absolute;
+        z-index: 8;
+        left: clamp(8px, 2.8vw, 20px);
+        right: clamp(8px, 2.8vw, 20px);
+        bottom: clamp(7px, 2.5vw, 18px);
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto auto;
+        align-items: end;
+        gap: clamp(7px, 2vw, 16px);
+        pointer-events: none;
+      }
+
+      .console-copy { min-width: 0; }
+
+      .console-copy .eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        color: #ffd46a;
+        font: 900 clamp(4px, .76vw, 6px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .15em;
+        text-transform: uppercase;
+      }
+
+      .console-copy .eyebrow::before {
+        width: 14px;
+        height: 2px;
+        border-radius: 2px;
+        background: currentColor;
+        box-shadow: 0 0 7px currentColor;
+        content: "";
+      }
+
+      .console-copy h1 {
+        overflow: hidden;
+        margin: clamp(3px, .8vw, 6px) 0 0;
+        color: #fff9ed;
+        font: 640 clamp(13px, 4.2vw, 30px)/.84 Georgia, "Times New Roman", serif;
+        letter-spacing: -.05em;
+        text-overflow: ellipsis;
+        text-wrap: nowrap;
+      }
+
+      .console-copy p {
+        overflow: hidden;
+        margin: 5px 0 0;
+        color: #ede5d1a8;
+        font: 760 clamp(4px, .76vw, 6px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .1em;
+        text-overflow: ellipsis;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+
+      .evidence {
+        display: grid;
+        grid-template-columns: repeat(3, auto);
+        gap: clamp(5px, 1.5vw, 12px);
+        padding: clamp(5px, 1vw, 8px) clamp(6px, 1.25vw, 10px);
+        border: 1px solid #f3c54f42;
+        border-radius: clamp(7px, 1.4vw, 11px);
+        background: #101114c8;
+        backdrop-filter: blur(10px);
+      }
+
+      .metric span,
+      .metric strong { display: block; }
+
+      .metric span {
+        color: #e9dfc88b;
+        font: 750 clamp(3px, .62vw, 5px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .11em;
+        text-transform: uppercase;
+      }
+
+      .metric strong {
+        margin-top: 4px;
+        color: #fff7e4;
+        font: 900 clamp(6px, 1.2vw, 9px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .02em;
+      }
+
+      .controls {
+        display: grid;
+        min-width: clamp(90px, 18vw, 132px);
+        gap: 4px;
+        padding: clamp(5px, 1vw, 8px);
+        border: 1px solid #f3c54f42;
+        border-radius: clamp(7px, 1.4vw, 11px);
+        background: #101114d9;
+        pointer-events: auto;
+        backdrop-filter: blur(10px);
+      }
+
+      .strength-row,
+      .button-row {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .strength-row label,
+      .strength-row output {
+        color: #efe5ceaa;
+        font: 850 clamp(3px, .65vw, 5px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+      }
+
+      .strength-row input {
+        min-width: 34px;
+        flex: 1 1 auto;
+        height: 10px;
+        accent-color: #f3c54f;
+        cursor: ew-resize;
+      }
+
+      .button-row button {
+        min-width: 0;
+        height: clamp(17px, 3.2vw, 24px);
+        flex: 1 1 0;
+        padding: 0 clamp(4px, .8vw, 7px);
+        border: 0;
+        border-radius: 999px;
+        background: #f3c54f;
+        color: #15120a;
+        cursor: pointer;
+        font: 900 clamp(4px, .72vw, 6px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .07em;
+        text-transform: uppercase;
+      }
+
+      .button-row button[data-sort-action="undo"] {
+        background: #ffffff13;
+        color: #fff7e4;
+      }
+
+      .button-row button:hover { filter: brightness(1.12); }
+      .button-row button:focus-visible,
+      .strength-row input:focus-visible { outline: 1px solid #fff; outline-offset: 1px; }
+      .button-row button:disabled { cursor: default; opacity: .38; }
+
+      .runtime-ledger {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+      }
+
+      @media (max-width: 430px), (max-height: 230px) {
+        .field-hint { display: none; }
+        .console { grid-template-columns: minmax(0, 1fr) auto; }
+        .evidence { display: none; }
+        .console-copy { grid-row: 1; grid-column: 1; }
+        .controls { grid-row: 1; grid-column: 2; }
+      }
+
+      @media (max-width: 210px), (max-height: 110px) {
+        .topbar { top: 5px; left: 6px; right: 6px; }
+        .identity-mark { width: 18px; height: 18px; font-size: 4px; }
+        .identity-copy, .sort-stage .library-badge, .spectrum, .evidence, .strength-row { display: none; }
+        .console { left: 6px; right: 6px; bottom: 5px; gap: 4px; }
+        .console-copy h1 { margin-top: 2px; font-size: 8px; }
+        .console-copy p { display: none; }
+        .controls { min-width: 42px; grid-row: 1; padding: 2px; border-radius: 999px; }
+        .button-row { gap: 2px; }
+        .button-row button { width: 18px; height: 16px; padding: 0; font-size: 0; }
+        .button-row button::after { font-size: 6px; }
+        .button-row button[data-sort-action="commit"]::after { content: "+"; }
+        .button-row button[data-sort-action="undo"]::after { content: "↶"; }
+        .button-row button[data-sort-action="restore"]::after { content: "×"; }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/magnetic-pixel-sort-field-FOZx4bfr.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+    <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
+    <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main id="sort-stage" class="preview-stage sort-stage" data-preview-mechanism="p5-image-pixel-magnetic-sort-field">
+      <div
+        id="sort-surface"
+        class="sort-surface"
+        tabindex="0"
+        role="application"
+        aria-label="Archive magnetic pixel sorter. Move to preview, drag to sort, use arrow keys to move the field, Enter to commit, Backspace to undo, and Escape to restore."
+      ></div>
+      <div class="image-grade" aria-hidden="true"></div>
+      <div class="paper-grain" aria-hidden="true"></div>
+
+      <header class="topbar">
+        <div class="identity">
+          <span class="identity-mark">M104</span>
+          <span class="identity-copy">
+            <strong>Chromatic archive unit</strong>
+            <span>Scan 07 · same-origin source</span>
+          </span>
+        </div>
+        <span class="library-badge">p5.js · decoded pixel field</span>
+      </header>
+
+      <div class="spectrum" aria-label="Five color clusters sampled from the source image">
+        <i data-cluster="0"></i><i data-cluster="1"></i><i data-cluster="2"></i><i data-cluster="3"></i><i data-cluster="4"></i>
+      </div>
+
+      <aside class="field-hint" aria-hidden="true">
+        <span>Human field input</span>
+        <strong>Hover to inspect.<br />Drag to preserve.</strong>
+      </aside>
+
+      <section class="console" aria-label="Magnetic sort evidence and controls">
+        <div class="console-copy">
+          <span class="eyebrow" data-sort-status>Source field ready</span>
+          <h1>Magnetic media recovery</h1>
+          <p data-sort-conclusion>Pixel evidence is being decoded</p>
+        </div>
+
+        <div class="evidence" aria-label="Pixel evidence">
+          <span class="metric"><span>Axis</span><strong data-reading="axis">—</strong></span>
+          <span class="metric"><span>Clusters</span><strong data-reading="clusters">—</strong></span>
+          <span class="metric"><span>Quality</span><strong data-reading="quality">—</strong></span>
+        </div>
+
+        <div class="controls">
+          <div class="strength-row">
+            <label for="field-strength">Field</label>
+            <input id="field-strength" type="range" min="12" max="34" value="23" step="1" aria-label="Magnetic field strength" />
+            <output for="field-strength" data-strength-output>23</output>
+          </div>
+          <div class="button-row">
+            <button type="button" data-sort-action="commit">Commit</button>
+            <button type="button" data-sort-action="undo" disabled>Undo</button>
+            <button type="button" data-sort-action="restore">Restore</button>
+          </div>
+        </div>
+      </section>
+
+      <output id="runtime-ledger" class="runtime-ledger" aria-live="polite"></output>
+    </main>
+
+  </body>
+</html>

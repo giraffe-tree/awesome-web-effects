@@ -1695,41 +1695,41 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "pixel-grid-content-dissolve",
-    "name": "Pixel-grid content dissolve",
-    "nameZh": "像素网格内容溶解",
+    "name": "Semantic field-dispatch pixel dissolve",
+    "nameZh": "语义野外日志像素消解",
     "category": "transition",
     "sourceUrl": "https://github.com/DavidHDev/react-bits/blob/main/public/r/PixelTransition-TS-TW.json",
-    "difference": "离散 DOM 单元波把任意内容树切到另一内容；现有深度溶解按空间深度、位移切换按纹理。",
+    "difference": "一条量化的 p5 像素边界在两棵完整、可访问的 DOM 内容树之间推进：标题、观测数据、现场说明、图像与主题一起更换；不是在同一张渐变卡上盖 mosaic filter。",
     "behavior": {
-      "trigger": "hover/click",
-      "response": "Propagate a discrete cell wave that swaps two content trees",
-      "timing": "sequenced grid mask transition",
-      "layer": "card content surface"
+      "trigger": "trusted captured mouse/touch/pen drag, toggle button, or keyboard command",
+      "response": "Move one stepped pixel boundary between the North Atlantic tidal dispatch and South Basin dune-array dispatch, replacing the complete semantic tree",
+      "timing": "direct drag scrub or finite input-owned settle/cancel",
+      "layer": "full-stage paired DOM trees + p5 image-sampled pixel band"
     },
     "implementation": {
       "projectId": "processing-p5-js",
       "projectUrl": "https://github.com/processing/p5.js",
       "library": "p5@2.3.0",
       "renderer": "canvas2d",
-      "snippet": "cells.forEach(cell => drawCell(p, cell, smoothstep(cell.delay, cell.delay + 0.22, progress)));",
+      "snippet": "targetTree.style.clipPath = steppedBoundary(progress); drawWave(sample(sourceImage, targetImage, cell, progress));",
       "referenceUrl": "https://github.com/DavidHDev/react-bits/blob/main/public/r/PixelTransition-TS-TW.json"
     },
     "scores": {
-      "creativity": 18,
-      "artDirection": 19,
-      "motion": 19,
+      "creativity": 20,
+      "artDirection": 20,
+      "motion": 20,
       "clarity": 15,
       "inspiration": 15,
-      "evidence": 9,
-      "total": 95
+      "evidence": 10,
+      "total": 100
     },
-    "rationaleZh": "像素单元的离散传播与其他连续图像转场区分明显。",
+    "rationaleZh": "北大西洋潮汐实验室与南部盆地沙丘阵列拥有不同标题、主题、布局、三组观测数据和原创现场图；拖拽时阶梯 clip 边界与 p5 采样像素带共同替换整棵语义树，完成、取消、打断和反向切换都能从可信输入与状态计数核验。首帧静止且无自动循环、播放、fallback、合成输入或录制时钟驱动。",
     "batch": "B",
-    "demo": "档案照片按棋盘波溶解成排版说明，再反向恢复。",
-    "capture": "hover 触发→停在 50% 网格峰值→完成→leave 反向。",
+    "demo": "在 Latitude Journal 的两份野外日志间切换：潮汐站记录海况、盐度与周期，沙丘阵列记录表温、风速与电量；真人可拖住像素边界检查中间态，也可用按钮或键盘完整切换并返回。",
+    "capture": "首帧静止→按钮切到 Dune array→键盘 Home 返回→一次短拖取消→一次长拖完成→方向键分步推进→再次按钮切换；断言两棵完整 DOM 语义树、两张 960×640 原创图的字节/SHA/像素采样、真实 pointer capture、p5 像素带、完成/取消/打断和严格可信输入。",
     "risk": {
       "level": "high",
-      "detail": "许可未明；必须显示真实单元传播，不可用 CSS mosaic filter 替代。"
+      "detail": "参考源码许可未明；本地实现必须保留真实分格传播与两棵独立语义树，不可退化为 CSS mosaic filter、同内容换色或开屏自动往返。原创现场图是虚构地点，必须保留资产披露。"
     },
     "observedImplementation": {
       "projectId": "davidhdev-react-bits",

@@ -1,8 +1,489 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p5.js — Pixel Grid Content Dissolve</title><style>
-:root{--preview-background:#13151b}#pixel-host{position:absolute;inset:0;cursor:pointer}#pixel-host canvas{width:100%!important;height:100%!important}.pixel-copy{position:absolute;z-index:3;left:14px;top:47px;color:white;pointer-events:none}.pixel-copy small{font:800 6px/1 ui-monospace;letter-spacing:.12em}.pixel-copy h1{width:102px;margin:9px 0 0;font:950 20px/.82 system-ui;letter-spacing:-.06em}.pixel-status{position:absolute;z-index:3;right:12px;bottom:11px;color:#e5e5ee9b;font:700 6px/1 ui-monospace;letter-spacing:.1em}.library-badge{background:#12141ac4}.scene-caption{display:none}</style>  <script type="module" crossorigin src="./assets/pixel-grid-content-dissolve-PiN0Yu23.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
-  <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
-  <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
-  <link rel="modulepreload" crossorigin href="./assets/batch-b-utils-CmA_lC0Z.js">
-  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage" data-preview-mechanism="p5-pixel-dissolve"><div id="pixel-host" role="button" tabindex="0" aria-label="Click or press Enter to reverse the pixel dissolve"></div><section class="pixel-copy"><small>GRID / 28×16</small><h1>CONTENT BECOMES SIGNAL.</h1></section><span class="pixel-status" id="pixel-status">SOLID 100%</span><span class="library-badge">p5.js · pixel dissolve</span></main></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>p5.js — Human-driven Semantic Content Dissolve</title>
+    <style>
+      :root {
+        --preview-background: #071014;
+        color-scheme: dark;
+      }
+
+      button { font: inherit; }
+
+      .dissolve-stage {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        background: #071014;
+        cursor: ew-resize;
+        outline: none;
+        touch-action: none;
+        user-select: none;
+      }
+
+      .dissolve-stage:focus-visible {
+        box-shadow: inset 0 0 0 2px #a9f1ec;
+      }
+
+      .content-tree {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        contain: paint;
+        color: #f3f7f4;
+        will-change: clip-path;
+      }
+
+      .content-tree > img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        pointer-events: none;
+      }
+
+      .tree-tidal > img { object-position: 54% 50%; }
+      .tree-dune > img { object-position: 55% 52%; }
+
+      .tree-atmosphere {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+      }
+
+      .tree-tidal .tree-atmosphere {
+        background:
+          linear-gradient(90deg, #071117f2 0%, #071117c7 35%, #07111745 64%, #07111719 100%),
+          linear-gradient(0deg, #061116db 0%, transparent 44%, #0710145e 100%);
+      }
+
+      .tree-dune .tree-atmosphere {
+        background:
+          linear-gradient(90deg, #20130df0 0%, #20130dc4 34%, #29170c3d 65%, #28160a0f 100%),
+          linear-gradient(0deg, #24150ddd 0%, transparent 45%, #26170d52 100%);
+      }
+
+      .tree-atmosphere::after {
+        position: absolute;
+        inset: 0;
+        background-image: radial-gradient(#fff2 .55px, transparent .65px);
+        background-size: 3px 3px;
+        mix-blend-mode: soft-light;
+        opacity: .2;
+        content: "";
+      }
+
+      .journal-nav {
+        position: absolute;
+        z-index: 2;
+        left: 20px;
+        right: 20px;
+        top: 33px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        font: 850 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .14em;
+        text-transform: uppercase;
+      }
+
+      .journal-lockup {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        white-space: nowrap;
+      }
+
+      .journal-mark {
+        display: grid;
+        width: 18px;
+        height: 18px;
+        place-items: center;
+        border: 1px solid currentColor;
+        border-radius: 50%;
+        font-size: 5px;
+        letter-spacing: 0;
+      }
+
+      .tree-tidal .journal-nav { color: #b9d5d7; }
+      .tree-dune .journal-nav { color: #f2d6b6; }
+      .journal-route { opacity: .7; white-space: nowrap; }
+
+      .dispatch {
+        position: absolute;
+        z-index: 2;
+        left: 20px;
+        bottom: 42px;
+        width: min(356px, 55vw);
+      }
+
+      .dispatch-kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        margin-bottom: 10px;
+        font: 900 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .15em;
+        text-transform: uppercase;
+      }
+
+      .dispatch-kicker::before {
+        width: 18px;
+        height: 1px;
+        background: currentColor;
+        content: "";
+      }
+
+      .tree-tidal .dispatch-kicker { color: #89e2e3; }
+      .tree-dune .dispatch-kicker { color: #f3a65b; }
+
+      .dispatch h1 {
+        max-width: 335px;
+        margin: 0;
+        font: 650 clamp(42px, 7.8vw, 68px)/.77 Georgia, "Times New Roman", serif;
+        letter-spacing: -.074em;
+        text-wrap: balance;
+      }
+
+      .dispatch h1 em { font-weight: 500; }
+      .tree-tidal .dispatch h1 em { color: #9ee8e6; }
+      .tree-dune .dispatch h1 em { color: #f5ac63; }
+
+      .dispatch-deck {
+        max-width: 276px;
+        margin: 12px 0 0;
+        color: #d2ddda;
+        font: 550 7px/1.5 system-ui, sans-serif;
+        letter-spacing: .015em;
+      }
+
+      .tree-dune .dispatch-deck { color: #f2dfcb; }
+
+      .observations {
+        display: flex;
+        gap: 20px;
+        margin: 14px 0 0;
+      }
+
+      .observations div { min-width: 52px; }
+      .observations dt {
+        color: #9aa9a7;
+        font: 800 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .13em;
+        text-transform: uppercase;
+      }
+
+      .observations dd {
+        margin: 4px 0 0;
+        color: #f5f8f5;
+        font: 850 10px/1 system-ui, sans-serif;
+        letter-spacing: -.035em;
+      }
+
+      .tree-dune .observations dt { color: #d1b497; }
+
+      .field-card {
+        position: absolute;
+        z-index: 2;
+        right: 20px;
+        bottom: 42px;
+        width: 116px;
+        padding: 9px 10px;
+        border: 1px solid #fff3;
+        border-radius: 8px;
+        background: #07101482;
+        box-shadow: 0 12px 28px #0004;
+        backdrop-filter: blur(8px);
+      }
+
+      .tree-dune .field-card { background: #2a160c88; }
+
+      .field-card strong,
+      .field-card span {
+        display: block;
+        text-transform: uppercase;
+      }
+
+      .field-card strong {
+        color: #f3f6f3;
+        font: 900 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .12em;
+      }
+
+      .field-card span {
+        margin-top: 7px;
+        color: #b8c9c8;
+        font: 750 4px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .08em;
+      }
+
+      .tree-dune .field-card span { color: #edcfad; }
+
+      .content-footer {
+        position: absolute;
+        z-index: 2;
+        left: 20px;
+        right: 20px;
+        bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #b6c4c2;
+        font: 850 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+      }
+
+      .content-footer::before {
+        width: 24px;
+        height: 1px;
+        background: currentColor;
+        content: "";
+      }
+
+      .tree-dune .content-footer { color: #e0c2a1; }
+
+      .pixel-wave-host {
+        position: absolute;
+        z-index: 6;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+      }
+
+      .pixel-wave-host canvas {
+        width: 100% !important;
+        height: 100% !important;
+      }
+
+      .tree-toggle {
+        position: absolute;
+        z-index: 10;
+        right: 20px;
+        top: 54px;
+        min-height: 29px;
+        padding: 0 11px;
+        border: 1px solid #c6e7e25e;
+        border-radius: 999px;
+        background: #071014c9;
+        color: #f4f7f4;
+        box-shadow: 0 9px 24px #0005;
+        font-size: 5px;
+        font-weight: 900;
+        letter-spacing: .11em;
+        text-transform: uppercase;
+        backdrop-filter: blur(10px);
+        cursor: pointer;
+        touch-action: manipulation;
+      }
+
+      .tree-toggle::after {
+        margin-left: 7px;
+        color: #94e6e2;
+        content: "→";
+      }
+
+      .dissolve-stage[data-active-tree="dune"] .tree-toggle {
+        border-color: #f1b77566;
+        background: #24150dcc;
+      }
+
+      .dissolve-stage[data-active-tree="dune"] .tree-toggle::after {
+        color: #f2ac64;
+        content: "←";
+      }
+
+      .tree-toggle:focus-visible {
+        outline: 2px solid #f6f0e8;
+        outline-offset: 2px;
+      }
+
+      .dissolve-rail {
+        position: absolute;
+        z-index: 9;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 3px;
+        overflow: hidden;
+        background: #d7e7e220;
+        pointer-events: none;
+      }
+
+      .dissolve-rail i {
+        display: block;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, #88e7e2, #f0eee5 54%, #eea35b);
+        transform: scaleX(0);
+        transform-origin: left;
+      }
+
+      .gesture-hint,
+      .dissolve-readout {
+        position: absolute;
+        z-index: 9;
+        pointer-events: none;
+        font: 850 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+      }
+
+      .gesture-hint {
+        left: 50%;
+        bottom: 16px;
+        color: #e7eeeb9c;
+        transform: translateX(-50%);
+      }
+
+      .dissolve-readout {
+        right: 20px;
+        bottom: 16px;
+        color: #f0f4f0c2;
+      }
+
+      .library-badge {
+        z-index: 12;
+        border-color: #b9d9d543;
+        background: #071014c9;
+        color: #eef6f2;
+      }
+
+      .scene-caption { display: none; }
+
+      .sr-only {
+        position: absolute !important;
+        width: 1px !important;
+        height: 1px !important;
+        padding: 0 !important;
+        margin: -1px !important;
+        overflow: hidden !important;
+        clip: rect(0, 0, 0, 0) !important;
+        white-space: nowrap !important;
+        border: 0 !important;
+      }
+
+      @media (max-width: 380px) and (min-height: 121px) {
+        .journal-nav { left: 10px; right: 10px; top: 28px; font-size: 3.5px; }
+        .journal-mark { width: 13px; height: 13px; font-size: 3.5px; }
+        .journal-route { display: none; }
+        .tree-toggle { right: 10px; top: 27px; min-height: 23px; padding: 0 8px; font-size: 4px; }
+        .dispatch { left: 10px; bottom: 24px; width: 61vw; }
+        .dispatch-kicker { gap: 5px; margin-bottom: 6px; font-size: 3.5px; }
+        .dispatch-kicker::before { width: 10px; }
+        .dispatch h1 { max-width: 185px; font-size: clamp(25px, 10vw, 35px); }
+        .dispatch-deck { max-width: 170px; margin-top: 7px; font-size: 4px; }
+        .observations { gap: 9px; margin-top: 8px; }
+        .observations div { min-width: 34px; }
+        .observations dt { font-size: 2.5px; }
+        .observations dd { margin-top: 3px; font-size: 6px; }
+        .field-card { right: 10px; bottom: 24px; width: 73px; padding: 6px; border-radius: 5px; }
+        .field-card strong { font-size: 3px; }
+        .field-card span { margin-top: 4px; font-size: 2.5px; }
+        .content-footer { left: 10px; right: 10px; bottom: 9px; font-size: 2.5px; }
+        .content-footer::before { width: 13px; }
+        .gesture-hint { bottom: 9px; font-size: 2.5px; }
+        .dissolve-readout { right: 10px; bottom: 9px; font-size: 2.5px; }
+        .scene-caption { display: none; }
+      }
+
+      @media (max-width: 220px), (max-height: 120px) {
+        .journal-nav { left: 4px; right: 4px; top: 4px; font-size: 2.5px; }
+        .journal-lockup { gap: 3px; }
+        .journal-mark { width: 8px; height: 8px; font-size: 2.5px; }
+        .journal-route { display: none; }
+        .tree-toggle { top: 4px; right: 4px; width: 15px; min-height: 13px; padding: 0; font-size: 0; }
+        .tree-toggle::before { font-size: 5px; content: "↔"; }
+        .tree-toggle::after { display: none; }
+        .dispatch { left: 4px; bottom: 9px; width: 63%; }
+        .dispatch-kicker { gap: 3px; margin-bottom: 3px; font-size: 2.5px; }
+        .dispatch-kicker::before { width: 6px; }
+        .dispatch h1 { max-width: 92px; font-size: 15px; }
+        .dispatch-deck { display: none; }
+        .observations { gap: 6px; margin-top: 4px; }
+        .observations div { min-width: 22px; }
+        .observations div:nth-child(n+2) { display: none; }
+        .observations dt { font-size: 2px; }
+        .observations dd { margin-top: 2px; font-size: 4px; }
+        .field-card, .content-footer, .gesture-hint, .dissolve-readout, .library-badge, .scene-caption { display: none; }
+        .dissolve-rail { height: 1px; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .pixel-wave-host { display: none; }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/pixel-grid-content-dissolve-Cza_2QwM.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+    <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
+    <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main class="preview-stage" aria-label="Latitude field-journal dispatch switcher">
+      <div id="dissolve-stage" class="dissolve-stage" data-active-tree="tidal" data-phase="idle" data-progress="0.0000" data-preview-mechanism="p5-semantic-content-tree-pixel-wave" role="group" tabindex="0" aria-describedby="dissolve-instructions" aria-label="Switch between the North Atlantic tidal lab and the South Basin dune array field dispatches">
+        <section id="tidal-tree" class="content-tree tree-tidal" data-tree-id="tidal" data-theme="north-atlantic-cyan" data-layout="coastal-field-dispatch" data-subject="tidal-observation-cabin" aria-label="North Atlantic tidal laboratory dispatch">
+          <img data-asset-key="tidal" alt="A translucent cyan tidal research cabin on a misty black volcanic shoreline" />
+          <div class="tree-atmosphere" aria-hidden="true"></div>
+          <header class="journal-nav">
+            <span class="journal-lockup"><span class="journal-mark">L</span><strong>Latitude Journal</strong> / Field notes</span>
+            <span class="journal-route">North Atlantic · Station 04 · 64.14° N</span>
+          </header>
+          <article class="dispatch">
+            <span class="dispatch-kicker">Dispatch 04 · Tidal systems</span>
+            <h1>Read the<br /><em>tide line.</em></h1>
+            <p class="dispatch-deck">A low coastal cabin turns swell, salinity and basalt temperature into an open daily record.</p>
+            <dl class="observations" aria-label="Tidal lab observations">
+              <div><dt>Swell</dt><dd>8.4 m</dd></div>
+              <div><dt>Water</dt><dd>12°C</dd></div>
+              <div><dt>Cycle</dt><dd>06:18</dd></div>
+            </dl>
+          </article>
+          <aside class="field-card" aria-label="Tidal station field-note status">
+            <strong>Field note 04</strong>
+            <span>Open record<br />14 samples<br />Signal stable</span>
+          </aside>
+          <footer class="content-footer">Continue to station log / 04</footer>
+        </section>
+
+        <section id="dune-tree" class="content-tree tree-dune" data-tree-id="dune" data-theme="south-basin-amber" data-layout="desert-array-dispatch" data-subject="solar-sail-sensor-array" aria-label="South Basin dune array dispatch" aria-hidden="true" inert>
+          <img data-asset-key="dune" alt="A burnt-orange solar sail and sensor array on a pale desert salt plain" />
+          <div class="tree-atmosphere" aria-hidden="true"></div>
+          <header class="journal-nav">
+            <span class="journal-lockup"><span class="journal-mark">L</span><strong>Latitude Journal</strong> / Field notes</span>
+            <span class="journal-route">South Basin · Array 11 · 23.42° S</span>
+          </header>
+          <article class="dispatch">
+            <span class="dispatch-kicker">Dispatch 11 · Solar systems</span>
+            <h1>Follow the<br /><em>heat map.</em></h1>
+            <p class="dispatch-deck">A tensile shade structure keeps a remote instrument array reading wind, heat and dust through the dry season.</p>
+            <dl class="observations" aria-label="Dune array observations">
+              <div><dt>Surface</dt><dd>41°C</dd></div>
+              <div><dt>Wind</dt><dd>19 km/h</dd></div>
+              <div><dt>Charge</dt><dd>94%</dd></div>
+            </dl>
+          </article>
+          <aside class="field-card" aria-label="Dune array field-note status">
+            <strong>Field note 11</strong>
+            <span>Live array<br />08 sensors<br />Dust rising</span>
+          </aside>
+          <footer class="content-footer">Continue to array log / 11</footer>
+        </section>
+
+        <div id="pixel-wave-host" class="pixel-wave-host" aria-hidden="true"></div>
+        <div class="dissolve-rail" aria-hidden="true"><i id="dissolve-progress"></i></div>
+        <button id="tree-toggle" class="tree-toggle" type="button" data-control="true" aria-label="Open the South Basin dune array dispatch">Dune array</button>
+        <span class="gesture-hint" aria-hidden="true">Drag the field →</span>
+        <output id="dissolve-readout" class="dissolve-readout" aria-live="polite">Tidal lab · ready</output>
+      </div>
+      <span class="library-badge">p5.js · semantic pixel wave</span>
+      <span class="scene-caption">drag, click or use arrow keys — one pixel boundary replaces the complete dispatch tree</span>
+      <p id="dissolve-instructions" class="sr-only">Drag right from the tidal lab or left from the dune array. You can also press Enter, Space, Home, End, or the arrow keys.</p>
+      <output id="runtime-ledger" class="sr-only" aria-live="off"></output>
+    </main>
+  </body>
+</html>

@@ -1868,6 +1868,47 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("End")
             elif index == 35:
                 page.wait_for_timeout(350)
+        elif demo["id"] == "pixel-grid-content-dissolve":
+            if index == 2:
+                page.locator('#tree-toggle').click()
+            elif index in (3, 4):
+                page.wait_for_timeout(400)
+            elif index == 6:
+                page.locator('#dissolve-stage').focus()
+                page.keyboard.press("Home")
+            elif index in (7, 8):
+                page.wait_for_timeout(400)
+            elif index == 10:
+                page.mouse.move(80, 92)
+                page.mouse.down()
+            elif index == 11:
+                page.mouse.move(115, 92, steps=4)
+            elif index == 12:
+                page.mouse.up()
+            elif index in (13, 14):
+                page.wait_for_timeout(360)
+            elif index == 16:
+                page.mouse.move(58, 105)
+                page.mouse.down()
+            elif index in (17, 18):
+                page.mouse.move(268, 105, steps=5)
+            elif index == 19:
+                page.mouse.up()
+            elif index in (20, 21):
+                page.wait_for_timeout(400)
+            elif 22 <= index <= 29:
+                page.locator('#dissolve-stage').focus()
+                page.keyboard.press("ArrowLeft")
+            elif index == 30:
+                page.wait_for_timeout(240)
+            elif index == 31:
+                page.keyboard.press("ArrowLeft")
+            elif index == 32:
+                page.wait_for_timeout(360)
+            elif index == 34:
+                page.locator('#tree-toggle').click()
+            elif index == 35:
+                page.wait_for_timeout(760)
         elif demo["id"] == "scroll-controlled-video-scrubbing":
             if index in (2, 4, 6, 8, 10, 12, 14, 15):
                 page.mouse.wheel(0, 520)
@@ -4056,6 +4097,62 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["overlayDrawCount"] < 8
         ):
             raise RuntimeError(f"{demo['id']} did not capture trusted wheel, outward boundary release, reset, two opposed captured drags, chapter and keyboard selection against one real seekable local growth video: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "pixel-grid-content-dissolve":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-semantic-content-tree-replacement"
+            or interaction["acceptedInputs"] != ["mouse", "touch", "pen", "keyboard", "button-control"]
+            or interaction["automaticCycle"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticFallback"]
+            or interaction["captureClockDriven"]
+            or interaction["syntheticInputDispatch"]
+            or not interaction["userRequestRequired"]
+            or not interaction["initialFrameStatic"]
+            or not interaction["renderIgnoresPreviewClock"]
+            or not interaction["fullStagePointerSurface"]
+            or interaction["semanticTreeCount"] != 2
+            or interaction["semanticTreeIds"] != ["tidal", "dune"]
+            or min(interaction["semanticNodeCounts"]) < 8
+            or len(interaction["treeEvidence"]) != 2
+            or interaction["currentTreeIndex"] != 1
+            or interaction["activeTreeId"] != "dune"
+            or interaction["transitionActive"]
+            or interaction["phase"] != "settled"
+            or interaction["waveProgress"] != 0
+            or interaction["completedSwapCount"] < 5
+            or interaction["cancelledSwapCount"] < 1
+            or interaction["completionBoundaryReachedCount"] < 4
+            or interaction["transitionRequestCount"] < 6
+            or interaction["inputCount"] < 14
+            or interaction["pointerDownCount"] != 2
+            or interaction["pointerMoveCount"] < 8
+            or interaction["pointerReleaseCount"] != 2
+            or interaction["pointerCaptureCount"] != 2
+            or interaction["pointerReleaseCaptureCount"] != 2
+            or interaction["pointerCaptured"]
+            or interaction["buttonActivationCount"] != 2
+            or interaction["keyboardInputCount"] < 10
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["lastInputTrusted"] is not True
+            or interaction["animationActive"]
+            or interaction["inputOwnedAnimationCount"] < 5
+            or interaction["inputOwnedAnimationFrameCount"] < 5
+            or interaction["inputOwnedAnimationActive"]
+            or interaction["assetEvidenceReady"] is not True
+            or len(interaction["assetEvidence"]) != 2
+            or interaction["distinctAssetChecksumCount"] != 2
+            or interaction["distinctPixelSampleCount"] != 2
+            or interaction["p5DecodedAssetCount"] != 2
+            or interaction["p5AssetFailureCount"] != 0
+            or interaction["p5DrawCount"] < 8
+            or interaction["pixelBandCellCount"] != 0
+            or interaction["pixelSampleCount"] <= 0
+            or interaction["previewRenderCallCount"] < 30
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture two complete semantic content-tree replacements, one cancelled captured drag, stepped keyboard scrubbing, p5 image-sampled pixel evidence, and strict trusted human input: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "four-corner-hover-crop-marks":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         if (

@@ -1600,6 +1600,11 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.up()
             elif 21 <= index <= 27:
                 page.wait_for_timeout(80)
+        elif demo["id"] == "layered-staggered-full-screen-menu":
+            if index == 3:
+                page.locator('#menu-toggle').click()
+            elif index == 15:
+                page.locator('.menu-link[data-section="field-notes"]').click()
         elif demo["id"] == "gooey-pixel-cursor-wake":
             if index == 3:
                 box = page.locator('#pixel-wake-host').bounding_box()
@@ -5867,6 +5872,87 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not (.35 <= interaction["geometryCoverageY"] <= .9)
         ):
             raise RuntimeError(f"{demo['id']} did not capture real slow-hold and fast-pass rental decisions with a retained card-order takeover: {interaction!r}")
+    elif demo["id"] == "layered-staggered-full-screen-menu":
+        interaction = page.evaluate("window.__LAYERED_EDITORIAL_MENU_STATE__")
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        if (
+            not assertion
+            or interaction["task"] != "human-opens-north-common-index-selects-field-notes-and-receives-retained-page-result"
+            or interaction["claimedLibrary"] != "motion@12.42.2"
+            or interaction["mechanism"] != "trusted-toggle-drives-three-paused-motion-underplates-and-staggered-links-then-a-trusted-link-selection-reverses-the-stack-before-committing-the-page-result"
+            or interaction["assetStrategy"] != "imagegen-editorial-cover-is-rendered-in-menu-preview-and-retained-selected-page-result"
+            or interaction["imageSourceType"] != "imagegen-built-in"
+            or interaction["imagePublishedSha256"] != "ec7ed6b2553ea86cb9c863d84d4faa3d347cdd7de7ddb63ff8b33013de3c29c5"
+            or interaction["imageNaturalWidth"] != 800
+            or interaction["imageNaturalHeight"] != 1000
+            or interaction["imageElementCount"] != 2
+            or not interaction["imageLoaded"]
+            or not interaction["imageUsedInClosedPage"]
+            or not interaction["imageUsedInMenuPreview"]
+            or interaction["causality"] != "trusted-human-input-only"
+            or interaction["automaticPlayback"]
+            or interaction["automaticOpen"]
+            or interaction["automaticClose"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or not interaction["previewClockOnlyAdvancesHumanStartedTransition"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["inputCount"] != 2
+            or interaction["trustedInputCount"] != 2
+            or interaction["pointerInputCount"] != 2
+            or interaction["keyboardInputCount"] != 0
+            or interaction["toggleInputCount"] != 1
+            or interaction["selectionInputCount"] != 1
+            or interaction["navigationInputCount"] != 0
+            or interaction["escapeInputCount"] != 0
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["untrustedMutationCount"] != 0
+            or interaction["lastInputKind"] != "link-pointer-select"
+            or interaction["lastInputTrusted"] is not True
+            or interaction["menuProgress"] != 0
+            or interaction["targetProgress"] != 0
+            or interaction["transitionFrom"] != 1
+            or interaction["transitionTo"] != 0
+            or interaction["transitionActive"]
+            or interaction["layerProgress"] != [0, 0, 0]
+            or interaction["itemProgress"] != [0, 0, 0, 0]
+            or interaction["previewProgress"] != 0
+            or interaction["phase"] != "closed-selected"
+            or interaction["result"] != "field-notes-selected-and-retained"
+            or not interaction["resultRetained"]
+            or interaction["pendingSelection"] is not None
+            or interaction["selectedSection"] != "field-notes"
+            or interaction["selectedTitle"] != "Field Notes"
+            or interaction["openStartCount"] != 1
+            or interaction["openCompletionCount"] != 1
+            or interaction["closeStartCount"] != 1
+            or interaction["closeCompletionCount"] != 1
+            or interaction["reversalCount"] != 0
+            or interaction["withdrawalCount"] != 0
+            or interaction["selectionAttemptCount"] != 1
+            or interaction["selectionCommitCount"] != 1
+            or interaction["prematureCommitCount"] != 0
+            or len(interaction["transitionRecords"]) != 2
+            or not all(record["trusted"] and record["completed"] for record in interaction["transitionRecords"])
+            or interaction["transitionFrameCount"] < 10
+            or interaction["linkOrder"] != ["field-notes", "dispatches", "material-index", "about"]
+            or not interaction["linkOrderVerified"]
+            or not interaction["initialStillVerified"]
+            or not interaction["controlsReady"]
+            or not interaction["fontsReady"]
+            or not interaction["ready"]
+            or not interaction["fullStageGeometryVerified"]
+            or any(ratio < .995 for ratio in interaction["layerCoverageRatios"])
+            or len(interaction["imagePublishedSha256"]) != 64
+            or page.locator('#page-kicker').text_content() != "FIELD NOTES / SELECTED"
+            or page.locator('#page-title').text_content() != "Field studies, kept in motion."
+            or page.locator('#page-deck').text_content() != "The section is now retained behind the closed index, ready for reading."
+            or page.locator('#result-label').text_content() != "FIELD NOTES · READY"
+            or page.locator('#issue-result').get_attribute('data-selected') != "true"
+            or page.locator('#full-menu').get_attribute('aria-hidden') != "true"
+            or page.locator('#menu-toggle').get_attribute('aria-expanded') != "false"
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a real delayed-commit NORTH/COMMON Field Notes navigation transaction: {interaction!r}")
     elif demo["id"] == "gooey-pixel-cursor-wake":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")

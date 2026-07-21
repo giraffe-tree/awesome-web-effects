@@ -1,0 +1,12 @@
+{
+  "demoId": "layered-staggered-full-screen-menu",
+  "asset": "north-common-fieldwork-cover.jpg",
+  "sourceType": "imagegen-built-in",
+  "generatedAt": "2026-07-21",
+  "sourceArtifact": "/Users/giraffetree/.codex/generated_images/019f847a-068b-7c92-a08a-fb36b4d54793/exec-2b6cb4be-b01e-4fa8-9402-6c29c6f99c82.png",
+  "sourceDimensions": "1122x1402",
+  "publishedDimensions": "800x1000",
+  "publishedSha256": "ec7ed6b2553ea86cb9c863d84d4faa3d347cdd7de7ddb63ff8b33013de3c29c5",
+  "runtimeRole": "The same original editorial cover is rendered in the closed issue page, the open navigation preview, and the retained Field Notes selection result.",
+  "prompt": "Use case: ads-marketing. Asset type: editorial culture magazine issue cover image used inside an interactive full-screen navigation demo. Create an original high-art editorial still life for a fictional independent magazine called NORTH/COMMON, issue theme FIELDWORK. Create only the cover photograph background, not a magazine mockup. Show a sculptural field-research table seen from slightly above, with one folded ultramarine fabric plane, a small mineral stone, a slim chrome measuring tool, and a torn warm-white paper edge. Premium contemporary editorial photography, tactile real materials, subtle film grain, restrained art direction, credible physical shadows. Portrait 4:5, one strong diagonal from lower left to upper right, quiet negative space in the upper-left and center for separately overlaid DOM typography. Hard late-afternoon side light; ultramarine blue, warm white, charcoal, muted mineral orange, small chrome highlights. Image only; absolutely no typography, letters, numbers, logos, watermark, UI, border, or mockup frame."
+}

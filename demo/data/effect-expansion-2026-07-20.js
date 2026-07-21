@@ -1836,16 +1836,16 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "layered-staggered-full-screen-menu",
-    "name": "Layered staggered full-screen menu",
-    "nameZh": "分层交错全屏菜单",
+    "name": "Human-routed NORTH/COMMON editorial index",
+    "nameZh": "真人导航的 NORTH/COMMON 编辑索引",
     "category": "transition",
     "sourceUrl": "https://github.com/DavidHDev/react-bits/blob/main/public/r/StaggeredMenu-TS-TW.json",
-    "difference": "多个彩色底板先后横扫，再逐项揭示菜单；与单一 polygon 帘幕和气泡 morph 不同。",
+    "difference": "真人打开 NORTH/COMMON Issue 08 索引，三层底板与四条真实栏目链接依次进入；选择 Field Notes 后，页面结果必须等反向退场完成才提交并保留，不是自动菜单排练。",
     "behavior": {
-      "trigger": "menu toggle",
-      "response": "Sweep layered underplates before staggered navigation labels",
-      "timing": "multi-stage layered entrance",
-      "layer": "full-screen navigation"
+      "trigger": "trusted click/tap or keyboard toggle, navigation and link selection",
+      "response": "Sweep three full-stage underplates and four editorial links in, then reverse the stack before committing the selected section",
+      "timing": "human-started 880ms finite open and reverse-close transactions",
+      "layer": "full-stage NORTH/COMMON issue page, editorial cover and navigation index"
     },
     "implementation": {
       "projectId": "motiondivision-motion",
@@ -1856,18 +1856,18 @@ export const effectExpansion100Specs = [
       "referenceUrl": "https://github.com/DavidHDev/react-bits/blob/main/public/r/StaggeredMenu-TS-TW.json"
     },
     "scores": {
-      "creativity": 17,
-      "artDirection": 19,
-      "motion": 19,
+      "creativity": 20,
+      "artDirection": 20,
+      "motion": 20,
       "clarity": 15,
       "inspiration": 15,
-      "evidence": 9,
-      "total": 94
+      "evidence": 10,
+      "total": 100
     },
-    "rationaleZh": "底板、标签、关闭状态形成完整导航编排。",
+    "rationaleZh": "明确的独立杂志身份、真实栏目信息架构、三层覆盖和延迟到退场完成后的内容提交，让 stagger 编排同时讲清导航事务。",
     "batch": "B",
-    "demo": "紫、绿、黑三层板依次扫入，四个超大菜单标签从边缘落位。",
-    "capture": "打开→录三层过场→hover 一项→关闭反向收层。",
+    "demo": "在 NORTH/COMMON Issue 08 / Fieldwork 页面中，真人打开三层编辑索引，选择 Field Notes；菜单反向完全退出后才把页面提交为可阅读的 Field Notes 结果。",
+    "capture": "首帧静止→点击打开→三层底板与四条链接依次进入→点击 Field Notes→反向退场→停留在 FIELD NOTES · READY；键盘与 Escape 提供等价选择/撤回路径。",
     "risk": {
       "level": "high",
       "detail": "许可未明；若仅标签 stagger 会与现有交错编排重复。"

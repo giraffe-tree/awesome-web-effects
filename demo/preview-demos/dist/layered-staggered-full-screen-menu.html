@@ -1,7 +1,95 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Motion — Layered Staggered Full-screen Menu</title><style>
-:root{--preview-background:#f3efe4;color-scheme:light}.menu-page{position:absolute;inset:0;padding:48px 16px;color:#1d211e}.menu-page small{font:800 6px/1 ui-monospace;letter-spacing:.13em}.menu-page h1{width:170px;margin:11px 0 0;font:950 25px/.82 system-ui;letter-spacing:-.065em}.menu-toggle{position:absolute;z-index:12;right:13px;top:11px;width:35px;height:25px;border:1px solid #202820;border-radius:99px;background:#fff;color:#202820;font:900 8px/1 ui-monospace;cursor:pointer}.menu-layer{position:absolute;inset:0;transform:translateX(105%)}.menu-layer.back{z-index:7;background:#ff714f}.menu-layer.mid{z-index:8;background:#6b63ff}.menu-layer.front{z-index:9;padding:35px 23px 24px;background:#18231e;color:white}.menu-layer.front small{font:800 6px/1 ui-monospace;letter-spacing:.13em;color:#9fb4a7}.menu-list{margin:10px 0 0;padding:0;list-style:none}.menu-list li{margin:3px 0;font:950 20px/.88 system-ui;letter-spacing:-.05em}.menu-list li span{display:inline-block;width:17px;color:#9fb4a7;font:800 6px/1 ui-monospace}.library-badge{z-index:15;color:white;background:#111b17c9}.scene-caption{z-index:15;left:auto;right:12px;bottom:9px}</style>  <script type="module" crossorigin src="./assets/layered-staggered-full-screen-menu-BNXAGk-Q.js"></script>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Motion — North/Common Layered Editorial Menu</title>
+  <style>
+    :root{--preview-background:#eee9dc;color-scheme:light}
+    .preview-stage{overflow:hidden;background:#eee9dc;color:#17201b}
+    .issue-page{position:absolute;inset:0;overflow:hidden;padding:46px 15px 22px;background:#eee9dc}
+    .issue-copy{position:relative;z-index:2;width:52%;max-width:180px}
+    .brand-lockup,.issue-kicker,.issue-result,.menu-eyebrow,.menu-meta,.menu-number,.menu-foot{font-family:ui-monospace,monospace;text-transform:uppercase}
+    .brand-lockup{font-size:6px;font-weight:900;line-height:1;letter-spacing:.12em}
+    .brand-lockup b{color:#f25a3d}
+    .issue-kicker{display:block;margin-top:19px;color:#727b75;font-size:5.5px;font-weight:800;line-height:1;letter-spacing:.13em}
+    .issue-title{margin:7px 0 0;font:950 24px/.84 system-ui;letter-spacing:-.065em}
+    .issue-deck{margin:8px 0 0;color:#5d6861;font:650 6px/1.35 ui-monospace;letter-spacing:.015em}
+    .issue-result{display:inline-flex;align-items:center;gap:5px;margin-top:10px;padding:5px 7px;border:1px solid #17201b2b;border-radius:99px;font-size:5px;font-weight:900;letter-spacing:.09em}
+    .issue-result i{width:4px;height:4px;border-radius:50%;background:#8a938e}
+    .issue-result[data-selected="true"]{border-color:#f25a3d55;color:#b93622}.issue-result[data-selected="true"] i{background:#f25a3d}
+    .issue-cover{position:absolute;top:0;right:0;bottom:0;width:45%;margin:0;overflow:hidden;background:#15233c}
+    .issue-cover img{width:100%;height:100%;object-fit:cover;object-position:56% 50%;filter:saturate(.96) contrast(1.02)}
+    .issue-cover figcaption{position:absolute;right:8px;bottom:8px;color:#fff;font:850 5px/1 ui-monospace;letter-spacing:.12em;text-transform:uppercase;text-shadow:0 1px 5px #000}
+    .menu-toggle{position:absolute;z-index:22;right:12px;top:10px;display:flex;align-items:center;justify-content:center;gap:5px;min-width:42px;height:27px;padding:0 8px;border:1px solid #17201b45;border-radius:99px;background:#faf6eccc;color:#17201b;font:900 6px/1 ui-monospace;letter-spacing:.08em;cursor:pointer;backdrop-filter:blur(7px)}
+    .menu-toggle i{position:relative;width:8px;height:6px}.menu-toggle i::before,.menu-toggle i::after{content:"";position:absolute;left:0;width:8px;height:1px;background:currentColor;transition:transform .2s ease,top .2s ease}.menu-toggle i::before{top:1px}.menu-toggle i::after{top:5px}
+    .menu-toggle[data-open="true"]{color:#f7f2e7;border-color:#ffffff42;background:#101715d9}.menu-toggle[data-open="true"] i::before{top:3px;transform:rotate(45deg)}.menu-toggle[data-open="true"] i::after{top:3px;transform:rotate(-45deg)}
+    .menu-layer{position:absolute;inset:0;transform:translateX(105%)}
+    .menu-layer.back{z-index:7;background:#ef5a3d}.menu-layer.mid{z-index:8;background:#234de6}
+    .menu-layer.front{z-index:9;padding:39px 17px 23px;background:#111816;color:#f3efe5;pointer-events:none}
+    .menu-layer.front[data-interactive="true"]{pointer-events:auto}
+    .menu-head{display:flex;align-items:center;justify-content:space-between;padding-bottom:7px;border-bottom:1px solid #ffffff20}
+    .menu-eyebrow{color:#a5b0aa;font-size:5.5px;font-weight:850;letter-spacing:.13em}.menu-eyebrow b{color:#ef5a3d}
+    .menu-meta{color:#68766f;font-size:5px;font-weight:800;letter-spacing:.11em}
+    .menu-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(80px,.75fr);gap:12px;height:calc(100% - 22px);padding-top:8px}
+    .menu-list{display:flex;flex-direction:column;justify-content:center;margin:0;padding:0;list-style:none}
+    .menu-list li{overflow:hidden;margin:1px 0}
+    .menu-link{display:flex;align-items:baseline;width:max-content;max-width:100%;padding:1px 0;border:0;background:none;color:#f3efe5;text-decoration:none;cursor:pointer}
+    .menu-number{width:20px;color:#6f7e77;font-size:5.5px;font-weight:850;letter-spacing:.08em}
+    .menu-name{font:900 21px/.88 system-ui;letter-spacing:-.055em}
+    .menu-link:hover .menu-name,.menu-link:focus-visible .menu-name{color:#82a0ff}.menu-link:focus-visible{outline:1px solid #82a0ff;outline-offset:3px}
+    .menu-preview{position:relative;align-self:center;height:min(108px,78%);margin:0;overflow:hidden;border:1px solid #ffffff20;background:#24344c}
+    .menu-preview img{width:100%;height:100%;object-fit:cover;object-position:55% 50%;opacity:.9}
+    .menu-preview figcaption{position:absolute;inset:auto 7px 7px;color:#fff;text-shadow:0 1px 5px #000}
+    .menu-preview strong{display:block;font:900 9px/.9 system-ui;letter-spacing:-.03em}.menu-preview span{display:block;margin-top:4px;font:800 4.5px/1 ui-monospace;letter-spacing:.1em;text-transform:uppercase}
+    .menu-foot{position:absolute;left:17px;right:17px;bottom:10px;display:flex;justify-content:space-between;color:#69776f;font-size:4.5px;font-weight:800;letter-spacing:.1em}
+    .library-badge{z-index:25;color:#f3efe5;background:#0e1513d2;border-color:#ffffff20}.scene-caption{display:none}
+    @media (max-width:400px) and (orientation:landscape){.issue-result{position:absolute;left:0;top:8px;margin:0;background:#eee9dce8}}
+    @media (min-width:500px){
+      .issue-page{padding:88px 30px 42px}.issue-copy{max-width:340px}.brand-lockup{font-size:11px}.issue-kicker{margin-top:37px;font-size:9px}.issue-title{margin-top:15px;font-size:52px}.issue-deck{margin-top:16px;font-size:10px}.issue-result{margin-top:20px;padding:8px 11px;font-size:8px}.issue-cover{width:44%}.issue-cover figcaption{right:16px;bottom:15px;font-size:8px}
+      .menu-toggle{right:22px;top:18px;min-width:74px;height:38px;font-size:9px}.menu-toggle i,.menu-toggle i::before,.menu-toggle i::after{width:12px}
+      .menu-layer.front{padding:72px 34px 42px}.menu-head{padding-bottom:13px}.menu-eyebrow{font-size:10px}.menu-meta{font-size:8px}.menu-grid{grid-template-columns:minmax(0,1.2fr) minmax(180px,.8fr);gap:28px;padding-top:16px}.menu-list li{margin:3px 0}.menu-number{width:36px;font-size:9px}.menu-name{font-size:46px}.menu-preview{height:min(260px,82%)}.menu-preview figcaption{inset:auto 13px 13px}.menu-preview strong{font-size:18px}.menu-preview span{font-size:7px}.menu-foot{left:34px;right:34px;bottom:18px;font-size:7px}
+    }
+    @media (orientation:portrait){
+      .issue-page{padding:54px 15px 28px}.issue-copy{width:100%;max-width:205px}.issue-title{font-size:32px}.issue-deck{max-width:175px}.issue-cover{top:auto;width:100%;height:47%}.issue-cover::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#eee9dc 0%,transparent 32%)}
+      .menu-toggle{min-width:28px;width:28px;padding:0}.menu-toggle span{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+      .menu-layer.front{padding:49px 15px 28px}.menu-grid{display:block;height:auto;padding-top:19px}.menu-list{display:block}.menu-list li{margin:4px 0}.menu-number{width:24px}.menu-name{font-size:29px}.menu-preview{position:absolute;right:15px;bottom:29px;width:76px;height:94px;opacity:.7}.menu-foot{left:15px;right:15px;bottom:12px}.menu-meta{display:none}
+    }
+  </style>
+  <script type="module" crossorigin src="./assets/layered-staggered-full-screen-menu-CBLDp1s8.js"></script>
   <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
   <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
-  <link rel="modulepreload" crossorigin href="./assets/batch-b-utils-CmA_lC0Z.js">
   <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage"><section class="menu-page"><small>INDEX / CLOSED</small><h1>THE PAGE WAITS BEHIND THE MENU.</h1></section><button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false">MENU</button><div class="menu-layer back"></div><div class="menu-layer mid"></div><nav class="menu-layer front" id="full-menu" data-preview-mechanism="motion-layered-menu" aria-label="Full screen menu"><small>NAVIGATION / OPEN</small><ol class="menu-list"><li><span>01</span>Work</li><li><span>02</span>Ideas</li><li><span>03</span>Studio</li><li><span>04</span>Contact</li></ol></nav><span class="library-badge">Motion · layered menu</span><span class="scene-caption">three surfaces arrive on staggered beats</span></main></body></html>
+</head>
+<body>
+  <main class="preview-stage" id="layered-menu-stage" data-preview-mechanism="motion-trusted-layered-editorial-navigation">
+    <section class="issue-page" id="issue-page" aria-live="polite">
+      <div class="issue-copy">
+        <div class="brand-lockup">NORTH<b>/</b>COMMON</div>
+        <span class="issue-kicker" id="page-kicker">ISSUE 08 / FIELDWORK</span>
+        <h1 class="issue-title" id="page-title">Observe what usually slips past.</h1>
+        <p class="issue-deck" id="page-deck">An independent journal of working landscapes, material intelligence, and useful detours.</p>
+        <span class="issue-result" id="issue-result" data-selected="false"><i></i><span id="result-label">NO SECTION SELECTED</span></span>
+      </div>
+      <figure class="issue-cover"><img class="fieldwork-cover" src="./assets/north-common-fieldwork-cover--tAeWgVi.jpg" alt="Ultramarine field-research still life with mineral and measuring tool"><figcaption>N/C · 08</figcaption></figure>
+    </section>
+    <button class="menu-toggle" id="menu-toggle" type="button" aria-controls="full-menu" aria-expanded="false" data-open="false"><i aria-hidden="true"></i><span>MENU</span></button>
+    <div class="menu-layer back" aria-hidden="true"></div>
+    <div class="menu-layer mid" aria-hidden="true"></div>
+    <nav class="menu-layer front" id="full-menu" aria-label="North Common full screen navigation" aria-hidden="true" inert data-interactive="false">
+      <header class="menu-head"><span class="menu-eyebrow">NORTH<b>/</b>COMMON · INDEX</span><span class="menu-meta">ISSUE 08 · FIELDWORK</span></header>
+      <div class="menu-grid">
+        <ol class="menu-list">
+          <li><a class="menu-link" href="#field-notes" data-section="field-notes" data-title="Field Notes"><span class="menu-number">01</span><span class="menu-name">Field Notes</span></a></li>
+          <li><a class="menu-link" href="#dispatches" data-section="dispatches" data-title="Dispatches"><span class="menu-number">02</span><span class="menu-name">Dispatches</span></a></li>
+          <li><a class="menu-link" href="#material-index" data-section="material-index" data-title="Material Index"><span class="menu-number">03</span><span class="menu-name">Material Index</span></a></li>
+          <li><a class="menu-link" href="#about" data-section="about" data-title="About"><span class="menu-number">04</span><span class="menu-name">About</span></a></li>
+        </ol>
+        <figure class="menu-preview" id="menu-preview"><img class="fieldwork-cover" src="./assets/north-common-fieldwork-cover--tAeWgVi.jpg" alt=""><figcaption><strong>FIELDWORK</strong><span>Cover study · Issue 08</span></figcaption></figure>
+      </div>
+      <footer class="menu-foot"><span>ARROWS TO MOVE · ENTER TO SELECT</span><span>ESC TO WITHDRAW</span></footer>
+    </nav>
+    <span class="library-badge">Motion · North/Common index</span>
+  </main>
+</body>
+</html>

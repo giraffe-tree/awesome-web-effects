@@ -1396,6 +1396,53 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.locator('#clear-control').click()
             elif index == 35:
                 page.wait_for_timeout(320)
+        elif demo["id"] == "emergent-particle-life-colonies":
+            if index == 2:
+                page.locator('#reset-life').click()
+            elif index == 3:
+                page.locator('.rule-control[data-rule="cycle"]').click()
+            elif index == 4:
+                page.locator('.species-control[data-species="1"]').click()
+            elif index == 5:
+                page.locator('#life-stage').focus()
+                page.keyboard.press("1")
+            elif index == 7:
+                page.mouse.move(164, 94)
+                page.mouse.down()
+            elif index == 8:
+                page.mouse.move(191, 78, steps=3)
+            elif index == 9:
+                page.mouse.move(220, 104, steps=3)
+            elif index == 10:
+                page.mouse.up()
+            elif index == 12:
+                page.locator('#run-toggle').click()
+            elif index == 13:
+                page.wait_for_timeout(820)
+            elif index == 17:
+                page.locator('#life-stage').focus()
+                page.keyboard.press("q")
+            elif index == 18:
+                page.keyboard.press("ArrowRight")
+            elif index == 19:
+                page.keyboard.press(".")
+            elif index == 21:
+                page.keyboard.press("r")
+            elif index == 23:
+                page.locator('.rule-control[data-rule="cycle"]').click()
+            elif index == 25:
+                page.mouse.move(188, 92)
+                page.mouse.down()
+            elif index == 26:
+                page.mouse.move(229, 104, steps=4)
+            elif index == 27:
+                page.mouse.up()
+            elif index == 28:
+                page.locator('#run-toggle').click()
+            elif index == 30:
+                page.wait_for_timeout(1200)
+            elif index == 35:
+                page.wait_for_timeout(260)
         elif demo["id"] == "four-corner-hover-crop-marks":
             if index == round(.35 * args.fps):
                 page.mouse.move(92, 78)
@@ -1775,7 +1822,8 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("1")
             elif index == 34:
                 page.wait_for_timeout(500)
-        page.evaluate("time => window.__setPreviewTime(time)", preview_time)
+        if demo["id"] != "emergent-particle-life-colonies":
+            page.evaluate("time => window.__setPreviewTime(time)", preview_time)
         frame_path = frame_root / f"{index:04d}.png"
         page.screenshot(path=str(frame_path), type="png")
         hashes.add(hashlib.sha256(frame_path.read_bytes()).hexdigest())
@@ -2971,6 +3019,51 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or input_state != "idle"
         ):
             raise RuntimeError(f"{demo['id']} did not capture trusted bidirectional pointer colour injection, keyboard injection, pause/resume, save, and explicit clear on the real framebuffer pipeline: assertion={assertion!r}; input_state={input_state!r}; interaction={interaction!r}")
+    elif demo["id"] == "emergent-particle-life-colonies":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PARTICLE_LIFE_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "bounded-colony-relationship-experiment"
+            or interaction["acceptedInputs"] != ["mouse", "touch", "pen", "keyboard", "control"]
+            or not interaction["userInputRequired"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticFallback"]
+            or interaction["captureClockDriven"]
+            or interaction["syntheticInputDispatch"]
+            or not interaction["deterministicInitialization"]
+            or interaction["randomSourceUsed"]
+            or not interaction["initialStaticConfirmed"]
+            or interaction["fixedSeed"] != 590216
+            or interaction["inputCount"] < 12
+            or interaction["pointerInputCount"] < 2
+            or interaction["keyboardInputCount"] < 4
+            or interaction["controlInputCount"] < 6
+            or interaction["pointerMoveCount"] < 6
+            or interaction["runCount"] < 2
+            or interaction["resetCount"] < 2
+            or interaction["ruleChangeCount"] < 3
+            or interaction["interventionCount"] < 3
+            or interaction["phase"] != "observed"
+            or interaction["running"]
+            or interaction["rule"] != "cycle"
+            or interaction["selectedSpecies"] != 1
+            or interaction["selectedStepBudget"] != 24
+            or interaction["remainingSteps"] != 0
+            or interaction["completedSteps"] != 24
+            or interaction["lastRunSteps"] != 24
+            or interaction["simulationStepCount"] != 24
+            or interaction["forceEvaluationCount"] < 45000
+            or not interaction["interventionActive"]
+            or interaction["pointerCaptured"]
+            or interaction["dragging"]
+            or interaction["activePointerId"] is not None
+            or interaction["lastInput"] != "control-run"
+            or interaction["lastInputTrusted"] is not True
+            or interaction["p5Instance"] is not True
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture two trusted bounded colony experiments, a real pointer intervention, keyboard rule/step input, reset, and a deterministic final observation: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "four-corner-hover-crop-marks":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         if (

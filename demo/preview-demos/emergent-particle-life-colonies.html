@@ -1,2 +1,422 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p5.js — Emergent Particle-life Colonies</title><link rel="stylesheet" href="./shared.css"><style>
-:root{--preview-background:#090b12}#life-host{position:absolute;inset:0;cursor:crosshair}#life-host canvas{width:100%!important;height:100%!important}.life-key{position:absolute;z-index:3;left:12px;top:46px;color:white;pointer-events:none}.life-key small{font:800 6px/1 ui-monospace;letter-spacing:.13em}.life-key h1{width:105px;margin:9px 0 0;font:950 19px/.82 system-ui;letter-spacing:-.06em}.species{position:absolute;z-index:3;right:11px;bottom:11px;display:flex;gap:7px;color:#c4cad6;font:700 6px/1 ui-monospace}.species i{display:inline-block;width:5px;height:5px;margin-right:3px;border-radius:50%}.library-badge{background:#080a11c4}.scene-caption{display:none}</style></head><body><main class="preview-stage" data-preview-mechanism="p5-particle-life"><div id="life-host" tabindex="0" aria-label="Click or use arrow keys to move the particle colony attractor"></div><section class="life-key"><small>EMERGENCE / 420 AGENTS</small><h1>RULES BECOME COLONIES.</h1></section><span class="species"><span><i style="background:#51edb4"></i>A</span><span><i style="background:#b46cff"></i>B</span><span><i style="background:#ff6a71"></i>C</span></span><span class="library-badge">p5.js · particle life</span></main><script type="module" src="./src/emergent-particle-life-colonies-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>p5.js — Human-operated Colony Behavior Sandbox</title>
+  <link rel="stylesheet" href="./shared.css">
+  <style>
+    :root {
+      --preview-background: #07100e;
+      color-scheme: dark;
+    }
+
+    * { box-sizing: border-box; }
+    body { overflow: hidden; }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .life-stage {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      min-height: 100%;
+      overflow: hidden;
+      isolation: isolate;
+      color: #edf4e8;
+      background: #07100e;
+      touch-action: none;
+      outline: none;
+    }
+
+    .life-stage:focus-visible {
+      box-shadow: inset 0 0 0 2px #d9ff72, inset 0 0 0 5px #07100e;
+    }
+
+    #life-host,
+    #life-host canvas {
+      position: absolute;
+      inset: 0;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    #life-host { cursor: crosshair; }
+    .life-stage[data-dragging="true"] #life-host { cursor: grabbing; }
+
+    .life-header,
+    .observation-card,
+    .relation-strip,
+    .sandbox-controls,
+    .life-footnote,
+    .library-badge {
+      position: absolute;
+      z-index: 5;
+    }
+
+    .life-header {
+      top: clamp(17px, 5vh, 34px);
+      left: clamp(17px, 4vw, 31px);
+      width: min(35%, 250px);
+      pointer-events: none;
+    }
+
+    .life-kicker {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      color: #aebbad;
+      font: 770 clamp(7px, .9vw, 10px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+
+    .life-kicker::before {
+      width: clamp(18px, 3vw, 32px);
+      height: 2px;
+      content: "";
+      background: #d9ff72;
+    }
+
+    .life-header h1 {
+      margin: 0;
+      font: 890 clamp(28px, 5.4vw, 54px)/.84 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: -.075em;
+      text-transform: uppercase;
+    }
+
+    .life-header h1 span { color: #d9ff72; }
+
+    .life-header p {
+      max-width: 220px;
+      margin: 14px 0 0;
+      color: #b5c0b4;
+      font: 570 clamp(9px, 1.2vw, 12px)/1.35 system-ui, sans-serif;
+    }
+
+    .observation-card {
+      top: clamp(15px, 4.5vh, 31px);
+      right: clamp(15px, 3vw, 25px);
+      width: clamp(150px, 25vw, 205px);
+      padding: 11px 12px;
+      border: 1px solid rgb(219 255 114 / 30%);
+      background: rgb(5 17 14 / 82%);
+      box-shadow: 0 12px 36px rgb(0 0 0 / 22%);
+      backdrop-filter: blur(9px);
+      pointer-events: none;
+    }
+
+    .observation-card > span,
+    .metric span,
+    .metric strong {
+      font: 750 clamp(6px, .76vw, 8px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+
+    .observation-card > span { color: #809184; }
+
+    #observation-output {
+      display: block;
+      min-height: 2.1em;
+      margin: 6px 0 10px;
+      color: #f0f5ea;
+      font: 820 clamp(13px, 2vw, 21px)/1.02 system-ui, sans-serif;
+      letter-spacing: -.045em;
+    }
+
+    .metric-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      padding-top: 8px;
+      border-top: 1px solid rgb(226 240 219 / 14%);
+    }
+
+    .metric { display: grid; gap: 4px; }
+    .metric span { color: #728378; }
+    .metric strong { color: #d9ff72; font-size: clamp(8px, 1vw, 11px); }
+
+    .relation-strip {
+      top: 50%;
+      right: clamp(15px, 3vw, 25px);
+      display: grid;
+      gap: 5px;
+      width: clamp(128px, 19vw, 166px);
+      transform: translateY(-42%);
+      color: #b7c4b8;
+      pointer-events: none;
+    }
+
+    .relation-strip strong {
+      color: #eaf2e5;
+      font: 760 clamp(6px, .8vw, 9px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+
+    .relation-line {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font: 650 clamp(7px, .95vw, 10px)/1.1 system-ui, sans-serif;
+    }
+
+    .relation-line i,
+    .species-chip i {
+      width: 7px;
+      height: 7px;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      box-shadow: 0 0 12px currentColor;
+    }
+
+    .species-a { color: #53e7ad; background: #53e7ad; }
+    .species-b { color: #a985ff; background: #a985ff; }
+    .species-c { color: #ff6b72; background: #ff6b72; }
+
+    .sandbox-controls {
+      right: clamp(14px, 3vw, 25px);
+      bottom: clamp(13px, 3.7vh, 25px);
+      display: flex;
+      align-items: flex-end;
+      gap: 7px;
+      max-width: calc(100% - 28px);
+    }
+
+    .control-cluster {
+      display: flex;
+      gap: 4px;
+      padding: 4px;
+      border: 1px solid rgb(222 240 214 / 17%);
+      border-radius: 999px;
+      background: rgb(5 17 14 / 82%);
+      backdrop-filter: blur(8px);
+    }
+
+    .sandbox-controls button,
+    .sandbox-controls select {
+      min-height: 30px;
+      border: 0;
+      border-radius: 999px;
+      color: #c3cec2;
+      background: transparent;
+      font: 750 clamp(6px, .78vw, 9px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .sandbox-controls button { min-width: 34px; padding: 0 9px; }
+
+    .sandbox-controls button[aria-pressed="true"],
+    .sandbox-controls button:hover,
+    .sandbox-controls button:focus-visible,
+    .sandbox-controls select:focus-visible {
+      color: #07100e;
+      background: #d9ff72;
+      outline: none;
+    }
+
+    .sandbox-controls select {
+      min-width: 66px;
+      padding: 0 22px 0 10px;
+      border: 1px solid rgb(222 240 214 / 17%);
+      color: #e4ece0;
+      background-color: rgb(5 17 14 / 88%);
+    }
+
+    .run-button,
+    .reset-button {
+      border: 1px solid rgb(222 240 214 / 22%) !important;
+      background: rgb(5 17 14 / 88%) !important;
+    }
+
+    .run-button {
+      min-width: 64px !important;
+      color: #07100e !important;
+      background: #d9ff72 !important;
+    }
+
+    .life-footnote {
+      left: clamp(17px, 4vw, 31px);
+      bottom: clamp(16px, 4.3vh, 29px);
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      max-width: 35%;
+      color: #829187;
+      pointer-events: none;
+    }
+
+    .life-footnote strong,
+    .life-footnote span {
+      font: 720 clamp(6px, .8vw, 9px)/1.15 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+
+    .life-footnote strong { color: #d5dfd1; }
+
+    .library-badge {
+      right: clamp(15px, 3vw, 25px);
+      top: 54%;
+      transform: rotate(90deg) translateX(50%);
+      transform-origin: right center;
+      background: rgb(5 17 14 / 68%);
+      pointer-events: none;
+    }
+
+    .short-label { display: none; }
+
+    @media (max-width: 420px) {
+      .life-header {
+        top: 10px;
+        left: 10px;
+        width: 34%;
+      }
+
+      .life-kicker { gap: 4px; margin-bottom: 6px; }
+      .life-kicker::before { width: 12px; height: 1px; }
+      .life-header h1 { font-size: clamp(16px, 6.6vw, 23px); }
+      .life-header p { display: none; }
+
+      .observation-card {
+        top: 9px;
+        right: 9px;
+        width: 104px;
+        padding: 7px 8px;
+      }
+
+      #observation-output { margin: 4px 0 6px; font-size: 11px; }
+      .metric-row { gap: 5px; padding-top: 5px; }
+
+      .relation-strip { display: none; }
+
+      .sandbox-controls {
+        right: 7px;
+        bottom: 7px;
+        gap: 3px;
+      }
+
+      .control-cluster { gap: 2px; padding: 2px; }
+      .sandbox-controls button { min-width: 23px; min-height: 22px; padding: 0 5px; }
+      .sandbox-controls select { min-width: 44px; min-height: 22px; padding: 0 13px 0 5px; }
+      .run-button { min-width: 38px !important; }
+      .long-label { display: none; }
+      .short-label { display: inline; }
+
+      .life-footnote,
+      .library-badge { display: none; }
+    }
+
+    @media (max-width: 180px), (max-height: 100px) {
+      .life-header { top: 4px; left: 5px; width: 34%; }
+      .life-kicker { margin-bottom: 3px; font-size: 3.5px; }
+      .life-kicker::before { width: 6px; }
+      .life-header h1 { font-size: 9px; line-height: .86; }
+
+      .observation-card {
+        top: 4px;
+        right: 4px;
+        width: 52px;
+        padding: 4px;
+      }
+
+      .observation-card > span,
+      .metric span { font-size: 3px; }
+      #observation-output { min-height: 0; margin: 2px 0 3px; font-size: 5.2px; }
+      .metric-row { gap: 2px; padding-top: 2px; }
+      .metric strong { font-size: 4px; }
+      .relation-strip,
+      .life-footnote { display: none; }
+
+      .sandbox-controls {
+        right: 3px;
+        bottom: 3px;
+        gap: 2px;
+      }
+
+      .control-cluster { gap: 1px; padding: 1px; }
+      .sandbox-controls button { min-width: 12px; min-height: 10px; padding: 0 2px; font-size: 3px; }
+      .sandbox-controls select { min-width: 22px; min-height: 10px; padding: 0 4px 0 2px; font-size: 3px; }
+      .run-button { min-width: 18px !important; }
+      .reset-button { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .sandbox-controls button,
+      .sandbox-controls select { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <main id="life-stage" class="life-stage" tabindex="0" aria-label="Interactive colony relationship sandbox" data-preview-mechanism="p5-human-run-particle-life-sandbox" data-phase="idle" data-rule="mutualism" data-running="false" data-automatic-path="false" data-capture-clock-driven="false" data-dragging="false">
+    <div id="life-host" aria-hidden="true"></div>
+
+    <header class="life-header">
+      <div class="life-kicker">Field model · 216 agents</div>
+      <h1>Shape the colony. <span>Read the consequence.</span></h1>
+      <p>Choose a relationship rule, place an intervention, and run a fixed number of deterministic steps.</p>
+    </header>
+
+    <section class="observation-card" aria-label="Simulation observation result" aria-live="polite">
+      <span>Observation</span>
+      <output id="observation-output">Awaiting run</output>
+      <div class="metric-row">
+        <div class="metric"><span>Mixing</span><strong id="mixing-output">00%</strong></div>
+        <div class="metric"><span>Cohesion</span><strong id="cohesion-output">00%</strong></div>
+      </div>
+    </section>
+
+    <section class="relation-strip" aria-label="Current colony relationships">
+      <strong id="rule-name">Mutualism</strong>
+      <span class="relation-line"><i class="species-a"></i>Foragers <b id="relation-a">seek pollinators</b></span>
+      <span class="relation-line"><i class="species-b"></i>Pollinators <b id="relation-b">bridge colonies</b></span>
+      <span class="relation-line"><i class="species-c"></i>Sentinels <b id="relation-c">guard edges</b></span>
+    </section>
+
+    <nav class="sandbox-controls" aria-label="Colony simulation controls">
+      <div class="control-cluster" aria-label="Relationship rule">
+        <button class="rule-control" type="button" data-rule="mutualism" aria-pressed="true" aria-label="Use mutualism relationship rule"><span class="long-label">Mutual</span><span class="short-label">M</span></button>
+        <button class="rule-control" type="button" data-rule="territory" aria-pressed="false" aria-label="Use territory relationship rule"><span class="long-label">Territory</span><span class="short-label">T</span></button>
+        <button class="rule-control" type="button" data-rule="cycle" aria-pressed="false" aria-label="Use cyclic pursuit relationship rule"><span class="long-label">Cycle</span><span class="short-label">C</span></button>
+      </div>
+      <div class="control-cluster" aria-label="Intervention colony">
+        <button class="species-control" type="button" data-species="0" aria-pressed="true" aria-label="Intervene on foragers">A</button>
+        <button class="species-control" type="button" data-species="1" aria-pressed="false" aria-label="Intervene on pollinators">B</button>
+        <button class="species-control" type="button" data-species="2" aria-pressed="false" aria-label="Intervene on sentinels">C</button>
+      </div>
+      <label>
+        <span class="sr-only">Run step count</span>
+        <select id="step-count" aria-label="Run step count">
+          <option value="24">24 steps</option>
+          <option value="72" selected>72 steps</option>
+          <option value="144">144 steps</option>
+        </select>
+      </label>
+      <button id="run-toggle" class="run-button" type="button" aria-pressed="false" aria-label="Run colony simulation">Run 72</button>
+      <button id="reset-life" class="reset-button" type="button" aria-label="Reset colony simulation">Reset</button>
+    </nav>
+
+    <div class="life-footnote" aria-hidden="true">
+      <strong>Place intervention · then run</strong>
+      <span>Pointer / touch / pen · arrows move · 1/2/3 steps · Space runs · R resets</span>
+    </div>
+
+    <span class="library-badge">p5.js · fixed-seed particle life</span>
+  </main>
+  <script type="module" src="./src/emergent-particle-life-colonies-demo.js"></script>
+</body>
+</html>

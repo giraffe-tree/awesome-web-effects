@@ -1507,41 +1507,41 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "emergent-particle-life-colonies",
-    "name": "Emergent particle-life colonies",
-    "nameZh": "涌现式粒子生命群落",
+    "name": "Bounded colony relationship sandbox",
+    "nameZh": "有界群落关系实验沙盘",
     "category": "canvas",
     "sourceUrl": "https://github.com/hunar4321/particle-life",
-    "difference": "种群间吸引排斥矩阵产生追逐、膜和群落；现有涡旋有统一向心场，鱼群使用 boids 与 DOM 避障。",
+    "difference": "把 216 个粒子的群落涌现变成一次可复现的关系实验：真人选择互惠、领地或循环追逐矩阵，指定干预种群与 24/72/144 步预算，再把引导信标放进生态场并读取混合度和凝聚度。",
     "behavior": {
-      "trigger": "time / reset",
-      "response": "Evolve colored populations under a fixed attraction-repulsion matrix",
-      "timing": "seeded emergent continuous simulation",
-      "layer": "Canvas particle field"
+      "trigger": "trusted mouse/touch/pen intervention, keyboard experiment controls, and explicit rule/species/step/run/reset controls",
+      "response": "Run a bounded fixed-seed population experiment under one of three real attraction-repulsion matrices and report its outcome",
+      "timing": "static first frame; simulation advances only for an explicit 24, 72, or 144-step human-requested run",
+      "layer": "full-preview p5 Canvas field, matrix legend, intervention beacon, experiment controls, and outcome metrics"
     },
     "implementation": {
       "projectId": "processing-p5-js",
       "projectUrl": "https://github.com/processing/p5.js",
       "library": "p5@2.3.0",
       "renderer": "canvas2d",
-      "snippet": "particles.forEach(a => particles.forEach(b => applyAttractionRule(a, b, matrix[a.kind][b.kind])));",
+      "snippet": "for (const a of agents) for (const b of agents) applyMatrixForce(a, b, rules[state.rule].matrix[a.species][b.species]);",
       "referenceUrl": "https://github.com/hunar4321/particle-life"
     },
     "scores": {
       "creativity": 19,
-      "artDirection": 18,
+      "artDirection": 20,
       "motion": 19,
-      "clarity": 14,
+      "clarity": 15,
       "inspiration": 15,
-      "evidence": 9,
-      "total": 94
+      "evidence": 10,
+      "total": 98
     },
-    "rationaleZh": "规则简单但群落行为复杂，具有独立的群体视觉词汇。",
+    "rationaleZh": "把抽象粒子生命改造成有输入、有边界、有结果的系统实验：用户决定关系矩阵、对象、干预位置与运算预算，最后用混合度、凝聚度和观察结论解释涌现，而不是观看无尽屏保。",
     "batch": "B",
-    "demo": "四种颜色形成追逐环和细胞膜状群落，旁边显示固定作用矩阵。",
-    "capture": "固定 seed 运行 0→8s→点击 reset 重放同一演化。",
+    "demo": "Bounded Colony Relationship Sandbox 用 p5 绘制三组各 72 个固定种子粒子；互惠、领地和循环追逐三套矩阵真实进入成对受力计算，真人放置某一种群的引导信标并显式运行有限步数。",
+    "capture": "从静止首帧开始，真人选择 Cyclic pursuit、Pollinators 与 24 steps，拖拽信标后运行；再用键盘换规则、移动信标、单步并重置，最后重复一轮有界实验并保留可读观察结果。",
     "risk": {
-      "level": "medium",
-      "detail": "随机种子、矩阵、边界、步长必须写入 provenance。"
+      "level": "high",
+      "detail": "必须保留固定种子、真实关系矩阵、环形边界、可信输入账本和显式有限步数；自动循环、合成事件、预览时钟推进或只画预制轨迹均不合格。"
     },
     "observedImplementation": {
       "projectId": "hunar4321-particle-life",

@@ -127,12 +127,12 @@ export const effectExpansion150BatchB = [
     scores: score(19, 19, 19, 15, 15, 10), rationaleZh: '音频数据来源可核验，丝带层次与扫频变化形成鲜明艺术结果。'
   },
   {
-    id: 'gravity-well-icon-field', order: 139, name: 'Gravity well icon field', nameZh: '重力井图标场', category: 'canvas', sourceUrl: 'https://github.com/liabru/matter-js',
-    difference: '界面符号按固定轨道半径和角速度围绕移动重力井弯曲，不是粒子吸附或普通图标云。',
-    behavior: { trigger: 'pointer movement', response: 'Interface glyphs orbit a movable gravity well with preserved mass bands', timing: 'continuous orbital mechanics', layer: 'icon physics canvas' },
-    prompt: '实现三圈不同半径和角速度的界面图标轨道，让指针成为可移动重力井。',
-    implementation: p5Implementation("new p5(p => { p.draw = () => icons.forEach(icon => drawOrbit(p, icon, pointer)); });", 'https://github.com/liabru/matter-js'),
-    scores: score(18, 18, 19, 15, 15, 10), rationaleZh: '符号、质量中心和轨道带共同表达界面重力，主体行为清楚。'
+    id: 'gravity-well-icon-field', order: 139, name: 'Deep Field gravity lens inspector', nameZh: 'Deep Field 深空重力透镜检查台', category: 'canvas', sourceUrl: 'https://github.com/processing/p5.js',
+    difference: '把自动绕行的小图标换成一次可解释的深空候选检查：生成巡天底片的真实像素决定七个候选的位置、分数和结论，用户亲手移动、调质量并锁定同一张图上的放大镜。',
+    behavior: { trigger: 'trusted hover, captured pointer drag, keyboard, or visible lens control', response: 'Move a same-image gravity lens through pixel-derived candidates, change aperture mass, compare local edge/blue/structure evidence, and lock a review target', timing: 'human-owned finite input with a static initial and settled final state', layer: 'full-stage p5 deep-field image, same-source lens, candidates, evidence readout, and controls' },
+    prompt: '制作一个全舞台深空重力透镜候选检查台：同源加载并精确校验一张 ImageGen 巡天底片，以 160×90 真实像素的亮度、边缘、蓝色过量、结构和亮点密度筛出七个候选；真人通过 hover、捕获式鼠标/触控/笔拖动、键盘和可见 −/Lock/+/Reset 控件移动镜片、调节质量并锁定候选。镜片必须放大同一提交图片的真实像素，首帧与每次输入后保持静止，禁止 autoplay、fallback、合成输入或预览时钟变异。',
+    implementation: p5Implementation("p.noLoop(); const candidates = deriveCandidates(samplePixels); surface.addEventListener('pointermove', moveLensFromTrustedInput); const lock = () => snapToNearestPixelCandidate(); p.image(source, lensX - r, lensY - r, 2*r, 2*r, sampleX, sampleY, sampleW, sampleH);", 'https://github.com/processing/p5.js'),
+    scores: score(20, 20, 20, 15, 15, 10), rationaleZh: '原创 ImageGen 深空巡天底片经过同源 fetch、精确源 SHA、浏览器与 p5 双解码，并读取为 160×90 / 14,400 像素证据；局部边缘、蓝色过量、结构变化和亮点密度真实生成七个候选与 Quiet/Weak/Review/Probable 结论。可信 hover、捕获拖拽、键盘和可见控件共同拥有透镜位置、质量与锁定，圆形镜片放大的仍是同一资源像素，没有自动轨道。'
   },
   {
     id: 'scroll-stitched-isometric-blueprint', order: 140, name: 'North Spur field-node commissioning', nameZh: 'North Spur 边缘节点装配验收', category: 'scroll', sourceUrl: 'https://github.com/motiondivision/motion',

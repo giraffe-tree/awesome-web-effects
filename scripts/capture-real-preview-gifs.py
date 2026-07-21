@@ -1849,6 +1849,33 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 25:
                 route = page.evaluate("window.__PREVIEW_INTERACTION_STATE__.routeEvidence")
                 page.mouse.move(route[5]["u"] * 320, route[5]["v"] * 180)
+        elif demo["id"] == "gravity-well-icon-field":
+            if index == 2:
+                page.mouse.move(58, 54)
+            elif index == 4:
+                page.mouse.move(58, 54)
+                page.mouse.down()
+            elif index == 5:
+                page.mouse.move(112, 105, steps=2)
+            elif index == 6:
+                page.mouse.move(205, 83, steps=3)
+            elif index == 7:
+                page.mouse.up()
+            elif index in (9, 11):
+                page.locator('[data-lens-action="stronger"]').click()
+            elif index == 13:
+                page.locator("#lens-surface").focus()
+                page.keyboard.press("ArrowLeft")
+            elif index == 15:
+                page.keyboard.press("ArrowUp")
+            elif index == 17:
+                page.keyboard.press("Enter")
+            elif index == 19:
+                page.locator('[data-lens-action="weaker"]').click()
+            elif index == 21:
+                page.locator('[data-lens-action="reset"]').click()
+            elif index == 23:
+                page.locator('[data-lens-action="lock"]').click()
         elif demo["id"] == "stencil-text-scanline-window":
             if index == 2:
                 page.mouse.move(286, 80)
@@ -5257,6 +5284,99 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["ready"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture a trusted six-fix pixel-derived night route, explicit confirmation, undo, keyboard reacquisition, and final reseal without automatic stitching: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "gravity-well-icon-field":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-deep-field-gravitational-lens-candidate-inspection"
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["mechanism"] != "same-origin-image-pixels-drive-p5-gravity-lens-magnification-local-evidence-and-candidate-conclusion"
+            or interaction["acceptedInputs"] != ["mouse-hover", "captured-mouse-drag", "captured-touch-drag", "captured-pen-drag", "keyboard", "visible-buttons"]
+            or not interaction["userInputRequired"]
+            or not interaction["initialFrameStatic"]
+            or not interaction["initialStaticConfirmed"]
+            or not interaction["animationSettled"]
+            or interaction["automaticCycle"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["previewClockMutationCount"] != 0
+            or interaction["inputCount"] < 15
+            or interaction["humanInputCausalityCount"] < 12
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["ignoredInputCount"] != 0
+            or interaction["pointerEnterCount"] < 1
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerMoveCount"] < 5
+            or interaction["pointerReleaseCount"] != 1
+            or interaction["pointerCancelCount"] != 0
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerReleaseCaptureCount"] != 1
+            or interaction["hoverMutationCount"] < 1
+            or interaction["dragMutationCount"] < 4
+            or interaction["dragDistance"] < .4
+            or interaction["keyboardInputCount"] != 3
+            or interaction["buttonActivationCount"] != 5
+            or interaction["massAdjustmentCount"] != 3
+            or interaction["lockCount"] != 3
+            or interaction["resetCount"] != 1
+            or interaction["maximumLensMass"] < 1.55
+            or not interaction["locked"]
+            or interaction["lockedCandidateIndex"] != 0
+            or interaction["activePointerId"] is not None
+            or interaction["pointerCaptured"]
+            or interaction["dragging"]
+            or interaction["lastInputTrusted"] is not True
+            or interaction["lastInputKind"] != "button-lock"
+            or interaction["lastPointerType"] != "mouse"
+            or interaction["assetFetchCount"] != 1
+            or interaction["assetResponseStatus"] != 200
+            or not interaction["assetSameOrigin"]
+            or interaction["assetByteLength"] != 192363
+            or interaction["assetSha256"] != "aa5095130a0a1424c6d43d95229728fd06a703beda30c5cb93b501f5be0c7c6a"
+            or not interaction["assetShaMatchesExpected"]
+            or not interaction["browserImageDecoded"]
+            or interaction["sourceNaturalWidth"] != 960
+            or interaction["sourceNaturalHeight"] != 640
+            or not interaction["p5ImageDecoded"]
+            or interaction["p5ImageClass"] != "p5.Image"
+            or interaction["p5ImageWidth"] != 960
+            or interaction["p5ImageHeight"] != 640
+            or interaction["p5ImagePixelLength"] != 2457600
+            or interaction["sampledWidth"] != 160
+            or interaction["sampledHeight"] != 90
+            or interaction["sampledPixelCount"] != 14400
+            or interaction["sampledByteLength"] != 57600
+            or len(interaction["sampledPixelSha256"]) != 64
+            or not interaction["sampledPixelSha256"].strip("0")
+            or interaction["distinctSampleColorCount"] <= 120
+            or interaction["nonzeroSampleByteCount"] <= 14400
+            or interaction["globalMeanLuma"] <= .02
+            or interaction["globalEdgeMean"] <= .01
+            or interaction["globalEdgeMaximum"] <= interaction["globalEdgeMean"]
+            or interaction["candidateCount"] != 7
+            or len(interaction["candidateEvidence"]) != 7
+            or interaction["candidateCoordinateChecksum"] <= 0
+            or interaction["minimumCandidateScore"] < 40
+            or interaction["maximumCandidateScore"] < 60
+            or not interaction["assetEvidenceReady"]
+            or not interaction["pixelEvidenceReady"]
+            or not interaction["p5InstanceReady"]
+            or not interaction["p5CanvasReady"]
+            or interaction["p5CanvasWidth"] != 320
+            or interaction["p5CanvasHeight"] != 180
+            or interaction["p5CompletedDrawCount"] < 10
+            or interaction["renderCount"] < 36
+            or interaction["previewClockIgnoredCount"] < 36
+            or interaction["initialVisualStateChecksum"] == interaction["currentVisualStateChecksum"]
+            or not interaction["runtimeAssertionPassed"]
+            or not interaction["ready"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture trusted deep-field hover, captured lens drag, source-derived candidate lock, keyboard position/mass changes, reset, and a final candidate-01 lock without automatic orbits: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "stencil-text-scanline-window":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

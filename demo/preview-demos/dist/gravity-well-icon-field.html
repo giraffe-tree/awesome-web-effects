@@ -1,8 +1,319 @@
-<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Gravity Well Icon Field</title><style>:root{--preview-background:#f6f1e6}canvas{width:100%;height:100%}.copy{position:absolute;left:14px;top:49px;width:101px;color:#17231f}.copy small{font:900 6px monospace;letter-spacing:.14em;color:#a6412e}.copy h1{margin:8px 0;font:950 20px/.84 system-ui;letter-spacing:-.06em}.library-badge{color:#17231f;background:#fff9;border-color:#17231f44}.scene-caption{display:none}</style>  <script type="module" crossorigin src="./assets/gravity-well-icon-field-evrsIXgs.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
-  <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
-  <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
-  <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
-  <link rel="modulepreload" crossorigin href="./assets/expansion-b-utils-CD_J0IHW.js">
-  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage"><canvas tabindex="0" aria-label="Icon glyphs orbit a moving gravity well"></canvas><section class="copy"><small>INTERFACE GRAVITY</small><h1>EVERY TOOL HAS MASS.</h1></section><span class="library-badge">p5.js · icon gravity</span></main></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>p5.js — Deep Field Gravity Lens</title>
+    <link rel="icon" href="data:," />
+    <style>
+      :root {
+        --preview-background: #020307;
+        color-scheme: dark;
+      }
+
+      button { font: inherit; }
+
+      .lens-stage {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        background: #020307;
+        color: #f6f2e8;
+        isolation: isolate;
+        user-select: none;
+      }
+
+      .lens-surface,
+      .lens-surface canvas,
+      .field-grade,
+      .field-grain {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .lens-surface {
+        z-index: 1;
+        cursor: crosshair;
+        outline: none;
+        touch-action: none;
+      }
+
+      .lens-surface:focus-visible {
+        box-shadow: inset 0 0 0 2px #bff4ff;
+      }
+
+      .lens-surface canvas,
+      .field-grade,
+      .field-grain { pointer-events: none; }
+
+      .field-grade {
+        z-index: 2;
+        background:
+          linear-gradient(180deg, #02040ac4 0%, transparent 27%, transparent 66%, #010209db 100%),
+          linear-gradient(90deg, #01030a69 0%, transparent 30%, transparent 76%, #02040a4f 100%);
+      }
+
+      .field-grain {
+        z-index: 3;
+        opacity: .07;
+        mix-blend-mode: soft-light;
+        background-image: radial-gradient(#fff8 .42px, transparent .6px);
+        background-size: 3px 3px;
+      }
+
+      .topbar {
+        position: absolute;
+        z-index: 7;
+        top: 11px;
+        left: 12px;
+        right: 12px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 10px;
+        pointer-events: none;
+      }
+
+      .identity {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        min-width: 0;
+      }
+
+      .identity-mark {
+        display: grid;
+        width: 25px;
+        height: 25px;
+        flex: 0 0 auto;
+        place-items: center;
+        border: 1px solid #bfeeff66;
+        border-radius: 50%;
+        background: #020713c9;
+        color: #bff4ff;
+        font: 950 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        backdrop-filter: blur(8px);
+      }
+
+      .identity-copy strong,
+      .identity-copy span {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        text-transform: uppercase;
+      }
+
+      .identity-copy strong {
+        font: 900 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .14em;
+      }
+
+      .identity-copy span {
+        margin-top: 4px;
+        color: #dce8f59a;
+        font: 750 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .11em;
+      }
+
+      .lens-stage .library-badge {
+        position: static;
+        max-width: 128px;
+        padding: 5px 7px;
+        border-color: #bfeeff45;
+        background: #020713c4;
+        color: #effbff;
+        font: 850 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .12em;
+        white-space: nowrap;
+        backdrop-filter: blur(8px);
+      }
+
+      .analysis-readout {
+        position: absolute;
+        z-index: 8;
+        left: 12px;
+        bottom: 10px;
+        display: grid;
+        grid-template-columns: auto auto;
+        align-items: end;
+        gap: 9px;
+        max-width: calc(100% - 142px);
+        pointer-events: none;
+      }
+
+      .score-orbit {
+        position: relative;
+        display: grid;
+        width: 36px;
+        height: 36px;
+        place-items: center;
+        border: 1px solid #bfeeff66;
+        border-radius: 50%;
+        background: #020713d1;
+        color: #bff4ff;
+        font: 950 8px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        backdrop-filter: blur(8px);
+      }
+
+      .score-orbit::before,
+      .score-orbit::after {
+        position: absolute;
+        border: 1px solid #bff4ff42;
+        border-radius: 50%;
+        content: "";
+      }
+
+      .score-orbit::before { inset: 4px -3px; }
+      .score-orbit::after { inset: -3px 6px; }
+
+      .analysis-copy { min-width: 0; }
+
+      .analysis-copy .status {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        color: #bff4ff;
+        font: 900 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .14em;
+        text-transform: uppercase;
+      }
+
+      .analysis-copy .status::before {
+        width: 11px;
+        height: 2px;
+        border-radius: 2px;
+        background: currentColor;
+        box-shadow: 0 0 7px currentColor;
+        content: "";
+      }
+
+      .analysis-copy h1 {
+        overflow: hidden;
+        margin: 4px 0 0;
+        color: #fffaf0;
+        font: 650 clamp(12px, 4vw, 25px)/.86 Georgia, "Times New Roman", serif;
+        letter-spacing: -.048em;
+        text-overflow: ellipsis;
+        text-wrap: nowrap;
+      }
+
+      .analysis-copy p {
+        margin: 4px 0 0;
+        color: #dce8f5b4;
+        font: 760 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .09em;
+        text-transform: uppercase;
+      }
+
+      .controls {
+        position: absolute;
+        z-index: 9;
+        right: 12px;
+        bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 3px;
+        padding: 3px;
+        border: 1px solid #bfeeff50;
+        border-radius: 999px;
+        background: #020713d7;
+        backdrop-filter: blur(9px);
+      }
+
+      .controls button {
+        display: grid;
+        min-width: 24px;
+        height: 22px;
+        padding: 0 7px;
+        place-items: center;
+        border: 0;
+        border-radius: 999px;
+        background: transparent;
+        color: #edf9ff;
+        cursor: pointer;
+        font: 900 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+      }
+
+      .controls button[data-lens-action="lock"] {
+        background: #bff4ff;
+        color: #04111a;
+      }
+
+      .controls button:hover { background: #ffffff18; }
+      .controls button[data-lens-action="lock"]:hover { background: #dbfaff; }
+
+      .controls button:focus-visible {
+        outline: 1px solid #fff;
+        outline-offset: 1px;
+      }
+
+      .runtime-ledger {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+      }
+
+      @media (max-width: 210px), (max-height: 105px) {
+        .topbar { top: 6px; left: 7px; right: 7px; }
+        .identity-mark { width: 19px; height: 19px; font-size: 5px; }
+        .identity-copy, .lens-stage .library-badge { display: none; }
+        .analysis-readout { left: 7px; bottom: 6px; max-width: calc(100% - 82px); gap: 5px; }
+        .score-orbit { width: 24px; height: 24px; font-size: 6px; }
+        .analysis-copy h1 { margin-top: 2px; font-size: 8px; }
+        .analysis-copy p { display: none; }
+        .controls { right: 6px; bottom: 6px; gap: 1px; padding: 2px; }
+        .controls button { min-width: 17px; width: 17px; height: 17px; padding: 0; font-size: 5px; }
+        .controls button span { display: none; }
+        .controls button[data-lens-action="reset"] { display: none; }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/gravity-well-icon-field-BvpggvKT.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+    <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
+    <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main id="lens-stage" class="preview-stage lens-stage" data-preview-mechanism="p5-pixel-driven-gravity-lens-inspection">
+      <div id="lens-surface" class="lens-surface" tabindex="0" role="application" aria-label="Deep-field lens inspector. Move or drag the lens, use arrow keys, then lock a candidate."></div>
+      <div class="field-grade" aria-hidden="true"></div>
+      <div class="field-grain" aria-hidden="true"></div>
+
+      <header class="topbar">
+        <div class="identity">
+          <span class="identity-mark">GL</span>
+          <div class="identity-copy">
+            <strong>Deep field · lens bench 07</strong>
+            <span>Drag to inspect · release to lock</span>
+          </div>
+        </div>
+        <span class="library-badge">p5.js · pixel lens</span>
+      </header>
+
+      <section class="analysis-readout" aria-live="polite">
+        <output id="lens-score" class="score-orbit">00</output>
+        <div class="analysis-copy">
+          <span id="lens-status" class="status">Calibrating field</span>
+          <h1 id="lens-conclusion">Deep-field aperture</h1>
+          <p><span id="lens-evidence">0.00 edge · 0.00 blue</span> · <span id="lens-strength">1.35× mass</span></p>
+        </div>
+      </section>
+
+      <nav class="controls" aria-label="Gravity lens controls">
+        <button type="button" data-lens-action="weaker" aria-label="Reduce lens mass">−</button>
+        <button type="button" data-lens-action="lock" aria-label="Lock current candidate"><span>Lock</span>◎</button>
+        <button type="button" data-lens-action="stronger" aria-label="Increase lens mass">+</button>
+        <button type="button" data-lens-action="reset" aria-label="Reset lens"><span>Reset</span>↺</button>
+      </nav>
+
+      <output id="runtime-ledger" class="runtime-ledger" aria-hidden="true"></output>
+    </main>
+  </body>
+</html>

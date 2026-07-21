@@ -1,1 +1,477 @@
-<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Spring Loaded Split Flap Counter</title><link rel="stylesheet" href="./shared.css"><style>:root{--preview-background:#201d18}.preview-stage{background:radial-gradient(circle at 70% 46%,#5a5041,#201d18 52%);color:#f8efdd}.copy{position:absolute;left:14px;top:49px;width:101px}.copy small{font:800 6px monospace;letter-spacing:.14em;color:#f5b95f}.copy h1{margin:8px 0;font:950 20px/.84 system-ui;letter-spacing:-.06em}.counter{position:absolute;left:138px;top:51px;display:flex;gap:7px;perspective:300px}.flap{position:relative;width:47px;height:68px;border-radius:6px;background:#0c0c0b;color:#fff;box-shadow:0 7px 14px #0008;display:grid;place-items:center;font:900 42px/.8 monospace;overflow:hidden}.flap::after{content:"";position:absolute;left:0;right:0;top:50%;border-top:1px solid #ffffff40;border-bottom:1px solid #000}.unit{position:absolute;right:20px;bottom:24px;color:#f5b95f;font:900 7px monospace}.scene-caption{display:none}</style></head><body><main class="preview-stage" tabindex="0"><section class="copy"><small>MECHANICAL DATA</small><h1>NUMBERS LAND WITH WEIGHT.</h1></section><div class="counter" id="counter"><i class="flap">0</i><i class="flap">0</i><i class="flap">0</i></div><b class="unit">KM / H</b><span class="library-badge">Motion · split flap</span></main><script type="module" src="./src/spring-loaded-split-flap-counter-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Harbor Hall Seat Sync</title>
+  <link rel="stylesheet" href="./shared.css">
+  <style>
+    :root {
+      --preview-background: #11130f;
+      --cream: #ece3cc;
+      --muted: #9a9b8f;
+      --line: rgba(236, 227, 204, .22);
+      --signal: rgb(69, 132, 125);
+      --signal-soft: rgba(69, 132, 125, .18);
+      --flap-face: rgb(33, 56, 53);
+      --flap-ink: rgb(229, 239, 222);
+    }
+
+    button,
+    input { font: inherit; }
+
+    button { -webkit-tap-highlight-color: transparent; }
+
+    .preview-stage {
+      container-type: size;
+      background:
+        linear-gradient(90deg, rgba(255, 255, 255, .018) 1px, transparent 1px) 0 0 / 24px 24px,
+        linear-gradient(rgba(255, 255, 255, .018) 1px, transparent 1px) 0 0 / 24px 24px,
+        radial-gradient(circle at 76% 38%, var(--signal-soft), transparent 37%),
+        #11130f;
+      color: var(--cream);
+      outline: none;
+      user-select: none;
+      touch-action: none;
+    }
+
+    .preview-stage::after {
+      content: "";
+      position: absolute;
+      inset: 4px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      pointer-events: none;
+    }
+
+    .topline {
+      position: absolute;
+      z-index: 4;
+      top: clamp(5px, 2.8cqh, 12px);
+      left: clamp(7px, 2.4cqw, 17px);
+      right: clamp(7px, 2.4cqw, 17px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .eyebrow,
+    .sync-state,
+    .proof-readout,
+    .legend,
+    .counter-label,
+    .counter-meta,
+    .task-hint {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+    }
+
+    .eyebrow {
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(5px, 1.1cqw, 8px);
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .eyebrow b { color: var(--cream); }
+
+    .sync-state {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--signal);
+      font-size: clamp(5px, 1cqw, 8px);
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .sync-state::before {
+      content: "";
+      width: clamp(4px, .9cqw, 7px);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: currentColor;
+      box-shadow: 0 0 12px currentColor;
+    }
+
+    .workspace {
+      position: absolute;
+      inset: clamp(22px, 10cqh, 40px) clamp(7px, 2.4cqw, 17px) clamp(23px, 15cqh, 61px);
+      display: grid;
+      grid-template-columns: minmax(0, .83fr) minmax(0, 1.56fr);
+      gap: clamp(7px, 2.7cqw, 20px);
+      align-items: stretch;
+      min-height: 0;
+    }
+
+    .proof-card,
+    .counter-panel {
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: clamp(7px, 2cqw, 15px);
+      overflow: hidden;
+      background: rgba(17, 19, 15, .76);
+    }
+
+    .proof-card {
+      position: relative;
+      cursor: crosshair;
+      outline: none;
+    }
+
+    .proof-image {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      filter: saturate(.92) contrast(1.04) brightness(.85);
+      transition: filter .18s ease;
+      pointer-events: none;
+    }
+
+    .proof-card:hover .proof-image,
+    .proof-card:focus-visible .proof-image { filter: saturate(1.08) contrast(1.08) brightness(.94); }
+
+    .proof-shade {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 44%, rgba(9, 11, 8, .86));
+      pointer-events: none;
+    }
+
+    .proof-title {
+      position: absolute;
+      left: clamp(6px, 1.5cqw, 11px);
+      top: clamp(5px, 1.3cqw, 9px);
+      padding: 3px 5px;
+      border-radius: 999px;
+      background: rgba(12, 14, 11, .72);
+      border: 1px solid rgba(236, 227, 204, .2);
+      color: var(--cream);
+      font: 800 clamp(5px, 1cqw, 7px)/1 ui-monospace, monospace;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+
+    .scan-marker {
+      position: absolute;
+      left: 52%;
+      top: 25%;
+      width: clamp(8px, 2cqw, 14px);
+      aspect-ratio: 1;
+      border: 1px solid var(--cream);
+      border-radius: 50%;
+      translate: -50% -50%;
+      opacity: 0;
+      box-shadow: 0 0 0 2px rgba(17, 19, 15, .5), 0 0 16px var(--signal);
+      pointer-events: none;
+    }
+
+    .proof-card[data-scanned="true"] .scan-marker { opacity: 1; }
+
+    .proof-readout {
+      position: absolute;
+      left: clamp(6px, 1.5cqw, 11px);
+      right: clamp(6px, 1.5cqw, 11px);
+      bottom: clamp(5px, 1.3cqw, 9px);
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 5px;
+      font-size: clamp(5px, .9cqw, 7px);
+      line-height: 1.35;
+      font-weight: 800;
+      pointer-events: none;
+    }
+
+    .proof-readout span:first-child { color: var(--muted); }
+    .proof-readout strong { color: var(--signal); font-size: 1.08em; }
+
+    .counter-panel {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: clamp(7px, 2.4cqw, 18px);
+    }
+
+    .counter-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: clamp(5px, 2.7cqh, 11px);
+    }
+
+    .counter-label {
+      color: var(--muted);
+      font-size: clamp(5px, 1cqw, 8px);
+      font-weight: 800;
+    }
+
+    .counter-meta {
+      color: var(--signal);
+      font-size: clamp(5px, .9cqw, 7px);
+      font-weight: 900;
+      text-align: right;
+    }
+
+    .counter {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: clamp(2px, 1.1cqw, 8px);
+      width: 100%;
+      perspective: 600px;
+    }
+
+    .flap {
+      position: relative;
+      aspect-ratio: .77;
+      min-height: 0;
+      border-radius: clamp(3px, 1.1cqw, 8px);
+      background: color-mix(in srgb, var(--flap-face), #060706 28%);
+      color: var(--flap-ink);
+      box-shadow:
+        inset 0 1px rgba(255, 255, 255, .12),
+        inset 0 -1px rgba(0, 0, 0, .75),
+        0 clamp(2px, 1.3cqh, 5px) clamp(5px, 2.8cqw, 17px) rgba(0, 0, 0, .44);
+      overflow: hidden;
+      transform-style: preserve-3d;
+    }
+
+    .flap-panel,
+    .flap-leaf {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 50%;
+      display: grid;
+      overflow: hidden;
+      background:
+        linear-gradient(100deg, rgba(255, 255, 255, .08), transparent 28%, rgba(0, 0, 0, .12)),
+        var(--flap-face);
+      backface-visibility: hidden;
+    }
+
+    .flap-panel b,
+    .flap-leaf b {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 200%;
+      display: grid;
+      place-items: center;
+      color: var(--flap-ink);
+      font: 900 clamp(12px, 7.9cqw, 57px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: -.08em;
+      text-shadow: 0 1px 0 rgba(0, 0, 0, .5);
+    }
+
+    .flap-panel-top,
+    .flap-leaf-out { top: 0; transform-origin: 50% 100%; }
+    .flap-panel-bottom,
+    .flap-leaf-in { bottom: 0; transform-origin: 50% 0; }
+    .flap-panel-top b,
+    .flap-leaf-out b { top: 0; }
+    .flap-panel-bottom b,
+    .flap-leaf-in b { bottom: 0; }
+    .flap-leaf { z-index: 3; }
+    .flap-leaf-in { transform: rotateX(92deg); opacity: 0; }
+
+    .flap-midline {
+      position: absolute;
+      z-index: 5;
+      left: 0;
+      right: 0;
+      top: 50%;
+      height: 1px;
+      background: rgba(0, 0, 0, .75);
+      box-shadow: 0 -1px rgba(255, 255, 255, .09);
+      pointer-events: none;
+    }
+
+    .flap-midline::before,
+    .flap-midline::after {
+      content: "";
+      position: absolute;
+      top: -2px;
+      width: 2px;
+      height: 5px;
+      background: #090a08;
+    }
+
+    .flap-midline::before { left: 4px; }
+    .flap-midline::after { right: 4px; }
+
+    .legend {
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+      margin-top: clamp(5px, 2.5cqh, 10px);
+      color: var(--muted);
+      font-size: clamp(4px, .85cqw, 7px);
+      font-weight: 700;
+    }
+
+    .legend b { color: var(--cream); }
+
+    .controls {
+      position: absolute;
+      z-index: 6;
+      left: clamp(7px, 2.4cqw, 17px);
+      right: clamp(7px, 2.4cqw, 17px);
+      bottom: clamp(5px, 2.7cqh, 11px);
+      height: clamp(14px, 9cqh, 36px);
+      display: grid;
+      grid-template-columns: auto minmax(36px, 1fr) auto auto auto;
+      gap: clamp(3px, 1cqw, 7px);
+      align-items: center;
+    }
+
+    .control-button {
+      height: 100%;
+      min-width: clamp(23px, 6.5cqw, 47px);
+      padding: 0 clamp(5px, 1.3cqw, 10px);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(236, 227, 204, .06);
+      color: var(--cream);
+      font: 900 clamp(5px, 1cqw, 8px)/1 ui-monospace, monospace;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      cursor: pointer;
+    }
+
+    .control-button:hover,
+    .control-button:focus-visible {
+      border-color: var(--signal);
+      background: var(--signal-soft);
+      outline: none;
+    }
+
+    .control-button.primary {
+      background: var(--signal);
+      border-color: var(--signal);
+      color: #0d110e;
+    }
+
+    .range-wrap {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      gap: clamp(4px, 1.3cqw, 10px);
+      padding: 0 clamp(5px, 1.5cqw, 11px);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(236, 227, 204, .035);
+    }
+
+    .task-hint {
+      color: var(--muted);
+      font-size: clamp(4px, .85cqw, 7px);
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    #release-range {
+      min-width: 0;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      accent-color: var(--signal);
+      cursor: ew-resize;
+    }
+
+    .preview-stage .library-badge {
+      top: auto;
+      left: auto;
+      right: clamp(7px, 2.4cqw, 17px);
+      bottom: calc(clamp(5px, 2.7cqh, 11px) + clamp(14px, 9cqh, 36px) + 4px);
+      padding: 3px 6px;
+      font-size: clamp(4px, .85cqw, 7px);
+      background: rgba(10, 12, 9, .66);
+    }
+
+    @container (max-width: 360px) {
+      .workspace { grid-template-columns: minmax(0, .72fr) minmax(0, 1.5fr); }
+      .proof-readout span:first-child,
+      .legend span:last-child,
+      .task-hint { display: none; }
+      .controls { grid-template-columns: auto minmax(24px, 1fr) auto auto auto; }
+      .control-button { padding: 0 5px; }
+    }
+
+    @container (max-width: 190px), (max-height: 105px) {
+      .topline { top: 4px; }
+      .workspace { top: 17px; bottom: 19px; gap: 4px; }
+      .proof-card,
+      .counter-panel { border-radius: 5px; }
+      .counter-panel { padding: 4px; }
+      .counter-heading { margin-bottom: 2px; }
+      .counter-meta,
+      .legend { display: none; }
+      .flap-panel b,
+      .flap-leaf b { font-size: clamp(11px, 7.8cqw, 15px); }
+      .controls { bottom: 3px; height: 13px; gap: 2px; }
+      .range-wrap { padding: 0 3px; }
+      .control-button { min-width: 19px; padding: 0 3px; letter-spacing: 0; }
+      .control-button span { display: none; }
+      .preview-stage .library-badge { display: none; }
+      .proof-title { padding: 2px 3px; }
+      .proof-readout { left: 3px; right: 3px; bottom: 2px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="preview-stage" id="inventory-stage" tabindex="0" data-preview-mechanism="motion-seat-inventory-split-flap">
+    <header class="topline">
+      <p class="eyebrow"><b>Harbor Hall</b> · seat inventory / HH–07</p>
+      <output class="sync-state" id="sync-state">source verified</output>
+    </header>
+
+    <section class="workspace" aria-label="Seat inventory verification workspace">
+      <figure class="proof-card" id="proof-card" tabindex="0" aria-label="Hover the source proofboard to inspect seat zones" data-scanned="false">
+        <img class="proof-image" id="proof-image" alt="Color-coded fictional Harbor Hall seating inventory proofboard">
+        <span class="proof-title">pixel proof / live</span>
+        <span class="scan-marker" id="scan-marker"></span>
+        <span class="proof-shade"></span>
+        <figcaption class="proof-readout">
+          <span>hover to inspect</span>
+          <strong id="zone-readout">upper · open</strong>
+        </figcaption>
+      </figure>
+
+      <section class="counter-panel" aria-labelledby="counter-label">
+        <div class="counter-heading">
+          <span class="counter-label" id="counter-label">release target / seats</span>
+          <output class="counter-meta" id="counter-meta">verified ceiling · ----</output>
+        </div>
+        <div class="counter" id="counter" aria-live="polite" aria-label="Planned released seats"></div>
+        <div class="legend">
+          <span>draft <b id="draft-value">----</b></span>
+          <span>committed <b id="committed-value">----</b></span>
+          <span>proof <b id="proof-value">pending</b></span>
+        </div>
+      </section>
+    </section>
+
+    <nav class="controls" aria-label="Seat release controls">
+      <button class="control-button" id="minus-button" type="button" aria-label="Release ten fewer seats">−10</button>
+      <label class="range-wrap" for="release-range">
+        <span class="task-hint">drag release</span>
+        <input id="release-range" type="range" min="0" max="100" value="0" step="1" aria-label="Planned seats to release">
+      </label>
+      <button class="control-button" id="plus-button" type="button" aria-label="Release ten more seats">+10</button>
+      <button class="control-button primary" id="sync-button" type="button" aria-label="Commit inventory update">Sync</button>
+      <button class="control-button" id="reset-button" type="button" aria-label="Restore verified inventory">↺ <span>Proof</span></button>
+    </nav>
+
+    <span class="library-badge">Motion · human split-flap</span>
+  </main>
+  <script type="module" src="./src/spring-loaded-split-flap-counter-demo.js"></script>
+</body>
+</html>

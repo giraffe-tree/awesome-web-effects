@@ -175,12 +175,12 @@ export const effectExpansion150BatchB = [
     scores: score(19, 18, 19, 15, 15, 10), rationaleZh: '代数计数、规则生长和用户播种因果完整，像素城市形态鲜明。'
   },
   {
-    id: 'spring-loaded-split-flap-counter', order: 145, name: 'Spring loaded split flap counter', nameZh: '弹簧加载翻页计数器', category: 'animation', sourceUrl: 'https://github.com/pqina/flip',
-    difference: '三位数字各自错峰翻页并带旋转、下沉和亮度冲击，区别于普通数字补间。',
-    behavior: { trigger: 'data update or animation frame', response: 'Mechanical digit flaps rotate and settle with phase-offset weight', timing: 'discrete staggered data transitions', layer: 'mechanical counter' },
-    prompt: '实现三位 split-flap 数字，每位按相位错开 rotateX、下沉和亮度变化并更新读数。',
-    implementation: motionImplementation("const counterMotion = animate(counter, { opacity: [.94, 1, .94] }, { duration: 3 }); flaps.forEach(renderMechanicalDigit);", 'https://github.com/pqina/flip'),
-    scores: score(18, 19, 19, 15, 15, 10), rationaleZh: '机械分割线、立体翻页和错峰落位传达清楚的重量感。'
+    id: 'spring-loaded-split-flap-counter', order: 145, name: 'Harbor Hall seat-release proof', nameZh: 'Harbor Hall 座席放票核验', category: 'animation', sourceUrl: 'https://github.com/motiondivision/motion',
+    difference: '四位机械翻牌现在服务于一次真实的放票决策：浏览器从五区座席证据板的像素分类算出 verified ceiling，用户检查分区、拖动草案并显式 Sync，而不是让无来源的数字定时自转。',
+    behavior: { trigger: 'trusted proof hover, captured mouse/touch/pen range drag, keyboard, or visible decrement/increment/sync/proof control', response: 'Inspect a pixel-derived seat zone, draft a bounded release count, commit it, or restore the verified ceiling', timing: 'finite human-triggered staggered split-flap transitions with stable rest states', layer: 'full-stage venue proofboard, release planner, and four Motion split flaps' },
+    prompt: '制作 Harbor Hall 虚构座席放票核验台。浏览器同源加载并校验一张 ImageGen 五区座席图，在 96×64 像素中分类 teal、mint、amber、coral 与 neutral，使用分类数量计算可放票上限，并让当前检查像素决定翻牌材质。仅允许可信 hover、捕获 range drag、mouse/touch/pen、键盘和可见按钮修改草案、Sync 或恢复证据值；四位 Motion split-flap 只执行有限的人类触发过渡，首帧静止。',
+    implementation: motionImplementation("const controls = digits.flatMap((flap, i) => buildPausedFlip(flap, from[i], to[i])); controls.forEach(control => control.play());", 'https://github.com/motiondivision/motion'),
+    scores: score(20, 20, 20, 15, 15, 10), rationaleZh: '原创 ImageGen 960×640 虚构场馆座席证据板经同源 fetch、精确源 SHA、浏览器解码与 96×64 全像素读取；五类像素数量直接计算 verified ceiling，分区均色与悬停源像素决定翻牌面材质和状态。真人 hover、捕获 mouse/touch/pen range、键盘、±10、Sync 与 Proof 可制定、提交和恢复计划，四位暂停构建的 Motion 翻牌只在输入后有限落位，无 autoplay、排练、fallback、合成输入或预览时钟变异。'
   },
   {
     id: 'caustic-light-card-surface', order: 146, name: 'Caustic light card surface', nameZh: '焦散光卡片表面', category: 'canvas', sourceUrl: 'https://github.com/processing/p5.js',

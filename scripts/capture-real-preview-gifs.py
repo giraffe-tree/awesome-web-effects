@@ -1717,6 +1717,59 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.locator('[data-radar-action="reset"]').click()
             elif index == 32:
                 page.locator('[data-radar-action="next"]').click()
+        elif demo["id"] == "spring-loaded-split-flap-counter":
+            if index == 3:
+                proof_bounds = page.locator("#proof-card").bounding_box()
+                if not proof_bounds:
+                    raise RuntimeError("spring-loaded-split-flap-counter proofboard has no bounds")
+                page.mouse.move(
+                    proof_bounds["x"] + proof_bounds["width"] * .5,
+                    proof_bounds["y"] + proof_bounds["height"] * .8,
+                )
+            elif index == 5:
+                range_bounds = page.locator("#release-range").bounding_box()
+                if not range_bounds:
+                    raise RuntimeError("spring-loaded-split-flap-counter range has no bounds")
+                page.mouse.move(
+                    range_bounds["x"] + range_bounds["width"] * .92,
+                    range_bounds["y"] + range_bounds["height"] * .5,
+                )
+                page.mouse.down()
+            elif index in (6, 7, 8, 9):
+                ratios = {6: .8, 7: .65, 8: .5, 9: .35}
+                range_bounds = page.locator("#release-range").bounding_box()
+                if not range_bounds:
+                    raise RuntimeError("spring-loaded-split-flap-counter range has no bounds")
+                page.mouse.move(
+                    range_bounds["x"] + range_bounds["width"] * ratios[index],
+                    range_bounds["y"] + range_bounds["height"] * .5,
+                    steps=2,
+                )
+            elif index == 10:
+                page.mouse.up()
+            elif index == 13:
+                page.locator("#plus-button").click()
+            elif index == 15:
+                page.locator("#sync-button").click()
+            elif index == 18:
+                page.locator("#inventory-stage").focus()
+                page.keyboard.press("Home")
+            elif index == 20:
+                page.keyboard.press("End")
+            elif index == 22:
+                page.keyboard.press("ArrowLeft")
+            elif index == 24:
+                page.locator("#reset-button").click()
+            elif index == 27:
+                proof_bounds = page.locator("#proof-card").bounding_box()
+                if not proof_bounds:
+                    raise RuntimeError("spring-loaded-split-flap-counter proofboard has no bounds")
+                page.mouse.move(
+                    proof_bounds["x"] + proof_bounds["width"] * .5,
+                    proof_bounds["y"] + proof_bounds["height"] * .45,
+                )
+            elif index == 29:
+                page.mouse.move(300, 20)
         elif demo["id"] == "kinetic-paper-fold-map":
             if index == 1:
                 page.mouse.move(280, 100)
@@ -4682,6 +4735,114 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["ready"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture trusted human beam aiming, all four pixel-clustered Storm Port anomalies, keyboard navigation, explicit reset, and retained post-reset evidence without an automatic sweep: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "spring-loaded-split-flap-counter":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        categories = interaction["categoryCounts"]
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-fictional-harbor-hall-seat-release-sync"
+            or interaction["claimedLibrary"] != "motion@12.42.2"
+            or interaction["renderer"] != "dom"
+            or interaction["mechanism"] != "trusted-human-input-drives-paused-motion-split-flaps"
+            or interaction["assetMechanismRole"] != "browser-decoded-source-pixels-determine-verified-seat-ceiling-zone-status-and-flap-material"
+            or interaction["acceptedInputs"] != ["mouse-hover", "captured-mouse-drag", "captured-touch-drag", "captured-pen-drag", "keyboard", "visible-buttons", "visible-range"]
+            or not interaction["userInputRequired"]
+            or not interaction["strictTrustedInputGuard"]
+            or not interaction["initialFrameStatic"]
+            or interaction["automaticCycle"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["previewClockMutationCount"] != 0
+            or interaction["inputCount"] < 18
+            or interaction["trustedInputCount"] != interaction["inputCount"]
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["pointerEnterCount"] < 2
+            or interaction["hoverMoveCount"] < 2
+            or interaction["zoneInspectionCount"] < 2
+            or interaction["zoneInspectionMutationCount"] < 2
+            or not {"amber", "mint"}.issubset(set(interaction["distinctInspectedCategories"]))
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerMoveCount"] < 8
+            or interaction["pointerUpCount"] != 1
+            or interaction["pointerCancelCount"] != 0
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerCaptureReleaseCount"] != 1
+            or "mouse" not in interaction["pointerTypesSeen"]
+            or interaction["keyboardInputCount"] != 3
+            or interaction["buttonActivationCount"] != 3
+            or interaction["rangeMutationCount"] < 8
+            or interaction["keyboardMutationCount"] != 3
+            or interaction["buttonMutationCount"] != 2
+            or interaction["planMutationCount"] != interaction["rangeMutationCount"] + interaction["keyboardMutationCount"] + interaction["buttonMutationCount"]
+            or interaction["planMutationCount"] < 13
+            or interaction["resetCount"] != 1
+            or interaction["commitCount"] != 1
+            or interaction["counterTransitionCount"] != interaction["planMutationCount"]
+            or interaction["counterTransitionCount"] < 13
+            or interaction["completedCounterTransitionCount"] < 1
+            or interaction["interruptedCounterTransitionCount"] < 1
+            or interaction["motionControllerCreateCount"] != interaction["counterTransitionCount"] * 8
+            or interaction["motionControllerPlayCount"] != interaction["motionControllerCreateCount"]
+            or interaction["activeMotionControllerCount"] != 0
+            or interaction["maximumActiveMotionControllerCount"] != 8
+            or not interaction["controlsBuiltWithoutAutoplay"]
+            or interaction["activePointerId"] is not None
+            or interaction["pointerCaptured"]
+            or interaction["lastPointerType"] != "mouse"
+            or interaction["lastInputKind"] != "mouse-hover"
+            or interaction["lastInputTrusted"] is not True
+            or interaction["firstHumanValueBefore"] != interaction["verifiedSeatCeiling"]
+            or interaction["firstHumanValueAfter"] >= interaction["verifiedSeatCeiling"]
+            or interaction["minimumPlannedSeats"] != 0
+            or interaction["maximumPlannedSeats"] != interaction["verifiedSeatCeiling"]
+            or interaction["maximumHumanDelta"] < interaction["verifiedSeatCeiling"]
+            or interaction["plannedSeats"] != interaction["verifiedSeatCeiling"]
+            or interaction["committedSeats"] != interaction["verifiedSeatCeiling"]
+            or interaction["verifiedSeatCeiling"] < 80
+            or interaction["verifiedSeatCeiling"] > 9990
+            or interaction["selectedCategory"] != "mint"
+            or interaction["flapMaterialSource"] != "mint"
+            or not interaction["flapMaterialColor"]
+            or interaction["assetFetchCount"] != 1
+            or interaction["assetResponseStatus"] != 200
+            or "image/jpeg" not in interaction["assetMimeType"]
+            or not interaction["assetSameOrigin"]
+            or interaction["assetByteLength"] != 376201
+            or interaction["assetSha256"] != "3d9b707b5729214ce8283a62ee67fea4ea536f95f03ca3a44d3a52cc4dbd1edf"
+            or not interaction["assetShaMatchesExpected"]
+            or not interaction["browserImageDecoded"]
+            or interaction["sourceNaturalWidth"] != 960
+            or interaction["sourceNaturalHeight"] != 640
+            or interaction["sampledWidth"] != 96
+            or interaction["sampledHeight"] != 64
+            or interaction["sampledPixelCount"] != 6144
+            or interaction["sampledPixelByteLength"] != 24576
+            or len(interaction["sampledPixelSha256"]) != 64
+            or not interaction["sampledPixelSha256"].strip("0")
+            or len(interaction["sampledPixelChecksum"]) != 8
+            or interaction["distinctSampleColorCount"] <= 90
+            or interaction["sampledLumaRange"] <= 60
+            or categories["teal"] <= 200
+            or categories["mint"] <= 25
+            or categories["amber"] <= 120
+            or categories["coral"] <= 200
+            or interaction["classifiedPixelCount"] <= 900
+            or sum(categories.values()) != 6144
+            or not interaction["initialStillVerified"]
+            or interaction["stageWidth"] != 320
+            or interaction["stageHeight"] != 180
+            or interaction["counterCoverageRatio"] <= 0
+            or interaction["proofCoverageRatio"] <= 0
+            or interaction["previewRenderCount"] < 36
+            or not interaction["runtimeAssertionPassed"]
+            or not interaction["ready"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a trusted proof hover, captured release-range draft, finite four-digit Motion transitions, explicit sync, reversible keyboard plan, and exact proof restore over the pixel-derived Harbor Hall seat ceiling: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "kinetic-paper-fold-map":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

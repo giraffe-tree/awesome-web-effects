@@ -1719,6 +1719,23 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.up()
             elif index == 21:
                 page.locator('#confirm-analysis').click()
+        elif demo["id"] == "click-to-collapse-hierarchy-branches":
+            if index == 3:
+                page.locator('#node-map-panel').click()
+            elif index == 5:
+                page.locator('#confirm-navigation').click()
+            elif index == 8:
+                page.locator('#node-components').click()
+            elif 9 <= index <= 15:
+                page.wait_for_timeout(80)
+            elif index == 16:
+                page.locator('#node-components').click()
+            elif 17 <= index <= 22:
+                page.wait_for_timeout(90)
+            elif index == 23:
+                page.locator('#node-filter-bar').click()
+            elif index == 25:
+                page.locator('#undo-action').click()
         elif demo["id"] == "gooey-pixel-cursor-wake":
             if index == 3:
                 box = page.locator('#pixel-wake-host').bounding_box()
@@ -6710,6 +6727,101 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or page.locator('#reset-graph').is_disabled()
         ):
             raise RuntimeError(f"{demo['id']} did not capture a real human-pinned bounded dependency solve and retained Auth API blast-radius analysis: {interaction!r}")
+    elif demo["id"] == "click-to-collapse-hierarchy-branches":
+        interaction = page.evaluate("window.__REPO_TREE_STATE__")
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        expected_node_order = ["repo", "app", "page", "layout", "components", "map-panel", "filter-bar", "charts", "sparkline", "docs", "field-notes", "release"]
+        expected_descendants = ["map-panel", "filter-bar", "charts", "sparkline"]
+        expected_unaffected = ["repo", "app", "page", "layout", "docs", "field-notes", "release"]
+        if (
+            not assertion
+            or interaction["task"] != "human-selects-and-confirms-a-repository-file-while-folder-collapse-hides-only-descendants-and-preserves-all-other-node-identities"
+            or interaction["claimedLibrary"] != "motion@12.42.2"
+            or interaction["mechanism"] != "trusted-node-or-keyboard-activation-drives-finite-motion-descendant-opacity-with-stable-authored-node-ids-while-review-selection-confirmation-and-undo-are-retained"
+            or interaction["assetStrategy"] != "code-native-authored-file-hierarchy-and-svg-connectors-are-the-functional-input-no-raster-asset-required"
+            or interaction["causality"] != "trusted-human-input-only"
+            or not interaction["userInputRequired"]
+            or not interaction["strictTrustedInputGuard"]
+            or interaction["automaticCollapse"]
+            or interaction["automaticRestore"]
+            or interaction["automaticSelection"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticCycle"]
+            or interaction["automaticTimeline"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or interaction["previewClockMutationCount"] != 0
+            or interaction["phase"] != "undo-restored"
+            or interaction["transitioning"]
+            or interaction["inputCount"] != 6
+            or interaction["trustedInputCount"] != 6
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["pointerNodeInputCount"] != 4
+            or interaction["pointerButtonInputCount"] != 2
+            or interaction["keyboardNodeInputCount"] != 0
+            or interaction["keyboardButtonInputCount"] != 0
+            or interaction["branchToggleInputCount"] != 2
+            or interaction["leafSelectionInputCount"] != 2
+            or interaction["confirmInputCount"] != 1
+            or interaction["undoInputCount"] != 1
+            or interaction["nodeCount"] != 12
+            or interaction["edgeCount"] != 11
+            or interaction["rootCount"] != 1
+            or interaction["branchNodeCount"] != 4
+            or interaction["leafNodeCount"] != 7
+            or [part.split(":", 1)[0] for part in interaction["hierarchyIdentitySignature"].split("|")] != expected_node_order
+            or interaction["selectedNodeId"] != "map-panel"
+            or interaction["confirmedNodeId"] != "map-panel"
+            or interaction["selectedPath"] != "atlas-studio/components/MapPanel.tsx"
+            or interaction["confirmedPath"] != interaction["selectedPath"]
+            or interaction["selectedDepth"] != 2
+            or interaction["confirmCount"] != 1
+            or not interaction["resultHeld"]
+            or not interaction["resultValidated"]
+            or interaction["collapsedBranchIds"] != []
+            or any(value != 0 for value in interaction["branchProgress"].values())
+            or interaction["collapseCount"] != 1
+            or interaction["restoreCount"] != 1
+            or interaction["transitionStartCount"] != 2
+            or interaction["transitionCompleteCount"] != 2
+            or interaction["motionControlCount"] != 2
+            or interaction["motionStartCount"] != 2
+            or interaction["motionCompleteCount"] != 2
+            or len(interaction["transitionRecords"]) != 2
+            or [record["action"] for record in interaction["transitionRecords"]] != ["collapse", "restore"]
+            or any(record["branchId"] != "components" for record in interaction["transitionRecords"])
+            or any(record["descendantIds"] != expected_descendants for record in interaction["transitionRecords"])
+            or any(record["unaffectedIds"] != expected_unaffected for record in interaction["transitionRecords"])
+            or any(not record["trusted"] or not record["completed"] or not record["retained"] or record["stableMovementError"] != 0 for record in interaction["transitionRecords"])
+            or interaction["hiddenDescendantCount"] != 0
+            or interaction["maximumHiddenDescendantCount"] != 4
+            or interaction["visibleNodeCount"] != 12
+            or interaction["unaffectedVisibleCountDuringCollapse"] != 8
+            or not interaction["unaffectedIdentityStable"]
+            or interaction["maximumStableNodeMovementError"] != 0
+            or interaction["identityCheckCount"] != 2
+            or interaction["snapshotDepth"] != 4
+            or interaction["undoCount"] != 1
+            or interaction["lastUndoRestoredSelectedId"] != "map-panel"
+            or interaction["lastUndoRestoredConfirmedId"] != "map-panel"
+            or interaction["auditTrailCount"] != 6
+            or [record["action"] for record in interaction["auditTrail"]] != ["select", "confirm", "collapse", "restore", "select", "undo"]
+            or interaction["auditTrail"][4].get("nodeId") != "filter-bar"
+            or interaction["auditTrail"][5].get("restoredSelectedId") != "map-panel"
+            or interaction["auditTrail"][5].get("restoredConfirmedId") != "map-panel"
+            or interaction["renderedNodeCount"] != 12
+            or interaction["renderedEdgeCount"] != 11
+            or abs(interaction["svgWidth"] - interaction["stageWidth"]) > 1
+            or abs(interaction["svgHeight"] - interaction["stageHeight"]) > 1
+            or interaction["geometryCoverageX"] < .995
+            or interaction["geometryCoverageY"] < .995
+            or not interaction["initialStillVerified"]
+            or page.locator('#selection-path').text_content() != "atlas-studio/components/MapPanel.tsx"
+            or "Review held" not in page.locator('#review-label').text_content()
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a real descendant-isolated repository collapse and retained MapPanel review path: {interaction!r}")
     elif demo["id"] == "gooey-pixel-cursor-wake":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")

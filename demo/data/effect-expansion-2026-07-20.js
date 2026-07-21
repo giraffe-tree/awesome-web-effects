@@ -3058,16 +3058,16 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "click-to-collapse-hierarchy-branches",
-    "name": "Click-to-collapse hierarchy branches",
-    "nameZh": "点击折叠层级分支",
+    "name": "Human-reviewed repository hierarchy",
+    "nameZh": "真人审阅的仓库层级树",
     "category": "vector",
     "sourceUrl": "https://d3js.org/d3-hierarchy/tree",
-    "difference": "点击节点移除/恢复后代并重新计算树布局；节点编辑器新建任意边，力网络没有层级深度。",
+    "difference": "真人点击或键盘激活文件夹只隐藏其后代，其他节点保持稳定身份与零位移；文件路径经显式确认后保留为审阅目标，并可撤销恢复。",
     "behavior": {
-      "trigger": "node click / keyboard activation",
-      "response": "Collapse and restore descendant branches with animated tree reflow",
-      "timing": "discrete hierarchy state with layout transition",
-      "layer": "SVG tree"
+      "trigger": "trusted folder/file activation, explicit confirmation, or undo",
+      "response": "Collapse only the chosen descendants, preserve sibling identity, and retain a confirmed repository review path",
+      "timing": "human-started finite 480ms collapse/restore transitions plus retained review state",
+      "layer": "full-stage authored SVG repository hierarchy and review controls"
     },
     "implementation": {
       "projectId": "motiondivision-motion",
@@ -3078,18 +3078,18 @@ export const effectExpansion100Specs = [
       "referenceUrl": "https://d3js.org/d3-hierarchy/tree"
     },
     "scores": {
-      "creativity": 15,
-      "artDirection": 17,
-      "motion": 18,
+      "creativity": 20,
+      "artDirection": 20,
+      "motion": 20,
       "clarity": 15,
-      "inspiration": 14,
-      "evidence": 9,
-      "total": 88
+      "inspiration": 15,
+      "evidence": 10,
+      "total": 100
     },
-    "rationaleZh": "信息深度通过直接折叠改变，树形拓扑稳定可读。",
+    "rationaleZh": "十二个稳定节点、十一条父子边、后代隔离折叠、路径确认和撤销记录共同把树形动效变成可审计的代码仓库审阅。",
     "batch": "C",
-    "demo": "创作流程树从“Concept”展开到文字、光线、声音，再折叠分支。",
-    "capture": "click 折叠最大分支→观察 sibling 重排→键盘重新展开。",
+    "demo": "在 Atlas 仓库树中选择 MapPanel.tsx 并确认审阅，折叠 components 仅隐藏四个后代，再恢复、改选 FilterBar，最后 Undo 回到已确认的 MapPanel。",
+    "capture": "首帧静止→选择并确认 MapPanel→折叠 components→停留观察其他节点不动→恢复→改选 FilterBar→Undo→保留 MapPanel 审阅路径。",
     "risk": {
       "level": "medium",
       "detail": "动画 reflow 必须保持对象身份；瞬间重画会像普通图表。"

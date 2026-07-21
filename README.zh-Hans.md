@@ -175,7 +175,7 @@
 | [真人钉住的发布依赖分析](https://giraffe-tree.github.io/awesome-web-effects/#draggable-force-directed-svg-network) | [p5.js](https://github.com/processing/p5.js) | **100/100** | [D3js](https://d3js.org/d3-force) | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#draggable-force-directed-svg-network) |
 | [真人审阅的 Voronoi 空气传感器归因](https://giraffe-tree.github.io/awesome-web-effects/#voronoi-nearest-point-hover-focus) | [p5.js](https://github.com/processing/p5.js) | **100/100** | [D3js](https://d3js.org/d3-delaunay) | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#voronoi-nearest-point-hover-focus) |
 | [真人留存的轴承异常刷选审阅](https://giraffe-tree.github.io/awesome-web-effects/#linked-brush-to-zoom-chart) | [p5.js](https://github.com/processing/p5.js) | **100/100** | [D3js](https://d3js.org/d3-brush) | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#linked-brush-to-zoom-chart) |
-| [点击折叠层级分支](https://giraffe-tree.github.io/awesome-web-effects/#click-to-collapse-hierarchy-branches) | [Motion](https://github.com/motiondivision/motion) | **88/100** | [D3js](https://d3js.org/d3-hierarchy/tree) | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#click-to-collapse-hierarchy-branches) |
+| [真人审阅的仓库层级树](https://giraffe-tree.github.io/awesome-web-effects/#click-to-collapse-hierarchy-branches) | [Motion](https://github.com/motiondivision/motion) | **100/100** | [D3js](https://d3js.org/d3-hierarchy/tree) | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#click-to-collapse-hierarchy-branches) |
 | [WAYFIND 弹性基线可读性校样](https://giraffe-tree.github.io/awesome-web-effects/#elastic-baseline-letter-wave) | [p5.js](https://github.com/processing/p5.js) | **100/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#elastic-baseline-letter-wave) |
 | [液态铬金属字形](https://giraffe-tree.github.io/awesome-web-effects/#liquid-chrome-letterform) | [p5.js](https://github.com/processing/p5.js) | **96/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#liquid-chrome-letterform) |
 | [编辑版本校样时间切片](https://giraffe-tree.github.io/awesome-web-effects/#typographic-time-slit) | [p5.js](https://github.com/processing/p5.js) | **100/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#typographic-time-slit) |
@@ -282,7 +282,7 @@
 - 150 个已核验预览：2 个官方素材、148 个可运行本地 Demo 录制；缺失数为 0。
 - 人工评审覆盖创意、艺术完成度、动效编排、效果辨识、创作迁移和证据质量。
 - 准入要求 80/100，并同时通过核心维度最低分；流行度不能覆盖质量门槛。
-- 已核验 GIF 总计 24.82 MiB；每个预览为 320×180、最长三秒且小于 1 MiB。
+- 已核验 GIF 总计 24.77 MiB；每个预览为 320×180、最长三秒且小于 1 MiB。
 - Stars 是 2026-07-20 快照；“推荐实现”与“在哪家 AI 官网观察到”始终是两种关系。
 
 继续阅读 [396 个候选的准入审计](research/demo-admission-audit-2026-07-20.md)、[100 家 AI 公司主页特效调研](research/ai-native-homepages-100.md)与[预览来源清单](demo/gifs/provenance.json)。

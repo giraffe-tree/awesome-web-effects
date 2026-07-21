@@ -1,1 +1,229 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Motion — Click to Collapse Hierarchy Branches</title><link rel="stylesheet" href="./shared.css"><style>:root{--preview-background:#0c0e15}.tree-svg{position:absolute;inset:0;width:100%;height:100%}.tree-edge{fill:none;stroke:#596173;stroke-width:1}.tree-node{cursor:pointer}.tree-node circle{fill:#171c29;stroke:#8b97b5;stroke-width:1}.tree-node.root circle{fill:#ffc66b;stroke:#ffc66b}.tree-node text{fill:#e9edfa;font:700 6px/1 ui-monospace;text-anchor:middle;pointer-events:none}.tree-node.root text{fill:#252012}.tree-copy{position:absolute;z-index:5;left:13px;top:40px;color:#eef1ff;pointer-events:none}.tree-copy small{font:800 6px/1 ui-monospace;letter-spacing:.16em;color:#ffc66b}.tree-copy h1{width:98px;margin:8px 0 0;font:950 16px/.86 system-ui;letter-spacing:-.05em}.tree-state{position:absolute;right:12px;top:12px;z-index:5;color:#ffc66b;font:900 7px/1 ui-monospace}.library-badge{background:#0c0e15c9}</style></head><body><main class="preview-stage" data-preview-mechanism="identity-preserving-tree-collapse"><svg class="tree-svg" id="tree-svg" viewBox="0 0 320 180" aria-label="Click a branch node or press Enter to collapse and restore descendants"><g id="tree-edges"></g><g id="tree-nodes"></g></svg><section class="tree-copy"><small>CREATIVE TREE / DEPTH 03</small><h1>COLLAPSE A BRANCH. KEEP ITS IDENTITY.</h1></section><output class="tree-state" id="tree-state">EXPANDED</output><span class="library-badge">Motion · hierarchy reflow</span><span class="scene-caption">stable nodes interpolate between tree layouts</span></main><script type="module" src="./src/click-to-collapse-hierarchy-branches-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Motion — Repository Review Tree</title>
+    <link rel="stylesheet" href="./shared.css" />
+    <style>
+      :root {
+        --preview-background: #0a1014;
+        --ink: #edf3ef;
+        --muted: #82918a;
+        --mint: #70dfb4;
+        --acid: #ddff57;
+        --amber: #ffbd65;
+      }
+
+      * { box-sizing: border-box; }
+      button { font: inherit; }
+
+      .repo-stage {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        color: var(--ink);
+        background:
+          linear-gradient(90deg, rgba(237, 243, 239, .035) 1px, transparent 1px) 0 0 / 24px 100%,
+          linear-gradient(rgba(237, 243, 239, .03) 1px, transparent 1px) 0 0 / 100% 24px,
+          #0a1014;
+      }
+
+      .tree-svg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        outline: none;
+      }
+
+      .tree-edge {
+        fill: none;
+        stroke: rgba(112, 223, 180, .27);
+        stroke-width: 1;
+        vector-effect: non-scaling-stroke;
+      }
+
+      .tree-node {
+        cursor: pointer;
+        outline: none;
+        transform-box: fill-box;
+        transform-origin: center;
+      }
+
+      .tree-node rect {
+        fill: rgba(15, 29, 28, .9);
+        stroke: rgba(112, 223, 180, .38);
+        stroke-width: 1;
+        vector-effect: non-scaling-stroke;
+      }
+
+      .tree-node[data-kind="root"] rect { fill: var(--acid); stroke: var(--acid); }
+      .tree-node[data-kind="branch"] rect { fill: rgba(28, 50, 43, .96); }
+      .tree-node[data-selected="true"] rect { stroke: var(--amber); stroke-width: 2; }
+      .tree-node[data-confirmed="true"] rect { stroke: var(--acid); stroke-width: 2; }
+      .tree-node:focus-visible rect { stroke: white; stroke-width: 2; }
+
+      .tree-node text {
+        fill: var(--ink);
+        font: 800 clamp(5.2px, 1.12vw, 8.5px)/1 ui-monospace, monospace;
+        letter-spacing: .015em;
+        text-anchor: middle;
+        dominant-baseline: middle;
+        pointer-events: none;
+      }
+
+      .tree-node[data-kind="root"] text { fill: #172018; font-weight: 950; }
+      .node-mark { fill: var(--acid); font-size: clamp(5px, 1vw, 8px); }
+
+      .masthead {
+        position: absolute;
+        z-index: 6;
+        top: 40px;
+        left: 11px;
+        display: grid;
+        gap: 2px;
+        pointer-events: none;
+      }
+
+      .eyebrow,
+      .selection-label,
+      .selection-path,
+      .review-label,
+      .review-copy,
+      .action-button,
+      .branch-state {
+        font-size: clamp(6px, 1.2vw, 9px);
+        font-weight: 900;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+      }
+
+      .eyebrow { color: rgba(237, 243, 239, .46); }
+      .masthead strong {
+        width: min-content;
+        font-size: clamp(13px, 3vw, 25px);
+        font-weight: 950;
+        line-height: .87;
+        letter-spacing: -.055em;
+      }
+
+      .selection-card {
+        position: absolute;
+        z-index: 6;
+        top: 10px;
+        right: 10px;
+        display: grid;
+        justify-items: end;
+        gap: 3px;
+        max-width: 42%;
+        padding: 6px 8px;
+        border: 1px solid rgba(112, 223, 180, .16);
+        border-radius: 5px;
+        background: rgba(10, 16, 20, .78);
+        backdrop-filter: blur(9px);
+        pointer-events: none;
+      }
+
+      .selection-label { color: rgba(237, 243, 239, .43); }
+      .selection-path {
+        overflow: hidden;
+        max-width: 100%;
+        color: var(--mint);
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .review-deck {
+        position: absolute;
+        z-index: 8;
+        bottom: 9px;
+        left: 10px;
+        display: grid;
+        grid-template-columns: 1fr auto auto;
+        align-items: center;
+        gap: 3px 5px;
+        width: clamp(91px, 29vw, 220px);
+        padding: 6px 7px;
+        border: 1px solid rgba(221, 255, 87, .16);
+        border-radius: 5px;
+        background: rgba(10, 16, 20, .86);
+        box-shadow: 0 12px 28px rgba(0, 0, 0, .22);
+        backdrop-filter: blur(9px);
+      }
+
+      .review-label { color: var(--acid); }
+      .review-copy {
+        grid-column: 1 / -1;
+        overflow: hidden;
+        color: rgba(237, 243, 239, .5);
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .action-button {
+        padding: 4px 6px;
+        border: 1px solid rgba(237, 243, 239, .19);
+        border-radius: 3px;
+        color: var(--ink);
+        background: rgba(237, 243, 239, .045);
+        cursor: pointer;
+        outline: none;
+      }
+      .action-button:disabled { opacity: .3; cursor: default; }
+      .action-button:focus-visible { border-color: var(--acid); box-shadow: 0 0 0 2px rgba(221, 255, 87, .12); }
+
+      .branch-state {
+        position: absolute;
+        z-index: 5;
+        right: 11px;
+        bottom: 10px;
+        color: rgba(237, 243, 239, .45);
+        pointer-events: none;
+      }
+
+      .library-badge { background: rgba(10, 16, 20, .9); }
+      .scene-caption { display: none; }
+
+      @media (max-width: 430px) and (max-height: 250px) {
+        .branch-state { display: none; }
+      }
+
+      @media (max-aspect-ratio: 4 / 5) {
+        .masthead { top: 42px; }
+        .selection-card { top: 42px; }
+        .review-deck { right: 10px; left: 10px; width: auto; }
+        .branch-state { display: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="preview-stage">
+      <section class="repo-stage" id="repo-stage" data-preview-mechanism="trusted-parent-only-descendant-collapse-with-stable-node-identity-and-retained-file-review" data-phase="waiting">
+        <svg class="tree-svg" id="tree-svg" role="tree" aria-label="Atlas repository hierarchy. Activate a folder to collapse only its descendants, activate a file to select it, then confirm navigation.">
+          <g id="tree-edges"></g>
+          <g id="tree-nodes"></g>
+        </svg>
+
+        <header class="masthead"><span class="eyebrow">Atlas repo · branch main</span><strong>Review the tree.</strong></header>
+
+        <section class="selection-card" aria-live="polite">
+          <span class="selection-label">Selected hierarchy path</span>
+          <output class="selection-path" id="selection-path">No file selected</output>
+        </section>
+
+        <section class="review-deck" aria-live="polite">
+          <output class="review-label" id="review-label">No review target</output>
+          <button class="action-button" id="confirm-navigation" type="button" disabled>Confirm</button>
+          <button class="action-button" id="undo-action" type="button" disabled>Undo</button>
+          <output class="review-copy" id="review-copy">Select a file from the hierarchy</output>
+        </section>
+
+        <output class="branch-state" id="branch-state">11 visible · all branches open</output>
+      </section>
+      <span class="library-badge">Motion · repository hierarchy</span>
+      <span class="scene-caption">folder toggles affect descendants only; confirmed path remains reviewable</span>
+    </main>
+    <script type="module" src="./src/click-to-collapse-hierarchy-branches-demo.js"></script>
+  </body>
+</html>

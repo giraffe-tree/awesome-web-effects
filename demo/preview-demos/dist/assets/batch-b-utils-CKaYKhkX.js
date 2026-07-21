@@ -1,0 +1,1 @@
+var e=(e,t=0,n=1)=>Math.max(t,Math.min(n,e)),t=(e,t=0)=>{let n=Math.sin((e+1)*12.9898+t*78.233)*43758.5453;return n-Math.floor(n)};export{t as n,e as t};

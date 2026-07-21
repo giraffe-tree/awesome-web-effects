@@ -1,193 +1,444 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Motion — Gesture Sliced Image Shutters</title>
-    <style>
-      :root { --preview-background: #071017; }
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>North Quay Gate Review — Gesture-sliced Image Shutters</title>
+  <style>
+    :root {
+      --preview-background: #0c1314;
+      --paper: #e9e0cd;
+      --muted: #929a91;
+      --line: rgba(233, 224, 205, .2);
+      --signal: #71b6aa;
+      --signal-soft: rgba(113, 182, 170, .16);
+      --alert: #d88b55;
+    }
 
-      .shutter-stage {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        min-width: 100%;
-        min-height: 100%;
-        overflow: hidden;
-        color: #f5f7f2;
-        background:
-          radial-gradient(circle at 85% 18%, rgba(88, 137, 146, .24), transparent 34%),
-          #071017;
-      }
+    button,
+    input { font: inherit; }
 
-      .shutters {
-        position: absolute;
-        inset: 32px 12px 11px;
-        display: grid;
-        grid-template-columns: repeat(8, minmax(0, 1fr));
-        gap: 0;
-        min-width: 0;
-        min-height: 0;
-        overflow: hidden;
-        border: 1px solid rgba(255, 255, 255, .24);
-        border-radius: clamp(8px, 3vw, 17px);
-        outline: none;
-        cursor: ew-resize;
-        touch-action: none;
-        background: #06131a;
-        box-shadow: 0 15px 35px rgba(0, 0, 0, .32);
-        isolation: isolate;
-      }
+    button { -webkit-tap-highlight-color: transparent; }
 
-      .shutters:focus-visible {
-        border-color: rgba(255, 255, 255, .92);
-        box-shadow: 0 0 0 2px rgba(255, 255, 255, .22), 0 15px 35px rgba(0, 0, 0, .32);
-      }
+    .gate-stage {
+      container-type: size;
+      color: var(--paper);
+      background:
+        radial-gradient(circle at 74% 37%, var(--signal-soft), transparent 42%),
+        linear-gradient(90deg, rgba(255, 255, 255, .018) 1px, transparent 1px) 0 0 / 23px 23px,
+        #0c1314;
+      outline: none;
+      user-select: none;
+      overflow: hidden;
+    }
 
-      .slice {
-        position: relative;
-        min-width: 0;
-        min-height: 0;
-        overflow: hidden;
-        will-change: transform;
-        transform-origin: center;
-        backface-visibility: hidden;
-        pointer-events: none;
-      }
+    .gate-stage::after {
+      content: "";
+      position: absolute;
+      z-index: 20;
+      inset: 4px;
+      border: 1px solid var(--line);
+      border-radius: clamp(8px, 2.2cqw, 16px);
+      pointer-events: none;
+    }
 
-      .slice img {
-        position: absolute;
-        left: calc(var(--i) * -100%);
-        top: 0;
-        display: block;
-        width: 800%;
-        height: 100%;
-        max-width: none;
-        object-fit: cover;
-        pointer-events: none;
-        user-select: none;
-        -webkit-user-drag: none;
-      }
+    .topline {
+      position: absolute;
+      z-index: 12;
+      top: clamp(6px, 2.8cqh, 12px);
+      left: clamp(8px, 2.4cqw, 18px);
+      right: clamp(8px, 2.4cqw, 18px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
 
-      .shutter-shade {
-        position: absolute;
-        z-index: 4;
-        inset: 0;
-        pointer-events: none;
-        background:
-          linear-gradient(180deg, rgba(5, 12, 15, .05), transparent 48%, rgba(5, 12, 15, .52)),
-          linear-gradient(90deg, rgba(5, 12, 15, .48), transparent 46%);
-      }
+    .eyebrow,
+    .system-state,
+    .image-label,
+    .gesture-hint,
+    .metric-label,
+    .metric-value,
+    .band-label,
+    .control-label {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      text-transform: uppercase;
+      letter-spacing: .11em;
+    }
 
-      .shutter-copy {
-        position: absolute;
-        z-index: 6;
-        left: clamp(11px, 5vw, 25px);
-        bottom: clamp(11px, 6vh, 24px);
-        width: min(42%, 170px);
-        color: white;
-        text-shadow: 0 2px 16px rgba(0, 0, 0, .68);
-        pointer-events: none;
-      }
+    .eyebrow {
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(5px, 1.05cqw, 8px);
+      font-weight: 800;
+      white-space: nowrap;
+    }
 
-      .shutter-copy small {
-        color: rgba(255, 222, 155, .84);
-        font: 800 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
-        letter-spacing: .13em;
-        text-transform: uppercase;
-      }
+    .eyebrow b { color: var(--paper); }
 
-      .shutter-copy h1 {
-        margin: 6px 0 0;
-        font: 900 clamp(13px, 5.5vw, 27px)/.84 system-ui, sans-serif;
-        letter-spacing: -.06em;
-        text-transform: uppercase;
-      }
+    .system-state {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--signal);
+      font-size: clamp(5px, .95cqw, 7px);
+      font-weight: 900;
+      white-space: nowrap;
+    }
 
-      .shutter-copy p {
-        margin: 7px 0 0;
-        color: rgba(255, 255, 255, .66);
-        font: 700 4px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace;
-        letter-spacing: .08em;
-        text-transform: uppercase;
-      }
+    .system-state::before {
+      content: "";
+      width: clamp(4px, .8cqw, 6px);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: currentColor;
+      box-shadow: 0 0 10px currentColor;
+    }
 
-      .shutter-meter {
-        position: absolute;
-        z-index: 6;
-        right: 10px;
-        bottom: 9px;
-        color: rgba(255, 231, 177, .76);
-        font: 800 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
-        letter-spacing: .1em;
-        text-transform: uppercase;
-        pointer-events: none;
-      }
+    .workspace {
+      position: absolute;
+      inset: clamp(24px, 10.5cqh, 43px) clamp(8px, 2.4cqw, 18px) clamp(28px, 17cqh, 69px);
+      display: grid;
+      grid-template-columns: minmax(0, 2.08fr) minmax(90px, .72fr);
+      gap: clamp(6px, 1.7cqw, 13px);
+      min-height: 0;
+    }
 
-      .shutter-grip {
-        position: absolute;
-        z-index: 6;
-        left: 50%;
-        top: 10px;
-        display: flex;
-        gap: 3px;
-        translate: -50% 0;
-        opacity: .58;
-        pointer-events: none;
-      }
+    .shutters,
+    .evidence-panel {
+      min-width: 0;
+      min-height: 0;
+      border: 1px solid var(--line);
+      border-radius: clamp(7px, 1.8cqw, 14px);
+      overflow: hidden;
+    }
 
-      .shutter-grip i {
-        width: 2px;
-        height: 9px;
-        border-radius: 99px;
-        background: rgba(255, 255, 255, .78);
-      }
+    .shutters {
+      position: relative;
+      touch-action: none;
+      cursor: ew-resize;
+      outline: none;
+      isolation: isolate;
+      background: #081012;
+      box-shadow: 0 17px 32px rgba(0, 0, 0, .28);
+    }
 
-      .library-badge { background: rgba(5, 15, 20, .78); }
-      .scene-caption { display: none; }
+    .shutters:focus-visible {
+      border-color: rgba(233, 224, 205, .85);
+      box-shadow: 0 0 0 2px rgba(233, 224, 205, .18), 0 17px 32px rgba(0, 0, 0, .28);
+    }
 
-      @media (max-width: 180px) {
-        .shutters { inset: 24px 6px 5px; border-radius: 6px; }
-        .shutter-copy { left: 7px; bottom: 7px; width: 46%; }
-        .shutter-copy h1 { margin-top: 3px; font-size: 9px; }
-        .shutter-copy small { font-size: 3px; }
-        .shutter-copy p, .shutter-meter { display: none; }
-        .shutter-grip { top: 5px; gap: 2px; }
-        .shutter-grip i { width: 1px; height: 5px; }
-        .library-badge { top: 5px; left: 6px; padding: 3px 5px; font-size: 5px; }
-      }
+    .slice-grid {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-columns: repeat(8, minmax(0, 1fr));
+      pointer-events: none;
+    }
 
-      @media (prefers-reduced-motion: reduce) {
-        .slice { will-change: auto; }
-      }
-    </style>
-    <script type="module" crossorigin src="./assets/gesture-sliced-image-shutters-qhkLFH_2.js"></script>
-    <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
-    <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
-    <link rel="modulepreload" crossorigin href="./assets/batch-c-utils-g_3IBZ2b.js">
-    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-  </head>
-  <body>
-    <main class="preview-stage shutter-stage">
-      <section class="shutters" id="shutters" tabindex="0" data-preview-mechanism="motion-human-shared-image-shutters" data-mode="idle" aria-label="Press and drag horizontally to stagger eight aligned slices of one volcanic bay photograph; use Left or Right Arrow from the keyboard">
-        <span class="slice" style="--i:0"><img src="./assets/volcanic-bay-shutter-source-AYV6OI-J.jpg" alt="" draggable="false" /></span>
-        <span class="slice" style="--i:1"><img src="./assets/volcanic-bay-shutter-source-AYV6OI-J.jpg" alt="" draggable="false" /></span>
-        <span class="slice" style="--i:2"><img src="./assets/volcanic-bay-shutter-source-AYV6OI-J.jpg" alt="" draggable="false" /></span>
-        <span class="slice" style="--i:3"><img src="./assets/volcanic-bay-shutter-source-AYV6OI-J.jpg" alt="" draggable="false" /></span>
-        <span class="slice" style="--i:4"><img src="./assets/volcanic-bay-shutter-source-AYV6OI-J.jpg" alt="" draggable="false" /></span>
-        <span class="slice" style="--i:5"><img src="./assets/volcanic-bay-shutter-source-AYV6OI-J.jpg" alt="" draggable="false" /></span>
-        <span class="slice" style="--i:6"><img src="./assets/volcanic-bay-shutter-source-AYV6OI-J.jpg" alt="" draggable="false" /></span>
-        <span class="slice" style="--i:7"><img src="./assets/volcanic-bay-shutter-source-AYV6OI-J.jpg" alt="" draggable="false" /></span>
-        <div class="shutter-shade" aria-hidden="true"></div>
-        <div class="shutter-grip" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-        <section class="shutter-copy" aria-hidden="true">
-          <small>Volcanic bay / gesture study</small>
-          <h1>Pull the horizon apart.</h1>
-          <p>Press · drag · release to register</p>
-        </section>
-        <span class="shutter-meter" id="shutter-meter" aria-hidden="true">8 slices / aligned</span>
+    .slice {
+      position: relative;
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
+      transform-origin: 50% 50%;
+      will-change: transform;
+      backface-visibility: hidden;
+      border-inline-start: 1px solid rgba(255, 255, 255, .06);
+    }
+
+    .slice:first-child { border-inline-start: 0; }
+
+    .slice img {
+      position: absolute;
+      left: calc(var(--slice-index) * -100%);
+      top: 0;
+      width: 800%;
+      height: 100%;
+      max-width: none;
+      display: block;
+      object-fit: cover;
+      filter: saturate(.88) contrast(1.045) brightness(.88);
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .image-shade {
+      position: absolute;
+      z-index: 3;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(3, 8, 9, .18), transparent 36%, rgba(3, 8, 9, .74)),
+        linear-gradient(90deg, rgba(3, 8, 9, .2), transparent 32%);
+      pointer-events: none;
+    }
+
+    .bay-marker {
+      position: absolute;
+      z-index: 5;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 12.5%;
+      opacity: 0;
+      border: 1px solid var(--signal);
+      background: linear-gradient(180deg, var(--signal-soft), transparent 38%, var(--signal-soft));
+      box-shadow: inset 0 0 18px var(--signal-soft);
+      pointer-events: none;
+    }
+
+    .shutters[data-inspected="true"] .bay-marker { opacity: 1; }
+
+    .image-label {
+      position: absolute;
+      z-index: 6;
+      top: clamp(6px, 2.3cqh, 10px);
+      left: clamp(7px, 1.7cqw, 12px);
+      padding: 4px 6px;
+      border: 1px solid rgba(233, 224, 205, .22);
+      border-radius: 999px;
+      color: rgba(233, 224, 205, .9);
+      background: rgba(6, 12, 13, .68);
+      font-size: clamp(4px, .85cqw, 7px);
+      font-weight: 900;
+      pointer-events: none;
+    }
+
+    .gesture-hint {
+      position: absolute;
+      z-index: 6;
+      left: clamp(7px, 1.7cqw, 12px);
+      bottom: clamp(6px, 2.4cqh, 11px);
+      max-width: 56%;
+      color: rgba(233, 224, 205, .72);
+      font-size: clamp(4px, .82cqw, 7px);
+      font-weight: 800;
+      line-height: 1.35;
+      pointer-events: none;
+    }
+
+    .gesture-hint b { color: white; }
+
+    .seam-meter {
+      position: absolute;
+      z-index: 6;
+      right: clamp(7px, 1.7cqw, 12px);
+      bottom: clamp(6px, 2.4cqh, 11px);
+      color: var(--signal);
+      font: 900 clamp(5px, 1cqw, 8px)/1 ui-monospace, monospace;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+
+    .evidence-panel {
+      display: flex;
+      flex-direction: column;
+      padding: clamp(7px, 1.8cqw, 13px);
+      background: rgba(12, 19, 20, .88);
+    }
+
+    .evidence-heading {
+      margin: 0;
+      color: var(--paper);
+      font: 850 clamp(10px, 2.6cqw, 19px)/.95 system-ui, sans-serif;
+      letter-spacing: -.045em;
+      text-transform: uppercase;
+    }
+
+    .evidence-subtitle {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font: 700 clamp(4px, .78cqw, 6px)/1.3 ui-monospace, monospace;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .metric-stack {
+      display: grid;
+      gap: clamp(4px, 1.8cqh, 8px);
+      margin-top: auto;
+      margin-bottom: auto;
+    }
+
+    .metric {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: 6px;
+      padding-bottom: clamp(3px, 1.5cqh, 7px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .metric-label {
+      color: var(--muted);
+      font-size: clamp(4px, .78cqw, 6px);
+      font-weight: 800;
+    }
+
+    .metric-value {
+      color: var(--paper);
+      font-size: clamp(5px, 1.05cqw, 8px);
+      font-weight: 900;
+      text-align: right;
+    }
+
+    .metric-value[data-alert="true"] { color: var(--alert); }
+
+    .band-strip {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 2px;
+      margin-top: auto;
+    }
+
+    .band-label {
+      display: grid;
+      place-items: center;
+      aspect-ratio: 1;
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      color: var(--muted);
+      font-size: clamp(3px, .65cqw, 5px);
+      font-weight: 900;
+    }
+
+    .band-label[data-selected="true"] {
+      color: #0c1314;
+      border-color: var(--signal);
+      background: var(--signal);
+    }
+
+    .controls {
+      position: absolute;
+      z-index: 14;
+      left: clamp(8px, 2.4cqw, 18px);
+      right: clamp(8px, 2.4cqw, 18px);
+      bottom: clamp(6px, 3cqh, 12px);
+      height: clamp(16px, 10cqh, 41px);
+      display: grid;
+      grid-template-columns: auto minmax(46px, 1fr) auto auto;
+      gap: clamp(4px, 1.1cqw, 8px);
+      align-items: center;
+    }
+
+    .control-label {
+      color: var(--muted);
+      font-size: clamp(4px, .78cqw, 6px);
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .separation-range {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      accent-color: var(--signal);
+      cursor: ew-resize;
+    }
+
+    .control-button {
+      height: 100%;
+      min-width: clamp(34px, 8cqw, 58px);
+      padding: 0 clamp(6px, 1.4cqw, 10px);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--paper);
+      background: rgba(233, 224, 205, .045);
+      font: 850 clamp(5px, .9cqw, 7px)/1 ui-monospace, monospace;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .control-button:hover,
+    .control-button:focus-visible {
+      border-color: var(--signal);
+      outline: none;
+    }
+
+    .control-button.primary {
+      color: #0b1515;
+      border-color: var(--signal);
+      background: var(--signal);
+    }
+
+    .library-badge { background: rgba(6, 12, 13, .75); }
+    .scene-caption { display: none; }
+
+    @container (max-width: 360px) {
+      .workspace { grid-template-columns: minmax(0, 2.3fr) minmax(74px, .7fr); }
+      .evidence-panel { padding: 6px; }
+      .metric:nth-child(3) { display: none; }
+      .controls { grid-template-columns: minmax(40px, 1fr) auto auto; }
+      .control-label { display: none; }
+      .evidence-subtitle { display: none; }
+    }
+
+    @container (max-width: 180px) {
+      .topline { top: 5px; left: 6px; right: 6px; }
+      .eyebrow { font-size: 4px; }
+      .system-state { font-size: 3.5px; gap: 3px; }
+      .workspace { inset: 18px 5px 19px; display: block; }
+      .shutters { width: 100%; height: 100%; border-radius: 5px; }
+      .evidence-panel { display: none; }
+      .image-label { top: 4px; left: 4px; padding: 2px 3px; font-size: 3px; }
+      .gesture-hint { left: 4px; bottom: 4px; max-width: 61%; font-size: 3px; }
+      .seam-meter { right: 4px; bottom: 4px; font-size: 3.5px; }
+      .controls { left: 5px; right: 5px; bottom: 4px; height: 11px; gap: 2px; grid-template-columns: 1fr auto auto; }
+      .control-button { min-width: 24px; padding: 0 4px; font-size: 3px; }
+      .library-badge { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .slice { will-change: auto; }
+    }
+  </style>
+  <script type="module" crossorigin src="./assets/gesture-sliced-image-shutters-CFUYxHXp.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+  <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
+  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+</head>
+<body>
+  <main class="preview-stage gate-stage" id="gate-stage" data-preview-mechanism="motion-pixel-profiled-human-image-shutters" data-ready="false">
+    <header class="topline">
+      <p class="eyebrow"><b>North Quay</b> · surge gate field review / 08 bays</p>
+      <span class="system-state" id="system-state">reading source pixels</span>
+    </header>
+
+    <section class="workspace">
+      <section class="shutters" id="shutters" tabindex="0" role="application" aria-label="North Quay gate inspection. Hover a bay to inspect its decoded pixels. Drag horizontally to separate the eight image shutters. Use arrow keys, Home, End, or Escape as keyboard alternatives.">
+        <div class="slice-grid" id="slice-grid" aria-hidden="true"></div>
+        <div class="image-shade" aria-hidden="true"></div>
+        <div class="bay-marker" id="bay-marker" aria-hidden="true"></div>
+        <span class="image-label">Decoded proof · exact source bytes</span>
+        <span class="gesture-hint"><b>Drag the field strips.</b><br>Separate evidence · hover a bay</span>
+        <span class="seam-meter" id="seam-meter">00% separated</span>
       </section>
-      <span class="library-badge">Motion · shared-image shutters</span>
-    </main>
-  </body>
+
+      <aside class="evidence-panel" aria-live="polite">
+        <h1 class="evidence-heading" id="evidence-heading">Bay —</h1>
+        <p class="evidence-subtitle" id="evidence-subtitle">hover the proof to inspect</p>
+        <div class="metric-stack">
+          <div class="metric"><span class="metric-label">Evidence</span><strong class="metric-value" id="evidence-kind">waiting</strong></div>
+          <div class="metric"><span class="metric-label">Risk score</span><strong class="metric-value" id="risk-score">— / 100</strong></div>
+          <div class="metric"><span class="metric-label">Pixel count</span><strong class="metric-value" id="pixel-count">— px</strong></div>
+          <div class="metric"><span class="metric-label">Disposition</span><strong class="metric-value" id="disposition">source sealed</strong></div>
+        </div>
+        <div class="band-strip" id="band-strip" aria-hidden="true"></div>
+      </aside>
+    </section>
+
+    <section class="controls" aria-label="Shutter separation controls">
+      <label class="control-label" for="separation-range">Separation</label>
+      <input class="separation-range" id="separation-range" type="range" min="0" max="100" step="1" value="0" aria-label="Separate inspection shutters">
+      <button class="control-button" id="align-button" type="button">Align</button>
+      <button class="control-button primary" id="separate-button" type="button">Separate</button>
+    </section>
+
+    <span class="library-badge">Motion · human-controlled evidence shutters</span>
+  </main>
+</body>
 </html>

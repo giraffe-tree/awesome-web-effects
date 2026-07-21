@@ -5,53 +5,237 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Chromatic Channel Drag Portrait</title>
     <style>
-      :root { --preview-background: #0c0a0e; }
-      .preview-stage { background: #0c0a0e; }
-      #channel-canvas { position: absolute; inset: 0; width: 100%; height: 100%; cursor: ew-resize; touch-action: none; outline: none; }
-      #channel-canvas:focus-visible { outline: 2px solid #f8eee8; outline-offset: -5px; }
-      .copy { position: absolute; z-index: 5; left: 4.375%; top: 27.2%; width: 40%; color: #fff7f3; pointer-events: none; }
-      .copy small { display: block; color: #ff6c88; font: 850 clamp(6px,1.875vw,13px)/1 ui-monospace, monospace; letter-spacing: .14em; }
-      .copy h1 { margin: clamp(8px,2.5vw,18px) 0 0; font: 950 clamp(20px,6.25vw,45px)/.84 system-ui, sans-serif; letter-spacing: -.06em; }
-      .interaction-hint { position: absolute; z-index: 5; left: 4.375%; bottom: 8.3%; margin: 0; color: rgba(255,247,243,.58); font: 800 clamp(6px,1.875vw,13px)/1 ui-monospace, monospace; letter-spacing: .1em; pointer-events: none; }
-      .channels { position: absolute; z-index: 6; right: 5.3%; bottom: 8.3%; display: flex; align-items: center; gap: clamp(4px,1.25vw,9px); color: rgba(255,255,255,.72); font: 850 clamp(6px,1.875vw,13px)/1 ui-monospace, monospace; letter-spacing: .08em; pointer-events: none; }
-      .channels b:nth-child(1) { color: #ff315d; }
-      .channels b:nth-child(2) { color: #51f0cf; }
-      .channels b:nth-child(3) { color: #6f7cff; }
-      .shift-readout { min-width: 3.8em; color: white; text-align: right; }
-      .library-badge { color: #fff; background: rgba(12,10,14,.72); border-color: rgba(255,255,255,.18); }
+      :root { --preview-background: #171612; }
+      button, input { font: inherit; }
+      .preview-stage { background: #171612; color: #f1eadf; }
+      #channel-canvas {
+        position: absolute;
+        z-index: 1;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        cursor: crosshair;
+        touch-action: none;
+        outline: none;
+      }
+      #channel-canvas[data-dragging="true"] { cursor: grabbing; }
+      #channel-canvas:focus-visible { outline: 2px solid #e7ff58; outline-offset: -5px; }
+      .proof-copy {
+        position: absolute;
+        z-index: 5;
+        left: 3.75%;
+        top: 15.5%;
+        width: 27.7%;
+        pointer-events: none;
+      }
+      .eyebrow {
+        margin: 0;
+        color: #e7ff58;
+        font: 850 clamp(4px,1.55vw,11px)/1 ui-monospace, monospace;
+        letter-spacing: .16em;
+      }
+      h1 {
+        margin: clamp(5px,1.55vw,11px) 0 0;
+        max-width: 7ch;
+        font: 920 clamp(14px,4.4vw,32px)/.88 system-ui, sans-serif;
+        letter-spacing: -.065em;
+      }
+      .experience {
+        max-width: 21em;
+        margin: clamp(5px,1.55vw,11px) 0 0;
+        color: rgba(241,234,223,.57);
+        font: 650 clamp(4px,1.35vw,9px)/1.35 ui-monospace, monospace;
+        letter-spacing: .035em;
+      }
+      .evidence {
+        display: grid;
+        grid-template-columns: .72fr 1.28fr;
+        gap: clamp(3px,.9vw,7px);
+        margin-top: clamp(6px,1.9vw,14px);
+      }
+      .metric {
+        min-width: 0;
+        padding-top: clamp(3px,.9vw,7px);
+        border-top: 1px solid rgba(241,234,223,.2);
+      }
+      .metric small {
+        display: block;
+        color: rgba(241,234,223,.42);
+        font: 750 clamp(3px,1vw,7px)/1 ui-monospace, monospace;
+        letter-spacing: .12em;
+      }
+      .metric output {
+        display: block;
+        overflow: hidden;
+        margin-top: clamp(2px,.55vw,4px);
+        color: #f1eadf;
+        font: 850 clamp(5px,1.55vw,11px)/1.05 ui-monospace, monospace;
+        letter-spacing: -.015em;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      #score-output { color: #e7ff58; }
+      .proof-controls {
+        position: absolute;
+        z-index: 8;
+        left: 3.75%;
+        bottom: 7.7%;
+        width: 27.7%;
+      }
+      .channel-buttons { display: grid; grid-template-columns: repeat(4,1fr); gap: clamp(2px,.6vw,5px); }
+      .channel-buttons button,
+      #align-button {
+        min-width: 0;
+        padding: clamp(2px,.7vw,5px) clamp(2px,.75vw,6px);
+        border: 1px solid rgba(241,234,223,.22);
+        border-radius: 999px;
+        background: rgba(241,234,223,.045);
+        color: rgba(241,234,223,.62);
+        cursor: pointer;
+        font: 850 clamp(4px,1.25vw,9px)/1 ui-monospace, monospace;
+        letter-spacing: .08em;
+      }
+      .channel-buttons button[aria-pressed="true"] {
+        border-color: #e7ff58;
+        background: #e7ff58;
+        color: #171612;
+      }
+      .channel-buttons button:focus-visible,
+      #align-button:focus-visible,
+      #spread-range:focus-visible { outline: 2px solid #e7ff58; outline-offset: 2px; }
+      .range-row {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        gap: clamp(4px,1.25vw,9px);
+        margin-top: clamp(3px,.9vw,7px);
+      }
+      #spread-range {
+        width: 100%;
+        height: clamp(8px,2.5vw,18px);
+        margin: 0;
+        accent-color: #e7ff58;
+        cursor: ew-resize;
+      }
+      #align-button { color: #f1eadf; }
+      #status-output {
+        display: block;
+        overflow: hidden;
+        margin-top: clamp(2px,.7vw,5px);
+        color: rgba(241,234,223,.46);
+        font: 720 clamp(3px,1vw,7px)/1 ui-monospace, monospace;
+        letter-spacing: .08em;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .source-label {
+        position: absolute;
+        z-index: 5;
+        top: 7.2%;
+        right: 4.8%;
+        margin: 0;
+        color: rgba(22,22,18,.68);
+        font: 850 clamp(4px,1.25vw,9px)/1 ui-monospace, monospace;
+        letter-spacing: .12em;
+        pointer-events: none;
+      }
+      .probe-label {
+        position: absolute;
+        z-index: 5;
+        right: 5.25%;
+        bottom: 7.2%;
+        margin: 0;
+        padding: clamp(3px,.8vw,6px) clamp(4px,1vw,8px);
+        border: 1px solid rgba(241,234,223,.24);
+        border-radius: 999px;
+        background: rgba(23,22,18,.72);
+        color: #f1eadf;
+        backdrop-filter: blur(8px);
+        font: 820 clamp(4px,1.25vw,9px)/1 ui-monospace, monospace;
+        letter-spacing: .05em;
+        pointer-events: none;
+      }
+      .library-badge {
+        top: 4.5%;
+        left: 3.75%;
+        padding: clamp(3px,.8vw,6px) clamp(4px,1vw,8px);
+        border-color: rgba(241,234,223,.2);
+        background: rgba(23,22,18,.74);
+        color: rgba(241,234,223,.82);
+        font-size: clamp(4px,1.25vw,9px);
+      }
       .scene-caption { display: none; }
-      .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0,0,0,0);
+        white-space: nowrap;
+        border: 0;
+      }
+      @media (max-width: 180px) {
+        .library-badge { padding: 2px 3px; font-size: 3px; }
+        .proof-copy { top: 19%; }
+        .eyebrow { font-size: 3px; }
+        h1 { margin-top: 3px; font-size: 8px; line-height: .88; }
+        .experience, .evidence, #status-output, .source-label { display: none; }
+        .proof-controls { bottom: 8%; }
+        .channel-buttons { gap: 1px; }
+        .channel-buttons button, #align-button { padding: 1px; font-size: 3px; }
+        .range-row { gap: 2px; margin-top: 2px; }
+        #spread-range { height: 5px; }
+        .probe-label { padding: 2px 3px; font-size: 3px; }
+      }
     </style>
-    <script type="module" crossorigin src="./assets/chromatic-channel-drag-portrait-BRncxQvz.js"></script>
+    <script type="module" crossorigin src="./assets/chromatic-channel-drag-portrait-Dm6Olu9W.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
     <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
     <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
     <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
   </head>
   <body>
-    <main class="preview-stage" data-preview-mechanism="p5-raster-rgb-channel-drag">
+    <main class="preview-stage" data-preview-mechanism="p5-raster-rgb-registration-workbench">
       <canvas
         id="channel-canvas"
         tabindex="0"
-        role="slider"
-        aria-label="RGB portrait channel separation"
+        role="application"
+        aria-label="RGB portrait registration workbench"
         aria-describedby="channel-instructions"
-        aria-valuemin="-18"
-        aria-valuemax="18"
-        aria-valuenow="0"
-        aria-valuetext="Channels registered"
       ></canvas>
-      <section class="copy">
-        <small>RGB REGISTRATION / 01</small>
-        <h1>PULL<br>COLOR<br>APART.</h1>
+
+      <section class="proof-copy" aria-label="Registration evidence">
+        <p class="eyebrow">PRESS PROOF / RGB–149</p>
+        <h1>FIND THE TRUE REGISTER.</h1>
+        <p class="experience">Probe a real source pixel, choose a plate, then drag its color plane into or out of alignment.</p>
+        <div class="evidence">
+          <div class="metric"><small>REGISTER</small><output id="score-output">100%</output></div>
+          <div class="metric"><small>PIXEL SAMPLE</small><output id="sample-output">HOVER TO READ</output></div>
+        </div>
       </section>
-      <p class="interaction-hint" aria-hidden="true">DRAG · RELEASE TO ALIGN</p>
-      <p class="sr-only" id="channel-instructions">Drag left or right, use the left and right arrow keys, then release to align the portrait channels.</p>
-      <output class="channels" id="channel-readout" aria-live="polite">
-        <b>R</b><span>·</span><b>G</b><span>·</span><b>B</b><span class="shift-readout" id="shift-readout">0 PX</span>
-      </output>
-      <span class="library-badge">p5.js · raster RGB drag</span>
-      <span class="scene-caption">real portrait pixels → split channels → spring registration</span>
+
+      <form class="proof-controls" aria-label="RGB plate controls" onsubmit="return false">
+        <div class="channel-buttons" role="group" aria-label="Active channel">
+          <button type="button" data-channel="triad" aria-pressed="true">TRI</button>
+          <button type="button" data-channel="red" aria-pressed="false">R</button>
+          <button type="button" data-channel="green" aria-pressed="false">G</button>
+          <button type="button" data-channel="blue" aria-pressed="false">B</button>
+        </div>
+        <div class="range-row">
+          <label class="sr-only" for="spread-range">Horizontal channel offset</label>
+          <input id="spread-range" type="range" min="-24" max="24" step="1" value="0">
+          <button type="button" id="align-button">ALIGN</button>
+        </div>
+        <output id="status-output" aria-live="polite">REGISTERED · ANALYSING SOURCE</output>
+      </form>
+
+      <p class="source-label" aria-hidden="true">FICTIONAL PRESS PROOF · 960×640 SOURCE</p>
+      <output class="probe-label" id="probe-output" aria-hidden="true">MOVE · SAMPLE / DRAG · SEPARATE</output>
+      <p class="sr-only" id="channel-instructions">Hover over the proof to inspect source pixels. Drag to separate the selected RGB plate. Use the channel buttons or number keys one through four, arrow keys to adjust, and Home or Escape to align.</p>
+      <span class="library-badge">p5.js · decoded RGB plates</span>
+      <span class="scene-caption">real proof pixels → selected channel drag → measurable registration</span>
     </main>
   </body>
 </html>

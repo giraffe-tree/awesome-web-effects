@@ -1,1 +1,0 @@
-var e=(e,t=0,n=1)=>Math.max(t,Math.min(n,e)),t=(e,t=3)=>((Number(e)||0)%t+t)%t,n=(e,n=3)=>.5-.5*Math.cos(t(e,n)/n*Math.PI*2),r=t=>{let n=e(t);return n*n*(3-2*n)},i=(e,t=0)=>{let n=Math.sin((e+1)*12.9898+t*78.233)*43758.5453;return n-Math.floor(n)};export{r as a,i,n,t as r,e as t};

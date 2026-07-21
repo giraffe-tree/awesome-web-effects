@@ -1,0 +1,1 @@
+var e=(e,t=0,n=1)=>Math.min(n,Math.max(t,e)),t=t=>{let n=e(t);return n*n*(3-2*n)};export{t as n,e as t};

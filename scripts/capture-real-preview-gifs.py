@@ -1849,6 +1849,40 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 25:
                 route = page.evaluate("window.__PREVIEW_INTERACTION_STATE__.routeEvidence")
                 page.mouse.move(route[5]["u"] * 320, route[5]["v"] * 180)
+        elif demo["id"] == "accordion-depth-tunnel-navigation":
+            if index == 2:
+                page.mouse.move(135, 80)
+            elif index == 4:
+                page.mouse.move(250, 80)
+            elif index == 6:
+                page.mouse.move(150, 80)
+                page.mouse.down()
+            elif index == 7:
+                page.mouse.move(185, 80, steps=2)
+            elif index == 8:
+                page.mouse.move(220, 80, steps=2)
+            elif index == 9:
+                page.mouse.move(270, 80, steps=3)
+            elif index == 10:
+                page.mouse.up()
+            elif index == 12:
+                page.locator('[data-action="previous"]').click()
+            elif index == 14:
+                page.locator('[data-action="target"]').click()
+            elif index == 16:
+                page.locator("#depth-range").focus()
+                page.keyboard.press("ArrowLeft")
+            elif index == 18:
+                page.locator("#depth-stage").focus()
+                page.keyboard.press("Home")
+            elif index == 20:
+                page.keyboard.press("ArrowRight")
+            elif index == 22:
+                page.keyboard.press("t")
+            elif index == 24:
+                page.keyboard.press("Escape")
+            elif index == 26:
+                page.locator('[data-action="target"]').click()
         elif demo["id"] == "seeded-sandpile-avalanche":
             if index == 2:
                 page.mouse.move(225, 70)
@@ -5384,6 +5418,105 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["ready"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture a trusted six-fix pixel-derived night route, explicit confirmation, undo, keyboard reacquisition, and final reseal without automatic stitching: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "accordion-depth-tunnel-navigation":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-underground-facility-depth-clearance-and-evidence-routing"
+            or interaction["claimedLibrary"] != "motion@12.42.2"
+            or interaction["mechanism"] != "motion-paused-css3d-accordion-seek-from-trusted-input-with-browser-decoded-image-evidence"
+            or interaction["acceptedInputs"] != ["mouse-hover", "captured-mouse-drag", "captured-touch-drag", "captured-pen-drag", "range", "button", "keyboard"]
+            or not interaction["userInputRequired"]
+            or not interaction["strictTrustedInputGuard"]
+            or not interaction["initialFrameStatic"]
+            or not interaction["initialStillVerified"]
+            or interaction["automaticPath"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticTimeline"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or interaction["previewClockMutationCount"] != 0
+            or interaction["visualMutationFromPreviewClock"]
+            or not interaction["renderIgnoresPreviewClock"]
+            or not interaction["controlsBuiltWithoutAutoplay"]
+            or interaction["nonInputProgressMutationCount"] != 0
+            or interaction["inputCount"] != interaction["trustedInputCount"]
+            or interaction["inputCount"] < 18
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["hoverInputCount"] < 2
+            or interaction["pointerInputCount"] < 8
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerDragCount"] < 6
+            or interaction["pointerReleaseCount"] != 1
+            or interaction["pointerCancelCount"] != 0
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerCaptureReleaseCount"] != 1
+            or interaction["pointerCaptured"]
+            or interaction["dragActive"]
+            or interaction["activePointerId"] is not None
+            or interaction["mouseInputCount"] < 10
+            or interaction["touchInputCount"] != 0
+            or interaction["penInputCount"] != 0
+            or interaction["rangeInputCount"] != 1
+            or interaction["buttonInputCount"] != 3
+            or interaction["keyboardInputCount"] != 4
+            or interaction["targetSelectionCount"] != 3
+            or interaction["resetCount"] != 1
+            or interaction["humanProgressMutationCount"] < 14
+            or interaction["minimumHumanProgress"] != 0
+            or interaction["maximumHumanProgress"] != 4
+            or interaction["maximumHumanDelta"] < 3
+            or interaction["progress"] != interaction["recommendedLevel"]
+            or interaction["selectedLevel"] != interaction["recommendedLevel"]
+            or interaction["selectedLevelId"] != interaction["recommendedLevelId"]
+            or interaction["motionControlCount"] != 5
+            or interaction["motionSeekCount"] < 70
+            or interaction["motionDuration"] != 4
+            or interaction["motionTimeSpread"] != 0
+            or len(interaction["transitionRecords"]) < 14
+            or any(record["trusted"] is not True for record in interaction["transitionRecords"])
+            or interaction["lastInputKind"] != "button"
+            or interaction["lastInputSource"] != "button-target"
+            or interaction["lastInputTrusted"] is not True
+            or interaction["lastPointerType"] != "mouse"
+            or interaction["assetFetchCount"] != 1
+            or interaction["assetResponseStatus"] != 200
+            or not interaction["assetSameOrigin"]
+            or "image/jpeg" not in interaction["assetMimeType"]
+            or interaction["assetByteLength"] != 311455
+            or interaction["assetSha256"] != "a64e63a15681acf9651f7905b54775cf70ef0a0f2e1cbabcc93c43e3b3608169"
+            or not interaction["assetShaMatchesExpected"]
+            or not interaction["assetDecoded"]
+            or interaction["assetDecodeCount"] != 1
+            or interaction["assetNaturalWidth"] != 960
+            or interaction["assetNaturalHeight"] != 640
+            or interaction["sampleWidth"] != 96
+            or interaction["sampleHeight"] != 64
+            or interaction["sampledPixelCount"] != 6144
+            or interaction["sampledByteLength"] != 24576
+            or len(interaction["sampledPixelSha256"]) != 64
+            or not interaction["sampledPixelSha256"].strip("0")
+            or interaction["sampledOpaquePixelCount"] != 6144
+            or interaction["layerEvidenceCount"] != 5
+            or len(interaction["layerEvidence"]) != 5
+            or interaction["distinctLayerColorCount"] < 4
+            or interaction["luminanceRange"] < 35
+            or interaction["luminanceRange"] > 230
+            or interaction["riskRange"] < 18
+            or interaction["riskRange"] > 100
+            or any(layer["pixelCount"] < 700 for layer in interaction["layerEvidence"])
+            or any(channel < 0 or channel > 255 for layer in interaction["layerEvidence"] for channel in layer["rgb"])
+            or any(layer["riskScore"] < 0 or layer["riskScore"] > 100 for layer in interaction["layerEvidence"])
+            or not interaction["pixelEvidenceBoundToNavigation"]
+            or interaction["panelsUsingCommittedAsset"] != 5
+            or interaction["runtimeAssertCount"] < 1
+            or not interaction["runtimeAssertionPassed"]
+            or not interaction["ready"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture trusted reversible five-panel depth seeking, the pixel-derived target stratum, and synchronized paused Motion controls without automatic tunnel navigation: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "seeded-sandpile-avalanche":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

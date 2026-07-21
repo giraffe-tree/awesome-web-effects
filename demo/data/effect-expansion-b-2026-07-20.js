@@ -95,12 +95,12 @@ export const effectExpansion150BatchB = [
     scores: score(20, 20, 20, 15, 15, 10), rationaleZh: '原创 ImageGen 唱片压片照片既是全舞台底图，也是镜片放大采样源；同源 fetch、SHA-256、DOM decode 与 1,536 像素采样均可核验。真人 hover、捕获拖拽、键盘和可见缩放/复位控件拥有位置与倍率，暂停的 Motion 控制器值与实时镜片倍率一致；首帧静止，无自动循环、rehearsal、fallback、合成输入或预览时钟变更。'
   },
   {
-    id: 'accordion-depth-tunnel-navigation', order: 135, name: 'Accordion depth tunnel navigation', nameZh: '手风琴景深隧道导航', category: 'transition', sourceUrl: 'https://github.com/motiondivision/motion',
-    difference: '四个章节平面按序折开并沿 Z 轴后退，形成可进入的内容隧道，而非二维手风琴列表。',
-    behavior: { trigger: 'pointer progress or timed navigation', response: 'Chapter panels hinge open while receding into a perspective tunnel', timing: 'staggered depth choreography', layer: 'CSS 3D navigation stack' },
-    prompt: '实现四层 preserve-3d 章节面板，以交错进度同步 rotateY、translateZ 和亮度。',
-    implementation: motionImplementation("const tunnelMotion = animate(tunnel, { opacity: [.94, 1, .94] }, { duration: 3 }); panels.forEach(renderDepthPanel);", 'https://github.com/motiondivision/motion'),
-    scores: score(18, 19, 19, 15, 15, 10), rationaleZh: '章节层级、开门动作和隧道纵深都能在小尺寸中读清。'
+    id: 'accordion-depth-tunnel-navigation', order: 135, name: 'Northline depth clearance', nameZh: 'Northline 地下层位通行检查', category: 'transition', sourceUrl: 'https://github.com/motiondivision/motion',
+    difference: '把定时推进的抽象章节隧道变成地下设施层位检查：一张真实切面图的五个像素带计算各层风险与建议目的层，用户再亲手深入、折返或直达目标。',
+    behavior: { trigger: 'trusted hover, captured pointer scrub, range, keyboard, or visible depth control', response: 'Seek five hinged evidence panels, compare pixel-derived risk, reverse at any point, or route directly to the recommended inspection stratum', timing: 'paused human-owned Motion controls that hold every intermediate depth', layer: 'full-stage cutaway ambience, five CSS3D panels, sampled evidence card, native depth range, and controls' },
+    prompt: '制作一个全舞台地下设施层位通行检查器：同源加载并精确校验一张 ImageGen 五层切面图，以 96×64 像素中的五个水平带计算均色、亮度方差、温暖度、湿度、纹理与深度风险，并把最高风险层设为 TARGET。真人通过 hover、捕获式鼠标/触控/笔拖动、range、键盘及 Up/Down/Target 控件同步 seek 五个无 autoplay 的 Motion/CSS3D 面板；首帧和每次操作后保持静止。',
+    implementation: motionImplementation("const controls = panels.map((panel, i) => animate(panel, { transform: levelTransforms(i), opacity: levelOpacity(i), filter: levelFilters(i) }, { duration: 4, ease: 'linear', autoplay: false })); controls.forEach(control => control.time = trustedDepth);", 'https://github.com/motiondivision/motion'),
+    scores: score(20, 20, 20, 15, 15, 10), rationaleZh: '原创 ImageGen 地下设施切面图经过同源 fetch、精确源 SHA 与浏览器解码，并读取为 96×64 / 6,144 像素；五个水平证据带真实决定每层色调、风险和推荐目的层。可信 hover、捕获拖动、range、键盘及可见按钮同步 seek 五个暂停 Motion 控制器和 CSS3D 折页，可停在任意中间深度且没有自动路径。'
   },
   {
     id: 'svg-metaball-cursor-separation', order: 136, name: 'SVG metaball cursor separation', nameZh: 'SVG 融球指针分离', category: 'vector', sourceUrl: 'https://github.com/w3c/svgwg',

@@ -1,1 +1,451 @@
-<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Accordion Depth Tunnel Navigation</title><link rel="stylesheet" href="./shared.css"><style>:root{--preview-background:#120f0d}.preview-stage{background:radial-gradient(circle at 73% 50%,#58361f,#120f0d 48%);perspective:440px}.copy{position:absolute;left:14px;top:50px;color:#fff4e9;width:100px}.copy small{font:800 6px monospace;letter-spacing:.13em;color:#ffb468}.copy h1{margin:8px 0;font:950 20px/.84 system-ui;letter-spacing:-.06em}.tunnel{position:absolute;left:144px;top:38px;width:145px;height:108px;transform-style:preserve-3d}.panel{position:absolute;inset:0;border:1px solid #ffcc9b88;background:#2c1b12cc;color:#ffe8d0;padding:12px;font:900 8px monospace;transform-origin:left center;backface-visibility:hidden}.panel b{display:block;font:950 25px/.9 system-ui;margin-top:36px;letter-spacing:-.06em}.scene-caption{display:none}</style></head><body><main class="preview-stage"><section class="copy"><small>DEPTH INDEX</small><h1>OPEN A HALL OF CHAPTERS.</h1></section><div class="tunnel" id="tunnel" tabindex="0" aria-label="Accordion panels recede into depth"><article class="panel">01 / ORIGIN<b>EARTH</b></article><article class="panel">02 / SIGNAL<b>WAVE</b></article><article class="panel">03 / MEMORY<b>TRACE</b></article><article class="panel">04 / FUTURE<b>FORM</b></article></div><span class="library-badge">CSS 3D · accordion tunnel</span></main><script type="module" src="./src/accordion-depth-tunnel-navigation-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Motion — Northline Depth Clearance</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="./shared.css">
+    <style>
+      :root {
+        --preview-background: #090b0c;
+        --paper: #efe6d3;
+        --amber: #f0a75b;
+        --signal: #a7dcce;
+        color-scheme: dark;
+      }
+
+      button, input { font: inherit; }
+
+      .depth-stage {
+        --level-progress: 0;
+        --atlas-image: none;
+        position: absolute;
+        inset: 0;
+        overflow: clip;
+        background: #090b0c;
+        color: var(--paper);
+        outline: none;
+        user-select: none;
+      }
+
+      .depth-stage::before {
+        position: absolute;
+        inset: -4%;
+        background-image:
+          linear-gradient(90deg, #07090ae6 0 26%, #07090a42 52%, #07090aa6),
+          linear-gradient(#080a0b20, #080a0bc7),
+          var(--atlas-image);
+        background-position: center;
+        background-size: cover;
+        filter: saturate(.66) contrast(1.08) brightness(.53);
+        transform: scale(1.04);
+        content: "";
+        pointer-events: none;
+      }
+
+      .depth-stage::after {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        background:
+          linear-gradient(90deg, transparent 49.8%, #ffffff0c 50%, transparent 50.2%),
+          repeating-linear-gradient(0deg, transparent 0 23px, #ffffff08 24px);
+        mix-blend-mode: screen;
+        content: "";
+        pointer-events: none;
+      }
+
+      .depth-stage:focus-visible { box-shadow: inset 0 0 0 2px #f2c68d; }
+
+      .mission-panel {
+        position: absolute;
+        z-index: 8;
+        top: 15%;
+        left: 3.7%;
+        width: min(28%, 195px);
+        text-shadow: 0 2px 18px #000;
+        pointer-events: none;
+      }
+
+      .mission-kicker,
+      .mission-copy,
+      .level-index,
+      .level-state,
+      .evidence-label,
+      .risk-line,
+      .depth-readout,
+      .depth-controls button,
+      .depth-controls input,
+      .depth-scale,
+      .interaction-hint {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-weight: 820;
+        letter-spacing: .105em;
+        text-transform: uppercase;
+      }
+
+      .mission-kicker {
+        color: var(--amber);
+        font-size: clamp(5px, 1.15vw, 8px);
+      }
+
+      .mission-panel h1 {
+        margin: clamp(6px, 1.3vw, 10px) 0 0;
+        font: 930 clamp(16px, 4.7vw, 34px)/.86 system-ui, sans-serif;
+        letter-spacing: -.065em;
+      }
+
+      .mission-copy {
+        margin: clamp(7px, 1.6vw, 12px) 0 0;
+        color: #e9ddc2a8;
+        font-size: clamp(4px, .94vw, 7px);
+        line-height: 1.45;
+      }
+
+      .evidence-card {
+        margin-top: clamp(9px, 2.2vw, 16px);
+        padding: clamp(7px, 1.5vw, 11px);
+        border: 1px solid #f0d8b436;
+        border-radius: clamp(7px, 1.5vw, 11px);
+        background: #0a0d0dcc;
+        box-shadow: inset 0 1px #fff0, 0 12px 30px #0006;
+        backdrop-filter: blur(12px);
+      }
+
+      .evidence-label {
+        display: flex;
+        justify-content: space-between;
+        gap: 6px;
+        color: #adbaaee0;
+        font-size: clamp(4px, .82vw, 6px);
+      }
+
+      .evidence-label b { color: var(--sample, #f0a75b); }
+
+      .evidence-card strong {
+        display: block;
+        margin-top: clamp(5px, 1.1vw, 8px);
+        font: 900 clamp(9px, 2.4vw, 17px)/.95 system-ui, sans-serif;
+        letter-spacing: -.035em;
+      }
+
+      .risk-line {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: clamp(5px, 1.2vw, 8px);
+        color: #e5dcc9b8;
+        font-size: clamp(4px, .82vw, 6px);
+      }
+
+      .risk-line i {
+        width: clamp(5px, 1.1vw, 8px);
+        height: clamp(5px, 1.1vw, 8px);
+        flex: 0 0 auto;
+        border-radius: 50%;
+        background: var(--sample, #f0a75b);
+        box-shadow: 0 0 10px var(--sample, #f0a75b);
+      }
+
+      .tunnel-viewport {
+        position: absolute;
+        z-index: 4;
+        top: 9%;
+        right: 3.7%;
+        bottom: 18%;
+        width: 64%;
+        min-width: 0;
+        perspective: clamp(360px, 80vw, 760px);
+        cursor: ew-resize;
+        touch-action: none;
+      }
+
+      .tunnel-viewport::before {
+        position: absolute;
+        inset: -3% -2%;
+        border: 1px solid #e8c89e24;
+        border-radius: clamp(10px, 2.4vw, 18px);
+        background: radial-gradient(circle at 54% 48%, #cb7e3621, #05070885 63%);
+        box-shadow: inset 0 0 45px #0009, 0 22px 50px #0008;
+        content: "";
+      }
+
+      .tunnel-viewport:focus-visible { outline: 2px solid #f0ba79; outline-offset: 4px; }
+      .tunnel-stack { position: absolute; inset: 0; transform-style: preserve-3d; }
+
+      .level-panel {
+        --sample: #9c765e;
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        transform-origin: 2% 50%;
+        transform-style: preserve-3d;
+        border: 1px solid color-mix(in srgb, var(--sample) 68%, #fff);
+        border-radius: clamp(9px, 2.1vw, 16px);
+        background: #111;
+        box-shadow: inset 0 1px #ffffff36, 0 24px 55px #000b;
+        will-change: transform, opacity, filter;
+      }
+
+      .level-photo {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(90deg, #07090acf, #07090a0c 52%, #07090a9c),
+          var(--atlas-image);
+        background-position: center, center var(--photo-y);
+        background-size: cover, 100% 500%;
+        filter: saturate(1.04) contrast(1.08);
+        transform: scale(1.025);
+      }
+
+      .level-photo::after {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(115deg, #ffffff10, transparent 26%, #0006 79%);
+        content: "";
+      }
+
+      .level-copy {
+        position: absolute;
+        z-index: 2;
+        inset: clamp(10px, 2.5vw, 18px);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        pointer-events: none;
+        text-shadow: 0 2px 15px #000;
+      }
+
+      .level-index {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        color: #f2e7d2c7;
+        font-size: clamp(5px, 1vw, 8px);
+      }
+
+      .level-index span:first-child::before {
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        margin-right: 7px;
+        border-radius: 50%;
+        background: var(--sample);
+        box-shadow: 0 0 11px var(--sample);
+        content: "";
+      }
+
+      .level-copy h2 {
+        margin: auto 0 clamp(5px, 1.3vw, 9px);
+        max-width: 68%;
+        font: 930 clamp(18px, 5vw, 38px)/.84 system-ui, sans-serif;
+        letter-spacing: -.065em;
+      }
+
+      .level-state {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 10px;
+        color: #e6dccaa8;
+        font-size: clamp(4px, .9vw, 7px);
+      }
+
+      .level-state strong {
+        color: var(--sample);
+        font-size: clamp(6px, 1.25vw, 9px);
+      }
+
+      .hinge {
+        position: absolute;
+        z-index: 3;
+        top: 16%;
+        bottom: 16%;
+        left: 5px;
+        width: 3px;
+        border-radius: 4px;
+        background: repeating-linear-gradient(#d9c4a8 0 9%, #3b3025 9% 18%);
+        box-shadow: 0 0 8px #000;
+        pointer-events: none;
+      }
+
+      .depth-scale {
+        position: absolute;
+        z-index: 9;
+        right: 3.7%;
+        bottom: 5%;
+        width: 64%;
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto auto auto;
+        align-items: center;
+        gap: clamp(4px, 1vw, 8px);
+        padding: clamp(5px, 1.1vw, 8px);
+        border: 1px solid #e7cda933;
+        border-radius: 999px;
+        background: #070909d9;
+        box-shadow: 0 10px 28px #0007;
+        backdrop-filter: blur(12px);
+      }
+
+      .depth-readout {
+        min-width: clamp(34px, 7.5vw, 54px);
+        color: #f1d4ad;
+        font-size: clamp(4px, .9vw, 7px);
+        text-align: center;
+      }
+
+      .depth-scale input {
+        width: 100%;
+        height: clamp(14px, 3vw, 21px);
+        margin: 0;
+        accent-color: var(--sample, #f0a75b);
+        cursor: ew-resize;
+      }
+
+      .depth-controls { display: contents; }
+      .depth-controls button {
+        min-width: clamp(22px, 4.6vw, 34px);
+        height: clamp(18px, 3.6vw, 27px);
+        padding: 0 clamp(4px, .9vw, 7px);
+        border: 1px solid #ebd6b74a;
+        border-radius: 999px;
+        background: #171818;
+        color: #ece1cc;
+        font-size: clamp(5px, .86vw, 7px);
+        cursor: pointer;
+      }
+
+      .depth-controls button[data-action="target"] {
+        border-color: color-mix(in srgb, var(--sample) 75%, #fff);
+        color: var(--sample);
+      }
+
+      .depth-controls button:hover { background: #282622; }
+      .depth-controls button:focus-visible,
+      .depth-scale input:focus-visible { outline: 2px solid #f1be7e; outline-offset: 2px; }
+
+      .interaction-hint {
+        position: absolute;
+        z-index: 9;
+        right: 4.8%;
+        bottom: 15.2%;
+        color: #f0e3cc92;
+        font-size: clamp(4px, .8vw, 6px);
+        pointer-events: none;
+      }
+
+      .preview-stage .library-badge {
+        top: 4.5%;
+        left: 3.7%;
+        padding: clamp(3px, .7vw, 5px) clamp(5px, 1.1vw, 8px);
+        border-color: #e6c39736;
+        background: #090b0bcc;
+        color: #eee1cc;
+        font-size: clamp(5px, .9vw, 7px);
+      }
+
+      .scene-caption { display: none; }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      @media (max-width: 360px) {
+        .mission-panel { top: 15%; left: 4%; width: 25%; }
+        .mission-copy { display: none; }
+        .evidence-card { margin-top: 6px; padding: 5px; }
+        .evidence-card strong { font-size: clamp(7px, 4vw, 13px); }
+        .tunnel-viewport { top: 10%; right: 3%; bottom: 21%; width: 67%; }
+        .depth-scale { right: 3%; bottom: 4%; width: 67%; gap: 3px; padding: 3px; }
+        .interaction-hint { display: none; }
+      }
+
+      @media (max-width: 190px) {
+        .mission-panel,
+        .preview-stage .library-badge { display: none; }
+        .tunnel-viewport { inset: 4px 4px 23px; width: auto; }
+        .level-copy { inset: 6px; }
+        .level-copy h2 { margin-bottom: 2px; font-size: 12px; }
+        .level-index { font-size: 4px; }
+        .level-state { font-size: 4px; }
+        .depth-scale { right: 4px; bottom: 3px; left: 4px; width: auto; gap: 2px; padding: 2px; }
+        .depth-readout { min-width: 22px; font-size: 4px; }
+        .depth-controls button { min-width: 18px; height: 14px; padding: 0 2px; font-size: 4px; }
+        .depth-scale input { height: 12px; }
+      }
+    </style>
+  </head>
+  <body>
+    <main
+      class="preview-stage depth-stage"
+      id="depth-stage"
+      tabindex="0"
+      role="application"
+      aria-label="Northline underground facility depth clearance navigator"
+      aria-describedby="depth-instructions"
+      data-preview-mechanism="motion-paused-css3d-image-sampled-depth-navigation"
+    >
+      <section class="mission-panel" aria-live="polite">
+        <span class="mission-kicker">Northline / clearance 05</span>
+        <h1>DESCEND<br>WITH<br>EVIDENCE.</h1>
+        <p class="mission-copy">Inspect five image-sampled strata. Risk and target depth come from the committed survey pixels.</p>
+        <div class="evidence-card" id="evidence-card">
+          <span class="evidence-label"><span>Selected stratum</span><b id="evidence-level">L-01</b></span>
+          <strong id="evidence-name">Intake concourse</strong>
+          <span class="risk-line"><i></i><span id="evidence-risk">Sampling evidence…</span></span>
+        </div>
+      </section>
+
+      <section class="tunnel-viewport" id="tunnel-viewport" tabindex="0" aria-label="Drag horizontally to descend through five evidence levels">
+        <div class="tunnel-stack">
+          <article class="level-panel" data-level="0" aria-hidden="false">
+            <div class="level-photo" style="--photo-y:0%"></div><i class="hinge"></i>
+            <div class="level-copy"><div class="level-index"><span>L-01 / 08M</span><span>INTAKE</span></div><h2>INTAKE<br>CONCOURSE</h2><div class="level-state"><span>dry access corridor</span><strong data-risk>—</strong></div></div>
+          </article>
+          <article class="level-panel" data-level="1" aria-hidden="true">
+            <div class="level-photo" style="--photo-y:25%"></div><i class="hinge"></i>
+            <div class="level-copy"><div class="level-index"><span>L-02 / 18M</span><span>ARCHIVE</span></div><h2>RECORDS<br>VAULT</h2><div class="level-state"><span>cold storage stacks</span><strong data-risk>—</strong></div></div>
+          </article>
+          <article class="level-panel" data-level="2" aria-hidden="true">
+            <div class="level-photo" style="--photo-y:50%"></div><i class="hinge"></i>
+            <div class="level-copy"><div class="level-index"><span>L-03 / 31M</span><span>CABLES</span></div><h2>SERVICE<br>GALLERY</h2><div class="level-state"><span>thermal cable route</span><strong data-risk>—</strong></div></div>
+          </article>
+          <article class="level-panel" data-level="3" aria-hidden="true">
+            <div class="level-photo" style="--photo-y:75%"></div><i class="hinge"></i>
+            <div class="level-copy"><div class="level-index"><span>L-04 / 46M</span><span>PUMPS</span></div><h2>PUMP<br>CHAMBER</h2><div class="level-state"><span>water ingress watch</span><strong data-risk>—</strong></div></div>
+          </article>
+          <article class="level-panel" data-level="4" aria-hidden="true">
+            <div class="level-photo" style="--photo-y:100%"></div><i class="hinge"></i>
+            <div class="level-copy"><div class="level-index"><span>L-05 / 63M</span><span>HEAT</span></div><h2>THERMAL<br>CHAMBER</h2><div class="level-state"><span>geothermal inspection</span><strong data-risk>—</strong></div></div>
+          </article>
+        </div>
+      </section>
+
+      <span class="interaction-hint">Hover to preview · capture-drag to scrub</span>
+      <div class="depth-scale" style="--sample:#f0a75b">
+        <output class="depth-readout" id="depth-readout" for="depth-range">L-01</output>
+        <input id="depth-range" type="range" min="0" max="4" step="0.01" value="0" aria-label="Facility depth">
+        <div class="depth-controls">
+          <button type="button" data-action="previous" aria-label="Previous shallower level">UP</button>
+          <button type="button" data-action="next" aria-label="Next deeper level">DOWN</button>
+          <button type="button" data-action="target" aria-label="Go to pixel-derived inspection target">TARGET</button>
+        </div>
+      </div>
+
+      <p class="sr-only" id="depth-instructions">Hover or captured-drag horizontally across the tunnel, use the depth range, choose the visible up, down and target buttons, or use arrow keys. Home returns to the intake, End moves to the deepest level, T moves to the pixel-derived inspection target, and Escape resets.</p>
+      <span class="library-badge">Motion · live depth clearance</span>
+      <span class="scene-caption">Image pixels determine each level risk and the navigable inspection target.</span>
+    </main>
+    <script type="module" src="./src/accordion-depth-tunnel-navigation-demo.js"></script>
+  </body>
+</html>

@@ -238,16 +238,16 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "interaction-history-hiring-badge",
-    "name": "Interaction-history hiring badge",
-    "nameZh": "交互历史驱动招聘徽章",
+    "name": "Human-built role-interest hiring memory",
+    "nameZh": "真人构建的岗位兴趣招聘记忆",
     "category": "pointer",
     "sourceUrl": "https://www.clay.com/",
-    "difference": "行为由此前 hover 次数决定，不是每次相同的 hover 动画或随机文案。",
+    "difference": "三次可信岗位选择建立可见的 session history，并据此逐步重组招聘邀请；不是定时模拟访问、随机改文案或每次相同的 hover。",
     "behavior": {
-      "trigger": "repeated pointer entries",
-      "response": "Escalate posture and copy across the first three visits",
-      "timing": "history-dependent finite states",
-      "layer": "edge badge"
+      "trigger": "trusted pointer or keyboard role selections, Undo, Escape, or Clear",
+      "response": "Append visible role-interest history and recompose a retained multidisciplinary hiring invitation",
+      "timing": "520ms finite feedback after each human-authored history mutation",
+      "layer": "full-stage role board, visible session memory, and hiring badge"
     },
     "implementation": {
       "projectId": "motiondivision-motion",
@@ -258,18 +258,18 @@ export const effectExpansion100Specs = [
       "referenceUrl": "https://www.clay.com/"
     },
     "scores": {
-      "creativity": 18,
-      "artDirection": 16,
-      "motion": 16,
+      "creativity": 20,
+      "artDirection": 20,
+      "motion": 20,
       "clarity": 15,
-      "inspiration": 14,
+      "inspiration": 15,
       "evidence": 10,
-      "total": 89
+      "total": 100
     },
-    "rationaleZh": "多次接近形成网站记忆感，但艺术与动效余量依赖精细设计。",
+    "rationaleZh": "岗位选择、三格历史和招聘徽章共同解释网站为何“记得”兴趣；3/3 形成跨产品、代码与动效的真实匹配邀请，且每一步都能 Undo、Escape 或 Clear。",
     "batch": "A",
-    "demo": "页边招聘徽章第 1 次轻晃、第 2 次探头、第 3 次翻面发出邀请。",
-    "capture": "以固定轨迹进入/离开三次，完整录下三种递进状态。",
+    "demo": "Parallel Practice 岗位兴趣台让真人选择 Product design、Creative code 与 Motion systems，并把选择历史归纳为可逆的跨学科招聘邀请。",
+    "capture": "真人依次选择三个岗位，保留 3/3 匹配结果，再用 Undo 恢复到 2/3，证明记忆由输入构建且可撤销。",
     "risk": {
       "level": "medium",
       "detail": "短 GIF 必须容纳三次访问；只改文字不够达到动效最低线。"

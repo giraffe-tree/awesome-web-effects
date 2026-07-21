@@ -1,3 +1,474 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>Motion — Interaction-history Hiring Badge</title><link rel="stylesheet" href="./shared.css"/><style>
-:root{--preview-background:#f6f0d8;color-scheme:light}.history-stage{background:linear-gradient(145deg,#f8f2dc,#e7d9ae);color:#171713}.history-copy{position:absolute;left:19px;top:48px;width:145px;font:900 22px/.88 Georgia,serif;letter-spacing:-.055em}.history-copy small{display:block;margin-top:9px;color:#766d4d;font:800 6px/1.4 ui-monospace,monospace;letter-spacing:.11em;text-transform:uppercase}.history-link{position:absolute;right:24px;top:61px;width:116px;height:64px;border:0;background:transparent;color:#171713;cursor:pointer}.history-link>span{font:900 16px/1 Georgia,serif;border-bottom:2px solid currentColor}.history-badge{position:absolute;right:-8px;top:-26px;width:92px;padding:8px 7px;border:2px solid #171713;border-radius:50%;background:#ffe348;font:900 7px/1.15 ui-monospace,monospace;text-transform:uppercase;box-shadow:3px 4px 0 #171713}.history-count{position:absolute;right:26px;bottom:26px;font:900 6px/1 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:#756a46}.history-stage .library-badge{background:#f8f2dcd9;border-color:#17171326;color:#171713}.scene-caption{display:none}
-</style></head><body><main class="preview-stage history-stage"><div class="history-copy">A SITE THAT<br/>REMEMBERS<small>each visit changes the invitation</small></div><button class="history-link" id="history-link" type="button"><span>Join the studio ↗</span><b class="history-badge" id="history-badge">We are hiring!</b></button><span class="history-count" id="history-count">hover memory · 0 / 3</span><span class="library-badge">Motion · interaction history</span><span class="scene-caption">the third visit reveals a more direct invitation</span></main><script type="module" src="./src/interaction-history-hiring-badge-demo.js"></script></body></html>
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Motion — Hiring Interest Memory</title>
+    <link rel="stylesheet" href="./shared.css" />
+    <style>
+      :root {
+        --preview-background: #232127;
+        --paper: #f1eee5;
+        --ink: #201e22;
+        --muted: #77716d;
+        --orange: #f06437;
+        --violet: #5c4fda;
+        --line: rgba(32, 30, 34, .16);
+        color-scheme: light;
+      }
+
+      button { font: inherit; color: inherit; }
+
+      .hiring-stage {
+        padding: clamp(5px, 1.8vw, 14px);
+        background:
+          radial-gradient(circle at 88% 12%, rgba(98, 84, 223, .23), transparent 34%),
+          linear-gradient(145deg, #29262d, #17161a);
+      }
+
+      .hiring-shell {
+        display: grid;
+        width: 100%;
+        height: 100%;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, .16);
+        border-radius: clamp(7px, 2vw, 17px);
+        background: var(--paper);
+        box-shadow: 0 24px 72px rgba(0, 0, 0, .28);
+        grid-template-rows: clamp(27px, 10vh, 40px) minmax(0, 1fr);
+      }
+
+      .hiring-header {
+        display: flex;
+        min-width: 0;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        padding: 0 clamp(9px, 2.6vw, 20px);
+        border-bottom: 1px solid var(--line);
+      }
+
+      .studio-lockup,
+      .header-tools,
+      .memory-status {
+        display: flex;
+        min-width: 0;
+        align-items: center;
+      }
+
+      .studio-lockup { gap: clamp(5px, 1vw, 8px); }
+
+      .studio-mark {
+        position: relative;
+        width: clamp(12px, 2.4vw, 19px);
+        aspect-ratio: 1;
+        flex: 0 0 auto;
+        border-radius: 50%;
+        background: var(--ink);
+      }
+
+      .studio-mark::after {
+        position: absolute;
+        width: 38%;
+        aspect-ratio: 1;
+        right: 13%;
+        bottom: 13%;
+        border-radius: 50%;
+        background: var(--orange);
+        content: '';
+      }
+
+      .studio-lockup strong {
+        overflow: hidden;
+        font-size: clamp(7px, 1.5vw, 11px);
+        letter-spacing: -.025em;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .studio-lockup span,
+      .memory-status,
+      .role-index,
+      .role-meta,
+      .interest-kicker,
+      .interest-count,
+      .history-label,
+      .history-empty,
+      .history-note,
+      .control-button {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        text-transform: uppercase;
+      }
+
+      .studio-lockup span {
+        color: var(--muted);
+        font-size: clamp(4px, .78vw, 6px);
+        font-weight: 780;
+        letter-spacing: .13em;
+      }
+
+      .header-tools { gap: clamp(6px, 1.2vw, 10px); }
+
+      .memory-status {
+        color: #65605d;
+        font-size: clamp(4px, .77vw, 6px);
+        font-weight: 780;
+        letter-spacing: .11em;
+        gap: 5px;
+        white-space: nowrap;
+      }
+
+      .memory-status::before {
+        width: 5px;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: var(--violet);
+        box-shadow: 0 0 0 3px rgba(92, 79, 218, .12);
+        content: '';
+      }
+
+      .control-button {
+        padding: clamp(4px, .7vw, 6px) clamp(6px, 1.1vw, 9px);
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: transparent;
+        color: #68625f;
+        cursor: pointer;
+        font-size: clamp(4px, .75vw, 6px);
+        font-weight: 800;
+        letter-spacing: .07em;
+      }
+
+      .control-button:disabled { cursor: default; opacity: .34; }
+
+      .hiring-body {
+        display: grid;
+        min-width: 0;
+        min-height: 0;
+        grid-template-columns: minmax(0, 1.5fr) minmax(102px, .72fr);
+      }
+
+      .role-board {
+        display: grid;
+        min-width: 0;
+        min-height: 0;
+        padding: clamp(10px, 2.8vw, 24px);
+        border-right: 1px solid var(--line);
+        grid-template-rows: auto minmax(0, 1fr) auto;
+      }
+
+      .board-heading {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .board-heading h1 {
+        max-width: 7.2em;
+        margin: 0;
+        font: 850 clamp(18px, 5vw, 42px)/.82 ui-serif, Georgia, serif;
+        letter-spacing: -.065em;
+      }
+
+      .board-heading p {
+        max-width: 21em;
+        margin: 0;
+        color: var(--muted);
+        font-size: clamp(5px, .92vw, 8px);
+        line-height: 1.35;
+      }
+
+      .role-list {
+        display: grid;
+        min-width: 0;
+        min-height: 0;
+        align-content: center;
+        margin-top: clamp(5px, 1.5vh, 11px);
+        border-top: 1px solid var(--ink);
+      }
+
+      .role-button {
+        position: relative;
+        display: grid;
+        min-width: 0;
+        align-items: center;
+        padding: clamp(4px, 1vh, 8px) 1px;
+        overflow: hidden;
+        border: 0;
+        border-bottom: 1px solid var(--line);
+        background: transparent;
+        text-align: left;
+        cursor: pointer;
+        grid-template-columns: clamp(21px, 4vw, 34px) minmax(0, 1fr) auto;
+        gap: clamp(4px, 1vw, 9px);
+      }
+
+      .role-button::before {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        background: var(--ink);
+        content: '';
+        opacity: 0;
+        transform: translateX(-102%);
+      }
+
+      .role-button > * { position: relative; z-index: 1; }
+
+      .role-index,
+      .role-meta {
+        color: var(--muted);
+        font-size: clamp(4px, .78vw, 6px);
+        font-weight: 800;
+        letter-spacing: .1em;
+      }
+
+      .role-name {
+        overflow: hidden;
+        font-size: clamp(8px, 1.75vw, 15px);
+        font-weight: 820;
+        letter-spacing: -.035em;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .role-meta { white-space: nowrap; }
+
+      .role-button[data-saved="true"] { color: var(--paper); }
+      .role-button[data-saved="true"]::before { opacity: 1; transform: translateX(0); }
+      .role-button[data-saved="true"] .role-index,
+      .role-button[data-saved="true"] .role-meta { color: #c8c2bb; }
+
+      .role-button:focus-visible,
+      .control-button:focus-visible {
+        outline: 2px solid var(--orange);
+        outline-offset: -2px;
+      }
+
+      .history-strip {
+        display: grid;
+        min-width: 0;
+        align-items: center;
+        padding-top: clamp(6px, 1.4vw, 11px);
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        gap: clamp(6px, 1.4vw, 12px);
+      }
+
+      .history-label,
+      .history-empty,
+      .history-note {
+        color: var(--muted);
+        font-size: clamp(4px, .71vw, 6px);
+        font-weight: 780;
+        letter-spacing: .09em;
+        white-space: nowrap;
+      }
+
+      .history-track {
+        display: grid;
+        min-width: 0;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 3px;
+      }
+
+      .history-node {
+        height: clamp(4px, 1.15vh, 7px);
+        overflow: hidden;
+        border: 1px solid rgba(32, 30, 34, .24);
+        border-radius: 999px;
+        background: transparent;
+      }
+
+      .history-node::after {
+        display: block;
+        width: 100%;
+        height: 100%;
+        border-radius: inherit;
+        background: var(--violet);
+        content: '';
+        transform: scaleX(0);
+        transform-origin: left;
+      }
+
+      .history-node[data-filled="true"]::after { transform: scaleX(1); }
+
+      .interest-panel {
+        position: relative;
+        display: grid;
+        min-width: 0;
+        min-height: 0;
+        place-items: center;
+        padding: clamp(8px, 2vw, 18px);
+        overflow: hidden;
+        background:
+          linear-gradient(rgba(32, 30, 34, .055) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(32, 30, 34, .055) 1px, transparent 1px),
+          #ddd7ca;
+        background-size: clamp(16px, 3.2vw, 27px) clamp(16px, 3.2vw, 27px);
+      }
+
+      .interest-panel::after {
+        position: absolute;
+        width: 72%;
+        aspect-ratio: 1;
+        border: 1px solid rgba(32, 30, 34, .1);
+        border-radius: 50%;
+        content: '';
+      }
+
+      .interest-badge {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        width: min(88%, 210px);
+        aspect-ratio: 1;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        padding: 13%;
+        border: clamp(1px, .3vw, 2px) solid var(--ink);
+        border-radius: 50%;
+        background: var(--orange);
+        color: var(--ink);
+        text-align: center;
+        box-shadow: clamp(3px, .8vw, 7px) clamp(4px, 1vw, 9px) 0 var(--ink);
+        transform: rotate(-4deg);
+      }
+
+      .interest-badge[data-ready="true"] {
+        background: var(--violet);
+        color: #fffdf5;
+      }
+
+      .interest-kicker {
+        font-size: clamp(4px, .82vw, 7px);
+        font-weight: 840;
+        letter-spacing: .13em;
+      }
+
+      .interest-count {
+        margin-top: clamp(3px, .7vw, 6px);
+        font-size: clamp(16px, 4.2vw, 35px);
+        font-weight: 900;
+        letter-spacing: -.09em;
+      }
+
+      .interest-title {
+        max-width: 8em;
+        margin: clamp(2px, .5vw, 5px) 0 0;
+        font: 850 clamp(7px, 1.5vw, 13px)/.95 ui-serif, Georgia, serif;
+        letter-spacing: -.045em;
+      }
+
+      .interest-detail {
+        max-width: 15em;
+        margin: clamp(3px, .8vw, 7px) 0 0;
+        color: currentColor;
+        font-size: clamp(4px, .77vw, 6px);
+        line-height: 1.28;
+        opacity: .7;
+      }
+
+      .hiring-stage .library-badge {
+        top: auto;
+        left: auto;
+        right: clamp(8px, 2vw, 15px);
+        bottom: clamp(7px, 1.8vw, 13px);
+        border-color: rgba(32, 30, 34, .16);
+        background: rgba(241, 238, 229, .76);
+        color: rgba(32, 30, 34, .72);
+        font-size: clamp(4px, .67vw, 6px);
+      }
+
+      .scene-caption { display: none; }
+
+      @media (max-width: 330px) and (max-aspect-ratio: 4 / 5) {
+        .hiring-shell { grid-template-rows: 35px minmax(0, 1fr); }
+        .studio-lockup span,
+        .memory-status { display: none; }
+        .hiring-body { grid-template-columns: 1fr; grid-template-rows: minmax(0, 1.18fr) minmax(122px, .82fr); }
+        .role-board { border-right: 0; border-bottom: 1px solid var(--line); }
+        .board-heading p { max-width: 13em; }
+        .interest-badge {
+          width: min(33%, 80px);
+          height: min(33vw, 80px);
+          min-height: 0;
+          padding: 7%;
+          aspect-ratio: auto;
+        }
+        .interest-detail { display: none; }
+        .interest-panel::after { width: 46%; }
+        .hiring-stage .library-badge { display: none; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .role-button::before,
+        .history-node::after { transition: none !important; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="preview-stage hiring-stage" id="hiring-stage">
+      <section class="hiring-shell" id="hiring-shell" aria-label="Open roles interest memory">
+        <header class="hiring-header">
+          <div class="studio-lockup">
+            <i class="studio-mark" aria-hidden="true"></i>
+            <strong>Parallel Practice</strong>
+            <span>Open roles · 2026</span>
+          </div>
+          <div class="header-tools">
+            <span class="memory-status" id="memory-status">Session memory · empty</span>
+            <button class="control-button" id="undo-last" type="button" disabled>Undo</button>
+            <button class="control-button" id="clear-history" type="button" disabled>Clear</button>
+          </div>
+        </header>
+
+        <div class="hiring-body">
+          <section class="role-board" aria-labelledby="roles-title">
+            <div class="board-heading">
+              <h1 id="roles-title">Find your place.</h1>
+              <p>Save the roles that pull you in. Your session history shapes one useful introduction.</p>
+            </div>
+
+            <div class="role-list" id="role-list" aria-label="Roles to remember">
+              <button class="role-button" type="button" data-role-id="product" data-role-name="Product design" data-saved="false" aria-pressed="false">
+                <span class="role-index">01</span><span class="role-name">Product design</span><span class="role-meta">NYC · Hybrid</span>
+              </button>
+              <button class="role-button" type="button" data-role-id="creative" data-role-name="Creative code" data-saved="false" aria-pressed="false">
+                <span class="role-index">02</span><span class="role-name">Creative code</span><span class="role-meta">Remote · EU</span>
+              </button>
+              <button class="role-button" type="button" data-role-id="motion" data-role-name="Motion systems" data-saved="false" aria-pressed="false">
+                <span class="role-index">03</span><span class="role-name">Motion systems</span><span class="role-meta">London · Flex</span>
+              </button>
+            </div>
+
+            <div class="history-strip" aria-live="polite">
+              <span class="history-label">Interest trail</span>
+              <span class="history-track" id="history-track" aria-hidden="true">
+                <i class="history-node" data-filled="false"></i>
+                <i class="history-node" data-filled="false"></i>
+                <i class="history-node" data-filled="false"></i>
+              </span>
+              <span class="history-note" id="history-note">Choose a role</span>
+            </div>
+          </section>
+
+          <aside class="interest-panel" aria-live="polite">
+            <div class="interest-badge" id="interest-badge" data-ready="false">
+              <span class="interest-kicker" id="interest-kicker">Open invitation</span>
+              <strong class="interest-count" id="interest-count">0 / 3</strong>
+              <h2 class="interest-title" id="interest-title">Tell us what caught your eye.</h2>
+              <p class="interest-detail" id="interest-detail">Three saved roles unlock a tailored studio introduction.</p>
+            </div>
+          </aside>
+        </div>
+      </section>
+      <span class="library-badge">Motion · trusted interaction history</span>
+      <span class="scene-caption">real role selections shape and preserve the hiring invitation</span>
+    </main>
+    <script type="module" src="./src/interaction-history-hiring-badge-demo.js"></script>
+  </body>
+</html>

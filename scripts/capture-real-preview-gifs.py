@@ -592,6 +592,22 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("Space")
             elif index == 35:
                 page.wait_for_timeout(340)
+        elif demo["id"] == "interaction-history-hiring-badge":
+            if index == 3:
+                page.locator('[data-role-id="product"]').click()
+            elif index == 10:
+                page.locator('[data-role-id="creative"]').click()
+            elif index == 17:
+                page.locator('[data-role-id="motion"]').click()
+            elif index == 26:
+                page.wait_for_function(
+                    "window.__PREVIEW_INTERACTION_STATE__.historyLength === 3 "
+                    "&& window.__PREVIEW_INTERACTION_STATE__.badgePhase === 'match-ready' "
+                    "&& !window.__PREVIEW_INTERACTION_STATE__.transitionActive",
+                    timeout=2_000,
+                )
+            elif index == 27:
+                page.locator('#undo-last').click()
         elif demo["id"] == "opposed-diagonal-offset-cta":
             if index == 4:
                 page.locator('#offset-button').hover()
@@ -4551,6 +4567,46 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["lastTrustedEvent"] != "space-toggle"
         ):
             raise RuntimeError(f"{demo['id']} did not capture a real shared-baseline metadata/CTA handoff across hover, focus, activation, cancellation, and reset: {interaction!r}")
+    elif demo["id"] == "interaction-history-hiring-badge":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        runtime_assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        pressed = page.locator('[data-role-id]').evaluate_all("nodes => nodes.map(node => node.getAttribute('aria-pressed'))")
+        if (
+            not runtime_assertion
+            or interaction["automaticPlayback"]
+            or interaction["automaticCycle"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or not interaction["userInitiatedChangesOnly"]
+            or interaction["syntheticInput"]
+            or not interaction["initialStaticVerified"]
+            or not interaction["geometryValidated"]
+            or not interaction["fullStageValidated"]
+            or not interaction["motionControlReady"]
+            or interaction["inputCount"] != 4
+            or interaction["pointerInputCount"] != 4
+            or interaction["keyboardInputCount"] != 0
+            or interaction["roleSelectionCount"] != 3
+            or interaction["undoCount"] != 1
+            or interaction["clearCount"] != 0
+            or interaction["escapeUndoCount"] != 0
+            or interaction["historyLength"] != 2
+            or interaction["history"] != ["product", "creative"]
+            or interaction["matchedRoleIds"] != ["product", "creative"]
+            or interaction["badgePhase"] != "remembering"
+            or interaction["lastSelectedRole"] != "creative"
+            or interaction["lastTrustedEvent"] != "pointer-undo"
+            or interaction["transitionStartCount"] < 4
+            or interaction["transitionCompleteCount"] != interaction["transitionStartCount"]
+            or interaction["transitionActive"]
+            or interaction["finiteTransitionStepCount"] < 20
+            or interaction["motionControlCreateCount"] < 10
+            or pressed != ["true", "true", "false"]
+            or page.locator('.history-node[data-filled="true"]').count() != 2
+            or page.locator('#interest-count').inner_text().strip() != "2 / 3"
+            or page.locator('#interest-badge').get_attribute('data-ready') != "false"
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a real, reversible role-interest hiring memory: {interaction!r}")
     elif demo["id"] == "opposed-diagonal-offset-cta":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         runtime_assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")

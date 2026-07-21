@@ -1579,6 +1579,42 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("Shift+ArrowDown")
             elif index == 29:
                 page.keyboard.press("ArrowLeft")
+        elif demo["id"] == "iris-aperture-navigation":
+            if index == 1:
+                page.mouse.move(250, 100)
+            elif index == 4:
+                page.mouse.move(180, 70, steps=4)
+            elif index == 7:
+                page.mouse.move(100, 120)
+            elif index == 8:
+                page.mouse.down()
+            elif index == 9:
+                page.mouse.move(190, 45, steps=6)
+            elif index == 10:
+                page.mouse.up()
+            elif index == 13:
+                page.locator('[data-chapter="0"]').click()
+            elif index == 15:
+                page.locator('[data-chapter="2"]').click()
+            elif index == 17:
+                page.locator('[data-chapter="1"]').click()
+            elif index == 20:
+                page.locator("#iris-open").click()
+            elif index == 22:
+                page.locator("#iris-close").click()
+            elif index == 24:
+                page.locator("#iris-canvas").focus()
+                page.keyboard.press("ArrowRight")
+            elif index == 26:
+                page.keyboard.press("ArrowUp")
+            elif index == 28:
+                page.keyboard.press("Home")
+            elif index == 30:
+                page.keyboard.press("End")
+            elif index == 32:
+                page.keyboard.press("ArrowLeft")
+            elif index == 34:
+                page.keyboard.press("ArrowDown")
         elif demo["id"] == "liquid-lens-card-refraction":
             if index == 1:
                 page.mouse.move(260, 110)
@@ -4040,6 +4076,77 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["lastInputTrusted"] is not True
         ):
             raise RuntimeError(f"{demo['id']} did not capture trusted slow/fast captured traces, keyboard sampling, reset, four unique decoded ImageGen frames, and a nonempty final visual-memory path: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "iris-aperture-navigation":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-portfolio-chapter-navigation"
+            or interaction["mechanism"] != "p5-canvas-local-raster-circular-clip-and-twelve-blade-iris"
+            or interaction["acceptedInputs"] != ["mouse", "touch", "pen", "keyboard", "button"]
+            or not interaction["userInputRequired"]
+            or not interaction["strictTrustedInputGuard"]
+            or interaction["automaticPath"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticFallback"]
+            or interaction["rehearsalMode"]
+            or interaction["previewClockDriven"]
+            or interaction["previewClockMutation"]
+            or interaction["visualMutationFromPreviewClock"]
+            or interaction["syntheticInputDispatch"]
+            or not interaction["initialStillVerified"]
+            or interaction["inputCount"] < 25
+            or interaction["trustedInputCount"] != interaction["inputCount"]
+            or interaction["rejectedUntrustedCount"] != 0
+            or interaction["hoverInputCount"] < 6
+            or interaction["mouseInputCount"] < 8
+            or interaction["touchInputCount"] != 0
+            or interaction["penInputCount"] != 0
+            or interaction["keyboardInputCount"] != 6
+            or interaction["buttonInputCount"] != 5
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerDragCount"] < 6
+            or interaction["pointerReleaseCount"] != 1
+            or interaction["pointerCancelCount"] != 0
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerCaptureReleaseCount"] != 1
+            or interaction["geometryMutationCount"] < 20
+            or interaction["humanGeometryMutationCount"] != interaction["geometryMutationCount"]
+            or interaction["nonInputGeometryMutationCount"] != 0
+            or interaction["centerMutationCount"] < 10
+            or interaction["openMutationCount"] < 8
+            or interaction["selectionMutationCount"] < 5
+            or abs(interaction["open"] - .9) > .001
+            or interaction["selectedChapter"] != 1
+            or abs(interaction["center"]["x"] - .54) > .001
+            or abs(interaction["center"]["y"] - .5) > .001
+            or interaction["activePointerId"] is not None
+            or interaction["activePointerType"] != "none"
+            or interaction["pointerCaptured"]
+            or interaction["lastInputKind"] != "keyboard"
+            or interaction["lastInputTrusted"] is not True
+            or interaction["assetFetchCount"] != 1
+            or interaction["assetFetchStatus"] != 200
+            or "image/jpeg" not in interaction["assetMimeType"]
+            or interaction["assetByteLength"] != 206995
+            or interaction["assetSha256"] != "4aa3eb7fb702d03313d32413186d58e21ac3bc480711042c2dd1224ee36b6618"
+            or not interaction["assetChecksumVerified"]
+            or not interaction["assetDecoded"]
+            or interaction["assetNaturalWidth"] != 960
+            or interaction["assetNaturalHeight"] != 640
+            or not interaction["p5ImageCreated"]
+            or interaction["p5ImagePixelCount"] != 614400
+            or interaction["p5ImagePixelByteLength"] != 2457600
+            or interaction["sourcePixelChecksum"] <= 0
+            or interaction["p5ImageDrawCalls"] < 20
+            or interaction["lastDrawnAssetSha256"] != "4aa3eb7fb702d03313d32413186d58e21ac3bc480711042c2dd1224ee36b6618"
+            or interaction["bladeCount"] != 12
+            or interaction["bladeVertexCount"] != 48
+            or interaction["apertureClipCount"] < 10
+            or interaction["renderedSampleCount"] <= 1000
+            or interaction["renderedLuminanceRange"] <= 80
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture trusted hover, captured drag, chapter controls, keyboard aperture changes, twelve-blade geometry, and a verified local p5 destination image with zero automatic mutation: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "liquid-lens-card-refraction":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

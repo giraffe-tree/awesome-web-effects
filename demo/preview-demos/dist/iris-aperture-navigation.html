@@ -1,7 +1,191 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p5.js — Iris Aperture Navigation</title><style>:root{--preview-background:#08100f}.expansion-stage{position:absolute;inset:0;overflow:hidden;cursor:crosshair}.expansion-stage canvas{display:block}.library-badge{background:#08100fcf}.scene-caption{color:#f5dda9a8}</style>  <script type="module" crossorigin src="./assets/iris-aperture-navigation-4G-ntB3K.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
-  <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
-  <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
-  <link rel="modulepreload" crossorigin href="./assets/expansion-a-utils-anD0k7Pd.js">
-  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage"><div class="expansion-stage" id="expansion-stage" data-preview-mechanism="p5-iris-aperture" tabindex="0" aria-label="Move the pointer or use arrow keys to open the iris navigation aperture"></div><span class="library-badge">p5.js · aperture geometry</span><span class="scene-caption">focus opens a mechanical route through the page</span></main></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>p5.js — North Atlantic Iris Navigation</title>
+    <style>
+      :root { --preview-background: #071013; color-scheme: dark; }
+      .preview-stage { background: #071013; }
+      #iris-canvas {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+        cursor: grab;
+        touch-action: none;
+        outline: none;
+      }
+      #iris-canvas:active { cursor: grabbing; }
+      #iris-canvas:focus-visible { outline: none; }
+      #iris-canvas:focus-visible + .route-heading small {
+        color: #ffd79b;
+        text-decoration: underline;
+        text-decoration-thickness: 1px;
+        text-underline-offset: 3px;
+      }
+      .route-heading {
+        position: absolute;
+        z-index: 4;
+        left: 3.75%;
+        top: 26%;
+        width: min(34%, 245px);
+        color: #f1ede3;
+        pointer-events: none;
+        text-shadow: 0 2px 15px rgba(0,0,0,.55);
+      }
+      .route-heading small {
+        display: block;
+        color: #e7a961;
+        font: 850 clamp(5px,1.25vw,9px)/1 ui-monospace, monospace;
+        letter-spacing: .16em;
+        text-transform: uppercase;
+      }
+      .route-heading h1 {
+        margin: clamp(5px,1.4vw,10px) 0 0;
+        font: 900 clamp(13px,4.8vw,35px)/.9 system-ui, sans-serif;
+        letter-spacing: -.055em;
+      }
+      .route-heading p {
+        margin: clamp(6px,1.6vw,12px) 0 0;
+        color: rgba(235,238,231,.67);
+        font: 750 clamp(4px,1vw,7px)/1.35 ui-monospace, monospace;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+      }
+      .aperture-controls {
+        position: absolute;
+        z-index: 8;
+        top: 5.5%;
+        right: 3.75%;
+        display: flex;
+        align-items: center;
+        gap: clamp(3px,.7vw,6px);
+      }
+      .aperture-controls button,
+      .chapter-nav button {
+        appearance: none;
+        border: 1px solid rgba(235,239,230,.22);
+        background: rgba(5,13,16,.76);
+        color: rgba(240,239,230,.78);
+        font-family: ui-monospace, monospace;
+        font-weight: 800;
+        text-transform: uppercase;
+        backdrop-filter: blur(9px);
+      }
+      .aperture-controls button {
+        width: clamp(18px,4vw,29px);
+        height: clamp(18px,4vw,29px);
+        padding: 0;
+        border-radius: 50%;
+        font-size: clamp(8px,1.8vw,13px);
+        line-height: 1;
+      }
+      .aperture-controls output {
+        min-width: clamp(43px,9vw,65px);
+        color: #f2c985;
+        font: 850 clamp(5px,1vw,8px)/1 ui-monospace, monospace;
+        letter-spacing: .08em;
+        text-align: center;
+      }
+      .chapter-nav {
+        position: absolute;
+        z-index: 8;
+        left: 3.75%;
+        right: 3.75%;
+        bottom: 5.5%;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: clamp(3px,.9vw,7px);
+        max-width: 68%;
+      }
+      .chapter-nav button {
+        min-width: 0;
+        padding: clamp(4px,1vw,7px) clamp(4px,1.1vw,8px);
+        border-radius: 999px;
+        font-size: clamp(5px,1.2vw,9px);
+        letter-spacing: .07em;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .chapter-nav button[aria-current="true"] {
+        border-color: rgba(239,181,102,.7);
+        background: #e4a65d;
+        color: #111718;
+      }
+      button { cursor: pointer; }
+      button:focus-visible { outline: 2px solid #f5cf91; outline-offset: 2px; }
+      .preview-stage .library-badge {
+        top: 5.5%;
+        left: 3.75%;
+        padding: clamp(3px,.75vw,6px) clamp(5px,1.2vw,9px);
+        border-color: rgba(235,239,230,.19);
+        background: rgba(5,13,16,.74);
+        color: rgba(239,240,232,.88);
+        font-size: clamp(5px,1vw,8px);
+        white-space: nowrap;
+      }
+      .scene-caption { display: none; }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0,0,0,0);
+        white-space: nowrap;
+        border: 0;
+      }
+      @media (max-width: 200px) {
+        .route-heading { display: none; }
+        .preview-stage .library-badge { display: none; }
+        .chapter-nav { left: 4px; right: 4px; bottom: 4px; max-width: none; gap: 2px; }
+        .chapter-nav button { padding: 3px 2px; font-size: 4px; letter-spacing: .02em; }
+        .aperture-controls { top: 4px; right: 4px; gap: 2px; }
+        .aperture-controls output { min-width: 29px; font-size: 4px; }
+        .aperture-controls button { width: 14px; height: 14px; font-size: 7px; }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/iris-aperture-navigation-JelmQJuW.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+    <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
+    <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main class="preview-stage" id="iris-stage" data-preview-mechanism="p5-image-sampled-iris-navigation">
+      <canvas
+        id="iris-canvas"
+        tabindex="0"
+        role="slider"
+        aria-label="North Atlantic portfolio iris navigator"
+        aria-describedby="iris-instructions"
+        aria-valuemin="16"
+        aria-valuemax="100"
+        aria-valuenow="42"
+        aria-valuetext="TIDE chapter, aperture 42 percent open"
+      ></canvas>
+      <section class="route-heading" aria-hidden="true">
+        <small>Field index / case 03</small>
+        <h1 id="chapter-title">TIDE<br>OBSERVATORY</h1>
+        <p>Move to inspect · drag upward to open</p>
+      </section>
+      <div class="aperture-controls" aria-label="Aperture size controls">
+        <button id="iris-close" type="button" aria-label="Close the aperture">−</button>
+        <output id="iris-readout" aria-live="polite">IRIS 42%</output>
+        <button id="iris-open" type="button" aria-label="Open the aperture">+</button>
+      </div>
+      <nav class="chapter-nav" aria-label="Portfolio chapters">
+        <button type="button" data-chapter="0" aria-current="false">01 Archive</button>
+        <button type="button" data-chapter="1" aria-current="true">02 Tide</button>
+        <button type="button" data-chapter="2" aria-current="false">03 Signal</button>
+      </nav>
+      <p class="sr-only" id="iris-instructions">Move the pointer to inspect the image through the iris. Press and drag upward or downward to change its opening. Use left and right arrow keys to choose a chapter, up and down to change aperture size, Home to close, or End to open.</p>
+      <span class="library-badge">p5.js · live iris</span>
+      <span class="scene-caption">real generated artwork pixels revealed by a human-controlled p5 aperture</span>
+    </main>
+  </body>
+</html>

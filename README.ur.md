@@ -1,17 +1,78 @@
+<div align="center">
+
 # Awesome Web Effects
 
-[English](README.md) · [简体中文](README.zh-Hans.md) · [हिन्दी](README.hi.md) · [Español](README.es.md) · [العربية](README.ar.md) · [Français](README.fr.md) · [বাংলা](README.bn.md) · [Português](README.pt.md) · [Bahasa Indonesia](README.id.md) · [اردو](README.ur.md) · [Русский](README.ru.md) · [Deutsch](README.de.md) · [日本語](README.ja.md) · [Naijá](README.pcm.md) · [العربي المصري](README.arz.md) · [मराठी](README.mr.md) · [Tiếng Việt](README.vi.md) · [తెలుగు](README.te.md) · [Kiswahili](README.sw.md) · [Hausa](README.ha.md)
+**اثر کو مقدم رکھنے والا تعاملی اٹلس**
 
-<p align="center"><strong>اثر کو مقدم رکھنے والا تعاملی اٹلس</strong></p>
-<p align="center">صرف وہ Demo شائع ہوتے ہیں جو بصری جانچ میں 80 یا زیادہ اسکور کریں؛ ہر ایک کے ساتھ حقیقی preview، کم سے کم code اور implementation prompt ہوتا ہے۔</p>
+صرف وہ Demo شائع ہوتے ہیں جو بصری جانچ میں 80 یا زیادہ اسکور کریں؛ ہر ایک کے ساتھ حقیقی preview، کم سے کم code اور implementation prompt ہوتا ہے۔
+
+[![150 curated effects](https://img.shields.io/badge/curated_effects-150-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
+[![150 real GIF previews](https://img.shields.io/badge/real_GIF_previews-150-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
+[![GitHub stars](https://img.shields.io/github/stars/giraffe-tree/awesome-web-effects?style=flat-square&color=0969da)](https://github.com/giraffe-tree/awesome-web-effects/stargazers)
+
+[**اثرات دیکھیں →**](https://giraffe-tree.github.io/awesome-web-effects/?lang=ur) · [Language metadata / 语言资料](docs/LANGUAGES.md)
+
+<sub>[English](README.md) · [简体中文](README.zh-Hans.md) · [हिन्दी](README.hi.md) · [Español](README.es.md) · [العربية](README.ar.md) · [Français](README.fr.md) · [বাংলা](README.bn.md) · [Português](README.pt.md) · [Bahasa Indonesia](README.id.md) · [اردو](README.ur.md) · [Русский](README.ru.md) · [Deutsch](README.de.md) · [日本語](README.ja.md) · [Naijá](README.pcm.md) · [العربي المصري](README.arz.md) · [मराठी](README.mr.md) · [Tiếng Việt](README.vi.md) · [తెలుగు](README.te.md) · [Kiswahili](README.sw.md) · [Hausa](README.ha.md)</sub>
+
+</div>
+
+---
+
+<h3 align="center">9 تصدیق شدہ GIF / 150 اثرات</h3>
 
 <table>
-<tr><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=ur#synchronized-scenario-scene-handoff"><img src="demo/gifs/captured/synchronized-scenario-scene-handoff.gif" width="270" alt="Synchronized scenario scene handoff"></a><br><sub><strong>Synchronized scenario scene handoff</strong><br>Page &amp; layout · 98/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=ur#pointer-injected-gpu-fluid"><img src="demo/gifs/captured/pointer-injected-gpu-fluid.gif" width="270" alt="Stage haze colour lab"></a><br><sub><strong>Stage haze colour lab</strong><br>3D &amp; WebGL · 99/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=ur#dom-aware-drag-spawned-fish-flock"><img src="demo/gifs/captured/dom-aware-drag-spawned-fish-flock.gif" width="270" alt="Human-released DOM-avoiding fish school"></a><br><sub><strong>Human-released DOM-avoiding fish school</strong><br>Canvas &amp; 2D · 100/100</sub></td></tr>
-<tr><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=ur#traveling-dot-headline-rewriter"><img src="demo/gifs/captured/traveling-dot-headline-rewriter.gif" width="270" alt="Human-approved headline revision marker"></a><br><sub><strong>Human-approved headline revision marker</strong><br>Text &amp; SVG · 100/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=ur#drag-thrown-card-stack"><img src="demo/gifs/captured/drag-thrown-card-stack.gif" width="270" alt="Release-velocity rental discovery stack"></a><br><sub><strong>Release-velocity rental discovery stack</strong><br>Pointer &amp; hover · 100/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=ur#scroll-scrubbed-document-generation-playback"><img src="demo/gifs/captured/scroll-scrubbed-document-generation-playback.gif" width="270" alt="Scroll-scrubbed document generation playback"></a><br><sub><strong>Scroll-scrubbed document generation playback</strong><br>Scroll &amp; reveal · 97/100</sub></td></tr>
-<tr><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=ur#interactive-vector-state-machine"><img src="demo/gifs/captured/interactive-vector-state-machine.gif" width="270" alt="Held-input room-scene assistant"></a><br><sub><strong>Held-input room-scene assistant</strong><br>Motion &amp; choreography · 94/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=ur#live-hand-landmark-video-overlay"><img src="demo/gifs/captured/live-hand-landmark-video-overlay.gif" width="270" alt="Hand rehabilitation landmark calibration"></a><br><sub><strong>Hand rehabilitation landmark calibration</strong><br>Canvas &amp; 2D · 98/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=ur#refractive-glass-transmission-sculpture"><img src="demo/gifs/captured/refractive-glass-transmission-sculpture.gif" width="270" alt="Glass under light optical material review"></a><br><sub><strong>Glass under light optical material review</strong><br>3D &amp; WebGL · 99/100</sub></td></tr>
+<tr>
+<td width="33%" align="center">
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=ur#synchronized-scenario-scene-handoff"><img src="demo/gifs/captured/synchronized-scenario-scene-handoff.gif" width="270" alt="Synchronized scenario scene handoff"></a>
+<br>
+<sub><strong>Synchronized scenario scene handoff</strong><br>Page &amp; layout · 98/100</sub>
+</td>
+<td width="33%" align="center">
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=ur#pointer-injected-gpu-fluid"><img src="demo/gifs/captured/pointer-injected-gpu-fluid.gif" width="270" alt="Stage haze colour lab"></a>
+<br>
+<sub><strong>Stage haze colour lab</strong><br>3D &amp; WebGL · 99/100</sub>
+</td>
+<td width="33%" align="center">
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=ur#dom-aware-drag-spawned-fish-flock"><img src="demo/gifs/captured/dom-aware-drag-spawned-fish-flock.gif" width="270" alt="Human-released DOM-avoiding fish school"></a>
+<br>
+<sub><strong>Human-released DOM-avoiding fish school</strong><br>Canvas &amp; 2D · 100/100</sub>
+</td>
+</tr>
+<tr>
+<td width="33%" align="center">
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=ur#traveling-dot-headline-rewriter"><img src="demo/gifs/captured/traveling-dot-headline-rewriter.gif" width="270" alt="Human-approved headline revision marker"></a>
+<br>
+<sub><strong>Human-approved headline revision marker</strong><br>Text &amp; SVG · 100/100</sub>
+</td>
+<td width="33%" align="center">
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=ur#drag-thrown-card-stack"><img src="demo/gifs/captured/drag-thrown-card-stack.gif" width="270" alt="Release-velocity rental discovery stack"></a>
+<br>
+<sub><strong>Release-velocity rental discovery stack</strong><br>Pointer &amp; hover · 100/100</sub>
+</td>
+<td width="33%" align="center">
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=ur#scroll-scrubbed-document-generation-playback"><img src="demo/gifs/captured/scroll-scrubbed-document-generation-playback.gif" width="270" alt="Scroll-scrubbed document generation playback"></a>
+<br>
+<sub><strong>Scroll-scrubbed document generation playback</strong><br>Scroll &amp; reveal · 97/100</sub>
+</td>
+</tr>
+<tr>
+<td width="33%" align="center">
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=ur#interactive-vector-state-machine"><img src="demo/gifs/captured/interactive-vector-state-machine.gif" width="270" alt="Held-input room-scene assistant"></a>
+<br>
+<sub><strong>Held-input room-scene assistant</strong><br>Motion &amp; choreography · 94/100</sub>
+</td>
+<td width="33%" align="center">
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=ur#live-hand-landmark-video-overlay"><img src="demo/gifs/captured/live-hand-landmark-video-overlay.gif" width="270" alt="Hand rehabilitation landmark calibration"></a>
+<br>
+<sub><strong>Hand rehabilitation landmark calibration</strong><br>Canvas &amp; 2D · 98/100</sub>
+</td>
+<td width="33%" align="center">
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=ur#refractive-glass-transmission-sculpture"><img src="demo/gifs/captured/refractive-glass-transmission-sculpture.gif" width="270" alt="Glass under light optical material review"></a>
+<br>
+<sub><strong>Glass under light optical material review</strong><br>3D &amp; WebGL · 99/100</sub>
+</td>
+</tr>
 </table>
-
-<p align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=ur"><strong>اثرات دیکھیں →</strong></a></p>
 
 <a id="agent-quick-start"></a>
 
@@ -29,9 +90,22 @@ Inspect the current project and use the complete Awesome Web Effects catalog (ht
 
 پہلے رویہ منتخب کریں، پھر اوزار۔
 
-<table><tr><td width="25%" align="center"><strong>150</strong><br><sub>اثرات</sub></td><td width="25%" align="center"><strong>150</strong><br><sub>تصدیق شدہ GIF</sub></td><td width="25%" align="center"><strong>148</strong><br><sub>مقامی Demo</sub></td><td width="25%" align="center"><strong>80/100</strong><br><sub>کیوریٹوریل داخلہ اسکور</sub></td></tr></table>
+<table>
+<tr>
+<td width="25%" align="center"><strong>150</strong><br><sub>اثرات</sub></td>
+<td width="25%" align="center"><strong>150</strong><br><sub>تصدیق شدہ GIF</sub></td>
+<td width="25%" align="center"><strong>148</strong><br><sub>مقامی Demo</sub></td>
+<td width="25%" align="center"><strong>80/100</strong><br><sub>کیوریٹوریل داخلہ اسکور</sub></td>
+</tr>
+</table>
 
-<table><tr><td width="33%"><strong>بنانے سے پہلے اصل Demo دیکھیں۔</strong><br><sub>ہر شائع شدہ اندراج نے تخلیق، art direction، motion، وضاحت، ترغیب اور ثبوت کی 100 نکاتی جانچ پاس کی ہے۔</sub></td><td width="33%"><strong>چلنے والے code سے شروع کریں۔</strong><br><sub>کسی بھی اثر کو کھول کر اس کے تجویز کردہ ماخذ کا سب سے چھوٹا مفید implementation نقل کریں۔</sub></td><td width="33%"><strong>اسے اپنے coding agent کے سپرد کریں۔</strong><br><sub>ایک کلک accessibility، responsive رویے، cleanup اور reduced motion کی شرائط والا محدود prompt نقل کرتا ہے۔</sub></td></tr></table>
+<table>
+<tr>
+<td width="33%"><strong>بنانے سے پہلے اصل Demo دیکھیں۔</strong><br><sub>ہر شائع شدہ اندراج نے تخلیق، art direction، motion، وضاحت، ترغیب اور ثبوت کی 100 نکاتی جانچ پاس کی ہے۔</sub></td>
+<td width="33%"><strong>چلنے والے code سے شروع کریں۔</strong><br><sub>کسی بھی اثر کو کھول کر اس کے تجویز کردہ ماخذ کا سب سے چھوٹا مفید implementation نقل کریں۔</sub></td>
+<td width="33%"><strong>اسے اپنے coding agent کے سپرد کریں۔</strong><br><sub>ایک کلک accessibility، responsive رویے، cleanup اور reduced motion کی شرائط والا محدود prompt نقل کرتا ہے۔</sub></td>
+</tr>
+</table>
 
 ## چلنے والے code سے شروع کریں۔
 
@@ -46,4 +120,6 @@ python3 -m http.server 4173 --directory demo
 - [تحقیقی حوالہ کھولیں ↗](README.md)
 - [Language metadata / 语言资料](docs/LANGUAGES.md)
 
-اثر کو مقدم، کثیر لسانی اور implementation کے لیے تیار۔ پروجیکٹ نام اور previews اپنے مصنفین کی ملکیت ہیں۔
+---
+
+<p align="center"><sub>اثر کو مقدم، کثیر لسانی اور implementation کے لیے تیار۔ پروجیکٹ نام اور previews اپنے مصنفین کی ملکیت ہیں۔</sub></p>

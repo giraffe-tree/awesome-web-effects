@@ -89,13 +89,23 @@ function visualShowcase(language) {
     const category = categoryById.get(effect.category);
     const name = isZh ? effect.nameZh : effect.name;
     const label = isZh ? category.labelZh : category.label;
-    return `<td width="33%" align="center"><a href="${siteUrlFor(locale)}#${effect.id}"><img src="demo/gifs/${source.preview}.gif" width="270" alt="${escapeHtml(name)}"></a><br><sub><strong>${escapeHtml(name)}</strong><br>${escapeHtml(label)} · ${effect.admission.total}/100</sub></td>`;
+    return [
+      `<td width="33%" align="center">`,
+      `<a href="${siteUrlFor(locale)}#${effect.id}"><img src="demo/gifs/${source.preview}.gif" width="270" alt="${escapeHtml(name)}"></a>`,
+      `<br>`,
+      `<sub><strong>${escapeHtml(name)}</strong><br>${escapeHtml(label)} · ${effect.admission.total}/100</sub>`,
+      `</td>`,
+    ].join('\n');
   });
   const rows = [];
   for (let index = 0; index < cards.length; index += 3) {
-    rows.push(`<tr>${cards.slice(index, index + 3).join('')}</tr>`);
+    rows.push(`<tr>\n${cards.slice(index, index + 3).join('\n')}\n</tr>`);
   }
   return `<table>\n${rows.join('\n')}\n</table>`;
+}
+
+function metricTable(cells) {
+  return `<table>\n<tr>\n${cells.join('\n')}\n</tr>\n</table>`;
 }
 
 function metricStrip(language) {
@@ -104,7 +114,7 @@ function metricStrip(language) {
     ? ['入选效果', '真实 GIF', '可运行 Demo', '最低准入分']
     : ['admitted effects', 'real GIFs', 'runnable demos', 'minimum score'];
   const values = [effects.length, verifiedPreviewCount, localDemoPreviewCount, `${admissionPolicy.threshold}/100`];
-  return `<table><tr>${values.map((value, index) => `<td width="25%" align="center"><strong>${value}</strong><br><sub>${labels[index]}</sub></td>`).join('')}</tr></table>`;
+  return metricTable(values.map((value, index) => `<td width="25%" align="center"><strong>${value}</strong><br><sub>${labels[index]}</sub></td>`));
 }
 
 const readmeFilename = locale => locale.code === 'en' ? 'README.md' : `README.${locale.code}.md`;
@@ -115,11 +125,45 @@ function languageNavigation(fromDocs = false) {
   return supportedLocales.map(locale => `[${locale.nativeName}](${prefix}${readmeFilename(locale)})`).join(' · ');
 }
 
+function badgeStrip() {
+  const repoUrl = 'https://github.com/giraffe-tree/awesome-web-effects';
+  return [
+    `[![${effects.length} curated effects](https://img.shields.io/badge/curated_effects-${effects.length}-0969da?style=flat-square)](${liveDemo})`,
+    `[![${verifiedPreviewCount} real GIF previews](https://img.shields.io/badge/real_GIF_previews-${verifiedPreviewCount}-0969da?style=flat-square)](${liveDemo})`,
+    `[![GitHub stars](https://img.shields.io/github/stars/giraffe-tree/awesome-web-effects?style=flat-square&color=0969da)](${repoUrl}/stargazers)`,
+  ].join('\n');
+}
+
+function heroBlock({ kicker, tagline, links }) {
+  return `<div align="center">
+
+# Awesome Web Effects
+
+**${escapeHtml(kicker)}**
+
+${escapeHtml(tagline)}
+
+${badgeStrip()}
+
+${links}
+
+<sub>${languageNavigation()}</sub>
+
+</div>`;
+}
+
+function featureStrip(steps, centered = false) {
+  const align = centered ? ' align="center"' : '';
+  return metricTable(steps.map(([title, copy]) => `<td width="33%"${align}><strong>${escapeHtml(title)}</strong><br><sub>${escapeHtml(copy)}</sub></td>`));
+}
+
+const centeredFooter = text => `---\n\n<p align="center"><sub>${escapeHtml(text)}</sub></p>`;
+
 function localizedMetricStrip(locale) {
   const t = getMessages(locale.code);
   const labels = [t.effects, t.gifs, t.previewLocal, t.curatorialScore];
   const values = [effects.length, verifiedPreviewCount, localDemoPreviewCount, `${admissionPolicy.threshold}/100`];
-  return `<table><tr>${values.map((value, index) => `<td width="25%" align="center"><strong>${value}</strong><br><sub>${escapeHtml(labels[index])}</sub></td>`).join('')}</tr></table>`;
+  return metricTable(values.map((value, index) => `<td width="25%" align="center"><strong>${value}</strong><br><sub>${escapeHtml(labels[index])}</sub></td>`));
 }
 
 function agentQuickStart(locale) {
@@ -158,16 +202,17 @@ ${getOneLineAgentPrompt(locale.code)}
 function localizedReadme(locale) {
   const t = getMessages(locale.code);
   const siteUrl = siteUrlFor(locale);
-  return `# Awesome Web Effects
+  return `${heroBlock({
+    kicker: t.kicker,
+    tagline: t.hero,
+    links: `[**${escapeHtml(t.browse)} →**](${siteUrl}) · [Language metadata / 语言资料](docs/LANGUAGES.md)`,
+  })}
 
-${languageNavigation()}
+---
 
-<p align="center"><strong>${escapeHtml(t.kicker)}</strong></p>
-<p align="center">${escapeHtml(t.hero)}</p>
+<h3 align="center">9 ${escapeHtml(t.gifs)} / ${effects.length} ${escapeHtml(t.effects)}</h3>
 
 ${visualShowcase(locale.code)}
-
-<p align="center"><a href="${siteUrl}"><strong>${escapeHtml(t.browse)} →</strong></a></p>
 
 ${agentQuickStart(locale)}
 
@@ -177,7 +222,7 @@ ${escapeHtml(t.catalogTitle)}
 
 ${localizedMetricStrip(locale)}
 
-<table><tr><td width="33%"><strong>${escapeHtml(t.visualTitle)}</strong><br><sub>${escapeHtml(t.visualCopy)}</sub></td><td width="33%"><strong>${escapeHtml(t.codeTitle)}</strong><br><sub>${escapeHtml(t.codeCopy)}</sub></td><td width="33%"><strong>${escapeHtml(t.promptTitle)}</strong><br><sub>${escapeHtml(t.promptCopy)}</sub></td></tr></table>
+${featureStrip([[t.visualTitle, t.visualCopy], [t.codeTitle, t.codeCopy], [t.promptTitle, t.promptCopy]])}
 
 ## ${escapeHtml(t.codeTitle)}
 
@@ -192,7 +237,7 @@ python3 -m http.server 4173 --directory demo
 - [${escapeHtml(t.viewReference)}](README.md)
 - [Language metadata / 语言资料](docs/LANGUAGES.md)
 
-${escapeHtml(t.footer)}
+${centeredFooter(t.footer)}
 `;
 }
 
@@ -227,14 +272,15 @@ The ranking uses the individual-language, total-speaker (L1 + L2) method from [E
 `;
 }
 
-const english = `# Awesome Web Effects
+const english = `${heroBlock({
+  kicker: 'See the interaction. Learn its name. Copy the code or agent prompt.',
+  tagline: 'A visual atlas for the moment when you know the feeling you want, but not the words to describe the effect.',
+  links: `[**Open the live visual catalog**](${siteUrlFor(supportedLocales[0])}) · [Language metadata](docs/LANGUAGES.md)`,
+})}
 
-${languageNavigation()}
+---
 
-[Open the live visual catalog](${siteUrlFor(supportedLocales[0])}) · [Language metadata](docs/LANGUAGES.md)
-
-<p align="center"><strong>See the interaction. Learn its name. Copy the code or agent prompt.</strong></p>
-<p align="center">A visual atlas for the moment when you know the feeling you want, but not the words to describe the effect.</p>
+<h3 align="center">9 of the ${effects.length} effects — every preview a real capture</h3>
 
 ${visualShowcase('en')}
 
@@ -246,7 +292,11 @@ ${agentQuickStart(supportedLocales[0])}
 
 ${metricStrip('en')}
 
-<table><tr><td width="33%"><strong>① Find by sight</strong><br><sub>Scan real motion instead of guessing library names.</sub></td><td width="33%"><strong>② Open the effect</strong><br><sub>Check the score, source, behavior and minimal implementation.</sub></td><td width="33%"><strong>③ Ship the idea</strong><br><sub>Copy code or a scoped prompt for Codex / Claude Code.</sub></td></tr></table>
+${featureStrip([
+  ['① Find by sight', 'Scan real motion instead of guessing library names.'],
+  ['② Open the effect', 'Check the score, source, behavior and minimal implementation.'],
+  ['③ Ship the idea', 'Copy code or a scoped prompt for Codex / Claude Code.'],
+], true)}
 
 This is an **effect-first**, curator-reviewed reference—not another repository list. Every published item has visible evidence, a score of at least **${admissionPolicy.threshold}/100**, provenance, reusable code and a runnable or official preview.
 
@@ -326,17 +376,18 @@ Expected project URL: [${liveDemo}](${liveDemo})
 - Run \`node scripts/build-docs.mjs\` to regenerate all localized README files and the language metadata document.
 - Run \`node scripts/validate.mjs\` before committing.
 
-GIFs and project names are used for research, indexing, and comparison. Rights remain with their respective authors.
+${centeredFooter('GIFs and project names are used for research, indexing, and comparison. Rights remain with their respective authors.')}
 `;
 
-const chinese = `# Awesome Web Effects
+const chinese = `${heroBlock({
+  kicker: '先看见效果，再知道它叫什么，最后复制代码或 Agent 提示词。',
+  tagline: '当你脑中已经有想要的感觉，却不知道如何描述特效时，这里就是一张可直接观看的 Web 交互图鉴。',
+  links: `[**打开在线视觉目录**](${siteUrlFor(supportedLocales[1])}) · [语言资料](docs/LANGUAGES.md)`,
+})}
 
-${languageNavigation()}
+---
 
-[打开在线视觉目录](${siteUrlFor(supportedLocales[1])}) · [语言资料](docs/LANGUAGES.md)
-
-<p align="center"><strong>先看见效果，再知道它叫什么，最后复制代码或 Agent 提示词。</strong></p>
-<p align="center">当你脑中已经有想要的感觉，却不知道如何描述特效时，这里就是一张可直接观看的 Web 交互图鉴。</p>
+<h3 align="center">${effects.length} 个效果中的 9 个 · 每个预览都是真实录制</h3>
 
 ${visualShowcase('zh-Hans')}
 
@@ -348,7 +399,11 @@ ${agentQuickStart(supportedLocales[1])}
 
 ${metricStrip('zh')}
 
-<table><tr><td width="33%"><strong>① 用眼睛找</strong><br><sub>直接浏览真实动效，不必先猜库名或技术术语。</sub></td><td width="33%"><strong>② 点开效果</strong><br><sub>查看评分、来源、行为拆解和最小实现。</sub></td><td width="33%"><strong>③ 带走方案</strong><br><sub>复制代码，或把完整提示词交给 Codex / Claude Code。</sub></td></tr></table>
+${featureStrip([
+  ['① 用眼睛找', '直接浏览真实动效，不必先猜库名或技术术语。'],
+  ['② 点开效果', '查看评分、来源、行为拆解和最小实现。'],
+  ['③ 带走方案', '复制代码，或把完整提示词交给 Codex / Claude Code。'],
+], true)}
 
 这不是另一份仓库名称列表，而是一个**效果优先、经过人工策展评分**的视觉参考库。每个入选条目都有真实证据、不低于 **${admissionPolicy.threshold}/100** 的评分、可追溯来源、可复用代码，以及本地可运行或官方预览。
 
@@ -428,7 +483,7 @@ Demo 完全静态且只使用相对路径。仓库内工作流会在推送到 \`
 - 运行 \`node scripts/build-docs.mjs\` 同步生成全部本地化 README 与语言资料文件。
 - 提交前运行 \`node scripts/validate.mjs\`。
 
-GIF 与项目名称仅用于研究、索引和比较，权利归各自作者所有。
+${centeredFooter('GIF 与项目名称仅用于研究、索引和比较，权利归各自作者所有。')}
 `;
 
 const readmeWrites = supportedLocales.map(locale => {

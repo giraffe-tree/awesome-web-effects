@@ -1,16 +1,77 @@
+<div align="center">
+
 # Awesome Web Effects
 
-[English](README.md) · [简体中文](README.zh-Hans.md) · [हिन्दी](README.hi.md) · [Español](README.es.md) · [العربية](README.ar.md) · [Français](README.fr.md) · [বাংলা](README.bn.md) · [Português](README.pt.md) · [Bahasa Indonesia](README.id.md) · [اردو](README.ur.md) · [Русский](README.ru.md) · [Deutsch](README.de.md) · [日本語](README.ja.md) · [Naijá](README.pcm.md) · [العربي المصري](README.arz.md) · [मराठी](README.mr.md) · [Tiếng Việt](README.vi.md) · [తెలుగు](README.te.md) · [Kiswahili](README.sw.md) · [Hausa](README.ha.md)
+**先看见效果，再知道它叫什么，最后复制代码或 Agent 提示词。**
 
-[打开在线视觉目录](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans) · [语言资料](docs/LANGUAGES.md)
+当你脑中已经有想要的感觉，却不知道如何描述特效时，这里就是一张可直接观看的 Web 交互图鉴。
 
-<p align="center"><strong>先看见效果，再知道它叫什么，最后复制代码或 Agent 提示词。</strong></p>
-<p align="center">当你脑中已经有想要的感觉，却不知道如何描述特效时，这里就是一张可直接观看的 Web 交互图鉴。</p>
+[![150 curated effects](https://img.shields.io/badge/curated_effects-150-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
+[![150 real GIF previews](https://img.shields.io/badge/real_GIF_previews-150-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
+[![GitHub stars](https://img.shields.io/github/stars/giraffe-tree/awesome-web-effects?style=flat-square&color=0969da)](https://github.com/giraffe-tree/awesome-web-effects/stargazers)
+
+[**打开在线视觉目录**](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans) · [语言资料](docs/LANGUAGES.md)
+
+<sub>[English](README.md) · [简体中文](README.zh-Hans.md) · [हिन्दी](README.hi.md) · [Español](README.es.md) · [العربية](README.ar.md) · [Français](README.fr.md) · [বাংলা](README.bn.md) · [Português](README.pt.md) · [Bahasa Indonesia](README.id.md) · [اردو](README.ur.md) · [Русский](README.ru.md) · [Deutsch](README.de.md) · [日本語](README.ja.md) · [Naijá](README.pcm.md) · [العربي المصري](README.arz.md) · [मराठी](README.mr.md) · [Tiếng Việt](README.vi.md) · [తెలుగు](README.te.md) · [Kiswahili](README.sw.md) · [Hausa](README.ha.md)</sub>
+
+</div>
+
+---
+
+<h3 align="center">150 个效果中的 9 个 · 每个预览都是真实录制</h3>
 
 <table>
-<tr><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#synchronized-scenario-scene-handoff"><img src="demo/gifs/captured/synchronized-scenario-scene-handoff.gif" width="270" alt="多层同步场景换幕"></a><br><sub><strong>多层同步场景换幕</strong><br>页面与布局 · 98/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#pointer-injected-gpu-fluid"><img src="demo/gifs/captured/pointer-injected-gpu-fluid.gif" width="270" alt="舞台烟雾配色实验室"></a><br><sub><strong>舞台烟雾配色实验室</strong><br>3D 与 WebGL · 99/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#dom-aware-drag-spawned-fish-flock"><img src="demo/gifs/captured/dom-aware-drag-spawned-fish-flock.gif" width="270" alt="真人释放并避让 DOM 的鱼群"></a><br><sub><strong>真人释放并避让 DOM 的鱼群</strong><br>Canvas 与 2D · 100/100</sub></td></tr>
-<tr><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#traveling-dot-headline-rewriter"><img src="demo/gifs/captured/traveling-dot-headline-rewriter.gif" width="270" alt="人工确认的标题修订标记"></a><br><sub><strong>人工确认的标题修订标记</strong><br>文本与 SVG · 100/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#drag-thrown-card-stack"><img src="demo/gifs/captured/drag-thrown-card-stack.gif" width="270" alt="释放速度驱动的房源发现卡组"></a><br><sub><strong>释放速度驱动的房源发现卡组</strong><br>指针与悬停 · 100/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#scroll-scrubbed-document-generation-playback"><img src="demo/gifs/captured/scroll-scrubbed-document-generation-playback.gif" width="270" alt="滚动擦洗式文档生成回放"></a><br><sub><strong>滚动擦洗式文档生成回放</strong><br>滚动与揭示 · 97/100</sub></td></tr>
-<tr><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#interactive-vector-state-machine"><img src="demo/gifs/captured/interactive-vector-state-machine.gif" width="270" alt="按住输入的房间场景助手"></a><br><sub><strong>按住输入的房间场景助手</strong><br>动画与编排 · 94/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#live-hand-landmark-video-overlay"><img src="demo/gifs/captured/live-hand-landmark-video-overlay.gif" width="270" alt="手部康复关键点校准"></a><br><sub><strong>手部康复关键点校准</strong><br>Canvas 与 2D · 98/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#refractive-glass-transmission-sculpture"><img src="demo/gifs/captured/refractive-glass-transmission-sculpture.gif" width="270" alt="光下玻璃光学材质评审"></a><br><sub><strong>光下玻璃光学材质评审</strong><br>3D 与 WebGL · 99/100</sub></td></tr>
+<tr>
+<td width="33%" align="center">
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#synchronized-scenario-scene-handoff"><img src="demo/gifs/captured/synchronized-scenario-scene-handoff.gif" width="270" alt="多层同步场景换幕"></a>
+<br>
+<sub><strong>多层同步场景换幕</strong><br>页面与布局 · 98/100</sub>
+</td>
+<td width="33%" align="center">
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#pointer-injected-gpu-fluid"><img src="demo/gifs/captured/pointer-injected-gpu-fluid.gif" width="270" alt="舞台烟雾配色实验室"></a>
+<br>
+<sub><strong>舞台烟雾配色实验室</strong><br>3D 与 WebGL · 99/100</sub>
+</td>
+<td width="33%" align="center">
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#dom-aware-drag-spawned-fish-flock"><img src="demo/gifs/captured/dom-aware-drag-spawned-fish-flock.gif" width="270" alt="真人释放并避让 DOM 的鱼群"></a>
+<br>
+<sub><strong>真人释放并避让 DOM 的鱼群</strong><br>Canvas 与 2D · 100/100</sub>
+</td>
+</tr>
+<tr>
+<td width="33%" align="center">
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#traveling-dot-headline-rewriter"><img src="demo/gifs/captured/traveling-dot-headline-rewriter.gif" width="270" alt="人工确认的标题修订标记"></a>
+<br>
+<sub><strong>人工确认的标题修订标记</strong><br>文本与 SVG · 100/100</sub>
+</td>
+<td width="33%" align="center">
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#drag-thrown-card-stack"><img src="demo/gifs/captured/drag-thrown-card-stack.gif" width="270" alt="释放速度驱动的房源发现卡组"></a>
+<br>
+<sub><strong>释放速度驱动的房源发现卡组</strong><br>指针与悬停 · 100/100</sub>
+</td>
+<td width="33%" align="center">
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#scroll-scrubbed-document-generation-playback"><img src="demo/gifs/captured/scroll-scrubbed-document-generation-playback.gif" width="270" alt="滚动擦洗式文档生成回放"></a>
+<br>
+<sub><strong>滚动擦洗式文档生成回放</strong><br>滚动与揭示 · 97/100</sub>
+</td>
+</tr>
+<tr>
+<td width="33%" align="center">
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#interactive-vector-state-machine"><img src="demo/gifs/captured/interactive-vector-state-machine.gif" width="270" alt="按住输入的房间场景助手"></a>
+<br>
+<sub><strong>按住输入的房间场景助手</strong><br>动画与编排 · 94/100</sub>
+</td>
+<td width="33%" align="center">
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#live-hand-landmark-video-overlay"><img src="demo/gifs/captured/live-hand-landmark-video-overlay.gif" width="270" alt="手部康复关键点校准"></a>
+<br>
+<sub><strong>手部康复关键点校准</strong><br>Canvas 与 2D · 98/100</sub>
+</td>
+<td width="33%" align="center">
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#refractive-glass-transmission-sculpture"><img src="demo/gifs/captured/refractive-glass-transmission-sculpture.gif" width="270" alt="光下玻璃光学材质评审"></a>
+<br>
+<sub><strong>光下玻璃光学材质评审</strong><br>3D 与 WebGL · 99/100</sub>
+</td>
+</tr>
 </table>
 
 <p align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans"><strong>查看全部 150 个实时效果 →</strong></a></p>
@@ -29,9 +90,22 @@
 
 ## 看见它、叫出它、实现它
 
-<table><tr><td width="25%" align="center"><strong>150</strong><br><sub>入选效果</sub></td><td width="25%" align="center"><strong>150</strong><br><sub>真实 GIF</sub></td><td width="25%" align="center"><strong>148</strong><br><sub>可运行 Demo</sub></td><td width="25%" align="center"><strong>80/100</strong><br><sub>最低准入分</sub></td></tr></table>
+<table>
+<tr>
+<td width="25%" align="center"><strong>150</strong><br><sub>入选效果</sub></td>
+<td width="25%" align="center"><strong>150</strong><br><sub>真实 GIF</sub></td>
+<td width="25%" align="center"><strong>148</strong><br><sub>可运行 Demo</sub></td>
+<td width="25%" align="center"><strong>80/100</strong><br><sub>最低准入分</sub></td>
+</tr>
+</table>
 
-<table><tr><td width="33%"><strong>① 用眼睛找</strong><br><sub>直接浏览真实动效，不必先猜库名或技术术语。</sub></td><td width="33%"><strong>② 点开效果</strong><br><sub>查看评分、来源、行为拆解和最小实现。</sub></td><td width="33%"><strong>③ 带走方案</strong><br><sub>复制代码，或把完整提示词交给 Codex / Claude Code。</sub></td></tr></table>
+<table>
+<tr>
+<td width="33%" align="center"><strong>① 用眼睛找</strong><br><sub>直接浏览真实动效，不必先猜库名或技术术语。</sub></td>
+<td width="33%" align="center"><strong>② 点开效果</strong><br><sub>查看评分、来源、行为拆解和最小实现。</sub></td>
+<td width="33%" align="center"><strong>③ 带走方案</strong><br><sub>复制代码，或把完整提示词交给 Codex / Claude Code。</sub></td>
+</tr>
+</table>
 
 这不是另一份仓库名称列表，而是一个**效果优先、经过人工策展评分**的视觉参考库。每个入选条目都有真实证据、不低于 **80/100** 的评分、可追溯来源、可复用代码，以及本地可运行或官方预览。
 
@@ -330,4 +404,6 @@ Demo 完全静态且只使用相对路径。仓库内工作流会在推送到 `m
 - 运行 `node scripts/build-docs.mjs` 同步生成全部本地化 README 与语言资料文件。
 - 提交前运行 `node scripts/validate.mjs`。
 
-GIF 与项目名称仅用于研究、索引和比较，权利归各自作者所有。
+---
+
+<p align="center"><sub>GIF 与项目名称仅用于研究、索引和比较，权利归各自作者所有。</sub></p>

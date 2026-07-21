@@ -1,16 +1,77 @@
+<div align="center">
+
 # Awesome Web Effects
 
-[English](README.md) · [简体中文](README.zh-Hans.md) · [हिन्दी](README.hi.md) · [Español](README.es.md) · [العربية](README.ar.md) · [Français](README.fr.md) · [বাংলা](README.bn.md) · [Português](README.pt.md) · [Bahasa Indonesia](README.id.md) · [اردو](README.ur.md) · [Русский](README.ru.md) · [Deutsch](README.de.md) · [日本語](README.ja.md) · [Naijá](README.pcm.md) · [العربي المصري](README.arz.md) · [मराठी](README.mr.md) · [Tiếng Việt](README.vi.md) · [తెలుగు](README.te.md) · [Kiswahili](README.sw.md) · [Hausa](README.ha.md)
+**See the interaction. Learn its name. Copy the code or agent prompt.**
 
-[Open the live visual catalog](https://giraffe-tree.github.io/awesome-web-effects/?lang=en) · [Language metadata](docs/LANGUAGES.md)
+A visual atlas for the moment when you know the feeling you want, but not the words to describe the effect.
 
-<p align="center"><strong>See the interaction. Learn its name. Copy the code or agent prompt.</strong></p>
-<p align="center">A visual atlas for the moment when you know the feeling you want, but not the words to describe the effect.</p>
+[![150 curated effects](https://img.shields.io/badge/curated_effects-150-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
+[![150 real GIF previews](https://img.shields.io/badge/real_GIF_previews-150-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
+[![GitHub stars](https://img.shields.io/github/stars/giraffe-tree/awesome-web-effects?style=flat-square&color=0969da)](https://github.com/giraffe-tree/awesome-web-effects/stargazers)
+
+[**Open the live visual catalog**](https://giraffe-tree.github.io/awesome-web-effects/?lang=en) · [Language metadata](docs/LANGUAGES.md)
+
+<sub>[English](README.md) · [简体中文](README.zh-Hans.md) · [हिन्दी](README.hi.md) · [Español](README.es.md) · [العربية](README.ar.md) · [Français](README.fr.md) · [বাংলা](README.bn.md) · [Português](README.pt.md) · [Bahasa Indonesia](README.id.md) · [اردو](README.ur.md) · [Русский](README.ru.md) · [Deutsch](README.de.md) · [日本語](README.ja.md) · [Naijá](README.pcm.md) · [العربي المصري](README.arz.md) · [मराठी](README.mr.md) · [Tiếng Việt](README.vi.md) · [తెలుగు](README.te.md) · [Kiswahili](README.sw.md) · [Hausa](README.ha.md)</sub>
+
+</div>
+
+---
+
+<h3 align="center">9 of the 150 effects — every preview a real capture</h3>
 
 <table>
-<tr><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#synchronized-scenario-scene-handoff"><img src="demo/gifs/captured/synchronized-scenario-scene-handoff.gif" width="270" alt="Synchronized scenario scene handoff"></a><br><sub><strong>Synchronized scenario scene handoff</strong><br>Page &amp; layout · 98/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#pointer-injected-gpu-fluid"><img src="demo/gifs/captured/pointer-injected-gpu-fluid.gif" width="270" alt="Stage haze colour lab"></a><br><sub><strong>Stage haze colour lab</strong><br>3D &amp; WebGL · 99/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#dom-aware-drag-spawned-fish-flock"><img src="demo/gifs/captured/dom-aware-drag-spawned-fish-flock.gif" width="270" alt="Human-released DOM-avoiding fish school"></a><br><sub><strong>Human-released DOM-avoiding fish school</strong><br>Canvas &amp; 2D · 100/100</sub></td></tr>
-<tr><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#traveling-dot-headline-rewriter"><img src="demo/gifs/captured/traveling-dot-headline-rewriter.gif" width="270" alt="Human-approved headline revision marker"></a><br><sub><strong>Human-approved headline revision marker</strong><br>Text &amp; SVG · 100/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#drag-thrown-card-stack"><img src="demo/gifs/captured/drag-thrown-card-stack.gif" width="270" alt="Release-velocity rental discovery stack"></a><br><sub><strong>Release-velocity rental discovery stack</strong><br>Pointer &amp; hover · 100/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#scroll-scrubbed-document-generation-playback"><img src="demo/gifs/captured/scroll-scrubbed-document-generation-playback.gif" width="270" alt="Scroll-scrubbed document generation playback"></a><br><sub><strong>Scroll-scrubbed document generation playback</strong><br>Scroll &amp; reveal · 97/100</sub></td></tr>
-<tr><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#interactive-vector-state-machine"><img src="demo/gifs/captured/interactive-vector-state-machine.gif" width="270" alt="Held-input room-scene assistant"></a><br><sub><strong>Held-input room-scene assistant</strong><br>Motion &amp; choreography · 94/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#live-hand-landmark-video-overlay"><img src="demo/gifs/captured/live-hand-landmark-video-overlay.gif" width="270" alt="Hand rehabilitation landmark calibration"></a><br><sub><strong>Hand rehabilitation landmark calibration</strong><br>Canvas &amp; 2D · 98/100</sub></td><td width="33%" align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#refractive-glass-transmission-sculpture"><img src="demo/gifs/captured/refractive-glass-transmission-sculpture.gif" width="270" alt="Glass under light optical material review"></a><br><sub><strong>Glass under light optical material review</strong><br>3D &amp; WebGL · 99/100</sub></td></tr>
+<tr>
+<td width="33%" align="center">
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#synchronized-scenario-scene-handoff"><img src="demo/gifs/captured/synchronized-scenario-scene-handoff.gif" width="270" alt="Synchronized scenario scene handoff"></a>
+<br>
+<sub><strong>Synchronized scenario scene handoff</strong><br>Page &amp; layout · 98/100</sub>
+</td>
+<td width="33%" align="center">
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#pointer-injected-gpu-fluid"><img src="demo/gifs/captured/pointer-injected-gpu-fluid.gif" width="270" alt="Stage haze colour lab"></a>
+<br>
+<sub><strong>Stage haze colour lab</strong><br>3D &amp; WebGL · 99/100</sub>
+</td>
+<td width="33%" align="center">
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#dom-aware-drag-spawned-fish-flock"><img src="demo/gifs/captured/dom-aware-drag-spawned-fish-flock.gif" width="270" alt="Human-released DOM-avoiding fish school"></a>
+<br>
+<sub><strong>Human-released DOM-avoiding fish school</strong><br>Canvas &amp; 2D · 100/100</sub>
+</td>
+</tr>
+<tr>
+<td width="33%" align="center">
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#traveling-dot-headline-rewriter"><img src="demo/gifs/captured/traveling-dot-headline-rewriter.gif" width="270" alt="Human-approved headline revision marker"></a>
+<br>
+<sub><strong>Human-approved headline revision marker</strong><br>Text &amp; SVG · 100/100</sub>
+</td>
+<td width="33%" align="center">
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#drag-thrown-card-stack"><img src="demo/gifs/captured/drag-thrown-card-stack.gif" width="270" alt="Release-velocity rental discovery stack"></a>
+<br>
+<sub><strong>Release-velocity rental discovery stack</strong><br>Pointer &amp; hover · 100/100</sub>
+</td>
+<td width="33%" align="center">
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#scroll-scrubbed-document-generation-playback"><img src="demo/gifs/captured/scroll-scrubbed-document-generation-playback.gif" width="270" alt="Scroll-scrubbed document generation playback"></a>
+<br>
+<sub><strong>Scroll-scrubbed document generation playback</strong><br>Scroll &amp; reveal · 97/100</sub>
+</td>
+</tr>
+<tr>
+<td width="33%" align="center">
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#interactive-vector-state-machine"><img src="demo/gifs/captured/interactive-vector-state-machine.gif" width="270" alt="Held-input room-scene assistant"></a>
+<br>
+<sub><strong>Held-input room-scene assistant</strong><br>Motion &amp; choreography · 94/100</sub>
+</td>
+<td width="33%" align="center">
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#live-hand-landmark-video-overlay"><img src="demo/gifs/captured/live-hand-landmark-video-overlay.gif" width="270" alt="Hand rehabilitation landmark calibration"></a>
+<br>
+<sub><strong>Hand rehabilitation landmark calibration</strong><br>Canvas &amp; 2D · 98/100</sub>
+</td>
+<td width="33%" align="center">
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#refractive-glass-transmission-sculpture"><img src="demo/gifs/captured/refractive-glass-transmission-sculpture.gif" width="270" alt="Glass under light optical material review"></a>
+<br>
+<sub><strong>Glass under light optical material review</strong><br>3D &amp; WebGL · 99/100</sub>
+</td>
+</tr>
 </table>
 
 <p align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en"><strong>Explore all 150 live effects →</strong></a></p>
@@ -29,9 +90,22 @@ Inspect the current project and use the complete Awesome Web Effects catalog (ht
 
 ## See it. Name it. Build it.
 
-<table><tr><td width="25%" align="center"><strong>150</strong><br><sub>admitted effects</sub></td><td width="25%" align="center"><strong>150</strong><br><sub>real GIFs</sub></td><td width="25%" align="center"><strong>148</strong><br><sub>runnable demos</sub></td><td width="25%" align="center"><strong>80/100</strong><br><sub>minimum score</sub></td></tr></table>
+<table>
+<tr>
+<td width="25%" align="center"><strong>150</strong><br><sub>admitted effects</sub></td>
+<td width="25%" align="center"><strong>150</strong><br><sub>real GIFs</sub></td>
+<td width="25%" align="center"><strong>148</strong><br><sub>runnable demos</sub></td>
+<td width="25%" align="center"><strong>80/100</strong><br><sub>minimum score</sub></td>
+</tr>
+</table>
 
-<table><tr><td width="33%"><strong>① Find by sight</strong><br><sub>Scan real motion instead of guessing library names.</sub></td><td width="33%"><strong>② Open the effect</strong><br><sub>Check the score, source, behavior and minimal implementation.</sub></td><td width="33%"><strong>③ Ship the idea</strong><br><sub>Copy code or a scoped prompt for Codex / Claude Code.</sub></td></tr></table>
+<table>
+<tr>
+<td width="33%" align="center"><strong>① Find by sight</strong><br><sub>Scan real motion instead of guessing library names.</sub></td>
+<td width="33%" align="center"><strong>② Open the effect</strong><br><sub>Check the score, source, behavior and minimal implementation.</sub></td>
+<td width="33%" align="center"><strong>③ Ship the idea</strong><br><sub>Copy code or a scoped prompt for Codex / Claude Code.</sub></td>
+</tr>
+</table>
 
 This is an **effect-first**, curator-reviewed reference—not another repository list. Every published item has visible evidence, a score of at least **80/100**, provenance, reusable code and a runnable or official preview.
 
@@ -330,4 +404,6 @@ Expected project URL: [https://giraffe-tree.github.io/awesome-web-effects/](http
 - Run `node scripts/build-docs.mjs` to regenerate all localized README files and the language metadata document.
 - Run `node scripts/validate.mjs` before committing.
 
-GIFs and project names are used for research, indexing, and comparison. Rights remain with their respective authors.
+---
+
+<p align="center"><sub>GIFs and project names are used for research, indexing, and comparison. Rights remain with their respective authors.</sub></p>

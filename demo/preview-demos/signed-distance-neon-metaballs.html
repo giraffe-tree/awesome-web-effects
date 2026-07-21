@@ -1,1 +1,370 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p5.js — Signed Distance Neon Metaballs</title><link rel="stylesheet" href="./shared.css"><style>:root{--preview-background:#020512}.a2-stage{background:#020512;color:#f7f8ff}.p5-host{position:absolute;inset:0;cursor:grab;touch-action:none}.p5-host canvas{width:100%!important;height:100%!important;image-rendering:auto}.copy{position:absolute;z-index:3;left:14px;top:48px;width:105px;pointer-events:none}.copy h1{margin:0;font:950 18px/.84 system-ui;letter-spacing:-.065em}.copy p{margin:9px 0 0;color:#72f3dc;font:750 6px/1.4 ui-monospace;letter-spacing:.1em;text-transform:uppercase}.scene-caption{display:none}</style></head><body><main class="preview-stage a2-stage"><div class="p5-host" data-p5-host tabindex="0" aria-label="Move the pointer to pull the neon metaball field"></div><section class="copy"><h1>LIGHT MERGES BEFORE SHAPES TOUCH.</h1><p>distance sum / emissive threshold</p></section><span class="library-badge">p5.js · signed distance field</span></main><script type="module" src="./src/signed-distance-neon-metaballs-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>p5.js — Human-driven Relay Coverage Metaballs</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="./shared.css">
+    <style>
+      :root {
+        --preview-background: #030712;
+        color-scheme: dark;
+      }
+
+      button { font: inherit; }
+
+      .relay-stage {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        background: #030712;
+        color: #f7f4e9;
+        cursor: crosshair;
+        isolation: isolate;
+        outline: none;
+        touch-action: none;
+        user-select: none;
+      }
+
+      .relay-stage[data-dragging="true"] { cursor: grabbing; }
+
+      .relay-stage:focus-visible::after {
+        position: absolute;
+        z-index: 20;
+        inset: 3px;
+        border: 1px solid rgba(230, 255, 248, .86);
+        border-radius: 10px;
+        pointer-events: none;
+        content: "";
+      }
+
+      .relay-canvas-host,
+      .relay-canvas-host canvas,
+      .field-grade,
+      .field-grain {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .relay-canvas-host { z-index: 0; }
+      .relay-canvas-host canvas { display: block; }
+
+      .field-grade,
+      .field-grain {
+        z-index: 1;
+        pointer-events: none;
+      }
+
+      .field-grade {
+        background:
+          linear-gradient(180deg, rgba(1, 4, 12, .74) 0%, transparent 28%, transparent 65%, rgba(1, 4, 11, .8) 100%),
+          linear-gradient(90deg, rgba(1, 4, 12, .52) 0%, transparent 33%, transparent 76%, rgba(1, 3, 9, .28) 100%);
+      }
+
+      .field-grain {
+        opacity: .075;
+        mix-blend-mode: soft-light;
+        background-image: radial-gradient(#fff9 .45px, transparent .65px);
+        background-size: 3px 3px;
+      }
+
+      .topbar {
+        position: absolute;
+        z-index: 8;
+        top: clamp(7px, 2.8vw, 18px);
+        left: clamp(8px, 3vw, 21px);
+        right: clamp(8px, 3vw, 21px);
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 8px;
+        pointer-events: none;
+      }
+
+      .identity {
+        display: flex;
+        align-items: center;
+        gap: clamp(5px, 1.3vw, 9px);
+        min-width: 0;
+      }
+
+      .identity-mark {
+        display: grid;
+        width: clamp(22px, 5vw, 36px);
+        aspect-ratio: 1;
+        flex: 0 0 auto;
+        place-items: center;
+        border: 1px solid rgba(187, 255, 241, .42);
+        border-radius: 50%;
+        background: rgba(1, 9, 18, .68);
+        color: #c9fff2;
+        font: 950 clamp(5px, 1.1vw, 8px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: -.03em;
+        box-shadow: 0 0 20px rgba(75, 244, 218, .12);
+        backdrop-filter: blur(8px);
+      }
+
+      .identity-copy strong,
+      .identity-copy span {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        text-transform: uppercase;
+      }
+
+      .identity-copy strong {
+        font: 900 clamp(6px, 1.45vw, 10px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .14em;
+      }
+
+      .identity-copy span {
+        margin-top: 4px;
+        color: rgba(222, 238, 240, .58);
+        font: 800 clamp(4px, .85vw, 6px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .12em;
+      }
+
+      .relay-stage .library-badge {
+        position: static;
+        z-index: auto;
+        max-width: 130px;
+        padding: 5px 7px;
+        border-color: rgba(213, 255, 245, .28);
+        background: rgba(1, 8, 17, .67);
+        color: #effdf8;
+        box-shadow: 0 7px 18px rgba(0, 3, 10, .22);
+        font: 850 clamp(4px, .85vw, 6px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .11em;
+        white-space: nowrap;
+        backdrop-filter: blur(8px);
+      }
+
+      .mission {
+        position: absolute;
+        z-index: 7;
+        left: clamp(8px, 3.1vw, 22px);
+        bottom: clamp(8px, 4vw, 26px);
+        width: min(40%, 285px);
+        pointer-events: none;
+        text-shadow: 0 2px 14px rgba(0, 4, 11, .82);
+      }
+
+      .mission small {
+        display: block;
+        color: #c7fff0;
+        font: 900 clamp(4px, 1.15vw, 8px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .15em;
+        text-transform: uppercase;
+      }
+
+      .mission h1 {
+        margin: clamp(4px, 1.35vw, 9px) 0 0;
+        font: 650 clamp(12px, 4.9vw, 35px)/.85 Georgia, "Times New Roman", serif;
+        letter-spacing: -.055em;
+      }
+
+      .mission p {
+        max-width: 270px;
+        margin: clamp(5px, 1.5vw, 10px) 0 0;
+        color: rgba(235, 240, 235, .68);
+        font: 750 clamp(4px, 1vw, 7px)/1.45 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .075em;
+        text-transform: uppercase;
+      }
+
+      .mesh-readout {
+        display: flex;
+        align-items: flex-end;
+        gap: clamp(7px, 1.7vw, 12px);
+        margin-top: clamp(6px, 1.8vw, 12px);
+      }
+
+      .mesh-score {
+        color: #f5fff9;
+        font: 950 clamp(11px, 3.3vw, 24px)/.82 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: -.09em;
+      }
+
+      .mesh-copy {
+        display: grid;
+        gap: 3px;
+      }
+
+      .mesh-copy strong {
+        color: #c9fff2;
+        font: 950 clamp(5px, 1.25vw, 9px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .11em;
+        text-transform: uppercase;
+      }
+
+      .mesh-copy span {
+        color: rgba(234, 242, 237, .58);
+        font: 800 clamp(4px, .92vw, 6px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .09em;
+        text-transform: uppercase;
+      }
+
+      .relay-controls {
+        position: absolute;
+        z-index: 10;
+        right: clamp(7px, 3vw, 20px);
+        bottom: clamp(7px, 3vw, 20px);
+        display: flex;
+        align-items: center;
+        gap: 3px;
+        padding: 3px;
+        border: 1px solid rgba(218, 255, 246, .28);
+        border-radius: 999px;
+        background: rgba(1, 8, 17, .76);
+        box-shadow: 0 10px 30px rgba(0, 2, 9, .4);
+        cursor: default;
+        backdrop-filter: blur(10px);
+      }
+
+      .relay-controls button {
+        display: grid;
+        min-width: clamp(20px, 4.5vw, 32px);
+        height: clamp(18px, 4.1vw, 28px);
+        padding: 0 clamp(5px, 1.1vw, 8px);
+        place-items: center;
+        border: 0;
+        border-radius: 999px;
+        background: transparent;
+        color: #eefcf7;
+        cursor: pointer;
+        font: 900 clamp(4px, 1vw, 7px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+      }
+
+      .relay-controls button[data-relay-action="next"] {
+        background: #c9fff2;
+        color: #031318;
+      }
+
+      .relay-controls button:hover { background: rgba(255, 255, 255, .13); }
+      .relay-controls button[data-relay-action="next"]:hover { background: #e2fff8; }
+
+      .relay-controls button:focus-visible {
+        outline: 1px solid #fff;
+        outline-offset: 1px;
+      }
+
+      .relay-selection {
+        display: grid;
+        min-width: clamp(34px, 8vw, 56px);
+        padding: 0 4px;
+        text-align: center;
+        pointer-events: none;
+      }
+
+      .relay-selection strong,
+      .relay-selection span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        text-transform: uppercase;
+      }
+
+      .relay-selection strong {
+        color: #f4fff9;
+        font: 950 clamp(4px, 1vw, 7px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .09em;
+      }
+
+      .relay-selection span {
+        margin-top: 3px;
+        color: rgba(229, 241, 236, .52);
+        font: 800 clamp(3px, .78vw, 5px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .08em;
+      }
+
+      .runtime-ledger {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+      }
+
+      @media (max-width: 220px), (max-height: 110px) {
+        .topbar { top: 5px; left: 5px; right: 5px; }
+        .identity-mark { width: 17px; }
+        .identity-copy span,
+        .mission p,
+        .mesh-copy span { display: none; }
+        .identity-copy strong { font-size: 4px; }
+        .relay-stage .library-badge { padding: 3px 4px; font-size: 3px; }
+        .mission { left: 5px; bottom: 5px; width: 41%; }
+        .mission small { font-size: 3px; }
+        .mission h1 { margin-top: 2px; font-size: 8px; }
+        .mesh-readout { gap: 4px; margin-top: 3px; }
+        .mesh-score { font-size: 8px; }
+        .mesh-copy strong { font-size: 3px; }
+        .relay-controls { right: 4px; bottom: 4px; gap: 1px; padding: 2px; }
+        .relay-controls button { min-width: 13px; height: 13px; padding: 0 3px; font-size: 3px; }
+        .relay-selection { min-width: 22px; padding: 0 2px; }
+        .relay-selection strong { font-size: 3px; }
+        .relay-selection span { display: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <main
+      id="relay-stage"
+      class="preview-stage relay-stage"
+      tabindex="0"
+      aria-label="Emergency relay coverage planner. Drag a relay node to reshape its signed-distance coverage, use arrow keys to move it, brackets to change gain, and visible controls to select or reset nodes."
+      data-preview-mechanism="p5-pixel-evidence-driven-signed-distance-relay-coverage"
+    >
+      <div id="relay-canvas-host" class="relay-canvas-host" aria-hidden="true"></div>
+      <div class="field-grade"></div>
+      <div class="field-grain"></div>
+
+      <header class="topbar">
+        <div class="identity">
+          <span class="identity-mark">R3</span>
+          <div class="identity-copy">
+            <strong>North quay relay desk</strong>
+            <span>Coastal response · field survey 06</span>
+          </div>
+        </div>
+        <span class="library-badge">p5.js · live SDF</span>
+      </header>
+
+      <section class="mission" aria-live="polite">
+        <small>Human-positioned signal coverage</small>
+        <h1>Keep every crew inside the mesh.</h1>
+        <p>Drag one relay. Its photo-derived gain and the other fields recompute the shared coverage edge.</p>
+        <div class="mesh-readout">
+          <output id="coverage-score" class="mesh-score">--%</output>
+          <div class="mesh-copy">
+            <strong id="mesh-status">Reading survey</strong>
+            <span id="mesh-detail">Pixel evidence pending</span>
+          </div>
+        </div>
+      </section>
+
+      <nav class="relay-controls" aria-label="Relay controls">
+        <button type="button" data-relay-action="previous" aria-label="Select previous relay">Prev</button>
+        <div class="relay-selection" aria-live="polite">
+          <strong id="relay-selection-name">Relay A</strong>
+          <span id="relay-selection-gain">Gain --</span>
+        </div>
+        <button type="button" data-relay-action="decrease" aria-label="Decrease selected relay gain">−</button>
+        <button type="button" data-relay-action="increase" aria-label="Increase selected relay gain">+</button>
+        <button type="button" data-relay-action="next" aria-label="Select next relay">Next</button>
+        <button type="button" data-relay-action="reset" aria-label="Reset relay plan">Reset</button>
+      </nav>
+
+      <output id="runtime-ledger" class="runtime-ledger" aria-hidden="true"></output>
+    </main>
+
+    <script type="module" src="./src/signed-distance-neon-metaballs-demo.js"></script>
+  </body>
+</html>

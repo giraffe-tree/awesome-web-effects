@@ -1649,6 +1649,28 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.locator('#layout-toggle').click()
             elif index == 13:
                 page.locator('#send-packet').click()
+        elif demo["id"] == "sticky-paragraph-ink-reveal":
+            if index == 3:
+                box = page.locator('#report-scroll').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * .55, box["y"] + box["height"] * .72)
+                page.mouse.wheel(0, 126)
+            elif index == 5:
+                page.mouse.wheel(0, 126)
+            elif index == 8:
+                box = page.locator('#report-scroll').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * .55, box["y"] + box["height"] * .72)
+                page.mouse.down()
+            elif 9 <= index <= 14:
+                box = page.locator('#report-scroll').bounding_box()
+                progress = (index - 8) / 6
+                page.mouse.move(box["x"] + box["width"] * .55, box["y"] + box["height"] * (.72 + (.32 - .72) * progress))
+            elif index == 15:
+                page.mouse.up()
+            elif index == 20:
+                page.locator('#report-scroll').focus()
+                page.keyboard.press('PageUp')
+            elif index == 25:
+                page.keyboard.press('End')
         elif demo["id"] == "gooey-pixel-cursor-wake":
             if index == 3:
                 box = page.locator('#pixel-wake-host').bounding_box()
@@ -6269,6 +6291,87 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or page.locator('#layout-toggle').is_disabled()
         ):
             raise RuntimeError(f"{demo['id']} did not capture a real DOM-bound site-audit packet transfer with an arrival-gated review result: {interaction!r}")
+    elif demo["id"] == "sticky-paragraph-ink-reveal":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        expected_words = ["Across", "42", "monitored", "courtyards,", "tree", "shade", "reduced", "peak", "surface", "temperature", "by", "11.8°C,", "while", "comfortable", "seating", "use", "lasted", "37", "minutes", "longer."]
+        if (
+            not assertion
+            or interaction["task"] != "human-reads-reviews-and-retains-a-sequential-research-evidence-conclusion"
+            or interaction["claimedLibrary"] != "motion@12.42.2"
+            or interaction["mechanism"] != "trusted-wheel-drag-or-keyboard-progress-controls-paused-motion-word-ink-in-document-order"
+            or interaction["assetStrategy"] != "code-native-dom-research-text-directly-defines-word-order-and-evidence-no-raster-input-required"
+            or interaction["imageGenerationDecision"] != "omitted-because-a-bitmap-would-not-drive-word-order-scroll-distance-or-reading-evidence"
+            or interaction["causality"] != "trusted-human-input-only"
+            or interaction["automaticFill"]
+            or interaction["automaticReset"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["captureClockDriven"]
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["untrustedInputPolicy"] != "reject-before-reading-progress-mutation"
+            or interaction["untrustedMutationCount"] != 0
+            or interaction["inputCount"] != 12
+            or interaction["trustedInputCount"] != 12
+            or interaction["wheelInputCount"] != 2
+            or interaction["pointerInputCount"] != 8
+            or interaction["keyboardInputCount"] != 2
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerMoveCount"] != 6
+            or interaction["pointerUpCount"] != 1
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerCaptureReleaseCount"] != 1
+            or interaction["dragActive"]
+            or interaction["activePointerId"] is not None
+            or interaction["lastInputKind"] != "keyboard-end"
+            or interaction["lastInputTrusted"] is not True
+            or interaction["progressMutationCount"] != 10
+            or interaction["forwardMutationCount"] != 9
+            or interaction["backwardMutationCount"] != 1
+            or interaction["reviewBacktrackCount"] != 1
+            or interaction["completionCount"] != 1
+            or interaction["returnToStartCount"] != 0
+            or interaction["progress"] != 1
+            or interaction["maximumProgress"] != 1
+            or abs(interaction["minimumProgressAfterAdvance"] - .18) > .001
+            or not interaction["conclusionRetained"]
+            or interaction["phase"] != "conclusion-retained"
+            or interaction["result"] != "shade-extends-safe-use-conclusion-retained"
+            or interaction["wordCount"] != 20
+            or interaction["motionControlCount"] != 20
+            or not interaction["controlsPausedAtConstruction"]
+            or interaction["emphasizedWordCount"] != 5
+            or interaction["revealedWordCount"] != 20
+            or interaction["fullyRevealedWordCount"] != 20
+            or interaction["wordSequence"] != expected_words
+            or not interaction["wordOrderVerified"]
+            or any(progress != 1 for progress in interaction["wordProgress"])
+            or interaction["activeEvidenceIndex"] != 4
+            or interaction["activeEvidenceId"] != "conclusion"
+            or interaction["evidenceStagesVisited"] != ["method", "sample-size", "surface-temperature", "dwell-time", "conclusion"]
+            or interaction["evidenceTransitionCount"] != 6
+            or page.locator('#evidence-card').get_attribute('data-complete') != "true"
+            or page.locator('#evidence-output').text_content() != "SHADE EXTENDS SAFE USE"
+            or interaction["scrollTop"] != 600
+            or interaction["scrollRange"] != 600
+            or not interaction["scrollProgressMatchesState"]
+            or interaction["initialProgress"] != 0
+            or interaction["initialScrollTop"] != 0
+            or not interaction["initialStillVerified"]
+            or not interaction["initialWordSignature"]
+            or interaction["stageWidth"] != 320
+            or interaction["stageHeight"] != 180
+            or interaction["stageCoverageRatio"] < .995
+            or not interaction["stickyPositionVerified"]
+            or not interaction["stickyWithinStage"]
+            or not interaction["textReadable"]
+            or not interaction["fullStageGeometryVerified"]
+            or len(interaction["transitionRecords"]) != 10
+            or not all(record["trusted"] for record in interaction["transitionRecords"])
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a real bidirectional research-evidence review with a retained shade conclusion: {interaction!r}")
     elif demo["id"] == "gooey-pixel-cursor-wake":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")

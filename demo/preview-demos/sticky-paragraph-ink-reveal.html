@@ -3,35 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Motion — Sticky Paragraph Ink Reveal</title>
+  <title>Motion — Sticky Research Evidence Reader</title>
+  <link rel="icon" href="data:,">
   <link rel="stylesheet" href="./shared.css">
   <style>
-    :root{--preview-background:#eee9dc;color-scheme:light}
-    .ink-scroll{position:absolute;inset:0;overflow-y:auto;background:#eee9dc;color:#25231f;scrollbar-width:none}
-    .ink-scroll::-webkit-scrollbar{display:none}
-    .ink-space{height:540px;padding-top:1px}
-    .ink-sticky{position:sticky;top:43px;width:260px;margin:0 0 0 45px;padding:15px 0}
-    .ink-sticky small{display:block;margin-bottom:10px;color:#9e6a3d;font:800 6px/1 ui-monospace;letter-spacing:.17em}
-    .ink-line{margin:0;font:850 20px/.94 Georgia,serif;letter-spacing:-.04em}
-    .ink-word{display:inline-block;color:#bdb6a9;will-change:transform,color}
-    .ink-meter{position:fixed;z-index:6;right:13px;top:14px;color:#9e6a3d;font:900 7px/1 ui-monospace}
-    .library-badge{background:#eee8d8e8;color:#2a2823;border-color:#70695c55}
-    .scene-caption{color:#625d53;background:#eee9dc;padding:2px 3px 0 0}
+    :root{--preview-background:#e9e4d8;color-scheme:light;--ink:#24231f;--paper:#e9e4d8;--clay:#b45335;--moss:#526f55}
+    #report-stage{background:var(--paper);color:var(--ink)}.report-grid{position:absolute;inset:0;background-image:linear-gradient(#25231f0b 1px,transparent 1px),linear-gradient(90deg,#25231f0b 1px,transparent 1px);background-size:16px 16px;pointer-events:none}.report-bar{position:absolute;z-index:6;left:11px;right:11px;top:9px;display:flex;justify-content:space-between;pointer-events:none;font:850 5px/1 ui-monospace;letter-spacing:.13em;text-transform:uppercase}.report-bar span:first-child{display:flex;align-items:center;gap:6px}.report-bar span:first-child::before{content:"";width:7px;height:7px;border-radius:2px;background:var(--clay)}.report-bar span:last-child{color:#8c867a}
+    .report-scroll{position:absolute;z-index:2;inset:0;overflow-y:auto;overscroll-behavior:none;scrollbar-width:none;touch-action:none;cursor:grab;outline:none}.report-scroll::-webkit-scrollbar{display:none}.report-scroll:active{cursor:grabbing}.report-scroll:focus-visible{box-shadow:inset 0 0 0 2px #b4533566}.report-space{height:780px;padding-top:1px}.report-sticky{position:sticky;top:28px;width:min(calc(100% - 24px),360px);margin-left:12px;padding:9px 0 12px;pointer-events:none}.report-kicker{display:block;margin-bottom:8px;color:var(--clay);font:850 5px/1 ui-monospace;letter-spacing:.16em}.report-title{width:150px;margin:0 0 7px;font:950 13px/.9 system-ui;letter-spacing:-.045em}.report-line{max-width:340px;margin:0;font:850 17px/.98 Georgia,serif;letter-spacing:-.035em}.ink-word{display:inline;color:#aaa296;will-change:color,transform}.ink-word[data-emphasis="evidence"]{--word-color:var(--clay)}.ink-word[data-emphasis="finding"]{--word-color:var(--moss)}
+    .progress-rail{position:absolute;z-index:7;right:12px;top:39px;width:5px;height:88px;border-radius:99px;background:#d1cabc;overflow:hidden;pointer-events:none}.progress-fill{position:absolute;left:0;right:0;bottom:0;height:0;background:linear-gradient(to top,var(--clay),#df8d5f);border-radius:99px}.progress-meter{position:absolute;z-index:7;right:11px;top:132px;color:#8c5741;font:900 6px/1 ui-monospace;letter-spacing:.08em;pointer-events:none}
+    .evidence-rail{position:absolute;z-index:8;left:11px;right:11px;bottom:9px;display:flex;align-items:flex-end;justify-content:space-between;pointer-events:none}.input-hint{font:750 5px/1.4 ui-monospace;letter-spacing:.08em;color:#817a6f}.input-hint b{color:var(--clay)}.evidence-card{min-width:132px;max-width:180px;padding:7px 9px;border:1px solid #2a28221f;border-radius:8px;background:#f5f1e9e6;text-align:right;box-shadow:0 8px 24px #5a4d3820}.evidence-card small{display:block;color:#958d80;font:800 5px/1 ui-monospace;letter-spacing:.12em}.evidence-card output{display:block;margin-top:4px;color:var(--ink);font:900 7px/1.1 ui-monospace;letter-spacing:.04em}.evidence-card[data-complete="true"]{border-color:#526f556b;background:#edf2e9}.evidence-card[data-complete="true"] output{color:var(--moss)}
+    @media(max-width:360px){.report-title{font-size:12px}.report-line{font-size:15px}.evidence-card{min-width:124px}.report-bar span:last-child{display:none}}
+    @media(max-width:270px){.report-sticky{top:36px;width:calc(100% - 42px)}.report-title{width:170px;font-size:14px}.report-line{font-size:17px;line-height:1.02}.progress-rail{height:132px}.progress-meter{top:177px}.input-hint{display:none}.evidence-card{max-width:none;width:100%;text-align:left;padding:9px 10px}}
   </style>
 </head>
 <body>
-  <main class="preview-stage" data-preview-mechanism="sticky-word-ink-scroll">
-    <div class="ink-scroll" id="ink-scroll" tabindex="0" aria-label="Scroll to fill the sticky paragraph word by word">
-      <div class="ink-space">
-        <section class="ink-sticky">
-          <small>MANIFESTO / READ WITH SCROLL</small>
-          <p class="ink-line" id="ink-line">Products should explain themselves before the interface asks for attention.</p>
-        </section>
+  <main id="report-stage" class="preview-stage" data-preview-mechanism="motion-sticky-sequential-research-ink">
+    <div class="report-grid"></div>
+    <header class="report-bar"><span>Urban Climate Study / Report 06</span><span>Motion · evidence reader</span></header>
+    <div id="report-scroll" class="report-scroll" tabindex="0" role="region" aria-label="Research report evidence reader. Scroll, drag, or use arrow keys to reveal and review the findings.">
+      <div class="report-space">
+        <article class="report-sticky">
+          <small class="report-kicker">FIELD EVIDENCE / 42 SITES</small>
+          <h1 class="report-title">Shade extends the useful life of a public place.</h1>
+          <p id="report-line" class="report-line">Across 42 monitored courtyards, tree shade reduced peak surface temperature by 11.8°C, while comfortable seating use lasted 37 minutes longer.</p>
+        </article>
       </div>
     </div>
-    <output class="ink-meter" id="ink-meter">INK 000%</output>
-    <span class="library-badge">Motion · sticky word reveal</span>
-    <span class="scene-caption">scroll progress fills each word in sequence</span>
+    <span class="progress-rail"><span id="progress-fill" class="progress-fill"></span></span><output id="progress-meter" class="progress-meter">000%</output>
+    <footer class="evidence-rail"><span class="input-hint"><b>WHEEL / DRAG</b> TO READ<br>ARROWS TO REVIEW · END FOR CONCLUSION</span><section id="evidence-card" class="evidence-card" data-complete="false"><small id="evidence-label">REVIEW STATUS</small><output id="evidence-output">AWAITING HUMAN INPUT</output></section></footer>
   </main>
   <script type="module" src="./src/sticky-paragraph-ink-reveal-demo.js"></script>
 </body>

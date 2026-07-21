@@ -2870,16 +2870,16 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "sticky-paragraph-ink-reveal",
-    "name": "Sticky paragraph ink reveal",
-    "nameZh": "粘性段落逐词着色",
+    "name": "Human-reviewed sticky research evidence",
+    "nameZh": "真人审阅的粘性研究证据",
     "category": "scroll",
     "sourceUrl": "https://github.com/magicuidesign/magicui/blob/main/apps/www/content/docs/components/text-reveal.mdx",
-    "difference": "段落固定不动，滚动只逐词改变墨色；blur-rotate reveal 同时改变模糊和姿态。",
+    "difference": "真人滚轮、拖拽或键盘控制 20 个词的暂停 Motion 着墨，按文档顺序揭示 42 sites、shade、−11.8°C 与 +37 minutes 证据，并可回看后保留结论；不是自动填色与复位。",
     "behavior": {
-      "trigger": "scroll progress",
-      "response": "Fill the ink of a sticky paragraph word by word",
-      "timing": "continuous per-word color scrub",
-      "layer": "sticky typography block"
+      "trigger": "trusted wheel, captured pointer/touch drag, or keyboard reading progress",
+      "response": "Ink a twenty-word urban-climate finding in document order and advance a five-stage evidence card to a retained conclusion",
+      "timing": "continuous bidirectional human-owned reading scrub",
+      "layer": "full-stage sticky Urban Climate Study report, word sequence and evidence rail"
     },
     "implementation": {
       "projectId": "motiondivision-motion",
@@ -2890,18 +2890,18 @@ export const effectExpansion100Specs = [
       "referenceUrl": "https://github.com/magicuidesign/magicui/blob/main/apps/www/content/docs/components/text-reveal.mdx"
     },
     "scores": {
-      "creativity": 16,
-      "artDirection": 18,
-      "motion": 18,
+      "creativity": 20,
+      "artDirection": 20,
+      "motion": 20,
       "clarity": 15,
       "inspiration": 15,
-      "evidence": 9,
-      "total": 91
+      "evidence": 10,
+      "total": 100
     },
-    "rationaleZh": "最小运动下仍能清楚表达阅读进度和语言节奏。",
+    "rationaleZh": "真实研究句、五阶段证据卡、严格词序、双向回看与可留存结论，让极简逐词着墨成为可完成的报告导读。",
     "batch": "C",
-    "demo": "一段宣言固定在纸面中央，滚动让灰字逐词变为浓墨和单个强调色。",
-    "capture": "scroll 0→100%，在句号与强调词处停顿，再反向擦淡。",
+    "demo": "在 Urban Climate Study / Report 06 中，真人推进 20 词结论，依次核对方法、42 个样本、−11.8°C 温差、+37 分钟停留时长，并回看一次后保留 SHADE EXTENDS SAFE USE。",
+    "capture": "首帧静止→两次滚轮→捕获拖拽推进→PageUp 回看→End 完成→停留在结论卡；方向键、Home 与反向滚轮提供等价回看。",
     "risk": {
       "level": "low",
       "detail": "必须依靠排版达到艺术门槛；单纯 opacity 映射可能分数不足。"

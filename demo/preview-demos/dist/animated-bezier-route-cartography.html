@@ -1,8 +1,333 @@
-<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Animated Bezier Route Cartography</title><style>:root{--preview-background:#e8e2d2}.preview-stage{background:#e8e2d2;color:#202823}.copy{position:absolute;left:14px;top:49px;width:102px}.copy small{font:900 6px monospace;letter-spacing:.14em;color:#b84735}.copy h1{margin:8px 0;font:950 20px/.84 system-ui;letter-spacing:-.06em}svg{position:absolute;left:123px;top:20px;width:193px;height:150px}.mapline{fill:none;stroke:#6e776e4c;stroke-width:1}.route{fill:none;stroke:#e0573f;stroke-width:3;stroke-linecap:round}.vehicle{fill:#202823;stroke:#fff;stroke-width:2}.place{fill:#202823;font:800 6px monospace}.library-badge{color:#202823;background:#fff9;border-color:#20282344}.scene-caption{display:none}</style>  <script type="module" crossorigin src="./assets/animated-bezier-route-cartography-DUFwYr77.js"></script>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Animated Bezier Route Cartography</title>
+  <style>
+    :root { --preview-background: #0c1211; color-scheme: dark; }
+    button, input { font: inherit; }
+    .preview-stage { background: #0c1211; color: #edf0e6; }
+    .route-shell {
+      position: absolute;
+      inset: 0 auto auto 0;
+      width: 320px;
+      height: 180px;
+      overflow: hidden;
+      transform: scale(1);
+      transform-origin: 0 0;
+      background: #0c1211;
+    }
+    .map-board {
+      position: absolute;
+      inset: 7px 96px 7px 7px;
+      overflow: hidden;
+      border: 1px solid #41504b;
+      border-radius: 10px;
+      background: #141c19;
+      box-shadow: inset 0 0 0 1px #0a0f0e;
+    }
+    .map-heading {
+      position: absolute;
+      z-index: 3;
+      left: 10px;
+      right: 9px;
+      top: 8px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      pointer-events: none;
+    }
+    .eyebrow {
+      margin: 0 0 2px;
+      color: #fb785e;
+      font: 800 5.5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+    .map-heading h1 {
+      margin: 0;
+      color: #f2f1e8;
+      font: 780 12px/.96 ui-sans-serif, system-ui, sans-serif;
+      letter-spacing: -.035em;
+    }
+    .task-chip {
+      display: grid;
+      justify-items: end;
+      gap: 2px;
+      color: #87958f;
+      font: 700 4.7px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+    }
+    .task-chip strong { color: #d8ddd5; font-size: 5.5px; }
+    #route-map {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+      touch-action: none;
+      cursor: crosshair;
+      outline: none;
+    }
+    #route-map:focus-visible { filter: drop-shadow(0 0 2px #fb785e); }
+    .ridge-fill { fill: url(#ridge-fill); opacity: .88; }
+    .ridge-line { fill: none; stroke: #9aa99f; stroke-width: .55; opacity: .22; }
+    .road-shadow { fill: none; stroke: #060a09; stroke-width: 8; stroke-linecap: round; }
+    .road-bed { fill: none; stroke: #41504b; stroke-width: 5; stroke-linecap: round; }
+    .road-dash { fill: none; stroke: #a2aea6; stroke-width: .65; stroke-dasharray: 2 3; opacity: .58; }
+    .route-live {
+      fill: none;
+      stroke: #fb785e;
+      stroke-width: 3.2;
+      stroke-linecap: round;
+      filter: drop-shadow(0 0 2.5px rgba(251,120,94,.35));
+    }
+    .station {
+      cursor: pointer;
+      outline: none;
+      transform-box: fill-box;
+      transform-origin: center;
+    }
+    .station .halo { fill: #111816; stroke: #728179; stroke-width: 1; }
+    .station .core { fill: #728179; }
+    .station .station-number {
+      fill: #aeb8b1;
+      font: 800 4.3px ui-monospace, SFMono-Regular, Menlo, monospace;
+      text-anchor: middle;
+      dominant-baseline: central;
+      pointer-events: none;
+    }
+    .station[data-state="complete"] .halo { stroke: #f7efdd; }
+    .station[data-state="complete"] .core { fill: #f7efdd; }
+    .station[data-state="current"] .halo { stroke: #fb785e; stroke-width: 1.6; }
+    .station[data-state="current"] .core { fill: #fb785e; }
+    .station:focus-visible .halo { stroke: #fff; stroke-width: 2; }
+    .station-label {
+      fill: #d8ded7;
+      font: 750 4.5px ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .04em;
+      paint-order: stroke;
+      stroke: #111816;
+      stroke-width: 2px;
+      stroke-linejoin: round;
+      pointer-events: none;
+    }
+    #courier { pointer-events: none; }
+    #courier .bearing { fill: #fb785e; stroke: #101613; stroke-width: 1; }
+    #courier .payload { fill: #f2efe3; stroke: #111816; stroke-width: .8; }
+    .map-footer {
+      position: absolute;
+      z-index: 5;
+      left: 9px;
+      right: 9px;
+      bottom: 7px;
+      display: grid;
+      grid-template-columns: 30px 1fr 35px;
+      align-items: center;
+      gap: 6px;
+      min-height: 17px;
+      padding: 0 6px;
+      border: 1px solid #4a5752;
+      border-radius: 6px;
+      background: rgba(10,15,14,.91);
+      backdrop-filter: blur(5px);
+    }
+    .map-footer output {
+      color: #f3f0e4;
+      font: 760 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .04em;
+      white-space: nowrap;
+    }
+    .map-footer output:last-child { color: #fb785e; text-align: right; }
+    #route-range {
+      width: 100%;
+      height: 12px;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      accent-color: #fb785e;
+      cursor: ew-resize;
+    }
+    #route-range::-webkit-slider-runnable-track { height: 2px; border-radius: 2px; background: #5d6a64; }
+    #route-range::-webkit-slider-thumb {
+      width: 7px;
+      height: 7px;
+      margin-top: -2.5px;
+      appearance: none;
+      border: 1px solid #161d1a;
+      border-radius: 50%;
+      background: #fb785e;
+    }
+    #route-range:focus-visible { outline: 1px solid #f6f1e4; outline-offset: 1px; }
+    .evidence-panel {
+      position: absolute;
+      inset: 7px 7px 7px 230px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border: 1px solid #dfdacb;
+      border-radius: 10px;
+      background: #e8e4d8;
+      color: #17201d;
+    }
+    .evidence-topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 18px;
+      padding: 0 7px;
+      border-bottom: 1px solid #c8c3b6;
+      font: 800 4.7px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .evidence-topline span:last-child { color: #b64d3b; }
+    .checkpoint-photo {
+      position: relative;
+      height: 69px;
+      flex: 0 0 69px;
+      overflow: hidden;
+      border-bottom: 1px solid #bdb8ad;
+      background-color: #65706b;
+      background-repeat: no-repeat;
+      background-size: 300% auto;
+      background-position: 0 68%;
+      transition: background-position 180ms cubic-bezier(.22,1,.36,1);
+    }
+    .checkpoint-photo::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(10,15,14,.02) 45%, rgba(10,15,14,.7));
+      pointer-events: none;
+    }
+    .photo-code {
+      position: absolute;
+      z-index: 2;
+      left: 6px;
+      bottom: 5px;
+      color: #fff8e9;
+      font: 850 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .08em;
+    }
+    .stop-copy { padding: 6px 7px 4px; }
+    .stop-copy h2 {
+      margin: 0 0 2px;
+      font: 820 9px/.95 ui-sans-serif, system-ui, sans-serif;
+      letter-spacing: -.035em;
+    }
+    .stop-copy p {
+      margin: 0;
+      color: #5d6661;
+      font: 680 4.5px/1.25 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .025em;
+      text-transform: uppercase;
+    }
+    .stop-controls {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3px;
+      margin: auto 6px 4px;
+    }
+    .stop-control {
+      min-width: 0;
+      height: 16px;
+      padding: 0;
+      border: 1px solid #a9a69d;
+      border-radius: 4px;
+      background: transparent;
+      color: #5c645f;
+      font: 820 4.5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      cursor: pointer;
+    }
+    .stop-control[aria-pressed="true"] { border-color: #17201d; background: #17201d; color: #f2efe4; }
+    .stop-control[data-complete="true"]:not([aria-pressed="true"]) { border-color: #b85240; color: #a24434; }
+    .stop-control:focus-visible { outline: 1.5px solid #b64d3b; outline-offset: 1px; }
+    .evidence-status {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 17px;
+      padding: 0 7px;
+      border-top: 1px solid #c8c3b6;
+      color: #646b67;
+      font: 780 4.5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+    .evidence-status strong { color: #17201d; font-size: 5px; }
+    .scene-caption { display: none; }
+    @media (prefers-reduced-motion: reduce) { .checkpoint-photo { transition: none; } }
+  </style>
+  <script type="module" crossorigin src="./assets/animated-bezier-route-cartography-CCa7orPj.js"></script>
   <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
   <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
-  <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
-  <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
-  <link rel="modulepreload" crossorigin href="./assets/expansion-b-utils-CD_J0IHW.js">
   <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage" tabindex="0"><section class="copy"><small>CURVE ROUTING</small><h1>A JOURNEY BENDS IN REAL TIME.</h1></section><svg viewBox="0 0 193 150"><path class="mapline" d="M4 20L190 4M0 51L193 36M1 87L190 75M5 125L187 111M32 0L19 150M78 0L64 150M127 0L111 150M171 0L158 150"/><path id="route" class="route" d="M14 124 C42 19 83 139 110 76 S154 13 181 43"/><circle id="vehicle" class="vehicle" r="7"/><text class="place" x="9" y="139">PORT</text><text class="place" x="159" y="31">STUDIO</text></svg><span class="library-badge">Motion + SVG · route map</span></main></body></html>
+</head>
+<body>
+  <main id="route-stage" class="preview-stage" aria-label="Northpass cold-chain route inspection">
+    <div class="route-shell">
+      <section class="map-board" aria-labelledby="route-title">
+        <header class="map-heading">
+          <div>
+            <p class="eyebrow">Cold-chain field route</p>
+            <h1 id="route-title">Northpass · CC–17</h1>
+          </div>
+          <div class="task-chip"><span>payload</span><strong>02–08°C</strong></div>
+        </header>
+        <svg id="route-map" viewBox="0 0 224 166" role="slider" tabindex="0"
+          aria-label="Scrub the delivery route" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <defs>
+            <linearGradient id="ridge-fill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#293934"/>
+              <stop offset="1" stop-color="#111816"/>
+            </linearGradient>
+          </defs>
+          <path class="ridge-fill" d="M0 48L27 32L48 45L72 23L99 48L119 29L143 47L169 24L194 41L224 20V145H0Z"/>
+          <g aria-hidden="true">
+            <path class="ridge-line" d="M-5 63C25 45 42 59 67 42S109 58 137 42S181 50 230 33"/>
+            <path class="ridge-line" d="M-8 76C19 60 46 76 74 56S116 70 145 56S185 64 229 46"/>
+            <path class="ridge-line" d="M-10 90C21 73 46 92 79 70S125 83 153 68S193 77 231 60"/>
+            <path class="ridge-line" d="M-12 105C26 88 54 109 86 87S132 99 165 84S199 91 234 76"/>
+            <path class="ridge-line" d="M-14 120C25 104 60 124 96 104S143 116 178 101S207 108 236 94"/>
+          </g>
+          <path id="route-shadow" class="road-shadow" d="M20 132 C44 105 37 72 71 86 C106 101 91 132 130 119 C165 107 151 63 194 49"/>
+          <path id="route-bed" class="road-bed" d="M20 132 C44 105 37 72 71 86 C106 101 91 132 130 119 C165 107 151 63 194 49"/>
+          <path class="road-dash" d="M20 132 C44 105 37 72 71 86 C106 101 91 132 130 119 C165 107 151 63 194 49"/>
+          <path id="route" class="route-live" d="M20 132 C44 105 37 72 71 86 C106 101 91 132 130 119 C165 107 151 63 194 49"/>
+          <g id="stations-layer"></g>
+          <g id="courier" transform="translate(20 132) rotate(0)">
+            <path class="bearing" d="M8 0L-5-5V5Z"/>
+            <rect class="payload" x="-5" y="-4" width="8" height="8" rx="2"/>
+          </g>
+        </svg>
+        <div class="map-footer">
+          <output id="distance-output">0.0 KM</output>
+          <input id="route-range" type="range" min="0" max="1000" value="0" step="1" aria-label="Route progress">
+          <output id="progress-output">000%</output>
+        </div>
+      </section>
+
+      <aside class="evidence-panel" aria-live="polite">
+        <div class="evidence-topline"><span>Fictional stop</span><span id="stop-index">01 / 03</span></div>
+        <div id="checkpoint-photo" class="checkpoint-photo" role="img" aria-label="Dispatch depot checkpoint">
+          <span id="photo-code" class="photo-code">DEP · 00.0</span>
+        </div>
+        <div class="stop-copy">
+          <h2 id="stop-name">Slate depot</h2>
+          <p id="stop-note">Seal logged · payload ready</p>
+        </div>
+        <div class="stop-controls" aria-label="Route stations">
+          <button class="stop-control" type="button" data-stop-index="0" aria-pressed="true">DEP</button>
+          <button class="stop-control" type="button" data-stop-index="1" aria-pressed="false">RDG</button>
+          <button class="stop-control" type="button" data-stop-index="2" aria-pressed="false">CLN</button>
+        </div>
+        <div class="evidence-status"><span>route check</span><strong id="completion-output">1 / 3 clear</strong></div>
+      </aside>
+    </div>
+  </main>
+</body>
+</html>

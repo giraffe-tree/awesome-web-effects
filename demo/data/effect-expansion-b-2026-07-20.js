@@ -159,12 +159,12 @@ export const effectExpansion150BatchB = [
     scores: score(18, 19, 19, 15, 15, 10), rationaleZh: '字母级宽度与重量差异明显，排版主体保持可读且富有节奏。'
   },
   {
-    id: 'animated-bezier-route-cartography', order: 143, name: 'Animated Bezier route cartography', nameZh: '贝塞尔路线动态制图', category: 'vector', sourceUrl: 'https://github.com/Turfjs/turf',
-    difference: '路线按真实 SVG 弧长被绘出，载具同时读取相邻点切线改变朝向，不是圆点沿 CSS 偏移路径。',
-    behavior: { trigger: 'pointer progress or animation frame', response: 'A route draws forward while a vehicle follows its exact tangent', timing: 'continuous arc-length traversal', layer: 'SVG map' },
-    prompt: '使用 getTotalLength 与 getPointAtLength 同步路线 dashoffset、载具位置和切线朝向。',
-    implementation: motionImplementation("const mapMotion = animate(route, { opacity: [.94, 1, .94] }, { duration: 3 }); vehicle.setAttribute('cx', route.getPointAtLength(s).x);", 'https://github.com/Turfjs/turf', 'svg'),
-    scores: score(18, 18, 19, 15, 15, 10), rationaleZh: '绘线、定位和朝向由同一弧长参数驱动，地图叙事明确。'
+    id: 'animated-bezier-route-cartography', order: 143, name: 'Northpass cold-chain route check', nameZh: 'Northpass 冷链路线检查', category: 'vector', sourceUrl: 'https://github.com/motiondivision/motion',
+    difference: '把抽象贝塞尔曲线变成一条 14.8 公里的虚构高山冷链交付路线：路线描边、药箱位置与切线朝向共享真实 SVG 弧长，三个检查点还会切换同一张现场图集中的对应像素证据。',
+    behavior: { trigger: 'trusted captured pointer scrub, range, keyboard, or station control', response: 'Inspect any route position while depot, ridge, and clinic evidence stay synchronized to the nearest checkpoint', timing: 'human-owned, paused and reversible arc-length seek', layer: 'full-stage SVG map plus decoded checkpoint evidence' },
+    prompt: '制作一条可人工检查的冷链配送路线：鼠标、触控笔或手指沿 SVG 路线捕获拖动，也可用滑杆、键盘和站点按钮往返；以 getTotalLength/getPointAtLength 同步描边、药箱切线与里程，并真实加载一张 ImageGen 三联现场图集，把所选站点绑定到对应裁切及像素证据。首帧静止，不自动播放。',
+    implementation: motionImplementation("const routeMotion = animate(route, { strokeDashoffset: [routeLength, 0] }, { duration: 1, ease: 'linear', autoplay: false }); routeMotion.pause(); routeMotion.time = progress; courier.setAttribute('transform', tangentTransform(progress));", 'https://github.com/motiondivision/motion', 'svg'),
+    scores: score(20, 20, 20, 15, 15, 10), rationaleZh: '一张原创 ImageGen 三联现场图被同源 fetch、精确 SHA 校验、浏览器解码并分成三个 64×64 像素证据裁切；虚构仓库、山脊中转与诊所照片随最近站点真实切换。真人捕获拖拽、range、键盘和站点按钮可在路线任意位置停留和反向，暂停的 Motion 控制器同时驱动路线描边，SVG 弧长还统一约束药箱坐标、切线、里程和检查点，没有 autoplay、排练、fallback、合成输入或预览时钟变异。'
   },
   {
     id: 'cellular-automata-hover-bloom', order: 144, name: 'Cellular automata hover bloom', nameZh: '元胞自动机悬停生长', category: 'canvas', sourceUrl: 'https://github.com/shiffman/The-Nature-of-Code-Examples-p5.js',

@@ -1610,6 +1610,48 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.wheel(0, -120)
             elif index in (32, 34):
                 page.mouse.wheel(0, 120)
+        elif demo["id"] == "animated-bezier-route-cartography":
+            if index == 2:
+                page.mouse.move(50, 110)
+            elif index == 3:
+                page.mouse.down()
+            elif index == 4:
+                page.mouse.move(70, 90, steps=3)
+            elif index == 5:
+                page.mouse.move(100, 118, steps=3)
+            elif index == 6:
+                page.mouse.move(130, 110, steps=3)
+            elif index == 7:
+                page.mouse.move(155, 80, steps=3)
+            elif index == 8:
+                page.mouse.move(180, 60, steps=3)
+            elif index == 9:
+                page.mouse.move(200, 50, steps=3)
+            elif index == 10:
+                page.mouse.up()
+            elif index == 12:
+                page.locator('.stop-control[data-stop-index="1"]').click()
+            elif index == 14:
+                page.locator("#route-range").click(position={"x": 24, "y": 5})
+            elif index == 16:
+                page.locator("#route-range").click(position={"x": 82, "y": 5})
+            elif index == 18:
+                page.locator('.stop-control[data-stop-index="2"]').click()
+            elif index == 20:
+                page.locator("#route-map").focus()
+                page.keyboard.press("Home")
+            elif index == 22:
+                page.keyboard.press("End")
+            elif index == 24:
+                page.keyboard.press("ArrowLeft")
+            elif index == 26:
+                page.keyboard.press("PageDown")
+            elif index == 28:
+                page.keyboard.press("PageUp")
+            elif index == 30:
+                page.locator('.stop-control[data-stop-index="0"]').click()
+            elif index == 32:
+                page.locator('.stop-control[data-stop-index="2"]').click()
         elif demo["id"] == "kinetic-paper-fold-map":
             if index == 1:
                 page.mouse.move(280, 100)
@@ -4283,6 +4325,102 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["ready"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture trusted wheel progress with boundary release, a captured vertical drag, dependency checkpoints, reversible keyboard seeks, five paused Motion controls, and pixel-bound proof over the verified as-built node photo: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "animated-bezier-route-cartography":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "human-owned-fictional-cold-chain-route-inspection"
+            or interaction["claimedLibrary"] != "motion@12.42.2"
+            or interaction["renderer"] != "svg"
+            or interaction["mechanism"] != "paused-motion-svg-dash-synchronized-to-bezier-arc-length-position-and-tangent"
+            or interaction["acceptedInputs"] != ["mouse-captured-scrub", "touch-captured-scrub", "pen-captured-scrub", "keyboard", "range", "station-control"]
+            or not interaction["userInputRequired"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticTimeline"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or interaction["previewClockMutationCount"] != 0
+            or not interaction["renderIgnoresPreviewClock"]
+            or not interaction["initialFrameStatic"]
+            or not interaction["initialStaticVerified"]
+            or interaction["initialProgress"] != 0
+            or interaction["trustedInputCount"] < 28
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["humanInputCausalityCount"] != interaction["progressMutationCount"]
+            or interaction["progressMutationCount"] < 28
+            or interaction["progressReversalCount"] < 5
+            or interaction["completionReversalCount"] < 3
+            or interaction["minHumanProgress"] != 0
+            or interaction["maxHumanProgress"] != 1
+            or interaction["maxHumanProgressDelta"] < .9
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerMoveCount"] < 12
+            or interaction["pointerUpCount"] != 1
+            or interaction["pointerCancelCount"] != 0
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerCaptureVerifiedCount"] != 1
+            or interaction["pointerReleaseCaptureCount"] != 1
+            or interaction["mouseInputCount"] < 14
+            or interaction["touchInputCount"] != 0
+            or interaction["penInputCount"] != 0
+            or interaction["keyboardInputCount"] != 5
+            or interaction["rangeInputCount"] < 2
+            or interaction["stationControlCount"] != 4
+            or interaction["activePointerId"] is not None
+            or interaction["activePointerType"] != "none"
+            or interaction["pointerCaptured"]
+            or interaction["lastInputTrusted"] is not True
+            or interaction["lastInputKind"] != "panel-station-control"
+            or interaction["progress"] != 1
+            or interaction["selectedStopIndex"] != 2
+            or interaction["selectedStopId"] != "north-clinic"
+            or interaction["completedStopCount"] != 3
+            or interaction["stationCount"] != 3
+            or interaction["stationProgresses"] != [0, .515, 1]
+            or any(count < 1 for count in interaction["stationVisitCounts"])
+            or interaction["stationHitEventCount"] < 8
+            or interaction["lastHitStationId"] != "north-clinic"
+            or interaction["routeCommandCount"] < 3
+            or interaction["routeLength"] <= 190
+            or not interaction["routeLengthStable"]
+            or interaction["routePointProbeCount"] != 101
+            or interaction["routeTangentProbeCount"] != 101
+            or interaction["routeFinitePointCount"] != 101
+            or interaction["routeFiniteTangentCount"] != 101
+            or interaction["stationPlacementErrorMax"] > .001
+            or interaction["routeProjectionSampleCount"] < 3000
+            or interaction["routeMotionControlCount"] != 1
+            or interaction["routeMotionDuration"] != 1
+            or abs(interaction["routeMotionTime"] - 1) > .002
+            or interaction["routeMotionProgressError"] > .002
+            or interaction["routeDashError"] > .2
+            or not interaction["courierTangentFinite"]
+            or interaction["assetSourceKind"] != "project-local-imagegen-fictional-checkpoint-atlas"
+            or interaction["assetFetchCount"] != 1
+            or interaction["assetResponseStatus"] != 200
+            or not interaction["assetSameOrigin"]
+            or not interaction["assetResponseSameOrigin"]
+            or "image/jpeg" not in interaction["assetContentType"]
+            or interaction["assetByteLength"] != 252082
+            or interaction["assetSha256"] != "4511d72d39ff9954a5f4d5aa86fee96e3f4d520babbacca0a0d8208f81751e62"
+            or not interaction["assetShaMatchesExpected"]
+            or not interaction["assetDecoded"]
+            or interaction["assetWidth"] != 960
+            or interaction["assetHeight"] != 640
+            or interaction["assetCropCount"] != 3
+            or interaction["assetPixelSampleCount"] != 12288
+            or len(set(interaction["assetCropChecksums"])) != 3
+            or any(count < 20 for count in interaction["assetCropDistinctColorBuckets"])
+            or any(count < 4 for count in interaction["assetCropCoralPixelCounts"])
+            or interaction["assetAlphaFailureCount"] != 0
+            or not interaction["assetEvidenceReady"]
+            or interaction["previewRenderCount"] < 36
+            or not interaction["ready"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a trusted reversible route inspection across mouse capture, range, keyboard and three field-evidence checkpoints on one paused Motion arc-length control: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "kinetic-paper-fold-map":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

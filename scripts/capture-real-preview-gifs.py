@@ -1605,6 +1605,34 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.locator('#menu-toggle').click()
             elif index == 15:
                 page.locator('.menu-link[data-section="field-notes"]').click()
+        elif demo["id"] == "snapping-target-reticle-cursor":
+            if index == 3:
+                page.locator('.defect-target').nth(1).hover()
+            elif 4 <= index <= 7:
+                page.wait_for_timeout(120)
+            elif index == 8:
+                page.locator('.defect-target').nth(1).click()
+            elif 9 <= index <= 12:
+                page.wait_for_timeout(120)
+            elif index == 13:
+                page.locator('.defect-target').nth(0).hover()
+            elif 14 <= index <= 17:
+                page.wait_for_timeout(120)
+            elif index == 18:
+                page.locator('.defect-target').nth(0).click()
+            elif 19 <= index <= 22:
+                page.wait_for_timeout(120)
+            elif index == 23:
+                page.locator('#undo-annotation').click()
+            elif index == 24:
+                page.locator('#inspection-stage').focus()
+                page.keyboard.press('End')
+            elif 25 <= index <= 29:
+                page.wait_for_timeout(120)
+            elif index == 30:
+                page.keyboard.press('Enter')
+            elif 31 <= index <= 35:
+                page.wait_for_timeout(120)
         elif demo["id"] == "gooey-pixel-cursor-wake":
             if index == 3:
                 box = page.locator('#pixel-wake-host').bounding_box()
@@ -5953,6 +5981,108 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or page.locator('#menu-toggle').get_attribute('aria-expanded') != "false"
         ):
             raise RuntimeError(f"{demo['id']} did not capture a real delayed-commit NORTH/COMMON Field Notes navigation transaction: {interaction!r}")
+    elif demo["id"] == "snapping-target-reticle-cursor":
+        page.wait_for_function("window.__PREVIEW_INTERACTION_STATE__.springSettled && window.__PREVIEW_INTERACTION_STATE__.confirmedDefectId === 'FST-09'", timeout=2000)
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        history_signature = [(record["action"], record["id"]) for record in interaction["annotationHistory"]]
+        expected_samples = [("COR-17", .735, .205), ("CRK-04", .535, .532), ("FST-09", .347, .817)]
+        sample_signature = [(sample["id"], sample["u"], sample["v"]) for sample in interaction["targetPixelSamples"]]
+        spring = interaction["springConfiguration"]
+        if (
+            not assertion
+            or interaction["task"] != "human-inspector-snaps-confirms-reviews-undoes-and-reselects-a-pixel-evidenced-defect-annotation"
+            or interaction["claimedLibrary"] != "motion@12.42.2"
+            or interaction["mechanism"] != "trusted-pointer-proximity-or-keyboard-focus-springs-a-reticle-to-pixel-derived-inspection-targets"
+            or interaction["assetStrategy"] != "imagegen-functional-inspection-pixels-define-target-coordinates-and-browser-sampled-evidence"
+            or interaction["causality"] != "trusted-human-input-only"
+            or interaction["automaticCruise"]
+            or interaction["automaticTour"]
+            or interaction["automaticSnap"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["captureClockDriven"]
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["untrustedInputPolicy"] != "reject-before-reticle-or-annotation-mutation"
+            or interaction["untrustedMutationCount"] != 0
+            or not interaction["initialStillVerified"]
+            or not interaction["initialVisualSignature"]
+            or interaction["inputCount"] != 11
+            or interaction["trustedInputCount"] != 11
+            or interaction["pointerInputCount"] != 9
+            or interaction["keyboardInputCount"] != 2
+            or interaction["pointerProximityInputCount"] != 4
+            or interaction["keyboardNavigationCount"] != 1
+            or interaction["focusInputCount"] != 2
+            or interaction["confirmationInputCount"] != 3
+            or interaction["undoInputCount"] != 1
+            or interaction["proximityEvaluationCount"] != 4
+            or interaction["measuredDistanceCount"] != 21
+            or interaction["measuredDistances"] != [108, 54, 0]
+            or interaction["nearestDistance"] != 0
+            or abs(interaction["snapRadius"] - 41.4) > .1
+            or interaction["snapAcquisitionCount"] != 10
+            or interaction["freeReticleMoveCount"] != 0
+            or interaction["reticleMotionCount"] != 10
+            or interaction["reticleMotionCompletionCount"] < 4
+            or not interaction["springSettled"]
+            or spring != {"type": "spring", "stiffness": 360, "damping": 27, "mass": .6}
+            or interaction["previewIndex"] != 2
+            or interaction["previewDefectId"] != "FST-09"
+            or interaction["confirmedIndex"] != 2
+            or interaction["confirmedDefectId"] != "FST-09"
+            or interaction["confirmedDefectKind"] != "damaged-fastener"
+            or not interaction["annotationRetained"]
+            or interaction["confirmationCount"] != 3
+            or interaction["undoCount"] != 1
+            or interaction["reselectionCount"] != 1
+            or interaction["reselectionAfterUndoCount"] != 1
+            or interaction["selectionChangeCount"] != 3
+            or interaction["selectionRetainedAcrossPreviewCount"] < 4
+            or interaction["phase"] != "annotation-retained"
+            or interaction["result"] != "FST-09-review-annotation-retained"
+            or history_signature != [("confirm", "CRK-04"), ("confirm", "COR-17"), ("undo", "COR-17"), ("confirm", "FST-09")]
+            or not all(record["trusted"] for record in interaction["annotationHistory"])
+            or page.locator('#annotation-pin').get_attribute('data-visible') != "true"
+            or page.locator('#undo-annotation').is_disabled()
+            or page.locator('#review-output').text_content() != "VERIFIED · FST-09"
+            or interaction["assetFetchCount"] != 1
+            or interaction["assetResponseStatus"] != 200
+            or not interaction["assetSameOrigin"]
+            or interaction["assetByteLength"] != 336992
+            or interaction["assetSha256"] != "6007175702fd26c5104db0fc0ca05d562ce6aaceac41c33dfa74ab15af16cea8"
+            or not interaction["assetShaMatchesExpected"]
+            or not interaction["browserImageDecoded"]
+            or interaction["imageNaturalWidth"] != 1280
+            or interaction["imageNaturalHeight"] != 720
+            or interaction["provenanceFetchCount"] != 1
+            or not interaction["provenanceVerified"]
+            or interaction["generationProvider"] != "OpenAI built-in image generation"
+            or interaction["generationPromptId"] != "graphite-panel-three-defects-v1"
+            or interaction["generatedAt"] != "2026-07-21"
+            or interaction["generatedOriginalSize"] != [1672, 941]
+            or sample_signature != expected_samples
+            or interaction["sampledPatchPixelCount"] != 75
+            or not interaction["pixelEvidenceReady"]
+            or not interaction["functionalAssetUseVerified"]
+            or interaction["targetPixelLuminanceSpread"] <= .03
+            or interaction["targetPixelEvidenceChecksum"] <= 0
+            or interaction["targetGeometryCount"] != 3
+            or interaction["maximumTargetAlignmentError"] > 1
+            or not interaction["targetsWithinVisibleImage"]
+            or not interaction["fullStageGeometryVerified"]
+            or interaction["stageCoverageRatio"] < .995
+            or interaction["backgroundAssetCoverageRatio"] < .995
+            or abs(interaction["reticleX"] - 111.04) > 1
+            or abs(interaction["reticleY"] - 147.06) > 1
+            or abs(interaction["targetReticleX"] - 111.04) > 1
+            or abs(interaction["targetReticleY"] - 147.06) > 1
+            or not all(record["trusted"] for record in interaction["transitionRecords"])
+            or interaction["renderCount"] <= 0
+            or interaction["geometryMeasureCount"] <= 0
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a real retained pixel-evidenced FST-09 defect annotation after reselect and undo: {interaction!r}")
     elif demo["id"] == "gooey-pixel-cursor-wake":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")

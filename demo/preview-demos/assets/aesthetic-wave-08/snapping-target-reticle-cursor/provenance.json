@@ -1,0 +1,13 @@
+{
+  "id": "snapping-target-reticle-cursor-inspection-panel",
+  "sourceType": "generated-functional-asset",
+  "provider": "OpenAI built-in image generation",
+  "generatedAt": "2026-07-21",
+  "promptId": "graphite-panel-three-defects-v1",
+  "prompt": "Create a straight-on 16:9 industrial inspection photograph of a dark graphite composite machinery access panel with exactly three separated defects: an amber corrosion bloom near the upper right, a pale hairline crack near the center, and a damaged or missing circular fastener near the lower left. No people, tools, reticles, UI, labels, logos, watermark, circles, or arrows.",
+  "functionalUse": "The committed pixels define the three defect targets, their normalized coordinates, and browser-sampled evidence used by the reticle snapping task.",
+  "originalGenerationSize": [1672, 941],
+  "committedDerivative": "graphite-panel-inspection.jpg",
+  "committedSize": [1280, 720],
+  "committedSha256": "6007175702fd26c5104db0fc0ca05d562ce6aaceac41c33dfa74ab15af16cea8"
+}

@@ -2118,16 +2118,16 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "snapping-target-reticle-cursor",
-    "name": "Snapping target-reticle cursor",
-    "nameZh": "吸附目标准星光标",
+    "name": "Human-confirmed pixel-evidenced defect reticle",
+    "nameZh": "真人确认的像素证据缺陷准星",
     "category": "pointer",
     "sourceUrl": "https://github.com/DavidHDev/react-bits/blob/main/public/r/TargetCursor-TS-TW.json",
-    "difference": "四角准星移动并按目标边界重设尺寸；现有情境光标只换媒体/文字角色，不几何锁定元素。",
+    "difference": "真人 proximity 或键盘焦点让 Motion 弹簧准星吸附到真实工业面板的三个像素坐标缺陷，显式确认后留下可撤销、可重选的审阅 pin；不是自动巡航圆形 A/B/C。",
     "behavior": {
-      "trigger": "pointer proximity/focus",
-      "response": "Travel and resize a reticle to lock onto marked targets",
-      "timing": "spring target acquisition",
-      "layer": "cursor overlay around DOM targets"
+      "trigger": "trusted pointer proximity, keyboard focus/navigation, explicit confirmation or Undo",
+      "response": "Spring the reticle to corrosion, crack or damaged-fastener pixels and retain a reviewable defect annotation",
+      "timing": "finite human-owned spring acquisition plus explicit retained confirmation",
+      "layer": "full-stage industrial inspection image, DOM targets, reticle and review annotation"
     },
     "implementation": {
       "projectId": "motiondivision-motion",
@@ -2138,18 +2138,18 @@ export const effectExpansion100Specs = [
       "referenceUrl": "https://github.com/DavidHDev/react-bits/blob/main/public/r/TargetCursor-TS-TW.json"
     },
     "scores": {
-      "creativity": 18,
-      "artDirection": 18,
-      "motion": 19,
+      "creativity": 20,
+      "artDirection": 20,
+      "motion": 20,
       "clarity": 15,
       "inspiration": 15,
-      "evidence": 9,
-      "total": 94
+      "evidence": 10,
+      "total": 100
     },
-    "rationaleZh": "元素边界吸附把光标变成明确的目标获取系统。",
+    "rationaleZh": "真实面板像素、三个语义缺陷坐标、实测距离、有限弹簧、确认/撤销/重选历史，共同把准星变成可审阅的工业巡检任务。",
     "batch": "B",
-    "demo": "准星在三种尺寸的仪器按钮之间锁定，角标旋转后停止。",
-    "capture": "pointer 依次接近三个目标→记录 resize/snap→离开回自由态。",
+    "demo": "巡检员在石墨复合面板中依次吸附并确认 CRK-04 与 COR-17，撤销后通过键盘选择 FST-09，最后保留 VERIFIED · FST-09 审阅标注。",
+    "capture": "首帧静止→hover/确认 CRK-04→hover/确认 COR-17→Undo→键盘 End 定位 FST-09→Enter 确认→停留在可审阅 pin。",
     "risk": {
       "level": "high",
       "detail": "许可未明；必须从 getBoundingClientRect 计算目标，不可写死坐标。"

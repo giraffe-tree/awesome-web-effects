@@ -145,7 +145,7 @@
 | [融球产品材质目标光标](https://giraffe-tree.github.io/awesome-web-effects/#metaball-blob-cursor) | [Motion](https://github.com/motiondivision/motion) | **100/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#metaball-blob-cursor) |
 | [Field Edit 视觉记忆轨迹](https://giraffe-tree.github.io/awesome-web-effects/#velocity-spaced-image-trail) | [p5.js](https://github.com/processing/p5.js) | **99/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#velocity-spaced-image-trail) |
 | [真人绘制的黏性信号矩阵](https://giraffe-tree.github.io/awesome-web-effects/#gooey-pixel-cursor-wake) | [p5.js](https://github.com/processing/p5.js) | **100/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#gooey-pixel-cursor-wake) |
-| [吸附目标准星光标](https://giraffe-tree.github.io/awesome-web-effects/#snapping-target-reticle-cursor) | [Motion](https://github.com/motiondivision/motion) | **94/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#snapping-target-reticle-cursor) |
+| [真人确认的像素证据缺陷准星](https://giraffe-tree.github.io/awesome-web-effects/#snapping-target-reticle-cursor) | [Motion](https://github.com/motiondivision/motion) | **100/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#snapping-target-reticle-cursor) |
 | [真人确认的单元格距离诊断](https://giraffe-tree.github.io/awesome-web-effects/#pointer-reactive-cell-grid) | [p5.js](https://github.com/processing/p5.js) | **100/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#pointer-reactive-cell-grid) |
 | [北大西洋光圈章节导航](https://giraffe-tree.github.io/awesome-web-effects/#iris-aperture-navigation) | [p5.js](https://github.com/processing/p5.js) | **100/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#iris-aperture-navigation) |
 | [织物结构规格校样](https://giraffe-tree.github.io/awesome-web-effects/#pointer-woven-ribbon-loom) | [p5.js](https://github.com/processing/p5.js) | **100/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#pointer-woven-ribbon-loom) |
@@ -282,7 +282,7 @@
 - 150 个已核验预览：2 个官方素材、148 个可运行本地 Demo 录制；缺失数为 0。
 - 人工评审覆盖创意、艺术完成度、动效编排、效果辨识、创作迁移和证据质量。
 - 准入要求 80/100，并同时通过核心维度最低分；流行度不能覆盖质量门槛。
-- 已核验 GIF 总计 24.96 MiB；每个预览为 320×180、最长三秒且小于 1 MiB。
+- 已核验 GIF 总计 25.00 MiB；每个预览为 320×180、最长三秒且小于 1 MiB。
 - Stars 是 2026-07-20 快照；“推荐实现”与“在哪家 AI 官网观察到”始终是两种关系。
 
 继续阅读 [396 个候选的准入审计](research/demo-admission-audit-2026-07-20.md)、[100 家 AI 公司主页特效调研](research/ai-native-homepages-100.md)与[预览来源清单](demo/gifs/provenance.json)。

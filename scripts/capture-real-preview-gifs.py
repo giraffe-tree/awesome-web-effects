@@ -1491,6 +1491,42 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("End")
             elif index == 35:
                 page.mouse.wheel(0, 180)
+        elif demo["id"] == "velocity-reactive-marquee":
+            if index == 2:
+                page.mouse.wheel(0, 4)
+            elif index == 5:
+                page.mouse.wheel(0, 68)
+            elif index == 7:
+                page.mouse.wheel(0, -72)
+            elif index == 10:
+                page.mouse.move(92, 104)
+                page.mouse.down()
+            elif index == 11:
+                page.mouse.move(156, 104, steps=4)
+            elif index == 12:
+                page.mouse.move(236, 104, steps=4)
+                page.mouse.up()
+            elif index == 15:
+                page.mouse.move(252, 104)
+                page.mouse.down()
+            elif index == 16:
+                page.mouse.move(176, 104, steps=4)
+            elif index == 17:
+                page.mouse.move(76, 104, steps=4)
+                page.mouse.up()
+            elif index == 20:
+                page.locator('#marquee-stage').focus()
+                page.keyboard.press("ArrowRight")
+            elif index == 22:
+                page.keyboard.press("Shift+ArrowLeft")
+            elif index == 28:
+                page.keyboard.press("r")
+            elif index == 31:
+                page.mouse.wheel(0, 34)
+            elif index == 33:
+                page.mouse.wheel(0, -38)
+            elif index == 35:
+                page.locator('#reset-control').click()
         elif demo["id"] == "four-corner-hover-crop-marks":
             if index == round(.35 * args.fps):
                 page.mouse.move(92, 78)
@@ -1870,7 +1906,7 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("1")
             elif index == 34:
                 page.wait_for_timeout(500)
-        if demo["id"] != "emergent-particle-life-colonies":
+        if demo["id"] not in {"emergent-particle-life-colonies", "velocity-reactive-marquee"}:
             page.evaluate("time => window.__setPreviewTime(time)", preview_time)
         frame_path = frame_root / f"{index:04d}.png"
         page.screenshot(path=str(frame_path), type="png")
@@ -3162,6 +3198,45 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["lastInputTrusted"] is not True
         ):
             raise RuntimeError(f"{demo['id']} did not capture trusted wheel accumulation and boundary release, two captured drags, chapter controls, keyboard navigation, restart, and a completed incident review: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "velocity-reactive-marquee":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "human-paced-arrival-board"
+            or interaction["acceptedInputs"] != ["wheel", "mouse", "touch", "pen", "keyboard", "control"]
+            or not interaction["userInputRequired"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticFallback"]
+            or interaction["previewClockDriven"]
+            or interaction["syntheticInputDispatch"]
+            or not interaction["inertiaInputOwned"]
+            or not interaction["initialStable"]
+            or interaction["inputCount"] < 20
+            or interaction["wheelInputCount"] < 5
+            or interaction["pointerInputCount"] < 10
+            or interaction["keyboardInputCount"] < 3
+            or interaction["controlInputCount"] < 1
+            or interaction["pointerCaptureCount"] < 2
+            or interaction["pointerReleaseCount"] < 2
+            or interaction["dragUpdateCount"] < 8
+            or interaction["resetCount"] < 2
+            or interaction["positiveSampleCount"] < 5
+            or interaction["negativeSampleCount"] < 5
+            or interaction["directionReversalCount"] < 5
+            or interaction["maxAbsVelocity"] < 900
+            or interaction["segmentWidth"] <= 280
+            or interaction["velocity"] != 0
+            or interaction["offset"] != 0
+            or interaction["inputSource"] != "reset"
+            or interaction["lastSignedSample"] != 0
+            or interaction["dragging"]
+            or interaction["pointerId"] is not None
+            or interaction["lastInputKind"] != "control"
+            or interaction["lastInputSource"] != "control-reset"
+            or interaction["lastInputTrusted"] is not True
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture trusted slow/fast signed wheel velocity, two opposed captured drags, keyboard impulses, repeated reversal, inertia, and exact reset on the real Motion rail: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "four-corner-hover-crop-marks":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         if (

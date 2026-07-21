@@ -1,7 +1,358 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Motion — Velocity-reactive Marquee</title><style>
-:root{--preview-background:#15131a}.marquee-stage{position:absolute;inset:0;overflow:hidden;color:white}.marquee-copy{position:absolute;left:14px;top:44px;z-index:4}.marquee-copy small{font:800 6px/1 ui-monospace;letter-spacing:.13em;color:#aaa5b4}.marquee-copy h1{margin:8px 0 0;font:950 17px/.85 system-ui;letter-spacing:-.055em}.marquee-window{position:absolute;left:0;right:0;top:91px;height:52px;border-top:1px solid #fff3;border-bottom:1px solid #fff3;overflow:hidden;transform:skewX(var(--skew,0deg))}.marquee-track{display:flex;width:max-content;height:100%;align-items:center;gap:16px;white-space:nowrap;font:950 28px/1 system-ui;letter-spacing:-.055em}.marquee-track i{color:#ff705d;font-style:normal}.velocity-meter{position:absolute;right:12px;top:48px;color:#bdb6c8;font:700 6px/1 ui-monospace;letter-spacing:.1em}.library-badge{background:#15121ac9}.scene-caption{display:none}</style>  <script type="module" crossorigin src="./assets/velocity-reactive-marquee-l9Qzm04i.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
-  <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
-  <link rel="modulepreload" crossorigin href="./assets/batch-b-utils-CmA_lC0Z.js">
-  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage"><div class="marquee-stage" id="marquee-stage" data-preview-mechanism="motion-velocity-marquee" tabindex="0" aria-label="Scroll or use arrow keys to change marquee velocity"><section class="marquee-copy"><small>SCROLL VELOCITY / LIVE</small><h1>TYPE WITH MOMENTUM.</h1></section><span class="velocity-meter" id="velocity-meter">1.00×</span><div class="marquee-window" id="marquee-window"><div class="marquee-track" id="marquee-track">BUILD <i>FASTER</i> THINK DEEPER SHIP <i>BRAVER</i> BUILD <i>FASTER</i> THINK DEEPER SHIP <i>BRAVER</i></div></div></div><span class="library-badge">Motion · velocity marquee</span></main></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Motion — Velocity-reactive Arrival Rail</title>
+    <style>
+      :root {
+        --preview-background: #f0f1eb;
+        --ink: #151815;
+        --paper: #f0f1eb;
+        --acid: #d9ff43;
+        --blue: #175cff;
+        --orange: #ff5938;
+        --hairline: rgba(21, 24, 21, .21);
+      }
+      * { box-sizing: border-box; }
+      body { overflow: hidden; background: var(--paper); color: var(--ink); }
+      .preview-stage { background: var(--paper); }
+      .marquee-stage {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        outline: none;
+        touch-action: none;
+        user-select: none;
+      }
+      .marquee-stage::before {
+        content: '';
+        position: absolute;
+        z-index: 0;
+        inset: 0;
+        opacity: .22;
+        pointer-events: none;
+        background-image: radial-gradient(circle, rgba(21,24,21,.18) .55px, transparent .7px);
+        background-size: 5px 5px;
+      }
+      .marquee-stage:focus-visible { box-shadow: inset 0 0 0 2px var(--blue); }
+      .topbar {
+        position: absolute;
+        z-index: 4;
+        top: 13px;
+        left: 14px;
+        right: 14px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        pointer-events: none;
+      }
+      .brand { display: flex; align-items: center; gap: 7px; }
+      .brand-mark {
+        display: grid;
+        place-items: center;
+        width: 17px;
+        height: 17px;
+        border-radius: 50%;
+        background: var(--ink);
+        color: var(--paper);
+        font: 850 7px/1 ui-monospace, monospace;
+      }
+      .eyebrow {
+        margin: 0;
+        font: 780 6px/1.25 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .13em;
+        text-transform: uppercase;
+      }
+      .brand .muted { margin-top: 2px; color: #676c66; }
+      .speed-console { display: flex; align-items: center; gap: 9px; }
+      .velocity-block { text-align: right; }
+      .velocity-number {
+        margin: 2px 0 0;
+        min-width: 72px;
+        font: 830 16px/.9 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: -.07em;
+      }
+      .velocity-number span { font-size: 6px; letter-spacing: .07em; }
+      #reset-control {
+        min-width: 46px;
+        min-height: 26px;
+        border: 1px solid var(--ink);
+        border-radius: 999px;
+        background: transparent;
+        color: var(--ink);
+        font: 780 6px/1 ui-monospace, monospace;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        pointer-events: auto;
+      }
+      #reset-control:hover { background: var(--ink); color: var(--paper); }
+      #reset-control:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+      .hero {
+        position: absolute;
+        z-index: 2;
+        top: 53px;
+        left: 14px;
+        right: 14px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 14px;
+        pointer-events: none;
+      }
+      .hero h1 {
+        margin: 0;
+        max-width: 450px;
+        font: 850 clamp(25px, 6.5vw, 52px)/.84 system-ui, sans-serif;
+        letter-spacing: -.075em;
+      }
+      .hero-copy {
+        max-width: 158px;
+        padding-bottom: 2px;
+        color: #4f554e;
+        font: 620 7px/1.36 system-ui, sans-serif;
+      }
+      .hero-copy strong { display: block; margin-bottom: 4px; color: var(--ink); font: 780 6px/1 ui-monospace, monospace; letter-spacing: .1em; text-transform: uppercase; }
+      .marquee-window {
+        --tilt: 0deg;
+        position: absolute;
+        z-index: 3;
+        left: 0;
+        right: 0;
+        top: 148px;
+        height: 166px;
+        overflow: hidden;
+        border-top: 1px solid var(--ink);
+        border-bottom: 1px solid var(--ink);
+        background: var(--ink);
+        color: var(--paper);
+        cursor: grab;
+        transform: skewY(var(--tilt));
+        transform-origin: 50% 50%;
+        transition: background-color 120ms linear;
+      }
+      .marquee-stage[data-dragging="true"] .marquee-window { cursor: grabbing; }
+      .marquee-stage[data-direction="next"] .marquee-window { background: #111d36; }
+      .marquee-stage[data-direction="previous"] .marquee-window { background: #351511; }
+      .marquee-window::after {
+        content: '';
+        position: absolute;
+        z-index: 3;
+        inset: 0;
+        pointer-events: none;
+        background: linear-gradient(90deg, rgba(10,12,10,.76), transparent 8%, transparent 92%, rgba(10,12,10,.76));
+      }
+      .arrival-track {
+        display: flex;
+        width: max-content;
+        height: 100%;
+        will-change: transform;
+      }
+      .rail-segment {
+        display: flex;
+        flex: none;
+        align-items: stretch;
+        height: 100%;
+      }
+      .arrival {
+        position: relative;
+        display: grid;
+        grid-template-columns: auto 1fr;
+        grid-template-rows: 1fr auto;
+        column-gap: 17px;
+        flex: none;
+        width: 248px;
+        padding: 20px 23px 17px;
+        border-right: 1px solid rgba(240,241,235,.24);
+      }
+      .arrival-time {
+        align-self: center;
+        font: 850 48px/.82 system-ui, sans-serif;
+        letter-spacing: -.075em;
+      }
+      .arrival-place { align-self: center; min-width: 0; }
+      .arrival-place strong {
+        display: block;
+        font: 780 12px/.95 system-ui, sans-serif;
+        letter-spacing: -.035em;
+        text-transform: uppercase;
+      }
+      .arrival-place span { display: block; margin-top: 5px; color: #aeb4ad; font: 700 6px/1 ui-monospace, monospace; letter-spacing: .1em; text-transform: uppercase; }
+      .arrival-status {
+        grid-column: 1 / -1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        padding-top: 10px;
+        border-top: 1px solid rgba(240,241,235,.22);
+        font: 760 6px/1 ui-monospace, monospace;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+      }
+      .arrival-status b { color: var(--acid); font-weight: 800; }
+      .arrival[data-tone="blue"] .arrival-time { color: #78a0ff; }
+      .arrival[data-tone="orange"] .arrival-time { color: #ff7b61; }
+      .arrival[data-tone="acid"] .arrival-time { color: var(--acid); }
+      .direction-banner {
+        position: absolute;
+        z-index: 5;
+        left: 50%;
+        top: 50%;
+        translate: -50% -50%;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 10px;
+        border: 1px solid rgba(240,241,235,.3);
+        border-radius: 999px;
+        background: rgba(9, 11, 10, .8);
+        color: var(--paper);
+        font: 780 6px/1 ui-monospace, monospace;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        pointer-events: none;
+        backdrop-filter: blur(7px);
+      }
+      .direction-banner::before { content: ''; width: 16px; height: 2px; background: currentColor; box-shadow: 6px 0 0 -1px currentColor; }
+      .marquee-stage[data-direction="next"] .direction-banner { color: #9cb9ff; }
+      .marquee-stage[data-direction="previous"] .direction-banner { color: #ff9c88; }
+      .marquee-stage[data-direction="idle"] .direction-banner { color: #aeb4ad; }
+      .footer {
+        position: absolute;
+        z-index: 4;
+        left: 14px;
+        right: 14px;
+        bottom: 13px;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+        align-items: end;
+        gap: 14px;
+        pointer-events: none;
+      }
+      .instruction { max-width: 185px; color: #555b54; font: 620 7px/1.35 system-ui, sans-serif; }
+      .speed-state { text-align: center; }
+      .speed-state strong { display: block; margin-top: 4px; font: 850 12px/.9 system-ui, sans-serif; letter-spacing: -.04em; text-transform: uppercase; }
+      .speed-bar { width: 94px; height: 3px; margin-top: 7px; background: rgba(21,24,21,.14); overflow: hidden; }
+      .speed-bar span { display: block; width: var(--speed-level, 0%); height: 100%; background: var(--blue); transition: width 60ms linear, background-color 100ms linear; }
+      .marquee-stage[data-direction="previous"] .speed-bar span { background: var(--orange); }
+      .boundary { justify-self: end; text-align: right; }
+      .boundary strong { display: block; margin-top: 3px; font: 820 9px/.9 ui-monospace, monospace; letter-spacing: -.04em; }
+      .library-badge, .scene-caption { display: none; }
+      @media (max-width: 460px) {
+        .topbar { top: 7px; left: 8px; right: 8px; }
+        .brand-mark { width: 13px; height: 13px; font-size: 5px; }
+        .brand .muted { display: none; }
+        .velocity-number { min-width: 48px; font-size: 10px; }
+        .velocity-number span { font-size: 5px; }
+        #reset-control { min-width: 36px; min-height: 20px; font-size: 5px; }
+        .hero { top: 34px; left: 8px; right: 8px; align-items: flex-start; }
+        .hero h1 { max-width: 185px; font-size: 21px; }
+        .hero-copy { max-width: 92px; font-size: 5px; line-height: 1.3; }
+        .hero-copy strong { display: none; }
+        .marquee-window { top: 73px; height: 72px; }
+        .arrival { width: 130px; padding: 9px 11px 8px; column-gap: 8px; }
+        .arrival-time { font-size: 25px; }
+        .arrival-place strong { font-size: 7px; }
+        .arrival-place span { margin-top: 3px; font-size: 4px; }
+        .arrival-status { padding-top: 5px; font-size: 4px; }
+        .direction-banner { padding: 4px 6px; font-size: 4px; }
+        .footer { left: 8px; right: 8px; bottom: 7px; grid-template-columns: 1fr auto; gap: 8px; }
+        .instruction { display: none; }
+        .speed-state { text-align: left; }
+        .speed-state strong { margin-top: 2px; font-size: 8px; }
+        .speed-bar { width: 65px; margin-top: 4px; }
+        .boundary strong { font-size: 6px; }
+      }
+      @media (max-width: 180px) {
+        .topbar { top: 4px; left: 5px; right: 5px; }
+        .brand-mark { width: 8px; height: 8px; }
+        .brand .eyebrow { display: none; }
+        .velocity-block .eyebrow, .velocity-number span { display: none; }
+        .velocity-number { min-width: 30px; font-size: 7px; }
+        #reset-control { min-width: 27px; min-height: 15px; padding: 0 3px; font-size: 4px; }
+        .hero { display: none; }
+        .marquee-window { top: 20px; height: 44px; }
+        .arrival { width: 74px; padding: 6px 7px 5px; column-gap: 4px; }
+        .arrival-time { font-size: 14px; }
+        .arrival-place strong { font-size: 5px; }
+        .arrival-place span { display: none; }
+        .arrival-status { padding-top: 3px; font-size: 3px; }
+        .direction-banner { top: auto; bottom: 3px; padding: 3px 4px; font-size: 3px; }
+        .direction-banner::before { width: 8px; }
+        .footer { left: 5px; right: 5px; bottom: 3px; }
+        .speed-state .eyebrow, .speed-bar { display: none; }
+        .speed-state strong { font-size: 5px; }
+        .boundary .eyebrow { display: none; }
+        .boundary strong { font-size: 5px; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .marquee-window, .speed-bar span { transition: none; }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/velocity-reactive-marquee-Cp9kZcNJ.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+    <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main class="preview-stage">
+      <section
+        class="marquee-stage"
+        id="marquee-stage"
+        data-preview-mechanism="motion-signed-velocity-marquee"
+        data-boundary="seamless-loop"
+        data-direction="idle"
+        data-dragging="false"
+        tabindex="0"
+        aria-label="Arrival information rail. Scroll, drag horizontally, or use the left and right arrow keys to move the rail with signed velocity."
+      >
+        <header class="topbar">
+          <div class="brand">
+            <span class="brand-mark" aria-hidden="true">M4</span>
+            <div><p class="eyebrow">Metrobrief / M4</p><p class="eyebrow muted">Central transfer · Live</p></div>
+          </div>
+          <div class="speed-console">
+            <div class="velocity-block">
+              <p class="eyebrow">Signed velocity</p>
+              <p class="velocity-number" id="velocity-meter">±000 <span>px/s</span></p>
+            </div>
+            <button id="reset-control" type="button">Reset</button>
+          </div>
+        </header>
+
+        <section class="hero">
+          <h1>Arrivals move<br />at your pace.</h1>
+          <p class="hero-copy"><strong>Browse the board</strong>Scroll slowly to scan. Move faster to jump ahead. Reverse at any time.</p>
+        </section>
+
+        <div class="marquee-window" id="marquee-window">
+          <div class="arrival-track" id="marquee-track">
+            <div class="rail-segment" id="primary-segment">
+              <article class="arrival" data-tone="acid"><time class="arrival-time">23:40</time><div class="arrival-place"><strong>East Loop</strong><span>Platform 04 · 8 stops</span></div><div class="arrival-status"><span>Service M4</span><b>Boarding</b></div></article>
+              <article class="arrival" data-tone="blue"><time class="arrival-time">23:52</time><div class="arrival-place"><strong>North Dock</strong><span>Platform 02 · 5 stops</span></div><div class="arrival-status"><span>Service N2</span><b>On time</b></div></article>
+              <article class="arrival" data-tone="orange"><time class="arrival-time">00:08</time><div class="arrival-place"><strong>Airport</strong><span>Platform 06 · Express</span></div><div class="arrival-status"><span>Service A1</span><b>+4 min</b></div></article>
+              <article class="arrival" data-tone="acid"><time class="arrival-time">00:16</time><div class="arrival-place"><strong>River Market</strong><span>Platform 01 · 3 stops</span></div><div class="arrival-status"><span>Service R3</span><b>On time</b></div></article>
+            </div>
+            <div class="rail-segment" aria-hidden="true">
+              <article class="arrival" data-tone="acid"><time class="arrival-time">23:40</time><div class="arrival-place"><strong>East Loop</strong><span>Platform 04 · 8 stops</span></div><div class="arrival-status"><span>Service M4</span><b>Boarding</b></div></article>
+              <article class="arrival" data-tone="blue"><time class="arrival-time">23:52</time><div class="arrival-place"><strong>North Dock</strong><span>Platform 02 · 5 stops</span></div><div class="arrival-status"><span>Service N2</span><b>On time</b></div></article>
+              <article class="arrival" data-tone="orange"><time class="arrival-time">00:08</time><div class="arrival-place"><strong>Airport</strong><span>Platform 06 · Express</span></div><div class="arrival-status"><span>Service A1</span><b>+4 min</b></div></article>
+              <article class="arrival" data-tone="acid"><time class="arrival-time">00:16</time><div class="arrival-place"><strong>River Market</strong><span>Platform 01 · 3 stops</span></div><div class="arrival-status"><span>Service R3</span><b>On time</b></div></article>
+            </div>
+          </div>
+          <p class="direction-banner" id="direction-output" role="status" aria-live="polite">At rest · input to browse</p>
+        </div>
+
+        <footer class="footer">
+          <p class="instruction">Wheel vertically or grab the board. Arrow keys give an equal signed impulse.</p>
+          <div class="speed-state"><p class="eyebrow" id="source-output">No input sampled</p><strong id="speed-output">At rest</strong><div class="speed-bar" aria-hidden="true"><span></span></div></div>
+          <div class="boundary"><p class="eyebrow">Boundary strategy</p><strong>SEAMLESS LOOP · ∞</strong></div>
+        </footer>
+      </section>
+      <span class="library-badge">Motion · signed velocity rail</span>
+      <span class="scene-caption">real input velocity controls arrival information direction and speed</span>
+    </main>
+  </body>
+</html>

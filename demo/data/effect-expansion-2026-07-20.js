@@ -1601,41 +1601,41 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "velocity-reactive-marquee",
-    "name": "Velocity-reactive marquee",
-    "nameZh": "滚动速度响应跑马灯",
+    "name": "Metrobrief arrival velocity board",
+    "nameZh": "Metrobrief 到站速度浏览板",
     "category": "scroll",
     "sourceUrl": "https://github.com/DavidHDev/react-bits/blob/main/public/r/ScrollVelocity-TS-TW.json",
-    "difference": "内容速度和方向由测得滚动速度改变；不是恒速直线 marquee 或曲线路径文字。",
+    "difference": "把 marquee 攢成实时到站信息浏览：滚轮距离/时间与捕获拖拽位移/时间被测成带符号 px/s，直接决定 M4 到站卡轨的速度、方向、倾斜与状态读数，并在输入后自然阻尼停下。",
     "behavior": {
-      "trigger": "scroll velocity",
-      "response": "Accelerate and reverse a text rail from document velocity",
-      "timing": "continuous velocity-coupled loop",
-      "layer": "typographic rail"
+      "trigger": "trusted wheel velocity, captured mouse/touch/pen drag velocity, keyboard signed impulse, or explicit reset",
+      "response": "Accelerate, reverse, and settle a seamless real-time arrival rail from measured signed human velocity",
+      "timing": "static first frame; direct input sets velocity and a finite input-owned exponential decay carries it to rest",
+      "layer": "full-preview transit briefing, duplicated seamless arrival-card rail, direction banner, live px/s meter, and speed classification"
     },
     "implementation": {
       "projectId": "motiondivision-motion",
       "projectUrl": "https://github.com/motiondivision/motion",
       "library": "motion@12.42.2",
       "renderer": "dom",
-      "snippet": "animate(rail, { x: ['0%', '-50%'] }, { duration: 3 / velocity, ease: 'linear', repeat: Infinity });",
+      "snippet": "state.offset += state.velocity * dt; state.velocity *= Math.exp(-DAMPING * dt); motion.time = modulo(-state.offset, segmentWidth) / segmentWidth;",
       "referenceUrl": "https://github.com/DavidHDev/react-bits/blob/main/public/r/ScrollVelocity-TS-TW.json"
     },
     "scores": {
-      "creativity": 17,
-      "artDirection": 18,
-      "motion": 19,
+      "creativity": 19,
+      "artDirection": 20,
+      "motion": 20,
       "clarity": 15,
       "inspiration": 15,
-      "evidence": 9,
-      "total": 93
+      "evidence": 10,
+      "total": 99
     },
-    "rationaleZh": "速度耦合让内容直接反馈阅读动作。",
+    "rationaleZh": "到站卡让速度变化承担真实浏览任务：慢动便于逐条扫描，快速输入用于跨越多班次，反向输入立即翻转方向；实时 px/s、输入来源和速度等级把原本隐形的机制公开给用户。",
     "batch": "B",
-    "demo": "双向大字轨默认慢行，快速上下滚动时反转并加速。",
-    "capture": "慢滚→快速下滚→快速上滚→停止观察回落基速。",
+    "demo": "Metrobrief Arrival Velocity Board 用一个 paused Motion transform 控制无缝双段到站卡轨；滚轮与拖拽真实测量带符号速度，键盘给予固定正负冲量，真人输入后的指数阻尼把轨道带回静止。",
+    "capture": "从完全静止的到站板开始，用慢/快滚轮验证速度等级并反向；再用两次相反方向的捕获拖拽和两次键盘冲量制造多次方向反转，最后分别用键盘与按钮 Reset 回到精确原点。",
     "risk": {
       "level": "high",
-      "detail": "许可未明；必须测真实滚动速度而非只按方向切 class。"
+      "detail": "必须保留真实距离/时间测速、正负样本、pointer capture、输入后有限阻尼与无缝 modulo 边界；恒速自动循环、合成事件或仅按方向切 class 均不合格。"
     },
     "observedImplementation": {
       "projectId": "davidhdev-react-bits",

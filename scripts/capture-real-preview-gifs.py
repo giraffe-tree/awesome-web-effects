@@ -1823,6 +1823,32 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.locator('[data-light-action="reset"]').click()
             elif index == 28:
                 page.mouse.move(244, 55)
+        elif demo["id"] == "cursor-drawn-constellation-thread":
+            if index == 3:
+                route = page.evaluate("window.__PREVIEW_INTERACTION_STATE__.routeEvidence")
+                page.mouse.move(route[0]["u"] * 320, route[0]["v"] * 180)
+            elif index == 5:
+                route = page.evaluate("window.__PREVIEW_INTERACTION_STATE__.routeEvidence")
+                page.mouse.move(route[0]["u"] * 320, route[0]["v"] * 180)
+                page.mouse.down()
+            elif index in (6, 7, 8, 9, 10):
+                route = page.evaluate("window.__PREVIEW_INTERACTION_STATE__.routeEvidence")
+                target = route[index - 5]
+                page.mouse.move(target["u"] * 320, target["v"] * 180, steps=3)
+            elif index == 11:
+                page.mouse.up()
+            elif index == 13:
+                page.locator('[data-constellation-action="confirm"]').click()
+            elif index == 15:
+                page.locator('[data-constellation-action="undo"]').click()
+            elif index == 17:
+                page.locator("#constellation-stage").focus()
+                page.keyboard.press("Enter")
+            elif index == 19:
+                page.locator('[data-constellation-action="confirm"]').click()
+            elif index == 25:
+                route = page.evaluate("window.__PREVIEW_INTERACTION_STATE__.routeEvidence")
+                page.mouse.move(route[5]["u"] * 320, route[5]["v"] * 180)
         elif demo["id"] == "kinetic-paper-fold-map":
             if index == 1:
                 page.mouse.move(280, 100)
@@ -5000,6 +5026,104 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["ready"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture trusted hover, captured multi-material lens dragging, keyboard/range depth control, visible shallower/deeper/reset actions, and robust pixel-derived optical evidence without automatic drift: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "cursor-drawn-constellation-thread":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        route = interaction["routeEvidence"]
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-night-navigation-observation-plate-calibration"
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["mechanism"] != "same-origin-generated-observation-plate-pixels-determine-connectable-stars-confidence-and-route-validity"
+            or interaction["acceptedInputs"] != ["mouse-hover", "mouse-drag", "touch-drag", "pen-drag", "keyboard", "button-control"]
+            or not interaction["userInputRequired"]
+            or not interaction["initialFrameStatic"]
+            or not interaction["initialStaticConfirmed"]
+            or interaction["automaticCycle"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["previewClockMutationCount"] != 0
+            or interaction["inputCount"] < 22
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["ignoredInputCount"] != 0
+            or interaction["pointerEnterCount"] < 1
+            or interaction["pointerMoveCount"] < 16
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerReleaseCount"] != 1
+            or interaction["pointerCancelCount"] != 0
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerReleaseCaptureCount"] != 1
+            or interaction["hoverMutationCount"] < 3
+            or interaction["dragMutationCount"] < 15
+            or interaction["keyboardInputCount"] != 1
+            or interaction["buttonActivationCount"] != 3
+            or interaction["fixAcceptanceCount"] != 7
+            or interaction["undoCount"] != 1
+            or interaction["resetCount"] != 0
+            or interaction["confirmationCount"] != 2
+            or interaction["confirmationClearCount"] != 1
+            or interaction["routeMutationCount"] != 10
+            or interaction["connectedFixCount"] != 6
+            or interaction["maximumConnectedFixCount"] != 6
+            or not interaction["routeComplete"]
+            or not interaction["confirmed"]
+            or interaction["connectedRouteIndices"] != [0, 1, 2, 3, 4, 5]
+            or interaction["activePointerId"] is not None
+            or interaction["pointerCaptured"]
+            or interaction["dragging"]
+            or interaction["lastInputTrusted"] is not True
+            or interaction["lastPointerType"] != "mouse"
+            or interaction["assetFetchCount"] != 1
+            or interaction["assetResponseStatus"] != 200
+            or not interaction["assetSameOrigin"]
+            or interaction["assetByteLength"] != 178986
+            or interaction["assetSha256"] != "f4b2f9f14bb24fca891ca88dbc385f06d2f803516095956f6d7afb58bd596e2d"
+            or not interaction["assetShaMatchesExpected"]
+            or not interaction["browserImageDecoded"]
+            or interaction["sourceNaturalWidth"] != 960
+            or interaction["sourceNaturalHeight"] != 640
+            or not interaction["p5ImageDecoded"]
+            or interaction["p5ImageClass"] != "p5.Image"
+            or interaction["p5ImageWidth"] != 960
+            or interaction["p5ImageHeight"] != 640
+            or interaction["p5ImagePixelLength"] != 2457600
+            or interaction["sampledWidth"] != 160
+            or interaction["sampledHeight"] != 90
+            or interaction["sampledPixelCount"] != 14400
+            or interaction["sampledByteLength"] != 57600
+            or len(interaction["sourcePixelSha256"]) != 64
+            or not interaction["sourcePixelSha256"].strip("0")
+            or interaction["distinctSampleColorCount"] <= 100
+            or interaction["distinctSampleColorCount"] >= 5000
+            or interaction["localMaximumCount"] < 18
+            or interaction["candidateCount"] != 18
+            or interaction["routeTargetCount"] != 6
+            or interaction["minimumCandidateConfidence"] != 68
+            or interaction["maximumCandidateConfidence"] != 99
+            or interaction["candidateCoordinateChecksum"] <= 0
+            or interaction["routeCoordinateChecksum"] <= 0
+            or len(interaction["candidateEvidence"]) != 18
+            or len(route) != 6
+            or any(target["confidence"] < 68 or target["confidence"] > 99 for target in route)
+            or any(route[index]["u"] <= route[index - 1]["u"] for index in range(1, len(route)))
+            or not interaction["assetEvidenceReady"]
+            or not interaction["pixelEvidenceReady"]
+            or not interaction["p5InstanceReady"]
+            or not interaction["p5CanvasReady"]
+            or interaction["p5CanvasWidth"] != 320
+            or interaction["p5CanvasHeight"] != 180
+            or interaction["p5CompletedDrawCount"] < 10
+            or interaction["renderCount"] < 36
+            or interaction["previewClockIgnoredCount"] < 36
+            or interaction["initialVisualStateChecksum"] == interaction["currentVisualStateChecksum"]
+            or not interaction["runtimeAssertionPassed"]
+            or not interaction["ready"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a trusted six-fix pixel-derived night route, explicit confirmation, undo, keyboard reacquisition, and final reseal without automatic stitching: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "kinetic-paper-fold-map":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

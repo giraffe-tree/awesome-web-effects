@@ -1,8 +1,276 @@
-<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Cursor Drawn Constellation Thread</title><style>:root{--preview-background:#020712}canvas{width:100%;height:100%}.copy{position:absolute;left:14px;top:49px;width:100px;color:#f1f5ff}.copy small{font:800 6px monospace;letter-spacing:.14em;color:#9fbaff}.copy h1{margin:8px 0;font:950 20px/.84 system-ui;letter-spacing:-.06em}.coord{position:absolute;right:11px;bottom:11px;color:#a5baff;font:800 6px monospace}.scene-caption{display:none}</style>  <script type="module" crossorigin src="./assets/cursor-drawn-constellation-thread-DKYsJ1B4.js"></script>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>North Spur Observation Plate</title>
+  <style>
+    :root {
+      --preview-background: #02070e;
+      --ink: #f6f2df;
+      --muted: rgba(224, 234, 238, .64);
+      --cyan: #93efe1;
+      --amber: #f2b76e;
+      --line: rgba(213, 235, 238, .2);
+    }
+
+    button { font: inherit; }
+
+    .preview-stage {
+      color: var(--ink);
+      background: #02070e;
+      cursor: crosshair;
+      touch-action: none;
+      outline: none;
+    }
+
+    .preview-stage:focus-visible::after {
+      content: "";
+      position: absolute;
+      inset: 3px;
+      z-index: 30;
+      border: 1px solid rgba(147, 239, 225, .76);
+      border-radius: 2px;
+      pointer-events: none;
+    }
+
+    #plate-canvas-host,
+    #plate-canvas-host canvas {
+      position: absolute;
+      inset: 0;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    .hud { position: absolute; inset: 0; z-index: 10; pointer-events: none; }
+
+    .brand {
+      position: absolute;
+      top: 14px;
+      left: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font: 750 7px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .brand-mark {
+      width: 15px;
+      height: 15px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(147, 239, 225, .62);
+      border-radius: 50%;
+      color: var(--cyan);
+      font-size: 8px;
+    }
+
+    .brand small { display: block; margin-top: 3px; color: var(--muted); font-size: 5px; letter-spacing: .12em; }
+
+    .status {
+      position: absolute;
+      top: 13px;
+      right: 14px;
+      min-width: 119px;
+      padding: 7px 9px;
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      background: rgba(2, 9, 16, .66);
+      backdrop-filter: blur(9px);
+      text-align: right;
+    }
+
+    .status-row { display: flex; justify-content: space-between; gap: 12px; align-items: center; }
+    .status-label { color: var(--muted); font: 700 5px/1 ui-monospace, monospace; letter-spacing: .15em; text-transform: uppercase; }
+    #mission-status { color: var(--cyan); font: 800 6px/1 ui-monospace, monospace; letter-spacing: .12em; }
+    #route-readout { display: block; margin-top: 5px; font: 760 11px/1 system-ui, sans-serif; letter-spacing: -.03em; }
+
+    .instruction {
+      position: absolute;
+      left: 15px;
+      top: 48px;
+      width: 116px;
+      text-shadow: 0 1px 10px rgba(0, 0, 0, .72);
+    }
+
+    .instruction .eyebrow { color: var(--amber); font: 800 5px/1 ui-monospace, monospace; letter-spacing: .16em; text-transform: uppercase; }
+    .instruction h1 { margin: 6px 0 7px; font: 760 17px/.9 system-ui, sans-serif; letter-spacing: -.065em; }
+    .instruction p { margin: 0; color: rgba(231, 237, 238, .72); font: 550 6px/1.35 system-ui, sans-serif; }
+
+    .target-card {
+      position: absolute;
+      left: 15px;
+      bottom: 39px;
+      width: 115px;
+      padding: 8px 9px;
+      border-left: 2px solid var(--cyan);
+      background: linear-gradient(90deg, rgba(2, 10, 18, .8), rgba(2, 10, 18, .24));
+      backdrop-filter: blur(7px);
+    }
+
+    .target-card small { display: block; color: var(--muted); font: 700 5px/1 ui-monospace, monospace; letter-spacing: .14em; text-transform: uppercase; }
+    #target-code { display: block; margin: 4px 0 3px; font: 800 10px/1 system-ui, sans-serif; }
+    #target-evidence { color: rgba(231, 237, 238, .72); font: 650 5px/1.25 ui-monospace, monospace; letter-spacing: .06em; }
+
+    .route-strip {
+      position: absolute;
+      left: 143px;
+      right: 143px;
+      bottom: 14px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .route-node {
+      width: 16px;
+      height: 16px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(231, 241, 242, .26);
+      border-radius: 50%;
+      background: rgba(2, 9, 16, .72);
+      color: rgba(231, 241, 242, .54);
+      font: 800 5px/1 ui-monospace, monospace;
+      transition: border-color .15s ease, color .15s ease, background .15s ease;
+    }
+
+    .route-node.is-complete { color: #061311; border-color: var(--cyan); background: var(--cyan); }
+    .route-node.is-next { color: var(--amber); border-color: var(--amber); }
+    .route-link { width: 8px; height: 1px; background: rgba(231, 241, 242, .24); }
+    .route-link.is-complete { background: var(--cyan); }
+
+    .controls {
+      position: absolute;
+      right: 14px;
+      bottom: 13px;
+      z-index: 22;
+      display: flex;
+      gap: 4px;
+      pointer-events: auto;
+    }
+
+    .controls button {
+      min-height: 20px;
+      padding: 0 8px;
+      border: 1px solid rgba(231, 241, 242, .23);
+      border-radius: 2px;
+      color: rgba(244, 246, 239, .84);
+      background: rgba(2, 9, 16, .74);
+      font: 750 5px/1 ui-monospace, monospace;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      backdrop-filter: blur(8px);
+      cursor: pointer;
+    }
+
+    .controls button:hover,
+    .controls button:focus-visible { color: var(--cyan); border-color: rgba(147, 239, 225, .65); outline: none; }
+    .controls [data-constellation-action="confirm"] { color: #061311; border-color: var(--cyan); background: var(--cyan); }
+    .controls [data-constellation-action="confirm"]:disabled { color: rgba(230, 239, 235, .42); border-color: rgba(231, 241, 242, .15); background: rgba(2, 9, 16, .58); cursor: not-allowed; }
+
+    .library-badge {
+      top: auto;
+      left: 15px;
+      bottom: 13px;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      color: rgba(231, 241, 242, .44);
+      font-size: 5px;
+      backdrop-filter: none;
+    }
+
+    @media (max-width: 360px), (max-height: 190px) {
+      .brand { top: 7px; left: 8px; gap: 5px; }
+      .brand-mark { width: 11px; height: 11px; font-size: 6px; }
+      .brand small, .instruction p, .library-badge { display: none; }
+      .instruction { top: 29px; left: 8px; width: 76px; }
+      .instruction h1 { margin-top: 4px; font-size: 10px; }
+      .status { top: 7px; right: 7px; min-width: 79px; padding: 5px 6px; }
+      .status-label { font-size: 4px; }
+      #mission-status { font-size: 4px; }
+      #route-readout { margin-top: 3px; font-size: 7px; }
+      .target-card { left: 8px; bottom: 7px; width: 75px; padding: 5px 6px; }
+      #target-code { margin: 2px 0; font-size: 6px; }
+      #target-evidence, .target-card small { font-size: 3.5px; }
+      .route-strip { left: 91px; right: 70px; bottom: 8px; gap: 1px; }
+      .route-node { width: 10px; height: 10px; font-size: 3.5px; }
+      .route-link { width: 3px; }
+      .controls { right: 7px; bottom: 7px; gap: 2px; }
+      .controls button { min-height: 13px; padding: 0 4px; font-size: 3.5px; }
+      .controls [data-constellation-action="reset"] { display: none; }
+    }
+
+    @media (max-width: 180px), (max-height: 95px) {
+      .brand { top: 4px; left: 4px; }
+      .brand-mark { width: 8px; height: 8px; border: 0; }
+      .brand > span:last-child { font-size: 4px; }
+      .instruction { top: 18px; left: 4px; width: 51px; }
+      .instruction .eyebrow { font-size: 3px; }
+      .instruction h1 { font-size: 6px; line-height: .92; }
+      .status { top: 4px; right: 4px; min-width: 49px; padding: 3px 4px; }
+      .status-label { display: none; }
+      #route-readout { font-size: 5px; }
+      .target-card { left: 4px; bottom: 4px; width: 52px; padding: 3px 4px; border-left-width: 1px; }
+      .target-card small, #target-evidence { display: none; }
+      #target-code { font-size: 4px; }
+      .route-strip { left: 59px; right: 42px; bottom: 4px; }
+      .route-node { width: 7px; height: 7px; border: 0; font-size: 3px; }
+      .route-link { width: 2px; }
+      .controls { right: 4px; bottom: 4px; }
+      .controls button { min-height: 8px; padding: 0 2px; border: 0; font-size: 3px; }
+      .controls [data-constellation-action="undo"] { display: none; }
+    }
+  </style>
+  <script type="module" crossorigin src="./assets/cursor-drawn-constellation-thread-CO1Acegl.js"></script>
   <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
-  <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
   <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
   <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
-  <link rel="modulepreload" crossorigin href="./assets/expansion-b-utils-CD_J0IHW.js">
   <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage"><canvas tabindex="0" aria-label="Pointer draws a snapping constellation thread"></canvas><section class="copy"><small>SKY THREAD / 18</small><h1>DRAW BETWEEN THE STARS.</h1></section><span class="coord">RA 14H · DEC +19°</span><span class="library-badge">p5.js · constellation thread</span></main></body></html>
+</head>
+<body>
+  <main id="constellation-stage" class="preview-stage" tabindex="0" aria-label="North Spur observation plate. Drag through the six highlighted pixel-derived stars in right-ascension order, or use arrow keys and Enter.">
+    <div id="plate-canvas-host" aria-hidden="true"></div>
+
+    <section class="hud" aria-live="polite">
+      <div class="brand">
+        <span class="brand-mark">✦</span>
+        <span>NORTH SPUR <small>OBSERVATION PLATE 07 · 23:40 UTC</small></span>
+      </div>
+
+      <div class="status">
+        <div class="status-row"><span class="status-label">route integrity</span><span id="mission-status">ACQUIRING</span></div>
+        <strong id="route-readout">0 / 6 FIXES</strong>
+      </div>
+
+      <div class="instruction">
+        <span class="eyebrow">Night navigation / human check</span>
+        <h1>TRACE THE CLEAN SKY CORRIDOR.</h1>
+        <p>Drag through each highlighted source star from west to east. Image contrast decides every valid fix.</p>
+      </div>
+
+      <div class="target-card">
+        <small>next pixel-derived fix</small>
+        <strong id="target-code">WAITING FOR PLATE</strong>
+        <span id="target-evidence">DECODING SOURCE PIXELS</span>
+      </div>
+
+      <div id="route-strip" class="route-strip" aria-hidden="true"></div>
+    </section>
+
+    <div class="controls" aria-label="Route controls">
+      <button type="button" data-constellation-action="undo">Undo</button>
+      <button type="button" data-constellation-action="reset">Reset</button>
+      <button type="button" data-constellation-action="confirm" disabled>Confirm</button>
+    </div>
+
+    <span class="library-badge">p5.js 2.3 · real pixel plate</span>
+  </main>
+
+</body>
+</html>

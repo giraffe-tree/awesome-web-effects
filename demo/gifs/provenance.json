@@ -1614,7 +1614,7 @@
       "originUrl": "https://github.com/processing/p5.js",
       "demoSourcePath": "demo/preview-demos/cursor-drawn-constellation-thread.html",
       "libraryVersion": "p5@2.3.0",
-      "generatedAt": "2026-07-20",
+      "generatedAt": "2026-07-21",
       "outputPath": "demo/gifs/captured/cursor-drawn-constellation-thread.gif",
       "usageBasis": "original local mechanism demo using p5@2.3.0; verify license https://github.com/processing/p5.js/blob/HEAD/license.txt"
     },

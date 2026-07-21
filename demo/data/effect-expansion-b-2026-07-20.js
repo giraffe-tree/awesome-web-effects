@@ -191,12 +191,12 @@ export const effectExpansion150BatchB = [
     scores: score(20, 20, 20, 15, 15, 10), rationaleZh: '原创 ImageGen 960×640 五材质水下校准板经同源 fetch、精确源 SHA、浏览器与 p5 双解码，并读取 5,184 个派生像素；每个像素的亮度、粗糙度与色度真实绑定材质类别、折射率、散射、局部放大位移及 600+ 个焦散顶点。真人 hover、捕获拖拽、键盘、range、深浅按钮与 Reset 拥有完整光学状态，无 autoplay、排练、fallback、合成输入或预览时钟变异。'
   },
   {
-    id: 'cursor-drawn-constellation-thread', order: 147, name: 'Cursor drawn constellation thread', nameZh: '指针绘制星座线', category: 'canvas', sourceUrl: 'https://github.com/anvaka/atree',
-    difference: '指针动态选择距离最近的七颗星并按距离缝合成路径，选中星有独立光环，不是全连接粒子网。',
-    behavior: { trigger: 'pointer movement', response: 'A thread snaps through the nearest stars and continually redraws a constellation', timing: 'continuous nearest-neighbor stitching', layer: 'star map canvas' },
-    prompt: '生成固定星图；每帧寻找距指针最近的七颗星，按距离顺序绘制一条带节点光环的星座线。',
-    implementation: p5Implementation("new p5(p => { p.draw = () => drawThread(p, nearestStars(pointer, 7)); });", 'https://github.com/anvaka/atree'),
-    scores: score(18, 19, 18, 15, 15, 10), rationaleZh: '星线选择由空间关系驱动，用户轨迹会产生明显不同的星座构图。'
+    id: 'cursor-drawn-constellation-thread', order: 147, name: 'North Spur night-route calibration', nameZh: 'North Spur 夜间星路校准', category: 'canvas', sourceUrl: 'https://github.com/processing/p5.js',
+    difference: '星线不再追着指针任意连点：一张夜间观测底片的真实局部亮度峰生成 18 颗候选星及严格从西向东的六段校准路线，只有按顺序穿过像素目标才能确认。',
+    behavior: { trigger: 'trusted hover, captured mouse/touch/pen route trace, keyboard, or visible undo/reset/confirm controls', response: 'Acquire six pixel-derived navigation fixes in order, inspect confidence, undo mistakes, and explicitly seal the corridor', timing: 'human-paced retained route construction with no autonomous stitching', layer: 'full-stage p5 observation plate, target rings, route and mission evidence' },
+    prompt: '制作 North Spur 虚构夜间导航校准台。同源加载并精确校验一张 ImageGen 北大西洋星空底片，用浏览器与 p5 解码 160×90 像素，提取局部亮度峰、筛出 18 颗空间分离候选星，并按像素坐标构造六个西向东 fix。仅允许可信 hover、捕获 mouse/touch/pen 拖线、键盘与 Undo/Reset/Confirm 操作；错误顺序拒绝，完整路线必须显式确认，首帧静止。',
+    implementation: p5Implementation("const candidates = selectSeparatedLocalMaxima(sourcePixels, 18); const route = buildWestToEastFixes(candidates, 6); drawHumanTrace(p, route, acquiredFixCount);", 'https://github.com/processing/p5.js'),
+    scores: score(20, 20, 20, 15, 15, 10), rationaleZh: '原创 ImageGen 960×640 夜间观测底片经同源 fetch、精确源 SHA、浏览器+p5 双解码与 14,400 像素读取；599 个局部峰筛成 18 颗候选星，像素亮度/对比度决定置信度与六段严格递增路线。真人 hover、捕获拖线、键盘及 Undo/Reset/Confirm 可采集、撤销、复补和封存路线，无 autoplay、排练、fallback、合成输入或预览时钟变异。'
   },
   {
     id: 'elastic-voronoi-focus-mosaic', order: 148, name: 'Elastic Voronoi focus mosaic', nameZh: '弹性 Voronoi 焦点马赛克', category: 'canvas', sourceUrl: 'https://github.com/gorhill/Javascript-Voronoi',

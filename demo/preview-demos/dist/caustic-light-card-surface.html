@@ -1,8 +1,283 @@
-<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Caustic Light Card Surface</title><style>:root{--preview-background:#031a22}canvas{width:100%;height:100%}.copy{position:absolute;left:14px;top:49px;width:101px;color:#e8fbff}.copy small{font:800 6px monospace;letter-spacing:.14em;color:#65e7ff}.copy h1{margin:8px 0;font:950 20px/.84 system-ui;letter-spacing:-.06em}.depth{position:absolute;right:12px;bottom:12px;color:#8eeeff;font:800 6px monospace}.scene-caption{display:none}</style>  <script type="module" crossorigin src="./assets/caustic-light-card-surface-C3nYJWJQ.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
-  <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
-  <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
-  <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
-  <link rel="modulepreload" crossorigin href="./assets/expansion-b-utils-CD_J0IHW.js">
-  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage"><canvas tabindex="0" aria-label="Animated water caustics wash over a card"></canvas><section class="copy"><small>LIGHT / WATER</small><h1>A CARD UNDER THE SURFACE.</h1></section><span class="depth">DEPTH 2.4M</span><span class="library-badge">p5.js · caustic field</span></main></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>p5.js — Human-driven Caustic Material Reader</title>
+    <link rel="icon" href="data:,">
+    <style>
+      :root {
+        --preview-background: #062b34;
+        color-scheme: dark;
+      }
+
+      button,
+      input { font: inherit; }
+
+      .caustic-stage {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        background: #062b34;
+        color: #f8f2df;
+        cursor: crosshair;
+        outline: none;
+        touch-action: none;
+        user-select: none;
+      }
+
+      .caustic-stage:focus-visible::after {
+        position: absolute;
+        z-index: 14;
+        inset: 3px;
+        border: 1px solid #fff1b5;
+        border-radius: 11px;
+        pointer-events: none;
+        content: "";
+      }
+
+      .canvas-host,
+      .canvas-host canvas {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .canvas-host { z-index: 0; }
+      .canvas-host canvas { display: block; }
+
+      .caustic-stage .library-badge {
+        top: clamp(5px,2.6vw,15px);
+        left: clamp(6px,2.8vw,18px);
+        z-index: 8;
+        border-color: rgba(238,247,220,.34);
+        background: rgba(3,25,30,.72);
+        color: #eef6df;
+        box-shadow: 0 7px 21px rgba(1,24,29,.24);
+      }
+
+      .source-proof {
+        position: absolute;
+        z-index: 8;
+        top: clamp(6px,2.8vw,17px);
+        right: clamp(7px,3vw,20px);
+        display: flex;
+        align-items: center;
+        gap: clamp(3px,.8vw,6px);
+        color: rgba(247,245,225,.88);
+        font: 850 clamp(5px,1.15vw,8px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .13em;
+        text-transform: uppercase;
+        text-shadow: 0 1px 6px #001d24;
+        pointer-events: none;
+      }
+
+      .source-proof::before {
+        width: clamp(4px,.85vw,6px);
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: #b8f6d6;
+        box-shadow: 0 0 11px rgba(184,246,214,.88);
+        content: "";
+      }
+
+      .title-block {
+        position: absolute;
+        z-index: 7;
+        left: clamp(7px,3.1vw,22px);
+        bottom: clamp(7px,4vw,25px);
+        width: min(36%, 245px);
+        pointer-events: none;
+        text-shadow: 0 2px 14px rgba(0,20,25,.75);
+      }
+
+      .title-block small {
+        display: block;
+        color: #b8f6d6;
+        font: 900 clamp(5px,1.3vw,9px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .15em;
+        text-transform: uppercase;
+      }
+
+      .title-block h1 {
+        margin: clamp(4px,1.4vw,10px) 0 0;
+        font: 680 clamp(12px,4.7vw,34px)/.86 Georgia, "Times New Roman", serif;
+        letter-spacing: -.055em;
+      }
+
+      .material-metrics {
+        display: flex;
+        gap: clamp(5px,1.8vw,13px);
+        margin-top: clamp(5px,1.6vw,11px);
+      }
+
+      .material-metric {
+        display: grid;
+        gap: 2px;
+        min-width: 0;
+      }
+
+      .material-metric span {
+        color: rgba(242,244,222,.58);
+        font: 800 clamp(4px,.98vw,7px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+      }
+
+      .material-metric output {
+        overflow: hidden;
+        color: #fff8df;
+        font: 900 clamp(6px,1.5vw,11px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .03em;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .probe-readout {
+        --probe-x: 52%;
+        --probe-y: 47%;
+        position: absolute;
+        z-index: 6;
+        left: var(--probe-x);
+        top: var(--probe-y);
+        padding: clamp(3px,.75vw,5px) clamp(5px,1.2vw,9px);
+        border: 1px solid rgba(255,244,201,.4);
+        border-radius: 999px;
+        background: rgba(2,25,31,.66);
+        color: #fff1b5;
+        font: 900 clamp(4px,1.18vw,8px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .1em;
+        transform: translate(-50%, calc(-50% + clamp(29px,11vw,70px)));
+        white-space: nowrap;
+        text-transform: uppercase;
+        box-shadow: 0 7px 22px rgba(0,24,30,.25);
+        backdrop-filter: blur(8px);
+        pointer-events: none;
+      }
+
+      .light-controls {
+        position: absolute;
+        z-index: 10;
+        right: clamp(6px,2.8vw,19px);
+        bottom: clamp(6px,3vw,19px);
+        display: grid;
+        grid-template-columns: auto minmax(42px, 96px) auto auto;
+        align-items: center;
+        gap: 3px;
+        padding: 3px;
+        border: 1px solid rgba(246,242,214,.28);
+        border-radius: 999px;
+        background: rgba(2,25,31,.76);
+        box-shadow: 0 9px 25px rgba(0,18,23,.34);
+        cursor: default;
+        backdrop-filter: blur(9px);
+      }
+
+      .light-control {
+        display: grid;
+        min-width: 0;
+        height: clamp(17px,3.9vw,27px);
+        padding: 0 clamp(5px,1.4vw,10px);
+        place-items: center;
+        border: 1px solid transparent;
+        border-radius: 999px;
+        background: transparent;
+        color: #f9f4df;
+        font: 900 clamp(5px,1.25vw,8px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+
+      .light-control:hover,
+      .light-control:focus-visible {
+        border-color: rgba(255,242,188,.72);
+        background: rgba(255,246,210,.08);
+        outline: none;
+      }
+
+      .depth-range {
+        width: 100%;
+        min-width: 0;
+        height: clamp(17px,3.9vw,27px);
+        margin: 0;
+        accent-color: #fff1b5;
+        cursor: ew-resize;
+      }
+
+      .gesture-note {
+        position: absolute;
+        z-index: 7;
+        left: 50%;
+        bottom: clamp(8px,3.4vw,22px);
+        color: rgba(246,245,223,.64);
+        font: 800 clamp(4px,1.05vw,7px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .12em;
+        text-shadow: 0 1px 6px #001d24;
+        text-transform: uppercase;
+        transform: translateX(-50%);
+        white-space: nowrap;
+        pointer-events: none;
+      }
+
+      .runtime-ledger {
+        position: fixed;
+        left: -10000px;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+      }
+
+      @media (max-width: 240px), (max-height: 115px) {
+        .caustic-stage .library-badge { top: 3px; left: 3px; padding: 3px 4px; font-size: 5px; letter-spacing: .03em; }
+        .source-proof { top: 5px; right: 4px; font-size: 0; letter-spacing: .04em; }
+        .source-proof::after { font-size: 4px; content: "Live"; }
+        .title-block { left: 4px; bottom: 4px; width: 38%; }
+        .title-block small { font-size: 4px; letter-spacing: .06em; }
+        .title-block h1 { margin-top: 3px; font-size: 10px; }
+        .material-metrics { gap: 4px; margin-top: 3px; }
+        .material-metric:nth-child(n+2) { display: none; }
+        .material-metric span { font-size: 4px; }
+        .material-metric output { max-width: 52px; font-size: 5px; }
+        .probe-readout { padding: 2px 4px; font-size: 4px; transform: translate(-50%,calc(-50% + 18px)); }
+        .light-controls { right: 3px; bottom: 3px; grid-template-columns: auto 38px auto auto; gap: 1px; padding: 1px; }
+        .light-control { height: 13px; padding: 0 3px; font-size: 4px; letter-spacing: .02em; }
+        .depth-range { height: 13px; }
+        .gesture-note { display: none; }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/caustic-light-card-surface-B--KqCKr.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+    <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
+    <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main class="preview-stage">
+      <section class="caustic-stage" id="caustic-stage" data-preview-mechanism="p5-pixel-derived-human-light-refraction" tabindex="0" aria-label="Aquatic material inspection. Hover to sample. Hold and drag to focus the caustic lens. Use arrow keys to move, brackets to change depth, Enter to focus, or the visible depth controls.">
+        <div class="canvas-host" id="caustic-canvas-host" aria-hidden="true"></div>
+        <span class="library-badge">p5.js · pixel caustics</span>
+        <span class="source-proof" id="source-proof">Source pixels / loading</span>
+        <section class="title-block" aria-label="Material response">
+          <small>Hydro / optical lab 07</small>
+          <h1>Read the water.</h1>
+          <div class="material-metrics">
+            <label class="material-metric"><span>Surface</span><output id="material-readout">Metal</output></label>
+            <label class="material-metric"><span>IOR</span><output id="ior-readout">1.520</output></label>
+            <label class="material-metric"><span>Scatter</span><output id="scatter-readout">42%</output></label>
+          </div>
+        </section>
+        <output class="probe-readout" id="probe-readout">Focus 42 · depth 52</output>
+        <p class="gesture-note">Hover to sample · hold + drag to focus</p>
+        <div class="light-controls" aria-label="Caustic depth controls">
+          <button class="light-control" type="button" data-light-action="shallower" aria-label="Make the inspection light shallower">−</button>
+          <input class="depth-range" id="depth-range" type="range" min="18" max="88" value="52" step="1" aria-label="Inspection light depth">
+          <button class="light-control" type="button" data-light-action="deeper" aria-label="Make the inspection light deeper">+</button>
+          <button class="light-control" type="button" data-light-action="reset">Reset</button>
+        </div>
+        <textarea class="runtime-ledger" id="runtime-ledger" tabindex="-1" aria-hidden="true"></textarea>
+      </section>
+    </main>
+  </body>
+</html>

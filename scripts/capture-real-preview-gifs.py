@@ -1770,6 +1770,59 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 )
             elif index == 29:
                 page.mouse.move(300, 20)
+        elif demo["id"] == "caustic-light-card-surface":
+            if index == 3:
+                page.mouse.move(248, 54)
+            elif index == 5:
+                page.mouse.move(72, 58)
+                page.mouse.down()
+            elif index == 6:
+                page.mouse.move(128, 42, steps=3)
+            elif index == 7:
+                page.mouse.move(226, 54, steps=3)
+            elif index == 8:
+                page.mouse.move(266, 122, steps=3)
+            elif index == 9:
+                page.mouse.move(154, 126, steps=3)
+            elif index == 10:
+                page.mouse.up()
+            elif index == 13:
+                page.locator('[data-light-action="shallower"]').click()
+            elif index == 15:
+                page.locator('[data-light-action="deeper"]').click()
+            elif index == 17:
+                range_bounds = page.locator("#depth-range").bounding_box()
+                if not range_bounds:
+                    raise RuntimeError("caustic-light-card-surface depth range has no bounds")
+                page.mouse.move(
+                    range_bounds["x"] + range_bounds["width"] * .88,
+                    range_bounds["y"] + range_bounds["height"] * .5,
+                )
+                page.mouse.down()
+            elif index == 18:
+                range_bounds = page.locator("#depth-range").bounding_box()
+                if not range_bounds:
+                    raise RuntimeError("caustic-light-card-surface depth range has no bounds")
+                page.mouse.move(
+                    range_bounds["x"] + range_bounds["width"] * .02,
+                    range_bounds["y"] + range_bounds["height"] * .5,
+                    steps=4,
+                )
+            elif index == 19:
+                page.mouse.up()
+            elif index == 20:
+                page.locator("#caustic-stage").focus()
+                page.keyboard.press("ArrowLeft")
+            elif index == 21:
+                page.keyboard.press("ArrowUp")
+            elif index == 22:
+                page.keyboard.press("]")
+            elif index == 23:
+                page.keyboard.press("Enter")
+            elif index == 25:
+                page.locator('[data-light-action="reset"]').click()
+            elif index == 28:
+                page.mouse.move(244, 55)
         elif demo["id"] == "kinetic-paper-fold-map":
             if index == 1:
                 page.mouse.move(280, 100)
@@ -4843,6 +4896,110 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["ready"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture a trusted proof hover, captured release-range draft, finite four-digit Motion transitions, explicit sync, reversible keyboard plan, and exact proof restore over the pixel-derived Harbor Hall seat ceiling: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "caustic-light-card-surface":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-pixel-derived-aquatic-material-optical-inspection"
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["mechanism"] != "committed-photo-pixels-drive-human-positioned-refraction-caustic-geometry-and-material-readout"
+            or interaction["assetMechanismRole"] != "every-sampled-pixel-binds-local-luminance-gradient-material-class-refraction-index-and-caustic-gain"
+            or interaction["acceptedInputs"] != ["mouse-hover", "mouse-drag", "touch-drag", "pen-drag", "keyboard", "button-control", "range-control"]
+            or not interaction["userInputRequired"]
+            or not interaction["strictTrustedInputGuard"]
+            or not interaction["initialFrameStatic"]
+            or not interaction["initialStillVerified"]
+            or interaction["automaticCycle"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["previewClockMutationCount"] != 0
+            or interaction["nonInputVisualMutationCountAfterReady"] != 0
+            or interaction["inputCount"] < 22
+            or interaction["trustedInputCount"] != interaction["inputCount"]
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["pointerEnterCount"] < 1
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerMoveCount"] < 10
+            or interaction["pointerReleaseCount"] != 1
+            or interaction["pointerCancelCount"] != 0
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerCaptureReleaseCount"] != 1
+            or interaction["hoverMutationCount"] < 3
+            or interaction["dragMutationCount"] < 10
+            or interaction["keyboardInputCount"] != 4
+            or interaction["keyboardMutationCount"] != 4
+            or interaction["buttonActivationCount"] != 3
+            or interaction["buttonMutationCount"] != 3
+            or interaction["rangeInputCount"] < 3
+            or interaction["rangeMutationCount"] != interaction["rangeInputCount"]
+            or interaction["resetActionCount"] != 1
+            or interaction["humanVisualMutationCount"] < 20
+            or interaction["humanInputCausalityCount"] != interaction["humanVisualMutationCount"]
+            or interaction["activePointerId"] is not None
+            or interaction["pointerCaptured"]
+            or interaction["lastPointerType"] != "mouse"
+            or interaction["lastInputTrusted"] is not True
+            or interaction["maximumProbeTravel"] < .35
+            or interaction["minimumHumanDepth"] > .22
+            or interaction["maximumHumanDepth"] < .72
+            or interaction["sourceSampleReadCount"] < 20
+            or interaction["distinctMaterialVisitedCount"] < 4
+            or len(interaction["visitedMaterialIds"]) < 4
+            or interaction["assetFetchCount"] != 1
+            or interaction["assetResponseStatus"] != 200
+            or "image/jpeg" not in interaction["assetMimeType"]
+            or not interaction["assetSameOrigin"]
+            or interaction["assetByteLength"] != 277104
+            or interaction["assetSha256"] != "72850e8dad0c1c0f34b2f2b3eafef430c24cbe5bddc5aa88434a0e2371ed967c"
+            or not interaction["assetShaMatchesExpected"]
+            or not interaction["browserImageDecoded"]
+            or interaction["sourceNaturalWidth"] != 960
+            or interaction["sourceNaturalHeight"] != 640
+            or not interaction["p5ImageDecoded"]
+            or interaction["p5ImageClass"] != "p5.Image"
+            or interaction["p5ImageWidth"] != 960
+            or interaction["p5ImageHeight"] != 640
+            or interaction["p5ImagePixelLength"] != 2457600
+            or interaction["sampleWidth"] != 96
+            or interaction["sampleHeight"] != 54
+            or interaction["sampledPixelCount"] != 5184
+            or interaction["sampledByteLength"] != 20736
+            or len(interaction["sampledPixelSha256"]) != 64
+            or not interaction["sampledPixelSha256"].strip("0")
+            or interaction["opaquePixelCount"] != 5184
+            or interaction["distinctQuantizedColorCount"] <= 450
+            or interaction["lumaRange"] <= .42
+            or interaction["roughnessRange"] <= .2
+            or interaction["responseRange"] <= .2
+            or len(interaction["materialCategoryCounts"]) != 6
+            or sum(interaction["materialCategoryCounts"]) != 5184
+            or interaction["nonEmptyMaterialCategoryCount"] < 5
+            or interaction["materialBindingChecksum"] <= 0
+            or not interaction["assetEvidenceReady"]
+            or not interaction["materialEvidenceReady"]
+            or not interaction["p5InstanceReady"]
+            or not interaction["p5CanvasReady"]
+            or interaction["p5CanvasWidth"] != 320
+            or interaction["p5CanvasHeight"] != 180
+            or interaction["stageWidth"] != 320
+            or interaction["stageHeight"] != 180
+            or interaction["stageCoverageRatio"] <= .99
+            or interaction["canvasCoverageRatio"] <= .99
+            or interaction["p5CompletedDrawCount"] < 20
+            or interaction["causticBandCount"] < 12
+            or interaction["causticVertexCount"] <= 600
+            or interaction["refractionSampleCount"] < 20
+            or interaction["lastRenderedBindingChecksum"] != interaction["materialBindingChecksum"]
+            or interaction["renderCount"] < 36
+            or not interaction["runtimeAssertionPassed"]
+            or not interaction["ready"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture trusted hover, captured multi-material lens dragging, keyboard/range depth control, visible shallower/deeper/reset actions, and robust pixel-derived optical evidence without automatic drift: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "kinetic-paper-fold-map":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

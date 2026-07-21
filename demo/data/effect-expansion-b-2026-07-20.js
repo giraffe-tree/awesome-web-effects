@@ -183,12 +183,12 @@ export const effectExpansion150BatchB = [
     scores: score(20, 20, 20, 15, 15, 10), rationaleZh: '原创 ImageGen 960×640 虚构场馆座席证据板经同源 fetch、精确源 SHA、浏览器解码与 96×64 全像素读取；五类像素数量直接计算 verified ceiling，分区均色与悬停源像素决定翻牌面材质和状态。真人 hover、捕获 mouse/touch/pen range、键盘、±10、Sync 与 Proof 可制定、提交和恢复计划，四位暂停构建的 Motion 翻牌只在输入后有限落位，无 autoplay、排练、fallback、合成输入或预览时钟变异。'
   },
   {
-    id: 'caustic-light-card-surface', order: 146, name: 'Caustic light card surface', nameZh: '焦散光卡片表面', category: 'canvas', sourceUrl: 'https://github.com/processing/p5.js',
-    difference: '二十四条相干波线在卡片裁切区域内叠加出水下焦散，而不是通用渐变或噪声闪烁。',
-    behavior: { trigger: 'pointer phase or animation frame', response: 'Layered wave fronts focus and drift across a submerged card', timing: 'continuous interference field', layer: 'card lighting surface' },
-    prompt: '在圆角卡片裁切区内叠加多组相干正弦曲线，用 lighter 合成表现缓慢漂移的水下焦散。',
-    implementation: p5Implementation("new p5(p => { p.draw = () => drawCausticWavefronts(p.drawingContext, phase); });", 'https://github.com/processing/p5.js'),
-    scores: score(18, 20, 18, 15, 15, 10), rationaleZh: '水下材质、焦散层次和文字卡片形成完成度很高的光影场景。'
+    id: 'caustic-light-card-surface', order: 146, name: 'Hydro optical material reader', nameZh: 'Hydro 水下材质光学检查', category: 'canvas', sourceUrl: 'https://github.com/processing/p5.js',
+    difference: '焦散不再悬浮于样板卡面：一张五材质水下校准板的真实像素同时决定局部材质、IOR、散射、折射位移与波线形态，用户亲自移动探头并改变深度。',
+    behavior: { trigger: 'trusted hover, captured mouse/touch/pen drag, keyboard, depth range, or visible controls', response: 'Move a refractive inspection lens across pixel-derived glass, stone, ceramic, rubber, metal, and water responses', timing: 'human-held, reversible optical states with no autonomous drift', layer: 'full-stage decoded material plate and p5 caustic lens' },
+    prompt: '制作 Hydro 虚构水下材质光学检查台。同源加载并精确校验一张 ImageGen 五材质校准板，用浏览器与 p5 解码，读取 96×54 像素的亮度、邻域梯度和色度来分类材质并计算 IOR、散射与焦散响应。仅允许可信 hover、捕获 mouse/touch/pen 拖动、键盘、深度 range 和可见按钮移动探头、聚焦及调深；每个结果可以停留和复位，首帧静止。',
+    implementation: p5Implementation("const local = samplePixelField(probe); drawRefractedSource(p, local); drawPixelBoundCausticBands(p, local.roughness, local.response);", 'https://github.com/processing/p5.js'),
+    scores: score(20, 20, 20, 15, 15, 10), rationaleZh: '原创 ImageGen 960×640 五材质水下校准板经同源 fetch、精确源 SHA、浏览器与 p5 双解码，并读取 5,184 个派生像素；每个像素的亮度、粗糙度与色度真实绑定材质类别、折射率、散射、局部放大位移及 600+ 个焦散顶点。真人 hover、捕获拖拽、键盘、range、深浅按钮与 Reset 拥有完整光学状态，无 autoplay、排练、fallback、合成输入或预览时钟变异。'
   },
   {
     id: 'cursor-drawn-constellation-thread', order: 147, name: 'Cursor drawn constellation thread', nameZh: '指针绘制星座线', category: 'canvas', sourceUrl: 'https://github.com/anvaka/atree',

@@ -39,12 +39,12 @@ export const effectExpansion150BatchB = [
     scores: score(18, 19, 19, 15, 15, 10), rationaleZh: '轨道运动与局部磁吸构成双重因果，工具按钮始终可辨且交互反馈强。'
   },
   {
-    id: 'stencil-text-scanline-window', order: 128, name: 'Stencil text scanline window', nameZh: '模板文字扫描窗', category: 'vector', sourceUrl: 'https://github.com/codrops/TextRepetitionEffect',
-    difference: '移动扫描尺决定彩色字面真实可见范围，空心字、实色字和刻度线形成印刷校色语义。',
-    behavior: { trigger: 'pointer or timed scan', response: 'A registration bar converts outlined letters into a chromatic stencil', timing: 'progress-linked horizontal wipe', layer: 'display typography' },
-    prompt: '实现空心标题与彩色字面叠合的扫描窗，扫描尺和 clip-path 必须共享同一进度。',
-    implementation: motionImplementation("const scan = animate(line, { opacity: [.9, 1, .9] }, { duration: 3 }); scan.pause();", 'https://github.com/codrops/TextRepetitionEffect'),
-    scores: score(18, 19, 18, 15, 15, 10), rationaleZh: '印刷模板、彩色扫描和测量刻度形成完整艺术方向，机制一眼明确。'
+    id: 'stencil-text-scanline-window', order: 128, name: 'Make-ready print registration gate', nameZh: 'Make-ready 印刷套准检查台', category: 'vector', sourceUrl: 'https://github.com/motiondivision/motion',
+    difference: '把自动横扫的彩色模板字变成印前放行检查：真实四色校样像素决定油墨色板、边缘风险、四个异常靶点和 HOLD/PASS 结论，用户必须亲自扫过证据再评估。',
+    behavior: { trigger: 'trusted hover, captured pointer drag, range, keyboard, or visible control', response: 'Seek the clipped REGISTER proof across real ink edges, collect four pixel-derived targets, then evaluate the source-backed press disposition', timing: 'human-owned paused Motion seek with finite reversible steps', layer: 'full-stage proof image, CSS background-clipped stencil, registration gate, targets, metrics, and controls' },
+    prompt: '制作一个全舞台印刷套准检查台：同源加载并精确校验一张 ImageGen 四色校样，用 192×128 像素读取派生色板、边缘风险和四个分离靶点；真人通过 hover、捕获式鼠标/触控/笔拖动、range、键盘和按钮移动扫描门，暂停的 Motion 控制器必须与 CSS clip-path 和 background-clip 进度一致。只有扫足证据并显式 Evaluate 后才能给出源像素决定的 HOLD/PASS；禁止 autoplay、排练、fallback、合成输入或预览时钟驱动。',
+    implementation: motionImplementation("const scanMotion = animate(probe, { value: [0, 1] }, { duration: 1, ease: 'linear', autoplay: false }); scanMotion.pause(); scanMotion.time = trustedHumanScanU; stage.style.setProperty('--scan-x', `${trustedHumanScanU * 100}%`);", 'https://github.com/motiondivision/motion'),
+    scores: score(20, 20, 20, 15, 15, 10), rationaleZh: '原创 ImageGen 四色套准校样被同源 fetch、精确源 SHA 与浏览器解码校验，并读取为 192×128 / 24,576 像素；真实颜色生成七类色板，邻域边缘与四色混合筛出四个空间分离靶点并决定风险与 HOLD/PASS。可信 hover、捕获拖拽、range、键盘和可见控件共同驱动暂停的 Motion seek、CSS 字面扫描窗、证据覆盖和显式放行判断，首帧与操作后都保持静止。'
   },
   {
     id: 'elastic-svg-rope-lettering', order: 129, name: 'Elastic SVG rope lettering', nameZh: '弹性 SVG 绳索字形', category: 'vector', sourceUrl: 'https://github.com/svgdotjs/svg.js',

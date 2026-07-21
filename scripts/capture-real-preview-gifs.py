@@ -1849,6 +1849,62 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 25:
                 route = page.evaluate("window.__PREVIEW_INTERACTION_STATE__.routeEvidence")
                 page.mouse.move(route[5]["u"] * 320, route[5]["v"] * 180)
+        elif demo["id"] == "stencil-text-scanline-window":
+            if index == 2:
+                page.mouse.move(286, 80)
+            elif index == 4:
+                page.mouse.move(285, 65)
+                page.mouse.down()
+            elif index == 5:
+                page.mouse.move(250, 115, steps=2)
+            elif index == 6:
+                page.mouse.move(210, 110, steps=2)
+            elif index == 7:
+                page.mouse.move(170, 95, steps=2)
+            elif index == 8:
+                page.mouse.move(130, 75, steps=2)
+            elif index == 9:
+                page.mouse.move(90, 55, steps=2)
+            elif index == 10:
+                page.mouse.move(45, 40, steps=2)
+            elif index == 11:
+                page.mouse.move(300, 90, steps=6)
+            elif index == 12:
+                page.mouse.up()
+            elif index == 14:
+                page.locator('[data-action="evaluate"]').click()
+            elif index == 16:
+                page.locator("#registration-stage").focus()
+                page.keyboard.press("r")
+            elif index == 18:
+                page.locator("#scan-range").focus()
+                page.keyboard.press("End")
+            elif index == 20:
+                page.locator("#registration-stage").focus()
+                page.keyboard.press("Home")
+            elif index == 21:
+                page.keyboard.press("ArrowRight")
+            elif index == 22:
+                page.keyboard.press("End")
+            elif index == 24:
+                page.locator('[data-action="evaluate"]').click()
+            elif index == 26:
+                page.mouse.move(300, 90)
+                page.mouse.down()
+            elif index == 27:
+                page.mouse.move(250, 80, steps=2)
+            elif index == 28:
+                page.mouse.move(200, 100, steps=2)
+            elif index == 29:
+                page.mouse.move(150, 70, steps=2)
+            elif index == 30:
+                page.mouse.move(100, 105, steps=2)
+            elif index == 31:
+                page.mouse.move(50, 90, steps=2)
+            elif index == 32:
+                page.mouse.up()
+            elif index == 34:
+                page.locator('[data-action="evaluate"]').click()
         elif demo["id"] == "cellular-automata-hover-bloom":
             if index == 3:
                 page.mouse.move(122, 93)
@@ -4929,7 +4985,7 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["pointerCaptureCount"] != 1
             or interaction["pointerCaptureReleaseCount"] != 1
             or "mouse" not in interaction["pointerTypesSeen"]
-            or interaction["keyboardInputCount"] != 3
+            or interaction["keyboardInputCount"] != 4
             or interaction["buttonActivationCount"] != 3
             or interaction["rangeMutationCount"] < 8
             or interaction["keyboardMutationCount"] != 3
@@ -5201,6 +5257,112 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["ready"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture a trusted six-fix pixel-derived night route, explicit confirmation, undo, keyboard reacquisition, and final reseal without automatic stitching: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "stencil-text-scanline-window":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-pixel-derived-print-registration-gate"
+            or interaction["claimedLibrary"] != "motion@12.42.2"
+            or interaction["renderer"] != "dom"
+            or interaction["mechanism"] != "human-seeks-a-paused-motion-control-synchronized-to-css-clipped-stencil-window-over-browser-decoded-proof-pixels"
+            or interaction["acceptedInputs"] != ["mouse-hover", "captured-mouse-drag", "captured-touch-drag", "captured-pen-drag", "keyboard", "visible-range", "visible-buttons"]
+            or not interaction["userInputRequired"]
+            or not interaction["strictTrustedInputGuard"]
+            or not interaction["initialFrameStatic"]
+            or not interaction["initialStillVerified"]
+            or interaction["automaticCycle"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["previewClockMutationCount"] != 0
+            or interaction["nonInputVisualMutationCountAfterReady"] != 0
+            or interaction["inputCount"] < 30
+            or interaction["trustedInputCount"] != interaction["inputCount"]
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["pointerEnterCount"] < 1
+            or interaction["hoverMoveCount"] < 1
+            or interaction["pointerDownCount"] != 2
+            or interaction["pointerMoveCount"] < 20
+            or interaction["pointerUpCount"] != 2
+            or interaction["pointerCancelCount"] != 0
+            or interaction["pointerCaptureCount"] != 2
+            or interaction["pointerCaptureReleaseCount"] != 2
+            or interaction["pointerTypesSeen"] != ["mouse"]
+            or interaction["keyboardInputCount"] != 4
+            or interaction["keyboardMutationCount"] < 2
+            or interaction["rangeInputCount"] != 1
+            or interaction["rangeMutationCount"] != 1
+            or interaction["buttonActivationCount"] != 3
+            or interaction["buttonMutationCount"] < 2
+            or interaction["humanVisualMutationCount"] < 25
+            or interaction["humanInputCausalityCount"] != interaction["humanVisualMutationCount"]
+            or interaction["maximumHumanTravel"] < .8
+            or interaction["evaluationCount"] != 3
+            or interaction["incompleteEvaluationCount"] != 2
+            or interaction["holdEvaluationCount"] != 1
+            or interaction["passEvaluationCount"] != 0
+            or interaction["resetCount"] != 1
+            or interaction["approvalState"] != "hold"
+            or interaction["lastEvaluatedDisposition"] != "hold"
+            or interaction["sourceDisposition"] != "hold"
+            or interaction["inspectedTargetCount"] != 4
+            or interaction["maximumInspectedTargetCount"] != 4
+            or interaction["scanCoverageBinCount"] < 6
+            or interaction["maximumScanCoverageBinCount"] < 10
+            or interaction["scanMetricReadCount"] < 30
+            or interaction["activePointerId"] is not None
+            or interaction["pointerCaptured"]
+            or interaction["lastInputKind"] != "button-evaluate"
+            or interaction["lastInputTrusted"] is not True
+            or interaction["lastPointerType"] != "mouse"
+            or not interaction["motionControlReady"]
+            or interaction["motionDuration"] != 1
+            or interaction["motionSyncError"] >= .0001
+            or interaction["maximumMotionSyncError"] >= .0001
+            or interaction["assetFetchCount"] != 1
+            or interaction["assetResponseStatus"] != 200
+            or interaction["assetMimeType"] != "image/jpeg"
+            or not interaction["assetSameOrigin"]
+            or interaction["assetByteLength"] != 246388
+            or interaction["assetSha256"] != "36471dadbf8888ddf16ae2b68156b39e587f3a4bb323f76f9b8456903c42a7e4"
+            or not interaction["assetShaMatchesExpected"]
+            or not interaction["browserImageDecoded"]
+            or interaction["sourceNaturalWidth"] != 960
+            or interaction["sourceNaturalHeight"] != 640
+            or interaction["sampleWidth"] != 192
+            or interaction["sampleHeight"] != 128
+            or interaction["sampledPixelCount"] != 24576
+            or interaction["sampledPixelByteLength"] != 98304
+            or len(interaction["sampledPixelSha256"]) != 64
+            or not interaction["sampledPixelSha256"].strip("0")
+            or len(interaction["sampledPixelChecksum"]) != 8
+            or interaction["distinctQuantizedColorCount"] <= 180
+            or interaction["opaquePixelCount"] != 24576
+            or interaction["lumaRange"] <= 175
+            or sum(interaction["inkCategoryCounts"]) != 24576
+            or interaction["nonEmptyInkCategoryCount"] < 6
+            or any(count <= 35 for count in interaction["inkCategoryCounts"][1:6])
+            or interaction["edgeRange"] <= .55
+            or interaction["defectDetectionCandidateCount"] <= 4500
+            or interaction["defectTargetCount"] != 4
+            or len(interaction["defectTargets"]) != 4
+            or any(target["severity"] <= .45 or target["rawScore"] <= 0 for target in interaction["defectTargets"])
+            or interaction["defectSpatialSeparationMinimum"] < 28
+            or interaction["globalDefectSeverity"] <= 60
+            or not interaction["assetEvidenceReady"]
+            or not interaction["pixelEvidenceReady"]
+            or interaction["stageCoverageRatio"] <= .99
+            or interaction["proofCoverageRatio"] <= .99
+            or interaction["visualRenderCount"] < 25
+            or interaction["previewRenderInvocationCount"] < 36
+            or not interaction["runtimeAssertionPassed"]
+            or not interaction["ready"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture trusted full-proof scan coverage, four pixel-derived registration targets, paused Motion/CSS synchronization, reset, incomplete review, and a final source-owned HOLD disposition without automatic scanning: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "cellular-automata-hover-bloom":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

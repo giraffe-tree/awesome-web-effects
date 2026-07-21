@@ -1,8 +1,521 @@
-<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Stencil Text Scanline Window</title><style>:root{--preview-background:#f1efe7}.preview-stage{background:#f1efe7;color:#171717}.label{position:absolute;left:14px;top:50px;font:900 6px monospace;letter-spacing:.16em}.word{position:absolute;left:13px;top:66px;margin:0;font:1000 58px/.78 Impact,system-ui;letter-spacing:-.07em;color:transparent;-webkit-text-stroke:1px #181818;background:linear-gradient(90deg,#ff3c22,#ffcb45,#37b8a6,#6248dd);background-clip:text;-webkit-background-clip:text;clip-path:inset(0 var(--cut,100%) 0 0)}.scan{position:absolute;left:13px;top:58px;width:3px;height:79px;background:#151515;transform:translateX(var(--x,0));box-shadow:7px 0 0 #fff,9px 0 0 #151515}.ticks{position:absolute;left:16px;right:16px;bottom:19px;border-top:1px solid #222;padding-top:5px;font:800 6px monospace;word-spacing:18px}.library-badge{color:#111;background:#ffffffb8;border-color:#1113}.scene-caption{display:none}</style>  <script type="module" crossorigin src="./assets/stencil-text-scanline-window-BLZy-H1a.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
-  <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
-  <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
-  <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
-  <link rel="modulepreload" crossorigin href="./assets/expansion-b-utils-CD_J0IHW.js">
-  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage" tabindex="0"><span class="label">COLOR INDEX / 04</span><h1 class="word" id="stencil">SIGNAL</h1><i class="scan" id="scan"></i><div class="ticks">00 20 40 60 80 100</div><span class="library-badge">CSS · stencil scan</span></main></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>CSS — Human-operated Registration Gate</title>
+    <link rel="icon" href="data:,">
+    <style>
+      :root {
+        --preview-background: #15130f;
+        --paper: #eee5d1;
+        --ink: #171714;
+        --cyan: #168c95;
+        --red: #d82d24;
+        --yellow: #e9a913;
+        --blue: #13529a;
+        --active-ink: #168c95;
+        --active-soft: rgba(22, 140, 149, .28);
+        --scan-x: 16%;
+        --probe-y: 50%;
+        --history-right: 84%;
+        --window-left: 10%;
+        --window-right: 78%;
+        color-scheme: dark;
+      }
+
+      button,
+      input { font: inherit; }
+
+      button { -webkit-tap-highlight-color: transparent; }
+
+      .registration-stage {
+        position: absolute;
+        inset: 0;
+        container-type: size;
+        overflow: hidden;
+        background: #15130f;
+        color: var(--paper);
+        cursor: crosshair;
+        outline: none;
+        touch-action: none;
+        user-select: none;
+      }
+
+      .registration-stage:focus-visible::after {
+        position: absolute;
+        z-index: 30;
+        inset: 3px;
+        border: 1px solid color-mix(in srgb, var(--active-ink), white 50%);
+        border-radius: 11px;
+        pointer-events: none;
+        content: "";
+      }
+
+      .proof-image,
+      .proof-grade,
+      .proof-grid {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+
+      .proof-image {
+        z-index: 0;
+        display: block;
+        object-fit: cover;
+        filter: saturate(.7) contrast(1.12) brightness(.39);
+        transform: scale(1.008);
+      }
+
+      .proof-grade {
+        z-index: 1;
+        background:
+          linear-gradient(90deg, rgba(12, 12, 10, .64), rgba(12, 12, 10, .12) 42%, rgba(12, 12, 10, .54)),
+          linear-gradient(180deg, rgba(12, 12, 10, .6), transparent 33%, transparent 67%, rgba(12, 12, 10, .78));
+        mix-blend-mode: multiply;
+      }
+
+      .proof-grid {
+        z-index: 2;
+        opacity: .17;
+        background:
+          linear-gradient(90deg, rgba(239, 229, 207, .42) 1px, transparent 1px) 0 0 / 8.333% 100%,
+          linear-gradient(rgba(239, 229, 207, .24) 1px, transparent 1px) 0 0 / 100% 25%;
+      }
+
+      .topline {
+        position: absolute;
+        z-index: 15;
+        top: clamp(6px, 3.1cqh, 18px);
+        left: clamp(7px, 2.7cqw, 19px);
+        right: clamp(7px, 2.7cqw, 19px);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        pointer-events: none;
+      }
+
+      .registration-stage .library-badge {
+        position: static;
+        padding: clamp(3px, 1.2cqw, 6px) clamp(5px, 1.7cqw, 10px);
+        border-color: rgba(238, 229, 209, .34);
+        background: rgba(15, 14, 11, .72);
+        color: var(--paper);
+        font-size: clamp(5px, 1.05cqw, 8px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, .28);
+      }
+
+      .source-state {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: color-mix(in srgb, var(--active-ink), white 44%);
+        font: 900 clamp(5px, 1.08cqw, 8px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .13em;
+        text-transform: uppercase;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, .78);
+        white-space: nowrap;
+      }
+
+      .source-state::before {
+        width: clamp(4px, .9cqw, 7px);
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: currentColor;
+        box-shadow: 0 0 11px currentColor;
+        content: "";
+      }
+
+      .hero {
+        position: absolute;
+        z-index: 5;
+        top: 50%;
+        left: 50%;
+        width: min(94%, 980px);
+        transform: translate(-50%, -54%);
+        pointer-events: none;
+      }
+
+      .jobline,
+      .gesture,
+      .metric-label,
+      .metric-value,
+      .gate-readout,
+      .marker-label,
+      .control {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        text-transform: uppercase;
+      }
+
+      .jobline {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin: 0 clamp(4px, 1cqw, 8px) clamp(3px, 1.4cqh, 7px);
+        color: rgba(238, 229, 209, .62);
+        font-size: clamp(4px, .93cqw, 7px);
+        font-weight: 850;
+        letter-spacing: .16em;
+      }
+
+      .jobline b { color: var(--paper); }
+
+      .stencil-stack {
+        position: relative;
+        height: clamp(39px, 26cqh, 120px);
+      }
+
+      .stencil-word {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        margin: 0;
+        place-items: center;
+        overflow: hidden;
+        font: 1000 clamp(25px, 15.2cqw, 112px)/.8 Impact, Haettenschweiler, "Arial Black", sans-serif;
+        letter-spacing: -.075em;
+        white-space: nowrap;
+      }
+
+      .stencil-outline {
+        z-index: 0;
+        color: rgba(13, 13, 11, .32);
+        -webkit-text-stroke: clamp(1px, .24cqw, 2px) rgba(238, 229, 209, .82);
+        text-shadow: 0 9px 28px rgba(0, 0, 0, .56);
+      }
+
+      .stencil-history,
+      .stencil-window {
+        color: transparent;
+        background-image: url("./assets/registration-proof-sheet-8HMBGl5J.jpg");
+        background-position: center;
+        background-size: cover;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-stroke: clamp(.35px, .1cqw, .75px) rgba(238, 229, 209, .36);
+      }
+
+      .stencil-history {
+        z-index: 1;
+        opacity: .43;
+        clip-path: inset(0 var(--history-right) 0 0);
+        filter: saturate(.8) contrast(1.08) brightness(.86);
+      }
+
+      .stencil-window {
+        z-index: 2;
+        clip-path: inset(0 var(--window-right) 0 var(--window-left));
+        filter: saturate(1.28) contrast(1.16) brightness(1.13);
+        text-shadow: 0 0 18px var(--active-soft);
+      }
+
+      .gesture {
+        margin: clamp(3px, 1.6cqh, 8px) 0 0;
+        color: rgba(238, 229, 209, .67);
+        font-size: clamp(4px, .93cqw, 7px);
+        font-weight: 800;
+        letter-spacing: .13em;
+        text-align: center;
+      }
+
+      .scan-gate {
+        position: absolute;
+        z-index: 11;
+        top: clamp(33px, 16cqh, 66px);
+        bottom: clamp(28px, 17cqh, 69px);
+        left: var(--scan-x);
+        width: 1px;
+        background: color-mix(in srgb, var(--active-ink), white 38%);
+        box-shadow:
+          -1px 0 0 rgba(10, 10, 8, .68),
+          1px 0 0 rgba(238, 229, 209, .52),
+          0 0 18px var(--active-soft);
+        transform: translateX(-50%);
+        pointer-events: none;
+      }
+
+      .scan-gate::before,
+      .scan-gate::after {
+        position: absolute;
+        left: 50%;
+        width: clamp(5px, 1.4cqw, 10px);
+        aspect-ratio: 1;
+        border: 1px solid currentColor;
+        color: color-mix(in srgb, var(--active-ink), white 45%);
+        background: #15130f;
+        transform: translateX(-50%) rotate(45deg);
+        content: "";
+      }
+
+      .scan-gate::before { top: -3px; }
+      .scan-gate::after { bottom: -3px; }
+
+      .probe {
+        position: absolute;
+        top: var(--probe-y);
+        left: 50%;
+        display: grid;
+        width: clamp(15px, 4cqw, 29px);
+        aspect-ratio: 1;
+        place-items: center;
+        border: 1px solid color-mix(in srgb, var(--active-ink), white 50%);
+        border-radius: 50%;
+        background: rgba(14, 13, 10, .72);
+        box-shadow: 0 0 0 3px rgba(14, 13, 10, .38), 0 0 20px var(--active-soft);
+        transform: translate(-50%, -50%);
+      }
+
+      .probe::after {
+        width: 30%;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: var(--active-ink);
+        content: "";
+      }
+
+      .defect-layer {
+        position: absolute;
+        z-index: 9;
+        inset: 0;
+        pointer-events: none;
+      }
+
+      .defect-marker {
+        position: absolute;
+        width: clamp(11px, 3.1cqw, 23px);
+        aspect-ratio: 1;
+        border: 1px solid rgba(238, 229, 209, .64);
+        border-radius: 50%;
+        background: rgba(18, 16, 13, .44);
+        box-shadow: 0 0 0 2px rgba(18, 16, 13, .36);
+        opacity: .44;
+        transform: translate(-50%, -50%);
+      }
+
+      .defect-marker::before,
+      .defect-marker::after {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        background: rgba(238, 229, 209, .72);
+        transform: translate(-50%, -50%);
+        content: "";
+      }
+
+      .defect-marker::before { width: 142%; height: 1px; }
+      .defect-marker::after { width: 1px; height: 142%; }
+
+      .defect-marker[data-inspected="true"] {
+        border-color: color-mix(in srgb, var(--active-ink), white 62%);
+        opacity: 1;
+        box-shadow: 0 0 0 3px var(--active-soft), 0 0 15px var(--active-soft);
+      }
+
+      .marker-label {
+        position: absolute;
+        top: calc(100% + 3px);
+        left: 50%;
+        color: var(--paper);
+        font-size: clamp(3px, .75cqw, 5px);
+        font-weight: 900;
+        letter-spacing: .06em;
+        transform: translateX(-50%);
+        white-space: nowrap;
+      }
+
+      .metrics {
+        position: absolute;
+        z-index: 15;
+        left: clamp(7px, 2.7cqw, 19px);
+        bottom: clamp(6px, 3.2cqh, 18px);
+        display: grid;
+        grid-template-columns: repeat(3, auto);
+        gap: clamp(8px, 3.1cqw, 22px);
+        pointer-events: none;
+      }
+
+      .metric { display: grid; gap: 2px; }
+
+      .metric-label {
+        color: rgba(238, 229, 209, .48);
+        font-size: clamp(3px, .8cqw, 6px);
+        font-weight: 800;
+        letter-spacing: .13em;
+      }
+
+      .metric-value {
+        color: var(--paper);
+        font-size: clamp(5px, 1.25cqw, 9px);
+        font-weight: 900;
+        letter-spacing: .03em;
+      }
+
+      .metric-value.accent { color: color-mix(in srgb, var(--active-ink), white 46%); }
+
+      .controls {
+        position: absolute;
+        z-index: 20;
+        right: clamp(6px, 2.5cqw, 18px);
+        bottom: clamp(5px, 2.8cqh, 16px);
+        display: grid;
+        grid-template-columns: auto minmax(48px, 112px) auto auto auto;
+        align-items: center;
+        gap: 2px;
+        padding: 3px;
+        border: 1px solid rgba(238, 229, 209, .28);
+        border-radius: 999px;
+        background: rgba(14, 13, 10, .78);
+        box-shadow: 0 9px 26px rgba(0, 0, 0, .34);
+        cursor: default;
+        backdrop-filter: blur(9px);
+      }
+
+      .control {
+        display: grid;
+        min-width: clamp(18px, 4.5cqw, 32px);
+        height: clamp(17px, 4cqw, 28px);
+        padding: 0 clamp(5px, 1.4cqw, 10px);
+        place-items: center;
+        border: 1px solid transparent;
+        border-radius: 999px;
+        background: transparent;
+        color: var(--paper);
+        font-size: clamp(5px, 1.12cqw, 8px);
+        font-weight: 900;
+        letter-spacing: .07em;
+        cursor: pointer;
+      }
+
+      .control:hover,
+      .control:focus-visible {
+        border-color: color-mix(in srgb, var(--active-ink), white 55%);
+        background: var(--active-soft);
+        outline: none;
+      }
+
+      .control.evaluate {
+        background: color-mix(in srgb, var(--active-ink), #111 58%);
+        color: #fff8e8;
+      }
+
+      .scan-range {
+        width: 100%;
+        min-width: 0;
+        height: clamp(17px, 4cqw, 28px);
+        margin: 0;
+        accent-color: var(--active-ink);
+        cursor: ew-resize;
+      }
+
+      .gate-readout {
+        position: absolute;
+        z-index: 14;
+        right: clamp(7px, 2.8cqw, 20px);
+        top: clamp(31px, 12cqh, 49px);
+        max-width: 44%;
+        color: rgba(238, 229, 209, .64);
+        font-size: clamp(4px, .92cqw, 7px);
+        font-weight: 850;
+        letter-spacing: .12em;
+        text-align: right;
+        text-transform: uppercase;
+        pointer-events: none;
+      }
+
+      .gate-readout b { color: color-mix(in srgb, var(--active-ink), white 48%); }
+
+      .runtime-ledger {
+        position: fixed;
+        left: -10000px;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+      }
+
+      @media (max-width: 440px) {
+        .metrics { grid-template-columns: repeat(2, auto); }
+        .metric:nth-child(2) { display: none; }
+        .controls { grid-template-columns: auto minmax(42px, 86px) auto auto; }
+        .control.reset { display: none; }
+      }
+
+      @media (max-width: 240px), (max-height: 115px) {
+        .proof-grid { opacity: .1; }
+        .topline { top: 3px; left: 3px; right: 3px; }
+        .registration-stage .library-badge { padding: 3px 4px; font-size: 4px; letter-spacing: .03em; }
+        .source-state { gap: 3px; font-size: 4px; letter-spacing: .04em; }
+        .source-state::before { width: 4px; }
+        .gate-readout { top: 18px; right: 4px; max-width: 55%; font-size: 4px; letter-spacing: .03em; }
+        .hero { width: 97%; transform: translate(-50%, -58%); }
+        .jobline { margin-bottom: 2px; font-size: 3px; letter-spacing: .06em; }
+        .jobline span:last-child { display: none; }
+        .stencil-stack { height: 24px; }
+        .stencil-word { font-size: 22px; -webkit-text-stroke-width: .5px; }
+        .gesture { margin-top: 2px; font-size: 3px; letter-spacing: .04em; }
+        .scan-gate { top: 19px; bottom: 18px; }
+        .probe { width: 10px; }
+        .defect-marker { width: 8px; }
+        .marker-label { display: none; }
+        .metrics { left: 4px; bottom: 4px; gap: 6px; }
+        .metric-label { font-size: 3px; letter-spacing: .04em; }
+        .metric-value { font-size: 4px; }
+        .controls { right: 3px; bottom: 3px; grid-template-columns: auto 32px auto auto; gap: 1px; padding: 1px; }
+        .control { min-width: 12px; height: 13px; padding: 0 3px; font-size: 4px; letter-spacing: 0; }
+        .scan-range { height: 13px; }
+        .control.evaluate { min-width: 21px; }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/stencil-text-scanline-window-KWeEGvvk.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+    <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main class="preview-stage registration-stage" id="registration-stage" data-preview-mechanism="css-pixel-derived-human-stencil-scanline" tabindex="0" aria-label="Print registration inspection. Hover or drag across the proof to move the stencil scan gate. Use arrow keys or the visible scan controls. Evaluate uses decoded source pixels to decide whether the proof can go to press.">
+      <img class="proof-image" id="proof-image" alt="Fictional four-ink screen-print registration proof">
+      <div class="proof-grade" aria-hidden="true"></div>
+      <div class="proof-grid" aria-hidden="true"></div>
+
+      <header class="topline">
+        <span class="library-badge">CSS · stencil scan</span>
+        <span class="source-state" id="source-state">Source pixels / loading</span>
+      </header>
+
+      <p class="gate-readout" id="gate-readout"><b>Inspection open</b> · scan all four register targets</p>
+
+      <section class="hero" aria-label="Make ready registration gate">
+        <p class="jobline"><span><b>Make-ready 04</b> / four-ink proof</span><span>Human scan · no autoplay</span></p>
+        <div class="stencil-stack" aria-hidden="true">
+          <h1 class="stencil-word stencil-outline">REGISTER</h1>
+          <h1 class="stencil-word stencil-history">REGISTER</h1>
+          <h1 class="stencil-word stencil-window">REGISTER</h1>
+        </div>
+        <p class="gesture">Move the gate · read the real ink edge · evaluate to release</p>
+      </section>
+
+      <div class="defect-layer" id="defect-layer" aria-hidden="true"></div>
+      <div class="scan-gate" aria-hidden="true"><i class="probe"></i></div>
+
+      <section class="metrics" aria-label="Live registration metrics">
+        <span class="metric"><span class="metric-label">Ink</span><output class="metric-value accent" id="ink-readout">—</output></span>
+        <span class="metric"><span class="metric-label">Edge risk</span><output class="metric-value" id="risk-readout">—</output></span>
+        <span class="metric"><span class="metric-label">Targets</span><output class="metric-value" id="target-readout">0 / 4</output></span>
+      </section>
+
+      <div class="controls" aria-label="Registration scan controls">
+        <button class="control" type="button" data-action="back" aria-label="Move scan gate backward">−</button>
+        <input class="scan-range" id="scan-range" type="range" min="0" max="100" value="16" step="1" aria-label="Scan position">
+        <button class="control" type="button" data-action="forward" aria-label="Move scan gate forward">+</button>
+        <button class="control evaluate" type="button" data-action="evaluate">Evaluate</button>
+        <button class="control reset" type="button" data-action="reset">Reset</button>
+      </div>
+
+      <output class="runtime-ledger" id="runtime-ledger" aria-live="polite"></output>
+    </main>
+  </body>
+</html>

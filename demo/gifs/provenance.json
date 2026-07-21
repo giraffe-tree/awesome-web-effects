@@ -624,7 +624,7 @@
       "originUrl": "https://github.com/processing/p5.js",
       "demoSourcePath": "demo/preview-demos/point-constructed-generative-corolla.html",
       "libraryVersion": "p5@2.3.0",
-      "generatedAt": "2026-07-20",
+      "generatedAt": "2026-07-21",
       "outputPath": "demo/gifs/captured/point-constructed-generative-corolla.gif",
       "usageBasis": "original local mechanism demo using p5@2.3.0; verify license https://github.com/processing/p5.js/blob/HEAD/license.txt"
     },

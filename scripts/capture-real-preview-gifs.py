@@ -1301,6 +1301,49 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.locator('#place-poster').click()
             elif index == 35:
                 page.wait_for_timeout(260)
+        elif demo["id"] == "point-constructed-generative-corolla":
+            if index == 2:
+                page.mouse.move(286, 92)
+            elif index == 4:
+                page.mouse.move(246, 66, steps=4)
+            elif index == 6:
+                page.mouse.move(214, 142)
+                page.mouse.down()
+            elif index == 7:
+                page.mouse.move(262, 112, steps=3)
+            elif index == 9:
+                page.mouse.move(304, 72, steps=3)
+            elif index == 10:
+                page.mouse.up()
+            elif index == 12:
+                page.locator('#density-up').click()
+            elif index == 14:
+                page.locator('#tension-up').click()
+            elif index == 16:
+                page.locator('#lock-button').click()
+            elif index == 18:
+                page.locator('#lock-button').click()
+            elif index == 20:
+                page.locator('#corolla-host').focus()
+                page.keyboard.press("ArrowLeft")
+            elif index == 21:
+                page.keyboard.press("ArrowUp")
+            elif index == 22:
+                page.keyboard.press("]")
+            elif index == 23:
+                page.keyboard.press("=")
+            elif index == 25:
+                page.keyboard.press("Enter")
+            elif index == 28:
+                page.locator('#lock-button').click()
+            elif index == 30:
+                page.locator('#reset-button').click()
+            elif index == 32:
+                page.mouse.move(190, 82)
+            elif index == 33:
+                page.locator('#density-down').click()
+            elif index == 35:
+                page.locator('#lock-button').click()
         elif demo["id"] == "four-corner-hover-crop-marks":
             if index == round(.35 * args.fps):
                 page.mouse.move(92, 78)
@@ -2788,6 +2831,48 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or physics["integrationSteps"] < 1
         ):
             raise RuntimeError(f"{demo['id']} did not capture trusted controls, keyboard placement, a real captured pointer throw, collisions, and an explicit final shortlist: assertion={assertion!r}; interaction={interaction!r}; physics={physics!r}")
+    elif demo["id"] == "point-constructed-generative-corolla":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["automaticGrowth"]
+            or interaction["automaticFocus"]
+            or interaction["automaticRehearsal"]
+            or interaction["previewClockDriven"]
+            or interaction["continuousGrowth"]
+            or interaction["runEnabled"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInput"]
+            or not interaction["userInitiatedChangesOnly"]
+            or not interaction["firstFrameStatic"]
+            or not interaction["initialStaticVerified"]
+            or interaction["inputCount"] < 20
+            or interaction["pointerInputCount"] < 14
+            or interaction["keyboardInputCount"] < 5
+            or interaction["focusMoveCount"] < 10
+            or interaction["parameterChangeCount"] < 5
+            or interaction["lockCount"] < 3
+            or interaction["unlockCount"] < 2
+            or interaction["resetCount"] < 1
+            or interaction["pointerCaptureCount"] < 1
+            or interaction["pointerReleaseCount"] < 1
+            or interaction["mode"] != "locked"
+            or not interaction["focusActive"]
+            or not interaction["dirty"]
+            or interaction["density"] != .66
+            or interaction["tension"] != .54
+            or interaction["inputKind"] != "pointer"
+            or interaction["lastTrustedEvent"] != "pointer-toggle-lock"
+            or interaction["pointerCaptured"]
+            or interaction["activePointerId"] is not None
+            or interaction["pointCount"] != 3600
+            or interaction["visiblePointCount"] < 1500
+            or interaction["influencedPointCount"] < 12
+            or interaction["transitionCount"] < 16
+            or interaction["redrawRequestCount"] < 16
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a trusted pointer/keyboard art-direction pass, parameter changes, reset, and explicit sleeve lock: {interaction!r}")
     elif demo["id"] == "four-corner-hover-crop-marks":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         if (

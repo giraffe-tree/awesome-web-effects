@@ -204,7 +204,7 @@
 | [实时分析器字形重塑](https://giraffe-tree.github.io/awesome-web-effects/#audio-equalizer-typography) | [p5.js](https://github.com/processing/p5.js) | **86/100** | [Soundraw](https://soundraw.io/) | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#audio-equalizer-typography) |
 | [建筑渲染折射质检探针](https://giraffe-tree.github.io/awesome-web-effects/#pointer-following-displacement-ripple) | [regl](https://github.com/regl-project/regl) | **93/100** | — | 5,557 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#pointer-following-displacement-ripple) |
 | [图像驱动的艺术节海报评审桌](https://giraffe-tree.github.io/awesome-web-effects/#draggable-rigid-body-poster-pile) | [p5.js](https://github.com/processing/p5.js) | **98/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#draggable-rigid-body-poster-pile) |
-| [点构成的生成式花冠](https://giraffe-tree.github.io/awesome-web-effects/#point-constructed-generative-corolla) | [p5.js](https://github.com/processing/p5.js) | **92/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#point-constructed-generative-corolla) |
+| [生成式花冠唱片封套导演](https://giraffe-tree.github.io/awesome-web-effects/#point-constructed-generative-corolla) | [p5.js](https://github.com/processing/p5.js) | **95/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#point-constructed-generative-corolla) |
 | [涌现式粒子生命群落](https://giraffe-tree.github.io/awesome-web-effects/#emergent-particle-life-colonies) | [p5.js](https://github.com/processing/p5.js) | **94/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#emergent-particle-life-colonies) |
 | [可拖拽缩放音频循环区](https://giraffe-tree.github.io/awesome-web-effects/#drag-resizable-audio-loop-region) | [p5.js](https://github.com/processing/p5.js) | **91/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#drag-resizable-audio-loop-region) |
 | [流式折线图窗口推进](https://giraffe-tree.github.io/awesome-web-effects/#streaming-line-chart-window) | [p5.js](https://github.com/processing/p5.js) | **89/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#streaming-line-chart-window) |
@@ -282,7 +282,7 @@
 - 150 个已核验预览：2 个官方素材、148 个可运行本地 Demo 录制；缺失数为 0。
 - 人工评审覆盖创意、艺术完成度、动效编排、效果辨识、创作迁移和证据质量。
 - 准入要求 80/100，并同时通过核心维度最低分；流行度不能覆盖质量门槛。
-- 已核验 GIF 总计 24.55 MiB；每个预览为 320×180、最长三秒且小于 1 MiB。
+- 已核验 GIF 总计 24.48 MiB；每个预览为 320×180、最长三秒且小于 1 MiB。
 - Stars 是 2026-07-20 快照；“推荐实现”与“在哪家 AI 官网观察到”始终是两种关系。
 
 继续阅读 [396 个候选的准入审计](research/demo-admission-audit-2026-07-20.md)、[100 家 AI 公司主页特效调研](research/ai-native-homepages-100.md)与[预览来源清单](demo/gifs/provenance.json)。

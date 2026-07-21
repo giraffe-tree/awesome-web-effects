@@ -1,8 +1,411 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p5.js — Point-constructed Generative Corolla</title><style>
-:root{--preview-background:#071214}#corolla-host{position:absolute;inset:0;cursor:crosshair}#corolla-host canvas{width:100%!important;height:100%!important}.corolla-copy{position:absolute;z-index:3;left:14px;top:48px;color:#eaf8ed;pointer-events:none}.corolla-copy small{font:800 6px/1 ui-monospace;letter-spacing:.13em}.corolla-copy h1{width:98px;margin:10px 0 0;font:950 20px/.82 system-ui;letter-spacing:-.06em}.formula{position:absolute;z-index:3;right:11px;bottom:12px;color:#a9c8b69c;font:700 6px/1 ui-monospace;letter-spacing:.1em}.library-badge{background:#061114bd}</style>  <script type="module" crossorigin src="./assets/point-constructed-generative-corolla-DyoEhIBK.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
-  <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
-  <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
-  <link rel="modulepreload" crossorigin href="./assets/batch-b-utils-CmA_lC0Z.js">
-  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage" data-preview-mechanism="p5-point-corolla"><div id="corolla-host" tabindex="0" aria-label="Move the pointer or use arrow keys to change the generative flower petal count"></div><section class="corolla-copy"><small>POINT FIELD / 1400</small><h1>GROW A MATHEMATICAL FLOWER.</h1></section><span class="formula" id="corolla-formula">r = sin(7θ)</span><span class="library-badge">p5.js · point corolla</span><span class="scene-caption">polar points accumulate into living petals</span></main></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>p5.js — Point-constructed Generative Corolla</title>
+    <style>
+      :root {
+        --preview-background: #10120e;
+        --ink: #10120e;
+        --paper: #f1eedf;
+        --acid: #d9ff54;
+        --coral: #ff7257;
+        --cyan: #72efd1;
+        color-scheme: dark;
+      }
+
+      * { box-sizing: border-box; }
+      button { color: inherit; font: inherit; }
+
+      .corolla-stage {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        background: #10120e;
+        color: var(--paper);
+      }
+
+      .corolla-host {
+        position: absolute;
+        inset: 0;
+        cursor: crosshair;
+        outline: none;
+        touch-action: none;
+      }
+      .corolla-host canvas {
+        display: block;
+        width: 100% !important;
+        height: 100% !important;
+      }
+      .corolla-host:focus-visible::after {
+        position: absolute;
+        inset: 7px;
+        border: 1px solid rgba(217, 255, 84, .72);
+        border-radius: 9px;
+        content: '';
+        pointer-events: none;
+      }
+
+      .studio-header,
+      .brand-lockup,
+      .studio-state,
+      .tool-head,
+      .parameter-row,
+      .parameter-controls,
+      .control-dock,
+      .dock-state,
+      .action-group,
+      .result-stamp {
+        display: flex;
+        align-items: center;
+      }
+
+      .studio-header {
+        position: absolute;
+        z-index: 5;
+        top: clamp(9px, 2.5vw, 18px);
+        right: clamp(11px, 2.8vw, 21px);
+        left: clamp(11px, 2.8vw, 21px);
+        min-width: 0;
+        justify-content: space-between;
+        pointer-events: none;
+      }
+      .brand-lockup { min-width: 0; gap: 8px; }
+      .brand-mark {
+        position: relative;
+        width: clamp(15px, 3.5vw, 22px);
+        aspect-ratio: 1;
+        flex: 0 0 auto;
+        border: 1px solid rgba(241, 238, 223, .54);
+        border-radius: 50%;
+      }
+      .brand-mark::before,
+      .brand-mark::after {
+        position: absolute;
+        border-radius: 50%;
+        content: '';
+      }
+      .brand-mark::before { inset: 24%; background: var(--acid); }
+      .brand-mark::after { right: -1px; bottom: 1px; width: 22%; aspect-ratio: 1; background: var(--coral); }
+      .brand-lockup strong {
+        font-size: clamp(6px, 1.7vw, 10px);
+        font-weight: 920;
+        letter-spacing: -.03em;
+      }
+      .brand-lockup span,
+      .studio-state,
+      .art-kicker,
+      .art-copy p,
+      .tool-kicker,
+      .edition-code,
+      .parameter-label,
+      .parameter-value,
+      .dock-state,
+      .control-button,
+      .result-stamp,
+      .canvas-note {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-weight: 780;
+        letter-spacing: .09em;
+        text-transform: uppercase;
+      }
+      .brand-lockup span {
+        overflow: hidden;
+        color: rgba(241, 238, 223, .55);
+        font-size: clamp(3px, .68vw, 5px);
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .studio-state {
+        gap: 6px;
+        color: rgba(241, 238, 223, .68);
+        font-size: clamp(3px, .7vw, 5px);
+        white-space: nowrap;
+      }
+      .studio-state::before {
+        width: 5px;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: var(--acid);
+        content: '';
+      }
+      .corolla-stage[data-mode="locked"] .studio-state::before { background: var(--coral); }
+
+      .art-copy {
+        position: absolute;
+        z-index: 4;
+        top: clamp(64px, 18vw, 116px);
+        left: clamp(16px, 4.5vw, 34px);
+        width: clamp(120px, 27vw, 190px);
+        pointer-events: none;
+      }
+      .art-kicker { color: rgba(241, 238, 223, .62); font-size: clamp(3px, .72vw, 5px); }
+      .art-copy h1 {
+        margin: clamp(8px, 1.9vw, 14px) 0 0;
+        font: 900 clamp(24px, 5.8vw, 44px)/.79 ui-serif, Georgia, serif;
+        letter-spacing: -.065em;
+      }
+      .art-copy h1 em { color: var(--coral); font-weight: 520; }
+      .art-copy p {
+        width: 29em;
+        margin: clamp(9px, 1.9vw, 14px) 0 0;
+        color: rgba(241, 238, 223, .55);
+        font-size: clamp(2px, .58vw, 4px);
+        line-height: 1.55;
+      }
+
+      .tool-panel {
+        position: absolute;
+        z-index: 6;
+        top: clamp(58px, 16vw, 102px);
+        right: clamp(13px, 3.4vw, 25px);
+        width: clamp(128px, 24vw, 174px);
+        padding: clamp(10px, 2.3vw, 17px);
+        border: 1px solid rgba(241, 238, 223, .2);
+        border-radius: clamp(7px, 1.8vw, 13px);
+        background: rgba(9, 12, 9, .72);
+        box-shadow: 0 18px 42px rgba(0, 0, 0, .22);
+        backdrop-filter: blur(12px);
+      }
+      .tool-head { justify-content: space-between; gap: 8px; }
+      .tool-kicker,
+      .edition-code { color: rgba(241, 238, 223, .58); font-size: clamp(2px, .58vw, 4px); }
+      .tool-title {
+        margin: clamp(7px, 1.6vw, 12px) 0 0;
+        font-size: clamp(10px, 2.4vw, 17px);
+        font-weight: 900;
+        letter-spacing: -.04em;
+      }
+      .parameter-list { margin-top: clamp(9px, 2vw, 15px); }
+      .parameter-row {
+        min-width: 0;
+        justify-content: space-between;
+        gap: 7px;
+        padding: clamp(6px, 1.3vw, 10px) 0;
+        border-top: 1px solid rgba(241, 238, 223, .13);
+      }
+      .parameter-label { color: rgba(241, 238, 223, .52); font-size: clamp(2px, .55vw, 4px); }
+      .parameter-value { color: var(--paper); font-size: clamp(4px, .9vw, 7px); }
+      .parameter-controls { gap: 3px; }
+      .parameter-button {
+        display: grid;
+        width: clamp(15px, 3.3vw, 22px);
+        aspect-ratio: 1;
+        padding: 0;
+        place-items: center;
+        border: 1px solid rgba(241, 238, 223, .24);
+        border-radius: 50%;
+        background: transparent;
+        color: var(--paper);
+        cursor: pointer;
+        font: 850 clamp(5px, 1.1vw, 8px)/1 ui-monospace, monospace;
+      }
+      .parameter-button:disabled { cursor: default; opacity: .25; }
+      .parameter-button:focus-visible,
+      .control-button:focus-visible { outline: 2px solid var(--acid); outline-offset: 2px; }
+      .focus-readout {
+        display: grid;
+        margin-top: clamp(7px, 1.5vw, 11px);
+        grid-template-columns: 1fr 1fr;
+        gap: 4px;
+      }
+      .focus-axis {
+        padding: clamp(5px, 1.1vw, 8px);
+        border-radius: 4px;
+        background: rgba(241, 238, 223, .06);
+      }
+      .focus-axis span { display: block; color: rgba(241, 238, 223, .47); font: 750 clamp(2px, .52vw, 4px)/1 ui-monospace, monospace; }
+      .focus-axis strong { display: block; margin-top: 4px; font-size: clamp(5px, 1.1vw, 8px); }
+
+      .control-dock {
+        position: absolute;
+        z-index: 7;
+        right: clamp(13px, 3.4vw, 25px);
+        bottom: clamp(12px, 3vw, 22px);
+        left: clamp(16px, 4.5vw, 34px);
+        min-width: 0;
+        justify-content: space-between;
+        gap: 10px;
+        pointer-events: none;
+      }
+      .dock-state {
+        min-width: 0;
+        gap: 7px;
+        color: rgba(241, 238, 223, .6);
+        font-size: clamp(2px, .57vw, 4px);
+      }
+      .dock-state strong { color: var(--paper); font-size: clamp(4px, .9vw, 6px); }
+      .dock-hint { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .action-group { flex: 0 0 auto; gap: 5px; pointer-events: auto; }
+      .control-button {
+        min-height: clamp(20px, 4.6vw, 31px);
+        padding: 0 clamp(8px, 1.7vw, 12px);
+        border: 1px solid rgba(241, 238, 223, .3);
+        border-radius: 999px;
+        background: rgba(9, 12, 9, .68);
+        color: var(--paper);
+        cursor: pointer;
+        font-size: clamp(3px, .67vw, 5px);
+      }
+      .control-button.primary { border-color: var(--acid); background: var(--acid); color: var(--ink); }
+      .corolla-stage[data-mode="locked"] .control-button.primary { border-color: var(--coral); background: var(--coral); }
+      .control-button:disabled { cursor: default; opacity: .34; }
+
+      .result-stamp {
+        position: absolute;
+        z-index: 5;
+        right: 28%;
+        bottom: 12%;
+        display: none;
+        width: clamp(72px, 16vw, 116px);
+        aspect-ratio: 1;
+        justify-content: center;
+        flex-direction: column;
+        border: 2px solid var(--acid);
+        border-radius: 50%;
+        color: var(--acid);
+        font-size: clamp(3px, .68vw, 5px);
+        text-align: center;
+        transform: rotate(-8deg);
+        pointer-events: none;
+      }
+      .result-stamp strong { display: block; margin-top: 4px; font-size: clamp(9px, 2.2vw, 16px); letter-spacing: -.02em; }
+      .corolla-stage[data-mode="locked"] .result-stamp { display: flex; }
+      .canvas-note {
+        position: absolute;
+        z-index: 3;
+        right: 28%;
+        top: 10%;
+        color: rgba(241, 238, 223, .36);
+        font-size: clamp(2px, .54vw, 4px);
+        pointer-events: none;
+      }
+
+      @media (max-width: 420px) {
+        .studio-header { top: 6px; right: 8px; left: 8px; }
+        .brand-lockup { gap: 4px; }
+        .art-copy { top: 39px; left: 12px; width: 95px; }
+        .art-copy h1 { margin-top: 5px; font-size: 20px; }
+        .art-copy p { width: 24em; margin-top: 5px; }
+        .tool-panel { top: 32px; right: 8px; width: 93px; padding: 8px; border-radius: 6px; backdrop-filter: blur(7px); }
+        .tool-title { margin-top: 4px; font-size: 9px; }
+        .parameter-list { margin-top: 5px; }
+        .parameter-row { padding: 3px 0; }
+        .parameter-button { width: 14px; }
+        .focus-readout { margin-top: 4px; gap: 2px; }
+        .focus-axis { padding: 3px; }
+        .control-dock { right: 8px; bottom: 7px; left: 12px; }
+        .dock-hint { display: none; }
+        .control-button { min-height: 17px; padding: 0 6px; }
+        .result-stamp { right: 31%; bottom: 13%; width: 58px; }
+        .canvas-note { right: 31%; top: 9%; }
+      }
+
+      @media (max-width: 220px), (max-height: 105px) {
+        .library-badge { display: none; }
+        .corolla-host:focus-visible::after { inset: 2px; border-radius: 3px; }
+        .studio-header { top: 2px; right: 3px; left: 3px; }
+        .brand-mark { width: 5px; }
+        .brand-lockup { gap: 2px; }
+        .brand-lockup strong { font-size: 2.3px; }
+        .brand-lockup span { display: none; }
+        .studio-state { gap: 2px; font-size: .8px; }
+        .studio-state::before { width: 2px; }
+        .art-copy { top: 14px; left: 4px; width: 39px; }
+        .art-kicker { font-size: .7px; }
+        .art-copy h1 { margin-top: 2px; font-size: 8px; }
+        .art-copy p { width: 28em; margin-top: 2px; font-size: .65px; }
+        .tool-panel { top: 12px; right: 3px; width: 40px; padding: 3px; border-radius: 3px; backdrop-filter: none; }
+        .tool-title,
+        .parameter-row:nth-child(3),
+        .focus-readout { display: none; }
+        .tool-head { gap: 2px; }
+        .tool-kicker,
+        .edition-code { font-size: .65px; }
+        .tool-title { margin-top: 1px; font-size: 3px; }
+        .parameter-list { margin-top: 2px; }
+        .parameter-row { gap: 1px; padding: 1px 0; }
+        .parameter-label { font-size: .6px; }
+        .parameter-value { font-size: .8px; }
+        .parameter-controls { gap: 1px; }
+        .parameter-button { width: 5px; border-width: 1px; font-size: 1.6px; }
+        .focus-readout { margin-top: 1px; gap: 1px; }
+        .focus-axis { padding: 1px; border-radius: 1px; }
+        .focus-axis span { font-size: .5px; }
+        .focus-axis strong { margin-top: 1px; font-size: .8px; }
+        .control-dock { right: 3px; bottom: 2px; left: 4px; gap: 2px; }
+        .dock-state { gap: 2px; font-size: .6px; }
+        .dock-state strong { font-size: .9px; }
+        .action-group { gap: 1px; }
+        .control-button { min-height: 6px; padding: 0 2px; font-size: .8px; }
+        .result-stamp { right: 31%; bottom: 12%; width: 25px; border-width: 1px; font-size: .6px; }
+        .result-stamp strong { margin-top: 1px; font-size: 2.5px; }
+        .canvas-note { display: none; }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/point-constructed-generative-corolla-F5cM3sdw.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+    <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
+    <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
+    <link rel="modulepreload" crossorigin href="./assets/batch-b-utils-CmA_lC0Z.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main class="preview-stage corolla-stage" id="corolla-stage" data-mode="editing" data-preview-mechanism="p5-input-directed-point-corolla">
+      <div class="corolla-host" id="corolla-host" tabindex="0" aria-label="Generative sleeve canvas. Move the pointer or use arrow keys to direct the growth focus. Use brackets for density, minus and plus for tension, Enter to lock, and R to reset."></div>
+
+      <header class="studio-header">
+        <div class="brand-lockup"><span class="brand-mark" aria-hidden="true"></span><strong>Numa Records</strong><span>Artwork lab · point field</span></div>
+        <span class="studio-state" id="studio-state">Editing · Sleeve 06</span>
+      </header>
+
+      <section class="art-copy">
+        <span class="art-kicker">Release NR–024 · Coronal Memory</span>
+        <h1>Shape the <em>chorus.</em></h1>
+        <p>Direct the bloom toward the loudest part of the record, then lock the sleeve master.</p>
+      </section>
+
+      <aside class="tool-panel" aria-label="Sleeve parameters">
+        <div class="tool-head"><span class="tool-kicker">Art direction</span><span class="edition-code">E / 06</span></div>
+        <h2 class="tool-title">Corolla field</h2>
+        <div class="parameter-list">
+          <div class="parameter-row">
+            <div><span class="parameter-label">Density</span><strong class="parameter-value" id="density-value">72%</strong></div>
+            <div class="parameter-controls">
+              <button class="parameter-button" id="density-down" type="button" aria-label="Decrease point density">−</button>
+              <button class="parameter-button" id="density-up" type="button" aria-label="Increase point density">+</button>
+            </div>
+          </div>
+          <div class="parameter-row">
+            <div><span class="parameter-label">Tension</span><strong class="parameter-value" id="tension-value">54%</strong></div>
+            <div class="parameter-controls">
+              <button class="parameter-button" id="tension-down" type="button" aria-label="Decrease petal tension">−</button>
+              <button class="parameter-button" id="tension-up" type="button" aria-label="Increase petal tension">+</button>
+            </div>
+          </div>
+          <div class="parameter-row">
+            <div><span class="parameter-label">Petals</span><strong class="parameter-value">07</strong></div>
+            <span class="parameter-label">Seed 024</span>
+          </div>
+        </div>
+        <div class="focus-readout" aria-label="Growth focus coordinates">
+          <div class="focus-axis"><span>Focus X</span><strong id="focus-x">64</strong></div>
+          <div class="focus-axis"><span>Focus Y</span><strong id="focus-y">50</strong></div>
+        </div>
+      </aside>
+
+      <div class="control-dock">
+        <div class="dock-state"><strong id="artwork-id">C7–D72–T54</strong><span class="dock-hint" id="interaction-hint">Pointer / touch / arrows direct local growth</span></div>
+        <div class="action-group">
+          <button class="control-button" id="reset-button" type="button" disabled>Reset</button>
+          <button class="control-button primary" id="lock-button" type="button">Lock sleeve</button>
+        </div>
+      </div>
+
+      <div class="result-stamp" id="result-stamp" aria-hidden="true">Sleeve master<strong>Locked 06</strong></div>
+      <span class="canvas-note">3,600 deterministic points · local focus deformation</span>
+      <span class="library-badge">p5.js · point corolla</span>
+    </main>
+  </body>
+</html>

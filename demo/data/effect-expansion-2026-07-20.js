@@ -1413,41 +1413,41 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "point-constructed-generative-corolla",
-    "name": "Point-constructed generative corolla",
-    "nameZh": "点构成的生成式花冠",
+    "name": "Generative corolla sleeve director",
+    "nameZh": "生成式花冠唱片封套导演",
     "category": "canvas",
     "sourceUrl": "https://github.com/williamngan/pts",
-    "difference": "点/向量关系生成花冠并受局部指针扰动；当前 p5 波形和粒子涡旋都没有径向花瓣拓扑。",
+    "difference": "3,600 个确定性点构成七瓣、四色花冠；用户定向局部生长并锁定唱片封套，而不是观看自动粒子循环。",
     "behavior": {
-      "trigger": "time/pointer",
-      "response": "Recompute layered radial point geometry around the pointer",
-      "timing": "seeded seamless loop with local response",
-      "layer": "Canvas 2D generative field"
+      "trigger": "trusted pointer, touch, pen, keyboard, parameter, and lock controls",
+      "response": "Move a local growth focus, tune point density and petal tension, then explicitly lock the sleeve master",
+      "timing": "event-driven redraw with a static first frame; reduced motion quantizes focus to discrete steps",
+      "layer": "full-bleed p5 point field, art-direction controls, focus probe, and locked-result stamp"
     },
     "implementation": {
       "projectId": "processing-p5-js",
       "projectUrl": "https://github.com/processing/p5.js",
       "library": "p5@2.3.0",
       "renderer": "canvas2d",
-      "snippet": "for (let ring = 0; ring < 4; ring++) drawCorollaPoints(p, center, ring, phase, pointer);",
+      "snippet": "p.noLoop(); blueprints.forEach(point => drawDeterministicPetalPoint(point, state.focus, state.density, state.tension));",
       "referenceUrl": "https://github.com/williamngan/pts"
     },
     "scores": {
       "creativity": 18,
-      "artDirection": 18,
-      "motion": 18,
-      "clarity": 14,
+      "artDirection": 19,
+      "motion": 19,
+      "clarity": 15,
       "inspiration": 15,
       "evidence": 9,
-      "total": 92
+      "total": 95
     },
-    "rationaleZh": "固定点规则形成明确花冠结构，区别于任意粒子运动。",
+    "rationaleZh": "把装饰性自动生长改为唱片封套定稿任务：真人输入直接改变点密度、花瓣张力和局部生长，Lock 产生清楚的完成结果。",
     "batch": "B",
-    "demo": "四层点花冠缓慢呼吸，指针经过时局部花瓣向外展开。",
-    "capture": "固定 8s phase→pointer 从左到中心→录下展开与闭合。",
+    "demo": "Numa Records 的 3,600 点花冠以七瓣四色确定性几何填满舞台；鼠标、触控、笔或方向键放置局部生长焦点，Density/Tension 调整结构，Lock sleeve 固化封套结果。",
+    "capture": "真实鼠标移动与捕获拖拽定位生长焦点，按钮和键盘修改 Density/Tension，执行 Lock→Unlock→Reset 后重新定向并显式 Lock；断言所有变化均由可信输入触发。",
     "risk": {
       "level": "medium",
-      "detail": "必须固定种子和相位；装饰文字不能承担辨识度。"
+      "detail": "必须保留固定点蓝图、静止首帧和输入驱动重绘；连续自动 phase 或捕获时钟变更均不合格。"
     },
     "observedImplementation": {
       "projectId": "williamngan-pts",

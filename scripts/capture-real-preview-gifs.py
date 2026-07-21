@@ -2222,6 +2222,37 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("ArrowUp")
             elif index == 24:
                 page.keyboard.press("Enter")
+        elif demo["id"] == "svg-metaball-cursor-separation":
+            if index == 2:
+                page.mouse.move(112, 90)
+            elif index == 4:
+                page.mouse.move(112, 90)
+                page.mouse.down()
+            elif index == 5:
+                page.mouse.move(155, 76, steps=2)
+            elif index == 6:
+                page.mouse.move(205, 92, steps=2)
+            elif index == 7:
+                page.mouse.move(258, 108, steps=2)
+            elif index == 8:
+                page.mouse.move(300, 96, steps=2)
+            elif index == 9:
+                page.mouse.up()
+            elif index == 12:
+                page.locator('[data-sort-action="merge"]').click()
+            elif index == 15:
+                page.locator('[data-sort-action="separate"]').click()
+            elif index == 18:
+                page.locator('[data-sort-action="lock"]').click()
+            elif index == 21:
+                page.locator("#reclaim-stage").focus()
+                page.keyboard.press("Enter")
+            elif index == 23:
+                page.keyboard.press("Escape")
+            elif index == 26:
+                page.keyboard.press("End")
+            elif index == 29:
+                page.keyboard.press("Enter")
         elif demo["id"] == "kinetic-paper-fold-map":
             if index == 1:
                 page.mouse.move(280, 100)
@@ -6533,6 +6564,105 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["ready"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture a trusted reversible pixel-derived harbor-risk query, pinned relationship finding, and exact source-backed Poisson graph without automatic focus: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "svg-metaball-cursor-separation":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-material-recovery-batch-topology-separation"
+            or interaction["claimedLibrary"] != "motion@12.42.2"
+            or interaction["mechanism"] != "paused-motion-controls-seek-four-pixel-classified-svg-nodes-inside-feGaussianBlur-feColorMatrix-metaball-topology"
+            or interaction["acceptedInputs"] != ["mouse-hover", "captured-mouse-drag", "captured-touch-drag", "captured-pen-drag", "keyboard", "visible-buttons"]
+            or not interaction["userInputRequired"]
+            or not interaction["initialFrameStatic"]
+            or not interaction["initialStaticConfirmed"]
+            or interaction["automaticCycle"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or interaction["previewClockMutationCount"] != 0
+            or not interaction["renderIgnoresPreviewClock"]
+            or not interaction["controlsBuiltWithoutAutoplay"]
+            or interaction["runtimeAssertCount"] < 2
+            or interaction["inputCount"] < 16
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["ignoredInputCount"] != 0
+            or interaction["pointerEnterCount"] < 1
+            or interaction["pointerMoveCount"] < 8
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerReleaseCount"] != 1
+            or interaction["pointerCancelCount"] != 0
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerReleaseCaptureCount"] != 1
+            or interaction["hoverMutationCount"] < 1
+            or interaction["dragMutationCount"] < 6
+            or interaction["keyboardInputCount"] != 4
+            or interaction["buttonActivationCount"] != 3
+            or interaction["mergeActionCount"] != 1
+            or interaction["separateActionCount"] != 1
+            or interaction["lockActionCount"] != 3
+            or interaction["resetCount"] != 1
+            or interaction["humanInputCausalityCount"] < 14
+            or interaction["separation"] != 1
+            or interaction["maximumSeparation"] != 1
+            or interaction["rotation"] != 0
+            or not interaction["batchLocked"]
+            or interaction["connectedComponentCount"] != 4
+            or interaction["bridgeCount"] != 0
+            or interaction["topologyState"] != "separated"
+            or len(interaction["nodePositions"]) != 4
+            or interaction["initialGeometryChecksum"] == interaction["currentGeometryChecksum"]
+            or interaction["currentGeometryChecksum"] <= 0
+            or interaction["activePointerId"] is not None
+            or interaction["pointerCaptured"]
+            or interaction["dragging"]
+            or interaction["lastInputKind"] != "keyboard-Enter"
+            or interaction["lastInputTrusted"] is not True
+            or interaction["lastPointerType"] != "mouse"
+            or interaction["assetFetchCount"] != 1
+            or interaction["assetResponseStatus"] != 200
+            or not interaction["assetSameOrigin"]
+            or interaction["assetByteLength"] != 362959
+            or interaction["assetSha256"] != "82e14d32428c48fea6267c9a954e8696965dc6ca73a8428554291ebd0f95ac39"
+            or not interaction["assetShaMatchesExpected"]
+            or not interaction["browserImageDecoded"]
+            or interaction["sourceNaturalWidth"] != 960
+            or interaction["sourceNaturalHeight"] != 640
+            or interaction["sourcePixelWidth"] != 96
+            or interaction["sourcePixelHeight"] != 64
+            or interaction["sourcePixelCount"] != 6144
+            or interaction["sourcePixelByteLength"] != 24576
+            or len(interaction["sourcePixelSha256"]) != 64
+            or not interaction["sourcePixelSha256"].strip("0")
+            or interaction["distinctSampleColorCount"] <= 400
+            or interaction["distinctSampleColorCount"] >= 6144
+            or interaction["materialRegionSampleCount"] != 4
+            or interaction["materialRegionPixelCount"] != 3128
+            or interaction["materialIdentityCount"] != 4
+            or set(interaction["materialClasses"]) != {"Cobalt glass", "Copper granulate", "Polymer flake", "Paper fibre"}
+            or len(interaction["materialEvidence"]) != 4
+            or any(evidence["pixelCount"] != 782 for evidence in interaction["materialEvidence"])
+            or any(evidence["confidence"] < 75 or evidence["confidence"] > 99 for evidence in interaction["materialEvidence"])
+            or interaction["materialEvidenceChecksum"] <= 0
+            or not interaction["materialEvidenceReady"]
+            or interaction["svgRootClass"] != "SVGSVGElement"
+            or interaction["svgFilterElementCount"] < 1
+            or interaction["gaussianBlurPrimitiveCount"] < 1
+            or interaction["colorMatrixPrimitiveCount"] < 1
+            or interaction["topologyNodeCount"] != 4
+            or interaction["specimenNodeCount"] != 4
+            or interaction["motionControlCount"] != 4
+            or interaction["motionSeekCount"] < 40
+            or interaction["motionTimeSpread"] != 0
+            or not interaction["motionControlsPaused"]
+            or interaction["previewClockCallCount"] < 36
+            or interaction["previewClockIgnoredCount"] != interaction["previewClockCallCount"]
+            or not interaction["runtimeAssertionPassed"]
+            or not interaction["ready"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture trusted reversible four-material separation, exact pixel identities, paused Motion control synchronization, and a locked SVG topology without automatic playback: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "kinetic-paper-fold-map":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

@@ -103,12 +103,12 @@ export const effectExpansion150BatchB = [
     scores: score(20, 20, 20, 15, 15, 10), rationaleZh: '原创 ImageGen 地下设施切面图经过同源 fetch、精确源 SHA 与浏览器解码，并读取为 96×64 / 6,144 像素；五个水平证据带真实决定每层色调、风险和推荐目的层。可信 hover、捕获拖动、range、键盘及可见按钮同步 seek 五个暂停 Motion 控制器和 CSS3D 折页，可停在任意中间深度且没有自动路径。'
   },
   {
-    id: 'svg-metaball-cursor-separation', order: 136, name: 'SVG metaball cursor separation', nameZh: 'SVG 融球指针分离', category: 'vector', sourceUrl: 'https://github.com/w3c/svgwg',
-    difference: '四个液态成员在同一 SVG 滤镜场内从融合体分离，拓扑连接随距离真实改变。',
-    behavior: { trigger: 'pointer progress', response: 'A fused SVG mass separates into ordered orbiting blobs', timing: 'continuous topology transition', layer: 'filtered SVG group' },
-    prompt: '使用 feGaussianBlur 与 feColorMatrix 构建融球滤镜，让四圆从单体连续分离并保持轨道顺序。',
-    implementation: motionImplementation("const groupMotion = animate(group, { opacity: [.94, 1, .94] }, { duration: 3 }); blobs.forEach(setOrbitalPosition);", 'https://github.com/w3c/svgwg', 'svg'),
-    scores: score(18, 18, 19, 15, 15, 10), rationaleZh: '融合和断开的拓扑变化直接可见，区别于普通圆点轨道。'
+    id: 'svg-metaball-cursor-separation', order: 136, name: 'Reclaim material stream separation', nameZh: '回收材料流分拣', category: 'vector', sourceUrl: 'https://github.com/w3c/svgwg',
+    difference: '一张已验证的回收料盘像素识别出玻璃、铜粒、聚合物与纸纤维，并把四个真实源区映射到 Motion 控制的 SVG 融球拓扑；不是无语义圆点轨道。',
+    behavior: { trigger: '可信 hover、捕获式鼠标/触控/笔拖拽、键盘或 Merge/Separate/Lock', response: '连续分开四类像素鉴别材料，查看拓扑断开并锁定四条回收流', timing: '真人直接 seek 四个暂停 Motion 控制器，输入后保持', layer: '全舞台 SVG 滤镜拓扑、四个图片像素区和分拣控件' },
+    prompt: '制作一个真人操作的回收料分拣台：同源加载并精确校验一张 ImageGen 四分区材料盘，从 96×64 像素中鉴别玻璃、铜粒、聚合物和纸纤维，并将每个源区裁入 feGaussianBlur + feColorMatrix SVG 融球节点。以可信 hover、捕获拖拽、键盘和 Merge/Separate/Lock 直接 seek 四个无 autoplay 的 Motion 控制器，可逆地改变连通分量并锁定分拣计划。',
+    implementation: motionImplementation("const controls = nodes.map(node => animate(node, { opacity: [.92, 1] }, { duration: 1, ease: 'linear', autoplay: false })); controls.forEach(control => control.time = trustedSeparation); applySvgMetaballTopology(pixelClassifiedNodes);", 'https://github.com/w3c/svgwg', 'svg'),
+    scores: score(20, 20, 20, 15, 15, 10), rationaleZh: '原创 ImageGen 回收材料盘经同源 fetch、精确 SHA 与浏览器解码，96×64 像素的四个区域真实决定材料身份、置信度、节点半径和可见纹理。真人 hover、捕获拖拽、键盘与 Merge/Separate/Lock 同步 seek 四个暂停 Motion 控制器和 SVG 连通拓扑；首帧及操作后静止，无 autoplay、rehearsal、fallback、合成输入或预览时钟变更。'
   },
   {
     id: 'gesture-sliced-image-shutters', order: 137, name: 'Gesture sliced image shutters', nameZh: '手势切片图像百叶', category: 'pointer', sourceUrl: 'https://github.com/motiondivision/motion',

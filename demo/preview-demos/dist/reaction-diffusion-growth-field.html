@@ -1,7 +1,436 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p5.js — Reaction Diffusion Growth Field</title><style>:root{--preview-background:#ebe4d6}.a2-stage{background:#eee7d9;color:#231e19}.p5-host{position:absolute;inset:0;cursor:cell;touch-action:none}.p5-host canvas{width:100%!important;height:100%!important}.copy{position:absolute;z-index:3;left:15px;top:48px;width:108px;pointer-events:none;mix-blend-mode:multiply}.copy h1{margin:0;font:950 18px/.86 system-ui;letter-spacing:-.065em}.copy p{margin:9px 0 0;font:750 6px/1.4 ui-monospace;letter-spacing:.09em;text-transform:uppercase}.scene-caption{display:none}.library-badge{color:#251d18;background:#f4eadbc9;border-color:#5d443b33}</style>  <script type="module" crossorigin src="./assets/reaction-diffusion-growth-field-azisLeUY.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
-  <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
-  <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
-  <link rel="modulepreload" crossorigin href="./assets/expansion-a2-utils-DN2D_StR.js">
-  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage a2-stage"><div class="p5-host" data-p5-host tabindex="0" aria-label="Move the pointer to seed a reaction diffusion bloom"></div><section class="copy"><h1>GROWTH FINDS AN EDGE.</h1><p>feed / kill / diffuse / repeat</p></section><span class="library-badge">p5.js · reaction field</span></main></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>p5.js — Human-operated Biomaterial Growth Lab</title>
+    <link rel="icon" href="data:,">
+    <style>
+      :root {
+        --preview-background: #131610;
+        color-scheme: dark;
+      }
+
+      button,
+      input { font: inherit; }
+
+      .culture-stage {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        background: #131610;
+        color: #f6edd6;
+        outline: none;
+        touch-action: none;
+        user-select: none;
+      }
+
+      .culture-stage:focus-visible {
+        box-shadow: inset 0 0 0 2px #e8ff73;
+      }
+
+      .culture-canvas,
+      .culture-canvas canvas,
+      .material-grade,
+      .material-grid {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .culture-canvas canvas {
+        cursor: crosshair;
+        outline: none;
+      }
+
+      .material-grade,
+      .material-grid {
+        z-index: 2;
+        pointer-events: none;
+      }
+
+      .material-grade {
+        background:
+          linear-gradient(90deg, rgba(10, 12, 8, .72), transparent 36%, transparent 70%, rgba(7, 9, 8, .28)),
+          linear-gradient(180deg, rgba(8, 10, 8, .22), transparent 31%, transparent 61%, rgba(7, 8, 6, .76));
+      }
+
+      .material-grid {
+        opacity: .15;
+        background-image:
+          linear-gradient(rgba(246, 237, 214, .16) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(246, 237, 214, .16) 1px, transparent 1px);
+        background-size: clamp(12px, 4vw, 29px) clamp(12px, 4vw, 29px);
+        mask-image: linear-gradient(90deg, rgba(0, 0, 0, .2), #000 48%, rgba(0, 0, 0, .5));
+      }
+
+      .topline,
+      .intro,
+      .probe-card,
+      .culture-console,
+      .preview-stage .library-badge {
+        position: absolute;
+        z-index: 8;
+      }
+
+      .topline {
+        top: clamp(7px, 2.5vw, 18px);
+        left: clamp(8px, 3vw, 22px);
+        right: clamp(8px, 3vw, 22px);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        pointer-events: none;
+      }
+
+      .brand,
+      .culture-status,
+      .eyebrow,
+      .intro p,
+      .probe-label,
+      .probe-value,
+      .reading-label,
+      .reading-value,
+      .bias-label,
+      .control,
+      .hint,
+      .preview-stage .library-badge {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-weight: 800;
+        letter-spacing: .11em;
+        text-transform: uppercase;
+      }
+
+      .brand,
+      .culture-status {
+        display: flex;
+        align-items: center;
+        gap: clamp(4px, 1vw, 7px);
+        color: rgba(246, 237, 214, .7);
+        font-size: clamp(4px, 1.15vw, 8px);
+        white-space: nowrap;
+      }
+
+      .brand::before {
+        width: clamp(12px, 3vw, 22px);
+        height: 1px;
+        background: #e8ff73;
+        content: "";
+      }
+
+      .culture-status::before {
+        width: clamp(4px, .9vw, 7px);
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: #78e8c0;
+        box-shadow: 0 0 10px rgba(120, 232, 192, .72);
+        content: "";
+      }
+
+      .culture-stage[data-generation="0"] .culture-status::before {
+        background: #e8ff73;
+        box-shadow: 0 0 10px rgba(232, 255, 115, .62);
+      }
+
+      .intro {
+        top: 23%;
+        left: clamp(9px, 3.8vw, 28px);
+        width: min(34%, 245px);
+        pointer-events: none;
+      }
+
+      .eyebrow {
+        color: #e8ff73;
+        font-size: clamp(4px, 1.05vw, 8px);
+      }
+
+      .intro h1 {
+        max-width: 230px;
+        margin: clamp(4px, 1.1vw, 8px) 0 0;
+        font: 760 clamp(14px, 5.3vw, 40px)/.84 Georgia, "Times New Roman", serif;
+        letter-spacing: -.068em;
+        text-wrap: balance;
+      }
+
+      .intro p {
+        max-width: 205px;
+        margin: clamp(5px, 1.2vw, 9px) 0 0;
+        color: rgba(246, 237, 214, .6);
+        font-size: clamp(4px, 1vw, 7px);
+        line-height: 1.45;
+      }
+
+      .probe-card {
+        top: 23%;
+        right: clamp(8px, 3.7vw, 27px);
+        display: grid;
+        width: clamp(62px, 18vw, 132px);
+        gap: clamp(4px, .9vw, 7px);
+        padding: clamp(6px, 1.35vw, 10px);
+        border: 1px solid rgba(246, 237, 214, .22);
+        border-radius: clamp(7px, 1.7vw, 13px);
+        background: rgba(13, 16, 12, .68);
+        box-shadow: 0 16px 38px rgba(0, 0, 0, .28);
+        backdrop-filter: blur(12px);
+        pointer-events: none;
+      }
+
+      .probe-head,
+      .probe-zone,
+      .probe-reading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 4px;
+      }
+
+      .probe-label {
+        color: rgba(246, 237, 214, .48);
+        font-size: clamp(3px, .8vw, 6px);
+      }
+
+      .probe-value {
+        color: #fff7df;
+        font-size: clamp(4px, .95vw, 7px);
+        white-space: nowrap;
+      }
+
+      .probe-zone strong {
+        display: flex;
+        align-items: center;
+        gap: clamp(3px, .7vw, 5px);
+      }
+
+      .probe-zone strong::before {
+        width: clamp(5px, 1.2vw, 9px);
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: var(--zone-color, #e8ff73);
+        box-shadow: 0 0 9px color-mix(in srgb, var(--zone-color, #e8ff73) 74%, transparent);
+        content: "";
+      }
+
+      .culture-console {
+        right: clamp(6px, 2.1vw, 15px);
+        bottom: clamp(6px, 2.1vw, 15px);
+        left: clamp(6px, 2.1vw, 15px);
+        display: grid;
+        grid-template-columns: 1.25fr 1fr minmax(92px, 1.7fr) auto;
+        align-items: center;
+        gap: clamp(5px, 1.2vw, 9px);
+        min-height: clamp(29px, 9vw, 58px);
+        padding: clamp(5px, 1.25vw, 9px) clamp(6px, 1.5vw, 11px);
+        border: 1px solid rgba(246, 237, 214, .2);
+        border-radius: clamp(7px, 1.8vw, 13px);
+        background: rgba(11, 14, 10, .78);
+        box-shadow: 0 13px 34px rgba(0, 0, 0, .28);
+        backdrop-filter: blur(14px);
+      }
+
+      .readings {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: clamp(5px, 1.2vw, 9px);
+      }
+
+      .reading { min-width: 0; }
+
+      .reading-label,
+      .bias-label,
+      .hint {
+        display: block;
+        color: rgba(246, 237, 214, .45);
+        font-size: clamp(3px, .72vw, 5px);
+        line-height: 1.2;
+        white-space: nowrap;
+      }
+
+      .reading-value {
+        display: block;
+        margin-top: 2px;
+        color: #fff7df;
+        font-size: clamp(5px, 1.35vw, 10px);
+        letter-spacing: .06em;
+        white-space: nowrap;
+      }
+
+      .hint {
+        color: rgba(232, 255, 115, .76);
+        line-height: 1.35;
+        white-space: normal;
+      }
+
+      .bias-control {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        gap: clamp(3px, .8vw, 6px);
+      }
+
+      .bias-control output {
+        min-width: 2.4em;
+        color: #e8ff73;
+        font: 900 clamp(4px, .9vw, 7px)/1 ui-monospace, monospace;
+        text-align: right;
+      }
+
+      .bias-control input {
+        min-width: 26px;
+        height: clamp(7px, 1.4vw, 10px);
+        accent-color: #e8ff73;
+        cursor: ew-resize;
+      }
+
+      .controls {
+        display: flex;
+        justify-content: flex-end;
+        gap: clamp(3px, .7vw, 5px);
+      }
+
+      .control {
+        min-width: clamp(24px, 5.6vw, 42px);
+        padding: clamp(4px, 1vw, 7px) clamp(4px, 1.1vw, 8px);
+        border: 1px solid rgba(246, 237, 214, .23);
+        border-radius: 999px;
+        background: rgba(246, 237, 214, .06);
+        color: #fff7df;
+        font-size: clamp(3px, .78vw, 6px);
+        line-height: 1;
+        white-space: nowrap;
+        cursor: pointer;
+      }
+
+      .control:hover,
+      .control:focus-visible {
+        border-color: rgba(232, 255, 115, .8);
+        background: rgba(232, 255, 115, .11);
+        outline: none;
+      }
+
+      .control.primary {
+        border-color: rgba(232, 255, 115, .76);
+        background: #e8ff73;
+        color: #171b11;
+      }
+
+      .preview-stage .library-badge {
+        top: clamp(24px, 8vw, 58px);
+        left: clamp(8px, 3vw, 22px);
+        color: rgba(246, 237, 214, .78);
+        background: rgba(12, 15, 11, .7);
+        border-color: rgba(246, 237, 214, .2);
+        font-size: clamp(3px, .8vw, 6px);
+      }
+
+      @media (max-width: 380px) {
+        .culture-console {
+          grid-template-columns: 1fr minmax(48px, .9fr) auto;
+        }
+        .hint { display: none; }
+        .readings { grid-template-columns: repeat(2, 1fr); }
+        .reading:nth-child(2) { display: none; }
+        .probe-reading:last-child { display: none; }
+      }
+
+      @media (max-width: 180px) {
+        .intro { top: 27%; width: 44%; }
+        .intro p { display: none; }
+        .probe-card { top: 28%; }
+        .culture-console {
+          gap: 3px;
+          padding: 4px;
+          grid-template-columns: minmax(25px, .75fr) minmax(24px, .7fr) auto;
+        }
+        .reading:nth-child(3),
+        .bias-label { display: none; }
+        .bias-control { grid-template-columns: 1fr auto; }
+        .control { min-width: 20px; padding-inline: 2px; }
+        .control span { display: none; }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/reaction-diffusion-growth-field-_ud60Vsi.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+    <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
+    <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main
+      id="culture-stage"
+      class="preview-stage culture-stage"
+      data-generation="0"
+      data-zone="cellulose"
+      tabindex="0"
+      aria-label="Biomaterial reaction diffusion laboratory. Hover to inspect the sampled substrate, drag to inoculate, then use Step to evolve a finite batch."
+    >
+      <div id="culture-canvas" class="culture-canvas" aria-hidden="true"></div>
+      <div class="material-grade"></div>
+      <div class="material-grid"></div>
+
+      <header class="topline" aria-hidden="true">
+        <div class="brand">MATERIA / CULTURE 115</div>
+        <div class="culture-status"><span id="culture-state">Held · human step only</span></div>
+      </header>
+
+      <section class="intro" aria-hidden="true">
+        <div class="eyebrow">Culture substrate / pixel assay</div>
+        <h1>Grow the boundary.</h1>
+        <p>Drag inoculum into the material. Advance only when the culture should move.</p>
+      </section>
+
+      <aside id="probe-card" class="probe-card" aria-live="polite">
+        <div class="probe-head">
+          <span class="probe-label">Probe</span>
+          <span id="probe-coordinate" class="probe-value">40 / 22</span>
+        </div>
+        <div class="probe-zone">
+          <span class="probe-label">Zone</span>
+          <strong id="probe-zone" class="probe-value">cellulose</strong>
+        </div>
+        <div class="probe-reading">
+          <span class="probe-label">Feed</span>
+          <span id="probe-feed" class="probe-value">0.000</span>
+        </div>
+        <div class="probe-reading">
+          <span class="probe-label">Kill</span>
+          <span id="probe-kill" class="probe-value">0.000</span>
+        </div>
+      </aside>
+
+      <section class="culture-console" aria-label="Culture controls">
+        <div class="readings" aria-live="polite">
+          <div class="reading">
+            <span class="reading-label">Generation</span>
+            <strong id="generation-reading" class="reading-value">000</strong>
+          </div>
+          <div class="reading">
+            <span class="reading-label">Inoculum</span>
+            <strong id="inoculum-reading" class="reading-value">000</strong>
+          </div>
+          <div class="reading">
+            <span class="reading-label">Active</span>
+            <strong id="active-reading" class="reading-value">0%</strong>
+          </div>
+        </div>
+
+        <div class="hint">Drag seed · Step ×8 · Space steps · Arrows probe</div>
+
+        <label class="bias-control" for="nutrient-bias">
+          <span class="bias-label">Nutrient</span>
+          <input id="nutrient-bias" type="range" min="-12" max="12" step="1" value="0">
+          <output id="bias-output" for="nutrient-bias">+00</output>
+        </label>
+
+        <div class="controls">
+          <button class="control primary" type="button" data-culture-action="step"><span>Step </span>×8</button>
+          <button class="control" type="button" data-culture-action="undo">Undo</button>
+          <button class="control" type="button" data-culture-action="reset">Reset</button>
+        </div>
+      </section>
+
+      <span class="library-badge">p5.js · Gray–Scott / held</span>
+    </main>
+  </body>
+</html>

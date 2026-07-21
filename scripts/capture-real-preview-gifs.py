@@ -2314,6 +2314,40 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("ArrowLeft")
             elif index == 34:
                 page.locator('[data-sort-action="commit"]').click()
+        elif demo["id"] == "reaction-diffusion-growth-field":
+            if index == 2:
+                page.mouse.move(230, 90)
+            elif index == 4:
+                page.mouse.down()
+            elif index == 5:
+                page.mouse.move(210, 80, steps=2)
+            elif index == 6:
+                page.mouse.move(190, 70, steps=2)
+            elif index == 7:
+                page.mouse.move(170, 90, steps=2)
+            elif index == 8:
+                page.mouse.move(190, 110, steps=2)
+            elif index == 9:
+                page.mouse.move(220, 120, steps=2)
+            elif index == 10:
+                page.mouse.up()
+            elif index == 12:
+                page.locator("#nutrient-bias").focus()
+                page.keyboard.press("ArrowRight")
+                page.keyboard.press("ArrowRight")
+            elif index == 15:
+                page.locator('[data-culture-action="step"]').click()
+            elif index == 18:
+                page.locator("#culture-stage").focus()
+                page.keyboard.press("ArrowRight")
+            elif index == 20:
+                page.keyboard.press("Enter")
+            elif index == 22:
+                page.keyboard.press("Space")
+            elif index == 25:
+                page.locator('[data-culture-action="step"]').click()
+            elif index == 31:
+                page.locator('[data-culture-action="step"]').click()
         elif demo["id"] == "poisson-constellation-bloom":
             if index == 2:
                 page.mouse.move(170, 92)
@@ -7043,6 +7077,131 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["ready"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture trusted reversible source-pixel magnetic recovery, exact archive evidence, and a human-preserved final sort without automatic behavior: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "reaction-diffusion-growth-field":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-image-sampled-biomaterial-reaction-diffusion-assay"
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["renderer"] != "canvas2d"
+            or interaction["mechanism"] != "gray-scott-reaction-diffusion-with-per-cell-feed-kill-and-diffusion-parameters-derived-from-decoded-source-pixels"
+            or interaction["acceptedInputs"] != ["mouse-hover", "captured-mouse-drag", "captured-touch-drag", "captured-pen-drag", "keyboard", "range-control", "visible-buttons"]
+            or not interaction["userInputRequired"]
+            or not interaction["strictTrustedInputGuard"]
+            or not interaction["initialFrameStatic"]
+            or not interaction["initialStillVerified"]
+            or interaction["automaticCycle"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["previewClockMutationCount"] != 0
+            or interaction["nonInputVisualMutationCountAfterReady"] != 0
+            or interaction["inputCount"] < 20
+            or interaction["trustedInputCount"] != interaction["inputCount"]
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["pointerEnterCount"] < 1
+            or interaction["hoverMoveCount"] < 1
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerMoveCount"] < 10
+            or interaction["dragMoveCount"] < 10
+            or interaction["pointerUpCount"] != 1
+            or interaction["pointerCancelCount"] != 0
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerCaptureReleaseCount"] != 1
+            or interaction["pointerTypesSeen"] != ["mouse"]
+            or interaction["keyboardInputCount"] != 3
+            or interaction["rangeInputCount"] != 2
+            or interaction["buttonActivationCount"] != 3
+            or interaction["manualStepBatchCount"] != 4
+            or interaction["stepButtonCount"] != 3
+            or interaction["stepKeyboardCount"] != 1
+            or interaction["generation"] != 32
+            or interaction["solverIterationCount"] != 32
+            or interaction["nutrientBias"] != 2
+            or interaction["biasMutationCount"] != 2
+            or interaction["inoculationStrokeCount"] != 2
+            or interaction["inoculationPointCount"] < 10
+            or interaction["depositedCellMutationCount"] <= 0
+            or interaction["inoculatedCellCount"] <= 0
+            or interaction["undoCount"] != 0
+            or interaction["resetCount"] != 0
+            or not interaction["fieldChangedByHuman"]
+            or interaction["currentFieldChecksum"] == interaction["initialFieldChecksum"]
+            or interaction["humanMutationCount"] <= 0
+            or interaction["humanInputCausalityCount"] <= 0
+            or interaction["activePointerId"] is not None
+            or interaction["pointerCaptured"]
+            or interaction["lastInputKind"] != "button-step"
+            or interaction["lastInputSource"] != "visible-button"
+            or interaction["lastInputTrusted"] is not True
+            or interaction["lastPointerType"] != "mouse"
+            or interaction["assetFetchCount"] != 1
+            or interaction["assetResponseStatus"] != 200
+            or not interaction["assetSameOrigin"]
+            or not interaction["assetMimeType"].startswith("image/jpeg")
+            or interaction["assetByteLength"] != 418008
+            or interaction["assetSha256"] != "316ec17368475dafffaba704a2be2b5ecff9a436698f8947263f9e1f47e5f46a"
+            or not interaction["assetShaMatchesExpected"]
+            or not interaction["browserImageDecoded"]
+            or interaction["sourceNaturalWidth"] != 960
+            or interaction["sourceNaturalHeight"] != 640
+            or not interaction["p5ImageDecoded"]
+            or interaction["p5ImageClass"] != "p5.Image"
+            or interaction["p5ImageWidth"] != 960
+            or interaction["p5ImageHeight"] != 640
+            or interaction["p5ImagePixelLength"] < 2457600
+            or not interaction["browserCanvasReadback"]
+            or interaction["sampledWidth"] != 80
+            or interaction["sampledHeight"] != 45
+            or interaction["sampledPixelCount"] != 3600
+            or interaction["sampledPixelByteLength"] != 14400
+            or len(interaction["sampledPixelSha256"]) != 64
+            or not interaction["sampledPixelSha256"].strip("0")
+            or len(interaction["sampledPixelChecksum"]) != 8
+            or interaction["distinctSampleColorCount"] <= 300
+            or interaction["sourceAlphaFailureCount"] != 0
+            or interaction["sampledLumaMinimum"] >= .25
+            or interaction["sampledLumaMaximum"] <= .72
+            or interaction["sampledLumaRange"] <= .55
+            or interaction["sampledSaturationMean"] <= .18
+            or interaction["sampledSaturationMean"] >= .72
+            or interaction["edgePairSampleCount"] != 7075
+            or interaction["edgeStrengthMaximum"] <= .18
+            or interaction["edgeStrengthRange"] <= .16
+            or len(interaction["zoneCategoriesPresent"]) < 5
+            or interaction["zoneCategoryCounts"].get("cellulose", 0) <= 50
+            or interaction["zoneCategoryCounts"].get("agar", 0) <= 50
+            or interaction["zoneCategoryCounts"].get("mineral", 0) <= 50
+            or interaction["zoneCategoryCounts"].get("biofilm", 0) <= 20
+            or interaction["zoneCategoryCounts"].get("seam", 0) <= 10
+            or interaction["feedRange"] <= .008
+            or interaction["killRange"] <= .005
+            or interaction["diffusionARange"] <= .1
+            or interaction["diffusionBRange"] <= .08
+            or interaction["initialSeedAnchorCount"] != 7
+            or interaction["initialSeedCellCount"] < 75
+            or interaction["initialSeedCellCount"] > 100
+            or interaction["initialSeedEdgeMean"] <= .1
+            or len(interaction["initialFieldChecksum"]) != 8
+            or not interaction["p5InstanceReady"]
+            or not interaction["p5CanvasReady"]
+            or interaction["p5CanvasWidth"] != 320
+            or interaction["p5CanvasHeight"] != 180
+            or interaction["p5CompletedDrawCount"] < 15
+            or interaction["p5ImageDrawCount"] < 1
+            or interaction["substrateCellDrawCount"] != 3600
+            or interaction["reactionCellDrawCount"] <= 0
+            or interaction["stageCoverageRatio"] <= .98
+            or interaction["canvasCoverageRatio"] <= .98
+            or interaction["previewRenderCalls"] < 36
+            or not interaction["runtimeAssertionPassed"]
+            or not interaction["ready"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture trusted biomaterial probing, captured inoculation, pixel-derived nutrient bias, keyboard seeding, and four finite eight-iteration Gray-Scott batches without automatic growth: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "poisson-constellation-bloom":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

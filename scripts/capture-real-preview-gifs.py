@@ -1849,6 +1849,45 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 25:
                 route = page.evaluate("window.__PREVIEW_INTERACTION_STATE__.routeEvidence")
                 page.mouse.move(route[5]["u"] * 320, route[5]["v"] * 180)
+        elif demo["id"] == "flowfield-paper-marbling":
+            if index == 2:
+                page.mouse.move(180, 80)
+            elif index == 4:
+                page.mouse.move(140, 62)
+                page.mouse.down()
+            elif index == 5:
+                page.mouse.move(180, 80, steps=2)
+            elif index == 6:
+                page.mouse.move(220, 95, steps=2)
+            elif index == 7:
+                page.mouse.move(260, 110, steps=2)
+            elif index == 8:
+                page.mouse.up()
+            elif index == 10:
+                page.locator("#comb-tines").focus()
+                page.keyboard.press("ArrowRight")
+            elif index == 12:
+                page.locator('[data-action="approve"]').click()
+            elif index == 15:
+                page.locator('[data-action="undo"]').click()
+            elif index == 17:
+                page.locator('[data-action="reset"]').click()
+            elif index == 19:
+                page.mouse.move(250, 55)
+                page.mouse.down()
+            elif index == 20:
+                page.mouse.move(220, 73, steps=2)
+            elif index == 21:
+                page.mouse.move(185, 94, steps=2)
+            elif index == 22:
+                page.mouse.move(150, 118, steps=2)
+            elif index == 23:
+                page.mouse.up()
+            elif index == 25:
+                page.locator("#marbling-stage").focus()
+                page.keyboard.press("ArrowRight")
+            elif index == 27:
+                page.keyboard.press("Enter")
         elif demo["id"] == "kinetic-variable-font-axis":
             if index == 2:
                 page.mouse.move(165, 95)
@@ -5311,6 +5350,125 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["ready"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture a trusted six-fix pixel-derived night route, explicit confirmation, undo, keyboard reacquisition, and final reseal without automatic stitching: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "flowfield-paper-marbling":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        category_total = sum(interaction["pigmentCategoryCounts"].values())
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-fictional-pigment-bath-calibration-combing-and-print-proof-approval"
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["mechanism"] != "real-raster-pixels-to-pigment-density-local-gradient-flowfield-contamination-metrics-and-human-comb-deformation"
+            or interaction["acceptedInputs"] != ["mouse-hover", "mouse-drag", "touch-drag", "pen-drag", "keyboard", "button", "range"]
+            or not interaction["userInputRequired"]
+            or not interaction["strictTrustedInputGuard"]
+            or not interaction["initialFrameStatic"]
+            or interaction["automaticCycle"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["previewClockMutationCount"] != 0
+            or interaction["nonInputVisualMutationCountAfterReady"] != 0
+            or interaction["inputCount"] != interaction["trustedInputCount"]
+            or interaction["inputCount"] < 20
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["pointerEnterCount"] < 1
+            or interaction["hoverMoveCount"] < 1
+            or interaction["pointerDownCount"] != 2
+            or interaction["pointerMoveCount"] < 10
+            or interaction["pointerUpCount"] != 2
+            or interaction["pointerCancelCount"] != 0
+            or interaction["pointerCaptureCount"] != 2
+            or interaction["pointerCaptureReleaseCount"] != 2
+            or interaction["pointerCaptured"]
+            or interaction["activePointerId"] is not None
+            or interaction["combStrokeCount"] != 2
+            or interaction["combPointCount"] < 10
+            or interaction["retainedStrokeCount"] != 1
+            or interaction["retainedPointCount"] < 5
+            or interaction["combMutationCount"] < 12
+            or interaction["flowDeformationCount"] < 1
+            or interaction["maximumFlowDeformation"] <= 0
+            or interaction["rangeInputCount"] != 1
+            or interaction["keyboardInputCount"] != 2
+            or interaction["buttonActivationCount"] != 3
+            or interaction["tineMutationCount"] != 2
+            or interaction["undoCount"] != 1
+            or interaction["resetCount"] != 1
+            or interaction["approvalCount"] != 2
+            or interaction["holdCount"] != 0
+            or interaction["approvalMutationCount"] != 2
+            or interaction["reversibleMutationCount"] < 4
+            or interaction["humanMutationCount"] < 18
+            or not interaction["approved"]
+            or interaction["combTineCount"] != 9
+            or interaction["currentQualityScore"] < 86
+            or interaction["currentQualityLabel"] != "PRESS READY"
+            or interaction["lastInputTrusted"] is not True
+            or interaction["lastInputKind"] != "keyboard"
+            or interaction["lastInputSource"] != "keyboard-approve"
+            or interaction["lastPointerType"] != "mouse"
+            or interaction["pointerTypesSeen"] != ["mouse"]
+            or interaction["assetFetchCount"] != 1
+            or interaction["assetResponseStatus"] != 200
+            or "image/jpeg" not in interaction["assetMimeType"]
+            or not interaction["assetSameOrigin"]
+            or interaction["assetByteLength"] != 423661
+            or interaction["assetSha256"] != "f368a7e66e8e91c8118739f5bddb7979a55b4aa0397c6007882bc1b80d12be01"
+            or not interaction["assetShaMatchesExpected"]
+            or not interaction["browserImageDecoded"]
+            or interaction["sourceNaturalWidth"] != 960
+            or interaction["sourceNaturalHeight"] != 640
+            or not interaction["p5ImageDecoded"]
+            or interaction["p5ImageClass"] != "p5.Image"
+            or interaction["p5ImageWidth"] != 960
+            or interaction["p5ImageHeight"] != 640
+            or interaction["p5ImagePixelLength"] < 2457600
+            or interaction["sampledWidth"] != 72
+            or interaction["sampledHeight"] != 48
+            or interaction["sampledPixelCount"] != 3456
+            or interaction["sampledPixelByteLength"] != 13824
+            or len(interaction["sampledPixelSha256"]) != 64
+            or not interaction["sampledPixelSha256"].strip("0")
+            or len(interaction["sampledPixelChecksum"]) != 8
+            or interaction["distinctSampleColorCount"] <= 250
+            or interaction["sourceAlphaFailureCount"] != 0
+            or interaction["sampledLuminanceMinimum"] >= .24
+            or interaction["sampledLuminanceMaximum"] <= .72
+            or interaction["sampledLuminanceRange"] <= .55
+            or interaction["pigmentDensity"] <= .2
+            or interaction["pigmentDensity"] >= .88
+            or interaction["pigmentDensityRange"] <= .55
+            or interaction["contaminationPixelCount"] < 0
+            or interaction["contaminationRatio"] < 0
+            or interaction["contaminationRatio"] >= .18
+            or category_total != 3456
+            or not {"indigo", "oxidized-teal", "madder", "ochre"}.issubset(set(interaction["pigmentCategoriesPresent"]))
+            or interaction["flowFieldWidth"] != 72
+            or interaction["flowFieldHeight"] != 48
+            or interaction["flowCellCount"] != 3456
+            or len(interaction["flowVectorChecksum"]) != 8
+            or interaction["flowMagnitudeMinimum"] <= 0
+            or interaction["flowMagnitudeMaximum"] <= interaction["flowMagnitudeMinimum"]
+            or interaction["flowMagnitudeRange"] <= .2
+            or interaction["sourceQualityScore"] < 60
+            or interaction["sourceQualityScore"] > 89
+            or interaction["paperCoverageRatio"] <= .42
+            or interaction["paperCoverageRatio"] >= .52
+            or interaction["canvasCoverageRatio"] < .95
+            or interaction["p5ImageDrawCount"] < 1
+            or interaction["streamlineDrawCount"] < 50
+            or interaction["streamlineSegmentDrawCount"] < 400
+            or interaction["combGuideDrawCount"] < 7
+            or interaction["p5CompletedDrawCount"] < 12
+            or not interaction["initialStillVerified"]
+            or not interaction["runtimeAssertionPassed"]
+            or not interaction["ready"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture two trusted retained marbling combs, reversible proof controls, and final explicit approval over a pixel-built pigment flowfield without automatic advection: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "kinetic-variable-font-axis":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

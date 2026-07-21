@@ -1,8 +1,440 @@
-<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Flowfield Paper Marbling</title><style>:root{--preview-background:#efe6d5}canvas{width:100%;height:100%}.copy{position:absolute;left:14px;top:49px;width:100px;color:#28231e}.copy small{font:900 6px monospace;letter-spacing:.14em;color:#995347}.copy h1{margin:8px 0;font:950 20px/.84 system-ui;letter-spacing:-.06em}.library-badge{color:#28231e;background:#fff9;border-color:#28231e44}.scene-caption{display:none}</style>  <script type="module" crossorigin src="./assets/flowfield-paper-marbling-DBRW73_5.js"></script>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Mizu Press — Human-operated Marbling Proof</title>
+  <style>
+    :root {
+      --preview-background: #111412;
+      --paper: #e8ddc3;
+      --ink: #181b18;
+      --muted: #999d91;
+      --line: rgba(232, 221, 195, .22);
+      --signal: #df8d40;
+      color-scheme: dark;
+    }
+
+    button,
+    input { font: inherit; }
+
+    button { -webkit-tap-highlight-color: transparent; }
+
+    .marbling-stage {
+      position: absolute;
+      inset: 0;
+      container-type: size;
+      overflow: hidden;
+      background:
+        linear-gradient(90deg, rgba(255, 255, 255, .018) 1px, transparent 1px) 0 0 / 22px 22px,
+        linear-gradient(rgba(255, 255, 255, .018) 1px, transparent 1px) 0 0 / 22px 22px,
+        radial-gradient(circle at 78% 45%, rgba(28, 91, 98, .17), transparent 44%),
+        #111412;
+      color: var(--paper);
+      outline: none;
+      user-select: none;
+      touch-action: none;
+    }
+
+    .marbling-stage::after {
+      position: absolute;
+      z-index: 2;
+      inset: 4px;
+      border: 1px solid var(--line);
+      border-radius: clamp(7px, 1.7cqw, 15px);
+      pointer-events: none;
+      content: "";
+    }
+
+    .marbling-stage:focus-visible::after {
+      border-color: rgba(231, 147, 70, .88);
+      box-shadow: inset 0 0 0 1px rgba(231, 147, 70, .28);
+    }
+
+    .marbling-canvas,
+    .marbling-canvas canvas,
+    .material-grade,
+    .material-grain {
+      position: absolute;
+      inset: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .marbling-canvas canvas {
+      cursor: crosshair;
+      touch-action: none;
+    }
+
+    .material-grade,
+    .material-grain { pointer-events: none; }
+
+    .material-grade {
+      z-index: 1;
+      background:
+        linear-gradient(90deg, rgba(8, 11, 9, .64), transparent 34%, transparent 78%, rgba(8, 11, 9, .16)),
+        linear-gradient(180deg, rgba(8, 11, 9, .42), transparent 24%, transparent 71%, rgba(8, 11, 9, .55));
+    }
+
+    .material-grain {
+      z-index: 2;
+      opacity: .09;
+      mix-blend-mode: soft-light;
+      background-image: radial-gradient(rgba(255, 249, 229, .78) .45px, transparent .65px);
+      background-size: 3px 3px;
+    }
+
+    .topline {
+      position: absolute;
+      z-index: 7;
+      top: clamp(6px, 3cqh, 13px);
+      left: clamp(8px, 2.4cqw, 18px);
+      right: clamp(8px, 2.4cqw, 18px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      pointer-events: none;
+    }
+
+    .press-id,
+    .proof-state,
+    .eyebrow,
+    .metric span,
+    .metric strong,
+    .instruction,
+    .sample-card,
+    .range-control,
+    .control-button,
+    .keymap {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      text-transform: uppercase;
+      letter-spacing: .11em;
+    }
+
+    .press-id {
+      display: flex;
+      align-items: center;
+      gap: clamp(5px, 1.3cqw, 9px);
+      color: var(--muted);
+      font-size: clamp(4px, .92cqw, 7px);
+      font-weight: 850;
+      white-space: nowrap;
+    }
+
+    .press-mark {
+      display: grid;
+      width: clamp(16px, 3.3cqw, 25px);
+      aspect-ratio: 1;
+      place-items: center;
+      border: 1px solid rgba(232, 221, 195, .35);
+      border-radius: 50%;
+      color: var(--signal);
+      font-size: .72em;
+      font-weight: 950;
+    }
+
+    .press-id b { color: var(--paper); }
+
+    .proof-state {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--signal);
+      font-size: clamp(4px, .9cqw, 7px);
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .proof-state::before {
+      width: clamp(4px, .8cqw, 6px);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: currentColor;
+      box-shadow: 0 0 10px currentColor;
+      content: "";
+    }
+
+    .editorial-copy {
+      position: absolute;
+      z-index: 6;
+      top: 27%;
+      left: clamp(8px, 2.4cqw, 18px);
+      width: 25%;
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--signal);
+      font-size: clamp(4px, .84cqw, 6px);
+      font-weight: 900;
+    }
+
+    .eyebrow::before {
+      width: clamp(8px, 2cqw, 15px);
+      height: 1px;
+      background: currentColor;
+      content: "";
+    }
+
+    .editorial-copy h1 {
+      max-width: 150px;
+      margin: clamp(4px, 1.7cqh, 8px) 0 0;
+      font: 650 clamp(13px, 3.7cqw, 28px)/.88 Georgia, "Times New Roman", serif;
+      letter-spacing: -.055em;
+    }
+
+    .instruction {
+      max-width: 128px;
+      margin: clamp(5px, 2cqh, 9px) 0 0;
+      color: rgba(232, 221, 195, .66);
+      font-size: clamp(3.5px, .68cqw, 5px);
+      font-weight: 750;
+      line-height: 1.48;
+    }
+
+    .metrics {
+      position: absolute;
+      z-index: 6;
+      left: clamp(8px, 2.4cqw, 18px);
+      bottom: clamp(26px, 17cqh, 70px);
+      display: grid;
+      width: 23%;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: clamp(3px, .9cqw, 7px);
+      pointer-events: none;
+    }
+
+    .metric {
+      min-width: 0;
+      padding: clamp(4px, 1.15cqw, 8px);
+      border: 1px solid var(--line);
+      border-radius: clamp(3px, .8cqw, 6px);
+      background: rgba(11, 14, 12, .62);
+      backdrop-filter: blur(6px);
+    }
+
+    .metric span,
+    .metric strong { display: block; }
+
+    .metric span {
+      overflow: hidden;
+      color: var(--muted);
+      font-size: clamp(3px, .58cqw, 4.5px);
+      font-weight: 800;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .metric strong {
+      margin-top: 4px;
+      color: var(--paper);
+      font-size: clamp(5px, 1.2cqw, 9px);
+      font-weight: 950;
+      white-space: nowrap;
+    }
+
+    .metric strong[data-tone="signal"] { color: var(--signal); }
+
+    .sample-card {
+      position: absolute;
+      z-index: 8;
+      min-width: clamp(49px, 9cqw, 69px);
+      padding: clamp(4px, .9cqw, 7px);
+      border: 1px solid rgba(244, 235, 210, .42);
+      border-radius: clamp(3px, .7cqw, 5px);
+      background: rgba(12, 15, 13, .88);
+      color: var(--muted);
+      font-size: clamp(3px, .62cqw, 5px);
+      font-weight: 800;
+      line-height: 1.45;
+      opacity: 0;
+      transform: translate(8px, -50%);
+      pointer-events: none;
+      backdrop-filter: blur(8px);
+    }
+
+    .sample-card[data-visible="true"] { opacity: 1; }
+    .sample-card b { color: var(--paper); }
+    .sample-card i {
+      display: inline-block;
+      width: 5px;
+      height: 5px;
+      margin-right: 4px;
+      border-radius: 50%;
+      background: var(--sample-color, var(--signal));
+      box-shadow: 0 0 8px var(--sample-color, var(--signal));
+    }
+
+    .control-deck {
+      position: absolute;
+      z-index: 9;
+      right: clamp(8px, 2.4cqw, 18px);
+      bottom: clamp(7px, 3.2cqh, 14px);
+      left: clamp(8px, 2.4cqw, 18px);
+      display: grid;
+      grid-template-columns: auto minmax(68px, 1fr) auto;
+      align-items: end;
+      gap: clamp(5px, 1.6cqw, 12px);
+      pointer-events: none;
+    }
+
+    .keymap {
+      align-self: center;
+      color: rgba(232, 221, 195, .55);
+      font-size: clamp(3px, .58cqw, 4.5px);
+      font-weight: 800;
+      line-height: 1.42;
+      white-space: nowrap;
+    }
+
+    .range-control {
+      display: grid;
+      min-width: 0;
+      gap: 4px;
+      padding: clamp(4px, .9cqw, 7px) clamp(6px, 1.3cqw, 10px);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(12, 15, 13, .82);
+      color: var(--muted);
+      font-size: clamp(3px, .62cqw, 5px);
+      font-weight: 850;
+      pointer-events: auto;
+      backdrop-filter: blur(8px);
+    }
+
+    .range-label {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .range-label output { color: var(--signal); font-weight: 950; }
+
+    .range-control input {
+      width: 100%;
+      height: 5px;
+      margin: 0;
+      accent-color: var(--signal);
+      cursor: ew-resize;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 3px;
+      padding: 3px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(12, 15, 13, .84);
+      pointer-events: auto;
+      backdrop-filter: blur(8px);
+    }
+
+    .control-button {
+      min-width: clamp(26px, 5.5cqw, 43px);
+      padding: clamp(4px, 1.4cqh, 7px) clamp(5px, 1.1cqw, 8px);
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--muted);
+      font-size: clamp(3px, .62cqw, 5px);
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .control-button:hover,
+    .control-button:focus-visible { background: rgba(232, 221, 195, .09); color: var(--paper); outline: none; }
+    .control-button[data-action="approve"] { background: var(--signal); color: #171712; }
+
+    .marbling-stage > .library-badge {
+      z-index: 7;
+      top: clamp(20px, 10cqh, 40px);
+      right: clamp(8px, 2.4cqw, 18px);
+      left: auto;
+      padding: clamp(3px, .8cqw, 6px) clamp(5px, 1.1cqw, 8px);
+      border-color: rgba(232, 221, 195, .25);
+      background: rgba(12, 15, 13, .72);
+      color: rgba(232, 221, 195, .78);
+      font-size: clamp(3px, .62cqw, 5px);
+      backdrop-filter: blur(7px);
+    }
+
+    @container (max-width: 230px) {
+      .editorial-copy { top: 25%; width: 27%; }
+      .instruction { display: none; }
+      .metrics { bottom: 29%; width: 24%; grid-template-columns: 1fr; }
+      .metric:nth-child(2) { display: none; }
+      .control-deck { grid-template-columns: minmax(44px, 1fr) auto; }
+      .keymap { display: none; }
+      .button-group .control-button[data-action="reset"] { display: none; }
+    }
+
+    @container (max-height: 110px) {
+      .editorial-copy h1 { margin-top: 3px; }
+      .metrics { display: none; }
+      .proof-state span:last-child { display: none; }
+      .control-deck { bottom: 5px; }
+      .range-control { gap: 2px; padding-block: 3px; }
+      .button-group { padding: 2px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { scroll-behavior: auto !important; }
+    }
+  </style>
+  <script type="module" crossorigin src="./assets/flowfield-paper-marbling-BcB557sA.js"></script>
   <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
-  <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
   <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
   <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
-  <link rel="modulepreload" crossorigin href="./assets/expansion-b-utils-CD_J0IHW.js">
   <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage"><canvas tabindex="0" aria-label="Flow lines comb pigment into marbled paper"></canvas><section class="copy"><small>INK / CURRENT</small><h1>COMB A RIVER THROUGH PAPER.</h1></section><span class="library-badge">p5.js · flowfield marbling</span></main></body></html>
+</head>
+<body>
+  <main id="marbling-stage" class="preview-stage marbling-stage" tabindex="0" aria-label="Interactive pigment calibration and paper marbling proof. Drag across the paper to comb the live flow field.">
+    <div id="marbling-canvas" class="marbling-canvas" aria-hidden="true"></div>
+    <div class="material-grade"></div>
+    <div class="material-grain"></div>
+
+    <header class="topline">
+      <div class="press-id"><span class="press-mark">水</span><span><b>MIZU PRESS</b> / BATH 03</span></div>
+      <div id="proof-state" class="proof-state"><span>PROOF OPEN</span></div>
+    </header>
+
+    <section class="editorial-copy">
+      <div class="eyebrow">PIGMENT / LIVE</div>
+      <h1>Comb the bath. Keep the paper.</h1>
+      <p class="instruction">Hover to inspect a real scan. Drag to rake its pixel-built current. Nothing moves until you do.</p>
+    </section>
+
+    <section class="metrics" aria-live="polite">
+      <div class="metric"><span>Proof score</span><strong id="score-readout" data-tone="signal">—</strong></div>
+      <div class="metric"><span>Contamination</span><strong id="contamination-readout">—</strong></div>
+      <div class="metric"><span>Pigment load</span><strong id="density-readout">—</strong></div>
+      <div class="metric"><span>Combed paths</span><strong id="stroke-readout">0</strong></div>
+    </section>
+
+    <div id="sample-card" class="sample-card" data-visible="false" aria-hidden="true">
+      <div><i></i><b id="sample-name">PIGMENT</b></div>
+      <div id="sample-density">LOAD —</div>
+    </div>
+
+    <section class="control-deck" aria-label="Marbling proof controls">
+      <div class="keymap">DRAG / COMB<br>← → / TINES</div>
+      <label class="range-control" for="comb-tines">
+        <span class="range-label"><span>Comb tines</span><output id="tine-readout" for="comb-tines">7</output></span>
+        <input id="comb-tines" type="range" min="3" max="11" step="2" value="7">
+      </label>
+      <div class="button-group">
+        <button class="control-button" type="button" data-action="undo" aria-label="Undo last comb path">Undo</button>
+        <button class="control-button" type="button" data-action="reset" aria-label="Reset paper proof">Reset</button>
+        <button class="control-button" type="button" data-action="approve" aria-label="Approve current paper proof">Approve</button>
+      </div>
+    </section>
+
+    <span class="library-badge">p5.js · pixel flowfield</span>
+  </main>
+</body>
+</html>

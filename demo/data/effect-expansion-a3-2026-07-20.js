@@ -51,11 +51,11 @@ export const effectExpansion150BatchA3 = [
     scores: scores(19, 19, 18, 15, 15, 10), rationaleZh: '分析距离场直接形成建筑轮廓与光晕，机制与画面高度一致。'
   },
   {
-    id: 'flowfield-paper-marbling', order: 125, name: 'Flowfield paper marbling', nameZh: '流场纸面大理石纹', category: 'canvas', sourceUrl: 'https://github.com/processing/p5.js',
-    difference: '七十条固定颜料流线逐步积分正弦向量场，并由指针模拟梳齿改变全局流向，不是 Perlin 噪声背景。',
-    behavior: { trigger: 'pointer comb direction or animation frame', response: 'Pigment streams integrate through a combed vector field into marbled paper', timing: 'continuous deterministic streamline advection', layer: 'paper marbling canvas' },
-    prompt: '用固定种子生成七十条颜料流线，逐步积分解析向量场；指针横向位置改变梳理项。',
-    implementation: p5("new p5(p => { p.draw = () => streams.forEach(stream => integrateAndDraw(p, stream, comb)); });", 'https://github.com/processing/p5.js'),
-    scores: scores(19, 20, 18, 15, 15, 10), rationaleZh: '纸张底色、颜料层次和可控梳理共同形成完整的大理石纹艺术效果。'
+    id: 'flowfield-paper-marbling', order: 125, name: 'Mizu Press marbling proof', nameZh: 'Mizu Press 纸纹打样台', category: 'canvas', sourceUrl: 'https://github.com/processing/p5.js',
+    difference: '把自动流动的抽象彩线变成一张可检验、可梳理、可批准的纸纹打样：真实颜料扫描像素决定每个流场单元、污染证据和初始质量分，用户的梳齿路径会被保留。',
+    behavior: { trigger: 'trusted hover, captured pointer comb, range, keyboard, or visible proof control', response: 'Inspect source pigment, retain a comb path that deforms the pixel-built current, change tine count, then undo, reset, or explicitly approve the proof', timing: 'finite human-owned redraws that remain static between inputs', layer: 'full-stage p5 pigment scan, decoded-pixel flowfield, retained comb guides, evidence metrics, and proof controls' },
+    prompt: '制作一个全舞台纸张大理石纹打样台：同源加载并精确校验一张 ImageGen 颜料/棉纸扫描，以 72×48 真实像素的色相、亮度、饱和度和局部梯度建立 3,456 个流场单元，派生颜料类别、污染比例和源质量分。真人通过 hover 探测、捕获式鼠标/触控/笔拖梳、梳齿 range、键盘及 Undo/Reset/Approve 控件留下可逆纹路；首帧和每次操作后静止，禁止 autoplay、排练、fallback、合成输入或预览时钟变异。',
+    implementation: p5("p.noLoop(); const field = sourcePixels.map(pixel => pixelGradientAndPigmentVector(pixel)); canvas.addEventListener('pointermove', retainTrustedCombStroke); approveButton.addEventListener('click', decideFromPixelEvidenceAndRetainedStroke);", 'https://github.com/processing/p5.js'),
+    scores: scores(20, 20, 20, 15, 15, 10), rationaleZh: '原创 ImageGen 颜料纸扫描经过同源 fetch、精确源 SHA、浏览器与 p5 双解码，并读取为 72×48 / 3,456 像素；真实色相、亮度、饱和度与相邻梯度决定颜料分类、污染证据、流向、流速、线色、线宽和源质量分。可信 hover、捕获拖梳、range、键盘和可见按钮共同拥有探测、保留形变、梳齿数量、撤销、重置与明确批准，没有自动流动。'
   }
 ];

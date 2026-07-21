@@ -210,7 +210,7 @@
 | [流式折线图窗口推进](https://giraffe-tree.github.io/awesome-web-effects/#streaming-line-chart-window) | [p5.js](https://github.com/processing/p5.js) | **89/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#streaming-line-chart-window) |
 | [真人签署的速度墨迹合同](https://giraffe-tree.github.io/awesome-web-effects/#velocity-sensitive-signature-ink) | [p5.js](https://github.com/processing/p5.js) | **100/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#velocity-sensitive-signature-ink) |
 | [真人压力塑形的包装校样批注](https://giraffe-tree.github.io/awesome-web-effects/#pressure-shaped-freehand-stroke) | [p5.js](https://github.com/processing/p5.js) | **100/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#pressure-shaped-freehand-stroke) |
-| [可拖拽编辑贝塞尔曲线手柄](https://giraffe-tree.github.io/awesome-web-effects/#drag-editable-bezier-curve-handles) | [p5.js](https://github.com/processing/p5.js) | **91/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#drag-editable-bezier-curve-handles) |
+| [真人应用的结账抽屉缓动曲线](https://giraffe-tree.github.io/awesome-web-effects/#drag-editable-bezier-curve-handles) | [p5.js](https://github.com/processing/p5.js) | **100/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#drag-editable-bezier-curve-handles) |
 | [手部康复关键点校准](https://giraffe-tree.github.io/awesome-web-effects/#live-hand-landmark-video-overlay) | [p5.js](https://github.com/processing/p5.js) | **98/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#live-hand-landmark-video-overlay) |
 | [遮挡检查 GIF 逐帧质检器](https://giraffe-tree.github.io/awesome-web-effects/#frame-by-frame-gif-scrubber) | [p5.js](https://github.com/processing/p5.js) | **99/100** | [Developer](https://developer.mozilla.org/en-US/docs/Web/API/ImageDecoder) | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#frame-by-frame-gif-scrubber) |
 | [磁性媒体归档修复](https://giraffe-tree.github.io/awesome-web-effects/#magnetic-pixel-sort-field) | [p5.js](https://github.com/processing/p5.js) | **100/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#magnetic-pixel-sort-field) |
@@ -282,7 +282,7 @@
 - 150 个已核验预览：2 个官方素材、148 个可运行本地 Demo 录制；缺失数为 0。
 - 人工评审覆盖创意、艺术完成度、动效编排、效果辨识、创作迁移和证据质量。
 - 准入要求 80/100，并同时通过核心维度最低分；流行度不能覆盖质量门槛。
-- 已核验 GIF 总计 24.77 MiB；每个预览为 320×180、最长三秒且小于 1 MiB。
+- 已核验 GIF 总计 24.75 MiB；每个预览为 320×180、最长三秒且小于 1 MiB。
 - Stars 是 2026-07-20 快照；“推荐实现”与“在哪家 AI 官网观察到”始终是两种关系。
 
 继续阅读 [396 个候选的准入审计](research/demo-admission-audit-2026-07-20.md)、[100 家 AI 公司主页特效调研](research/ai-native-homepages-100.md)与[预览来源清单](demo/gifs/provenance.json)。

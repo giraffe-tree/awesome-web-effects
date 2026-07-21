@@ -3199,16 +3199,16 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "drag-editable-bezier-curve-handles",
-    "name": "Drag-editable Bézier curve handles",
-    "nameZh": "可拖拽编辑贝塞尔曲线手柄",
+    "name": "Human-applied checkout easing curve",
+    "nameZh": "真人应用的结账抽屉缓动曲线",
     "category": "canvas",
     "sourceUrl": "https://github.com/paperjs/paper.js",
-    "difference": "拖动可见控制点实时重算曲线与切线；曲线文字只沿既定路径运输。",
+    "difference": "真人拖动或键盘微调 C1/C2 会实时重算 p5 三次 Bézier、切线与 31 点参数采样；编辑仅产生 draft，显式 Apply 后才保留结账抽屉缓动 token。",
     "behavior": {
-      "trigger": "pointer drag",
-      "response": "Move curve handles and continuously recompute path geometry and tangents",
-      "timing": "direct reversible geometry editing",
-      "layer": "Paper.js Canvas vector surface"
+      "trigger": "trusted handle drag or keyboard nudge, followed by explicit apply, undo, or reset",
+      "response": "Recompute curve/tangents as a draft while preserving the saved token until the human commits",
+      "timing": "direct reversible editing plus transactional retained commit",
+      "layer": "full-stage p5 Kinetic Curve Lab and DOM transaction controls"
     },
     "implementation": {
       "projectId": "processing-p5-js",
@@ -3219,18 +3219,18 @@ export const effectExpansion100Specs = [
       "referenceUrl": "https://github.com/paperjs/paper.js"
     },
     "scores": {
-      "creativity": 16,
-      "artDirection": 18,
-      "motion": 18,
+      "creativity": 20,
+      "artDirection": 20,
+      "motion": 20,
       "clarity": 15,
       "inspiration": 15,
-      "evidence": 9,
-      "total": 91
+      "evidence": 10,
+      "total": 100
     },
-    "rationaleZh": "控制点、切线和曲线因果一眼可辨，是独立编辑器交互。",
+    "rationaleZh": "真实控制柄、两条切线、31 点参数采样、draft/retained 分离与 Apply/Undo/Reset 事务让几何编辑成为可用的 motion token 工具。",
     "batch": "C",
-    "demo": "三点霓虹曲线带两个可见手柄，拖动中点让光带从拱形变成 S 形。",
-    "capture": "drag 中点→drag 切线端→double click reset。",
+    "demo": "编辑 Checkout Drawer 的 cubic-bezier 缓动：拖动 C1/C2 后 Apply v1，再键盘试改并 Undo，Reset 后用键盘形成最终曲线并 Apply v2。",
+    "capture": "首帧静止→真人拖动 C1/C2→Apply v1→键盘试改 C2→Undo→Reset→键盘改 C1→Enter Apply v2→保留 cubic-bezier(0.27, 0.83, 0.32, 1)。",
     "risk": {
       "level": "medium",
       "detail": "GitHub SPDX 未断言；需核验许可并避免退化为普通 draggable dot。"

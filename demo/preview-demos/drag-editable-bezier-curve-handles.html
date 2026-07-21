@@ -1,1 +1,293 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p5.js — Drag Editable Bézier Curve Handles</title><link rel="stylesheet" href="./shared.css"><style>:root{--preview-background:#0a0b13}#bezier-host{position:absolute;inset:0;cursor:crosshair}#bezier-host canvas{width:100%!important;height:100%!important}.bezier-copy{position:absolute;z-index:5;left:13px;top:45px;color:#f3f3ff;pointer-events:none}.bezier-copy small{font:800 6px/1 ui-monospace;letter-spacing:.16em;color:#d59aff}.bezier-copy h1{width:100px;margin:8px 0 0;font:950 17px/.85 system-ui;letter-spacing:-.055em}.curve-state{position:absolute;right:12px;top:12px;z-index:5;color:#d59aff;font:900 7px/1 ui-monospace}.library-badge{background:#0a0b13c9}</style></head><body><main class="preview-stage" data-preview-mechanism="direct-bezier-control-points"><div id="bezier-host" tabindex="0" aria-label="Drag either square control handle or endpoint; double click to reset the curve"></div><section class="bezier-copy"><small>CURVE EDITOR / CUBIC</small><h1>PULL THE TANGENT. RESHAPE THE LIGHT.</h1></section><output class="curve-state" id="curve-state">HANDLE C1</output><span class="library-badge">p5.js · cubic Bézier editor</span><span class="scene-caption">control points continuously recompute curve geometry</span></main><script type="module" src="./src/drag-editable-bezier-curve-handles-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>p5.js — Drag Editable Bézier Curve Handles</title>
+    <link rel="stylesheet" href="./shared.css">
+    <style>
+      :root {
+        --preview-background: #e9e5dc;
+        color-scheme: light;
+        --ink: #151816;
+        --paper: #f4f1e9;
+        --panel: #191c1a;
+        --acid: #c8ff4d;
+        --coral: #ff735d;
+        --muted: #777c76;
+      }
+
+      button { font: inherit; }
+
+      .preview-stage {
+        background:
+          radial-gradient(circle at 84% 10%, rgba(255, 115, 93, .18), transparent 29%),
+          var(--paper);
+        color: var(--ink);
+      }
+
+      #bezier-host,
+      #bezier-host canvas {
+        position: absolute;
+        inset: 0;
+        width: 100% !important;
+        height: 100% !important;
+      }
+
+      #bezier-host { z-index: 1; }
+      #bezier-host canvas { pointer-events: none; }
+
+      .topbar {
+        position: absolute;
+        z-index: 4;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 10px;
+        border-bottom: 1px solid rgba(21, 24, 22, .15);
+        pointer-events: none;
+      }
+
+      .brand,
+      .project,
+      .eyebrow,
+      .field-label,
+      .status-pill,
+      .handle-name {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        text-transform: uppercase;
+        letter-spacing: .12em;
+      }
+
+      .brand { font-size: 7px; font-weight: 900; }
+      .brand i { color: var(--coral); font-style: normal; }
+      .project { color: #777c76; font-size: 6px; font-weight: 800; }
+
+      .inspector {
+        position: absolute;
+        z-index: 5;
+        right: 9px;
+        top: 36px;
+        width: 91px;
+        height: 133px;
+        display: flex;
+        flex-direction: column;
+        padding: 8px;
+        border: 1px solid rgba(21, 24, 22, .16);
+        border-radius: 8px;
+        background: rgba(250, 248, 242, .88);
+        box-shadow: 0 10px 30px rgba(35, 37, 32, .08);
+        backdrop-filter: blur(8px);
+      }
+
+      .eyebrow { color: var(--muted); font-size: 5px; font-weight: 900; }
+      .inspector h1 { margin: 4px 0 0; font-size: 12px; line-height: .93; letter-spacing: -.05em; }
+
+      .status-row { display: flex; align-items: center; gap: 4px; margin-top: 6px; }
+      .status-pill {
+        min-width: 31px;
+        padding: 3px 4px;
+        border-radius: 999px;
+        background: #dedbd2;
+        color: #5f645f;
+        font-size: 4.5px;
+        font-weight: 900;
+        text-align: center;
+      }
+      .status-pill[data-state="dirty"] { background: #ffe1da; color: #a93524; }
+      .status-pill[data-state="saved"] { background: #dff5a9; color: #344a09; }
+      .status-copy { min-width: 0; color: #777c76; font: 700 5px/1.1 ui-monospace, monospace; }
+
+      .curve-code {
+        margin: 7px 0 0;
+        padding: 5px 5px 4px;
+        min-height: 24px;
+        border-radius: 5px;
+        background: #191c1a;
+        color: #f4f1e9;
+        font: 800 5.1px/1.4 ui-monospace, monospace;
+        overflow-wrap: anywhere;
+      }
+
+      .metrics {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3px;
+        margin-top: 5px;
+      }
+      .metric { min-width: 0; }
+      .field-label { display: block; color: #8c918b; font-size: 4px; font-weight: 900; }
+      .metric strong { display: block; margin-top: 1px; font: 900 6px/1 ui-monospace, monospace; }
+
+      .actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 3px; margin-top: auto; }
+      .actions button {
+        min-width: 0;
+        height: 18px;
+        padding: 0 2px;
+        border: 1px solid rgba(21, 24, 22, .18);
+        border-radius: 4px;
+        background: transparent;
+        color: #535853;
+        cursor: pointer;
+        font: 900 4.6px/1 ui-monospace, monospace;
+        text-transform: uppercase;
+      }
+      .actions button:hover,
+      .actions button:focus-visible { border-color: var(--coral); outline: 2px solid rgba(255, 115, 93, .28); outline-offset: 1px; }
+      .actions .apply { border-color: #191c1a; background: #191c1a; color: var(--acid); }
+      .actions button:disabled { opacity: .36; cursor: default; }
+
+      .handle {
+        position: absolute;
+        z-index: 7;
+        width: 30px;
+        height: 30px;
+        padding: 0;
+        border: 0;
+        border-radius: 50%;
+        background: transparent;
+        cursor: grab;
+        touch-action: none;
+      }
+      .handle:active { cursor: grabbing; }
+      .handle::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 11px;
+        height: 11px;
+        transform: translate(-50%, -50%) rotate(45deg);
+        border: 2px solid var(--paper);
+        border-radius: 2px;
+        background: var(--coral);
+        box-shadow: 0 0 0 1px #151816;
+      }
+      .handle[data-index="1"]::after { background: var(--acid); }
+      .handle:focus-visible { outline: 2px solid var(--coral); outline-offset: 1px; }
+      .handle[data-index="1"]:focus-visible { outline-color: #7ca900; }
+      .handle-name {
+        position: absolute;
+        z-index: 6;
+        color: rgba(244, 241, 233, .7);
+        font-size: 5px;
+        font-weight: 900;
+        pointer-events: none;
+        transform: translate(-50%, 13px);
+      }
+
+      .hint {
+        position: absolute;
+        z-index: 4;
+        left: 14px;
+        bottom: 7px;
+        display: flex;
+        gap: 8px;
+        color: #6d726c;
+        font: 800 5px/1 ui-monospace, monospace;
+        text-transform: uppercase;
+        letter-spacing: .08em;
+        pointer-events: none;
+      }
+      .hint b { color: #191c1a; }
+
+      .library-badge,
+      .scene-caption { display: none; }
+
+      @media (min-width: 500px) {
+        .topbar { height: 44px; padding: 0 22px; }
+        .brand { font-size: 11px; }
+        .project { font-size: 9px; }
+        .inspector { top: 62px; right: 24px; width: 205px; height: 310px; padding: 18px; border-radius: 16px; }
+        .eyebrow { font-size: 8px; }
+        .inspector h1 { margin-top: 8px; font-size: 28px; }
+        .status-row { gap: 8px; margin-top: 14px; }
+        .status-pill { min-width: 64px; padding: 6px 8px; font-size: 8px; }
+        .status-copy { font-size: 9px; }
+        .curve-code { margin-top: 16px; padding: 12px; min-height: 52px; border-radius: 9px; font-size: 11px; }
+        .metrics { gap: 12px; margin-top: 13px; }
+        .field-label { font-size: 7px; }
+        .metric strong { margin-top: 4px; font-size: 13px; }
+        .actions { gap: 7px; }
+        .actions button { height: 35px; border-radius: 7px; font-size: 8px; }
+        .handle { width: 46px; height: 46px; }
+        .handle::after { width: 16px; height: 16px; border-width: 3px; }
+        .handle-name { font-size: 8px; transform: translate(-50%, 21px); }
+        .hint { left: 26px; bottom: 16px; gap: 18px; font-size: 8px; }
+      }
+
+      @media (max-aspect-ratio: 4/5) {
+        .topbar { height: 36px; padding: 0 10px; }
+        .brand { font-size: 8px; }
+        .project { font-size: 6px; }
+        .inspector {
+          left: 9px;
+          right: 9px;
+          top: auto;
+          bottom: 9px;
+          width: auto;
+          height: 104px;
+          display: grid;
+          grid-template-columns: 1.25fr .9fr;
+          grid-template-rows: auto auto 1fr;
+          column-gap: 8px;
+          padding: 9px;
+        }
+        .inspector h1 { margin-top: 3px; font-size: 13px; }
+        .eyebrow { font-size: 5px; }
+        .status-row { grid-column: 2; grid-row: 1; margin: 0; align-self: start; justify-content: end; }
+        .status-copy { display: none; }
+        .curve-code { grid-column: 1; grid-row: 2 / 4; margin-top: 7px; min-height: 43px; font-size: 6px; }
+        .metrics { grid-column: 2; grid-row: 2; margin-top: 6px; }
+        .actions { grid-column: 2; grid-row: 3; margin-top: 6px; }
+        .actions button { height: 20px; }
+        .hint { left: 13px; bottom: 121px; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="preview-stage" data-preview-mechanism="trusted-drag-keyboard-cubic-bezier-editor">
+      <div id="bezier-host" aria-hidden="true"></div>
+
+      <header class="topbar">
+        <div class="brand"><i>●</i> KINETIC / CURVE LAB</div>
+        <div class="project">CHECKOUT DRAWER · MOTION 04</div>
+      </header>
+
+      <button class="handle" id="handle-c1" data-index="0" aria-label="Move cubic Bézier control handle C1" aria-keyshortcuts="ArrowLeft ArrowRight ArrowUp ArrowDown"></button>
+      <button class="handle" id="handle-c2" data-index="1" aria-label="Move cubic Bézier control handle C2" aria-keyshortcuts="ArrowLeft ArrowRight ArrowUp ArrowDown"></button>
+      <span class="handle-name" id="handle-name-c1">C1</span>
+      <span class="handle-name" id="handle-name-c2">C2</span>
+
+      <aside class="inspector" aria-label="Easing curve inspector">
+        <div>
+          <div class="eyebrow">Motion token / draft</div>
+          <h1>Drawer<br>arrival</h1>
+        </div>
+        <div class="status-row">
+          <span class="status-pill" id="status-pill" data-state="clean">Ready</span>
+          <span class="status-copy" id="status-copy">edit handles, then apply</span>
+        </div>
+        <output class="curve-code" id="curve-code" aria-live="polite">cubic-bezier(0.22, 0.78, 0.32, 1)</output>
+        <div class="metrics">
+          <div class="metric"><span class="field-label">50% frame</span><strong id="mid-value">88%</strong></div>
+          <div class="metric"><span class="field-label">End slope</span><strong id="slope-value">0.00</strong></div>
+        </div>
+        <div class="actions">
+          <button type="button" id="undo-curve" disabled>Undo</button>
+          <button type="button" id="reset-curve">Reset</button>
+          <button type="button" class="apply" id="apply-curve">Apply</button>
+        </div>
+      </aside>
+
+      <div class="hint"><span><b>Drag</b> tangent</span><span><b>Arrows</b> nudge</span><span><b>Apply</b> retain</span></div>
+      <span class="library-badge">p5.js · cubic Bézier editor</span>
+      <span class="scene-caption">control handles update real curve geometry</span>
+    </main>
+    <script type="module" src="./src/drag-editable-bezier-curve-handles-demo.js"></script>
+  </body>
+</html>

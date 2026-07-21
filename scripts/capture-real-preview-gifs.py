@@ -1800,6 +1800,49 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                     page.mouse.up()
             elif index == 25:
                 page.locator('#confirm-proof').click()
+        elif demo["id"] == "drag-editable-bezier-curve-handles":
+            if index == 4:
+                box = page.locator('#handle-c1').bounding_box()
+                c1_start_x = box["x"] + box["width"] * .5
+                c1_start_y = box["y"] + box["height"] * .5
+                page.mouse.move(c1_start_x, c1_start_y)
+                page.mouse.down()
+            elif 5 <= index <= 8:
+                progress = (index - 4) / 4
+                page.mouse.move(c1_start_x + (90 - c1_start_x) * progress, c1_start_y + (112 - c1_start_y) * progress)
+            elif index == 9:
+                page.mouse.up()
+            elif index == 10:
+                box = page.locator('#handle-c2').bounding_box()
+                c2_start_x = box["x"] + box["width"] * .5
+                c2_start_y = box["y"] + box["height"] * .5
+                page.mouse.move(c2_start_x, c2_start_y)
+                page.mouse.down()
+            elif 11 <= index <= 14:
+                progress = (index - 10) / 4
+                page.mouse.move(c2_start_x + (152 - c2_start_x) * progress, c2_start_y + (62 - c2_start_y) * progress)
+            elif index == 15:
+                page.mouse.up()
+            elif index == 18:
+                page.locator('#apply-curve').click()
+            elif index == 20:
+                page.locator('#handle-c2').focus()
+                page.keyboard.press('ArrowLeft')
+            elif index == 21:
+                page.keyboard.press('ArrowDown')
+            elif index == 22:
+                page.locator('#undo-curve').click()
+            elif index == 24:
+                page.locator('#reset-curve').click()
+            elif index == 26:
+                page.locator('#handle-c1').focus()
+                page.keyboard.press('Shift+ArrowRight')
+            elif index == 27:
+                page.keyboard.press('Shift+ArrowUp')
+            elif index == 29:
+                page.locator('#apply-curve').focus()
+            elif index == 30:
+                page.keyboard.press('Enter')
         elif demo["id"] == "gooey-pixel-cursor-wake":
             if index == 3:
                 box = page.locator('#pixel-wake-host').bounding_box()
@@ -7046,6 +7089,56 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or page.locator('#status-output').text_content() != "APPROVED WITH 2 MARKS"
         ):
             raise RuntimeError(f"{demo['id']} did not capture real light/firm pressure-shaped packaging proof marks and retained review: {interaction!r}")
+    elif demo["id"] == "drag-editable-bezier-curve-handles":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        if (
+            not assertion
+            or interaction["id"] != "drag-editable-bezier-curve-handles"
+            or interaction["productTask"] != "Edit and retain the easing token for a checkout drawer arrival."
+            or interaction["library"] != "p5@2.3.0"
+            or interaction["renderer"] != "canvas2d"
+            or interaction["mechanism"] != "trusted pointer drag and keyboard movement recompute p5 cubic Bézier geometry and tangents"
+            or interaction["assetStrategy"] != "code-native"
+            or "raster pixels would not drive" not in interaction["imageGenDecision"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticCycle"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or not interaction["initialStillVerified"]
+            or interaction["draft"] != [.27, .83, .32, 1]
+            or interaction["retainedDraft"] != [.27, .83, .32, 1]
+            or interaction["retainedSignature"] != "0.270|0.830|0.320|1.000"
+            or interaction["phase"] != "committed"
+            or interaction["trustedPointerInputCount"] != 2
+            or interaction["pointerDragCount"] != 2
+            or interaction["trustedKeyboardInputCount"] != 4
+            or interaction["keyboardNudgeCount"] != 4
+            or interaction["trustedControlInputCount"] != 4
+            or interaction["commitCount"] != 2
+            or interaction["completionCount"] != 2
+            or interaction["undoCount"] != 1
+            or interaction["resetCount"] != 1
+            or interaction["cancelCount"] < 1
+            or interaction["intentCount"] != 3
+            or interaction["transitCount"] < 8
+            or interaction["retainedStableDuringDraftEditCount"] < 2
+            or interaction["prematureCommitCount"] != 0
+            or interaction["retainedChangeOutsideCommitCount"] != 0
+            or interaction["pendingTransactionId"] is not None
+            or interaction["activeHandle"] is not None
+            or interaction["curveSampleCount"] != 31
+            or not interaction["curveMonotonicX"]
+            or interaction["curveChecksum"] <= 1000
+            or not (.90 <= interaction["sampledMidY"] <= .96)
+            or interaction["canvasCoverage"] < .98
+            or interaction["drawCount"] <= 0
+            or interaction["bezierRenderCount"] <= 0
+            or page.locator('#curve-code').text_content() != "cubic-bezier(0.27, 0.83, 0.32, 1)"
+            or page.locator('#status-pill').text_content() != "Saved v2"
+            or page.locator('#status-pill').get_attribute('data-state') != "saved"
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a real transactional checkout easing edit and retained second human commit: {interaction!r}")
     elif demo["id"] == "gooey-pixel-cursor-wake":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")

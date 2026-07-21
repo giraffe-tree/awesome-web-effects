@@ -1980,6 +1980,29 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 27:
                 page.locator('#keep-datum').focus()
                 page.keyboard.press('Enter')
+        elif demo["id"] == "liquid-chrome-letterform":
+            if index == 3:
+                page.locator('[data-candidate-index="1"]').dispatch_event('click')
+            elif index == 4:
+                page.locator('[data-candidate-index="1"]').click()
+            elif index == 5:
+                chrome_box = page.locator('#chrome-host').bounding_box()
+                chrome_start_x = chrome_box["x"] + chrome_box["width"] * .55
+                chrome_start_y = chrome_box["y"] + chrome_box["height"] * .40
+                chrome_target_x = chrome_box["x"] + chrome_box["width"] * .84
+                chrome_target_y = chrome_box["y"] + chrome_box["height"] * .64
+                page.mouse.move(chrome_start_x, chrome_start_y)
+                page.mouse.down()
+            elif 6 <= index <= 11:
+                progress = (index - 5) / 6
+                page.mouse.move(
+                    chrome_start_x + (chrome_target_x - chrome_start_x) * progress,
+                    chrome_start_y + (chrome_target_y - chrome_start_y) * progress,
+                )
+            elif index == 12:
+                page.mouse.up()
+            elif index == 15:
+                page.locator('#confirm-proof').click()
         elif demo["id"] == "hover-activated-image-marquee-menu":
             if index == 4:
                 page.locator('[data-index="2"]').hover()
@@ -7685,6 +7708,86 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or page.locator('#pitch-value').text_content() != "34°"
         ):
             raise RuntimeError(f"{demo['id']} did not capture real 3D datum picking, camera revision, and explicitly retained Tech Park load: {interaction!r}")
+    elif demo["id"] == "liquid-chrome-letterform":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        retained = interaction["retainedProof"] or {}
+        if (
+            not assertion
+            or interaction["id"] != "liquid-chrome-letterform"
+            or interaction["task"] != "human-chooses-a-letterform-tunes-the-chrome-reflection-and-explicitly-keeps-or-revises-the-proof"
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["mechanism"] != "p5-webgl-fragment-shader-samples-a-code-generated-glyph-mask-texture-and-human-light-uniforms-to-render-liquid-chrome"
+            or interaction["assetStrategy"] != "code-generated-raster-glyph-mask-texture-and-procedural-environment-bands-no-external-raster-required"
+            or interaction["externalRasterRequired"]
+            or interaction["externalRasterCount"] != 0
+            or not interaction["codeGeneratedMaskTexture"]
+            or not interaction["vertexShaderVerified"]
+            or not interaction["fragmentShaderVerified"]
+            or interaction["automaticLetterCycle"]
+            or interaction["automaticLightSweep"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["previewClockDriven"]
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["untrustedMutationCount"] != 0
+            or not interaction["initialStillVerified"]
+            or interaction["candidateIndex"] != 1
+            or interaction["candidateGlyph"] != "R"
+            or abs(interaction["light"]["x"] - .84) > .001
+            or abs(interaction["light"]["y"] - .64) > .001
+            or abs(interaction["warp"] - .866) > .001
+            or not interaction["reviewRetained"]
+            or interaction["phase"] != "chrome-proof-retained"
+            or interaction["result"] != "chrome-proof-retained-r"
+            or retained.get("candidateIndex") != 1
+            or retained.get("glyph") != "R"
+            or retained.get("name") != "RITUAL"
+            or retained.get("light") != {"x": .84, "y": .64}
+            or abs(retained.get("warp", 0) - .866) > .001
+            or interaction["retainedMaskChecksum"] != interaction["currentMaskChecksum"]
+            or interaction["retainedFramebufferSignature"] != interaction["framebufferSignature"]
+            or interaction["retainedRevision"] != interaction["revision"]
+            or interaction["inputCount"] != 10
+            or interaction["trustedInputCount"] != 10
+            or interaction["pointerInputCount"] != 10
+            or interaction["keyboardInputCount"] != 0
+            or interaction["controlInputCount"] != 0
+            or interaction["rejectedUntrustedInputCount"] != 1
+            or interaction["candidateSelectionCount"] != 1
+            or interaction["lightInputCount"] != 7
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerMoveCount"] != 6
+            or interaction["pointerUpCount"] != 1
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerCaptureReleaseCount"] != 1
+            or interaction["confirmationCount"] != 1
+            or interaction["businessCommitCount"] != 1
+            or interaction["prematureCommitCount"] != 0
+            or interaction["inputMutationRequestCount"] != 8
+            or interaction["inputDrivenFramebufferMutationCount"] != 8
+            or interaction["failedInputFramebufferMutationCount"] != 0
+            or interaction["drawnRevision"] != interaction["revision"]
+            or interaction["shaderPassCount"] != interaction["drawCount"]
+            or interaction["textureBindCount"] != interaction["drawCount"]
+            or interaction["uniformUpdateCount"] != interaction["drawCount"] * 5
+            or interaction["currentMaskChecksum"] <= 0
+            or interaction["framebufferSignature"] <= 0
+            or not interaction["candidateMaskChecksumUnique"]
+            or len(interaction["candidateMaskRecords"]) != 3
+            or not interaction["shaderCompiled"]
+            or not interaction["shaderMaskTextureBound"]
+            or not interaction["webglReady"]
+            or interaction["webglVersion"] not in ("webgl1", "webgl2")
+            or interaction["lastGlError"] != 0
+            or not interaction["fullStageGeometryVerified"]
+            or interaction["canvasCoverageRatio"] < .995
+            or page.locator('#proof-state').get_attribute('data-retained') != "true"
+            or page.locator('#proof-output').text_content() != "KEPT · R / RITUAL"
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a real human-tuned WebGL mask proof with explicit R retention: {interaction!r}")
     elif demo["id"] == "hover-activated-image-marquee-menu":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")

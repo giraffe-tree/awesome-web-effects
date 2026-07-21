@@ -1,7 +1,45 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p5.js — Liquid Chrome Letterform</title><style>:root{--preview-background:#130f19}.expansion-stage{position:absolute;inset:0;overflow:hidden;cursor:ew-resize}.expansion-stage canvas{display:block}.library-badge{background:#130f19d8}.scene-caption{color:#f2d8ffa0}</style>  <script type="module" crossorigin src="./assets/liquid-chrome-letterform-CSxDuI1g.js"></script>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>p5.js WebGL — Liquid Chrome Letterform Proof</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root{--preview-background:#080a0f;color-scheme:dark;--ink:#f3f0ea;--muted:#80838f;--cyan:#83f0ff;--pink:#ff7ec8;--green:#a8efbd}
+    #chrome-stage{overflow:hidden;background:#080a0f;color:var(--ink)}#chrome-host{position:absolute;inset:0;cursor:crosshair;outline:none;touch-action:none}#chrome-host:focus-visible{box-shadow:inset 0 0 0 2px #83f0ff66}#chrome-host canvas{width:100%!important;height:100%!important;display:block}
+    .chrome-header{position:absolute;z-index:8;left:11px;right:11px;top:9px;display:flex;align-items:center;justify-content:space-between;pointer-events:none;font:850 5px/1 ui-monospace;letter-spacing:.13em;text-transform:uppercase}.chrome-header span:first-child{display:flex;align-items:center;gap:6px}.chrome-header span:first-child::before{content:"";width:7px;height:7px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--pink));box-shadow:0 0 0 3px #83f0ff17}.chrome-header span:last-child{color:#6e7480}
+    .chrome-copy{position:absolute;z-index:7;left:12px;top:40px;width:82px;pointer-events:none}.chrome-copy small{font:800 5px/1 ui-monospace;letter-spacing:.14em;color:var(--cyan)}.chrome-copy h1{margin:7px 0 0;font:950 16px/.87 system-ui;letter-spacing:-.055em}.chrome-copy p{margin:7px 0 0;font:650 5px/1.35 system-ui;color:var(--muted)}
+    .candidate-list{position:absolute;z-index:11;left:11px;top:109px;width:82px;display:grid;grid-template-columns:repeat(3,1fr);gap:4px}.candidate-button{height:23px;padding:0;border:1px solid #f3f0ea26;border-radius:7px;background:#11141c;color:#838793;cursor:pointer;font:900 6px/1 ui-monospace}.candidate-button:hover,.candidate-button:focus-visible{border-color:#83f0ff70;color:var(--ink);outline:none}.candidate-button[aria-pressed="true"]{border-color:#83f0ff8c;background:#12232b;color:var(--cyan)}
+    .shader-hud{position:absolute;z-index:8;right:11px;top:28px;pointer-events:none;text-align:right}.shader-hud small{display:block;font:750 5px/1 ui-monospace;letter-spacing:.11em;color:#6e7480}.shader-hud output{display:block;margin-top:4px;font:900 6px/1.3 ui-monospace;letter-spacing:.06em;color:var(--ink)}
+    .proof-state{position:absolute;z-index:8;right:12px;bottom:48px;pointer-events:none;text-align:right}.proof-state small{display:block;font:750 4px/1 ui-monospace;letter-spacing:.11em;color:#6e7480}.proof-state output{display:block;margin-top:3px;font:900 5px/1 ui-monospace;letter-spacing:.06em;color:#a3a6b0}.proof-state[data-retained="true"] output{color:var(--green)}
+    .chrome-controls{position:absolute;z-index:12;left:102px;right:11px;bottom:8px;display:flex;align-items:center;justify-content:flex-end;gap:5px}.chrome-action{height:34px;min-width:45px;padding:0 8px;border:1px solid #f3f0ea24;border-radius:8px;background:#11151d;color:#8d919c;cursor:pointer;font:850 5px/1 ui-monospace;letter-spacing:.07em}.chrome-action:disabled{opacity:.35;cursor:not-allowed}.chrome-action:focus-visible{outline:1px solid var(--cyan);outline-offset:1px}.chrome-action.confirm{min-width:68px;border-color:#a8efbd52;background:#14231d;color:var(--green)}
+    @media(min-width:480px){.chrome-copy{width:145px}.chrome-copy h1{font-size:23px}.chrome-copy p{font-size:6px}.candidate-list{top:134px;width:145px}.candidate-button{height:32px;font-size:7px}.chrome-controls{left:182px}.chrome-action{height:36px}.proof-state{bottom:51px}}
+    @media(max-width:270px){.chrome-header span:last-child{display:none}.chrome-copy{top:38px;width:205px}.chrome-copy h1{font-size:17px}.chrome-copy p{display:none}.candidate-list{top:89px;width:110px}.candidate-button{height:28px}.shader-hud{top:122px}.proof-state{bottom:57px}.chrome-controls{left:11px;gap:4px}.chrome-action{height:40px;min-width:0;flex:1;padding:0 5px}.chrome-action.confirm{min-width:0;flex:1.35}}
+  </style>
+  <script type="module" crossorigin src="./assets/liquid-chrome-letterform-BNxaQIQZ.js"></script>
   <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
   <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
   <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
-  <link rel="modulepreload" crossorigin href="./assets/expansion-a-utils-anD0k7Pd.js">
   <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage"><div class="expansion-stage" id="expansion-stage" data-preview-mechanism="p5-liquid-chrome-type" tabindex="0" aria-label="Move the pointer to slide light over the liquid chrome letterform"></div><span class="library-badge">p5.js · chrome typography</span><span class="scene-caption">a moving spectrum turns one glyph into liquid metal</span></main></body></html>
+</head>
+<body>
+  <main id="chrome-stage" class="preview-stage" data-preview-mechanism="trusted-candidate-and-light-controls-drive-p5-webgl-mask-texture-chrome-shader">
+    <div id="chrome-host" tabindex="0" role="application" aria-label="Chrome letterform proof. Choose A, R, or S. Drag to move the reflected light, use arrow keys as an alternative, Enter to keep the candidate, Z to undo, and R to reset."></div>
+    <header class="chrome-header"><span>Chrome Type / Proof 03</span><span>p5.js · WebGL mask shader</span></header>
+    <section class="chrome-copy"><small>RELEASE ARTWORK</small><h1>TUNE THE METAL.</h1><p>Choose a letter, move the studio reflection, then keep the finish.</p></section>
+    <nav class="candidate-list" aria-label="Letterform candidates">
+      <button class="candidate-button" type="button" data-candidate-index="0" aria-label="Candidate A, Arc" aria-pressed="true">A</button>
+      <button class="candidate-button" type="button" data-candidate-index="1" aria-label="Candidate R, Ritual" aria-pressed="false">R</button>
+      <button class="candidate-button" type="button" data-candidate-index="2" aria-label="Candidate S, Signal" aria-pressed="false">S</button>
+    </nav>
+    <span class="shader-hud"><small>LIVE SHADER</small><output id="shader-output">A · LIGHT 64 / 42</output></span>
+    <span id="proof-state" class="proof-state" data-retained="false"><small>PROOF DECISION</small><output id="proof-output">CANDIDATE A · NOT KEPT</output></span>
+    <footer class="chrome-controls">
+      <button id="undo-proof" class="chrome-action" type="button" disabled>UNDO</button>
+      <button id="reset-proof" class="chrome-action" type="button" disabled>RESET</button>
+      <button id="confirm-proof" class="chrome-action confirm" type="button">KEEP PROOF</button>
+    </footer>
+  </main>
+</body>
+</html>

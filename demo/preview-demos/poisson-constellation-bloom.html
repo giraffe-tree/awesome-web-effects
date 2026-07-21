@@ -1,1 +1,358 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p5.js — Poisson Constellation Bloom</title><link rel="stylesheet" href="./shared.css"><style>:root{--preview-background:#080817}.a2-stage{background:radial-gradient(circle at 72% 50%,#24204b,#080817 64%);color:#fff}.p5-host{position:absolute;inset:0;cursor:crosshair;touch-action:none}.p5-host canvas{width:100%!important;height:100%!important}.copy{position:absolute;z-index:3;left:14px;top:48px;width:105px;pointer-events:none}.copy h1{margin:0;font:900 18px/.86 Georgia,serif;letter-spacing:-.05em}.copy p{margin:9px 0 0;color:#c4b7ff;font:700 6px/1.4 ui-monospace;letter-spacing:.1em;text-transform:uppercase}.scene-caption{display:none}</style></head><body><main class="preview-stage a2-stage"><div class="p5-host" data-p5-host tabindex="0" aria-label="Move the pointer to bloom a seeded constellation"></div><section class="copy"><h1>SPACE CONNECTS NEARBY THOUGHTS.</h1><p>seeded spacing / local bloom</p></section><span class="library-badge">p5.js · poisson constellation</span></main><script type="module" src="./src/poisson-constellation-bloom-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>p5.js — Harbor Risk Relationship Bloom</title>
+    <link rel="stylesheet" href="./shared.css" />
+    <style>
+      :root {
+        --preview-background: #061118;
+        --paper: #eef3e8;
+        --muted: rgba(231, 239, 226, .66);
+        --line: rgba(225, 236, 220, .22);
+        --runoff: #ff9a4b;
+        --water: #73d7d4;
+        --utility: #f3e4c6;
+        --ground: #b7c18b;
+      }
+
+      * { box-sizing: border-box; }
+      button, input { font: inherit; }
+
+      .risk-stage {
+        background: #061118;
+        color: var(--paper);
+        font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+      }
+
+      .graph-host {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        cursor: crosshair;
+        touch-action: none;
+        outline: none;
+      }
+
+      .graph-host canvas {
+        width: 100% !important;
+        height: 100% !important;
+      }
+
+      .graph-host:focus-visible::after {
+        content: "";
+        position: absolute;
+        inset: 7px;
+        border: 1px solid rgba(255, 176, 105, .9);
+        border-radius: 8px;
+        pointer-events: none;
+      }
+
+      .mast,
+      .story,
+      .readout,
+      .legend,
+      .controls,
+      .status-strip {
+        position: absolute;
+        z-index: 5;
+        pointer-events: none;
+      }
+
+      .mast {
+        top: 12px;
+        left: 14px;
+        right: 14px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        padding-bottom: 8px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .identity {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font: 800 clamp(7px, 1vw, 10px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .13em;
+        text-transform: uppercase;
+      }
+
+      .identity-mark {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--runoff);
+        box-shadow: 0 0 0 4px rgba(255, 154, 75, .17);
+      }
+
+      .mast-meta {
+        display: flex;
+        gap: clamp(10px, 3vw, 28px);
+        color: var(--muted);
+        font: 700 clamp(6px, .85vw, 9px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+      }
+
+      .mast-meta strong {
+        color: var(--paper);
+        font-weight: 850;
+      }
+
+      .story {
+        left: 14px;
+        bottom: 17px;
+        width: min(38vw, 300px);
+        text-shadow: 0 1px 12px rgba(2, 8, 12, .5);
+      }
+
+      .eyebrow {
+        margin: 0 0 5px;
+        color: var(--runoff);
+        font: 800 clamp(6px, .9vw, 9px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .16em;
+        text-transform: uppercase;
+      }
+
+      .story h1 {
+        max-width: 290px;
+        margin: 0;
+        font: 720 clamp(20px, 4.1vw, 42px)/.9 Georgia, "Times New Roman", serif;
+        letter-spacing: -.055em;
+      }
+
+      .story-note {
+        max-width: 265px;
+        margin: 7px 0 0;
+        color: var(--muted);
+        font-size: clamp(7px, 1.1vw, 11px);
+        line-height: 1.35;
+      }
+
+      .readout {
+        top: clamp(48px, 13vh, 84px);
+        right: 14px;
+        width: clamp(112px, 21vw, 180px);
+        padding: 10px 11px;
+        border: 1px solid var(--line);
+        border-radius: 7px;
+        background: rgba(5, 15, 21, .7);
+        box-shadow: 0 16px 42px rgba(0, 0, 0, .2);
+        backdrop-filter: blur(10px);
+      }
+
+      .readout-label,
+      .readout-value,
+      .readout-detail {
+        display: block;
+        margin: 0;
+      }
+
+      .readout-label {
+        color: var(--muted);
+        font: 800 clamp(6px, .8vw, 8px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .13em;
+        text-transform: uppercase;
+      }
+
+      .readout-value {
+        margin-top: 6px;
+        color: var(--paper);
+        font: 780 clamp(11px, 1.7vw, 17px)/1.05 ui-sans-serif, system-ui, sans-serif;
+        letter-spacing: -.03em;
+      }
+
+      .readout-detail {
+        margin-top: 6px;
+        padding-top: 6px;
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        font: 700 clamp(6px, .84vw, 8px)/1.35 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .05em;
+        text-transform: uppercase;
+      }
+
+      .legend {
+        top: 50%;
+        left: 14px;
+        display: grid;
+        gap: 5px;
+        transform: translateY(-50%);
+        color: rgba(238, 243, 232, .64);
+        font: 750 clamp(6px, .72vw, 8px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .07em;
+        text-transform: uppercase;
+      }
+
+      .legend span { display: flex; align-items: center; gap: 6px; }
+      .legend i { width: 5px; height: 5px; border-radius: 50%; box-shadow: 0 0 0 3px rgba(255,255,255,.06); }
+      .legend .runoff { background: var(--runoff); }
+      .legend .water { background: var(--water); }
+      .legend .utility { background: var(--utility); }
+      .legend .ground { background: var(--ground); }
+
+      .controls {
+        right: 14px;
+        bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        pointer-events: auto;
+      }
+
+      .reach-control {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        min-height: 28px;
+        padding: 0 8px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: rgba(5, 15, 21, .72);
+        color: var(--muted);
+        font: 800 7px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .09em;
+        text-transform: uppercase;
+        backdrop-filter: blur(9px);
+      }
+
+      .reach-control output { min-width: 15px; color: var(--paper); }
+
+      input[type="range"] {
+        width: clamp(48px, 9vw, 84px);
+        height: 16px;
+        margin: 0;
+        accent-color: var(--runoff);
+        cursor: ew-resize;
+      }
+
+      .controls button {
+        min-height: 28px;
+        padding: 0 10px;
+        border: 1px solid rgba(240, 239, 220, .32);
+        border-radius: 999px;
+        background: rgba(5, 15, 21, .78);
+        color: var(--paper);
+        font: 800 7px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .09em;
+        text-transform: uppercase;
+        cursor: pointer;
+        backdrop-filter: blur(9px);
+      }
+
+      .controls button:hover,
+      .controls button:focus-visible,
+      .controls button[aria-pressed="true"] {
+        border-color: var(--runoff);
+        background: rgba(104, 48, 17, .82);
+        outline: none;
+      }
+
+      .status-strip {
+        top: 39px;
+        left: 14px;
+        color: rgba(238, 243, 232, .6);
+        font: 800 clamp(5.5px, .72vw, 7px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+      }
+
+      .library-badge {
+        top: auto;
+        left: auto;
+        right: 14px;
+        bottom: auto;
+        transform: translateY(-38px);
+        opacity: .88;
+        font-size: clamp(5.5px, .7vw, 7px);
+      }
+
+      [data-runtime-ledger] { display: none; }
+
+      @media (max-width: 360px) {
+        .mast { top: 9px; left: 10px; right: 10px; padding-bottom: 6px; }
+        .mast-meta { gap: 9px; }
+        .mast-meta span:nth-child(2) { display: none; }
+        .status-strip { top: 31px; left: 10px; }
+        .story { left: 10px; bottom: 10px; width: 42%; }
+        .story-note { display: none; }
+        .story h1 { font-size: clamp(14px, 6vw, 21px); }
+        .readout { top: 37px; right: 10px; width: 94px; padding: 7px 8px; }
+        .readout-detail { margin-top: 4px; padding-top: 4px; }
+        .legend { left: 10px; gap: 3px; }
+        .legend span { gap: 4px; }
+        .controls { right: 10px; bottom: 9px; gap: 4px; }
+        .reach-control { min-height: 21px; padding: 0 5px; gap: 3px; }
+        input[type="range"] { width: 38px; }
+        .controls button { min-height: 21px; padding: 0 6px; font-size: 6px; }
+        .library-badge { display: none; }
+      }
+
+      @media (max-width: 190px), (max-height: 95px) {
+        .mast { top: 5px; left: 6px; right: 6px; padding-bottom: 4px; }
+        .identity { font-size: 5px; gap: 4px; }
+        .identity-mark { width: 4px; height: 4px; box-shadow: 0 0 0 2px rgba(255,154,75,.18); }
+        .mast-meta, .status-strip, .readout, .legend, .eyebrow, .reach-control span, .reach-control output { display: none; }
+        .story { left: 6px; bottom: 5px; width: 62px; }
+        .story h1 { font-size: 11px; line-height: .9; }
+        .controls { right: 5px; bottom: 5px; gap: 3px; }
+        .reach-control { min-height: 15px; padding: 0 2px; border-radius: 5px; }
+        input[type="range"] { width: 24px; height: 12px; }
+        .controls button { min-height: 15px; padding: 0 4px; border-radius: 5px; font-size: 4.5px; }
+        .graph-host:focus-visible::after { inset: 3px; border-radius: 4px; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        * { scroll-behavior: auto !important; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="preview-stage risk-stage" id="risk-stage" data-preview-mechanism="pixel-derived-poisson-risk-relationship-graph">
+      <div class="graph-host" id="graph-host" tabindex="0" role="application" aria-label="Harbor risk relationship graph. Move or drag the query probe, use arrow keys to inspect, Enter to pin, Home for highest risk, and Escape to reset."></div>
+
+      <header class="mast" aria-hidden="true">
+        <div class="identity"><i class="identity-mark"></i> Meridian evidence graph</div>
+        <div class="mast-meta">
+          <span><strong id="node-count">—</strong> nodes</span>
+          <span><strong id="edge-count">—</strong> relations</span>
+          <span><strong id="risk-count">—</strong> elevated</span>
+        </div>
+      </header>
+
+      <output class="status-strip" id="status-strip">Decoding field evidence…</output>
+
+      <section class="story" aria-hidden="true">
+        <p class="eyebrow">Case 07 / Harbor runoff</p>
+        <h1>Trace the runoff.</h1>
+        <p class="story-note">Probe the evidence field. Local relations bloom where sampled surface, utility and plume signals converge.</p>
+      </section>
+
+      <aside class="readout" aria-live="polite">
+        <span class="readout-label">Relationship finding</span>
+        <output class="readout-value" id="finding-output">Move the probe</output>
+        <output class="readout-detail" id="detail-output">Image pixels are classifying the graph</output>
+      </aside>
+
+      <div class="legend" aria-hidden="true">
+        <span><i class="runoff"></i> Runoff</span>
+        <span><i class="water"></i> Water</span>
+        <span><i class="utility"></i> Utility</span>
+        <span><i class="ground"></i> Ground</span>
+      </div>
+
+      <div class="controls" aria-label="Graph controls">
+        <label class="reach-control" for="reach-range"><span>Reach</span><input id="reach-range" type="range" min="38" max="88" step="2" value="62" /><output id="reach-output">62</output></label>
+        <button type="button" id="pin-button" aria-pressed="false">Pin</button>
+        <button type="button" id="reset-button">Reset</button>
+      </div>
+
+      <span class="library-badge">p5.js · pixel-sampled poisson graph</span>
+      <output data-runtime-ledger id="runtime-ledger"></output>
+    </main>
+    <script type="module" src="./src/poisson-constellation-bloom-demo.js"></script>
+  </body>
+</html>

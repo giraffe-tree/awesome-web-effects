@@ -2192,6 +2192,36 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("ArrowLeft")
             elif index == 34:
                 page.locator('[data-sort-action="commit"]').click()
+        elif demo["id"] == "poisson-constellation-bloom":
+            if index == 2:
+                page.mouse.move(170, 92)
+            elif index == 4:
+                page.mouse.move(168, 110)
+                page.mouse.down()
+            elif index == 5:
+                page.mouse.move(190, 96, steps=3)
+            elif index == 6:
+                page.mouse.move(215, 80, steps=3)
+            elif index == 7:
+                page.mouse.move(242, 68, steps=3)
+            elif index == 8:
+                page.mouse.up()
+            elif index == 11:
+                page.locator("#pin-button").click()
+            elif index == 14:
+                page.locator("#reach-range").focus()
+                page.keyboard.press("ArrowRight")
+            elif index == 17:
+                page.locator("#reset-button").click()
+            elif index == 20:
+                page.mouse.move(220, 90)
+            elif index == 21:
+                page.locator("#graph-host").focus()
+                page.keyboard.press("ArrowRight")
+            elif index == 22:
+                page.keyboard.press("ArrowUp")
+            elif index == 24:
+                page.keyboard.press("Enter")
         elif demo["id"] == "kinetic-paper-fold-map":
             if index == 1:
                 page.mouse.move(280, 100)
@@ -6390,6 +6420,119 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["ready"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture trusted reversible source-pixel magnetic recovery, exact archive evidence, and a human-preserved final sort without automatic behavior: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "poisson-constellation-bloom":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-pixel-derived-harbor-risk-relationship-graph"
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["mechanism"] != "committed-image-pixels-classify-poisson-nodes-and-weight-local-risk-relations"
+            or interaction["acceptedInputs"] != ["mouse-hover", "captured-mouse-drag", "captured-touch-drag", "captured-pen-drag", "keyboard", "range-control", "visible-buttons"]
+            or not interaction["userInputRequired"]
+            or not interaction["initialFrameStatic"]
+            or not interaction["initialStaticConfirmed"]
+            or interaction["automaticCycle"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or interaction["previewClockMutationCount"] != 0
+            or interaction["timerMutationCount"] != 0
+            or interaction["runtimeAssertCount"] < 2
+            or interaction["inputCount"] < 16
+            or interaction["humanInputCausalityCount"] != interaction["visualMutationCount"]
+            or interaction["humanInputCausalityCount"] < interaction["inputCount"] - 4
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["pointerEnterCount"] < 1
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerMoveCount"] < 9
+            or interaction["pointerReleaseCount"] != 1
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerReleaseCaptureCount"] != 1
+            or interaction["hoverMutationCount"] < 1
+            or interaction["dragMutationCount"] < 6
+            or interaction["mouseDragMutationCount"] < 6
+            or interaction["touchDragMutationCount"] != 0
+            or interaction["penDragMutationCount"] != 0
+            or interaction["keyboardInputCount"] != 3
+            or interaction["rangeInputCount"] != 1
+            or interaction["buttonActivationCount"] != 2
+            or interaction["pinActivationCount"] != 2
+            or interaction["resetCount"] != 1
+            or interaction["dragDistance"] < 40
+            or not interaction["queryActive"]
+            or not interaction["queryPinned"]
+            or interaction["selectedNodeIndex"] < 0
+            or interaction["selectedCategory"] not in ("RUNOFF", "WATER", "UTILITY", "GROUND")
+            or interaction["selectedRelationCount"] <= 0
+            or interaction["selectedClusterChecksum"] <= 0
+            or interaction["activePointerId"] is not None
+            or interaction["pointerCaptured"]
+            or interaction["lastInputTrusted"] is not True
+            or interaction["lastInputKind"] != "keyboard-Enter"
+            or interaction["lastPointerType"] != "mouse"
+            or interaction["sourceFetchCount"] != 1
+            or interaction["sourceResponseStatus"] != 200
+            or not interaction["sourceSameOrigin"]
+            or interaction["sourceByteLength"] != 294954
+            or interaction["sourceSha256"] != "cdd11f0c7486999bfeae82de1809f52762be6608fc9521b264f3a89732e638af"
+            or not interaction["sourceShaMatchesExpected"]
+            or not interaction["browserImageDecoded"]
+            or interaction["sourceNaturalWidth"] != 960
+            or interaction["sourceNaturalHeight"] != 640
+            or interaction["sourcePixelCount"] != 614400
+            or not interaction["p5ImageDecoded"]
+            or interaction["p5ImageClass"] != "p5.Image"
+            or interaction["p5ImageWidth"] != 960
+            or interaction["p5ImageHeight"] != 640
+            or interaction["p5ImagePixelLength"] != 2457600
+            or interaction["sampledWidth"] != 80
+            or interaction["sampledHeight"] != 45
+            or interaction["sampledPixelCount"] != 3600
+            or interaction["sampledByteLength"] != 14400
+            or len(interaction["sampledPixelSha256"]) != 64
+            or not interaction["sampledPixelSha256"].strip("0")
+            or interaction["sampledPixelChecksum"] <= 0
+            or interaction["distinctSampleColorCount"] <= 250
+            or interaction["meanLuma"] <= .2
+            or interaction["meanLuma"] >= .8
+            or interaction["lumaDeviation"] <= .08
+            or interaction["lumaDeviation"] >= .36
+            or interaction["edgeDensity"] <= .05
+            or interaction["edgeDensity"] >= .75
+            or interaction["edgeSampleCount"] != 7075
+            or interaction["warmPixelRatio"] <= .01
+            or interaction["warmPixelRatio"] >= .3
+            or interaction["darkPixelRatio"] <= .03
+            or interaction["darkPixelRatio"] >= .7
+            or interaction["poissonNodeCount"] < 50
+            or interaction["poissonNodeCount"] > 100
+            or interaction["minimumObservedNodeDistance"] < 19.99
+            or interaction["relationshipCount"] < 150
+            or interaction["relationshipCount"] > 350
+            or interaction["crossRiskRelationshipCount"] < 5
+            or interaction["crossRiskRelationshipCount"] > 50
+            or interaction["highRiskNodeCount"] < 10
+            or interaction["highRiskNodeCount"] > 60
+            or len(interaction["categoryCounts"]) != 4
+            or any(count <= 0 for count in interaction["categoryCounts"])
+            or interaction["highestRiskNodeIndex"] < 0
+            or interaction["highestRiskValue"] < .62
+            or interaction["evidenceConclusion"] != "Runoff → utility"
+            or interaction["graphChecksum"] <= 0
+            or interaction["initialCanvasSignature"] <= 0
+            or interaction["lastCanvasSignature"] <= 0
+            or not interaction["p5InstanceReady"]
+            or not interaction["p5CanvasReady"]
+            or interaction["p5CanvasWidth"] != 320
+            or interaction["p5CanvasHeight"] != 180
+            or interaction["p5DrawCount"] < 12
+            or interaction["renderCount"] < 36
+            or not interaction["ready"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a trusted reversible pixel-derived harbor-risk query, pinned relationship finding, and exact source-backed Poisson graph without automatic focus: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "kinetic-paper-fold-map":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

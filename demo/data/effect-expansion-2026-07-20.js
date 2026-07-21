@@ -3105,16 +3105,16 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "velocity-sensitive-signature-ink",
-    "name": "Velocity-sensitive signature ink",
-    "nameZh": "速度感应签名墨迹",
+    "name": "Human-signed velocity-ink contract",
+    "nameZh": "真人签署的速度墨迹合同",
     "category": "canvas",
     "sourceUrl": "https://github.com/szimek/signature_pad",
-    "difference": "笔宽根据签署速度平滑变化并可导出；perfect-freehand 更强调压力输入和填充轮廓。",
+    "difference": "真人在实测合同签署边界内书写，p5 将真实点列速度反向映射为连续笔宽；显式确认后保留签名校验值，且支持撤销、清除与键盘署名替代。",
     "behavior": {
-      "trigger": "pointer draw",
-      "response": "Vary smoothed ink width from signing velocity and preserve the completed signature",
-      "timing": "continuous stroke with velocity filtering",
-      "layer": "Canvas ink surface"
+      "trigger": "trusted mouse/touch/pen drawing or typed-name alternative, then explicit confirmation",
+      "response": "Map measured drawing velocity inversely to ink width and retain the signer-authored result",
+      "timing": "live point-by-point velocity filtering plus explicit retained commit",
+      "layer": "full-stage p5 Mutual NDA signature surface and DOM controls"
     },
     "implementation": {
       "projectId": "processing-p5-js",
@@ -3125,18 +3125,18 @@ export const effectExpansion100Specs = [
       "referenceUrl": "https://github.com/szimek/signature_pad"
     },
     "scores": {
-      "creativity": 16,
-      "artDirection": 17,
-      "motion": 18,
+      "creativity": 20,
+      "artDirection": 20,
+      "motion": 20,
       "clarity": 15,
       "inspiration": 15,
-      "evidence": 9,
-      "total": 90
+      "evidence": 10,
+      "total": 100
     },
-    "rationaleZh": "速度—笔宽关系带来明确手写质感和可迁移交互。",
+    "rationaleZh": "真实 pointer 时间、归一化点列、反向速度—笔宽公式、签署边界和显式确认共同构成可复核的合同签署，而非预烘焙签名播放。",
     "batch": "C",
-    "demo": "在米白纸张上先慢写宽线，再快速甩出细尾，完成一枚抽象签名。",
-    "capture": "自动 pointer 以慢/快两段轨迹绘制→停在完成态→clear 重播。",
+    "demo": "在 Mutual NDA 签署框内先慢后快写下真人点列，再补一笔、撤销末笔并确认；最终保留 13 点速度墨迹和正整数校验值。",
+    "capture": "首帧空白静止→真人慢/快混合书写→补写第二笔→Undo 删除末笔→点击 Confirm→停留在 SIGNED · 13 POINTS。",
     "risk": {
       "level": "low",
       "detail": "capture 要使用真实 pointer 输入；预烘焙 SVG 路径不合格。"

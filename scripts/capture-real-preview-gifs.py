@@ -1736,6 +1736,37 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.locator('#node-filter-bar').click()
             elif index == 25:
                 page.locator('#undo-action').click()
+        elif demo["id"] == "velocity-sensitive-signature-ink":
+            path = [(.08, .54), (.148, .692), (.217, .712), (.285, .754), (.353, .589), (.422, .509), (.49, .393), (.558, .348), (.627, .445), (.695, .48), (.763, .648), (.832, .662), (.90, .676)]
+            if index == 3:
+                geometry = page.evaluate("window.__PREVIEW_INTERACTION_STATE__.signatureBounds")
+                page.mouse.move(geometry["left"] + geometry["width"] * path[0][0], geometry["top"] + geometry["height"] * path[0][1])
+                page.mouse.down()
+            elif 4 <= index <= 15:
+                geometry = page.evaluate("window.__PREVIEW_INTERACTION_STATE__.signatureBounds")
+                page.wait_for_timeout(70 if index <= 8 else 8)
+                u, v = path[index - 3]
+                page.mouse.move(geometry["left"] + geometry["width"] * u, geometry["top"] + geometry["height"] * v)
+            elif index == 16:
+                page.mouse.up()
+            elif index == 18:
+                geometry = page.evaluate("window.__PREVIEW_INTERACTION_STATE__.signatureBounds")
+                page.mouse.move(geometry["left"] + geometry["width"] * .28, geometry["top"] + geometry["height"] * .78)
+                page.mouse.down()
+            elif index == 19:
+                geometry = page.evaluate("window.__PREVIEW_INTERACTION_STATE__.signatureBounds")
+                page.wait_for_timeout(40)
+                page.mouse.move(geometry["left"] + geometry["width"] * .48, geometry["top"] + geometry["height"] * .80)
+            elif index == 20:
+                geometry = page.evaluate("window.__PREVIEW_INTERACTION_STATE__.signatureBounds")
+                page.wait_for_timeout(8)
+                page.mouse.move(geometry["left"] + geometry["width"] * .66, geometry["top"] + geometry["height"] * .77)
+            elif index == 21:
+                page.mouse.up()
+            elif index == 23:
+                page.locator('#undo-stroke').click()
+            elif index == 26:
+                page.locator('#confirm-signature').click()
         elif demo["id"] == "gooey-pixel-cursor-wake":
             if index == 3:
                 box = page.locator('#pixel-wake-host').bounding_box()
@@ -6822,6 +6853,98 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or "Review held" not in page.locator('#review-label').text_content()
         ):
             raise RuntimeError(f"{demo['id']} did not capture a real descendant-isolated repository collapse and retained MapPanel review path: {interaction!r}")
+    elif demo["id"] == "velocity-sensitive-signature-ink":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        if (
+            not assertion
+            or interaction["task"] != "human-draws-or-types-explicitly-confirms-reviews-undoes-and-clears-a-contract-signature"
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["mechanism"] != "trusted-pointer-velocity-inversely-maps-to-p5-ink-width-inside-a-measured-signature-boundary"
+            or interaction["assetStrategy"] != "code-native-contract-dom-and-human-input-point-data-no-functional-raster-input-required"
+            or interaction["imageGenerationDecision"] != "omitted-because-raster-pixels-would-not-drive-pointer-velocity-point-order-or-ink-width"
+            or interaction["acceptedInputs"] != ["mouse-drag-signature", "touch-or-pen-signature", "typed-name-alternative", "undo-control-or-command-z", "clear-control-or-delete", "button-or-enter-confirmation"]
+            or interaction["causality"] != "trusted-human-input-only"
+            or interaction["automaticSignature"]
+            or interaction["automaticStrokePlayback"]
+            or interaction["fixedAuthoredSignature"]
+            or interaction["automaticFallback"]
+            or interaction["captureClockDriven"]
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["untrustedInputPolicy"] != "reject-before-point-text-or-signature-decision-mutation"
+            or interaction["untrustedMutationCount"] != 0
+            or not interaction["initialBlankVerified"]
+            or interaction["inputCount"] != 20
+            or interaction["trustedInputCount"] != 20
+            or interaction["pointerInputCount"] != 18
+            or interaction["keyboardInputCount"] != 0
+            or interaction["controlInputCount"] != 2
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["pointerDownCount"] != 2
+            or interaction["pointerMoveCount"] != 14
+            or interaction["pointerUpCount"] != 2
+            or interaction["pointerCaptureCount"] != 2
+            or interaction["pointerCaptureReleaseCount"] != 2
+            or interaction["ignoredOutsideBoundaryCount"] != 0
+            or interaction["clampedPointCount"] != 0
+            or interaction["strokeCreationCount"] != 2
+            or interaction["strokeCount"] != 1
+            or interaction["pointCount"] != 13
+            or interaction["segmentCount"] != 12
+            or interaction["undoInputCount"] != 1
+            or interaction["undoCount"] != 1
+            or interaction["clearInputCount"] != 0
+            or interaction["clearCount"] != 0
+            or interaction["typedInputEventCount"] != 0
+            or interaction["typedCharacterCount"] != 0
+            or interaction["confirmationInputCount"] != 1
+            or interaction["confirmationCount"] != 1
+            or interaction["rejectedConfirmationCount"] != 0
+            or interaction["drawing"]
+            or interaction["activePointerId"] is not None
+            or interaction["velocitySampleCount"] != 14
+            or interaction["minimumObservedVelocity"] is None
+            or interaction["minimumObservedVelocity"] <= 0
+            or interaction["maximumObservedVelocity"] <= interaction["minimumObservedVelocity"]
+            or interaction["minimumObservedWidth"] < 1.2
+            or interaction["maximumObservedWidth"] > 8.2
+            or interaction["widthRange"] <= 3
+            or not interaction["velocityWidthInverseVerified"]
+            or interaction["widthMappingErrorMaximum"] >= .001
+            or abs(interaction["signatureExtentWidth"] - .82) > .001
+            or not (.39 <= interaction["signatureExtentHeight"] <= .42)
+            or not interaction["allPointsWithinBoundary"]
+            or interaction["signatureMode"] != "velocity-ink"
+            or not interaction["signatureRetained"]
+            or interaction["retainedStrokeCount"] != 1
+            or interaction["retainedPointCount"] != 13
+            or interaction["retainedTypedName"] is not None
+            or not isinstance(interaction["retainedSignatureChecksum"], int)
+            or interaction["retainedSignatureChecksum"] <= 0
+            or interaction["phase"] != "signature-retained"
+            or interaction["result"] != "velocity-ink-contract-signature-retained"
+            or len(interaction["transitionRecords"]) != 16
+            or any(not record["trusted"] for record in interaction["transitionRecords"])
+            or sum(1 for record in interaction["transitionRecords"] if record.get("source") == "trusted-pointer-point") != 14
+            or not any(record.get("action") == "undo" for record in interaction["transitionRecords"])
+            or not any(record.get("action") == "confirm" for record in interaction["transitionRecords"])
+            or not interaction["boundaryWithinStage"]
+            or interaction["canvasCoverageRatio"] < .995
+            or not interaction["fullStageGeometryVerified"]
+            or not interaction["p5InstanceReady"]
+            or not interaction["canvas2dReady"]
+            or not interaction["ready"]
+            or interaction["renderCount"] <= 0
+            or interaction["drawCount"] <= 0
+            or interaction["completedDrawCount"] <= 0
+            or interaction["geometryMeasureCount"] <= 0
+            or page.locator('#signature-status').get_attribute('data-retained') != "true"
+            or page.locator('#status-output').text_content() != "SIGNED · 13 POINTS"
+            or page.locator('#undo-stroke').is_disabled()
+            or page.locator('#clear-signature').is_disabled()
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a real velocity-mapped contract signature, revision, and retained confirmation: {interaction!r}")
     elif demo["id"] == "gooey-pixel-cursor-wake":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")

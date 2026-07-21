@@ -1,1 +1,39 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p5.js — Velocity Sensitive Signature Ink</title><link rel="stylesheet" href="./shared.css"><style>:root{--preview-background:#eee8d9;color-scheme:light}#signature-host{position:absolute;inset:0;cursor:crosshair}#signature-host canvas{width:100%!important;height:100%!important}.signature-copy{position:absolute;z-index:5;left:14px;top:42px;color:#25221d;pointer-events:none}.signature-copy small{font:800 6px/1 ui-monospace;letter-spacing:.16em;color:#a05b35}.signature-copy h1{width:105px;margin:8px 0 0;font:950 17px/.86 system-ui;letter-spacing:-.05em}.speed{position:absolute;right:12px;top:12px;z-index:5;color:#a05b35;font:900 7px/1 ui-monospace}.library-badge{background:#eee8d9d6;color:#25221d;border-color:#665e5155}.scene-caption{color:#665e51}</style></head><body><main class="preview-stage" data-preview-mechanism="velocity-filtered-ink"><div id="signature-host" tabindex="0" aria-label="Draw a signature; slow movement produces broad ink and fast movement a fine tail"></div><section class="signature-copy"><small>INK ENGINE / VELOCITY</small><h1>SPEED CHANGES THE WEIGHT OF A MARK.</h1></section><output class="speed" id="speed">VELOCITY 0.00</output><span class="library-badge">p5.js · velocity-sensitive ink</span><span class="scene-caption">filtered pointer velocity inversely maps to width</span></main><script type="module" src="./src/velocity-sensitive-signature-ink-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>p5.js — Velocity-Sensitive Contract Signature</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="./shared.css">
+  <style>
+    :root{--preview-background:#eee9dd;color-scheme:light;--ink:#26231e;--clay:#a35534;--green:#496b50}
+    #contract-stage{background:#eee9dd;color:var(--ink)}#signature-host{position:absolute;inset:0;cursor:crosshair;outline:none;touch-action:none}#signature-host:focus-visible{box-shadow:inset 0 0 0 2px #a3553466}#signature-host canvas{width:100%!important;height:100%!important}
+    .contract-bar{position:absolute;z-index:6;left:11px;right:11px;top:9px;display:flex;justify-content:space-between;pointer-events:none;font:850 5px/1 ui-monospace;letter-spacing:.13em;text-transform:uppercase}.contract-bar span:first-child{display:flex;align-items:center;gap:6px}.contract-bar span:first-child::before{content:"";width:7px;height:7px;border-radius:2px;background:var(--clay)}.contract-bar span:last-child{color:#8e877a}
+    .contract-copy{position:absolute;z-index:5;left:12px;top:37px;width:82px;pointer-events:none}.contract-copy small{font:800 5px/1 ui-monospace;letter-spacing:.14em;color:var(--clay)}.contract-copy h1{margin:7px 0 0;font:950 15px/.87 system-ui;letter-spacing:-.05em}.contract-copy p{margin:7px 0 0;font:650 5px/1.35 system-ui;color:#898175}
+    .signature-boundary-label{position:absolute;z-index:5;pointer-events:none;font:800 5px/1 ui-monospace;letter-spacing:.11em;color:#8f877b}.speed-readout{position:absolute;z-index:6;right:12px;top:28px;text-align:right;pointer-events:none}.speed-readout small{display:block;font:750 5px/1 ui-monospace;letter-spacing:.11em;color:#91897e}.speed-readout output{display:block;margin-top:4px;font:900 6px/1 ui-monospace;letter-spacing:.07em;color:var(--clay)}
+    .typed-preview{position:absolute;z-index:5;display:flex;align-items:center;padding:0 12px;color:#24211d;opacity:.72;pointer-events:none;font:italic 900 18px/1.1 Georgia,serif;letter-spacing:.02em}.typed-preview:empty{display:none}
+    .signature-controls{position:absolute;z-index:9;left:11px;right:11px;bottom:8px;display:flex;align-items:center;gap:5px}.typed-input{width:88px;height:36px;padding:0 8px;border:1px solid #4a443a2e;border-radius:8px;background:#f8f4eb;color:#27231e;outline:none;font:750 6px/1 ui-monospace;letter-spacing:.06em}.typed-input:focus{border-color:#a3553480}.typed-input::placeholder{color:#9d9589}.signature-action{height:36px;padding:0 8px;border:1px solid #4a443a2e;border-radius:8px;background:#e4ded1;color:#5f574d;cursor:pointer;font:850 5px/1 ui-monospace;letter-spacing:.08em}.signature-action:disabled{opacity:.4;cursor:not-allowed}.signature-action:focus-visible{outline:1px solid var(--clay);outline-offset:1px}.signature-action.confirm{margin-left:auto;border-color:#496b5066;background:#e5eee4;color:var(--green)}
+    .signature-status{position:absolute;z-index:6;right:12px;bottom:50px;text-align:right;pointer-events:none}.signature-status small{display:block;font:750 5px/1 ui-monospace;letter-spacing:.11em;color:#91897e}.signature-status output{display:block;margin-top:4px;font:900 6px/1 ui-monospace;letter-spacing:.06em;color:#6d655b}.signature-status[data-retained="true"] output{color:var(--green)}
+    @media(max-width:270px){.contract-bar span:last-child{display:none}.contract-copy{top:37px;width:175px}.contract-copy h1{width:175px;font-size:17px}.contract-copy p{display:none}.speed-readout{top:72px;left:12px;right:auto;text-align:left}.signature-controls{gap:4px}.typed-input{width:68px;height:40px;padding:0 6px}.signature-action{height:40px;padding:0 6px}.signature-action.confirm{padding:0 7px}.signature-status{bottom:56px}}
+  </style>
+</head>
+<body>
+  <main id="contract-stage" class="preview-stage" data-preview-mechanism="p5-velocity-width-contract-signature">
+    <div id="signature-host" tabindex="0" role="application" aria-label="Contract signature field. Draw inside the boundary, type a keyboard alternative, press Enter to confirm, Control Z to undo, or Delete to clear."></div>
+    <header class="contract-bar"><span>Mutual NDA / Signature 02</span><span>p5.js · velocity ink</span></header>
+    <section class="contract-copy"><small>SIGNER ATTESTATION</small><h1>SIGN WITH YOUR OWN MOTION.</h1><p>Slow strokes carry weight. Fast strokes taper to a fine line.</p></section>
+    <span id="boundary-label" class="signature-boundary-label">SIGN WITHIN BOUNDARY</span>
+    <span class="speed-readout"><small>LIVE INK</small><output id="speed-output">0.00 PX/MS · 0.00 PX</output></span>
+    <span id="typed-preview" class="typed-preview"></span>
+    <span id="signature-status" class="signature-status" data-retained="false"><small>SIGNATURE STATUS</small><output id="status-output">EMPTY · NOT CONFIRMED</output></span>
+    <footer class="signature-controls">
+      <input id="typed-name" class="typed-input" type="text" maxlength="28" autocomplete="off" aria-label="Typed signature alternative" placeholder="TYPE NAME">
+      <button id="undo-stroke" class="signature-action" type="button" disabled>UNDO</button>
+      <button id="clear-signature" class="signature-action" type="button" disabled>CLEAR</button>
+      <button id="confirm-signature" class="signature-action confirm" type="button">CONFIRM</button>
+    </footer>
+  </main>
+  <script type="module" src="./src/velocity-sensitive-signature-ink-demo.js"></script>
+</body>
+</html>

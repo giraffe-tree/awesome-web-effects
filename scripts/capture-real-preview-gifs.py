@@ -1849,6 +1849,37 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 25:
                 route = page.evaluate("window.__PREVIEW_INTERACTION_STATE__.routeEvidence")
                 page.mouse.move(route[5]["u"] * 320, route[5]["v"] * 180)
+        elif demo["id"] == "elastic-voronoi-focus-mosaic":
+            if index == 3:
+                page.mouse.move(294, 41)
+            elif index == 5:
+                page.mouse.move(294, 41)
+                page.mouse.down()
+            elif index == 6:
+                page.mouse.move(256, 85, steps=3)
+            elif index == 7:
+                page.mouse.move(185, 137, steps=3)
+            elif index == 8:
+                page.mouse.move(269, 137, steps=3)
+            elif index == 9:
+                page.mouse.up()
+            elif index == 12:
+                page.locator('[data-focus-action="previous"]').click()
+            elif index == 14:
+                page.locator('[data-focus-action="lock"]').click()
+            elif index in (16, 18):
+                page.locator('[data-focus-action="next"]').click()
+            elif index == 20:
+                page.locator("#mosaic-surface").focus()
+                page.keyboard.press("ArrowRight")
+            elif index == 22:
+                page.keyboard.press("Enter")
+            elif index == 24:
+                page.locator('[data-focus-action="reset"]').click()
+            elif index == 27:
+                page.locator('[data-focus-action="next"]').click()
+            elif index == 30:
+                page.locator('[data-focus-action="lock"]').click()
         elif demo["id"] == "kinetic-paper-fold-map":
             if index == 1:
                 page.mouse.move(280, 100)
@@ -5124,6 +5155,91 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["ready"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture a trusted six-fix pixel-derived night route, explicit confirmation, undo, keyboard reacquisition, and final reseal without automatic stitching: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "elastic-voronoi-focus-mosaic":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-coastal-image-evidence-focus-and-classification"
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["mechanism"] != "p5-image-pixels-drive-power-diagram-site-evidence-classification-and-elastic-focus-area"
+            or interaction["acceptedInputs"] != ["mouse-hover", "captured-mouse-drag", "captured-touch-drag", "captured-pen-drag", "keyboard", "visible-buttons"]
+            or not interaction["userInputRequired"]
+            or not interaction["initialFrameStatic"]
+            or not interaction["initialStaticConfirmed"]
+            or interaction["automaticCycle"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or interaction["previewClockMutationCount"] != 0
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["inputCount"] < 20
+            or interaction["humanInputCausalityCount"] != interaction["inputCount"]
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["pointerEnterCount"] < 1
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerMoveCount"] < 10
+            or interaction["pointerReleaseCount"] != 1
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerReleaseCaptureCount"] != 1
+            or interaction["keyboardInputCount"] != 2
+            or interaction["buttonActivationCount"] != 7
+            or interaction["hoverFocusCount"] < 1
+            or interaction["dragFocusCount"] < 3
+            or interaction["lockCount"] < 4
+            or interaction["resetCount"] != 1
+            or interaction["dragDistance"] < .45
+            or interaction["selectedIndex"] != 7
+            or interaction["focusIndex"] != 7
+            or interaction["maximumFocusExpansionRatio"] <= 1.18
+            or interaction["focusExpansionRatio"] <= 1.18
+            or not interaction["animationSettled"]
+            or interaction["activePointerId"] is not None
+            or interaction["pointerCaptured"]
+            or interaction["lastInputTrusted"] is not True
+            or interaction["lastInputKind"] != "button-lock"
+            or interaction["lastPointerType"] != "mouse"
+            or interaction["assetFetchCount"] != 1
+            or interaction["assetResponseStatus"] != 200
+            or not interaction["assetSameOrigin"]
+            or interaction["assetByteLength"] != 360838
+            or interaction["assetSha256"] != "45a73a7734337e154e4bb3a28a2ee86833228661d2a4b385791fb2af798f2a9a"
+            or not interaction["assetShaMatchesExpected"]
+            or not interaction["browserImageDecoded"]
+            or interaction["sourceNaturalWidth"] != 960
+            or interaction["sourceNaturalHeight"] != 640
+            or not interaction["p5ImageDecoded"]
+            or interaction["p5ImageClass"] != "p5.Image"
+            or interaction["p5ImageWidth"] != 960
+            or interaction["p5ImageHeight"] != 640
+            or interaction["p5ImagePixelLength"] != 2457600
+            or interaction["sampledPixelCount"] != 2925
+            or interaction["sampledByteLength"] != 11700
+            or len(interaction["sampledPixelSha256"]) != 64
+            or not interaction["sampledPixelSha256"].strip("0")
+            or interaction["distinctSampleColorCount"] <= 200
+            or interaction["evidenceSiteCount"] != 13
+            or interaction["evidenceClassCount"] < 3
+            or interaction["evidenceClassCount"] > 5
+            or len(interaction["evidenceClasses"]) != interaction["evidenceClassCount"]
+            or interaction["evidenceChecksum"] <= 0
+            or not interaction["evidenceReady"]
+            or interaction["partitionCoverageCellCount"] != 3600
+            or interaction["partitionExpectedCellCount"] != 3600
+            or interaction["partitionRegionCount"] != 13
+            or interaction["adjacencyEdgeCount"] < 16
+            or interaction["minimumNeighborCount"] < 2
+            or abs(interaction["currentPartitionArea"] - 57600) >= .05
+            or interaction["currentGeometryChecksum"] <= 0
+            or not interaction["p5InstanceReady"]
+            or not interaction["p5CanvasReady"]
+            or interaction["p5CompletedDrawCount"] < 10
+            or interaction["renderCount"] < 36
+            or not interaction["ready"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture trusted coastal-evidence hover, captured weighted-focus dragging, lock/reset/keyboard reversibility, and exact source-backed power-diagram topology without automatic focus: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "kinetic-paper-fold-map":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

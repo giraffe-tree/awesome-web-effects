@@ -199,12 +199,12 @@ export const effectExpansion150BatchB = [
     scores: score(20, 20, 20, 15, 15, 10), rationaleZh: '原创 ImageGen 960×640 夜间观测底片经同源 fetch、精确源 SHA、浏览器+p5 双解码与 14,400 像素读取；599 个局部峰筛成 18 颗候选星，像素亮度/对比度决定置信度与六段严格递增路线。真人 hover、捕获拖线、键盘及 Undo/Reset/Confirm 可采集、撤销、复补和封存路线，无 autoplay、排练、fallback、合成输入或预览时钟变异。'
   },
   {
-    id: 'elastic-voronoi-focus-mosaic', order: 148, name: 'Elastic Voronoi focus mosaic', nameZh: '弹性 Voronoi 焦点马赛克', category: 'canvas', sourceUrl: 'https://github.com/gorhill/Javascript-Voronoi',
-    difference: '离指针最近的种子通过距离权重扩大势力范围，整张镶嵌实时弹性重分区，而非放大一张图片。',
-    behavior: { trigger: 'pointer movement', response: 'The nearest Voronoi region gains spatial weight and pushes neighboring cells away', timing: 'continuous weighted tessellation', layer: 'mosaic field' },
-    prompt: '实现固定种子的加权 Voronoi 栅格，降低焦点种子的距离权重，使最近区域连续扩张。',
-    implementation: p5Implementation("new p5(p => { p.draw = () => rasterWeightedVoronoi(p, seeds, focusedSeed); });", 'https://github.com/gorhill/Javascript-Voronoi'),
-    scores: score(19, 18, 18, 15, 15, 10), rationaleZh: '焦点与全局重分区关系清楚，色块边界具有独特的弹性空间感。'
+    id: 'elastic-voronoi-focus-mosaic', order: 148, name: 'Coastscan restoration evidence field', nameZh: 'Coastscan 海岸修复证据场', category: 'canvas', sourceUrl: 'https://github.com/processing/p5.js',
+    difference: '弹性分区不再包裹随机色块：一张海岸修复航拍图的真实局部像素为 13 个 power-diagram 区域提供色彩、地貌分类与置信度，焦点扩张用于放大并锁定调查证据。',
+    behavior: { trigger: 'trusted hover, captured mouse/touch/pen drag, keyboard, or previous/next/lock/reset controls', response: 'Elastic power cells reallocate area around dune, basalt, tidal, marsh, and wrack evidence while preserving a lockable selection', timing: 'human-driven finite focus transitions that settle and can reverse', layer: 'full-stage p5 survey image clipped through weighted Voronoi cells' },
+    prompt: '制作 Coastscan 虚构海岸修复证据检查台。同源加载并精确校验一张 ImageGen 航拍调查图，用浏览器与 p5 解码；在 13 个固定 site 周围各读取 15×15 像素，把均色、亮度与色度分类为沙丘、玄武岩、潮水、盐沼或漂积线并计算置信度。仅允许可信 hover、捕获 mouse/touch/pen 拖动、键盘与 Prev/Next/Lock/Reset 改变加权 power diagram 焦点和锁定结果；首帧静止。',
+    implementation: p5Implementation("const evidence = sites.map(site => classify(samplePixels(site, 15))); const cells = weightedPowerDiagram(sites, focusedIndex, focusPower); drawClippedSurvey(p, image, cells, evidence);", 'https://github.com/processing/p5.js'),
+    scores: score(20, 20, 20, 15, 15, 10), rationaleZh: '原创 ImageGen 960×640 海岸修复航拍图经同源 fetch、精确源 SHA、浏览器+p5 双解码；13 个 site 各读取 225 个真实像素，派生地貌、置信度与可视叠色。13 区 power diagram 覆盖 3,600 个审计格并保有有效邻接，真人 hover、捕获拖动、键盘和锁定按钮可放大、切换、固定与复位证据，无 autoplay、排练、fallback、合成输入或预览时钟变异。'
   },
   {
     id: 'chromatic-channel-drag-portrait', order: 149, name: 'Chromatic channel drag portrait', nameZh: '色彩通道拖拽肖像', category: 'canvas', sourceUrl: 'https://github.com/akella/fake3d',

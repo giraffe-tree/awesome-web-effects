@@ -164,6 +164,21 @@ def main() -> int:
             rows = page.locator("#effect-list .effect-row")
             expect(rows).to_have_count(expected_effect_count)
             expect(page.locator("#effect-list .media-load-state[role]")).to_have_count(0)
+            expect(page.locator("#featured-effects .featured-effect")).to_have_count(3)
+            desktop_grid_columns = page.locator("#effect-list").evaluate(
+                "element => getComputedStyle(element).gridTemplateColumns.split(' ').length"
+            )
+            assert desktop_grid_columns == 3
+            transition_filter = page.locator('#filters [data-category="transition"]')
+            expected_transition_count = page.locator(
+                '#effect-list .effect-row[data-category="transition"]'
+            ).count()
+            transition_filter.click()
+            expect(transition_filter).to_have_attribute("aria-pressed", "true")
+            expect(rows).to_have_count(expected_transition_count)
+            page.locator('#filters [data-category="all"]').click()
+            expect(rows).to_have_count(expected_effect_count)
+            page.wait_for_timeout(650)
 
             for effect_id in admitted_local_preview_ids:
                 migrated_row = page.locator(f"#{effect_id}")
@@ -339,6 +354,10 @@ def main() -> int:
             page.locator("#language").select_option("ur")
             expect(page.locator("html")).to_have_attribute("dir", "rtl")
             assert page.evaluate("document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1")
+            mobile_grid_columns = page.locator("#effect-list").evaluate(
+                "element => getComputedStyle(element).gridTemplateColumns.split(' ').length"
+            )
+            assert mobile_grid_columns == 1
             page.locator("#language").select_option("en")
             mobile_prompt_screenshot = ROOT / "tmp" / "agent-prompt-mobile.png"
             page.locator("#agent-prompt").screenshot(path=str(mobile_prompt_screenshot))

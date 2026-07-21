@@ -3,12 +3,12 @@ const p5 = (snippet, referenceUrl) => ({ projectId: 'processing-p5-js', projectU
 
 export const effectExpansion150BatchA3 = [
   {
-    id: 'kinetic-rain-letterpress', order: 111, name: 'Kinetic rain letterpress', nameZh: '动态字雨活版压印', category: 'canvas', sourceUrl: 'https://github.com/processing/p5.js',
-    difference: '字模受确定性重力下落并在纸面碰撞瞬间留下被压扁的墨迹，不是字符雨或普通打字动画。',
-    behavior: { trigger: 'pointer pressure or animation frame', response: 'Falling type blocks stamp widening ink impressions when they strike paper', timing: 'continuous gravity cycles with discrete impacts', layer: 'letterpress canvas' },
-    prompt: '使用固定字模数组实现下落、碰撞和压印；指针纵向位置控制重力强度，墨迹只在接触纸面时出现。',
-    implementation: p5("new p5(p => { p.draw = () => typeBlocks.forEach(block => drawFallAndImpression(p, block, gravity)); });", 'https://github.com/processing/p5.js'),
-    scores: scores(18, 19, 19, 15, 15, 10), rationaleZh: '下落字模、纸面基线与碰撞墨迹形成明确的活版因果，材质与动作均可辨。'
+    id: 'kinetic-rain-letterpress', order: 111, name: 'Make-ready kinetic letterpress', nameZh: 'Make-ready 活版校样台', category: 'canvas', sourceUrl: 'https://github.com/processing/p5.js',
+    difference: '把自动坠落的散字变成可交付的 PROOFING 活版校样：真实棉纸与三种墨样像素决定纸面、墨色、吸墨率、压力目标、增益和最终 PASS/HOLD。',
+    behavior: { trigger: 'trusted hover, captured mouse/touch/pen slug drop, keyboard, native pressure range, sampled ink button, or visible Rain step/Undo/Reset control', response: 'Select and lower a type slug, advance the remaining letters in finite steps, tune impression pressure, switch source-sampled ink, and approve only when all eight impressions meet the pixel-derived stock target', timing: 'human-owned p5 noLoop redraws that remain static and reversible after input', layer: 'full-stage decoded cotton proof, eight live type slugs and impressions, ink rail, pressure control, make-ready evidence, and disposition' },
+    prompt: '制作一个全舞台数字活版 Make-ready 工作台：同源加载并精确校验一张 ImageGen 棉纸校样图，读取 96×54 像素中的纸张区与 Navy/Rust/Graphite 三个墨样区，派生纸面纹理、吸墨率、压力目标、墨色、增益和 PASS/HOLD。真人通过 hover、捕获式鼠标/触控/笔向下拖动字模、键盘、原生 pressure range、墨色按钮和 Rain step/Undo/Reset 控件逐字完成 PROOFING；p5 必须 noLoop，只按输入重绘，禁止自动坠落、循环、排练、fallback、合成输入或预览时钟变更。',
+    implementation: p5("p.noLoop(); const stock = samplePaperAndThreeInkRegions(sourcePixels); stage.addEventListener('pointermove', dropSlugOnlyFromCapturedTrustedInput); stepButton.addEventListener('click', () => { advanceFiniteMakeReadyStep(); p.redraw(); });", 'https://github.com/processing/p5.js'),
+    scores: scores(20, 20, 20, 15, 15, 10), rationaleZh: '原创 ImageGen 棉纸校样经同源 fetch、精确源 SHA、浏览器 decode 与 96×54 / 5,184 像素读取；中央纸张区和三块墨样真实决定画布基材、墨色、吸墨率、约 68 的压力目标、墨迹增益与结论。可信 hover、捕获拖拽、键盘、range、墨色和 Step/Undo/Reset 使八字母校样有限推进、可逆且输入后保持。'
   },
   {
     id: 'recursive-arc-forest-growth', order: 112, name: 'Recursive arc forest growth', nameZh: '递归弧线森林生长', category: 'canvas', sourceUrl: 'https://github.com/shiffman/The-Nature-of-Code-Examples-p5.js',

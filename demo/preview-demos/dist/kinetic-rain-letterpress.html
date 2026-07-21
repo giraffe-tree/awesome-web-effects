@@ -1,8 +1,341 @@
-<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Kinetic Rain Letterpress</title><style>:root{--preview-background:#e8dfca}canvas{width:100%;height:100%}.copy{position:absolute;left:14px;top:49px;width:99px;color:#261f19}.copy small{font:900 6px monospace;letter-spacing:.14em;color:#a64c38}.copy h1{margin:8px 0;font:950 20px/.84 system-ui;letter-spacing:-.06em}.library-badge{color:#261f19;background:#fff9;border-color:#261f1944}.scene-caption{display:none}</style>  <script type="module" crossorigin src="./assets/kinetic-rain-letterpress-CDUWuE8m.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
-  <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
-  <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
-  <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
-  <link rel="modulepreload" crossorigin href="./assets/expansion-b-utils-CD_J0IHW.js">
-  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage"><canvas tabindex="0" aria-label="Falling type blocks stamp ink into paper"></canvas><section class="copy"><small>TYPE / GRAVITY</small><h1>LET LETTERS HIT PAPER.</h1></section><span class="library-badge">p5.js · rain letterpress</span></main></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>p5.js — Kinetic Letterpress Make-ready</title>
+    <link rel="icon" href="data:,">
+    <style>
+      :root {
+        --preview-background: #24241f;
+        --paper: #e5ded0;
+        --ink: #17212a;
+        --rust: #9b3928;
+        --graphite: #2d2e2b;
+        --signal: #47785f;
+        color-scheme: light;
+      }
+
+      button, input { font: inherit; }
+
+      .press-stage {
+        position: absolute;
+        inset: 0;
+        overflow: clip;
+        background: #24241f;
+        color: #24231e;
+        outline: none;
+        touch-action: none;
+        user-select: none;
+      }
+
+      .press-stage:focus-visible { box-shadow: inset 0 0 0 2px #ae402f; }
+
+      .print-surface,
+      .print-surface canvas {
+        position: absolute;
+        inset: 0;
+        width: 100% !important;
+        height: 100% !important;
+      }
+
+      .print-surface { z-index: 1; }
+      .print-surface canvas { display: block; }
+
+      .surface-scan {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        opacity: .2;
+        background:
+          linear-gradient(90deg, transparent 49.8%, #2d2b2417 50%, transparent 50.2%),
+          repeating-linear-gradient(0deg, transparent 0 23px, #2d2b240a 24px);
+        pointer-events: none;
+      }
+
+      .brief,
+      .proof-card,
+      .ink-rail,
+      .press-controls,
+      .source-status {
+        position: absolute;
+        z-index: 8;
+      }
+
+      .brief {
+        top: 8%;
+        left: 18.5%;
+        width: min(24%, 170px);
+        pointer-events: none;
+      }
+
+      .brief-kicker,
+      .brief-copy,
+      .proof-label,
+      .proof-detail,
+      .ink-rail,
+      .press-controls,
+      .source-status,
+      .impact-readout {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-weight: 820;
+        letter-spacing: .095em;
+        text-transform: uppercase;
+      }
+
+      .brief-kicker {
+        color: var(--rust);
+        font-size: clamp(5px, .95vw, 7px);
+      }
+
+      .brief h1 {
+        margin: clamp(5px, 1vw, 8px) 0 0;
+        font: 930 clamp(14px, 3.8vw, 27px)/.86 system-ui, sans-serif;
+        letter-spacing: -.06em;
+      }
+
+      .brief-copy {
+        margin: clamp(5px, 1.05vw, 8px) 0 0;
+        color: #333129a8;
+        font-size: clamp(4px, .72vw, 5px);
+        line-height: 1.45;
+      }
+
+      .proof-card {
+        top: 8%;
+        right: 5%;
+        width: min(22%, 158px);
+        padding: clamp(6px, 1.2vw, 9px);
+        border: 1px solid #302e272e;
+        border-radius: clamp(6px, 1.25vw, 9px);
+        background: #e7dfd1d8;
+        box-shadow: inset 0 1px #fff8, 0 10px 24px #2a292128;
+        backdrop-filter: blur(9px);
+        pointer-events: none;
+      }
+
+      .proof-label {
+        display: flex;
+        justify-content: space-between;
+        gap: 5px;
+        color: #58554c;
+        font-size: clamp(4px, .7vw, 5px);
+      }
+
+      .proof-label b { color: var(--rust); }
+
+      .proof-card strong {
+        display: block;
+        margin-top: clamp(4px, .8vw, 6px);
+        color: var(--decision-color, #9b3928);
+        font: 930 clamp(11px, 2.5vw, 18px)/.9 system-ui, sans-serif;
+        letter-spacing: -.045em;
+      }
+
+      .proof-detail {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 3px 6px;
+        margin-top: clamp(4px, .85vw, 7px);
+        color: #545148bd;
+        font-size: clamp(3px, .59vw, 4px);
+      }
+
+      .proof-detail span:nth-child(even) { text-align: right; }
+
+      .ink-rail {
+        top: 42%;
+        left: 7.4%;
+        display: grid;
+        gap: clamp(4px, 1vw, 7px);
+        font-size: clamp(3px, .58vw, 4px);
+      }
+
+      .ink-rail button {
+        display: grid;
+        width: clamp(17px, 4.2vw, 30px);
+        aspect-ratio: 1;
+        padding: 0;
+        place-content: center;
+        border: 1px solid #f4eee2a8;
+        border-radius: clamp(4px, .8vw, 6px);
+        background: var(--swatch, #17212a);
+        box-shadow: 0 2px 7px #201f1948;
+        color: #fff;
+        font: inherit;
+        letter-spacing: .03em;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+
+      .ink-rail button[data-selected="true"] {
+        outline: 2px solid #a54331;
+        outline-offset: 2px;
+      }
+
+      .ink-rail button:focus-visible { outline: 2px solid #182631; outline-offset: 2px; }
+
+      .impact-readout {
+        position: absolute;
+        z-index: 7;
+        right: 7%;
+        bottom: 25%;
+        color: #36342d91;
+        font-size: clamp(3px, .64vw, 5px);
+        pointer-events: none;
+      }
+
+      .source-status {
+        top: 4.5%;
+        left: 4%;
+        display: flex;
+        gap: 5px;
+        align-items: center;
+        color: #d8d0c3;
+        font-size: clamp(4px, .68vw, 5px);
+        text-shadow: 0 1px 5px #0009;
+        pointer-events: none;
+      }
+
+      .source-status i {
+        width: 5px;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: #8fbc9e;
+        box-shadow: 0 0 7px #8fbc9e;
+      }
+
+      .press-controls {
+        right: 4.5%;
+        bottom: 5%;
+        left: 4.5%;
+        display: flex;
+        align-items: center;
+        gap: clamp(5px, 1vw, 9px);
+        min-height: clamp(19px, 4.2vw, 30px);
+        padding: 0 clamp(7px, 1.2vw, 10px);
+        border: 1px solid #e7dfd066;
+        border-radius: 999px;
+        background: #272720df;
+        box-shadow: inset 0 1px #ffffff14, 0 8px 20px #1c1c1870;
+        color: #efe8dc;
+        font-size: clamp(4px, .7vw, 5px);
+        backdrop-filter: blur(10px);
+      }
+
+      .press-controls label {
+        display: flex;
+        flex: 1 1 80px;
+        align-items: center;
+        gap: 6px;
+        min-width: 0;
+        color: #d8d0c3ac;
+      }
+
+      .press-controls input {
+        min-width: 34px;
+        flex: 1 1 80px;
+        height: 2px;
+        accent-color: var(--ink);
+      }
+
+      .press-controls output { min-width: 2.5em; color: #fff; }
+
+      .press-controls button {
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: #efe8dc;
+        font: inherit;
+        letter-spacing: inherit;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+
+      .press-controls button[data-action="step"] { color: #ef9c72; }
+      .press-controls button:hover,
+      .press-controls button:focus-visible { color: #8fbc9e; outline: none; }
+
+      .source-evidence,
+      .source-image { display: none; }
+
+      .library-badge {
+        color: #27251f;
+        background: #f5eee3cc;
+        border-color: #27251f38;
+      }
+
+      @media (max-width: 420px) {
+        .brief { left: 18%; width: 27%; }
+        .proof-card { width: 23%; }
+      }
+
+      @media (max-width: 220px), (max-height: 115px) {
+        .library-badge { display: none; }
+        .brief { top: 7%; left: 17%; width: 31%; }
+        .brief h1 { margin-top: 2px; font-size: 7px; }
+        .brief-copy { display: none; }
+        .proof-card { top: 7%; right: 4%; width: 26%; padding: 3px; }
+        .proof-card strong { margin-top: 2px; font-size: 6px; }
+        .proof-detail { display: none; }
+        .ink-rail { gap: 2px; }
+        .ink-rail button { width: 11px; border-radius: 3px; font-size: 2px; }
+        .source-status, .impact-readout { display: none; }
+        .press-controls { min-height: 13px; gap: 4px; padding: 0 4px; font-size: 3px; }
+        .press-controls label > span { display: none; }
+        .press-controls input { min-width: 22px; }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/kinetic-rain-letterpress-cUULenk4.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+    <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
+    <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main
+      id="press-stage"
+      class="preview-stage press-stage"
+      tabindex="0"
+      aria-label="Human-operated kinetic letterpress proof. Drag a type slug down, or use keyboard and controls to make the impression."
+    >
+      <div id="print-surface" class="print-surface" aria-hidden="true"></div>
+      <div class="surface-scan"></div>
+
+      <header class="brief">
+        <div class="brief-kicker">Make-ready · proof 04</div>
+        <h1>Let type meet paper.</h1>
+        <p class="brief-copy">Drag a slug downward. Source paper and ink pixels decide the impression.</p>
+      </header>
+
+      <section class="proof-card" aria-live="polite">
+        <div class="proof-label"><span>Press disposition</span><b data-proof-state>Awaiting</b></div>
+        <strong data-proof-conclusion>HOLD / 0 OF 8</strong>
+        <div class="proof-detail">
+          <span data-reading="pressure">Pressure 72</span><span data-reading="target">Target —</span>
+          <span data-reading="paper">Paper —</span><span data-reading="gain">Gain —</span>
+        </div>
+      </section>
+
+      <nav id="ink-rail" class="ink-rail" aria-label="Ink colors sampled from the committed proof stock">
+        <button type="button" data-ink="navy" aria-label="Use sampled navy ink">N</button>
+        <button type="button" data-ink="rust" aria-label="Use sampled rust ink">R</button>
+        <button type="button" data-ink="graphite" aria-label="Use sampled graphite ink">G</button>
+      </nav>
+
+      <div class="impact-readout" data-impact-readout>0 / 8 impressions · select a slug</div>
+      <div class="source-status"><i></i><span data-source-status>Decoding proof stock</span></div>
+
+      <div class="press-controls">
+        <label for="press-pressure"><span>Impression</span><input id="press-pressure" type="range" min="54" max="92" value="72" aria-label="Letterpress impression pressure"><output data-pressure-output>72</output></label>
+        <button type="button" data-action="step">Rain step</button>
+        <button type="button" data-action="undo">Undo</button>
+        <button type="button" data-action="reset">Reset</button>
+      </div>
+
+      <img id="source-image" class="source-image" alt="" aria-hidden="true">
+      <canvas id="source-evidence" class="source-evidence" width="96" height="54" aria-hidden="true"></canvas>
+      <span class="library-badge">p5.js · decoded cotton proof</span>
+    </main>
+  </body>
+</html>

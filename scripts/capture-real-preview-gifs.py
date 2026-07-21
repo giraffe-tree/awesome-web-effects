@@ -1883,6 +1883,34 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("Escape")
             elif index == 26:
                 page.locator('[data-action="target"]').click()
+        elif demo["id"] == "kinetic-rain-letterpress":
+            if index == 2:
+                page.mouse.move(177, 76)
+            elif index == 4:
+                page.mouse.move(177, 82)
+                page.mouse.down()
+            elif index == 5:
+                page.mouse.move(177, 106, steps=2)
+            elif index == 6:
+                page.mouse.move(177, 133, steps=2)
+            elif index == 7:
+                page.mouse.up()
+            elif index == 9:
+                page.locator('[data-ink="rust"]').click()
+            elif index == 11:
+                page.locator("#press-pressure").focus()
+                page.keyboard.press("ArrowLeft")
+                page.keyboard.press("ArrowLeft")
+                page.keyboard.press("ArrowLeft")
+            elif index in (14, 17, 20, 23):
+                page.locator('[data-action="step"]').click()
+            elif index == 26:
+                page.locator('[data-action="undo"]').click()
+            elif index == 29:
+                page.locator('[data-action="step"]').click()
+            elif index == 32:
+                page.locator("#press-stage").focus()
+                page.keyboard.press("ArrowRight")
         elif demo["id"] == "polar-waveform-sundial":
             if index == 2:
                 page.mouse.move(255, 63)
@@ -5721,6 +5749,127 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["ready"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture trusted reversible five-panel depth seeking, the pixel-derived target stratum, and synchronized paused Motion controls without automatic tunnel navigation: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "kinetic-rain-letterpress":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-pixel-evidenced-digital-letterpress-make-ready"
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["renderer"] != "canvas2d"
+            or interaction["mechanism"] != "trusted-human-input-drops-deterministic-type-slugs-into-p5-letterpress-impressions-on-browser-decoded-proof-stock"
+            or interaction["acceptedInputs"] != ["mouse-hover", "captured-mouse-drag", "captured-touch-drag", "captured-pen-drag", "keyboard", "range-control", "ink-buttons", "visible-action-buttons"]
+            or not interaction["userInputRequired"]
+            or not interaction["strictTrustedInputGuard"]
+            or not interaction["initialFrameStatic"]
+            or not interaction["initialStillVerified"]
+            or interaction["automaticCycle"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticTimeline"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["visualMutationFromPreviewClock"]
+            or interaction["previewClockMutationCount"] != 0
+            or interaction["inputCount"] < 18
+            or interaction["trustedInputCount"] != interaction["inputCount"]
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["pointerEnterCount"] < 1
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerMoveCount"] < 4
+            or interaction["pointerDragCount"] < 4
+            or interaction["pointerUpCount"] != 1
+            or interaction["pointerCancelCount"] != 0
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerCaptureReleaseCount"] != 1
+            or interaction["pointerTypesSeen"] != ["mouse"]
+            or interaction["keyboardInputCount"] != 1
+            or interaction["rangeInputCount"] != 3
+            or interaction["inkButtonInputCount"] != 1
+            or interaction["actionButtonInputCount"] != 6
+            or interaction["rainStepCount"] != 5
+            or interaction["undoCount"] != 1
+            or interaction["resetCount"] != 0
+            or interaction["impressionCount"] != 8
+            or interaction["maximumImpressionCount"] != 8
+            or interaction["stampMutationCount"] < 8
+            or interaction["proofState"] != "passed"
+            or interaction["proofConclusion"] != "PASS / EVEN BITE"
+            or interaction["selectedInkId"] != "rust"
+            or interaction["pressure"] != 69
+            or interaction["minimumPressure"] != 69
+            or interaction["maximumPressure"] != 72
+            or interaction["recommendedPressure"] != 68
+            or interaction["maximumProgress"] != 1
+            or interaction["maximumProgressDelta"] < .28
+            or interaction["humanVisualMutationCount"] < 18
+            or interaction["humanInputCausalityCount"] != interaction["humanVisualMutationCount"]
+            or interaction["activePointerId"] is not None
+            or interaction["pointerCaptured"]
+            or interaction["dragging"]
+            or interaction["lastInputKind"] != "keyboard"
+            or interaction["lastInputSource"] != "glyph-selection"
+            or interaction["lastInputTrusted"] is not True
+            or interaction["lastPointerType"] != "mouse"
+            or interaction["assetFetchCount"] != 1
+            or interaction["assetResponseStatus"] != 200
+            or interaction["assetMimeType"] != "image/jpeg"
+            or not interaction["assetSameOrigin"]
+            or interaction["assetByteLength"] != 274593
+            or interaction["assetSha256"] != "f560758adc555f66ffd903f9cc16d4e89aa447760b14faedfd83d5737cdc1863"
+            or not interaction["assetShaMatchesExpected"]
+            or not interaction["browserImageDecoded"]
+            or interaction["sourceNaturalWidth"] != 960
+            or interaction["sourceNaturalHeight"] != 640
+            or interaction["sourcePixelCount"] != 614400
+            or not interaction["browserCanvasReadback"]
+            or interaction["sampledWidth"] != 96
+            or interaction["sampledHeight"] != 54
+            or interaction["sampledPixelCount"] != 5184
+            or interaction["sampledPixelByteLength"] != 20736
+            or len(interaction["sampledPixelSha256"]) != 64
+            or not interaction["sampledPixelSha256"].strip("0")
+            or interaction["sampledOpaquePixelCount"] != 5184
+            or interaction["distinctSampleColorCount"] < 240
+            or interaction["sampledLuminanceRange"] < .68
+            or interaction["sampledLuminanceStdDev"] < .18
+            or interaction["sampledSaturationMean"] < .08
+            or interaction["sampledEdgeMean"] < .015
+            or interaction["paperProfile"]["pixelCount"] < 1200
+            or interaction["paperLuminance"] < .6
+            or interaction["paperTextureDeviation"] < .014
+            or interaction["paperEdgeMean"] < .0035
+            or interaction["paperAbsorbency"] < .25
+            or interaction["paperAbsorbency"] > .86
+            or interaction["inkProfileCount"] != 3
+            or len(interaction["inkProfiles"]) != 3
+            or any(profile["pixelCount"] < 60 for profile in interaction["inkProfiles"])
+            or interaction["minimumInkColorDistance"] < 18
+            or not interaction["pixelEvidenceBoundToInk"]
+            or not interaction["pixelEvidenceBoundToPaper"]
+            or not interaction["pixelEvidenceBoundToConclusion"]
+            or not interaction["p5InstanceReady"]
+            or not interaction["p5CanvasReady"]
+            or not interaction["p5NoLoop"]
+            or interaction["p5DrawCount"] < 18
+            or interaction["p5CompletedDrawCount"] != interaction["p5DrawCount"]
+            or interaction["p5EventRedrawCount"] < 18
+            or interaction["p5SourceDrawCount"] != interaction["p5DrawCount"]
+            or interaction["p5GlyphDrawCount"] != 8
+            or interaction["p5ImpressionDrawCount"] != 8
+            or interaction["canvasWidth"] != 320
+            or interaction["canvasHeight"] != 180
+            or interaction["stageCoverageRatio"] < .94
+            or interaction["canvasCoverageRatio"] < .98
+            or interaction["previewClockIgnoredCount"] < 36
+            or interaction["initialVisualStateChecksum"] == interaction["currentVisualStateChecksum"]
+            or interaction["runtimeAssertCount"] < 2
+            or not interaction["runtimeAssertionPassed"]
+            or not interaction["ready"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture trusted cotton-stock hover, captured slug drop, source-sampled rust ink, pixel-derived pressure tuning, finite PROOFING steps, undo, and a final p5 noLoop PASS without automatic rain: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "polar-waveform-sundial":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

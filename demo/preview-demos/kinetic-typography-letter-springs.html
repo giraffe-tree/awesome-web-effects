@@ -1,1 +1,353 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p5.js — Kinetic Typography Letter Springs</title><link rel="stylesheet" href="./shared.css"><style>:root{--preview-background:#f0eadc}.a2-stage{background:#f0eadc;color:#171512}.p5-host{position:absolute;inset:0;cursor:ew-resize;touch-action:none}.p5-host canvas{width:100%!important;height:100%!important}.copy{position:absolute;z-index:3;left:14px;top:48px;width:90px;pointer-events:none}.copy p{margin:0;color:#c53d2c;font:800 6px/1.45 ui-monospace;letter-spacing:.1em;text-transform:uppercase}.copy strong{display:block;margin-top:8px;font:900 15px/.9 Georgia,serif}.scene-caption{display:none}.library-badge{color:#171512;background:#f8f3e9cf;border-color:#17151233}</style></head><body><main class="preview-stage a2-stage"><div class="p5-host" data-p5-host tabindex="0" aria-label="Move the pointer or arrow keys through the spring-loaded word"></div><section class="copy"><p>type / force / recovery</p><strong>LETTERS REMEMBER HOME.</strong></section><span class="library-badge">p5.js · kinetic type springs</span></main><script type="module" src="./src/kinetic-typography-letter-springs-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>p5.js — Four Ink Title Tension Proof</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="./shared.css">
+    <style>
+      :root {
+        --preview-background: #171817;
+        --paper: rgb(231 215 188);
+        --ink-a: rgb(229 69 45);
+        --ink-b: rgb(24 48 124);
+        --ink-c: rgb(178 176 40);
+        --ink-d: rgb(153 35 104);
+        --status: var(--ink-b);
+        color-scheme: light;
+      }
+
+      * { box-sizing: border-box; }
+      button, input { font: inherit; }
+
+      .proof-stage {
+        --proof-image: none;
+        position: absolute;
+        inset: 0;
+        overflow: clip;
+        isolation: isolate;
+        background: #171817;
+        color: #171817;
+        outline: none;
+        user-select: none;
+      }
+
+      .proof-stage::before {
+        position: absolute;
+        inset: -2%;
+        z-index: -2;
+        background-image:
+          linear-gradient(#ffffff08, #00000014),
+          var(--proof-image);
+        background-position: center;
+        background-size: cover;
+        filter: saturate(.9) contrast(1.02);
+        transform: scale(1.035);
+        content: "";
+      }
+
+      .proof-stage::after {
+        position: absolute;
+        inset: 0;
+        z-index: 3;
+        background:
+          linear-gradient(90deg, transparent 49.8%, #17181712 50%, transparent 50.2%),
+          repeating-linear-gradient(0deg, transparent 0 17px, #17181708 18px);
+        content: "";
+        pointer-events: none;
+      }
+
+      #type-canvas-host {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        cursor: crosshair;
+        outline: none;
+        touch-action: none;
+      }
+
+      #type-canvas-host canvas {
+        display: block;
+        width: 100% !important;
+        height: 100% !important;
+      }
+
+      #type-canvas-host:focus-visible { box-shadow: inset 0 0 0 2px var(--ink-b); }
+
+      .proof-header {
+        position: absolute;
+        z-index: 6;
+        top: clamp(8px, 4.2%, 22px);
+        left: clamp(10px, 3.7%, 27px);
+        max-width: 36%;
+        pointer-events: none;
+      }
+
+      .proof-kicker,
+      .proof-note,
+      .proof-card,
+      .proof-controls,
+      .interaction-hint,
+      .ink-legend {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-weight: 820;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+      }
+
+      .proof-kicker {
+        color: var(--ink-a);
+        font-size: clamp(5px, 1.1vw, 8px);
+      }
+
+      .proof-header h1 {
+        margin: clamp(5px, 1.1vw, 8px) 0 0;
+        font: 950 clamp(16px, 4.2vw, 31px)/.85 system-ui, sans-serif;
+        letter-spacing: -.065em;
+      }
+
+      .proof-note {
+        margin: clamp(5px, 1.1vw, 8px) 0 0;
+        color: #1718178a;
+        font-size: clamp(4px, .82vw, 6px);
+        line-height: 1.45;
+      }
+
+      .proof-card {
+        position: absolute;
+        z-index: 7;
+        top: clamp(8px, 4.2%, 22px);
+        right: clamp(9px, 3.4%, 25px);
+        width: clamp(72px, 21.5vw, 154px);
+        padding: clamp(7px, 1.5vw, 11px);
+        border: 1px solid #17181733;
+        border-radius: clamp(7px, 1.6vw, 12px);
+        background: color-mix(in srgb, var(--paper) 83%, transparent);
+        box-shadow: inset 0 1px #ffffff75, 0 12px 28px #17181724;
+        backdrop-filter: blur(12px);
+        pointer-events: none;
+      }
+
+      .proof-card small {
+        display: flex;
+        justify-content: space-between;
+        gap: 6px;
+        color: #17181775;
+        font-size: clamp(4px, .78vw, 6px);
+      }
+
+      .proof-card small::after {
+        width: clamp(5px, 1vw, 8px);
+        height: clamp(5px, 1vw, 8px);
+        flex: 0 0 auto;
+        border-radius: 50%;
+        background: var(--status);
+        box-shadow: 0 0 10px color-mix(in srgb, var(--status) 72%, transparent);
+        content: "";
+      }
+
+      .proof-card strong {
+        display: block;
+        margin-top: clamp(5px, 1.1vw, 8px);
+        color: var(--status);
+        font: 950 clamp(12px, 3.2vw, 23px)/.86 system-ui, sans-serif;
+        letter-spacing: -.055em;
+      }
+
+      .proof-card output {
+        display: block;
+        margin-top: clamp(4px, .9vw, 6px);
+        color: #171817;
+        font-size: clamp(5px, 1.05vw, 8px);
+      }
+
+      .proof-card p {
+        margin: clamp(4px, .9vw, 6px) 0 0;
+        color: #1718177a;
+        font-size: clamp(4px, .72vw, 5.5px);
+        line-height: 1.4;
+      }
+
+      .ink-legend {
+        position: absolute;
+        z-index: 7;
+        top: clamp(63px, 30%, 116px);
+        right: clamp(10px, 3.6%, 26px);
+        display: flex;
+        gap: clamp(3px, .8vw, 6px);
+        align-items: center;
+        color: #17181775;
+        font-size: clamp(3px, .7vw, 5px);
+        pointer-events: none;
+      }
+
+      .ink-legend i {
+        width: clamp(6px, 1.4vw, 10px);
+        height: clamp(6px, 1.4vw, 10px);
+        border: 1px solid #ffffff7d;
+        border-radius: 50%;
+        background: var(--swatch);
+        box-shadow: 0 1px 4px #17181732;
+      }
+
+      .interaction-hint {
+        position: absolute;
+        z-index: 6;
+        left: clamp(10px, 3.7%, 27px);
+        bottom: clamp(42px, 20%, 82px);
+        margin: 0;
+        color: #17181778;
+        font-size: clamp(4px, .76vw, 5.8px);
+        pointer-events: none;
+      }
+
+      .interaction-hint b { color: var(--ink-a); }
+
+      .proof-controls {
+        position: absolute;
+        z-index: 8;
+        right: clamp(9px, 3.4%, 25px);
+        bottom: clamp(8px, 4.7%, 22px);
+        left: clamp(9px, 3.4%, 25px);
+        display: grid;
+        grid-template-columns: auto minmax(40px, 1fr) auto auto auto auto;
+        align-items: center;
+        gap: clamp(4px, .9vw, 7px);
+        padding: clamp(5px, 1vw, 8px);
+        border: 1px solid #17181738;
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--paper) 88%, transparent);
+        box-shadow: 0 11px 30px #1718172c;
+        backdrop-filter: blur(14px);
+      }
+
+      .proof-controls label,
+      .proof-controls output {
+        color: #1718178d;
+        font-size: clamp(4px, .78vw, 5.8px);
+        white-space: nowrap;
+      }
+
+      .proof-controls output {
+        min-width: clamp(24px, 5vw, 36px);
+        color: var(--ink-d);
+        text-align: center;
+      }
+
+      .proof-controls input {
+        width: 100%;
+        height: clamp(14px, 3vw, 22px);
+        margin: 0;
+        accent-color: var(--ink-d);
+        cursor: ew-resize;
+      }
+
+      .proof-controls button {
+        min-width: clamp(28px, 6.4vw, 46px);
+        height: clamp(18px, 3.7vw, 27px);
+        padding: 0 clamp(5px, 1.1vw, 8px);
+        border: 1px solid #17181745;
+        border-radius: 999px;
+        background: #f8eed8c9;
+        color: #171817;
+        font-size: clamp(4px, .78vw, 5.8px);
+        cursor: pointer;
+      }
+
+      .proof-controls button:hover,
+      .proof-controls button:focus-visible {
+        border-color: var(--ink-b);
+        outline: none;
+        color: var(--ink-b);
+      }
+
+      .proof-controls button[aria-pressed="true"] {
+        border-color: var(--ink-b);
+        background: var(--ink-b);
+        color: #fff6e6;
+      }
+
+      .library-badge {
+        z-index: 9;
+        top: auto;
+        right: auto;
+        bottom: clamp(41px, 19%, 78px);
+        left: clamp(10px, 3.7%, 27px);
+        transform: translateY(135%);
+        border-color: #1718172f;
+        background: #f6ead1d4;
+        color: #171817;
+      }
+
+      @media (max-width: 420px) {
+        .proof-header { max-width: 39%; }
+        .proof-note { display: none; }
+        .proof-card { width: 27%; }
+        .proof-card p { display: none; }
+        .ink-legend { display: none; }
+        .proof-controls { grid-template-columns: auto 1fr auto auto auto; }
+        .proof-controls output { display: none; }
+        .proof-controls button[data-action="reset"] { display: none; }
+      }
+
+      @media (max-width: 190px) {
+        .proof-header { top: 6px; left: 7px; max-width: 46px; }
+        .proof-kicker { font-size: 3.5px; }
+        .proof-header h1 { margin-top: 3px; font-size: 9px; }
+        .proof-card { top: 6px; right: 6px; width: 44px; padding: 4px; }
+        .proof-card strong { margin-top: 3px; font-size: 7px; }
+        .proof-card output { margin-top: 2px; font-size: 4px; }
+        .interaction-hint, .library-badge { display: none; }
+        .proof-controls { right: 6px; bottom: 5px; left: 6px; gap: 2px; padding: 3px; }
+        .proof-controls label { display: none; }
+        .proof-controls button { min-width: 22px; height: 13px; padding: 0 3px; font-size: 3.5px; }
+      }
+    </style>
+  </head>
+  <body>
+    <main id="type-proof-stage" class="preview-stage proof-stage" data-preview-mechanism="kinetic-typography-letter-springs">
+      <div
+        id="type-canvas-host"
+        tabindex="0"
+        role="application"
+        aria-label="Four-ink kinetic title proof. Move or drag the force probe, use arrow keys, or adjust pull."
+      ></div>
+
+      <header class="proof-header">
+        <span class="proof-kicker">Edition 03 / title tension</span>
+        <h1>MAKE TYPE FEEL PRESSURE.</h1>
+        <p class="proof-note">Committed proof pixels set ink, damping, contrast and the safe displacement limit.</p>
+      </header>
+
+      <aside id="proof-card" class="proof-card" aria-live="polite">
+        <small>Print decision</small>
+        <strong id="proof-decision">READY</strong>
+        <output id="proof-score">— / 100</output>
+        <p id="proof-detail">Move through the title to test its recoverable range.</p>
+      </aside>
+
+      <div class="ink-legend" aria-hidden="true">
+        <span>Pixel inks</span>
+        <i style="--swatch:var(--ink-a)"></i>
+        <i style="--swatch:var(--ink-b)"></i>
+        <i style="--swatch:var(--ink-c)"></i>
+        <i style="--swatch:var(--ink-d)"></i>
+      </div>
+
+      <p class="interaction-hint"><b>Drag</b> the force probe · arrows nudge · release to home</p>
+
+      <section class="proof-controls" aria-label="Title tension controls">
+        <label for="pull-range">Pull</label>
+        <input id="pull-range" type="range" min="3" max="12" step="1" value="7" aria-label="Letter spring pull">
+        <output id="pull-output" for="pull-range">7×</output>
+        <button type="button" data-action="release">Release</button>
+        <button type="button" data-action="hold" aria-pressed="false">Hold</button>
+        <button type="button" data-action="reset">Reset</button>
+      </section>
+
+      <span class="library-badge">p5.js · pixel-tuned springs</span>
+    </main>
+    <script type="module" src="./src/kinetic-typography-letter-springs-demo.js"></script>
+  </body>
+</html>

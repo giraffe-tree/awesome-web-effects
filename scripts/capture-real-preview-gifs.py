@@ -2348,6 +2348,38 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.locator('[data-culture-action="step"]').click()
             elif index == 31:
                 page.locator('[data-culture-action="step"]').click()
+        elif demo["id"] == "kinetic-typography-letter-springs":
+            if index == 2:
+                page.mouse.move(41, 100)
+            elif index == 4:
+                page.mouse.down()
+            elif index == 5:
+                page.mouse.move(58, 91, steps=2)
+            elif index == 6:
+                page.mouse.move(77, 105, steps=2)
+            elif index == 7:
+                page.mouse.move(100, 87, steps=2)
+            elif index == 8:
+                page.mouse.move(124, 99, steps=2)
+            elif index == 9:
+                page.mouse.move(150, 92, steps=2)
+            elif index == 10:
+                page.mouse.up()
+            elif index == 12:
+                page.locator("#pull-range").focus()
+                page.keyboard.press("ArrowRight")
+                page.keyboard.press("ArrowRight")
+            elif index == 14:
+                page.locator('[data-action="hold"]').click()
+            elif index == 20:
+                page.locator('[data-action="release"]').click()
+            elif index == 24:
+                page.locator("#type-canvas-host").focus()
+                page.keyboard.press("ArrowRight")
+            elif index == 25:
+                page.keyboard.press("ArrowUp")
+            elif index == 27:
+                page.locator('[data-action="hold"]').click()
         elif demo["id"] == "poisson-constellation-bloom":
             if index == 2:
                 page.mouse.move(170, 92)
@@ -7202,6 +7234,107 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["ready"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture trusted biomaterial probing, captured inoculation, pixel-derived nutrient bias, keyboard seeding, and four finite eight-iteration Gray-Scott batches without automatic growth: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "kinetic-typography-letter-springs":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-four-ink-kinetic-title-tension-proofing"
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["renderer"] != "canvas2d"
+            or interaction["mechanism"] != "committed-proof-pixels-determine-ink-palette-spring-constants-outline-and-print-decision-while-trusted-input-drives-finite-letter-level-spring-sequences"
+            or interaction["acceptedInputs"] != ["mouse-hover", "captured-mouse-drag", "captured-touch-drag", "captured-pen-drag", "keyboard", "native-range", "visible-buttons"]
+            or not interaction["userInputRequired"]
+            or not interaction["strictTrustedInputGuard"]
+            or not interaction["initialFrameStatic"]
+            or not interaction["initialStaticConfirmed"]
+            or interaction["automaticCycle"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticTimeline"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["automaticSequenceStartCount"] != 0
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["previewClockMutationCount"] != 0
+            or interaction["nonInputVisualMutationCount"] != 0
+            or interaction["inputCount"] < 16
+            or interaction["trustedInputCount"] != interaction["inputCount"]
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["pointerEnterCount"] < 1
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerMoveCount"] < 10
+            or interaction["pointerReleaseCount"] != 1
+            or interaction["pointerCancelCount"] != 0
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerCaptureReleaseCount"] != 1
+            or interaction["dragMutationCount"] < 5
+            or interaction["keyboardInputCount"] != 2
+            or interaction["keyboardMutationCount"] < 1
+            or interaction["rangeInputCount"] != 2
+            or interaction["rangeMutationCount"] != 2
+            or interaction["buttonActivationCount"] != 3
+            or interaction["releaseCount"] != 1
+            or interaction["holdToggleCount"] != 2
+            or interaction["resetCount"] != 0
+            or interaction["pull"] != 9
+            or not interaction["locked"]
+            or interaction["finiteSequenceStartCount"] < 10
+            or interaction["finiteSequenceCancellationCount"] < 1
+            or interaction["maximumSequenceStepCount"] > 30
+            or interaction["humanVisualMutationCount"] <= 0
+            or interaction["humanInputCausalityCount"] <= 0
+            or interaction["maximumHumanDisplacement"] <= 0
+            or interaction["currentVisualChecksum"] == interaction["initialVisualChecksum"]
+            or interaction["lastInputKind"] != "visible-button"
+            or interaction["lastInputSource"] != "hold"
+            or interaction["lastInputTrusted"] is not True
+            or interaction["assetFetchCount"] != 1
+            or interaction["assetResponseStatus"] != 200
+            or not interaction["assetSameOrigin"]
+            or not interaction["assetMimeType"].startswith("image/jpeg")
+            or interaction["assetByteLength"] != 316790
+            or interaction["assetSha256"] != "19742a0f7aa7a5a91f50c9ea04f285bc34017195cbdd157b9971e5ce05e73af1"
+            or not interaction["assetShaMatchesExpected"]
+            or not interaction["browserImageDecoded"]
+            or interaction["sourceNaturalWidth"] != 960
+            or interaction["sourceNaturalHeight"] != 640
+            or not interaction["browserCanvasReadback"]
+            or interaction["sampledWidth"] != 96
+            or interaction["sampledHeight"] != 64
+            or interaction["sampledPixelCount"] != 6144
+            or interaction["sampledPixelByteLength"] != 24576
+            or len(interaction["sampledPixelSha256"]) != 64
+            or not interaction["sampledPixelSha256"].strip("0")
+            or interaction["distinctQuantizedColorCount"] < 300
+            or interaction["sampleLumaStdDev"] < 50
+            or interaction["inkProfileCount"] != 4
+            or interaction["inkEvidencePixelCount"] < 1500
+            or interaction["minimumInkEvidencePixelCount"] < 320
+            or interaction["minimumInkColorDistance"] < 60
+            or interaction["paperLuma"] < 170
+            or interaction["paperLuma"] > 245
+            or interaction["pixelDrivenSpringStiffness"] < .1
+            or interaction["pixelDrivenSpringStiffness"] > .18
+            or interaction["pixelDrivenDamping"] < .72
+            or interaction["pixelDrivenDamping"] > .84
+            or interaction["pixelDrivenSafeDisplacement"] < 14
+            or interaction["pixelDrivenSafeDisplacement"] > 21
+            or not interaction["pixelEvidenceBoundToTypography"]
+            or not interaction["p5InstanceReady"]
+            or not interaction["p5CanvasReady"]
+            or not interaction["p5ImageDecoded"]
+            or interaction["p5ImageClass"] != "p5.Image"
+            or interaction["p5ImageWidth"] != 960
+            or interaction["p5ImageHeight"] != 640
+            or interaction["p5ImagePixelLength"] != 2457600
+            or interaction["stageCoverageRatio"] <= .98
+            or interaction["canvasCoverageRatio"] <= .98
+            or not interaction["runtimeAssertionPassed"]
+            or not interaction["ready"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture trusted four-ink title tension proofing, exact source-pixel spring evidence, and a retained human-held result without automatic behavior: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "poisson-constellation-bloom":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

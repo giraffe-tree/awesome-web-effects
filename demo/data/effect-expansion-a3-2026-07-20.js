@@ -19,12 +19,12 @@ export const effectExpansion150BatchA3 = [
     scores: scores(20, 20, 20, 15, 15, 10), rationaleZh: '原创林冠样带经同源 fetch、精确源 SHA、浏览器与 p5 双解码及 90×60 像素读取；五区的真实色彩与纹理决定递归深度、姿态、颜色和再生适宜度。可信拖拽、range、键盘和按钮拥有 571 枝的完整再生过程与 ESTABLISHED 结论，画面输入后保持静止。'
   },
   {
-    id: 'pointer-woven-ribbon-loom', order: 113, name: 'Pointer woven ribbon loom', nameZh: '指针编织彩带织机', category: 'pointer', sourceUrl: 'https://github.com/processing/p5.js',
-    difference: '横向经线和纵向纬线以不同相位真实交错，指针改变两组丝带弯曲幅度，而非网格扭曲滤镜。',
-    behavior: { trigger: 'pointer horizontal position', response: 'Warp and weft ribbons bend through opposing phase fields while retaining weave order', timing: 'continuous reversible textile deformation', layer: 'woven canvas field' },
-    prompt: '绘制十二条经线与八条纬线，使用虚线相位制造上下交织关系，并让指针控制流体弯曲幅度。',
-    implementation: p5("new p5(p => { p.draw = () => drawWarpAndWeft(p.drawingContext, pointerBend); });", 'https://github.com/processing/p5.js'),
-    scores: scores(19, 20, 19, 15, 15, 10), rationaleZh: '经纬拓扑与纺织色彩形成鲜明主体，交织而非叠线的结构可以直接辨认。'
+    id: 'pointer-woven-ribbon-loom', order: 113, name: 'Material weave specification proof', nameZh: '织物结构规格校样', category: 'pointer', sourceUrl: 'https://github.com/processing/p5.js',
+    difference: '不再用固定彩带充当扁平装饰；真实材料校准图的四个像素区域生成 TWILL、PLAIN、SATIN、CROSS 的经纬密度、轴角、张力、摩擦、颜色与 OPEN/BALANCED/TIGHT 结论。',
+    behavior: { trigger: 'trusted hover, captured mouse/touch/pen drag, keyboard, native tension range, material buttons, or visible Previous/Next/Commit/Undo/Reset controls', response: 'Bend a source-derived weave, compare four material structures, adjust tension, commit a specification, undo, or reset', timing: 'human-owned p5 noLoop redraws that remain static and reversible between inputs', layer: 'full-stage decoded material master, live warp/weft field, shuttle, four-structure rail, specification evidence, and controls' },
+    prompt: '制作一个全舞台织物结构规格校样台：同源加载并精确校验一张 ImageGen 四区材料校准图，读取 96×54 像素，从每区真实 edgeX/edgeY、亮度、饱和度和颜色派生 warp、weft、angle、tension、friction、色板及 OPEN/BALANCED/TIGHT。真人通过 hover、捕获鼠标/触控/笔拖拽、键盘、原生 tension range、材料按钮和 Previous/Next/Commit/Undo/Reset 控制织机与规格结果；p5 noLoop，首帧和操作后保持静止，禁止自动循环、播放、排练、fallback 或预览时钟变异。',
+    implementation: p5("verifiedMaterialPixels -> fourWeaveProfiles; trustedShuttle + tension + material -> finite p5 warp/weft redraw and reversible specification commit", 'https://github.com/processing/p5.js'),
+    scores: scores(20, 20, 20, 15, 15, 10), rationaleZh: '原创材料校准图经同源 fetch、精确源 SHA、浏览器解码与 96×54 像素读取；四区产生不同经纬数量、轴角、张力、摩擦和三类结构结论。可信拖拽、range、键盘、材料与提交控件拥有满舞台织机，按钮事件与舞台捕获严格分区。'
   },
   {
     id: 'polar-waveform-sundial', order: 122, name: 'Acoustic daylight window finder', nameZh: '声学日光录音窗口', category: 'canvas', sourceUrl: 'https://github.com/d3/d3-shape',

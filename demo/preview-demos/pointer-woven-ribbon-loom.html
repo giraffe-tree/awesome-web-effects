@@ -1,1 +1,241 @@
-<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pointer Woven Ribbon Loom</title><link rel="stylesheet" href="./shared.css"><style>:root{--preview-background:#181126}canvas{width:100%;height:100%}.copy{position:absolute;left:14px;top:49px;width:100px;color:#fff5ff}.copy small{font:800 6px monospace;letter-spacing:.14em;color:#ffaeec}.copy h1{margin:8px 0;font:950 20px/.84 system-ui;letter-spacing:-.06em}.weft{position:absolute;right:11px;bottom:11px;color:#ffbaf0;font:800 6px monospace}.scene-caption{display:none}</style></head><body><main class="preview-stage"><canvas tabindex="0" aria-label="Pointer bends alternating woven ribbons"></canvas><section class="copy"><small>WARP / WEFT</small><h1>WEAVE MOTION INTO COLOR.</h1></section><span class="weft">12 × 08 THREADS</span><span class="library-badge">p5.js · ribbon loom</span></main><script type="module" src="./src/pointer-woven-ribbon-loom-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>p5.js — Human-directed Material Loom</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="./shared.css">
+    <style>
+      :root {
+        --preview-background: #151310;
+        --paper: #f1e6cd;
+        --muted: #dfd4bdad;
+        --accent: #d6a354;
+        color-scheme: dark;
+      }
+
+      button, input { font: inherit; }
+
+      .loom-stage {
+        position: absolute;
+        inset: 0;
+        overflow: clip;
+        background: #151310;
+        color: var(--paper);
+        outline: none;
+        touch-action: none;
+        user-select: none;
+      }
+
+      .loom-stage:focus-visible { box-shadow: inset 0 0 0 2px var(--accent); }
+
+      .loom-surface,
+      .loom-surface canvas {
+        position: absolute;
+        inset: 0;
+        width: 100% !important;
+        height: 100% !important;
+      }
+
+      .loom-surface { z-index: 1; }
+      .loom-surface canvas { display: block; }
+
+      .loom-grade {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        background: linear-gradient(90deg, #0a0907c2 0%, #0a09074a 31%, #0a09071c 55%, #0a09076b 100%);
+        pointer-events: none;
+      }
+
+      .masthead,
+      .material-rail,
+      .output-card,
+      .loom-controls,
+      .source-status {
+        position: absolute;
+        z-index: 7;
+      }
+
+      .masthead {
+        top: 9%;
+        left: 4%;
+        width: min(30%, 216px);
+        pointer-events: none;
+        text-shadow: 0 2px 18px #000;
+      }
+
+      .masthead small,
+      .masthead p,
+      .material-rail,
+      .output-label,
+      .output-metrics,
+      .loom-controls,
+      .source-status {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-weight: 820;
+        letter-spacing: .09em;
+        text-transform: uppercase;
+      }
+
+      .masthead small { color: var(--accent); font-size: clamp(5px, 1vw, 8px); }
+      .masthead h1 { margin: 6px 0 0; font: 950 clamp(16px, 4.4vw, 32px)/.84 system-ui, sans-serif; letter-spacing: -.065em; }
+      .masthead p { margin: 8px 0 0; color: var(--muted); font-size: clamp(4px, .75vw, 6px); line-height: 1.45; }
+
+      .material-rail {
+        top: 6%;
+        right: 4%;
+        display: flex;
+        gap: clamp(3px, .7vw, 6px);
+        font-size: clamp(4px, .66vw, 5px);
+      }
+
+      .material-rail button {
+        min-width: clamp(27px, 6vw, 44px);
+        padding: clamp(4px, .8vw, 6px) clamp(5px, 1vw, 8px);
+        border: 1px solid #eee4cf35;
+        border-radius: 999px;
+        background: #12100dc9;
+        color: #ede4d3;
+        font: inherit;
+        letter-spacing: inherit;
+        text-transform: inherit;
+        cursor: pointer;
+      }
+
+      .material-rail button[data-selected="true"] {
+        border-color: color-mix(in srgb, var(--accent) 75%, white);
+        background: color-mix(in srgb, var(--accent) 26%, #12100d 74%);
+        box-shadow: 0 0 18px color-mix(in srgb, var(--accent) 28%, transparent);
+      }
+
+      .material-rail button:focus-visible { outline: 2px solid #f1d49f; outline-offset: 2px; }
+
+      .output-card {
+        right: 4%;
+        bottom: 20%;
+        width: min(27%, 190px);
+        padding: clamp(7px, 1.3vw, 10px);
+        border: 1px solid #eee4cf35;
+        border-radius: clamp(7px, 1.4vw, 10px);
+        background: #12100dd6;
+        box-shadow: inset 0 1px #fff1, 0 12px 30px #0008;
+        backdrop-filter: blur(10px);
+        pointer-events: none;
+      }
+
+      .output-label { display: flex; justify-content: space-between; gap: 5px; color: #d9cfbb; font-size: clamp(4px, .7vw, 5px); }
+      .output-label b { color: var(--accent); }
+      .output-card strong { display: block; margin-top: 5px; color: var(--accent); font: 930 clamp(11px, 2.5vw, 18px)/.9 system-ui, sans-serif; letter-spacing: -.04em; }
+      .output-metrics { display: grid; grid-template-columns: repeat(2, 1fr); gap: 3px 6px; margin-top: 7px; color: #dfd5c1a8; font-size: clamp(3px, .6vw, 5px); }
+      .output-metrics span:nth-child(even) { text-align: right; }
+
+      .source-status {
+        left: 4%;
+        bottom: 20.5%;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        color: #e7deccb0;
+        font-size: clamp(4px, .66vw, 5px);
+        pointer-events: none;
+      }
+
+      .source-status i { width: 5px; aspect-ratio: 1; border-radius: 50%; background: #a8cfaa; box-shadow: 0 0 8px #a8cfaa; }
+
+      .loom-controls {
+        right: 4%;
+        bottom: 5%;
+        left: 4%;
+        display: flex;
+        align-items: center;
+        gap: clamp(5px, 1vw, 9px);
+        min-height: clamp(19px, 4.2vw, 30px);
+        padding: 0 clamp(7px, 1.2vw, 10px);
+        border: 1px solid #eee4cf31;
+        border-radius: 999px;
+        background: #12100de2;
+        box-shadow: inset 0 1px #fff1, 0 9px 24px #0008;
+        font-size: clamp(4px, .66vw, 5px);
+        backdrop-filter: blur(10px);
+      }
+
+      .loom-controls label { display: flex; flex: 1 1 90px; align-items: center; gap: 6px; min-width: 0; color: #dbd1bda8; }
+      .loom-controls input { min-width: 34px; flex: 1 1 100px; height: 2px; accent-color: var(--accent); }
+      .loom-controls output { min-width: 2.4em; color: var(--accent); }
+      .loom-controls button { padding: 0; border: 0; background: transparent; color: #eee5d4; font: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; }
+      .loom-controls button[data-action="commit"] { color: #eab078; }
+      .loom-controls button:hover,
+      .loom-controls button:focus-visible { color: var(--accent); outline: none; }
+
+      .source-image,
+      .source-evidence { display: none; }
+
+      @media (max-width: 420px) {
+        .masthead { width: 31%; }
+        .output-card { width: 29%; }
+      }
+
+      @media (max-width: 220px), (max-height: 115px) {
+        .library-badge { display: none; }
+        .masthead { top: 7%; width: 33%; }
+        .masthead h1 { margin-top: 2px; font-size: 8px; }
+        .masthead p { display: none; }
+        .material-rail { top: 4%; gap: 2px; }
+        .material-rail button { min-width: 18px; padding: 2px 3px; font-size: 3px; }
+        .output-card { bottom: 21%; width: 31%; padding: 4px; }
+        .output-card strong { margin-top: 2px; font-size: 7px; }
+        .output-metrics,
+        .source-status { display: none; }
+        .loom-controls { min-height: 13px; gap: 4px; padding: 0 4px; font-size: 3px; }
+        .loom-controls label > span { display: none; }
+        .loom-controls input { min-width: 20px; }
+      }
+    </style>
+  </head>
+  <body>
+    <main id="loom-stage" class="preview-stage loom-stage" tabindex="0" aria-label="Human-operated material ribbon loom. Move or drag to bend the weave, use arrows to move the shuttle, number keys to select a material, plus and minus to adjust tension, Enter to commit, or Home to reset.">
+      <div id="loom-surface" class="loom-surface" aria-hidden="true"></div>
+      <div class="loom-grade" aria-hidden="true"></div>
+
+      <header class="masthead">
+        <small>Material loom · proof 13</small>
+        <h1>Weave motion into structure.</h1>
+        <p>Move the shuttle; drag to pull a finite pick. Source fibers set warp, weft and tension.</p>
+      </header>
+
+      <nav class="material-rail" aria-label="Pixel-derived weave outputs">
+        <button type="button" data-material="0">Twill</button>
+        <button type="button" data-material="1">Plain</button>
+        <button type="button" data-material="2">Satin</button>
+        <button type="button" data-material="3">Cross</button>
+      </nav>
+
+      <section class="output-card" aria-live="polite">
+        <div class="output-label"><span>Selected output</span><b data-output-status>Open proof</b></div>
+        <strong data-output-name>TWILL / OPEN</strong>
+        <div class="output-metrics">
+          <span data-reading="warp">Warp —</span><span data-reading="weft">Weft —</span>
+          <span data-reading="angle">Angle —</span><span data-reading="tension">Tension —</span>
+        </div>
+      </section>
+
+      <div class="source-status"><i></i><span data-source-status>Decoding material master</span></div>
+
+      <div class="loom-controls">
+        <label for="loom-tension"><span>Tension bias</span><input id="loom-tension" type="range" min="0" max="100" value="50" aria-label="Loom tension bias"><output data-tension-output>50</output></label>
+        <button type="button" data-action="previous">Previous</button>
+        <button type="button" data-action="next">Next</button>
+        <button type="button" data-action="commit">Commit</button>
+        <button type="button" data-action="undo">Undo</button>
+        <button type="button" data-action="reset">Reset</button>
+      </div>
+
+      <img id="source-image" class="source-image" alt="" aria-hidden="true">
+      <canvas id="source-evidence" class="source-evidence" width="96" height="54" aria-hidden="true"></canvas>
+      <span class="library-badge">p5.js · decoded fiber master</span>
+    </main>
+    <script type="module" src="./src/pointer-woven-ribbon-loom-demo.js"></script>
+  </body>
+</html>

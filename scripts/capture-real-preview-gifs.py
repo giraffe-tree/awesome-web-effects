@@ -2714,6 +2714,42 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("[")
             elif index == 24:
                 page.keyboard.press("ArrowDown")
+        elif demo["id"] == "pointer-woven-ribbon-loom":
+            if index == 3:
+                page.mouse.move(70, 70)
+            elif index == 5:
+                page.mouse.move(120, 95)
+            elif index == 7:
+                page.mouse.move(150, 95)
+                page.mouse.down()
+            elif index == 8:
+                page.mouse.move(180, 80)
+            elif index == 9:
+                page.mouse.move(210, 100)
+            elif index == 10:
+                page.mouse.move(240, 75)
+            elif index == 11:
+                page.mouse.up()
+            elif index == 14:
+                page.locator('[data-material="1"]').click()
+            elif index == 17:
+                page.locator("#loom-tension").focus()
+                page.keyboard.press("ArrowRight")
+                page.keyboard.press("ArrowRight")
+            elif index == 19:
+                page.locator('[data-action="commit"]').click()
+            elif index == 22:
+                page.locator('[data-action="next"]').click()
+            elif index == 24:
+                page.locator('[data-action="commit"]').click()
+            elif index == 27:
+                page.locator('[data-action="undo"]').click()
+            elif index == 30:
+                page.locator("#loom-stage").focus()
+                page.keyboard.press("ArrowLeft")
+                page.keyboard.press("ArrowUp")
+            elif index == 33:
+                page.locator('[data-action="reset"]').click()
         elif demo["id"] == "poisson-constellation-bloom":
             if index == 2:
                 page.mouse.move(170, 92)
@@ -8989,6 +9025,80 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["ready"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture a trusted full-stage pixel-derived coastal canopy regeneration transect with five habitat profiles, finite recursive growth and a retained ESTABLISHED result without automatic motion: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "pointer-woven-ribbon-loom":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        densities = [profile["density"] for profile in interaction["profiles"]]
+        axis_ratios = [profile["edgeY"] / profile["edgeX"] for profile in interaction["profiles"]]
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-pixel-derived-textile-structure-proof"
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["mechanism"] != "verified-material-master-pixels-drive-warp-weft-angle-tension-friction-color-and-weave-conclusion"
+            or interaction["acceptedInputs"] != ["mouse-hover", "captured-mouse-drag", "captured-touch-drag", "captured-pen-drag", "keyboard", "range-control", "material-buttons", "visible-action-buttons"]
+            or not interaction["userInputRequired"]
+            or not interaction["strictTrustedInputGuard"]
+            or not interaction["initialFrameStatic"]
+            or not interaction["initialStillVerified"]
+            or interaction["automaticCycle"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticTimeline"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["previewClockMutationCount"] != 0
+            or interaction["trustedInputs"] < 17
+            or interaction["rejectedInputs"] != 0
+            or interaction["humanMutationCount"] != interaction["trustedInputs"]
+            or interaction["hoverInputs"] < 3
+            or interaction["dragInputs"] != 3
+            or interaction["keyboardInputs"] != 2
+            or interaction["touchInputs"] != 0
+            or interaction["penInputs"] != 0
+            or interaction["mouseInputs"] < 8
+            or interaction["rangeInputs"] != 2
+            or interaction["materialInputs"] != 1
+            or interaction["actionInputs"] != 5
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerReleaseCount"] != 1
+            or interaction["dragging"]
+            or interaction["activePointerId"] is not None
+            or interaction["committed"] != []
+            or interaction["lastInput"] != "action:reset"
+            or len(interaction["history"]) < 15
+            or interaction["selected"] != 0
+            or interaction["tensionBias"] != 50
+            or interaction["source"] is None
+            or interaction["source"]["bytes"] != 469833
+            or interaction["source"]["width"] != 960
+            or interaction["source"]["height"] != 640
+            or interaction["source"]["sha256"] != "4086ae488153382f68c8697c4de0f53625ea10d39cf8b8df9a06cf8e25843159"
+            or len(interaction["source"]["sampledSha256"]) != 64
+            or not interaction["source"]["sampledSha256"].strip("0")
+            or interaction["assetFetchCount"] != 1
+            or interaction["assetResponseStatus"] != 200
+            or not interaction["assetMimeType"].startswith("image/jpeg")
+            or not interaction["assetSameOrigin"]
+            or not interaction["browserImageDecoded"]
+            or len(interaction["profiles"]) != 4
+            or sorted(profile["name"] for profile in interaction["profiles"]) != ["CROSS", "PLAIN", "SATIN", "TWILL"]
+            or len(set(profile["warp"] for profile in interaction["profiles"])) < 3
+            or len(set(profile["weft"] for profile in interaction["profiles"])) < 2
+            or len(set(profile["conclusion"] for profile in interaction["profiles"])) < 3
+            or max(densities) - min(densities) <= 3
+            or max(axis_ratios) - min(axis_ratios) <= .05
+            or interaction["p5DrawCount"] < 15
+            or interaction["setupDrawCount"] != 1
+            or interaction["eventRedrawCount"] < 15
+            or interaction["canvasCoverage"] is None
+            or interaction["canvasCoverage"]["width"] != 320
+            or interaction["canvasCoverage"]["height"] != 180
+            or interaction["canvasCoverage"]["stageWidth"] != 320
+            or interaction["canvasCoverage"]["stageHeight"] != 180
+            or interaction["canvasCoverage"]["ratio"] < .98
+            or interaction["initialVisualChecksum"] is None
+            or interaction["currentVisualChecksum"] != interaction["initialVisualChecksum"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a trusted full-stage pixel-derived material weave specification with four distinct structures, commit/undo/reset, strict control separation and no automatic motion: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "poisson-constellation-bloom":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

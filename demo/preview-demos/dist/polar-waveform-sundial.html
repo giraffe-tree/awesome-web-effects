@@ -1,8 +1,504 @@
-<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Polar Waveform Sundial</title><style>:root{--preview-background:#f4eee0}canvas{width:100%;height:100%}.copy{position:absolute;left:14px;top:49px;width:100px;color:#202721}.copy small{font:900 6px monospace;letter-spacing:.14em;color:#c34b35}.copy h1{margin:8px 0;font:950 20px/.84 system-ui;letter-spacing:-.06em}.library-badge{color:#202721;background:#fff9;border-color:#20272144}.scene-caption{display:none}</style>  <script type="module" crossorigin src="./assets/polar-waveform-sundial-BWdkoUm2.js"></script>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>p5.js — Human-operated Acoustic Sundial</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root {
+      --preview-background: #111514;
+      --bone: #eee8d9;
+      --muted: rgba(229, 229, 216, .58);
+      --copper: #e99a4c;
+      --teal: #8dc9bd;
+      --line: rgba(238, 232, 217, .23);
+      color-scheme: dark;
+    }
+
+    button,
+    input { font: inherit; }
+
+    button { -webkit-tap-highlight-color: transparent; }
+
+    .sundial-stage {
+      position: absolute;
+      inset: 0;
+      container-type: size;
+      overflow: hidden;
+      background: #111514;
+      color: var(--bone);
+      isolation: isolate;
+      outline: none;
+      touch-action: none;
+      user-select: none;
+    }
+
+    .sundial-stage:focus-visible::after {
+      position: absolute;
+      z-index: 20;
+      inset: 3px;
+      border: 1px solid var(--copper);
+      border-radius: clamp(7px, 1.7cqw, 14px);
+      pointer-events: none;
+      content: "";
+    }
+
+    .sundial-surface,
+    .sundial-surface canvas,
+    .plate-grade,
+    .plate-grain {
+      position: absolute;
+      inset: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .sundial-surface {
+      z-index: 1;
+      cursor: crosshair;
+      outline: none;
+      touch-action: none;
+    }
+
+    .sundial-surface canvas,
+    .plate-grade,
+    .plate-grain { pointer-events: none; }
+
+    .plate-grade {
+      z-index: 2;
+      background:
+        linear-gradient(90deg, rgba(10, 14, 14, .74) 0%, rgba(10, 14, 14, .36) 31%, transparent 54%, rgba(8, 10, 10, .08) 100%),
+        linear-gradient(180deg, rgba(8, 11, 11, .34), transparent 26%, transparent 71%, rgba(8, 11, 11, .6));
+    }
+
+    .plate-grain {
+      z-index: 3;
+      opacity: .055;
+      mix-blend-mode: soft-light;
+      background-image: radial-gradient(rgba(246, 237, 218, .82) .45px, transparent .65px);
+      background-size: 3px 3px;
+    }
+
+    .archive-bar {
+      position: absolute;
+      z-index: 8;
+      top: clamp(7px, 3.2cqh, 14px);
+      left: clamp(9px, 2.5cqw, 18px);
+      right: clamp(9px, 2.5cqw, 18px);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+      pointer-events: none;
+    }
+
+    .archive-id {
+      display: flex;
+      align-items: center;
+      gap: clamp(6px, 1.4cqw, 10px);
+      min-width: 0;
+    }
+
+    .archive-mark {
+      display: grid;
+      width: clamp(19px, 4cqw, 29px);
+      aspect-ratio: 1;
+      place-items: center;
+      flex: 0 0 auto;
+      border: 1px solid rgba(233, 154, 76, .48);
+      border-radius: 50%;
+      background: rgba(14, 18, 17, .76);
+      color: var(--copper);
+      font: 950 clamp(4px, .88cqw, 6px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      backdrop-filter: blur(8px);
+    }
+
+    .archive-copy strong,
+    .archive-copy span,
+    .session-state,
+    .eyebrow,
+    .time-label,
+    .session-conclusion,
+    .metric span,
+    .metric strong,
+    .probe-card,
+    .band-control,
+    .sundial-actions button,
+    .keymap {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+
+    .archive-copy strong,
+    .archive-copy span {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .archive-copy strong {
+      font-size: clamp(4px, 1cqw, 7px);
+      font-weight: 900;
+    }
+
+    .archive-copy span {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: clamp(3px, .7cqw, 5px);
+      font-weight: 750;
+    }
+
+    .session-state {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: clamp(4px, 1cqw, 7px) clamp(6px, 1.4cqw, 10px);
+      border: 1px solid rgba(141, 201, 189, .38);
+      border-radius: 999px;
+      background: rgba(14, 18, 17, .74);
+      color: var(--teal);
+      font-size: clamp(3.5px, .76cqw, 5.5px);
+      font-weight: 900;
+      white-space: nowrap;
+      backdrop-filter: blur(8px);
+    }
+
+    .session-state::before {
+      width: 5px;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: currentColor;
+      box-shadow: 0 0 8px currentColor;
+      content: "";
+    }
+
+    .session-panel {
+      position: absolute;
+      z-index: 7;
+      top: 23%;
+      left: clamp(9px, 2.5cqw, 18px);
+      width: min(29cqw, 205px);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--copper);
+      font-size: clamp(3.5px, .75cqw, 5.5px);
+      font-weight: 900;
+    }
+
+    .eyebrow::before {
+      width: clamp(9px, 2.1cqw, 16px);
+      height: 1px;
+      background: currentColor;
+      content: "";
+    }
+
+    .session-panel h1 {
+      max-width: 190px;
+      margin: clamp(5px, 1.7cqh, 8px) 0 0;
+      font: 650 clamp(14px, 4cqw, 30px)/.87 Georgia, "Times New Roman", serif;
+      letter-spacing: -.056em;
+    }
+
+    .time-label {
+      display: block;
+      margin-top: clamp(6px, 2.1cqh, 10px);
+      color: var(--muted);
+      font-size: clamp(3px, .65cqw, 4.5px);
+      font-weight: 800;
+    }
+
+    .time-readout {
+      display: block;
+      margin-top: 2px;
+      color: var(--bone);
+      font: 350 clamp(20px, 6.7cqw, 50px)/.9 Georgia, "Times New Roman", serif;
+      letter-spacing: -.06em;
+    }
+
+    .session-conclusion {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: clamp(4px, 1.4cqh, 7px);
+      color: var(--teal);
+      font-size: clamp(3.5px, .74cqw, 5.4px);
+      font-weight: 900;
+    }
+
+    .session-conclusion::before {
+      width: 10px;
+      height: 2px;
+      background: currentColor;
+      content: "";
+    }
+
+    .metrics {
+      display: grid;
+      margin-top: clamp(6px, 2.2cqh, 11px);
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: clamp(3px, .75cqw, 6px);
+    }
+
+    .metric {
+      min-width: 0;
+      padding-top: clamp(4px, 1.3cqh, 7px);
+      border-top: 1px solid var(--line);
+    }
+
+    .metric span,
+    .metric strong { display: block; }
+
+    .metric span {
+      overflow: hidden;
+      color: var(--muted);
+      font-size: clamp(2.8px, .58cqw, 4.2px);
+      font-weight: 800;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .metric strong {
+      margin-top: clamp(3px, .9cqh, 5px);
+      overflow: hidden;
+      color: var(--bone);
+      font-size: clamp(4.5px, 1cqw, 7px);
+      font-weight: 950;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .metric strong[data-tone="quiet"] { color: var(--teal); }
+    .metric strong[data-tone="loud"] { color: var(--copper); }
+
+    .probe-card {
+      position: absolute;
+      z-index: 8;
+      top: 18%;
+      right: clamp(9px, 2.5cqw, 18px);
+      min-width: clamp(57px, 12cqw, 88px);
+      padding: clamp(5px, 1.2cqw, 8px);
+      border: 1px solid var(--line);
+      border-radius: clamp(3px, .7cqw, 5px);
+      background: rgba(14, 18, 17, .68);
+      pointer-events: none;
+      backdrop-filter: blur(7px);
+    }
+
+    .probe-card span,
+    .probe-card strong { display: block; }
+
+    .probe-card span {
+      color: var(--muted);
+      font-size: clamp(3px, .62cqw, 4.5px);
+      font-weight: 800;
+    }
+
+    .probe-card strong {
+      margin-top: clamp(3px, .9cqh, 5px);
+      color: var(--copper);
+      font-size: clamp(4.5px, 1cqw, 7px);
+      font-weight: 950;
+    }
+
+    .control-dock {
+      position: absolute;
+      z-index: 10;
+      right: clamp(8px, 2.5cqw, 18px);
+      bottom: clamp(7px, 3.2cqh, 14px);
+      left: clamp(8px, 2.5cqw, 18px);
+      display: grid;
+      grid-template-columns: minmax(78px, 1fr) auto auto;
+      align-items: end;
+      gap: clamp(4px, 1cqw, 8px);
+      pointer-events: none;
+    }
+
+    .band-control {
+      display: grid;
+      min-width: 0;
+      gap: 4px;
+      padding: clamp(4px, .9cqw, 6px) clamp(6px, 1.3cqw, 9px);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(14, 18, 17, .8);
+      pointer-events: auto;
+      backdrop-filter: blur(8px);
+    }
+
+    .band-control label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      color: var(--muted);
+      font-size: clamp(3px, .61cqw, 4.5px);
+      font-weight: 850;
+    }
+
+    .band-control output { color: var(--bone); }
+
+    .band-control input {
+      width: 100%;
+      min-width: 60px;
+      height: 3px;
+      margin: 0;
+      accent-color: var(--copper);
+      cursor: ew-resize;
+    }
+
+    .sundial-actions {
+      display: flex;
+      gap: 3px;
+      padding: 3px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(14, 18, 17, .82);
+      pointer-events: auto;
+      backdrop-filter: blur(8px);
+    }
+
+    .sundial-actions button {
+      min-width: clamp(27px, 5.5cqw, 43px);
+      height: clamp(19px, 4.7cqh, 26px);
+      padding: 0 clamp(5px, 1.2cqw, 8px);
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--bone);
+      cursor: pointer;
+      font-size: clamp(3px, .65cqw, 4.8px);
+      font-weight: 900;
+    }
+
+    .sundial-actions button[data-sundial-action="quietest"] {
+      background: var(--copper);
+      color: #20140b;
+    }
+
+    .sundial-actions button:hover { background: rgba(255, 255, 255, .12); }
+    .sundial-actions button[data-sundial-action="quietest"]:hover { background: #ffc784; }
+
+    .sundial-actions button:focus-visible,
+    .band-control input:focus-visible {
+      outline: 1px solid #fff;
+      outline-offset: 1px;
+    }
+
+    .keymap {
+      align-self: center;
+      color: rgba(229, 229, 216, .49);
+      font-size: clamp(3px, .58cqw, 4.2px);
+      font-weight: 800;
+      line-height: 1.35;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .runtime-ledger {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    @container (max-width: 250px) {
+      .archive-copy span,
+      .metrics,
+      .keymap { display: none; }
+
+      .session-panel { top: 27%; width: 31%; }
+      .session-panel h1 { font-size: clamp(10px, 7.4cqw, 17px); }
+      .time-readout { font-size: clamp(17px, 10cqw, 27px); }
+      .probe-card { top: 21%; }
+      .control-dock { grid-template-columns: minmax(52px, 1fr) auto; }
+      .sundial-actions button { min-width: 24px; padding: 0 4px; }
+      .sundial-actions button[data-sundial-action="mark"] { display: none; }
+    }
+
+    @container (max-width: 170px) {
+      .archive-copy,
+      .session-state,
+      .session-panel,
+      .probe-card,
+      .band-control,
+      .keymap { display: none; }
+
+      .archive-mark { width: 17px; }
+
+      .control-dock {
+        right: 5px;
+        bottom: 5px;
+        left: auto;
+        display: block;
+      }
+
+      .sundial-actions { padding: 2px; }
+      .sundial-actions button { min-width: 22px; height: 16px; font-size: 3px; }
+    }
+  </style>
+  <script type="module" crossorigin src="./assets/polar-waveform-sundial-DKXHOFmK.js"></script>
   <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
-  <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
   <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
   <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
-  <link rel="modulepreload" crossorigin href="./assets/expansion-b-utils-CD_J0IHW.js">
   <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage"><canvas tabindex="0" aria-label="A radial waveform casts a rotating sundial shadow"></canvas><section class="copy"><small>SIGNAL / SOLAR</small><h1>READ SOUND LIKE SUNLIGHT.</h1></section><span class="library-badge">p5.js · polar sundial</span></main></body></html>
+</head>
+<body>
+  <main class="preview-stage sundial-stage" id="sundial-stage" data-preview-mechanism="p5-raster-polar-acoustic-waveform-sundial" tabindex="0" aria-label="Acoustic response sundial. Hover to inspect sound, drag around the plate to choose a time, and use arrow keys to move the gnomon.">
+    <div class="sundial-surface" id="sundial-surface" aria-hidden="true"></div>
+    <div class="plate-grade"></div>
+    <div class="plate-grain"></div>
+
+    <header class="archive-bar">
+      <div class="archive-id">
+        <span class="archive-mark">17</span>
+        <span class="archive-copy"><strong>Auralis Field Archive</strong><span>Material response plate · solar cycle 04</span></span>
+      </div>
+      <span class="session-state" id="session-state">Window unmarked</span>
+    </header>
+
+    <section class="session-panel">
+      <span class="eyebrow">Acoustic daylight</span>
+      <h1>Find the hour between sounds.</h1>
+      <span class="time-label">Selected recording window</span>
+      <strong class="time-readout" id="time-readout">—</strong>
+      <span class="session-conclusion" id="session-conclusion">Reading plate</span>
+      <div class="metrics" aria-live="polite">
+        <div class="metric"><span>Level</span><strong id="level-readout">—</strong></div>
+        <div class="metric"><span>Response</span><strong id="response-readout">—</strong></div>
+        <div class="metric"><span>Quietest</span><strong id="quietest-readout">—</strong></div>
+      </div>
+    </section>
+
+    <aside class="probe-card" aria-live="polite">
+      <span>Hover probe</span><strong id="probe-time">—</strong>
+      <span>Local energy</span><strong id="probe-energy">—</strong>
+    </aside>
+
+    <footer class="control-dock">
+      <div class="band-control">
+        <label for="frequency-band"><span>Analysis band</span><output id="band-readout" for="frequency-band">1.2 kHz</output></label>
+        <input id="frequency-band" type="range" min="80" max="8000" step="80" value="1200" aria-label="Acoustic analysis frequency in hertz">
+      </div>
+      <div class="sundial-actions" aria-label="Sundial actions">
+        <button type="button" data-sundial-action="quietest">Quiet</button>
+        <button type="button" data-sundial-action="mark" aria-pressed="false">Mark</button>
+        <button type="button" data-sundial-action="reset">Reset</button>
+      </div>
+      <span class="keymap">Drag phase · arrows step<br>Q quiet · M mark · R reset</span>
+    </footer>
+
+    <output class="runtime-ledger" id="runtime-ledger">Raster pending</output>
+  </main>
+</body>
+</html>

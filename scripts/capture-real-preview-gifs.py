@@ -1883,6 +1883,42 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("Escape")
             elif index == 26:
                 page.locator('[data-action="target"]').click()
+        elif demo["id"] == "polar-waveform-sundial":
+            if index == 2:
+                page.mouse.move(255, 63)
+            elif index == 4:
+                page.mouse.move(232, 137)
+                page.mouse.down()
+            elif index == 5:
+                page.mouse.move(245, 126, steps=2)
+            elif index == 6:
+                page.mouse.move(262, 107, steps=2)
+            elif index == 7:
+                page.mouse.move(271, 90, steps=2)
+            elif index == 8:
+                page.mouse.move(260, 67, steps=2)
+            elif index == 9:
+                page.mouse.move(238, 48, steps=2)
+            elif index == 10:
+                page.mouse.up()
+            elif index == 13:
+                page.locator('[data-sundial-action="quietest"]').click()
+            elif index == 15:
+                page.locator("#sundial-stage").focus()
+                page.keyboard.press("ArrowRight")
+            elif index == 18:
+                page.locator("#frequency-band").focus()
+                page.keyboard.press("ArrowRight")
+                page.keyboard.press("ArrowRight")
+            elif index == 21:
+                page.locator('[data-sundial-action="mark"]').click()
+            elif index == 24:
+                page.locator('[data-sundial-action="reset"]').click()
+            elif index == 27:
+                page.locator('[data-sundial-action="quietest"]').click()
+            elif index == 30:
+                page.locator("#sundial-stage").focus()
+                page.keyboard.press("m")
         elif demo["id"] == "seeded-sandpile-avalanche":
             if index == 2:
                 page.mouse.move(225, 70)
@@ -5685,6 +5721,125 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["ready"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture trusted reversible five-panel depth seeking, the pixel-derived target stratum, and synchronized paused Motion controls without automatic tunnel navigation: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "polar-waveform-sundial":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-acoustic-daylight-recording-window-finder"
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["mechanism"] != "same-origin-raster-polar-ring-pixels-drive-p5-waveform-frequency-energy-gnomon-and-recording-conclusion"
+            or interaction["acceptedInputs"] != ["mouse-hover", "captured-mouse-drag", "captured-touch-drag", "captured-pen-drag", "keyboard", "range-control", "visible-buttons"]
+            or not interaction["userInputRequired"]
+            or not interaction["strictTrustedInputGuard"]
+            or not interaction["initialFrameStatic"]
+            or not interaction["initialStillVerified"]
+            or interaction["automaticCycle"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["previewClockMutationCount"] != 0
+            or interaction["nonInputVisualMutationCountAfterReady"] != 0
+            or interaction["inputCount"] < 17
+            or interaction["trustedInputCount"] != interaction["inputCount"]
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["pointerEnterCount"] < 1
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerMoveCount"] < 10
+            or interaction["hoverMoveCount"] < 1
+            or interaction["pointerReleaseCount"] != 1
+            or interaction["pointerCancelCount"] != 0
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerCaptureReleaseCount"] != 1
+            or interaction["pointerTypesSeen"] != ["mouse"]
+            or interaction["keyboardInputCount"] != 2
+            or interaction["rangeInputCount"] != 2
+            or interaction["buttonActivationCount"] != 4
+            or interaction["phaseMutationCount"] < 8
+            or interaction["probeMutationCount"] < 8
+            or interaction["bandMutationCount"] != 2
+            or interaction["waveformMutationCount"] != 2
+            or interaction["quietestActivationCount"] != 2
+            or interaction["markMutationCount"] != 2
+            or interaction["resetCount"] != 1
+            or interaction["reversibleMutationCount"] < 12
+            or interaction["humanMutationCount"] < 15
+            or not interaction["marked"]
+            or interaction["markedPhase"] != interaction["selectedPhase"]
+            or abs(interaction["selectedPhase"] - interaction["quietestPhase"]) > .0001
+            or interaction["selectedBandHz"] != 1200
+            or interaction["selectedEnergy"] <= 0
+            or not interaction["selectedTime"]
+            or not interaction["selectedResponseLabel"]
+            or not interaction["selectedConclusion"]
+            or interaction["activePointerId"] is not None
+            or interaction["pointerCaptured"]
+            or interaction["dragging"]
+            or interaction["lastInputKind"] != "keyboard"
+            or interaction["lastInputSource"] != "keyboard-m"
+            or interaction["lastInputTrusted"] is not True
+            or interaction["assetFetchCount"] != 1
+            or interaction["assetResponseStatus"] != 200
+            or not interaction["assetMimeType"].startswith("image/jpeg")
+            or not interaction["assetSameOrigin"]
+            or interaction["assetByteLength"] != 314778
+            or interaction["assetSha256"] != "6000df299e322ee164dbb2b5695a750ed4fdb2e37718e84d529e783697d5eef8"
+            or not interaction["assetShaMatchesExpected"]
+            or not interaction["browserImageDecoded"]
+            or interaction["sourceNaturalWidth"] != 960
+            or interaction["sourceNaturalHeight"] != 640
+            or interaction["sourcePixelCount"] != 614400
+            or not interaction["p5ImageDecoded"]
+            or interaction["p5ImageClass"] != "p5.Image"
+            or interaction["p5ImageWidth"] != 960
+            or interaction["p5ImageHeight"] != 640
+            or interaction["p5ImagePixelLength"] != 2457600
+            or interaction["sampledWidth"] != 120
+            or interaction["sampledHeight"] != 80
+            or interaction["sampledPixelCount"] != 9600
+            or interaction["sampledPixelByteLength"] != 38400
+            or len(interaction["sampledPixelSha256"]) != 64
+            or not interaction["sampledPixelSha256"].strip("0")
+            or interaction["sampledPixelChecksum"] <= 0
+            or interaction["distinctSampleColorCount"] <= 100
+            or interaction["nonzeroSampleByteCount"] <= 19200
+            or interaction["sourceAlphaFailureCount"] != 0
+            or interaction["sampledLuminanceRange"] <= .5
+            or interaction["sampledWarmSignalRange"] <= .6
+            or interaction["sampledTealSignalMaximum"] <= .1
+            or interaction["polarBinCount"] != 256
+            or interaction["waveformPointCount"] != 256
+            or interaction["waveformChecksum"] <= 0
+            or interaction["initialWaveformChecksum"] <= 0
+            or interaction["polarPixelEvaluationCount"] < 768
+            or interaction["spectralPixelEvaluationCount"] != 2304
+            or interaction["energyRange"] <= .4
+            or interaction["quietestEnergy"] <= 0
+            or interaction["meanEnergy"] <= interaction["quietestEnergy"]
+            or interaction["loudestEnergy"] <= interaction["meanEnergy"]
+            or interaction["dominantSourceBand"] not in ("LOW", "MID", "HIGH")
+            or not interaction["rasterDrivenEvidenceReady"]
+            or not interaction["p5InstanceReady"]
+            or not interaction["p5CanvasReady"]
+            or interaction["p5CanvasWidth"] != 320
+            or interaction["p5CanvasHeight"] != 180
+            or interaction["p5CompletedDrawCount"] < 15
+            or interaction["p5ImageDrawCount"] < 1
+            or interaction["guideRingDrawCount"] < 4
+            or interaction["waveformSegmentDrawCount"] < 256
+            or interaction["gnomonDrawCount"] < 1
+            or interaction["renderedSampleCount"] <= 1000
+            or interaction["renderedPixelChecksum"] <= 0
+            or interaction["renderedLuminanceRange"] <= 40
+            or interaction["previewRenderCalls"] < 36
+            or interaction["initialVisualStateChecksum"] == interaction["currentVisualStateChecksum"]
+            or not interaction["runtimeAssertionPassed"]
+            or not interaction["ready"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture trusted response-plate hover, captured phase drag, keyboard/range changes, quiet-window finding, reset, and a final marked pixel-derived acoustic window without automatic rotation: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "seeded-sandpile-avalanche":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

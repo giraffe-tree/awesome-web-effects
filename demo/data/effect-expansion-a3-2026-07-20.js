@@ -27,12 +27,12 @@ export const effectExpansion150BatchA3 = [
     scores: scores(19, 20, 19, 15, 15, 10), rationaleZh: '经纬拓扑与纺织色彩形成鲜明主体，交织而非叠线的结构可以直接辨认。'
   },
   {
-    id: 'polar-waveform-sundial', order: 122, name: 'Polar waveform sundial', nameZh: '极坐标波形日晷', category: 'canvas', sourceUrl: 'https://github.com/d3/d3-shape',
-    difference: '双频波形被映射为闭合极坐标轮廓，同时由相位决定日晷阴影方向与长度，不是圆形音频均衡器。',
-    behavior: { trigger: 'pointer phase or animation frame', response: 'A radial waveform reshapes while a central gnomon casts a phase-linked shadow', timing: 'continuous polar signal rotation', layer: 'signal sundial canvas' },
-    prompt: '将两组正弦采样叠加到极坐标半径，并用同一相位驱动中央日晷阴影的角度和长度。',
-    implementation: p5("new p5(p => { p.draw = () => drawPolarWaveAndShadow(p.drawingContext, phase); });", 'https://github.com/d3/d3-shape'),
-    scores: scores(19, 19, 18, 15, 15, 10), rationaleZh: '声纹轮廓与日晷指针共享相位，科学仪器般的视觉语言完整。'
+    id: 'polar-waveform-sundial', order: 122, name: 'Acoustic daylight window finder', nameZh: '声学日光录音窗口', category: 'canvas', sourceUrl: 'https://github.com/d3/d3-shape',
+    difference: '把自动旋转的数学波形改为可测量的录音时段选择器：同一块真实声学响应盘的环向像素产生 256 个能量采样、频段结论、安静时刻与影针，而不是装饰性正弦波。',
+    behavior: { trigger: 'trusted hover, captured mouse/touch/pen orbit drag, keyboard, native frequency range, or visible Quiet/Mark/Reset control', response: 'Inspect local energy, move the selected recording phase, resample a frequency-dependent ring, jump to the quietest source-backed time, and explicitly mark the window', timing: 'human-owned finite p5 redraws that remain static between inputs', layer: 'full-stage acoustic response plate, polar waveform, gnomon, time and energy readouts, frequency control, and retained mark' },
+    prompt: '制作一个全舞台声学日光录音窗口选择器：同源加载并精确校验一张 ImageGen 同心声学响应盘，读取 120×80 像素，以 256 个角度、每角三层径向采样计算波形能量，并让 frequency range 改变采样半径与低/中/高频结论。真人通过 hover、捕获式鼠标/触控/笔环向拖动、键盘、原生频率 range 和 Quiet/Mark/Reset 控件选择、标记与复位录音时刻；首帧和所有结果保持静止，禁止自动旋转、播放、排练、fallback、合成输入或预览时钟变更。',
+    implementation: p5("p.noLoop(); const waveform = Array.from({ length: 256 }, (_, i) => sampleThreeRadialPlatePixels(source, i, frequencyBand)); stage.addEventListener('pointermove', seekPhaseFromTrustedHumanInput); p.redraw();", 'https://github.com/processing/p5.js'),
+    scores: scores(20, 20, 20, 15, 15, 10), rationaleZh: '原创 ImageGen 声学响应盘经同源 fetch、精确源 SHA、浏览器与 p5 双解码，并读取为 120×80 / 9,600 像素；真实环纹在 256 个角度、三层半径上的能量决定低/中/高频响应、安静时刻、波形和影针。可信 hover、捕获拖拽、键盘、range 与 Quiet/Mark/Reset 全部触发有限 p5 重绘，首帧与结果都静止。'
   },
   {
     id: 'seeded-sandpile-avalanche', order: 123, name: 'Ridge 12 slope load cell', nameZh: 'Ridge 12 坡面负载实验场', category: 'canvas', sourceUrl: 'https://github.com/shiffman/The-Nature-of-Code-Examples-p5.js',

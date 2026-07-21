@@ -164,7 +164,7 @@
 | 效果 | 推荐实现 | 策展评分 | AI 官网参考（最多 3 家） | Stars | 实现数 | 状态 | 实现 |
 | --- | --- | ---: | --- | ---: | ---: | --- | --- |
 | [SVG 描边绘制](https://giraffe-tree.github.io/awesome-web-effects/#svg-stroke-drawing) | [Vivus](https://github.com/maxwellito/vivus) | **86/100** | — | 15,479 | 1 | 经典旧版 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#svg-stroke-drawing) |
-| [输入—选中—替换提示词循环](https://giraffe-tree.github.io/awesome-web-effects/#prompt-select-replace-loop) | [Motion](https://github.com/motiondivision/motion) | **97/100** | [Granola](https://www.granola.ai/) | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#prompt-select-replace-loop) |
+| [语义提示词修订工作台](https://giraffe-tree.github.io/awesome-web-effects/#prompt-select-replace-loop) | [Motion](https://github.com/motiondivision/motion) | **100/100** | [Granola](https://www.granola.ai/) | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#prompt-select-replace-loop) |
 | [人工确认的标题修订标记](https://giraffe-tree.github.io/awesome-web-effects/#traveling-dot-headline-rewriter) | [Motion](https://github.com/motiondivision/motion) | **100/100** | [PolyAI](https://poly.ai/) | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#traveling-dot-headline-rewriter) |
 | [无限曲线文字传送带](https://giraffe-tree.github.io/awesome-web-effects/#infinite-curved-text-conveyor) | [Motion](https://github.com/motiondivision/motion) | **96/100** | [Wispr Flow](https://wisprflow.ai/) | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#infinite-curved-text-conveyor) |
 | [实时文本边界研讨批注](https://giraffe-tree.github.io/awesome-web-effects/#animated-hand-drawn-semantic-annotation) | [Motion](https://github.com/motiondivision/motion) | **90/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#animated-hand-drawn-semantic-annotation) |
@@ -282,7 +282,7 @@
 - 150 个已核验预览：2 个官方素材、148 个可运行本地 Demo 录制；缺失数为 0。
 - 人工评审覆盖创意、艺术完成度、动效编排、效果辨识、创作迁移和证据质量。
 - 准入要求 80/100，并同时通过核心维度最低分；流行度不能覆盖质量门槛。
-- 已核验 GIF 总计 25.28 MiB；每个预览为 320×180、最长三秒且小于 1 MiB。
+- 已核验 GIF 总计 25.26 MiB；每个预览为 320×180、最长三秒且小于 1 MiB。
 - Stars 是 2026-07-20 快照；“推荐实现”与“在哪家 AI 官网观察到”始终是两种关系。
 
 继续阅读 [396 个候选的准入审计](research/demo-admission-audit-2026-07-20.md)、[100 家 AI 公司主页特效调研](research/ai-native-homepages-100.md)与[预览来源清单](demo/gifs/provenance.json)。

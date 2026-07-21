@@ -162,8 +162,8 @@ export const reviewedDemoScores = {
     rationaleZh: '背景材质、遮罩、排版与立体标签在同一节拍原子换幕，视觉叙事完整且不同层的职责都能被辨认。'
   },
   'prompt-select-replace-loop': {
-    creativity: 19, artDirection: 18, motion: 20, clarity: 15, inspiration: 15, evidence: 10,
-    rationaleZh: '输入、真实选择态、覆盖替换和光标落位构成完整编辑语义，区别于普通打字机，短循环也能读懂行为。'
+    creativity: 20, artDirection: 20, motion: 20, clarity: 15, inspiration: 15, evidence: 10,
+    rationaleZh: '原生文本选区、字段专属替代项、before/after、显式 Apply 与可撤销历史构成完整真人编辑因果链；结果稳定保留，且不存在自动循环。'
   },
   'traveling-dot-headline-rewriter': {
     creativity: 20, artDirection: 20, motion: 20, clarity: 15, inspiration: 15, evidence: 10,

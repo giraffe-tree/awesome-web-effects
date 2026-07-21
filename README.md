@@ -164,7 +164,7 @@ Typing, text splitting, vector drawing, handwriting, and SVG morphing.
 | Effect | Recommended implementation | Curatorial score | AI homepage references (max 3) | Stars | Implementations | Status | Implementation |
 | --- | --- | ---: | --- | ---: | ---: | --- | --- |
 | [SVG stroke drawing](https://giraffe-tree.github.io/awesome-web-effects/#svg-stroke-drawing) | [Vivus](https://github.com/maxwellito/vivus) | **86/100** | — | 15,479 | 1 | Legacy | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#svg-stroke-drawing) |
-| [Type-select-replace prompt loop](https://giraffe-tree.github.io/awesome-web-effects/#prompt-select-replace-loop) | [Motion](https://github.com/motiondivision/motion) | **97/100** | [Granola](https://www.granola.ai/) | 32,819 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#prompt-select-replace-loop) |
+| [Semantic prompt revision workspace](https://giraffe-tree.github.io/awesome-web-effects/#prompt-select-replace-loop) | [Motion](https://github.com/motiondivision/motion) | **100/100** | [Granola](https://www.granola.ai/) | 32,819 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#prompt-select-replace-loop) |
 | [Human-approved headline revision marker](https://giraffe-tree.github.io/awesome-web-effects/#traveling-dot-headline-rewriter) | [Motion](https://github.com/motiondivision/motion) | **100/100** | [PolyAI](https://poly.ai/) | 32,819 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#traveling-dot-headline-rewriter) |
 | [Infinite curved text-path conveyor](https://giraffe-tree.github.io/awesome-web-effects/#infinite-curved-text-conveyor) | [Motion](https://github.com/motiondivision/motion) | **96/100** | [Wispr Flow](https://wisprflow.ai/) | 32,819 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#infinite-curved-text-conveyor) |
 | [Live-bounds seminar annotation](https://giraffe-tree.github.io/awesome-web-effects/#animated-hand-drawn-semantic-annotation) | [Motion](https://github.com/motiondivision/motion) | **90/100** | — | 32,819 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#animated-hand-drawn-semantic-annotation) |
@@ -282,7 +282,7 @@ Scene graphs, creative coding, physics, drawing tools, and 2D renderers.
 - 150 verified previews: 2 official captures and 148 captures from runnable local demos; 0 missing.
 - Human review scores creativity, art direction, motion craft, legibility, creative transfer and evidence quality.
 - Admission requires 80/100 plus core-dimension minimums. Popularity never overrides the gate.
-- The verified GIF set is 25.28 MiB; every preview is 320×180, at most three seconds and below 1 MiB.
+- The verified GIF set is 25.26 MiB; every preview is 320×180, at most three seconds and below 1 MiB.
 - Stars are a 2026-07-20 snapshot. Recommendation sources and observed AI homepages remain separate relationships.
 
 Read the [current 396-candidate admission audit](research/demo-admission-audit-2026-07-20.md), the [100-company homepage research](research/ai-native-homepages-100.md), and the [preview provenance manifest](demo/gifs/provenance.json).

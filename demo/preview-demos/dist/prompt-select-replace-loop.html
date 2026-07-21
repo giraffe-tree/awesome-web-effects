@@ -3,121 +3,502 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Motion — Prompt Select Replace Loop</title>
+    <title>Motion — Prompt Revision Workspace</title>
     <style>
-      :root { --preview-background: #160b21; }
-      .prompt-stage {
-        background:
-          radial-gradient(circle at 86% 15%, rgba(255, 112, 194, .2), transparent 35%),
-          radial-gradient(circle at 13% 92%, rgba(111, 221, 255, .15), transparent 42%),
-          linear-gradient(145deg, #140a20, #24102d 54%, #101827);
+      :root {
+        --preview-background: #e9e4da;
+        --ink: #162521;
+        --muted: #66726d;
+        --line: rgba(22, 37, 33, .15);
+        --paper: #f7f4ec;
+        --acid: #d9ff57;
+        --mint: #a7dfcb;
+        --forest: #154d3e;
       }
+
+      button { font: inherit; }
+
+      .prompt-stage {
+        color: var(--ink);
+        background:
+          linear-gradient(rgba(22, 37, 33, .035) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(22, 37, 33, .035) 1px, transparent 1px),
+          #e9e4da;
+        background-size: 18px 18px;
+      }
+
+      .prompt-stage::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(circle at 84% 14%, rgba(217, 255, 87, .42), transparent 28%),
+          radial-gradient(circle at 10% 90%, rgba(167, 223, 203, .48), transparent 30%);
+        pointer-events: none;
+      }
+
       .prompt-shell {
         position: absolute;
-        inset: 35px 15px 18px;
-        overflow: hidden;
-        border: 1px solid rgba(255, 255, 255, .16);
-        border-radius: 18px;
-        background: rgba(14, 8, 24, .76);
-        box-shadow: 0 20px 45px rgba(4, 2, 12, .48), inset 0 1px rgba(255, 255, 255, .08);
+        inset: 34px 10px 10px;
+        display: grid;
+        grid-template-rows: 29px minmax(0, 1fr);
+        overflow: clip;
+        border: 1px solid rgba(22, 37, 33, .26);
+        border-radius: 14px;
+        background: rgba(247, 244, 236, .94);
+        box-shadow: 0 12px 28px rgba(39, 48, 43, .16), inset 0 1px rgba(255, 255, 255, .8);
       }
+
       .prompt-toolbar {
         display: flex;
+        min-width: 0;
+        align-items: center;
+        gap: 8px;
+        padding: 0 10px;
+        border-bottom: 1px solid var(--line);
+        background: rgba(255, 255, 255, .38);
+      }
+
+      .product-mark {
+        display: inline-flex;
         align-items: center;
         gap: 5px;
-        height: 27px;
-        padding: 0 10px;
-        border-bottom: 1px solid rgba(255, 255, 255, .08);
-        color: rgba(255, 255, 255, .52);
-        font-size: 6px;
-        font-weight: 800;
+        color: var(--forest);
+        font-size: 7px;
+        font-weight: 950;
         letter-spacing: .12em;
         text-transform: uppercase;
       }
-      .prompt-toolbar::before {
-        content: "";
-        width: 7px;
-        height: 7px;
-        border-radius: 50%;
-        background: #ff74c9;
-        box-shadow: 12px 0 #ffd36e, 24px 0 #7aebff;
-        margin-right: 23px;
-      }
-      .prompt-editor {
-        position: absolute;
-        inset: 38px 12px 30px;
-        padding: 15px 14px;
-        border: 1px solid rgba(255, 255, 255, .1);
-        border-radius: 13px;
-        background: linear-gradient(140deg, rgba(255,255,255,.07), rgba(255,255,255,.025));
-        cursor: pointer;
-      }
-      .prompt-label { color: #f4bedf; font-size: 7px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }
-      .prompt-line { position: relative; height: 26px; margin-top: 8px; color: white; font-size: 13px; font-weight: 650; letter-spacing: -.018em; white-space: nowrap; }
-      .phrase-layer { position: absolute; left: 0; top: 0; z-index: 3; }
-      .phrase-layer span { display: inline-block; min-width: .18em; }
-      .selection-wash {
-        position: absolute;
-        z-index: 2;
-        left: -3px;
-        top: -3px;
-        width: 184px;
-        height: 22px;
+
+      .product-mark::before {
+        content: "Q";
+        display: grid;
+        width: 15px;
+        height: 15px;
+        place-items: center;
         border-radius: 4px;
-        background: linear-gradient(90deg, rgba(92, 189, 255, .64), rgba(176, 92, 255, .54));
-        box-shadow: 0 0 20px rgba(92, 189, 255, .22);
-        transform-origin: left center;
+        background: var(--forest);
+        color: var(--acid);
+        font-size: 8px;
       }
-      .prompt-caret {
-        position: absolute;
-        z-index: 5;
-        top: -1px;
-        width: 1px;
-        height: 18px;
-        background: #fff;
-        box-shadow: 0 0 8px #fff;
+
+      .toolbar-rule { width: 1px; height: 12px; background: var(--line); }
+
+      .document-title {
+        min-width: 0;
+        overflow: hidden;
+        color: #52615b;
+        font-size: 7px;
+        font-weight: 750;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
-      .model-chip {
-        position: absolute;
-        left: 14px;
-        bottom: 10px;
-        padding: 5px 8px;
-        border: 1px solid rgba(123, 229, 255, .38);
-        border-radius: 99px;
-        background: rgba(67, 157, 180, .16);
-        color: #b9f6ff;
-        font-size: 6px;
-        font-weight: 900;
-        letter-spacing: .1em;
+
+      .step-track {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin-left: auto;
+        color: #7c8883;
+        font-size: 5px;
+        font-weight: 850;
+        letter-spacing: .06em;
         text-transform: uppercase;
       }
-      .prompt-status { position: absolute; right: 12px; bottom: 11px; color: rgba(255,255,255,.48); font-size: 6px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+
+      .step-dot {
+        width: 5px;
+        height: 5px;
+        border: 1px solid #93a19b;
+        border-radius: 50%;
+        background: transparent;
+      }
+
+      .prompt-shell[data-state="selected"] .step-dot:nth-child(1),
+      .prompt-shell[data-state="staged"] .step-dot:nth-child(1),
+      .prompt-shell[data-state="staged"] .step-dot:nth-child(3),
+      .prompt-shell[data-state="applied"] .step-dot,
+      .prompt-shell[data-state="undone"] .step-dot:nth-child(1) {
+        border-color: var(--forest);
+        background: var(--acid);
+        box-shadow: 0 0 0 2px rgba(217, 255, 87, .25);
+      }
+
+      .prompt-workspace {
+        display: grid;
+        min-width: 0;
+        grid-template-rows: minmax(0, 1fr);
+        grid-template-columns: minmax(0, 1.48fr) minmax(108px, .82fr);
+        min-height: 0;
+      }
+
+      .editor-pane {
+        position: relative;
+        display: flex;
+        min-width: 0;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 10px 11px 9px;
+        border-right: 1px solid var(--line);
+      }
+
+      .eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        color: #77837e;
+        font-size: 5px;
+        font-weight: 900;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+      }
+
+      .eyebrow::before {
+        content: "";
+        width: 15px;
+        height: 2px;
+        border-radius: 2px;
+        background: var(--mint);
+      }
+
+      .prompt-copy {
+        margin: 7px 0 5px;
+        color: #162521;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(10px, 3.35vw, 21px);
+        font-weight: 600;
+        line-height: 1.28;
+        letter-spacing: -.025em;
+        user-select: text;
+      }
+
+      .semantic-span {
+        position: relative;
+        display: inline;
+        border-radius: 2px;
+        background: linear-gradient(transparent 62%, rgba(167, 223, 203, .55) 62%);
+        cursor: text;
+        outline: none;
+        transition: background-color .16s ease, box-shadow .16s ease;
+      }
+
+      .semantic-span:hover,
+      .semantic-span:focus-visible {
+        background-color: rgba(167, 223, 203, .34);
+        box-shadow: 0 0 0 2px rgba(21, 77, 62, .16);
+      }
+
+      .semantic-span.is-selected {
+        background: var(--acid);
+        box-shadow: 0 0 0 2px rgba(21, 77, 62, .2);
+      }
+
+      .semantic-span.is-applied {
+        background: linear-gradient(transparent 54%, var(--acid) 54%);
+      }
+
+      ::selection { background: #154d3e; color: #fff; }
+
+      .editor-meta {
+        display: flex;
+        align-items: flex-end;
+        gap: 7px;
+        color: #7b8782;
+        font-size: 5px;
+        font-weight: 750;
+        line-height: 1.25;
+      }
+
+      .editor-meta strong { color: var(--forest); font-weight: 950; }
+      .editor-hint { max-width: 170px; }
+
+      .confidence {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin-left: auto;
+        white-space: nowrap;
+      }
+
+      .confidence::before {
+        content: "";
+        width: 23px;
+        height: 3px;
+        border-radius: 4px;
+        background: linear-gradient(90deg, var(--forest) 78%, #d8d5cb 78%);
+      }
+
+      .revision-panel {
+        display: flex;
+        min-width: 0;
+        min-height: 0;
+        flex-direction: column;
+        padding: 8px 8px 7px;
+        background: rgba(235, 239, 230, .68);
+      }
+
+      .panel-kicker {
+        color: #76837d;
+        font-size: 5px;
+        font-weight: 900;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+      }
+
+      .selection-label {
+        min-height: 13px;
+        margin-top: 2px;
+        overflow: hidden;
+        color: var(--forest);
+        font-size: 7px;
+        font-weight: 900;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .replacement-list {
+        display: grid;
+        gap: 3px;
+        margin-top: 4px;
+      }
+
+      .replacement-option {
+        min-width: 0;
+        overflow: hidden;
+        padding: 4px 5px;
+        border: 1px solid rgba(21, 77, 62, .15);
+        border-radius: 5px;
+        background: rgba(255, 255, 255, .66);
+        color: #314b42;
+        font-size: 5.5px;
+        font-weight: 760;
+        text-align: left;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        cursor: pointer;
+      }
+
+      .replacement-option:hover:not(:disabled),
+      .replacement-option:focus-visible,
+      .replacement-option[aria-pressed="true"] {
+        border-color: var(--forest);
+        background: var(--acid);
+        color: #132e26;
+        outline: none;
+      }
+
+      .replacement-option:disabled { opacity: .38; cursor: not-allowed; }
+
+      .diff-line {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
+        gap: 3px;
+        min-height: 17px;
+        margin-top: 4px;
+        padding-top: 4px;
+        border-top: 1px solid var(--line);
+        color: #77837e;
+        font-size: 4.5px;
+        font-weight: 760;
+      }
+
+      .diff-line span {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .diff-line .diff-before { text-decoration: line-through; }
+      .diff-line .diff-after { color: var(--forest); font-weight: 900; }
+
+      .panel-actions {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto auto;
+        gap: 3px;
+        margin-top: auto;
+      }
+
+      .apply-button,
+      .utility-button {
+        min-height: 19px;
+        border-radius: 5px;
+        font-size: 5px;
+        font-weight: 900;
+        letter-spacing: .04em;
+        cursor: pointer;
+      }
+
+      .apply-button {
+        border: 1px solid var(--forest);
+        background: var(--forest);
+        color: #f5ffe2;
+      }
+
+      .apply-button:not(:disabled):hover,
+      .apply-button:not(:disabled):focus-visible { background: #0e392e; outline: 2px solid var(--acid); }
+      .apply-button:disabled { border-color: #aeb7b2; background: #c9cfca; color: #7d8883; cursor: not-allowed; }
+
+      .utility-button {
+        width: 25px;
+        border: 1px solid var(--line);
+        background: transparent;
+        color: #5f6d67;
+      }
+
+      .utility-button:hover:not(:disabled),
+      .utility-button:focus-visible { border-color: var(--forest); color: var(--forest); outline: none; }
+      .utility-button:disabled { opacity: .38; cursor: not-allowed; }
+
+      .status-strip {
+        position: absolute;
+        top: 16px;
+        right: 12px;
+        z-index: 21;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        color: rgba(22, 37, 33, .64);
+        font-size: 5px;
+        font-weight: 900;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        pointer-events: none;
+      }
+
+      .status-dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--forest);
+        box-shadow: 0 0 0 2px rgba(21, 77, 62, .12);
+      }
+
+      .prompt-stage .library-badge {
+        border-color: rgba(21, 77, 62, .28);
+        background: rgba(247, 244, 236, .88);
+        color: var(--forest);
+      }
+
       .prompt-stage .scene-caption { display: none; }
-      @media (prefers-reduced-motion: reduce) { .prompt-editor { cursor: default; } }
+
+      @media (min-width: 540px) {
+        .prompt-shell { inset: 44px 20px 18px; grid-template-rows: 42px minmax(0, 1fr); border-radius: 22px; }
+        .prompt-toolbar { gap: 12px; padding-inline: 16px; }
+        .product-mark { font-size: 10px; }
+        .product-mark::before { width: 22px; height: 22px; font-size: 11px; border-radius: 6px; }
+        .document-title { font-size: 10px; }
+        .step-track { gap: 7px; font-size: 7px; }
+        .step-dot { width: 7px; height: 7px; }
+        .prompt-workspace { grid-template-columns: minmax(0, 1.6fr) minmax(220px, .9fr); }
+        .editor-pane { padding: 24px 28px 20px; }
+        .eyebrow { font-size: 8px; }
+        .eyebrow::before { width: 25px; height: 3px; }
+        .prompt-copy { margin-block: 18px 12px; }
+        .editor-meta { font-size: 8px; }
+        .revision-panel { padding: 20px 18px 16px; }
+        .panel-kicker { font-size: 7px; }
+        .selection-label { min-height: 21px; margin-top: 5px; font-size: 11px; }
+        .replacement-list { gap: 7px; margin-top: 9px; }
+        .replacement-option { padding: 9px 10px; border-radius: 8px; font-size: 9px; }
+        .diff-line { min-height: 31px; margin-top: 9px; padding-top: 9px; font-size: 7px; }
+        .panel-actions { gap: 6px; }
+        .apply-button, .utility-button { min-height: 31px; border-radius: 8px; font-size: 7px; }
+        .utility-button { width: 36px; }
+        .status-strip { top: 20px; right: 20px; font-size: 7px; }
+      }
+
+      @media (max-height: 240px) {
+        .editor-pane { justify-content: flex-start; }
+        .editor-meta { display: none; }
+        .revision-panel { padding: 5px 7px 5px; }
+        .selection-label { min-height: 9px; margin-top: 1px; }
+        .replacement-list { gap: 2px; margin-top: 2px; }
+        .replacement-option { padding: 2px 4px; font-size: 5px; line-height: 1; }
+        .diff-line { display: none; }
+        .apply-button, .utility-button { min-height: 16px; }
+      }
+
+      @media (max-width: 279px) and (min-height: 260px) {
+        .prompt-shell { inset: 34px 8px 9px; grid-template-rows: 28px minmax(0, 1fr); }
+        .prompt-workspace { grid-template-columns: 1fr; grid-template-rows: minmax(115px, 1fr) auto; }
+        .prompt-workspace, .editor-pane, .revision-panel { width: 100%; min-width: 0; }
+        .step-track > span:not(.step-dot) { display: none; }
+        .editor-pane { border-right: 0; border-bottom: 1px solid var(--line); }
+        .revision-panel { min-height: 122px; }
+        .prompt-copy { font-size: 12px; }
+        .replacement-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .replacement-option { min-height: 28px; white-space: normal; }
+        .replacement-option:last-child { grid-column: 1 / -1; }
+        .status-strip { display: none; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .001ms !important; }
+      }
     </style>
-    <script type="module" crossorigin src="./assets/prompt-select-replace-loop-BRkNc3BV.js"></script>
+    <script type="module" crossorigin src="./assets/prompt-select-replace-loop-HA5WCbSQ.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
     <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
     <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
   </head>
   <body>
-    <main class="preview-stage prompt-stage" aria-label="A prompt is typed, semantically selected, and replaced in a deterministic loop">
-      <section class="prompt-shell" data-preview-mechanism="motion-type-select-replace">
-        <header class="prompt-toolbar">Prompt composer · live edit</header>
-        <button class="prompt-editor" id="prompt-editor" type="button" aria-label="Advance the prompt editing sequence">
-          <span class="prompt-label">Describe the atmosphere</span>
-          <span class="prompt-line" aria-live="polite">
-            <span class="selection-wash" id="selection-wash" aria-hidden="true"></span>
-            <span class="phrase-layer" id="old-phrase">paint silence in neon</span>
-            <span class="phrase-layer" id="new-phrase">make memory feel liquid</span>
-            <span class="prompt-caret" id="prompt-caret" aria-hidden="true"></span>
+    <main class="preview-stage prompt-stage" aria-label="An interactive prompt revision workspace for selecting and replacing meaningful query spans">
+      <section class="prompt-shell" id="prompt-shell" data-preview-mechanism="motion-prompt-select-replace" data-state="idle">
+        <header class="prompt-toolbar">
+          <span class="product-mark">Quarry</span>
+          <span class="toolbar-rule" aria-hidden="true"></span>
+          <span class="document-title">Research query · Draft 03</span>
+          <span class="step-track" aria-label="Revision steps">
+            <span class="step-dot" aria-hidden="true"></span><span>Select</span>
+            <span class="step-dot" aria-hidden="true"></span><span>Replace</span>
+            <span class="step-dot" aria-hidden="true"></span><span>Confirm</span>
           </span>
-          <span class="model-chip" id="model-chip">atmosphere · v2</span>
-          <span class="prompt-status" id="prompt-status">typing</span>
-        </button>
+        </header>
+
+        <div class="prompt-workspace">
+          <section class="editor-pane" aria-labelledby="prompt-heading">
+            <div>
+              <div class="eyebrow" id="prompt-heading">Prompt brief · semantic fields detected</div>
+              <p class="prompt-copy" id="prompt-copy">
+                Prepare a <span class="semantic-span" tabindex="0" data-field="format">weekly market brief</span> for
+                <span class="semantic-span" tabindex="0" data-field="region">Southern Europe</span>, comparing
+                <span class="semantic-span" tabindex="0" data-field="focus">rail-accessible coastal towns</span> for
+                <span class="semantic-span" tabindex="0" data-field="audience">remote design teams</span>.
+              </p>
+            </div>
+            <footer class="editor-meta">
+              <span class="editor-hint"><strong>Select a highlighted phrase</strong> by dragging over it, or focus it and press Enter.</span>
+              <span class="confidence">4 editable spans</span>
+            </footer>
+          </section>
+
+          <aside class="revision-panel" aria-labelledby="revision-heading">
+            <span class="panel-kicker" id="revision-heading">Replacement desk</span>
+            <span class="selection-label" id="selection-label" aria-live="polite">Select a semantic span</span>
+            <div class="replacement-list" id="replacement-list" aria-label="Replacement options">
+              <button class="replacement-option" type="button" data-option="0" aria-pressed="false" disabled>Replacement 01</button>
+              <button class="replacement-option" type="button" data-option="1" aria-pressed="false" disabled>Replacement 02</button>
+              <button class="replacement-option" type="button" data-option="2" aria-pressed="false" disabled>Replacement 03</button>
+            </div>
+            <div class="diff-line" aria-live="polite">
+              <span class="diff-before" id="diff-before">No source selected</span>
+              <span aria-hidden="true">→</span>
+              <span class="diff-after" id="diff-after">No revision staged</span>
+            </div>
+            <div class="panel-actions">
+              <button class="apply-button" id="apply-revision" type="button" disabled>Apply revision</button>
+              <button class="utility-button" id="undo-revision" type="button" aria-label="Undo last revision" title="Undo" disabled>↶</button>
+              <button class="utility-button" id="reset-revision" type="button" aria-label="Reset the complete prompt" title="Reset">×</button>
+            </div>
+          </aside>
+        </div>
       </section>
-      <span class="library-badge">Motion · semantic edit loop</span>
-      <span class="scene-caption">type, select and replace one authored prompt</span>
+
+      <span class="library-badge">Motion · Prompt revision</span>
+      <span class="scene-caption">Select one authored span, stage a replacement, then confirm</span>
+      <span class="status-strip"><span class="status-dot" id="status-dot"></span><span id="prompt-status">Awaiting selection</span></span>
     </main>
   </body>
 </html>

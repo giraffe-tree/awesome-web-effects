@@ -2788,6 +2788,21 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.locator('[data-layout-action="edit"]').click()
             elif index == 33:
                 page.locator('#reset-registration').click()
+        elif demo["id"] == "prompt-select-replace-loop":
+            if index == 3:
+                page.mouse.move(42, 113)
+            elif index == 4:
+                page.mouse.down()
+            elif index == 5:
+                page.mouse.move(82, 113)
+            elif index == 6:
+                page.mouse.move(128, 113)
+            elif index == 7:
+                page.mouse.up()
+            elif index == 12:
+                page.locator('[data-option="0"]').click()
+            elif index == 18:
+                page.locator('#apply-revision').click()
         elif demo["id"] == "poisson-constellation-bloom":
             if index == 2:
                 page.mouse.move(170, 92)
@@ -9267,6 +9282,76 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["ready"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture a trusted full-stage ImageGen-textured DOM/GPU registration calibration with drag, range, layout, keyboard and reset controls while preserving subpixel plane lock and no automatic motion: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "prompt-select-replace-loop":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        document_state = page.evaluate("""() => ({
+            shellState: document.querySelector('#prompt-shell').dataset.state,
+            nativeSelection: getSelection().toString(),
+            tokenValues: Object.fromEntries([...document.querySelectorAll('.semantic-span')].map(token => [token.dataset.field, token.textContent])),
+            selectedTokens: document.querySelectorAll('.semantic-span.is-selected').length,
+            appliedTokens: document.querySelectorAll('.semantic-span.is-applied').length,
+            pressedOptions: document.querySelectorAll('.replacement-option[aria-pressed=\"true\"]').length,
+            optionsDisabled: [...document.querySelectorAll('.replacement-option')].every(option => option.disabled),
+            applyDisabled: document.querySelector('#apply-revision').disabled,
+            undoDisabled: document.querySelector('#undo-revision').disabled,
+            diffBefore: document.querySelector('#diff-before').textContent,
+            diffAfter: document.querySelector('#diff-after').textContent,
+            scrollWidth: document.documentElement.scrollWidth,
+            clientWidth: document.documentElement.clientWidth,
+            scrollHeight: document.documentElement.scrollHeight,
+            clientHeight: document.documentElement.clientHeight,
+        })""")
+        if (
+            not assertion
+            or interaction["id"] != "prompt-select-replace-loop"
+            or interaction["task"] != "human-operated-semantic-prompt-span-revision-workspace"
+            or interaction["claimedLibrary"] != "motion@12.42.2"
+            or interaction["mechanism"] != "native-dom-range-selection-stages-one-semantic-replacement-and-explicit-apply-retains-the-revised-prompt"
+            or interaction["assetStrategy"] != "code-native-editable-text-and-dom-range-no-functional-raster-input-required"
+            or not interaction["userInputRequired"]
+            or not interaction["strictTrustedInputGuard"]
+            or not interaction["initialFrameStatic"]
+            or not interaction["initialStaticVerified"]
+            or interaction["automaticCycle"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticLoop"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["previewClockMutationCount"] != 0
+            or interaction["selectedField"] != "region"
+            or interaction["stagedValue"] != "Atlantic Portugal"
+            or len(interaction["history"]) != 1
+            or interaction["history"][0] != {"field": "region", "before": "Southern Europe", "after": "Atlantic Portugal"}
+            or interaction["humanActions"] != 3
+            or interaction["pointerSelectionCount"] != 1
+            or interaction["keyboardSelectionCount"] != 0
+            or interaction["optionSelectionCount"] != 1
+            or interaction["applyCount"] != 1
+            or interaction["undoCount"] != 0
+            or interaction["resetCount"] != 0
+            or interaction["nativeSelectionCount"] < 2
+            or interaction["motionRuns"] < 4
+            or interaction["renderCalls"] < 20
+            or interaction["lastInputTrusted"] is not True
+            or interaction["lastInputKind"] != "apply"
+            or not interaction["ready"]
+            or document_state["shellState"] != "applied"
+            or document_state["nativeSelection"] != "Atlantic Portugal"
+            or document_state["tokenValues"] != {"format": "weekly market brief", "region": "Atlantic Portugal", "focus": "rail-accessible coastal towns", "audience": "remote design teams"}
+            or document_state["selectedTokens"] != 1
+            or document_state["appliedTokens"] != 1
+            or document_state["pressedOptions"] != 1
+            or not document_state["optionsDisabled"]
+            or not document_state["applyDisabled"]
+            or document_state["undoDisabled"]
+            or document_state["diffBefore"] != "Southern Europe"
+            or document_state["diffAfter"] != "Atlantic Portugal"
+            or document_state["scrollWidth"] > document_state["clientWidth"] + 1
+            or document_state["scrollHeight"] > document_state["clientHeight"] + 1
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a trusted native text selection, field-specific replacement, explicit retained Apply result and full-stage no-overflow prompt revision workflow without automatic motion: assertion={assertion!r}; interaction={interaction!r}; document={document_state!r}")
     elif demo["id"] == "poisson-constellation-bloom":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

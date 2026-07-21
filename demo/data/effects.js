@@ -888,14 +888,14 @@ const expansionEffects = [
     rationaleZh: '背景材质、遮罩、排版与立体标签在同一节拍原子换幕，视觉叙事完整且不同层的职责都能被辨认。'
   },
   {
-    id: 'prompt-select-replace-loop', category: 'vector', name: 'Type-select-replace prompt loop', nameZh: '输入—选中—替换提示词循环', order: 19,
+    id: 'prompt-select-replace-loop', category: 'vector', name: 'Semantic prompt revision workspace', nameZh: '语义提示词修订工作台', order: 19,
     company: 'Granola', homepage: 'https://www.granola.ai/', observedAs: 'Type-select-replace prompt loop',
-    difference: 'The loop explicitly types, selects a semantic range, and overwrites it with a new phrase, preserving editor selection and caret states instead of deleting a typewriter string.',
-    behavior: { trigger: 'animation frame or editor action', response: 'A prompt is typed, semantically selected, and replaced in place', timing: 'phased edit loop', layer: 'Editor text surface' },
+    difference: 'A real DOM Range selects one meaningful prompt field, offers field-specific alternatives, previews the before/after diff, and retains the replacement only after explicit approval.',
+    behavior: { trigger: 'trusted text selection, replacement choice, and explicit Apply', response: 'The selected semantic span is staged, compared, and replaced while native selection and revision history remain available', timing: 'finite feedback after each human decision only', layer: 'Full-stage prompt revision workspace' },
     implementationName: 'Motion', projectId: 'motiondivision-motion', projectUrl: 'https://github.com/motiondivision/motion', referenceUrl: 'https://motion.dev/docs',
     snippet: "import { animate } from 'motion';\nconst selection = animate('.selection', { scaleX: [0, 1] });\nselection.finished.then(() => replacePromptText());",
-    scores: { creativity: 19, artDirection: 18, motion: 20, clarity: 15, inspiration: 15, evidence: 10 },
-    rationaleZh: '输入、真实选择态、覆盖替换和光标落位构成完整编辑语义，区别于普通打字机，短循环也能读懂行为。'
+    scores: { creativity: 20, artDirection: 20, motion: 20, clarity: 15, inspiration: 15, evidence: 10 },
+    rationaleZh: '真人先用原生 DOM Range 选中一个语义字段，再选择字段专属替代项并显式 Apply；before/after、保留结果、Undo/Reset 与无输入静止共同把脚本化循环变成可信的 Prompt 修订流程。'
   },
   {
     id: 'traveling-dot-headline-rewriter', category: 'vector', name: 'Human-approved headline revision marker', nameZh: '人工确认的标题修订标记', order: 20,

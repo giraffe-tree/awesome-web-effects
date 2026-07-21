@@ -1,2 +1,289 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p5.js — Velocity-spaced Image Trail</title><link rel="stylesheet" href="./shared.css"><style>
-:root{--preview-background:#e9e4d9;color-scheme:light}#trail-host{position:absolute;inset:0;cursor:crosshair}#trail-host canvas{width:100%!important;height:100%!important}.trail-copy{position:absolute;z-index:3;left:13px;top:46px;color:#20251f;pointer-events:none}.trail-copy small{font:800 6px/1 ui-monospace;letter-spacing:.12em}.trail-copy h1{width:94px;margin:9px 0 0;font:950 18px/.82 system-ui;letter-spacing:-.06em}.trail-meter{position:absolute;z-index:3;right:12px;bottom:11px;color:#3641379c;font:700 6px/1 ui-monospace}.library-badge{color:#202820;background:#f8f2e5d9;border-color:#20282020}.scene-caption{display:none}</style></head><body><main class="preview-stage" data-preview-mechanism="p5-image-trail"><div id="trail-host" tabindex="0" aria-label="Move quickly or use arrow keys to spread the image trail"></div><section class="trail-copy"><small>VELOCITY / TRAIL</small><h1>IMAGES FOLLOW THE GESTURE.</h1></section><span class="trail-meter" id="trail-meter">SPACING 18</span><span class="library-badge">p5.js · image trail</span></main><script type="module" src="./src/velocity-spaced-image-trail-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>p5.js — Velocity-spaced Image Trail</title>
+  <link rel="stylesheet" href="./shared.css">
+  <style>
+    :root {
+      --preview-background: #d9d6cb;
+      color-scheme: light;
+      font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+    }
+
+    button { font: inherit; }
+
+    .preview-stage {
+      background: #d9d6cb;
+      color: #161914;
+    }
+
+    #trail-host {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      cursor: crosshair;
+      touch-action: none;
+      outline: none;
+    }
+
+    #trail-host:focus-visible::after {
+      content: "";
+      position: absolute;
+      inset: 5px;
+      border: 1px solid #ff5a36;
+      border-radius: 2px;
+      pointer-events: none;
+    }
+
+    #trail-host canvas {
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    .editorial-copy {
+      position: absolute;
+      z-index: 4;
+      top: 11px;
+      left: 12px;
+      width: min(29vw, 190px);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin: 0;
+      font: 800 clamp(5px, 1vw, 8px)/1 ui-monospace, SFMono-Regular, monospace;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 13px;
+      height: 2px;
+      background: #ff5a36;
+    }
+
+    .editorial-copy h1 {
+      margin: clamp(13px, 3.1vh, 25px) 0 7px;
+      font-size: clamp(18px, 5.25vw, 43px);
+      font-weight: 880;
+      line-height: .86;
+      letter-spacing: -.072em;
+      text-wrap: balance;
+    }
+
+    .editorial-copy p {
+      width: min(100%, 154px);
+      margin: 0;
+      color: #53594e;
+      font: 620 clamp(6px, 1.18vw, 9px)/1.36 ui-monospace, SFMono-Regular, monospace;
+    }
+
+    .metrics {
+      position: absolute;
+      z-index: 5;
+      top: 11px;
+      right: 11px;
+      display: grid;
+      grid-template-columns: repeat(3, auto);
+      gap: 1px;
+      pointer-events: none;
+      filter: drop-shadow(0 2px 8px rgba(10, 16, 13, .12));
+    }
+
+    .metric {
+      min-width: 52px;
+      padding: 7px 8px 6px;
+      background: rgba(16, 20, 17, .86);
+      color: #f1efe6;
+      backdrop-filter: blur(9px);
+    }
+
+    .metric:first-child { border-radius: 2px 0 0 2px; }
+    .metric:last-child { border-radius: 0 2px 2px 0; }
+
+    .metric small,
+    .metric strong {
+      display: block;
+      white-space: nowrap;
+    }
+
+    .metric small {
+      margin-bottom: 4px;
+      color: #a6aca2;
+      font: 700 5px/1 ui-monospace, SFMono-Regular, monospace;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .metric strong {
+      font: 800 clamp(7px, 1.4vw, 11px)/1 ui-monospace, SFMono-Regular, monospace;
+    }
+
+    .frame-controls {
+      position: absolute;
+      z-index: 7;
+      left: 11px;
+      bottom: 10px;
+      display: flex;
+      align-items: flex-end;
+      gap: 4px;
+    }
+
+    .frame-selectors {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 3px;
+    }
+
+    .frame-button {
+      position: relative;
+      width: clamp(23px, 5vw, 38px);
+      aspect-ratio: 3 / 2;
+      overflow: hidden;
+      padding: 0;
+      border: 1px solid rgba(242, 239, 228, .8);
+      border-radius: 2px;
+      background-position: center;
+      background-size: cover;
+      box-shadow: 0 3px 12px rgba(11, 16, 13, .12);
+      cursor: pointer;
+    }
+
+    .frame-button::after {
+      content: attr(data-index);
+      position: absolute;
+      right: 2px;
+      bottom: 2px;
+      padding: 1px 2px;
+      border-radius: 1px;
+      background: rgba(10, 13, 11, .78);
+      color: #fff;
+      font: 800 5px/1 ui-monospace, SFMono-Regular, monospace;
+    }
+
+    .frame-button[aria-pressed="true"] {
+      outline: 2px solid #ff5a36;
+      outline-offset: 1px;
+    }
+
+    .frame-button:focus-visible,
+    .reset-button:focus-visible {
+      outline: 2px solid #ff5a36;
+      outline-offset: 2px;
+    }
+
+    .frame-button:nth-child(1) { background-image: url('./assets/aesthetic-wave-01/velocity-spaced-image-trail/tidal-plate.jpg'); }
+    .frame-button:nth-child(2) { background-image: url('./assets/aesthetic-wave-01/velocity-spaced-image-trail/dune-marker.jpg'); }
+    .frame-button:nth-child(3) { background-image: url('./assets/aesthetic-wave-01/velocity-spaced-image-trail/signal-cloth.jpg'); }
+    .frame-button:nth-child(4) { background-image: url('./assets/aesthetic-wave-01/velocity-spaced-image-trail/fog-pavilion.jpg'); }
+
+    .reset-button {
+      min-height: 23px;
+      padding: 0 8px;
+      border: 1px solid rgba(22, 25, 20, .25);
+      border-radius: 2px;
+      background: rgba(239, 236, 226, .9);
+      color: #171a15;
+      font: 800 6px/1 ui-monospace, SFMono-Regular, monospace;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+    }
+
+    .interaction-note {
+      position: absolute;
+      z-index: 5;
+      right: 11px;
+      bottom: 11px;
+      max-width: 184px;
+      margin: 0;
+      padding: 6px 8px;
+      border-left: 2px solid #ff5a36;
+      background: rgba(239, 236, 226, .9);
+      color: #282e27;
+      font: 700 6px/1.35 ui-monospace, SFMono-Regular, monospace;
+      letter-spacing: .04em;
+      pointer-events: none;
+      backdrop-filter: blur(8px);
+    }
+
+    .library-badge,
+    .scene-caption { display: none; }
+
+    .runtime-ledger {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    @media (max-width: 360px) {
+      .editorial-copy { width: 34vw; }
+      .editorial-copy p { max-width: 104px; }
+      .metric { min-width: 42px; padding: 6px; }
+      .interaction-note { max-width: 130px; }
+    }
+
+    @media (max-width: 190px), (max-height: 100px) {
+      .editorial-copy { top: 6px; left: 7px; width: 42vw; }
+      .editorial-copy h1 { margin-top: 8px; font-size: 15px; }
+      .editorial-copy p,
+      .metric:nth-child(1),
+      .interaction-note,
+      .reset-button { display: none; }
+      .metrics { top: 6px; right: 6px; }
+      .metric { min-width: 32px; padding: 4px; }
+      .metric small { margin-bottom: 2px; font-size: 4px; }
+      .metric strong { font-size: 6px; }
+      .frame-controls { left: 6px; bottom: 5px; gap: 2px; }
+      .frame-selectors { gap: 2px; }
+      .frame-button { width: 16px; border-width: 1px; }
+      .frame-button::after { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="preview-stage" id="trail-stage" data-preview-mechanism="p5-velocity-spaced-editorial-image-trail">
+    <div id="trail-host" tabindex="0" role="application" aria-label="Coastal frame review. Press and drag to lay out image samples; movement speed controls their spacing. Use arrow keys as an alternative. Press R to reset."></div>
+
+    <header class="editorial-copy">
+      <p class="eyebrow">Field edit · 04 frames</p>
+      <h1>Move to reveal the cut.</h1>
+      <p>Slow scans keep references close. Fast gestures open space for visual differences.</p>
+    </header>
+
+    <aside class="metrics" aria-live="polite" aria-label="Trail measurements">
+      <div class="metric"><small>Speed</small><strong id="speed-output">000 px/s</strong></div>
+      <div class="metric"><small>Spawn gap</small><strong id="gap-output">18 px</strong></div>
+      <div class="metric"><small>Kept</small><strong id="kept-output">00 / 10</strong></div>
+    </aside>
+
+    <nav class="frame-controls" aria-label="Choose the first frame in the review sequence">
+      <div class="frame-selectors">
+        <button class="frame-button" type="button" data-frame="0" data-index="01" aria-label="Start with tidal plate frame" aria-pressed="true"></button>
+        <button class="frame-button" type="button" data-frame="1" data-index="02" aria-label="Start with dune marker frame" aria-pressed="false"></button>
+        <button class="frame-button" type="button" data-frame="2" data-index="03" aria-label="Start with signal cloth frame" aria-pressed="false"></button>
+        <button class="frame-button" type="button" data-frame="3" data-index="04" aria-label="Start with fog pavilion frame" aria-pressed="false"></button>
+      </div>
+      <button class="reset-button" id="reset-control" type="button">Reset · R</button>
+    </nav>
+
+    <p class="interaction-note" id="interaction-note">PRESS + TRACE · arrows also work</p>
+    <output class="runtime-ledger" id="runtime-ledger" aria-label="Interaction ledger"></output>
+  </main>
+  <script type="module" src="./src/velocity-spaced-image-trail-demo.js"></script>
+</body>
+</html>

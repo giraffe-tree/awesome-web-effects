@@ -2024,41 +2024,41 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "velocity-spaced-image-trail",
-    "name": "Velocity-spaced image trail",
-    "nameZh": "速度间隔图像尾迹",
+    "name": "Field Edit visual-memory trace",
+    "nameZh": "Field Edit 视觉记忆轨迹",
     "category": "pointer",
     "sourceUrl": "https://github.com/DavidHDev/react-bits/blob/main/public/r/ImageTrail-TS-TW.json",
-    "difference": "指针累计距离超过阈值才生成整张媒体卡，并根据速度决定间距；不是光标粒子或动态图块 rail。",
+    "difference": "真人按压拖拽的真实位移与事件时间共同决定采样速度：慢扫形成密集参考，快扫拉开图卡间距；不是自动路径、光标粒子或固定间距 rail。",
     "behavior": {
-      "trigger": "pointer travel distance",
-      "response": "Spawn photographic cards at velocity-aware spatial intervals and fade them",
-      "timing": "distance-threshold media trail",
-      "layer": "pointer overlay"
+      "trigger": "trusted captured mouse/touch/pen drag, keyboard trace, frame selection, or explicit reset",
+      "response": "Accumulate real travel distance, map measured px/s to a responsive spawn gap, and interpolate decoded photographic cards onto the owned path",
+      "timing": "human-paced direct sampling with a static first frame and no automatic path, playback, fallback, synthetic input, or preview-clock mutation",
+      "layer": "full-stage p5 editorial image-review canvas"
     },
     "implementation": {
       "projectId": "processing-p5-js",
       "projectUrl": "https://github.com/processing/p5.js",
       "library": "p5@2.3.0",
       "renderer": "canvas2d",
-      "snippet": "if (distance(pointer, previousSpawn) > velocitySpacing) cards.push(makeTrailCard(pointer, phase));",
+      "snippet": "sampleMotion(previous, next, event.timeStamp) measures dx/dt, maps speed to a spawn gap, then interpolates decoded frames at each crossed distance threshold.",
       "referenceUrl": "https://github.com/DavidHDev/react-bits/blob/main/public/r/ImageTrail-TS-TW.json"
     },
     "scores": {
-      "creativity": 19,
-      "artDirection": 19,
+      "creativity": 20,
+      "artDirection": 20,
       "motion": 19,
       "clarity": 15,
       "inspiration": 15,
-      "evidence": 9,
-      "total": 96
+      "evidence": 10,
+      "total": 99
     },
-    "rationaleZh": "完整媒体卡的空间尾迹形成强烈编辑式视觉。",
+    "rationaleZh": "四张统一的海岸勘察影像把速度间距变成可读的视觉记忆采样；实时 px/s、gap 与每卡间距标注让机制无需说明也能被验证。",
     "batch": "B",
-    "demo": "指针在黑色画布上画弧线，六张原创花朵照片沿轨迹翻转消散。",
-    "capture": "先慢移不触发→快速弧线生成→停住观察依次淡出。",
+    "demo": "在 Field Edit 海岸现场选定起始镜头，按压拖过全幅画面；慢速保留密集参照，快速手势留下更大的视觉间隔，方向键提供等价轨迹输入。",
+    "capture": "从零输入静止态开始，真人选择起始镜头，完成一段慢拖与一段快拖并 Reset；再用方向键和第二次捕获拖拽生成最终十帧记忆轨迹，断言速度区间、间距差、素材 decode/checksum 与严格可信输入。",
     "risk": {
       "level": "high",
-      "detail": "源码约 39KB 且许可未明；图片资产与随机序列必须固定。"
+      "detail": "参考源码许可未明；本地实现必须保留真实速度测量、固定且可追溯的原创图片资产、严格可信输入和无自动路径证据。"
     },
     "observedImplementation": {
       "projectId": "davidhdev-react-bits",

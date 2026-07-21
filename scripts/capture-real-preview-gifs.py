@@ -1527,6 +1527,58 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.wheel(0, -38)
             elif index == 35:
                 page.locator('#reset-control').click()
+        elif demo["id"] == "velocity-spaced-image-trail":
+            if index == 1:
+                page.locator('.frame-button[data-frame="1"]').click()
+            elif index == 2:
+                page.mouse.move(126, 142)
+                page.mouse.down()
+            elif index == 3:
+                page.wait_for_timeout(120)
+                page.mouse.move(143, 134, steps=2)
+            elif index == 4:
+                page.wait_for_timeout(120)
+                page.mouse.move(161, 125, steps=2)
+            elif index == 5:
+                page.wait_for_timeout(120)
+                page.mouse.move(180, 115, steps=2)
+            elif index == 6:
+                page.mouse.move(248, 92, steps=3)
+            elif index == 7:
+                page.mouse.move(302, 72, steps=3)
+            elif index == 8:
+                page.mouse.up()
+            elif index == 10:
+                page.locator('#reset-control').click()
+            elif index == 12:
+                page.locator('.frame-button[data-frame="3"]').click()
+            elif index == 14:
+                page.locator('#trail-host').focus()
+                page.keyboard.press("Shift+ArrowRight")
+            elif index == 15:
+                page.keyboard.press("ArrowDown")
+            elif index == 16:
+                page.keyboard.press("Shift+ArrowLeft")
+            elif index == 17:
+                page.keyboard.press("ArrowUp")
+            elif index == 20:
+                page.mouse.move(124, 64)
+                page.mouse.down()
+            elif index == 21:
+                page.mouse.move(170, 82, steps=4)
+            elif index == 22:
+                page.mouse.move(224, 108, steps=4)
+            elif index == 23:
+                page.mouse.move(286, 138, steps=4)
+            elif index == 24:
+                page.mouse.up()
+            elif index == 27:
+                page.locator('#trail-host').focus()
+                page.keyboard.press("Shift+ArrowRight")
+            elif index == 28:
+                page.keyboard.press("Shift+ArrowDown")
+            elif index == 29:
+                page.keyboard.press("ArrowLeft")
         elif demo["id"] == "bending-webgl-gallery-ribbon":
             if index == 2:
                 page.mouse.wheel(0, 160)
@@ -3289,6 +3341,61 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["lastInputTrusted"] is not True
         ):
             raise RuntimeError(f"{demo['id']} did not capture trusted slow/fast signed wheel velocity, two opposed captured drags, keyboard impulses, repeated reversal, inertia, and exact reset on the real Motion rail: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "velocity-spaced-image-trail":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        sample_gaps = [sample["spawnGap"] for sample in interaction["speedSamples"]]
+        sample_speeds = [sample["speed"] for sample in interaction["speedSamples"]]
+        spawn_sources = {record["source"] for record in interaction["spawnRecords"]}
+        if (
+            not assertion
+            or interaction["task"] != "human-paced-visual-memory-and-frame-inspection"
+            or interaction["mechanism"] != "distance-accumulation-with-speed-mapped-spawn-gap"
+            or interaction["acceptedInputs"] != ["mouse", "touch", "pen", "keyboard", "control"]
+            or not interaction["userInputRequired"]
+            or not interaction["strictTrustedInputGuard"]
+            or interaction["automaticPath"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticFallback"]
+            or interaction["previewClockDriven"]
+            or interaction["previewClockMutation"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["initialTrailItems"] != 0
+            or not interaction["initialStillVerified"]
+            or interaction["inputCount"] < 30
+            or interaction["inputCount"] != interaction["trustedInputCount"]
+            or interaction["rejectedUntrustedCount"] != 0
+            or interaction["pointerInputCount"] < 20
+            or interaction["keyboardInputCount"] < 7
+            or interaction["controlInputCount"] < 3
+            or interaction["pointerCaptureCount"] < 2
+            or interaction["pointerReleaseCount"] < 2
+            or interaction["pointerMoveCount"] < 18
+            or interaction["keyboardMoveCount"] < 7
+            or interaction["selectionCount"] < 2
+            or interaction["resetCount"] < 1
+            or interaction["speedSampleCount"] < 20
+            or interaction["spawnCount"] < 12
+            or interaction["trailItemCount"] < 4
+            or interaction["trailItemCount"] > 10
+            or not sample_gaps
+            or max(sample_gaps) - min(sample_gaps) < 12
+            or max(sample_speeds) < 700
+            or min(sample_speeds) > 350
+            or spawn_sources != {"pointer", "keyboard"}
+            or interaction["assetDecodeCount"] != 4
+            or interaction["assetDecodeFailureCount"] != 0
+            or len(interaction["assetChecksums"]) != 4
+            or not interaction["assetChecksumsUnique"]
+            or interaction["sampledPixelCount"] != 24576
+            or interaction["selectedAssetIndex"] != 3
+            or interaction["pointerCaptured"]
+            or interaction["activePointerId"] is not None
+            or interaction["activePointerType"] != "none"
+            or interaction["lastInputKind"] != "keyboard"
+            or interaction["lastInputTrusted"] is not True
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture trusted slow/fast captured traces, keyboard sampling, reset, four unique decoded ImageGen frames, and a nonempty final visual-memory path: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "bending-webgl-gallery-ribbon":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

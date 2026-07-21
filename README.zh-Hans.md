@@ -143,7 +143,7 @@
 | [悬停激活图像跑马菜单](https://giraffe-tree.github.io/awesome-web-effects/#hover-activated-image-marquee-menu) | [Motion](https://github.com/motiondivision/motion) | **95/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#hover-activated-image-marquee-menu) |
 | [拖拽甩出卡片堆](https://giraffe-tree.github.io/awesome-web-effects/#drag-thrown-card-stack) | [Motion](https://github.com/motiondivision/motion) | **94/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#drag-thrown-card-stack) |
 | [融球液滴光标](https://giraffe-tree.github.io/awesome-web-effects/#metaball-blob-cursor) | [Motion](https://github.com/motiondivision/motion) | **95/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#metaball-blob-cursor) |
-| [速度间隔图像尾迹](https://giraffe-tree.github.io/awesome-web-effects/#velocity-spaced-image-trail) | [p5.js](https://github.com/processing/p5.js) | **96/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#velocity-spaced-image-trail) |
+| [Field Edit 视觉记忆轨迹](https://giraffe-tree.github.io/awesome-web-effects/#velocity-spaced-image-trail) | [p5.js](https://github.com/processing/p5.js) | **99/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#velocity-spaced-image-trail) |
 | [黏性像素光标尾流](https://giraffe-tree.github.io/awesome-web-effects/#gooey-pixel-cursor-wake) | [p5.js](https://github.com/processing/p5.js) | **94/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#gooey-pixel-cursor-wake) |
 | [吸附目标准星光标](https://giraffe-tree.github.io/awesome-web-effects/#snapping-target-reticle-cursor) | [Motion](https://github.com/motiondivision/motion) | **94/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#snapping-target-reticle-cursor) |
 | [指针响应单元格网格](https://giraffe-tree.github.io/awesome-web-effects/#pointer-reactive-cell-grid) | [p5.js](https://github.com/processing/p5.js) | **91/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#pointer-reactive-cell-grid) |
@@ -282,7 +282,7 @@
 - 150 个已核验预览：2 个官方素材、148 个可运行本地 Demo 录制；缺失数为 0。
 - 人工评审覆盖创意、艺术完成度、动效编排、效果辨识、创作迁移和证据质量。
 - 准入要求 80/100，并同时通过核心维度最低分；流行度不能覆盖质量门槛。
-- 已核验 GIF 总计 24.21 MiB；每个预览为 320×180、最长三秒且小于 1 MiB。
+- 已核验 GIF 总计 24.29 MiB；每个预览为 320×180、最长三秒且小于 1 MiB。
 - Stars 是 2026-07-20 快照；“推荐实现”与“在哪家 AI 官网观察到”始终是两种关系。
 
 继续阅读 [396 个候选的准入审计](research/demo-admission-audit-2026-07-20.md)、[100 家 AI 公司主页特效调研](research/ai-native-homepages-100.md)与[预览来源清单](demo/gifs/provenance.json)。

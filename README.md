@@ -143,7 +143,7 @@ Tilt, depth, custom cursors, magnetic motion, and image distortion.
 | [Hover-activated image marquee menu](https://giraffe-tree.github.io/awesome-web-effects/#hover-activated-image-marquee-menu) | [Motion](https://github.com/motiondivision/motion) | **95/100** | — | 32,819 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#hover-activated-image-marquee-menu) |
 | [Drag-thrown card stack](https://giraffe-tree.github.io/awesome-web-effects/#drag-thrown-card-stack) | [Motion](https://github.com/motiondivision/motion) | **94/100** | — | 32,819 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#drag-thrown-card-stack) |
 | [Metaball blob cursor](https://giraffe-tree.github.io/awesome-web-effects/#metaball-blob-cursor) | [Motion](https://github.com/motiondivision/motion) | **95/100** | — | 32,819 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#metaball-blob-cursor) |
-| [Velocity-spaced image trail](https://giraffe-tree.github.io/awesome-web-effects/#velocity-spaced-image-trail) | [p5.js](https://github.com/processing/p5.js) | **96/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#velocity-spaced-image-trail) |
+| [Field Edit visual-memory trace](https://giraffe-tree.github.io/awesome-web-effects/#velocity-spaced-image-trail) | [p5.js](https://github.com/processing/p5.js) | **99/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#velocity-spaced-image-trail) |
 | [Gooey pixel cursor wake](https://giraffe-tree.github.io/awesome-web-effects/#gooey-pixel-cursor-wake) | [p5.js](https://github.com/processing/p5.js) | **94/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#gooey-pixel-cursor-wake) |
 | [Snapping target-reticle cursor](https://giraffe-tree.github.io/awesome-web-effects/#snapping-target-reticle-cursor) | [Motion](https://github.com/motiondivision/motion) | **94/100** | — | 32,819 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#snapping-target-reticle-cursor) |
 | [Pointer-reactive cell grid](https://giraffe-tree.github.io/awesome-web-effects/#pointer-reactive-cell-grid) | [p5.js](https://github.com/processing/p5.js) | **91/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#pointer-reactive-cell-grid) |
@@ -282,7 +282,7 @@ Scene graphs, creative coding, physics, drawing tools, and 2D renderers.
 - 150 verified previews: 2 official captures and 148 captures from runnable local demos; 0 missing.
 - Human review scores creativity, art direction, motion craft, legibility, creative transfer and evidence quality.
 - Admission requires 80/100 plus core-dimension minimums. Popularity never overrides the gate.
-- The verified GIF set is 24.21 MiB; every preview is 320×180, at most three seconds and below 1 MiB.
+- The verified GIF set is 24.29 MiB; every preview is 320×180, at most three seconds and below 1 MiB.
 - Stars are a 2026-07-20 snapshot. Recommendation sources and observed AI homepages remain separate relationships.
 
 Read the [current 396-candidate admission audit](research/demo-admission-audit-2026-07-20.md), the [100-company homepage research](research/ai-native-homepages-100.md), and the [preview provenance manifest](demo/gifs/provenance.json).

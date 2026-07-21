@@ -2380,6 +2380,28 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("ArrowUp")
             elif index == 27:
                 page.locator('[data-action="hold"]').click()
+        elif demo["id"] == "typography-particle-disassembly-field":
+            if index == 3:
+                page.mouse.move(240, 75)
+            elif index == 5:
+                page.mouse.move(64, 104)
+                page.mouse.down()
+            elif index == 6:
+                page.mouse.move(96, 104, steps=2)
+            elif index == 7:
+                page.mouse.move(128, 104, steps=2)
+            elif index == 8:
+                page.mouse.move(160, 104, steps=2)
+            elif index == 9:
+                page.mouse.move(192, 104, steps=2)
+            elif index == 10:
+                page.mouse.move(220, 104, steps=2)
+            elif index == 11:
+                page.mouse.up()
+            elif index == 15:
+                page.locator('[data-release-action="balance"]').click()
+            elif index == 21:
+                page.locator('[data-release-action="approve"]').click()
         elif demo["id"] == "poisson-constellation-bloom":
             if index == 2:
                 page.mouse.move(170, 92)
@@ -7335,6 +7357,116 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["ready"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture trusted four-ink title tension proofing, exact source-pixel spring evidence, and a retained human-held result without automatic behavior: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "typography-particle-disassembly-field":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        coverage = page.evaluate("""() => {
+          const stage = document.querySelector('#release-stage');
+          const canvas = document.querySelector('#particle-surface canvas');
+          const stageRect = stage.getBoundingClientRect();
+          const canvasRect = canvas.getBoundingClientRect();
+          return {
+            stageWidth: stageRect.width,
+            stageHeight: stageRect.height,
+            canvasWidth: canvasRect.width,
+            canvasHeight: canvasRect.height,
+            bodyScrollWidth: document.body.scrollWidth,
+            bodyScrollHeight: document.body.scrollHeight,
+          };
+        }""")
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-music-release-title-to-environment-particle-compositor"
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["renderer"] != "canvas2d"
+            or interaction["mechanism"] != "glyph-mask-pixels-interpolate-to-same-origin-raster-edge-targets-colors-and-release-judgment"
+            or interaction["acceptedInputs"] != ["mouse-hover", "captured-mouse-drag", "captured-touch-drag", "captured-pen-drag", "keyboard", "range-control", "visible-buttons"]
+            or not interaction["userInputRequired"]
+            or not interaction["strictTrustedInputGuard"]
+            or not interaction["initialStillVerified"]
+            or interaction["automaticPath"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticFallback"]
+            or interaction["rehearsalMode"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["previewClockDriven"]
+            or interaction["previewClockMutation"]
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["previewRenderMutationCount"] != 0
+            or interaction["nonInputMutationCount"] != 0
+            or interaction["inputCount"] < 14
+            or interaction["trustedInputCount"] != interaction["inputCount"]
+            or interaction["rejectedUntrustedCount"] != 0
+            or interaction["hoverInputCount"] < 2
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerMoveCount"] < 10
+            or interaction["pointerReleaseCount"] != 1
+            or interaction["pointerCancelCount"] != 0
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerCaptureReleaseCount"] != 1
+            or interaction["pointerCaptured"]
+            or interaction["keyboardInputCount"] != 0
+            or interaction["rangeInputCount"] != 0
+            or interaction["buttonActivationCount"] != 2
+            or interaction["balanceActivationCount"] != 1
+            or interaction["approveActivationCount"] != 1
+            or interaction["resetActivationCount"] != 0
+            or interaction["approvalBlockedCount"] != 0
+            or interaction["progressMutationCount"] < 5
+            or interaction["probeMutationCount"] < 5
+            or interaction["approvedMutationCount"] != 1
+            or abs(interaction["progress"] - interaction["recommendedProgress"]) > .001
+            or interaction["publishScore"] != interaction["recommendedScore"]
+            or not interaction["approved"]
+            or interaction["lastInputKind"] != "button"
+            or interaction["lastInputSource"] != "button-approve"
+            or interaction["lastInputTrusted"] is not True
+            or interaction["assetFetchCount"] != 1
+            or interaction["assetFetchStatus"] != 200
+            or not interaction["assetMimeType"].startswith("image/jpeg")
+            or interaction["assetByteLength"] != 184646
+            or interaction["assetSha256"] != "222c86cc8eac6ed3b369dc4e14053f3c0f40d495eeb3da2672b6a74ad8ed7141"
+            or not interaction["assetChecksumVerified"]
+            or interaction["assetDecodeCount"] != 1
+            or not interaction["assetDecoded"]
+            or interaction["assetNaturalWidth"] != 960
+            or interaction["assetNaturalHeight"] != 640
+            or interaction["sampledPixelCount"] != 9600
+            or interaction["sampledByteLength"] != 38400
+            or interaction["sampledPixelChecksum"] <= 0
+            or interaction["sampledLuminanceRange"] <= 100
+            or interaction["sampledEdgeMean"] <= .015
+            or interaction["sampledEdgeMaximum"] <= .2
+            or interaction["sampledChromaMean"] <= .08
+            or interaction["glyphParticleCount"] < 1800
+            or interaction["targetCandidateCount"] < 3500
+            or interaction["targetAssignmentCount"] != interaction["glyphParticleCount"]
+            or interaction["uniqueTargetCount"] < 1400
+            or interaction["particleTargetChecksum"] <= 0
+            or interaction["targetQualityScore"] < .58
+            or interaction["recommendedProgress"] <= .2
+            or interaction["recommendedProgress"] >= .82
+            or interaction["recommendedScore"] < 70
+            or not interaction["p5ImageLoaded"]
+            or interaction["p5ImageWidth"] != 960
+            or interaction["p5ImageHeight"] != 640
+            or interaction["p5ImagePixelLength"] != 2457600
+            or not interaction["p5CanvasCreated"]
+            or interaction["p5ImageDrawCount"] < 1
+            or interaction["particleDrawCount"] < interaction["glyphParticleCount"]
+            or interaction["p5DrawCount"] < 10
+            or interaction["renderedSampleCount"] < 1000
+            or interaction["renderedPixelChecksum"] <= 0
+            or interaction["renderedLuminanceRange"] <= 100
+            or coverage["stageWidth"] < 319
+            or coverage["stageHeight"] < 179
+            or coverage["canvasWidth"] < 319
+            or coverage["canvasHeight"] < 179
+            or coverage["bodyScrollWidth"] > 320
+            or coverage["bodyScrollHeight"] > 180
+            or not interaction["ready"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture trusted LOW TIDE glyph-to-image particle composition, exact source evidence, full-stage p5 rendering, and a retained human approval without automatic behavior: assertion={assertion!r}; interaction={interaction!r}; coverage={coverage!r}")
     elif demo["id"] == "poisson-constellation-bloom":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

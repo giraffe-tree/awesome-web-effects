@@ -79,12 +79,12 @@ export const effectExpansion150BatchB = [
     scores: score(20, 20, 20, 15, 15, 10), rationaleZh: '原创 ImageGen 960×640 圆形工作室俯视图被真实 fetch、SHA-256 校验、浏览器解码并采样为 96×64；十二个径向扇区各贡献 12 个像素样本，直接生成开放、有限和维护时段。真人 hover、捕获 mouse/touch/pen drag、键盘与 Previous/Next/Hold 可往返检查并确认，暂停的 Motion 控制器只响应可信输入；全舞台适配 720、320 和 144 宽度，无自动循环、排练、fallback、合成输入或预览时钟变异。'
   },
   {
-    id: 'typography-particle-disassembly-field', order: 133, name: 'Typography particle disassembly field', nameZh: '字体粒子解体场', category: 'canvas', sourceUrl: 'https://github.com/timdream/wordcloud2.js',
-    difference: '从真实文字像素采样粒子，按固定向量场解体并可逆重组，不是随机散点背景。',
-    behavior: { trigger: 'pointer progress or animation frame', response: 'Sampled glyph pixels leave their exact letter positions and enter a swirl field', timing: 'continuous reversible disassembly', layer: 'canvas typography' },
-    prompt: '在离屏 Canvas 渲染词语并采样 alpha 像素，以固定种子位移场实现可逆的字形解体。',
-    implementation: p5Implementation("new p5(p => { const points = sampleGlyphMask(); p.draw = () => drawDisassembly(p, points, progress); });", 'https://github.com/timdream/wordcloud2.js'),
-    scores: score(19, 18, 19, 15, 15, 10), rationaleZh: '粒子来源能精确回到字形，解体前后语义连续且视觉变化显著。'
+    id: 'typography-particle-disassembly-field', order: 133, name: 'Low Tide release particle compositor', nameZh: 'LOW TIDE 发行粒子合成器', category: 'canvas', sourceUrl: 'https://github.com/timdream/wordcloud2.js',
+    difference: '不再让字形按时间自动碎成随机背景；2,060 个真实字形粒子由用户拖入同源发行环境图的像素边缘，目标颜色、推荐混合比例、评分和批准门槛都来自最终提交图片。',
+    behavior: { trigger: 'trusted hover, captured mouse/touch/pen drag, keyboard, native range, or visible Balance/Approve/Reset control', response: 'Continuously place the LOW TIDE title between readable glyphs and image-derived environmental particles, inspect the source, balance the mix, and approve a retained release state', timing: 'human-paced direct composition that redraws only after input and remains still between decisions', layer: 'full-stage p5 image compositor with glyph-mask particles, probe, evidence card, range, and release controls' },
+    prompt: '制作一个全舞台音乐发行标题合成器：同源加载并精确校验一张 ImageGen 潮汐环境图，把 LOW TIDE 的离屏字形像素映射到真实图片边缘及 RGB，真实像素计算推荐混合比例和批准分数；真人通过 hover、捕获拖拽、键盘、range 与 Balance/Approve/Reset 决定最终状态，首帧与操作后都保持静止。',
+    implementation: p5Implementation("glyphMaskParticles.map(p => lerp(p.glyph, imageEdgeTargets[p.index], humanMix));", 'https://github.com/timdream/wordcloud2.js'),
+    scores: score(20, 20, 20, 15, 15, 10), rationaleZh: '原创 ImageGen 潮汐环境图经过同源 fetch、精确源 SHA、浏览器与 p5 双解码，并读取 120×80 / 9,600 像素；亮度、边缘和色度真实决定 1,645 个独立落点、粒子颜色、推荐 39% 混合和发行评分。可信 hover、捕获拖动、键盘、range 与可见控制拥有连续进度和批准状态，p5 noLoop 且没有自动路径。'
   },
   {
     id: 'liquid-lens-card-refraction', order: 134, name: 'Pressing surface liquid-lens inspection', nameZh: '唱片压片液态镜片检查', category: 'pointer', sourceUrl: 'https://github.com/w3c/fxtf-drafts',

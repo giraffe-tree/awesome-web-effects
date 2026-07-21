@@ -1,8 +1,466 @@
-<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Typography Particle Disassembly Field</title><style>:root{--preview-background:#040a12}canvas{width:100%;height:100%}.copy{position:absolute;left:14px;top:48px;color:#effcff;width:100px}.copy small{font:800 6px monospace;letter-spacing:.14em;color:#62e9d2}.copy h1{margin:8px 0;font:950 20px/.84 system-ui;letter-spacing:-.06em}.state{position:absolute;right:12px;bottom:12px;color:#7ffbe6;font:800 6px monospace}.scene-caption{display:none}</style>  <script type="module" crossorigin src="./assets/typography-particle-disassembly-field-Dk4lDxZ3.js"></script>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>p5.js — Human-operated Release Title Particle Editor</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root {
+      --preview-background: #05111c;
+      --paper: #eef4ee;
+      --muted: rgba(225, 237, 235, .6);
+      --cyan: #9edfe1;
+      --amber: #efa55d;
+      --line: rgba(226, 239, 237, .23);
+      color-scheme: dark;
+    }
+
+    button,
+    input { font: inherit; }
+
+    button { -webkit-tap-highlight-color: transparent; }
+
+    .release-stage {
+      position: absolute;
+      inset: 0;
+      container-type: size;
+      overflow: hidden;
+      background: #05111c;
+      color: var(--paper);
+      isolation: isolate;
+      outline: none;
+      touch-action: none;
+      user-select: none;
+    }
+
+    .release-stage:focus-visible::after {
+      position: absolute;
+      z-index: 20;
+      inset: 3px;
+      border: 1px solid var(--cyan);
+      border-radius: clamp(7px, 1.7cqw, 14px);
+      pointer-events: none;
+      content: "";
+    }
+
+    .particle-surface,
+    .particle-surface canvas,
+    .environment-grade,
+    .environment-grain {
+      position: absolute;
+      inset: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .particle-surface {
+      z-index: 1;
+      cursor: ew-resize;
+      outline: none;
+      touch-action: none;
+    }
+
+    .particle-surface canvas,
+    .environment-grade,
+    .environment-grain { pointer-events: none; }
+
+    .environment-grade {
+      z-index: 2;
+      background:
+        linear-gradient(90deg, rgba(2, 10, 18, .58) 0%, rgba(2, 10, 18, .22) 39%, rgba(2, 10, 18, .03) 77%),
+        linear-gradient(180deg, rgba(1, 8, 15, .3), transparent 26%, transparent 69%, rgba(1, 8, 15, .66));
+    }
+
+    .environment-grain {
+      z-index: 3;
+      opacity: .055;
+      mix-blend-mode: soft-light;
+      background-image: radial-gradient(rgba(239, 250, 248, .75) .43px, transparent .65px);
+      background-size: 3px 3px;
+    }
+
+    .release-bar {
+      position: absolute;
+      z-index: 8;
+      top: clamp(7px, 3.2cqh, 14px);
+      left: clamp(9px, 2.5cqw, 18px);
+      right: clamp(9px, 2.5cqw, 18px);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+      pointer-events: none;
+    }
+
+    .release-id {
+      display: flex;
+      align-items: center;
+      gap: clamp(6px, 1.4cqw, 10px);
+      min-width: 0;
+    }
+
+    .release-mark {
+      display: grid;
+      width: clamp(19px, 4cqw, 29px);
+      aspect-ratio: 1;
+      place-items: center;
+      flex: 0 0 auto;
+      border: 1px solid rgba(158, 223, 225, .48);
+      border-radius: 50%;
+      background: rgba(3, 14, 24, .76);
+      color: var(--cyan);
+      font: 950 clamp(4px, .88cqw, 6px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      backdrop-filter: blur(8px);
+    }
+
+    .release-copy strong,
+    .release-copy span,
+    .publish-state,
+    .title-annotation,
+    .decision-card,
+    .probe-card,
+    .mix-control,
+    .release-actions button,
+    .keymap {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+
+    .release-copy strong,
+    .release-copy span {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .release-copy strong {
+      font-size: clamp(4px, 1cqw, 7px);
+      font-weight: 900;
+    }
+
+    .release-copy span {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: clamp(3px, .7cqw, 5px);
+      font-weight: 750;
+    }
+
+    .publish-state {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: clamp(4px, 1cqw, 7px) clamp(6px, 1.4cqw, 10px);
+      border: 1px solid rgba(158, 223, 225, .38);
+      border-radius: 999px;
+      background: rgba(3, 14, 24, .74);
+      color: var(--cyan);
+      font-size: clamp(3.5px, .76cqw, 5.5px);
+      font-weight: 900;
+      white-space: nowrap;
+      backdrop-filter: blur(8px);
+    }
+
+    .publish-state::before {
+      width: 5px;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: currentColor;
+      box-shadow: 0 0 8px currentColor;
+      content: "";
+    }
+
+    .title-annotation {
+      position: absolute;
+      z-index: 7;
+      top: 23%;
+      left: clamp(9px, 2.5cqw, 18px);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--cyan);
+      font-size: clamp(3.5px, .75cqw, 5.5px);
+      font-weight: 900;
+      pointer-events: none;
+    }
+
+    .title-annotation::before {
+      width: clamp(9px, 2.1cqw, 16px);
+      height: 1px;
+      background: currentColor;
+      content: "";
+    }
+
+    .decision-card {
+      position: absolute;
+      z-index: 8;
+      right: clamp(9px, 2.5cqw, 18px);
+      bottom: clamp(33px, 19cqh, 76px);
+      width: clamp(70px, 15cqw, 110px);
+      padding: clamp(6px, 1.4cqw, 10px);
+      border: 1px solid var(--line);
+      border-radius: clamp(4px, .8cqw, 6px);
+      background: rgba(3, 14, 24, .72);
+      pointer-events: none;
+      backdrop-filter: blur(8px);
+    }
+
+    .decision-card span,
+    .decision-card strong,
+    .decision-card small { display: block; }
+
+    .decision-card span {
+      color: var(--muted);
+      font-size: clamp(3px, .62cqw, 4.5px);
+      font-weight: 800;
+    }
+
+    .decision-card strong {
+      margin-top: clamp(4px, 1.3cqh, 7px);
+      color: var(--paper);
+      font-size: clamp(13px, 3.2cqw, 23px);
+      font-weight: 950;
+      letter-spacing: -.04em;
+    }
+
+    .decision-card small {
+      margin-top: clamp(3px, 1cqh, 5px);
+      color: var(--cyan);
+      font-size: clamp(3.2px, .7cqw, 5px);
+      font-weight: 900;
+      line-height: 1.35;
+    }
+
+    .decision-card small[data-tone="warn"] { color: var(--amber); }
+
+    .decision-meta {
+      display: grid;
+      margin-top: clamp(5px, 1.5cqh, 8px);
+      grid-template-columns: 1fr 1fr;
+      gap: 4px;
+      color: var(--muted);
+      font-size: clamp(2.8px, .58cqw, 4.2px);
+      font-weight: 800;
+    }
+
+    .probe-card {
+      position: absolute;
+      z-index: 8;
+      top: 18%;
+      right: clamp(9px, 2.5cqw, 18px);
+      min-width: clamp(61px, 13cqw, 95px);
+      padding: clamp(5px, 1.2cqw, 8px);
+      border: 1px solid var(--line);
+      border-radius: clamp(3px, .7cqw, 5px);
+      background: rgba(3, 14, 24, .68);
+      pointer-events: none;
+      backdrop-filter: blur(7px);
+    }
+
+    .probe-card span,
+    .probe-card strong { display: block; }
+
+    .probe-card span {
+      color: var(--muted);
+      font-size: clamp(3px, .62cqw, 4.5px);
+      font-weight: 800;
+    }
+
+    .probe-card strong {
+      margin-top: clamp(3px, .9cqh, 5px);
+      color: var(--amber);
+      font-size: clamp(4.5px, 1cqw, 7px);
+      font-weight: 950;
+    }
+
+    .control-dock {
+      position: absolute;
+      z-index: 10;
+      right: clamp(8px, 2.5cqw, 18px);
+      bottom: clamp(7px, 3.2cqh, 14px);
+      left: clamp(8px, 2.5cqw, 18px);
+      display: grid;
+      grid-template-columns: minmax(78px, 1fr) auto auto;
+      align-items: end;
+      gap: clamp(4px, 1cqw, 8px);
+      pointer-events: none;
+    }
+
+    .mix-control {
+      display: grid;
+      min-width: 0;
+      gap: 4px;
+      padding: clamp(4px, .9cqw, 6px) clamp(6px, 1.3cqw, 9px);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(3, 14, 24, .8);
+      pointer-events: auto;
+      backdrop-filter: blur(8px);
+    }
+
+    .mix-control label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      color: var(--muted);
+      font-size: clamp(3px, .61cqw, 4.5px);
+      font-weight: 850;
+    }
+
+    .mix-control output { color: var(--paper); }
+
+    .mix-control input {
+      width: 100%;
+      min-width: 60px;
+      height: 3px;
+      margin: 0;
+      accent-color: var(--cyan);
+      cursor: ew-resize;
+    }
+
+    .release-actions {
+      display: flex;
+      gap: 3px;
+      padding: 3px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(3, 14, 24, .82);
+      pointer-events: auto;
+      backdrop-filter: blur(8px);
+    }
+
+    .release-actions button {
+      min-width: clamp(29px, 5.8cqw, 45px);
+      height: clamp(19px, 4.7cqh, 26px);
+      padding: 0 clamp(5px, 1.2cqw, 8px);
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--paper);
+      cursor: pointer;
+      font-size: clamp(3px, .65cqw, 4.8px);
+      font-weight: 900;
+    }
+
+    .release-actions button[data-release-action="balance"] {
+      background: var(--cyan);
+      color: #06222a;
+    }
+
+    .release-actions button:hover { background: rgba(255, 255, 255, .12); }
+    .release-actions button[data-release-action="balance"]:hover { background: #c4fbfc; }
+
+    .release-actions button:focus-visible,
+    .mix-control input:focus-visible {
+      outline: 1px solid #fff;
+      outline-offset: 1px;
+    }
+
+    .keymap {
+      align-self: center;
+      color: rgba(225, 237, 235, .5);
+      font-size: clamp(3px, .58cqw, 4.2px);
+      font-weight: 800;
+      line-height: 1.35;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .runtime-ledger {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    @container (max-width: 250px) {
+      .release-copy span,
+      .decision-meta,
+      .keymap { display: none; }
+
+      .title-annotation { top: 20%; }
+      .decision-card { right: 7px; bottom: 31px; width: 58px; padding: 5px; }
+      .probe-card { top: 19%; right: 7px; }
+      .control-dock { grid-template-columns: minmax(52px, 1fr) auto; }
+      .release-actions button { min-width: 24px; padding: 0 4px; }
+      .release-actions button[data-release-action="approve"] { display: none; }
+    }
+
+    @container (max-width: 170px) {
+      .release-copy,
+      .publish-state,
+      .title-annotation,
+      .decision-card,
+      .probe-card,
+      .mix-control,
+      .keymap { display: none; }
+
+      .release-mark { width: 17px; }
+
+      .control-dock {
+        right: 5px;
+        bottom: 5px;
+        left: auto;
+        display: block;
+      }
+
+      .release-actions { padding: 2px; }
+      .release-actions button { min-width: 22px; height: 16px; font-size: 3px; }
+    }
+  </style>
+  <script type="module" crossorigin src="./assets/typography-particle-disassembly-field-BkFXtj5M.js"></script>
   <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
-  <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
   <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
   <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
-  <link rel="modulepreload" crossorigin href="./assets/expansion-b-utils-CD_J0IHW.js">
   <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage"><canvas tabindex="0" aria-label="Word disperses into particles and reforms"></canvas><section class="copy"><small>GLYPH MATTER</small><h1>TYPE BECOMES WEATHER.</h1></section><span class="state">ASSEMBLE ↔ DISPERSE</span><span class="library-badge">Canvas · glyph particles</span></main></body></html>
+</head>
+<body>
+  <main class="preview-stage release-stage" id="release-stage" data-preview-mechanism="p5-glyph-mask-to-raster-edge-particle-field" tabindex="0" aria-label="Music release title particle editor. Hover to inspect source pixels, drag horizontally to disassemble the title, and use arrow keys to adjust the mix.">
+    <div class="particle-surface" id="particle-surface" aria-hidden="true"></div>
+    <div class="environment-grade"></div>
+    <div class="environment-grain"></div>
+
+    <header class="release-bar">
+      <div class="release-id">
+        <span class="release-mark">03</span>
+        <span class="release-copy"><strong>Low Tide / Release compositor</strong><span>Environmental title field · chapter master</span></span>
+      </div>
+      <span class="publish-state" id="publish-state">Draft unapproved</span>
+    </header>
+
+    <span class="title-annotation">Title matter / drag to edit</span>
+
+    <aside class="probe-card" aria-live="polite">
+      <span>Environment probe</span><strong id="probe-tone">—</strong>
+      <span>Target density</span><strong id="probe-density">—</strong>
+    </aside>
+
+    <section class="decision-card" aria-live="polite">
+      <span>Release score</span><strong id="release-score">—</strong>
+      <small id="release-conclusion">Reading environment</small>
+      <div class="decision-meta"><span id="readability-readout">Read —</span><span id="integration-readout">Fit —</span></div>
+    </section>
+
+    <footer class="control-dock">
+      <div class="mix-control">
+        <label for="disassembly-mix"><span>Title → environment</span><output id="mix-readout" for="disassembly-mix">8%</output></label>
+        <input id="disassembly-mix" type="range" min="0" max="100" step="1" value="8" aria-label="Title particle disassembly percentage">
+      </div>
+      <div class="release-actions" aria-label="Release title actions">
+        <button type="button" data-release-action="balance">Balance</button>
+        <button type="button" data-release-action="approve" aria-pressed="false">Approve</button>
+        <button type="button" data-release-action="reset">Reset</button>
+      </div>
+      <span class="keymap">Drag mix · arrows step<br>B balance · A approve · R reset</span>
+    </footer>
+
+    <output class="runtime-ledger" id="runtime-ledger">Raster pending</output>
+  </main>
+</body>
+</html>

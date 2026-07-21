@@ -6,15 +6,459 @@
   <title>p5.js — Refractive Glass Transmission Sculpture</title>
   <link rel="stylesheet" href="./shared.css">
   <style>
-    :root{--preview-background:#090713}#glass-host{position:absolute;inset:0;cursor:ew-resize}#glass-host canvas{width:100%!important;height:100%!important}.glass-copy{position:absolute;z-index:4;left:14px;top:48px;color:#f5f0ff;pointer-events:none}.glass-copy small{font:800 6px/1 ui-monospace;letter-spacing:.16em;color:#76f4d4}.glass-copy h1{width:112px;margin:8px 0;font:950 18px/.85 system-ui;letter-spacing:-.06em}.glass-copy p{width:94px;margin:0;color:#c6bad9;font:600 6px/1.45 ui-monospace}.ior{position:absolute;z-index:4;right:12px;top:12px;color:#ffd6ed;font:900 7px/1 ui-monospace;letter-spacing:.12em}.library-badge{background:#090713b8}.scene-caption{color:#d5c8e0}</style>
+    :root {
+      --preview-background: #07090a;
+      --ink: #f2eee5;
+      --muted: #a7aca9;
+      --line: rgba(242, 238, 229, .2);
+      --acid: #c8ff64;
+      --cyan: #39d9ff;
+      --panel: rgba(8, 11, 12, .76);
+    }
+
+    * { box-sizing: border-box; }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: var(--preview-background);
+    }
+
+    button { font: inherit; }
+
+    .preview-stage {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      color: var(--ink);
+      background: #07090a;
+      isolation: isolate;
+    }
+
+    .preview-stage::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, rgba(5, 7, 8, .72), transparent 28%, transparent 72%, rgba(5, 7, 8, .55)),
+        linear-gradient(180deg, rgba(5, 7, 8, .48), transparent 24%, transparent 73%, rgba(5, 7, 8, .78));
+      mix-blend-mode: multiply;
+    }
+
+    #glass-host {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      overflow: hidden;
+      cursor: grab;
+      touch-action: none;
+      outline: 0;
+    }
+
+    #glass-host:active { cursor: grabbing; }
+
+    #glass-host:focus-visible {
+      box-shadow: inset 0 0 0 2px var(--acid);
+    }
+
+    #glass-host canvas {
+      position: absolute;
+      inset: 0;
+      display: block;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    .lab-header,
+    .title-block,
+    .readout-panel,
+    .environment-switch,
+    .lab-footer,
+    .inspection-flag {
+      position: absolute;
+      z-index: 4;
+    }
+
+    .lab-header {
+      top: 13px;
+      left: 15px;
+      right: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      pointer-events: none;
+      font: 750 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .17em;
+      text-transform: uppercase;
+    }
+
+    .lab-header__index { color: var(--ink); }
+
+    .lab-header__status {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: #d3d8d3;
+    }
+
+    .lab-header__status::before {
+      content: "";
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--acid);
+      box-shadow: 0 0 10px rgba(200, 255, 100, .9);
+    }
+
+    .title-block {
+      top: 55px;
+      left: 22px;
+      width: 154px;
+      pointer-events: none;
+    }
+
+    .title-block__eyebrow {
+      margin: 0 0 9px;
+      color: var(--acid);
+      font: 800 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .title-block h1 {
+      margin: 0;
+      max-width: 150px;
+      font: 650 32px/.82 Georgia, "Times New Roman", serif;
+      letter-spacing: -.065em;
+      text-wrap: balance;
+    }
+
+    .title-block h1 em {
+      display: block;
+      color: var(--cyan);
+      font-weight: 500;
+    }
+
+    .title-block__copy {
+      margin: 12px 0 0;
+      width: 128px;
+      color: #c0c5c1;
+      font: 650 5px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .075em;
+      text-transform: uppercase;
+    }
+
+    .readout-panel {
+      top: 54px;
+      right: 20px;
+      width: 130px;
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: 0 12px 45px rgba(0, 0, 0, .26);
+      backdrop-filter: blur(10px);
+      pointer-events: none;
+    }
+
+    .readout-panel__title {
+      margin: 0 0 8px;
+      color: #c8cdc9;
+      font: 700 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .readout-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 6px 0;
+      border-top: 1px solid rgba(242, 238, 229, .12);
+    }
+
+    .readout-row span {
+      color: #939a96;
+      font: 700 4.5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .readout-row strong {
+      max-width: 78px;
+      color: var(--ink);
+      text-align: right;
+      font: 750 7px/1.15 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .035em;
+    }
+
+    .environment-switch {
+      right: 20px;
+      top: 183px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      width: 130px;
+      padding: 3px;
+      gap: 3px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(7, 9, 10, .7);
+      backdrop-filter: blur(10px);
+    }
+
+    .environment-switch button,
+    .lab-footer button {
+      min-width: 0;
+      border: 0;
+      color: #d4d8d4;
+      background: transparent;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+    }
+
+    .environment-switch button {
+      padding: 6px 7px;
+      border-radius: 999px;
+      font: 750 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+
+    .environment-switch button[aria-pressed="true"] {
+      color: #11150f;
+      background: var(--acid);
+    }
+
+    .environment-switch button:focus-visible,
+    .lab-footer button:focus-visible {
+      outline: 1px solid var(--acid);
+      outline-offset: 2px;
+    }
+
+    .inspection-flag {
+      top: 47px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 6px 9px;
+      border: 1px solid var(--acid);
+      border-radius: 999px;
+      color: #0d120c;
+      background: var(--acid);
+      font: 800 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+
+    .inspection-flag[hidden] { display: none; }
+
+    .lab-footer {
+      left: 20px;
+      right: 20px;
+      bottom: 10px;
+      display: grid;
+      grid-template-columns: minmax(118px, .8fr) minmax(130px, 1fr) auto;
+      align-items: center;
+      min-height: 42px;
+      padding-top: 9px;
+      border-top: 1px solid rgba(242, 238, 229, .24);
+    }
+
+    .footer-meta {
+      min-width: 0;
+      pointer-events: none;
+    }
+
+    .footer-meta strong {
+      display: block;
+      color: var(--ink);
+      font: 750 7px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .footer-meta span {
+      display: block;
+      margin-top: 4px;
+      overflow: hidden;
+      color: #8f9691;
+      font: 650 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .09em;
+      text-overflow: ellipsis;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .footer-hint {
+      justify-self: center;
+      color: #a6aca8;
+      font: 650 4.5px/1.25 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .08em;
+      text-align: center;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+
+    .footer-controls {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+    }
+
+    .ior-control {
+      display: flex;
+      align-items: center;
+      height: 25px;
+      border: 1px solid rgba(242, 238, 229, .24);
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(7, 9, 10, .66);
+    }
+
+    .ior-control button {
+      width: 24px;
+      height: 23px;
+      font: 800 9px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+
+    .ior-control output {
+      min-width: 34px;
+      color: var(--ink);
+      text-align: center;
+      font: 750 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      pointer-events: none;
+    }
+
+    .lab-footer > .footer-controls > button {
+      height: 25px;
+      padding: 0 11px;
+      border: 1px solid rgba(242, 238, 229, .24);
+      border-radius: 999px;
+      font: 750 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+
+    #inspect-button {
+      color: #0c120c;
+      border-color: var(--acid);
+      background: var(--acid);
+    }
+
+    #inspect-button[aria-pressed="true"] {
+      color: #12120c;
+      border-color: #ffd46a;
+      background: #ffd46a;
+    }
+
+    .library-badge {
+      left: 12px;
+      top: 11px;
+      z-index: 5;
+      display: none;
+      background: rgba(7, 9, 10, .76);
+    }
+
+    @media (max-width: 430px) {
+      .lab-header { top: 8px; left: 10px; right: 10px; font-size: 4.5px; }
+      .title-block { top: 34px; left: 10px; width: 92px; }
+      .title-block__eyebrow { margin-bottom: 5px; font-size: 4px; }
+      .title-block h1 { max-width: 90px; font-size: 20px; }
+      .title-block__copy { display: none; }
+      .readout-panel { top: 34px; right: 8px; width: 88px; padding: 6px 7px; border-radius: 5px; }
+      .readout-panel__title { margin-bottom: 4px; font-size: 3.5px; }
+      .readout-row { padding: 3px 0; }
+      .readout-row span { font-size: 3.2px; }
+      .readout-row strong { max-width: 56px; font-size: 4.5px; }
+      .environment-switch { top: 99px; right: 8px; width: 88px; padding: 2px; gap: 2px; }
+      .environment-switch button { padding: 4px 3px; font-size: 3.5px; }
+      .inspection-flag { top: 25px; padding: 4px 6px; font-size: 3.5px; }
+      .lab-footer { left: 9px; right: 9px; bottom: 5px; grid-template-columns: 58px 1fr auto; min-height: 25px; padding-top: 5px; }
+      .footer-meta strong { font-size: 4.5px; }
+      .footer-meta span { margin-top: 2px; font-size: 3px; }
+      .footer-hint { font-size: 3px; }
+      .footer-controls { gap: 3px; }
+      .ior-control { height: 17px; }
+      .ior-control button { width: 16px; height: 15px; font-size: 6px; }
+      .ior-control output { min-width: 22px; font-size: 4px; }
+      .lab-footer > .footer-controls > button { height: 17px; padding: 0 6px; font-size: 3.5px; }
+    }
+
+    @media (max-width: 180px) {
+      .preview-stage::after { background: linear-gradient(180deg, rgba(5, 7, 8, .25), transparent 30%, rgba(5, 7, 8, .4)); }
+      .lab-header { top: 3px; left: 4px; right: 4px; font-size: 2.6px; }
+      .lab-header__status { display: none; }
+      .title-block { top: 14px; left: 4px; width: 38px; }
+      .title-block__eyebrow { display: none; }
+      .title-block h1 { max-width: 38px; font-size: 8px; letter-spacing: -.055em; }
+      .readout-panel { display: none; }
+      .environment-switch { top: auto; right: auto; left: 4px; bottom: 3px; width: 51px; padding: 1px; }
+      .environment-switch button { padding: 2.5px 2px; font-size: 2.4px; }
+      .inspection-flag { top: 13px; padding: 2px 3px; font-size: 2.2px; }
+      .lab-footer { left: auto; right: 3px; bottom: 3px; display: block; min-height: 0; padding: 0; border: 0; }
+      .footer-meta,
+      .footer-hint,
+      .ior-control,
+      #reset-button { display: none; }
+      .lab-footer > .footer-controls > button { height: 8px; padding: 0 4px; font-size: 2.5px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .001ms !important; animation-duration: .001ms !important; }
+    }
+  </style>
 </head>
 <body>
-  <main class="preview-stage" data-preview-mechanism="raymarched-refraction">
-    <div id="glass-host" tabindex="0" aria-label="Move the pointer or use arrow keys to rotate the refractive sculpture"></div>
-    <section class="glass-copy"><small>OPTICAL STUDY / 1.45</small><h1>LIGHT BENDS AROUND FORM.</h1><p>LIVE STRIPED ENVIRONMENT · CHROMATIC TRANSMISSION</p></section>
-    <span class="ior">IOR 1.45</span>
-    <span class="library-badge">p5.js · ray-marched glass</span>
-    <span class="scene-caption">refract(ray, normal, 1 / ior)</span>
+  <main id="glass-stage" class="preview-stage" data-preview-mechanism="p5-raymarched-texture-refraction-inspector">
+    <div id="glass-host" role="application" tabindex="0" aria-label="Glass material inspector. Drag to rotate. Use arrow keys to rotate, brackets to change refractive index, G to change environment, Enter to inspect, and R to reset."></div>
+
+    <header class="lab-header" aria-hidden="true">
+      <span class="lab-header__index">Material Lab · Optics 04</span>
+      <span id="archive-state" class="lab-header__status">Ready · input required</span>
+    </header>
+
+    <section class="title-block" aria-hidden="true">
+      <p class="title-block__eyebrow">Transmission sample</p>
+      <h1>Glass <em>under light.</em></h1>
+      <p class="title-block__copy">Rotate the sample against calibrated studio plates before approving its optical material.</p>
+    </section>
+
+    <aside class="readout-panel" aria-label="Current glass readings">
+      <p class="readout-panel__title">Live specimen readout</p>
+      <div class="readout-row"><span>Environment</span><strong id="environment-output">Cobalt / amber</strong></div>
+      <div class="readout-row"><span>Index</span><strong id="ior-output">1.45</strong></div>
+      <div class="readout-row"><span>Dispersion</span><strong id="dispersion-output">0.035</strong></div>
+      <div class="readout-row"><span>Rotation</span><strong id="rotation-output">−10° / 0°</strong></div>
+    </aside>
+
+    <nav class="environment-switch" aria-label="Inspection environment">
+      <button id="studio-button" type="button" aria-pressed="true">Studio</button>
+      <button id="grid-button" type="button" aria-pressed="false">Grid</button>
+    </nav>
+
+    <span id="inspection-flag" class="inspection-flag" hidden>Grid inspection active</span>
+
+    <footer class="lab-footer">
+      <div class="footer-meta" aria-hidden="true">
+        <strong id="motion-output">Sample at rest</strong>
+        <span id="source-output">Awaiting trusted input</span>
+      </div>
+      <span class="footer-hint" aria-hidden="true">Capture drag · arrows rotate · [ ] index · G environment</span>
+      <div class="footer-controls">
+        <span class="ior-control" aria-label="Refractive index controls">
+          <button id="ior-down-button" type="button" aria-label="Decrease refractive index">−</button>
+          <output id="ior-control-output" aria-live="polite">1.45</output>
+          <button id="ior-up-button" type="button" aria-label="Increase refractive index">+</button>
+        </span>
+        <button id="reset-button" type="button" disabled>Reset</button>
+        <button id="inspect-button" type="button" aria-pressed="false">Inspect grid</button>
+      </div>
+    </footer>
+
+    <span class="library-badge">p5.js · ray-marched texture refraction</span>
   </main>
   <script type="module" src="./src/refractive-glass-transmission-sculpture-demo.js"></script>
 </body>

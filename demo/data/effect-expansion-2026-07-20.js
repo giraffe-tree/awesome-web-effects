@@ -2306,41 +2306,41 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "refractive-glass-transmission-sculpture",
-    "name": "Refractive glass transmission sculpture",
-    "nameZh": "折射玻璃透射雕塑",
+    "name": "Glass under light optical material review",
+    "nameZh": "光下玻璃光学材质评审",
     "category": "webgl",
     "sourceUrl": "https://github.com/pmndrs/drei",
-    "difference": "物体以厚度、色散和畸变折射实时背景；现有虹彩 shader 平面不模拟透射光学。",
+    "difference": "真人旋转的 SDF 玻璃体以法线、IOR 与 RGB 色散对本地标定环境执行真实 `texture2D()` 和 GLSL `refract()` 采样；不是自动旋转的虹彩表面或装饰背景。",
     "behavior": {
-      "trigger": "pointer/time",
-      "response": "Rotate a transmissive sculpture and refract a live striped environment",
-      "timing": "continuous optical response",
-      "layer": "3D mesh material"
+      "trigger": "trusted captured mouse/touch/pen drag, keyboard rotation/IOR/environment/inspection, or explicit controls and reset",
+      "response": "Rotate a ray-marched glass specimen, switch between two decoded calibration bays, tune refractive index, and inspect straight-grid distortion through real chromatic transmission",
+      "timing": "human-owned direct optical response with a static first frame and no automatic cruise, playback, rehearsal, fallback, synthetic input, or preview-clock mutation",
+      "layer": "full-stage p5 WebGL optical material inspector"
     },
     "implementation": {
       "projectId": "processing-p5-js",
       "projectUrl": "https://github.com/processing/p5.js",
       "library": "p5@2.3.0",
       "renderer": "webgl",
-      "snippet": "vec3 transmitted = environment(refract(ray, normal, 1.0 / 1.45));",
+      "snippet": "RGB channels sample texture2D(u_environment, refractedOffset(rayDirection, normal, u_ior ± u_dispersion)) and mix with Fresnel on a ray-marched SDF surface.",
       "referenceUrl": "https://github.com/pmndrs/drei"
     },
     "scores": {
-      "creativity": 18,
+      "creativity": 19,
       "artDirection": 20,
-      "motion": 18,
+      "motion": 20,
       "clarity": 15,
       "inspiration": 15,
-      "evidence": 9,
-      "total": 95
+      "evidence": 10,
+      "total": 99
     },
-    "rationaleZh": "玻璃厚度和色散带来独立材质签名。",
+    "rationaleZh": "钴蓝/琥珀灯箱和青/红正交网格提供可判断的直线证据，实时环境、IOR、色散、旋转与检查状态把折射从诗意视觉变成可完成的材质审批任务。",
     "batch": "C",
-    "demo": "玻璃结体前后穿过程序化彩色条纹，拖动时折射方向改变。",
-    "capture": "自动转一圈→pointer drag 改视角→停在高色散峰值。",
+    "demo": "在 Glass under light 光学实验台中旋转一枚玻璃样品，切换 Studio/Grid 标定环境、调整 IOR，并用正交网格确认折射与色散是否可接受。",
+    "capture": "从零输入静止样品开始，完成两次相反捕获拖拽，切换 Studio/Grid、键盘旋转与 IOR 调节，触达最大 IOR 边界，执行 Inspect/Close 与 Reset，最后停在明确的 Grid inspection 结果；断言本地纹理解码、shader 编译/采样和严格可信输入。",
     "risk": {
       "level": "high",
-      "detail": "禁止依赖无许可 HDRI；低端 GPU 需清楚降级。"
+      "detail": "不得依赖无许可 HDRI 或自动旋转假证据；必须保留本地原创标定环境、WebGL shader 编译、真实纹理绑定、折射采样、边界与输入台账，低端 GPU 失败需显式报告。"
     },
     "observedImplementation": {
       "projectId": "pmndrs-drei",

@@ -1579,6 +1579,59 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("Shift+ArrowDown")
             elif index == 29:
                 page.keyboard.press("ArrowLeft")
+        elif demo["id"] == "refractive-glass-transmission-sculpture":
+            viewport_width = page.viewport_size["width"]
+            viewport_height = page.viewport_size["height"]
+            point = lambda x, y: (round(viewport_width * x), round(viewport_height * y))
+            if index == 1:
+                page.locator('#grid-button').click()
+            elif index == 3:
+                page.locator('#studio-button').click()
+            elif index == 5:
+                page.mouse.move(*point(.76, .67))
+                page.mouse.down()
+            elif index == 6:
+                page.mouse.move(*point(.61, .57), steps=4)
+            elif index == 7:
+                page.mouse.move(*point(.43, .46), steps=4)
+                page.mouse.up()
+            elif index == 9:
+                page.mouse.move(*point(.34, .54))
+                page.mouse.down()
+            elif index == 10:
+                page.mouse.move(*point(.54, .64), steps=4)
+            elif index == 11:
+                page.mouse.move(*point(.74, .72), steps=4)
+                page.mouse.up()
+            elif index == 13:
+                page.locator('#glass-host').focus()
+                page.keyboard.press("ArrowRight")
+            elif index == 14:
+                page.keyboard.press("ArrowUp")
+            elif index == 15:
+                page.keyboard.press("[")
+            elif index == 16:
+                page.keyboard.press("]")
+            elif index == 17:
+                page.keyboard.press("g")
+            elif index == 18:
+                page.keyboard.press("Enter")
+            elif index == 20:
+                page.locator('#grid-button').click()
+            elif index == 22:
+                for _ in range(13):
+                    page.locator('#ior-up-button').click()
+                page.locator('#glass-host').focus()
+                page.keyboard.press("]")
+            elif index == 24:
+                page.locator('#reset-button').click()
+            elif index == 26:
+                page.locator('#glass-host').focus()
+                page.keyboard.press("ArrowLeft")
+            elif index == 27:
+                page.keyboard.press("]")
+            elif index == 28:
+                page.locator('#inspect-button').click()
         elif demo["id"] == "draggable-dome-gallery":
             viewport_width = page.viewport_size["width"]
             viewport_height = page.viewport_size["height"]
@@ -3450,6 +3503,70 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["lastInputTrusted"] is not True
         ):
             raise RuntimeError(f"{demo['id']} did not capture trusted slow/fast captured traces, keyboard sampling, reset, four unique decoded ImageGen frames, and a nonempty final visual-memory path: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "refractive-glass-transmission-sculpture":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "glass-material-refraction-review"
+            or interaction["acceptedInputs"] != ["mouse", "touch", "pen", "keyboard", "control"]
+            or not interaction["userInputRequired"]
+            or interaction["automaticCruise"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["previewClockDriven"]
+            or interaction["previewClockMutationCount"] != 0
+            or interaction["syntheticInputDispatch"]
+            or not interaction["userOwnedOrientation"]
+            or not interaction["firstFrameStatic"]
+            or not interaction["initialStaticVerified"]
+            or not interaction["reducedMotionDiscreteControls"]
+            or interaction["inputCount"] < 47
+            or interaction["inputCount"] != interaction["trustedInputCount"]
+            or interaction["rejectedUntrustedCount"] != 0
+            or interaction["pointerInputCount"] < 20
+            or interaction["mouseInputCount"] < 20
+            or interaction["keyboardInputCount"] < 9
+            or interaction["controlInputCount"] < 18
+            or interaction["positiveInputCount"] < 12
+            or interaction["negativeInputCount"] < 4
+            or interaction["reversalCount"] < 2
+            or interaction["orientationMutationCount"] < 16
+            or interaction["iorMutationCount"] < 15
+            or interaction["environmentSwitchCount"] < 5
+            or interaction["inspectionCount"] < 4
+            or interaction["inspectionClearCount"] < 2
+            or interaction["resetCount"] < 1
+            or interaction["boundaryAttemptCount"] < 1
+            or interaction["maxBoundaryCount"] < 1
+            or interaction["pointerCaptureCount"] < 2
+            or interaction["pointerReleaseCount"] < 2
+            or interaction["dragUpdateCount"] < 16
+            or interaction["pointerCaptured"]
+            or interaction["activePointerId"] is not None
+            or interaction["activePointerType"] is not None
+            or interaction["assetCount"] != 2
+            or interaction["assetDecodedCount"] != 2
+            or not interaction["assetDimensionsValid"]
+            or len(interaction["assetChecksums"]) != 2
+            or not interaction["assetChecksumsUnique"]
+            or interaction["sampledPixelCount"] != 10368
+            or not interaction["textureImagesReady"]
+            or not interaction["p5Ready"]
+            or not interaction["webglReady"]
+            or interaction["webglVersion"] not in {"webgl1", "webgl2"}
+            or not interaction["shaderCompiled"]
+            or not interaction["transmissionShaderVerified"]
+            or interaction["shaderPasses"] != interaction["drawCount"]
+            or interaction["textureBindCount"] != interaction["drawCount"]
+            or interaction["environmentIndex"] != 1
+            or not interaction["inspectionActive"]
+            or interaction["resultState"] != "grid-inspection"
+            or interaction["ior"] != 1.47
+            or interaction["inputKind"] != "control"
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture two trusted opposed specimen drags, keyboard and control IOR/environment changes, max-IOR boundary, inspection/clear/reset, two unique decoded calibration textures, and the real p5 ray-marched GLSL transmission pass: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "draggable-dome-gallery":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

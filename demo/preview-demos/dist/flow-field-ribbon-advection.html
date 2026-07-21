@@ -1,7 +1,490 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p5.js — Flow Field Ribbon Advection</title><style>:root{--preview-background:#061b26}.a2-stage{background:linear-gradient(135deg,#051822,#092d38);color:#effcff}.p5-host{position:absolute;inset:0;cursor:crosshair;touch-action:none}.p5-host canvas{width:100%!important;height:100%!important}.copy{position:absolute;z-index:3;left:14px;top:48px;width:104px;pointer-events:none}.copy h1{margin:0;font:900 18px/.86 Georgia,serif;letter-spacing:-.05em}.copy p{margin:9px 0 0;color:#75d8e5;font:750 6px/1.4 ui-monospace;letter-spacing:.1em;text-transform:uppercase}.scene-caption{display:none}</style>  <script type="module" crossorigin src="./assets/flow-field-ribbon-advection-CQunlRKf.js"></script>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>p5.js — Human-operated Passage Current Routing</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root {
+      --preview-background: #03131d;
+      --paper: #edf5ee;
+      --muted: rgba(221, 236, 232, .63);
+      --cyan: #9ceee2;
+      --amber: #efb34f;
+      --line: rgba(221, 242, 238, .25);
+      color-scheme: dark;
+    }
+
+    button,
+    input { font: inherit; }
+
+    button { -webkit-tap-highlight-color: transparent; }
+
+    .route-stage {
+      position: absolute;
+      inset: 0;
+      container-type: size;
+      overflow: hidden;
+      background: #03131d;
+      color: var(--paper);
+      isolation: isolate;
+      outline: none;
+      touch-action: none;
+      user-select: none;
+    }
+
+    .route-stage:focus-visible::after {
+      position: absolute;
+      z-index: 20;
+      inset: 3px;
+      border: 1px solid var(--cyan);
+      border-radius: clamp(8px, 1.8cqw, 15px);
+      pointer-events: none;
+      content: "";
+    }
+
+    .route-surface,
+    .route-surface canvas,
+    .survey-grade,
+    .survey-grain {
+      position: absolute;
+      inset: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .route-surface {
+      z-index: 1;
+      cursor: crosshair;
+      outline: none;
+      touch-action: none;
+    }
+
+    .route-surface canvas,
+    .survey-grade,
+    .survey-grain { pointer-events: none; }
+
+    .survey-grade {
+      z-index: 2;
+      background:
+        linear-gradient(90deg, rgba(2, 13, 22, .76) 0%, rgba(2, 13, 22, .14) 32%, rgba(2, 13, 22, .04) 71%, rgba(2, 13, 22, .35) 100%),
+        linear-gradient(180deg, rgba(2, 13, 22, .44), transparent 30%, transparent 69%, rgba(2, 13, 22, .62));
+    }
+
+    .survey-grain {
+      z-index: 3;
+      opacity: .065;
+      mix-blend-mode: soft-light;
+      background-image: radial-gradient(rgba(241, 251, 248, .75) .42px, transparent .65px);
+      background-size: 3px 3px;
+    }
+
+    .topbar {
+      position: absolute;
+      z-index: 8;
+      top: clamp(7px, 3.4cqh, 14px);
+      left: clamp(9px, 2.5cqw, 18px);
+      right: clamp(9px, 2.5cqw, 18px);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+      pointer-events: none;
+    }
+
+    .identity {
+      display: flex;
+      align-items: center;
+      gap: clamp(6px, 1.4cqw, 10px);
+      min-width: 0;
+    }
+
+    .passage-mark {
+      display: grid;
+      width: clamp(19px, 4cqw, 29px);
+      aspect-ratio: 1;
+      place-items: center;
+      flex: 0 0 auto;
+      border: 1px solid rgba(156, 238, 226, .44);
+      border-radius: 50%;
+      background: rgba(2, 17, 27, .76);
+      color: var(--cyan);
+      font: 950 clamp(4px, .9cqw, 6px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      backdrop-filter: blur(8px);
+    }
+
+    .identity-copy strong,
+    .identity-copy span,
+    .route-state,
+    .eyebrow,
+    .instruction,
+    .metric span,
+    .metric strong,
+    .probe-card,
+    .draft-control,
+    .route-controls button,
+    .keymap {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+
+    .identity-copy strong,
+    .identity-copy span {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .identity-copy strong {
+      font-size: clamp(4px, 1cqw, 7px);
+      font-weight: 900;
+    }
+
+    .identity-copy span {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: clamp(3px, .7cqw, 5px);
+      font-weight: 750;
+    }
+
+    .route-state {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: clamp(4px, 1.1cqw, 7px) clamp(6px, 1.5cqw, 10px);
+      border: 1px solid rgba(156, 238, 226, .35);
+      border-radius: 999px;
+      background: rgba(2, 17, 27, .74);
+      color: var(--cyan);
+      font-size: clamp(3.5px, .78cqw, 5.5px);
+      font-weight: 900;
+      white-space: nowrap;
+      backdrop-filter: blur(9px);
+    }
+
+    .route-state::before {
+      width: 5px;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: currentColor;
+      box-shadow: 0 0 8px currentColor;
+      content: "";
+    }
+
+    .editorial-copy {
+      position: absolute;
+      z-index: 7;
+      top: 29%;
+      left: clamp(9px, 2.5cqw, 18px);
+      width: min(26cqw, 190px);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--amber);
+      font-size: clamp(3.5px, .76cqw, 5.5px);
+      font-weight: 900;
+    }
+
+    .eyebrow::before {
+      width: clamp(9px, 2.2cqw, 16px);
+      height: 1px;
+      background: currentColor;
+      content: "";
+    }
+
+    .editorial-copy h1 {
+      max-width: 185px;
+      margin: clamp(5px, 1.7cqh, 8px) 0 0;
+      font: 650 clamp(14px, 4cqw, 30px)/.87 Georgia, "Times New Roman", serif;
+      letter-spacing: -.058em;
+    }
+
+    .instruction {
+      max-width: 140px;
+      margin: clamp(5px, 1.8cqh, 9px) 0 0;
+      color: rgba(226, 240, 236, .68);
+      font-size: clamp(3.3px, .7cqw, 5px);
+      font-weight: 760;
+      line-height: 1.48;
+    }
+
+    .metrics {
+      position: absolute;
+      z-index: 7;
+      left: clamp(9px, 2.5cqw, 18px);
+      bottom: clamp(31px, 18cqh, 73px);
+      display: grid;
+      width: min(25cqw, 180px);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: clamp(3px, .8cqw, 6px);
+      pointer-events: none;
+    }
+
+    .metric {
+      min-width: 0;
+      padding: clamp(4px, 1cqw, 7px);
+      border: 1px solid var(--line);
+      border-radius: clamp(3px, .7cqw, 5px);
+      background: rgba(2, 17, 27, .68);
+      backdrop-filter: blur(7px);
+    }
+
+    .metric span,
+    .metric strong { display: block; }
+
+    .metric span {
+      overflow: hidden;
+      color: var(--muted);
+      font-size: clamp(3px, .62cqw, 4.5px);
+      font-weight: 800;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .metric strong {
+      margin-top: clamp(3px, 1cqh, 5px);
+      overflow: hidden;
+      color: var(--paper);
+      font-size: clamp(5px, 1.15cqw, 8px);
+      font-weight: 950;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .metric strong[data-tone="high"] { color: #ffbb6c; }
+    .metric strong[data-tone="low"] { color: var(--cyan); }
+
+    .probe-card {
+      position: absolute;
+      z-index: 8;
+      top: 43%;
+      right: clamp(9px, 2.5cqw, 18px);
+      min-width: clamp(60px, 13cqw, 94px);
+      padding: clamp(5px, 1.25cqw, 8px);
+      border: 1px solid var(--line);
+      border-radius: clamp(3px, .7cqw, 5px);
+      background: rgba(2, 17, 27, .72);
+      pointer-events: none;
+      backdrop-filter: blur(8px);
+    }
+
+    .probe-card span,
+    .probe-card strong { display: block; }
+
+    .probe-card span {
+      color: var(--muted);
+      font-size: clamp(3px, .64cqw, 4.5px);
+      font-weight: 800;
+    }
+
+    .probe-card strong {
+      margin-top: clamp(3px, 1cqh, 5px);
+      color: var(--cyan);
+      font-size: clamp(5px, 1.15cqw, 8px);
+      font-weight: 950;
+    }
+
+    .probe-card .probe-risk { color: var(--amber); }
+
+    .bottom-dock {
+      position: absolute;
+      z-index: 10;
+      right: clamp(8px, 2.5cqw, 18px);
+      bottom: clamp(7px, 3.4cqh, 14px);
+      left: clamp(8px, 2.5cqw, 18px);
+      display: grid;
+      grid-template-columns: minmax(80px, 1fr) auto auto;
+      align-items: end;
+      gap: clamp(4px, 1cqw, 8px);
+      pointer-events: none;
+    }
+
+    .draft-control {
+      display: grid;
+      min-width: 0;
+      gap: 4px;
+      padding: clamp(4px, .9cqw, 6px) clamp(6px, 1.3cqw, 9px);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(2, 17, 27, .79);
+      pointer-events: auto;
+      backdrop-filter: blur(8px);
+    }
+
+    .draft-control label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      color: var(--muted);
+      font-size: clamp(3px, .61cqw, 4.5px);
+      font-weight: 850;
+    }
+
+    .draft-control output { color: var(--paper); }
+
+    .draft-control input {
+      width: 100%;
+      min-width: 60px;
+      height: 3px;
+      margin: 0;
+      accent-color: var(--amber);
+      cursor: ew-resize;
+    }
+
+    .route-controls {
+      display: flex;
+      gap: 3px;
+      padding: 3px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(2, 17, 27, .82);
+      pointer-events: auto;
+      backdrop-filter: blur(8px);
+    }
+
+    .route-controls button {
+      min-width: clamp(27px, 5.4cqw, 42px);
+      height: clamp(19px, 4.7cqh, 26px);
+      padding: 0 clamp(5px, 1.2cqw, 8px);
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--paper);
+      cursor: pointer;
+      font-size: clamp(3px, .65cqw, 4.8px);
+      font-weight: 900;
+    }
+
+    .route-controls button[data-route-action="safe"] {
+      background: var(--cyan);
+      color: #06242c;
+    }
+
+    .route-controls button:hover { background: rgba(255, 255, 255, .12); }
+    .route-controls button[data-route-action="safe"]:hover { background: #c4fff5; }
+
+    .route-controls button:focus-visible,
+    .draft-control input:focus-visible {
+      outline: 1px solid #fff;
+      outline-offset: 1px;
+    }
+
+    .keymap {
+      align-self: center;
+      color: rgba(226, 240, 236, .54);
+      font-size: clamp(3px, .58cqw, 4.2px);
+      font-weight: 800;
+      line-height: 1.35;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .runtime-ledger {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    @container (max-width: 250px) {
+      .identity-copy span,
+      .instruction,
+      .keymap { display: none; }
+
+      .editorial-copy { top: 31%; width: 29%; }
+      .editorial-copy h1 { font-size: clamp(11px, 8.7cqw, 18px); }
+      .metrics { width: 29%; bottom: 28px; }
+      .probe-card { top: 39%; }
+      .bottom-dock { grid-template-columns: minmax(54px, 1fr) auto; }
+      .route-controls button { min-width: 24px; padding: 0 4px; }
+      .route-controls button[data-route-action="lock"] { display: none; }
+    }
+
+    @container (max-width: 170px) {
+      .identity-copy,
+      .route-state,
+      .editorial-copy,
+      .metrics,
+      .probe-card,
+      .draft-control,
+      .keymap { display: none; }
+
+      .passage-mark { width: 17px; }
+
+      .bottom-dock {
+        right: 5px;
+        bottom: 5px;
+        left: auto;
+        display: block;
+      }
+
+      .route-controls { padding: 2px; }
+      .route-controls button { min-width: 22px; height: 16px; font-size: 3px; }
+    }
+  </style>
+  <script type="module" crossorigin src="./assets/flow-field-ribbon-advection-DYkYTZZ5.js"></script>
   <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
   <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
   <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
-  <link rel="modulepreload" crossorigin href="./assets/expansion-a2-utils-DN2D_StR.js">
   <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage a2-stage"><div class="p5-host" data-p5-host tabindex="0" aria-label="Move the pointer to bend the advected flow ribbons"></div><section class="copy"><h1>CURRENT LEAVES A VISIBLE MEMORY.</h1><p>curl noise / ribbon advection</p></section><span class="library-badge">p5.js · flow-field ribbons</span></main></body></html>
+</head>
+<body>
+  <main class="preview-stage route-stage" id="route-stage" data-preview-mechanism="p5-raster-sampled-ocean-current-route-field" tabindex="0" aria-label="North Passage current routing desk. Hover to inspect current, drag to bend the route, use arrow keys to move the route gate.">
+    <div class="route-surface" id="route-surface" aria-hidden="true"></div>
+    <div class="survey-grade"></div>
+    <div class="survey-grain"></div>
+
+    <header class="topbar">
+      <div class="identity">
+        <span class="passage-mark">NP</span>
+        <span class="identity-copy"><strong>Nereid Passage / Route Desk</strong><span>Surface-current raster · survey 04</span></span>
+      </div>
+      <span class="route-state" id="route-state">Route editable</span>
+    </header>
+
+    <section class="editorial-copy">
+      <span class="eyebrow">Live current field</span>
+      <h1>Let the water choose the passage.</h1>
+      <p class="instruction">Hover to sound the flow. Drag the amber gate to reroute through the measured current.</p>
+    </section>
+
+    <section class="metrics" aria-live="polite">
+      <div class="metric"><span>Passage risk</span><strong id="risk-readout">—</strong></div>
+      <div class="metric"><span>Current assist</span><strong id="assist-readout">—</strong></div>
+      <div class="metric"><span>Distance</span><strong id="distance-readout">—</strong></div>
+      <div class="metric"><span>Field sample</span><strong id="sample-readout">—</strong></div>
+    </section>
+
+    <aside class="probe-card" id="probe-card" aria-live="polite">
+      <span>Local set / drift</span><strong id="probe-current">—</strong>
+      <span>Grounding risk</span><strong class="probe-risk" id="probe-risk">—</strong>
+    </aside>
+
+    <footer class="bottom-dock">
+      <div class="draft-control">
+        <label for="vessel-draft"><span>Vessel draft</span><output id="draft-readout" for="vessel-draft">4.2 m</output></label>
+        <input id="vessel-draft" type="range" min="2.4" max="7.2" step="0.2" value="4.2" aria-label="Vessel draft in metres">
+      </div>
+      <div class="route-controls" aria-label="Route actions">
+        <button type="button" data-route-action="safe" aria-label="Apply lowest-risk gate">Safe</button>
+        <button type="button" data-route-action="lock" aria-pressed="false">Lock</button>
+        <button type="button" data-route-action="reset">Reset</button>
+      </div>
+      <span class="keymap">Arrows move gate<br>S safest · L lock · R reset</span>
+    </footer>
+
+    <output class="runtime-ledger" id="runtime-ledger">Raster pending</output>
+  </main>
+</body>
+</html>

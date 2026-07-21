@@ -1576,6 +1576,24 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.move(226, 100, steps=4)
             elif index == 7:
                 page.mouse.click(226, 100)
+        elif demo["id"] == "cursor-projected-3d-surface-marker":
+            if index in {4, 7, 10, 13, 16}:
+                positions = page.evaluate("window.__SURFACE_INSPECTION_STATE__.targetScreenPositions")
+                target_a = next(position for position in positions if position["id"] == "A")
+                target_b = next(position for position in positions if position["id"] == "B")
+                box = page.locator('#surface-host').bounding_box()
+                if index == 4:
+                    x, y = target_a["x"] - 24, target_a["y"] + 4
+                elif index == 7:
+                    x, y = target_a["x"], target_a["y"]
+                elif index == 10:
+                    x, y = (target_a["x"] + target_b["x"]) / 2, (target_a["y"] + target_b["y"]) / 2
+                else:
+                    x, y = target_b["x"], target_b["y"]
+                page.mouse.move(box["x"] + x, box["y"] + y)
+                if index == 16:
+                    page.mouse.down()
+                    page.mouse.up()
         elif demo["id"] == "metaball-blob-cursor":
             if index == 3:
                 page.locator('#finish-cobalt').hover()
@@ -5707,6 +5725,56 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["canvas2dReady"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture a real proximity scan and finite retained H4 diagnostic: {interaction!r}")
+    elif demo["id"] == "cursor-projected-3d-surface-marker":
+        interaction = page.evaluate("window.__SURFACE_INSPECTION_STATE__")
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        if (
+            not assertion
+            or interaction["task"] != "human-locates-a-digital-twin-inspection-zone-and-retains-a-reviewable-normal-aligned-stamp"
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["assetStrategy"] != "code-native-deterministic-heightfield-is-the-functional-surface-input-no-raster-input-required"
+            or interaction["automaticPath"]
+            or interaction["automaticStamping"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticCycle"]
+            or interaction["automaticTimeline"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or interaction["previewClockMutationCount"] != 0
+            or interaction["phase"] not in ["stamped", "reviewing"]
+            or not interaction["engaged"]
+            or not interaction["resultHeld"]
+            or not interaction["resultValidated"]
+            or interaction["inputCount"] != interaction["trustedInputCount"]
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["pointerMoveCount"] < 4
+            or interaction["pointerPressCount"] != 1
+            or interaction["projectionSolveCount"] < interaction["pointerMoveCount"]
+            or interaction["projectionResidualPx"] >= 3
+            or abs(interaction["focusNormalLength"] - 1) >= .0015
+            or interaction["normalScreenError"] > .05
+            or interaction["acquiredTarget"] != "B"
+            or interaction["targetAcquireCount"] < 2
+            or interaction["targetCount"] != 3
+            or interaction["stampCount"] != 1
+            or interaction["stampCreateCount"] != 1
+            or interaction["stampPersistenceRenderCount"] < 1
+            or interaction["lastStampTarget"] != "B"
+            or abs(interaction["lastStampNormalLength"] - 1) >= .0015
+            or not interaction["lastStampSignature"].startswith("B:")
+            or interaction["surfaceVertexCount"] != 551
+            or interaction["surfaceCellCount"] != 504
+            or interaction["heightDataSignature"] != "56:5696:-1998:2044"
+            or interaction["geometryCoverageX"] < .995
+            or interaction["geometryCoverageY"] < .995
+            or not interaction["initialStillVerified"]
+            or len(interaction["initialPixelHash"]) != 8
+            or any(character not in "0123456789abcdef" for character in interaction["initialPixelHash"])
+            or interaction["initialPixelHash"] == "00000000"
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a real normal-aligned retained digital-twin inspection stamp: {interaction!r}")
     elif demo["id"] == "metaball-blob-cursor":
         interaction = page.evaluate("window.__METABALL_TARGET_STATE__")
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")

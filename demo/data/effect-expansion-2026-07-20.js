@@ -2494,16 +2494,16 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "cursor-projected-3d-surface-marker",
-    "name": "Cursor-projected 3D surface marker",
-    "nameZh": "光标投射三维表面标记",
+    "name": "Human-stamped digital-twin surface inspection",
+    "nameZh": "真人盖章的数字孪生曲面巡检",
     "category": "webgl",
     "sourceUrl": "https://github.com/mrdoob/three.js",
-    "difference": "Raycaster 把二维光标投到起伏网格并让标记沿面法线贴合；现有光标都停留在屏幕平面。",
+    "difference": "可信二维输入经 screen-ray 反投影到确定性 heightfield，标记由高度导数法线真实对齐；只有命中巡检目标后才能留下带 UV/normal 签名的稳定审阅印章。",
     "behavior": {
-      "trigger": "pointer move/click",
-      "response": "Raycast onto a mesh, align a marker to the face normal, and leave fading stamps",
-      "timing": "continuous surface tracking plus click imprint",
-      "layer": "Three.js mesh surface"
+      "trigger": "trusted pointer/touch/pen targeting and press, or keyboard target/navigation plus Enter/Space",
+      "response": "Project onto the heightfield, align to its derivative normal, acquire A/B/C, and retain a verified inspection stamp",
+      "timing": "direct human projection plus immediate retained stamp; no fading or automatic orbit",
+      "layer": "full-stage p5 digital-twin inspection surface and evidence readout"
     },
     "implementation": {
       "projectId": "processing-p5-js",
@@ -2514,18 +2514,18 @@ export const effectExpansion100Specs = [
       "referenceUrl": "https://github.com/mrdoob/three.js"
     },
     "scores": {
-      "creativity": 18,
-      "artDirection": 18,
-      "motion": 18,
+      "creativity": 20,
+      "artDirection": 20,
+      "motion": 20,
       "clarity": 15,
       "inspiration": 15,
       "evidence": 10,
-      "total": 94
+      "total": 100
     },
-    "rationaleZh": "二维输入与三维表面法线的关系清楚且无需外部资产。",
+    "rationaleZh": "28×18 确定性高度场、screen-ray 投影残差、单位法线误差和 B 点印章签名共同证明二维输入确实贴合三维曲面，结果稳定保留且无自动路径。",
     "batch": "C",
-    "demo": "波浪状纸面上准星贴着坡度移动，点击留下会褪色的印章。",
-    "capture": "pointer 横跨峰谷→三次 click→orbit 证明印章贴在表面。",
+    "demo": "一张数字孪生复合板巡检台，操作员在 A/B/C 检查区间投影准星并为 Ridge joint 留下可审阅印章。",
+    "capture": "真人从 A 过渡到 B，观察法线对齐与目标获取，在 B 点盖章并保留 Verified 结果。",
     "risk": {
       "level": "medium",
       "detail": "必须真实 raycast 和 face normal；屏幕坐标直接移动属于伪造。"

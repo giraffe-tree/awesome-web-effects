@@ -1,7 +1,216 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p5.js — Cursor Projected 3D Surface Marker</title><style>:root{--preview-background:#071018}#surface-host{position:absolute;inset:0;cursor:crosshair}#surface-host canvas{width:100%!important;height:100%!important}.surface-copy{position:absolute;z-index:5;left:13px;top:47px;color:#eff8ff;pointer-events:none}.surface-copy small{font:800 6px/1 ui-monospace;letter-spacing:.16em;color:#68d8ff}.surface-copy h1{width:102px;margin:8px 0 0;font:950 18px/.84 system-ui;letter-spacing:-.055em}.normal-readout{position:absolute;right:11px;top:11px;z-index:5;color:#68d8ff;font:800 6px/1.4 ui-monospace;text-align:right}.library-badge{background:#071018c9}</style>  <script type="module" crossorigin src="./assets/cursor-projected-3d-surface-marker-ByGDf8As.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
-  <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
-  <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
-  <link rel="modulepreload" crossorigin href="./assets/batch-c-utils-g_3IBZ2b.js">
-  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage" data-preview-mechanism="heightfield-raycast-normal"><div id="surface-host" tabindex="0" aria-label="Move over the wave surface and click to leave normal-aligned stamps"></div><section class="surface-copy"><small>SURFACE CAST / LIVE</small><h1>THE MARKER FOLLOWS THE SLOPE.</h1></section><output class="normal-readout" id="normal-readout">N 0.00 / 0.00 / 1.00</output><span class="library-badge">p5.js · heightfield raycast</span><span class="scene-caption">screen ray → surface uv → derivative normal</span></main></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>p5.js — Digital Twin Surface Inspection</title>
+    <style>
+      :root {
+        --preview-background: #07110f;
+        --ink: #e9f4ee;
+        --mint: #79f2bd;
+        --acid: #ddff57;
+        --amber: #ffb65a;
+      }
+
+      * { box-sizing: border-box; }
+
+      .inspection-stage {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        color: var(--ink);
+        background: #07110f;
+      }
+
+      .surface-host {
+        position: absolute;
+        inset: 0;
+        cursor: crosshair;
+        touch-action: none;
+        outline: none;
+      }
+
+      .surface-host canvas {
+        width: 100% !important;
+        height: 100% !important;
+      }
+
+      .surface-host:focus-visible::after {
+        content: "";
+        position: absolute;
+        inset: 4px;
+        border: 1px solid var(--acid);
+        border-radius: 5px;
+        pointer-events: none;
+      }
+
+      .twin-title {
+        position: absolute;
+        z-index: 5;
+        top: 39px;
+        left: 12px;
+        display: grid;
+        gap: 3px;
+        pointer-events: none;
+      }
+
+      .eyebrow,
+      .normal-readout,
+      .mission-state,
+      .mission-copy,
+      .target-key,
+      .stamp-count {
+        font-size: clamp(6px, 1.35vw, 10px);
+        font-weight: 850;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+      }
+
+      .eyebrow { color: rgba(233, 244, 238, .5); }
+      .twin-title strong {
+        font-size: clamp(13px, 3.2vw, 25px);
+        font-weight: 950;
+        line-height: .86;
+        letter-spacing: -.055em;
+      }
+
+      .telemetry {
+        position: absolute;
+        z-index: 5;
+        top: 10px;
+        right: 11px;
+        display: grid;
+        justify-items: end;
+        gap: 4px;
+        pointer-events: none;
+      }
+
+      .normal-readout {
+        color: var(--mint);
+        font-family: ui-monospace, monospace;
+        letter-spacing: .04em;
+      }
+
+      .stamp-count {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        color: rgba(233, 244, 238, .55);
+      }
+
+      .stamp-count::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--amber);
+        box-shadow: 0 0 0 3px rgba(255, 182, 90, .12);
+      }
+
+      .mission-deck {
+        position: absolute;
+        z-index: 6;
+        right: 10px;
+        bottom: 9px;
+        left: 10px;
+        display: grid;
+        grid-template-columns: auto minmax(90px, 1fr) auto;
+        align-items: center;
+        gap: 8px;
+        min-height: 30px;
+        padding: 6px 8px;
+        border: 1px solid rgba(121, 242, 189, .2);
+        border-radius: 5px;
+        background: rgba(7, 17, 15, .8);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, .24);
+        backdrop-filter: blur(10px);
+        pointer-events: none;
+      }
+
+      .mission-state {
+        color: var(--acid);
+        white-space: nowrap;
+      }
+
+      .mission-copy {
+        overflow: hidden;
+        color: rgba(233, 244, 238, .56);
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .target-keys {
+        display: flex;
+        gap: 4px;
+      }
+
+      .target-key {
+        display: grid;
+        place-items: center;
+        width: clamp(17px, 2.6vw, 23px);
+        aspect-ratio: 1;
+        border: 1px solid rgba(233, 244, 238, .22);
+        border-radius: 50%;
+        color: rgba(233, 244, 238, .58);
+        font-family: ui-monospace, monospace;
+      }
+
+      .inspection-stage[data-acquired-target="A"] .target-key[data-key="A"],
+      .inspection-stage[data-acquired-target="B"] .target-key[data-key="B"],
+      .inspection-stage[data-acquired-target="C"] .target-key[data-key="C"] {
+        border-color: var(--acid);
+        color: var(--acid);
+        background: rgba(221, 255, 87, .1);
+      }
+
+      .library-badge { background: rgba(7, 17, 15, .88); }
+      .scene-caption { display: none; }
+
+      @media (max-aspect-ratio: 4 / 5) {
+        .twin-title { top: 42px; }
+        .telemetry { top: 39px; }
+        .mission-deck {
+          grid-template-columns: auto auto;
+          grid-template-rows: auto auto;
+        }
+        .mission-copy { grid-column: 1 / -1; grid-row: 2; }
+        .target-keys { justify-self: end; }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/cursor-projected-3d-surface-marker-DprmUtV8.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+    <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
+    <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main class="preview-stage" data-preview-mechanism="trusted-screen-ray-heightfield-projection-and-normal-aligned-inspection-stamp">
+      <section class="inspection-stage" id="inspection-stage" data-phase="waiting" data-acquired-target="none">
+        <div class="surface-host" id="surface-host" tabindex="0" role="application" aria-label="Digital twin surface. Move the pointer over an inspection target and click to leave a normal-aligned stamp. Use arrow keys and Enter for keyboard inspection."></div>
+
+        <header class="twin-title">
+          <span class="eyebrow">North cut · twin 07</span>
+          <strong>Surface<br />inspection.</strong>
+        </header>
+
+        <section class="telemetry" aria-live="polite">
+          <output class="normal-readout" id="normal-readout">N — / — / —</output>
+          <output class="stamp-count" id="stamp-count">0 verified</output>
+        </section>
+
+        <footer class="mission-deck">
+          <output class="mission-state" id="mission-state">Awaiting operator</output>
+          <span class="mission-copy" id="mission-copy">Move onto A, B, or C · click to stamp</span>
+          <span class="target-keys" aria-hidden="true">
+            <span class="target-key" data-key="A">A</span>
+            <span class="target-key" data-key="B">B</span>
+            <span class="target-key" data-key="C">C</span>
+          </span>
+        </footer>
+      </section>
+      <span class="library-badge">p5.js · digital twin raycast</span>
+      <span class="scene-caption">screen ray → heightfield → derivative normal → retained stamp</span>
+    </main>
+  </body>
+</html>

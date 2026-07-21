@@ -2803,6 +2803,28 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.locator('[data-option="0"]').click()
             elif index == 18:
                 page.locator('#apply-revision').click()
+        elif demo["id"] == "self-inverting-fixed-navigation":
+            if index == 5:
+                page.mouse.move(150, 170)
+            elif index == 6:
+                page.mouse.down()
+            elif index == 7:
+                page.mouse.move(150, 140)
+            elif index == 8:
+                page.mouse.move(150, 105)
+            elif index == 9:
+                page.mouse.move(150, 70)
+            elif index == 10:
+                page.mouse.move(150, 35)
+            elif index == 11:
+                page.mouse.move(150, 5)
+            elif index == 12:
+                page.mouse.up()
+            elif index == 18:
+                page.locator('[data-section="2"]').click()
+            elif index == 25:
+                page.locator('#reader-viewport').focus()
+                page.keyboard.press('Home')
         elif demo["id"] == "poisson-constellation-bloom":
             if index == 2:
                 page.mouse.move(170, 92)
@@ -9352,6 +9374,65 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or document_state["scrollHeight"] > document_state["clientHeight"] + 1
         ):
             raise RuntimeError(f"{demo['id']} did not capture a trusted native text selection, field-specific replacement, explicit retained Apply result and full-stage no-overflow prompt revision workflow without automatic motion: assertion={assertion!r}; interaction={interaction!r}; document={document_state!r}")
+    elif demo["id"] == "self-inverting-fixed-navigation":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_STATE__()")
+        evidence = interaction["sectionEvidence"]
+        if (
+            not assertion
+            or interaction["id"] != "self-inverting-fixed-navigation"
+            or interaction["task"] != "human-operated-long-form-reader-with-computed-background-contrast-navigation"
+            or interaction["claimedLibrary"] != "motion@12.42.2"
+            or interaction["mechanism"] != "paused-motion-track-seeks-only-from-trusted-human-input-while-fixed-navigation-selects-the-higher-wcag-contrast-ink-from-the-actual-section-background-underneath"
+            or interaction["assetStrategy"] != "code-native-section-colors-and-computed-style-evidence-no-functional-raster-input-required"
+            or interaction["acceptedInputs"] != ["trusted-wheel", "captured-mouse-drag", "captured-touch-drag", "captured-pen-drag", "keyboard", "visible-section-buttons"]
+            or not interaction["userInputRequired"]
+            or not interaction["strictTrustedInputGuard"]
+            or not interaction["firstFrameStatic"]
+            or not interaction["initialStaticVerified"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticCycle"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["captureClockDriven"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["trustedInteractionCount"] < 3
+            or interaction["wheelCount"] != 0
+            or interaction["keyboardCount"] < 1
+            or interaction["sectionClickCount"] < 1
+            or interaction["pointerDragCount"] != 1
+            or interaction["pointerMoveCount"] < 5
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerCaptureReleaseCount"] != 1
+            or interaction["pointerCaptured"]
+            or interaction["activePointerId"] is not None
+            or interaction["lastInput"] != "keyboard:Home"
+            or interaction["progress"] != 0
+            or interaction["currentSection"] != 0
+            or interaction["sampledSection"] != 0
+            or interaction["activeBackground"] != "#071c22"
+            or interaction["chosenInk"] != "LIGHT"
+            or interaction["contrastRatio"] < 15
+            or interaction["contrastRatio"] > 17
+            or not interaction["contrastPass"]
+            or interaction["sectionCount"] != 3
+            or interaction["viewportHeight"] != 180
+            or interaction["maximumOffset"] != 360
+            or interaction["motionDuration"] != 1
+            or not interaction["motionPaused"]
+            or interaction["changedByTrustedInput"]
+            or not interaction["everChangedByTrustedInput"]
+            or interaction["evidenceSource"] != "computed-section-background"
+            or len(evidence) != 3
+            or [item["source"] for item in evidence] != ["#071c22", "#efe9d7", "#bd3f2b"]
+            or [item["inkName"] for item in evidence] != ["LIGHT", "DARK", "LIGHT"]
+            or not (15 <= evidence[0]["ratio"] <= 17)
+            or not (13 <= evidence[1]["ratio"] <= 16)
+            or not (4.6 <= evidence[2]["ratio"] <= 5.1)
+            or interaction["computedBackgroundsMatch"] != [True, True, True]
+            or interaction["controlStates"] != ["true", "false", "false"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a trusted full-stage drag, chapter jump and keyboard return through three computed-background contrast states with a paused Motion track and no automatic navigation: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "poisson-constellation-bloom":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

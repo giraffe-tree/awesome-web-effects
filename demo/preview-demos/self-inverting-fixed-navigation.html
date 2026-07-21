@@ -6,46 +6,408 @@
     <title>Motion — Self-inverting Fixed Navigation</title>
     <link rel="stylesheet" href="./shared.css" />
     <style>
-      :root { --preview-background: #0c1220; }
-      .contrast-viewport { position: absolute; inset: 0; overflow: hidden; touch-action: pan-y; }
-      .contrast-track { position: absolute; inset: 0 0 auto; height: 360px; will-change: transform; }
-      .contrast-panel { position: relative; height: 180px; overflow: hidden; }
-      .contrast-panel h1 { position: absolute; left: 18px; top: 65px; width: 210px; margin: 0; font: 950 30px/.78 system-ui, sans-serif; letter-spacing: -.075em; }
-      .contrast-panel p { position: absolute; left: 20px; top: 127px; margin: 0; font: 750 6px/1.3 ui-monospace, monospace; letter-spacing: .12em; text-transform: uppercase; }
-      .panel-dark { color: #f4f5ed; background: radial-gradient(circle at 76% 44%, #5e4ad8 0 7%, transparent 8%), radial-gradient(circle at 73% 46%, #243685 0 20%, transparent 38%), linear-gradient(145deg, #071019, #18243a); }
-      .panel-dark::before { content: ''; position: absolute; right: 19px; top: 45px; width: 88px; height: 88px; border: 1px solid #8c9fff70; border-radius: 50%; box-shadow: inset 0 0 0 13px #7181ff0a, inset 0 0 0 28px #7181ff0b; }
-      .panel-dark::after { content: ''; position: absolute; right: 56px; top: 82px; width: 14px; height: 14px; border-radius: 50%; background: #efecff; box-shadow: 0 0 24px #a698ff; }
-      .panel-light { color: #151612; background-color: #f1efdf; background-image: linear-gradient(#1d23170f 1px, transparent 1px), linear-gradient(90deg, #1d23170f 1px, transparent 1px); background-size: 18px 18px; }
-      .panel-light h1 { color: #1d2119; }
-      .panel-light p { color: #4a4b40; }
-      .panel-light::before { content: ''; position: absolute; right: -12px; top: 36px; width: 108px; height: 108px; border-radius: 46% 54% 38% 62%; background: #ff6d44; rotate: 18deg; box-shadow: -40px 24px 0 -15px #d9ce52, -73px -5px 0 -27px #2caa78; }
-      .fixed-nav { position: absolute; z-index: 20; left: 12px; right: 12px; top: 10px; height: 30px; display: flex; align-items: center; justify-content: space-between; padding: 0 7px 0 10px; border: 1px solid currentColor; border-radius: 99px; color: #fff; background: transparent; mix-blend-mode: difference; }
-      .nav-brand { display: inline-flex; align-items: center; gap: 6px; padding: 0; border: 0; color: inherit; background: none; font: 950 7px/1 system-ui, sans-serif; letter-spacing: .04em; cursor: pointer; }
-      .nav-brand::before { content: ''; width: 7px; height: 7px; border-radius: 2px 50% 50%; background: currentColor; rotate: 45deg; }
-      .nav-links { display: flex; align-items: center; gap: 10px; font: 800 6px/1 system-ui, sans-serif; }
-      .nav-links a { color: inherit; text-decoration: none; }
-      .nav-cta { padding: 6px 8px; border: 1px solid currentColor; border-radius: 99px; }
-      .contrast-meter { position: absolute; z-index: 15; right: 13px; bottom: 11px; width: 66px; color: #fff; font: 750 5.5px/1 ui-monospace, monospace; letter-spacing: .1em; text-align: right; mix-blend-mode: difference; }
-      .contrast-meter::after { content: ''; display: block; width: 100%; height: 2px; margin-top: 4px; background: #fff3; border-radius: 4px; }
-      .contrast-meter i { position: absolute; right: 0; bottom: 0; width: 100%; height: 2px; background: white; border-radius: 4px; transform: scaleX(var(--contrast-progress, 0)); transform-origin: left; }
-      .preview-stage > .library-badge { top: auto; bottom: 9px; background: #0d131eb0; }
+      :root { --preview-background: #071c22; }
+
+      .preview-stage {
+        --nav-ink: #f7f3e8;
+        --nav-wash: rgba(6, 24, 29, .18);
+        --unit: clamp(1px, .3125vw, 2.25px);
+        color: #f7f3e8;
+        background: #071c22;
+      }
+
+      .reader-viewport {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        cursor: grab;
+        outline: none;
+        touch-action: none;
+        user-select: none;
+      }
+
+      .reader-viewport:focus-visible::after {
+        content: '';
+        position: absolute;
+        z-index: 40;
+        inset: 3px;
+        border: 1px solid color-mix(in srgb, var(--nav-ink) 75%, transparent);
+        border-radius: 8px;
+        pointer-events: none;
+      }
+
+      .reader-viewport.is-dragging { cursor: grabbing; }
+
+      .story-track {
+        position: absolute;
+        inset: 0 0 auto;
+        height: 300%;
+        will-change: transform;
+      }
+
+      .story-section {
+        position: relative;
+        height: 33.333333%;
+        min-height: 1px;
+        overflow: hidden;
+        background-color: var(--section-background);
+      }
+
+      .section-copy {
+        position: absolute;
+        z-index: 3;
+        left: clamp(16px, 6.25vw, 45px);
+        top: clamp(54px, 30vh, 122px);
+        max-width: min(68vw, 500px);
+      }
+
+      .section-kicker,
+      .section-note,
+      .folio,
+      .nav-brand,
+      .nav-links,
+      .sample-readout,
+      .chapter-readout {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        text-transform: uppercase;
+      }
+
+      .section-kicker {
+        margin: 0 0 clamp(7px, 1.7vh, 13px);
+        font-size: clamp(6px, 1.88vw, 13px);
+        font-weight: 760;
+        letter-spacing: .16em;
+        opacity: .72;
+      }
+
+      .story-section h1 {
+        max-width: 710px;
+        margin: 0;
+        font: 820 clamp(34px, 10.7vw, 78px)/.82 ui-sans-serif, system-ui, sans-serif;
+        letter-spacing: -.072em;
+      }
+
+      .section-note {
+        max-width: 310px;
+        margin: clamp(12px, 3.2vh, 22px) 0 0;
+        font-size: clamp(6px, 1.7vw, 12px);
+        font-weight: 670;
+        line-height: 1.45;
+        letter-spacing: .08em;
+        opacity: .7;
+      }
+
+      .folio {
+        position: absolute;
+        z-index: 3;
+        right: clamp(15px, 4.7vw, 34px);
+        bottom: clamp(13px, 4.4vh, 29px);
+        font-size: clamp(6px, 1.72vw, 12px);
+        font-weight: 740;
+        letter-spacing: .12em;
+      }
+
+      .section-arrival {
+        --section-background: #071c22;
+        color: #f7f3e8;
+      }
+
+      .section-arrival::before {
+        content: '';
+        position: absolute;
+        right: -8%;
+        top: -26%;
+        width: min(56vw, 400px);
+        aspect-ratio: 1;
+        border: clamp(16px, 5vw, 36px) solid #e5b74f;
+        border-radius: 50%;
+        opacity: .98;
+      }
+
+      .section-arrival::after {
+        content: '';
+        position: absolute;
+        right: 10%;
+        top: 14%;
+        width: min(33vw, 236px);
+        aspect-ratio: 1;
+        border: 1px solid rgba(247, 243, 232, .38);
+        border-radius: 50%;
+        box-shadow: 0 0 0 clamp(13px, 4vw, 29px) rgba(247, 243, 232, .035), 0 0 0 clamp(29px, 8vw, 58px) rgba(247, 243, 232, .028);
+      }
+
+      .section-method {
+        --section-background: #efe9d7;
+        color: #17201c;
+      }
+
+      .section-method::before {
+        content: '';
+        position: absolute;
+        right: 8%;
+        top: 17%;
+        width: min(24vw, 172px);
+        height: 66%;
+        border-radius: 50% 50% 9% 9%;
+        background: #2f684d;
+        transform: rotate(9deg);
+        box-shadow: clamp(-50px, -7vw, -26px) clamp(15px, 4vh, 29px) 0 #c9442e;
+      }
+
+      .section-method::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        opacity: .28;
+        background-image: linear-gradient(rgba(30, 42, 35, .18) 1px, transparent 1px), linear-gradient(90deg, rgba(30, 42, 35, .18) 1px, transparent 1px);
+        background-size: clamp(16px, 5vw, 36px) clamp(16px, 5vw, 36px);
+        mask-image: linear-gradient(90deg, transparent 32%, #000);
+      }
+
+      .section-shelter {
+        --section-background: #bd3f2b;
+        color: #fff6e8;
+      }
+
+      .section-shelter::before {
+        content: '';
+        position: absolute;
+        right: 5%;
+        bottom: -31%;
+        width: min(53vw, 382px);
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: #7fb9aa;
+        box-shadow: inset 0 0 0 clamp(24px, 7vw, 50px) #102f35, inset 0 0 0 clamp(25px, 7.3vw, 53px) rgba(255, 246, 232, .45);
+      }
+
+      .section-shelter::after {
+        content: '';
+        position: absolute;
+        right: 28%;
+        top: 0;
+        width: 1px;
+        height: 100%;
+        background: rgba(255, 246, 232, .38);
+        box-shadow: clamp(24px, 7vw, 50px) 0 rgba(255, 246, 232, .22), clamp(48px, 14vw, 100px) 0 rgba(255, 246, 232, .16);
+      }
+
+      .fixed-nav {
+        position: absolute;
+        z-index: 30;
+        top: clamp(10px, 3.4vh, 24px);
+        left: clamp(11px, 3.5vw, 25px);
+        right: clamp(11px, 3.5vw, 25px);
+        min-height: clamp(30px, 9vh, 64px);
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+        align-items: center;
+        gap: clamp(7px, 2vw, 15px);
+        padding: 0 clamp(9px, 2.6vw, 19px);
+        border: 1px solid color-mix(in srgb, var(--nav-ink) 62%, transparent);
+        border-radius: 999px;
+        color: var(--nav-ink);
+        background: var(--nav-wash);
+        box-shadow: 0 8px 22px rgba(0, 0, 0, .08);
+        backdrop-filter: blur(7px) saturate(105%);
+        transition: color .16s ease, border-color .16s ease, background-color .16s ease;
+      }
+
+      .nav-brand {
+        justify-self: start;
+        display: inline-flex;
+        align-items: center;
+        gap: clamp(5px, 1.6vw, 12px);
+        min-width: 0;
+        font-size: clamp(6px, 1.86vw, 13px);
+        font-weight: 900;
+        letter-spacing: .08em;
+        white-space: nowrap;
+      }
+
+      .nav-brand::before {
+        content: '';
+        width: clamp(7px, 2.3vw, 16px);
+        aspect-ratio: 1;
+        flex: 0 0 auto;
+        border: 1px solid currentColor;
+        border-radius: 50%;
+        box-shadow: inset 0 0 0 2px transparent, inset 0 0 0 3px currentColor;
+      }
+
+      .nav-links {
+        justify-self: center;
+        display: flex;
+        align-items: center;
+        gap: clamp(9px, 3vw, 22px);
+        font-size: clamp(5px, 1.55vw, 11px);
+        font-weight: 780;
+        letter-spacing: .1em;
+      }
+
+      .nav-links span { opacity: .65; }
+      .nav-links span[aria-current="page"] { opacity: 1; }
+
+      .sample-readout {
+        justify-self: end;
+        display: flex;
+        align-items: center;
+        gap: clamp(4px, 1.25vw, 9px);
+        min-width: 0;
+        font-size: clamp(5px, 1.47vw, 10px);
+        font-weight: 800;
+        letter-spacing: .06em;
+        white-space: nowrap;
+      }
+
+      .sample-chip {
+        width: clamp(7px, 2vw, 14px);
+        aspect-ratio: 1;
+        border: 1px solid currentColor;
+        border-radius: 50%;
+        background: var(--sample-color, #071c22);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .18);
+      }
+
+      .chapter-readout {
+        position: absolute;
+        z-index: 30;
+        left: clamp(15px, 4.7vw, 34px);
+        bottom: clamp(12px, 3.8vh, 27px);
+        display: flex;
+        align-items: center;
+        gap: clamp(7px, 2.1vw, 15px);
+        color: var(--nav-ink);
+        font-size: clamp(5px, 1.55vw, 11px);
+        font-weight: 760;
+        letter-spacing: .1em;
+        transition: color .16s ease;
+      }
+
+      .chapter-line {
+        width: clamp(24px, 7.5vw, 54px);
+        height: 1px;
+        background: currentColor;
+        opacity: .58;
+      }
+
+      .section-controls {
+        position: absolute;
+        z-index: 35;
+        right: clamp(13px, 4.1vw, 30px);
+        top: 50%;
+        display: grid;
+        gap: clamp(6px, 1.85vh, 13px);
+        transform: translateY(-50%);
+      }
+
+      .section-control {
+        position: relative;
+        width: clamp(10px, 3vw, 22px);
+        aspect-ratio: 1;
+        padding: 0;
+        border: 1px solid color-mix(in srgb, var(--nav-ink) 52%, transparent);
+        border-radius: 50%;
+        color: var(--nav-ink);
+        background: transparent;
+        cursor: pointer;
+        transition: color .16s ease, border-color .16s ease, background-color .16s ease;
+      }
+
+      .section-control::after {
+        content: '';
+        position: absolute;
+        inset: 31%;
+        border-radius: 50%;
+        background: currentColor;
+        opacity: .34;
+      }
+
+      .section-control[aria-current="true"] { background: var(--nav-ink); }
+      .section-control[aria-current="true"]::after { background: var(--sample-color); opacity: 1; }
+      .section-control:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+
+      .input-hint {
+        position: absolute;
+        z-index: 30;
+        left: 50%;
+        bottom: clamp(12px, 3.8vh, 27px);
+        color: var(--nav-ink);
+        font: 730 clamp(5px, 1.47vw, 10px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        opacity: .68;
+        transition: color .16s ease;
+        transform: translateX(-50%);
+        pointer-events: none;
+        white-space: nowrap;
+      }
+
+      .preview-stage > .library-badge,
       .scene-caption { display: none; }
+
+      @media (prefers-reduced-motion: reduce) {
+        .fixed-nav,
+        .chapter-readout,
+        .section-control,
+        .input-hint { transition: none; }
+      }
+
+      @media (max-width: 410px) and (max-aspect-ratio: 4 / 3) {
+        .fixed-nav { grid-template-columns: 1fr auto; }
+        .nav-links { display: none; }
+        .section-copy { top: 25%; max-width: 74vw; }
+        .story-section h1 { font-size: clamp(31px, 12vw, 52px); }
+        .section-note { max-width: 56vw; }
+      }
     </style>
   </head>
   <body>
-    <main class="preview-stage" aria-label="A Motion-powered fixed navigation that inverts its colors as contrasting content scrolls underneath">
-      <div class="contrast-viewport" id="contrast-viewport" tabindex="0" aria-label="Scroll or use arrow keys to move between dark and light sections">
-        <div class="contrast-track" id="contrast-track">
-          <section class="contrast-panel panel-dark"><h1>DARK<br />SIGNAL</h1><p>Navigation stays bright above night.</p></section>
-          <section class="contrast-panel panel-light"><h1>LIGHT<br />FIELD</h1><p>The same navigation turns to ink.</p></section>
+    <main class="preview-stage" id="preview-stage" data-preview-mechanism="motion-self-inverting-nav" aria-label="An interactive long-form brand page with a fixed navigation that selects readable ink from the section underneath">
+      <div class="reader-viewport" id="reader-viewport" tabindex="0" aria-label="拖动、滚轮或使用方向键浏览三个章节">
+        <div class="story-track" id="story-track">
+          <section class="story-section section-arrival" data-background="#071c22" data-chapter="01 / ARRIVAL" aria-label="Arrival">
+            <div class="section-copy">
+              <p class="section-kicker">Field journal · 01</p>
+              <h1>A slower<br />route north.</h1>
+              <p class="section-note">Coastlines, shelter and the quiet work of making less.</p>
+            </div>
+            <span class="folio">57.12° N · Issue 07</span>
+          </section>
+          <section class="story-section section-method" data-background="#efe9d7" data-chapter="02 / METHOD" aria-label="Method">
+            <div class="section-copy">
+              <p class="section-kicker">Material study · 02</p>
+              <h1>Build lightly.<br />Learn deeply.</h1>
+              <p class="section-note">A field method for structures that listen before they settle.</p>
+            </div>
+            <span class="folio">12 assemblies · 04 sites</span>
+          </section>
+          <section class="story-section section-shelter" data-background="#bd3f2b" data-chapter="03 / SHELTER" aria-label="Shelter">
+            <div class="section-copy">
+              <p class="section-kicker">Open archive · 03</p>
+              <h1>Weather is<br />a collaborator.</h1>
+              <p class="section-note">Three seasons of wind, salt and shared thresholds.</p>
+            </div>
+            <span class="folio">Archive open · 26 notes</span>
+          </section>
         </div>
       </div>
-      <nav class="fixed-nav" id="fixed-nav" data-preview-mechanism="motion-self-inverting-nav" aria-label="Preview navigation">
-        <button class="nav-brand" id="nav-brand" type="button">PARALLAX</button>
-        <span class="nav-links"><a href="#work">WORK</a><a class="nav-cta" href="#start">START</a></span>
+
+      <nav class="fixed-nav" id="fixed-nav" aria-label="Fixed publication navigation">
+        <span class="nav-brand">NORTH / COMMON</span>
+        <span class="nav-links" aria-hidden="true"><span aria-current="page">Journal</span><span>Work</span><span>About</span></span>
+        <span class="sample-readout"><i class="sample-chip" aria-hidden="true"></i><span id="contrast-value">12.9:1 · LIGHT</span></span>
       </nav>
-      <div class="contrast-meter" id="contrast-meter" aria-hidden="true">CONTRAST SAMPLE<i></i></div>
-      <span class="library-badge">Motion · fixed contrast</span>
+
+      <div class="chapter-readout" aria-live="polite"><span class="chapter-line"></span><span id="chapter-value">01 / ARRIVAL</span></div>
+
+      <div class="section-controls" aria-label="Jump to chapter">
+        <button class="section-control" type="button" data-section="0" aria-label="转到 Arrival" aria-current="true"></button>
+        <button class="section-control" type="button" data-section="1" aria-label="转到 Method" aria-current="false"></button>
+        <button class="section-control" type="button" data-section="2" aria-label="转到 Shelter" aria-current="false"></button>
+      </div>
+
+      <span class="input-hint">Drag · wheel · keys</span>
     </main>
     <script type="module" src="./src/self-inverting-fixed-navigation-demo.js"></script>
   </body>

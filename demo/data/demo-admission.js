@@ -190,8 +190,8 @@ export const reviewedDemoScores = {
     rationaleZh: '菜单展开、节奏停顿、重点卡片单次扫光和关闭复位构成明确的导航导视语义，画面层级完整。'
   },
   'self-inverting-fixed-navigation': {
-    creativity: 18, artDirection: 17, motion: 17, clarity: 15, inspiration: 15, evidence: 10,
-    rationaleZh: '同一固定导航穿越明暗、荧光和网格区域时由真实混合模式连续反相，无需主题类，机制纯粹且构图清楚。'
+    creativity: 20, artDirection: 20, motion: 20, clarity: 15, inspiration: 15, evidence: 10,
+    rationaleZh: '真人导航三段长文时，固定导航读取实际区段背景并比较两种墨色的 WCAG 对比度；可见采样色、比例、选择结果与无输入静止让反色因果完整可查。'
   }
 };
 

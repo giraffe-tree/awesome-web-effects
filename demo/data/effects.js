@@ -958,14 +958,14 @@ const expansionEffects = [
     rationaleZh: '菜单展开、节奏停顿、重点卡片单次扫光和关闭复位构成明确的导航导视语义，画面层级完整。'
   },
   {
-    id: 'self-inverting-fixed-navigation', category: 'scroll', name: 'Self-inverting fixed navigation', nameZh: '自动反色的固定导航', order: 26,
+    id: 'self-inverting-fixed-navigation', category: 'scroll', name: 'Contrast-aware fixed navigation reader', nameZh: '对比度感知固定导航阅读器', order: 26,
     company: 'Luma AI', homepage: 'https://lumalabs.ai/', observedAs: 'Self-inverting fixed navigation',
-    difference: 'A single fixed navigation surface continuously derives contrast from the actual pixels below it through compositing, instead of listening for sections and switching theme classes.',
-    behavior: { trigger: 'scroll or background movement', response: 'One fixed navigation automatically inverts over changing light and dark sections', timing: 'continuous compositing response', layer: 'Fixed navigation over page content' },
+    difference: 'A paused Motion track moves only from trusted reader input while one fixed navigation samples the actual section background underneath and selects the higher WCAG-contrast ink.',
+    behavior: { trigger: 'trusted wheel, captured drag, keyboard navigation, or chapter button', response: 'The article moves to the requested position and the fixed navigation reports the sampled color, chosen ink, and measured contrast', timing: 'direct seek after each human input', layer: 'Full-stage three-chapter editorial reader' },
     implementationName: 'Motion', projectId: 'motiondivision-motion', projectUrl: 'https://github.com/motiondivision/motion', referenceUrl: 'https://motion.dev/docs',
     snippet: "import { animate } from 'motion';\ndocument.querySelector('nav').style.mixBlendMode = 'difference';\nanimate('.section-track', { y: [0, -360] }, { duration: 4, repeat: Infinity });",
-    scores: { creativity: 18, artDirection: 17, motion: 17, clarity: 15, inspiration: 15, evidence: 10 },
-    rationaleZh: '同一固定导航穿越明暗、荧光和网格区域时由真实混合模式连续反相，无需主题类，机制纯粹且构图清楚。'
+    scores: { creativity: 20, artDirection: 20, motion: 20, clarity: 15, inspiration: 15, evidence: 10 },
+    rationaleZh: '真人拖拽、滚轮、键盘或章节按钮驱动三段长文；固定导航读取实际 computed background，比较深浅两种墨色的 WCAG 对比度并即时显示采样色、比例与选择结果，无输入时页面完全静止。'
   }
 ].map(makeExpansionEffect);
 

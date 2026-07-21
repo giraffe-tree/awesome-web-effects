@@ -1,2 +1,551 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Motion — Sticky Card Stack Accumulation</title><link rel="stylesheet" href="./shared.css"><style>
-:root{--preview-background:#f0ebdf;color-scheme:light}.sticky-stage{position:absolute;inset:0;overflow:hidden;color:#20231f}.sticky-copy{position:absolute;left:14px;top:47px;width:75px}.sticky-copy small{font:800 6px/1 ui-monospace;letter-spacing:.12em}.sticky-copy h1{margin:9px 0 0;font:950 16px/.83 system-ui;letter-spacing:-.06em}.stack-card{position:absolute;left:102px;top:38px;width:189px;height:112px;padding:13px;border:1px solid #1d251f;border-radius:14px;transform-origin:50% 0;box-shadow:0 10px 25px #2933291e}.stack-card:nth-of-type(1){z-index:1;background:#cf9aff}.stack-card:nth-of-type(2){z-index:2;background:#ff775e}.stack-card:nth-of-type(3){z-index:3;background:#d9f26d}.stack-card small{font:800 6px/1 ui-monospace;letter-spacing:.11em}.stack-card strong{display:block;width:115px;margin-top:17px;font:950 19px/.85 system-ui;letter-spacing:-.055em}.stack-index{position:absolute;right:13px;bottom:11px;font:900 25px/1 ui-serif;opacity:.28}.library-badge{color:#20271f;background:#faf4e7da;border-color:#20271f20}.scene-caption{display:none}</style></head><body><main class="preview-stage"><div class="sticky-stage" id="sticky-stage" data-preview-mechanism="motion-sticky-stack" tabindex="0" aria-label="Scroll or use arrow keys to accumulate sticky cards"><section class="sticky-copy"><small>SCROLL / STACK</small><h1>Stories collect in place.</h1></section><article class="stack-card"><small>CHAPTER / ONE</small><strong>Notice the first signal.</strong><span class="stack-index">01</span></article><article class="stack-card"><small>CHAPTER / TWO</small><strong>Layer in the evidence.</strong><span class="stack-index">02</span></article><article class="stack-card"><small>CHAPTER / THREE</small><strong>Arrive at a new whole.</strong><span class="stack-index">03</span></article></div><span class="library-badge">Motion · sticky stack</span></main><script type="module" src="./src/sticky-card-stack-accumulation-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Motion — Sticky Incident Review</title>
+  <link rel="stylesheet" href="./shared.css">
+  <style>
+    :root {
+      --preview-background: #101714;
+      --ink: #101714;
+      --paper: #f4efe4;
+      --acid: #dfff63;
+      color-scheme: dark;
+    }
+
+    * { box-sizing: border-box; }
+
+    .sticky-stage {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 21% 27%, rgba(82, 127, 103, .16), transparent 26%),
+        linear-gradient(135deg, #101714 0%, #0a100e 100%);
+      color: var(--paper);
+      isolation: isolate;
+    }
+
+    .sticky-stage::before {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background-image:
+        linear-gradient(rgba(244, 239, 228, .032) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(244, 239, 228, .032) 1px, transparent 1px);
+      background-size: 28px 28px;
+      content: "";
+      mask-image: linear-gradient(90deg, #000, transparent 68%);
+    }
+
+    .review-header {
+      position: absolute;
+      z-index: 12;
+      top: 18px;
+      right: 24px;
+      left: 166px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: rgba(244, 239, 228, .58);
+      font: 800 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .review-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--paper);
+    }
+
+    .review-status::before {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--acid);
+      box-shadow: 0 0 0 3px rgba(223, 255, 99, .08);
+      content: "";
+    }
+
+    .sticky-stage[data-complete="true"] .review-status::before { background: #71e59c; }
+
+    .case-intro {
+      position: absolute;
+      z-index: 9;
+      top: 64px;
+      left: 28px;
+      width: 205px;
+    }
+
+    .case-kicker,
+    .intro-note {
+      display: block;
+      color: rgba(244, 239, 228, .55);
+      font: 800 6px/1.35 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .case-kicker { color: var(--acid); }
+
+    .case-intro h1 {
+      max-width: 4.8em;
+      margin: 10px 0 0;
+      font: 760 clamp(31px, 5.8vw, 43px)/.82 Georgia, "Times New Roman", serif;
+      letter-spacing: -.065em;
+    }
+
+    .case-intro h1 em {
+      color: #ff7f6d;
+      font-weight: inherit;
+    }
+
+    .intro-note {
+      width: 24em;
+      margin-top: 14px;
+      font-size: 4px;
+      line-height: 1.55;
+      letter-spacing: .08em;
+    }
+
+    .chapter-nav {
+      position: absolute;
+      z-index: 11;
+      bottom: 78px;
+      left: 28px;
+      display: grid;
+      width: 205px;
+      border-top: 1px solid rgba(244, 239, 228, .16);
+    }
+
+    .chapter-control {
+      display: grid;
+      min-height: 24px;
+      padding: 0;
+      border: 0;
+      border-bottom: 1px solid rgba(244, 239, 228, .12);
+      background: transparent;
+      color: rgba(244, 239, 228, .42);
+      cursor: pointer;
+      grid-template-columns: 22px 1fr auto;
+      align-items: center;
+      text-align: left;
+      font: 750 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+
+    .chapter-control::after {
+      width: 4px;
+      height: 4px;
+      border: 1px solid currentColor;
+      border-radius: 50%;
+      content: "";
+    }
+
+    .chapter-control.is-active { color: var(--paper); }
+    .chapter-control.is-active::after { border-color: var(--acid); background: var(--acid); }
+    .chapter-control:focus-visible,
+    .restart-button:focus-visible,
+    .case-shell:focus-visible { outline: 2px solid var(--acid); outline-offset: 3px; }
+
+    .finding-panel {
+      position: absolute;
+      z-index: 10;
+      right: auto;
+      bottom: 13px;
+      left: 28px;
+      display: flex;
+      min-height: 45px;
+      align-items: center;
+      border-top: 1px solid rgba(244, 239, 228, .18);
+      color: rgba(244, 239, 228, .54);
+      width: 205px;
+    }
+
+    .finding-progress {
+      display: flex;
+      width: 68px;
+      align-items: baseline;
+      gap: 9px;
+    }
+
+    .finding-progress strong {
+      color: var(--paper);
+      font: 760 18px/1 Georgia, "Times New Roman", serif;
+      white-space: nowrap;
+    }
+
+    .finding-progress span,
+    .finding-copy span,
+    .restart-button {
+      font: 800 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .finding-copy {
+      display: grid;
+      margin-left: 8px;
+      gap: 3px;
+    }
+
+    .finding-copy strong {
+      color: var(--paper);
+      font: 690 9px/1.1 system-ui, sans-serif;
+    }
+
+    .restart-button {
+      min-height: 23px;
+      margin-left: auto;
+      padding: 0 11px;
+      border: 1px solid rgba(244, 239, 228, .22);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--paper);
+      cursor: pointer;
+    }
+
+    .restart-button:disabled { cursor: default; opacity: .28; }
+
+    .case-shell {
+      --card-height: min(252px, 62vh);
+      --strip: 24px;
+      --peek: 32px;
+      position: absolute;
+      z-index: 5;
+      top: 55px;
+      right: 24px;
+      left: 36%;
+      height: calc(var(--card-height) + var(--strip) * 3);
+      overflow: hidden;
+      border-radius: 15px;
+      outline: none;
+      overscroll-behavior: contain;
+      scrollbar-width: none;
+      touch-action: none;
+    }
+
+    .case-shell::-webkit-scrollbar { display: none; }
+
+    .case-document { min-height: 100%; }
+
+    .case-card {
+      position: sticky;
+      top: calc(var(--index) * var(--strip));
+      z-index: calc(var(--index) + 1);
+      width: 100%;
+      height: var(--card-height);
+      margin: 0 0 calc(var(--strip) * 3 - var(--peek));
+      padding: 17px 18px;
+      overflow: hidden;
+      border: 1px solid rgba(16, 23, 20, .78);
+      border-radius: 15px;
+      color: var(--ink);
+      transform-origin: 50% 0;
+      box-shadow: 0 16px 34px rgba(0, 0, 0, .24);
+      will-change: transform;
+    }
+
+    .case-card:last-child { margin-bottom: 0; }
+    .case-card:nth-child(1) { background: #f2eadb; }
+    .case-card:nth-child(2) { background: #f2c65b; }
+    .case-card:nth-child(3) { background: #ef806e; }
+    .case-card:nth-child(4) { background: #b8e2c0; }
+
+    .card-head {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      height: 13px;
+      align-items: flex-start;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(16, 23, 20, .24);
+      font: 900 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+
+    .card-body {
+      position: absolute;
+      top: 30px;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      padding: 0 18px;
+      transform-origin: 50% 0;
+      will-change: transform, opacity;
+    }
+
+    .case-card h2 {
+      max-width: 12em;
+      margin: 16px 0 0;
+      font: 760 clamp(18px, 3.3vw, 25px)/.88 Georgia, "Times New Roman", serif;
+      letter-spacing: -.052em;
+    }
+
+    .case-card p {
+      width: 31em;
+      margin: 9px 0 0;
+      color: rgba(16, 23, 20, .64);
+      font: 650 5px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .015em;
+    }
+
+    .evidence-block {
+      position: absolute;
+      right: 18px;
+      bottom: 36px;
+      left: 18px;
+      display: grid;
+      min-height: 55px;
+      padding: 9px;
+      border: 1px solid rgba(16, 23, 20, .24);
+      border-radius: 7px;
+      background: rgba(255, 255, 255, .18);
+    }
+
+    .metric-row { display: flex; align-items: flex-end; justify-content: space-between; }
+    .metric-row span { font: 850 5px/1 ui-monospace, monospace; letter-spacing: .08em; text-transform: uppercase; }
+    .metric-row strong { font: 800 19px/.8 Georgia, serif; letter-spacing: -.04em; }
+
+    .retry-bars {
+      display: flex;
+      height: 20px;
+      margin-top: 7px;
+      align-items: flex-end;
+      gap: 3px;
+    }
+
+    .retry-bars i { flex: 1; height: var(--h); border-radius: 1px 1px 0 0; background: var(--ink); opacity: calc(.28 + var(--h) / 100); }
+
+    .region-grid { display: grid; margin-top: 7px; grid-template-columns: repeat(6, 1fr); gap: 3px; }
+    .region-grid i { height: 13px; border: 1px solid rgba(16, 23, 20, .32); border-radius: 2px; }
+    .region-grid i.alert { background: var(--ink); }
+
+    .config-diff {
+      display: grid;
+      margin-top: 7px;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px;
+      font: 850 7px/1.5 ui-monospace, monospace;
+    }
+
+    .config-diff span { padding: 3px 5px; border-radius: 3px; background: rgba(16, 23, 20, .09); }
+    .config-diff .removed { text-decoration: line-through; opacity: .5; }
+
+    .action-list { display: grid; margin-top: 6px; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+    .action-list span { padding: 5px; border: 1px solid rgba(16, 23, 20, .22); border-radius: 3px; font: 850 4px/1.2 ui-monospace, monospace; text-transform: uppercase; }
+    .action-list b { display: block; margin-bottom: 3px; font-size: 7px; }
+
+    .card-result {
+      position: absolute;
+      right: 18px;
+      bottom: 14px;
+      left: 18px;
+      display: flex;
+      justify-content: space-between;
+      color: rgba(16, 23, 20, .64);
+      font: 850 5px/1 ui-monospace, monospace;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .card-result strong { color: var(--ink); }
+
+    .progress-rail {
+      position: absolute;
+      z-index: 13;
+      right: 24px;
+      bottom: 8px;
+      left: 36%;
+      height: 2px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(244, 239, 228, .12);
+    }
+
+    .progress-fill { width: 100%; height: 100%; background: var(--acid); transform: scaleX(0); transform-origin: 0 50%; }
+    .interaction-hint { position: absolute; z-index: 13; right: 24px; bottom: 14px; color: rgba(244,239,228,.44); font: 800 4px/1 ui-monospace, monospace; letter-spacing:.08em; text-transform: uppercase; }
+    .library-badge { color: var(--paper); background: rgba(16,23,20,.82); border-color: rgba(244,239,228,.18); }
+    .scene-caption { display: none; }
+
+    @media (max-width: 420px) {
+      .review-header { top: 7px; right: 8px; left: 155px; font-size: 3px; }
+      .review-id { display: none; }
+      .review-status { gap: 3px; }
+      .review-status::before { width: 3px; height: 3px; box-shadow: none; }
+      .case-intro { top: 30px; left: 10px; width: 78px; }
+      .case-kicker { font-size: 3px; }
+      .case-intro h1 { max-width: 4.7em; margin-top: 5px; font-size: 18px; }
+      .intro-note { width: 21em; margin-top: 7px; font-size: 2px; }
+      .chapter-nav { bottom: 37px; left: 10px; width: 78px; grid-template-columns: 1fr 1fr; }
+      .chapter-control { min-height: 12px; grid-template-columns: 10px 1fr 3px; font-size: 2.5px; }
+      .chapter-control:nth-child(-n+2) { border-top: 1px solid rgba(244,239,228,.1); }
+      .chapter-control::after { width: 2px; height: 2px; }
+      .finding-panel { right: auto; bottom: 6px; left: 10px; width: 78px; min-height: 26px; }
+      .finding-progress { width: 32px; gap: 3px; }
+      .finding-progress strong { font-size: 9px; }
+      .finding-progress span, .finding-copy span, .restart-button { font-size: 2px; }
+      .finding-copy { display: none; }
+      .finding-copy strong { font-size: 4px; }
+      .restart-button { min-height: 11px; padding: 0 5px; }
+      .case-shell { --card-height: 116px; --strip: 11px; --peek: 16px; top: 21px; right: 7px; left: 30%; height: calc(var(--card-height) + var(--strip) * 3); border-radius: 8px; }
+      .case-card { padding: 8px; border-radius: 8px; }
+      .card-body { top: 15px; padding: 0 8px; }
+      .card-head { height: 7px; font-size: 2.4px; }
+      .case-card h2 { max-width: 11.5em; margin-top: 7px; font-size: 12px; }
+      .case-card p { width: 34em; margin-top: 4px; font-size: 2.2px; }
+      .evidence-block { right: 8px; bottom: 18px; left: 8px; min-height: 27px; padding: 4px; border-radius: 3px; }
+      .metric-row span { font-size: 2.2px; }
+      .metric-row strong { font-size: 9px; }
+      .retry-bars { height: 9px; margin-top: 3px; gap: 1px; }
+      .region-grid { margin-top: 3px; gap: 1px; }
+      .region-grid i { height: 6px; }
+      .config-diff { margin-top: 3px; gap: 2px; font-size: 3px; }
+      .config-diff span { padding: 1px 2px; }
+      .action-list { margin-top: 3px; gap: 2px; }
+      .action-list span { padding: 2px; font-size: 1.9px; }
+      .action-list b { margin-bottom: 1px; font-size: 3px; }
+      .card-result { right: 8px; bottom: 7px; left: 8px; font-size: 2.2px; }
+      .progress-rail { right: 7px; bottom: 3px; left: 30%; height: 1px; }
+      .interaction-hint { display: none; }
+    }
+
+    @media (max-width: 220px), (max-height: 105px) {
+      .library-badge { display: none; }
+      .sticky-stage::before { background-size: 8px 8px; }
+      .review-header { top: 2px; right: 3px; left: 46px; font-size: .8px; }
+      .review-status { gap: 1px; }
+      .review-status::before { width: 1px; height: 1px; }
+      .case-intro { top: 12px; left: 3px; width: 37px; }
+      .case-kicker { font-size: .8px; }
+      .case-intro h1 { margin-top: 2px; font-size: 7.5px; }
+      .intro-note { width: 24em; margin-top: 2px; font-size: .55px; }
+      .chapter-nav { bottom: 17px; left: 3px; width: 37px; }
+      .chapter-control { min-height: 5px; grid-template-columns: 4px 1fr 1px; font-size: .7px; }
+      .chapter-control::after { width: 1px; height: 1px; border-width: .5px; }
+      .finding-panel { right: auto; bottom: 2px; left: 3px; width: 37px; min-height: 12px; }
+      .finding-progress { width: 19px; gap: 1px; }
+      .finding-progress strong { font-size: 4px; }
+      .finding-progress span, .finding-copy span, .restart-button { font-size: .6px; }
+      .finding-copy { margin-left: 4px; gap: .5px; }
+      .finding-copy strong { font-size: 1.2px; }
+      .restart-button { min-height: 5px; padding: 0 2px; border-width: .5px; }
+      .case-shell { --card-height: 50px; --strip: 5px; --peek: 8px; top: 10px; right: 3px; left: 31%; height: calc(var(--card-height) + var(--strip) * 3); border-radius: 3px; }
+      .case-card { padding: 3px; border-width: .5px; border-radius: 3px; }
+      .card-body { top: 7px; padding: 0 3px; }
+      .card-head { height: 3px; border-width: .5px; font-size: .65px; }
+      .case-card h2 { max-width: 12em; margin-top: 3px; font-size: 5.4px; }
+      .case-card p { display: none; }
+      .evidence-block { right: 3px; bottom: 8px; left: 3px; min-height: 13px; padding: 2px; border-width: .5px; border-radius: 1px; }
+      .metric-row span { font-size: .6px; }
+      .metric-row strong { font-size: 3.2px; }
+      .retry-bars { height: 4px; margin-top: 1px; gap: .5px; }
+      .region-grid { margin-top: 1px; gap: .5px; }
+      .region-grid i { height: 3px; border-width: .5px; }
+      .config-diff { margin-top: 1px; gap: 1px; font-size: .9px; }
+      .config-diff span { padding: .5px 1px; }
+      .action-list { margin-top: 1px; gap: 1px; }
+      .action-list span { padding: 1px; border-width: .5px; font-size: .55px; }
+      .action-list b { margin-bottom: .5px; font-size: 1px; }
+      .card-result { right: 3px; bottom: 3px; left: 3px; font-size: .6px; }
+      .progress-rail { right: 3px; bottom: 1px; left: 31%; height: .5px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="preview-stage">
+    <section class="sticky-stage" id="sticky-stage" data-preview-mechanism="motion-user-scrubbed-sticky-incident-review" data-complete="false">
+      <header class="review-header">
+        <span class="review-id">Post-incident review · INC-24-0816</span>
+        <span class="review-status" id="review-status">Reading · 01 Signal</span>
+      </header>
+
+      <section class="case-intro" aria-labelledby="case-title">
+        <span class="case-kicker">Harbor Pay · Reliability</span>
+        <h1 id="case-title">The <em>47-minute</em> checkout outage.</h1>
+        <span class="intro-note">Follow the evidence from first alert to shipped safeguards. Each read chapter stays in view.</span>
+      </section>
+
+      <nav class="chapter-nav" aria-label="Incident review chapters">
+        <button class="chapter-control is-active" type="button" data-progress="0" data-chapter="signal" aria-pressed="true"><span>01</span><strong>Signal</strong></button>
+        <button class="chapter-control" type="button" data-progress="0.333333" data-chapter="scope" aria-pressed="false"><span>02</span><strong>Scope</strong></button>
+        <button class="chapter-control" type="button" data-progress="0.666667" data-chapter="cause" aria-pressed="false"><span>03</span><strong>Cause</strong></button>
+        <button class="chapter-control" type="button" data-progress="1" data-chapter="response" aria-pressed="false"><span>04</span><strong>Response</strong></button>
+      </nav>
+
+      <div class="case-shell" id="case-shell" tabindex="0" role="region" aria-label="Incident case file. Wheel, drag vertically, or use arrow keys to read chapters.">
+        <div class="case-document" id="case-document">
+          <article class="case-card" style="--index:0" data-chapter="signal" aria-current="step">
+            <header class="card-head"><span>01 / Signal</span><time datetime="2024-08-16T09:12:00Z">09:12 UTC</time></header>
+            <div class="card-body">
+              <h2>Success fell. Retries rose.</h2>
+              <p>Charges cleared at the gateway, but completion callbacks waited behind a fast-growing queue.</p>
+              <div class="evidence-block">
+                <div class="metric-row"><span>Callback retry rate</span><strong>18×</strong></div>
+                <div class="retry-bars" aria-hidden="true"><i style="--h:18%"></i><i style="--h:25%"></i><i style="--h:31%"></i><i style="--h:48%"></i><i style="--h:62%"></i><i style="--h:81%"></i><i style="--h:100%"></i></div>
+              </div>
+              <footer class="card-result"><span>Finding</span><strong>Queue pressure</strong></footer>
+            </div>
+          </article>
+
+          <article class="case-card" style="--index:1" data-chapter="scope">
+            <header class="card-head"><span>02 / Scope</span><time datetime="2024-08-16T09:19:00Z">09:19 UTC</time></header>
+            <div class="card-body">
+              <h2>The failure stopped at EU-West.</h2>
+              <p>US traffic and card authorization stayed healthy. Two European callback workers carried the impact.</p>
+              <div class="evidence-block">
+                <div class="metric-row"><span>Checkouts affected</span><strong>38%</strong></div>
+                <div class="region-grid" aria-hidden="true"><i></i><i></i><i class="alert"></i><i class="alert"></i><i></i><i></i></div>
+              </div>
+              <footer class="card-result"><span>Finding</span><strong>Blast radius bounded</strong></footer>
+            </div>
+          </article>
+
+          <article class="case-card" style="--index:2" data-chapter="cause">
+            <header class="card-head"><span>03 / Cause</span><time datetime="2024-08-16T09:31:00Z">09:31 UTC</time></header>
+            <div class="card-body">
+              <h2>One deploy halved the workers.</h2>
+              <p>A copied staging limit reached production. Autoscaling saw busy workers, not the waiting callback queue.</p>
+              <div class="evidence-block">
+                <div class="metric-row"><span>Deploy 3b7a19</span><strong>−50%</strong></div>
+                <div class="config-diff"><span class="removed">workers 24</span><span>workers 12</span></div>
+              </div>
+              <footer class="card-result"><span>Finding</span><strong>Capacity regression</strong></footer>
+            </div>
+          </article>
+
+          <article class="case-card" style="--index:3" data-chapter="response">
+            <header class="card-head"><span>04 / Response</span><time datetime="2024-08-16T09:59:00Z">09:59 UTC</time></header>
+            <div class="card-body">
+              <h2>Recover, then remove the trap.</h2>
+              <p>Capacity returned first. Queue-aware scaling, a deploy guard and a replay drill closed the incident.</p>
+              <div class="evidence-block">
+                <div class="metric-row"><span>Orders recovered</span><strong>2,184</strong></div>
+                <div class="action-list"><span><b>✓</b>Queue metric</span><span><b>✓</b>Deploy guard</span><span><b>✓</b>Replay drill</span></div>
+              </div>
+              <footer class="card-result"><span>Result</span><strong>3 safeguards shipped</strong></footer>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <aside class="finding-panel" aria-live="polite">
+        <div class="finding-progress"><strong id="chapter-count">01 / 04</strong><span id="progress-label">00% read</span></div>
+        <div class="finding-copy"><span id="finding-label">Current finding</span><strong id="finding-value">Queue pressure isolated</strong></div>
+        <button class="restart-button" id="restart-button" type="button" disabled>Restart review</button>
+      </aside>
+
+      <div class="progress-rail" role="progressbar" aria-label="Incident review progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-fill" id="progress-fill"></div></div>
+      <span class="interaction-hint">Wheel · capture drag · arrows · 1–4</span>
+    </section>
+    <span class="library-badge">Motion · sticky case file</span>
+    <span class="scene-caption">A user-scrubbed incident review whose sticky chapters accumulate into a persistent evidence stack.</span>
+  </main>
+  <script type="module" src="./src/sticky-card-stack-accumulation-demo.js"></script>
+</body>
+</html>

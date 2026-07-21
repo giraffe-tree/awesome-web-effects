@@ -1443,6 +1443,54 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.wait_for_timeout(1200)
             elif index == 35:
                 page.wait_for_timeout(260)
+        elif demo["id"] == "sticky-card-stack-accumulation":
+            if index == 2:
+                page.mouse.wheel(0, -160)
+            elif index == 4:
+                page.mouse.wheel(0, 180)
+            elif index == 5:
+                page.mouse.wheel(0, 220)
+            elif index == 7:
+                page.locator('.chapter-control[data-progress="0.333333"]').click()
+            elif index == 9:
+                page.mouse.move(230, 142)
+                page.mouse.down()
+            elif index == 10:
+                page.mouse.move(230, 112, steps=3)
+            elif index == 11:
+                page.mouse.move(230, 72, steps=3)
+            elif index == 12:
+                page.mouse.up()
+            elif index == 14:
+                page.locator('#case-shell').focus()
+                page.keyboard.press("PageDown")
+            elif index == 16:
+                page.locator('.chapter-control[data-progress="1"]').click()
+            elif index == 18:
+                page.mouse.wheel(0, 220)
+            elif index == 20:
+                page.mouse.wheel(0, -220)
+            elif index == 22:
+                page.mouse.move(230, 66)
+                page.mouse.down()
+            elif index == 23:
+                page.mouse.move(230, 102, steps=3)
+            elif index == 24:
+                page.mouse.move(230, 140, steps=3)
+            elif index == 25:
+                page.mouse.up()
+            elif index == 27:
+                page.locator('#case-shell').focus()
+                page.keyboard.press("2")
+            elif index == 29:
+                page.locator('#restart-button').click()
+            elif index == 31:
+                page.locator('.chapter-control[data-progress="0.666667"]').click()
+            elif index == 33:
+                page.locator('#case-shell').focus()
+                page.keyboard.press("End")
+            elif index == 35:
+                page.mouse.wheel(0, 180)
         elif demo["id"] == "four-corner-hover-crop-marks":
             if index == round(.35 * args.fps):
                 page.mouse.move(92, 78)
@@ -3064,6 +3112,56 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["claimedLibrary"] != "p5@2.3.0"
         ):
             raise RuntimeError(f"{demo['id']} did not capture two trusted bounded colony experiments, a real pointer intervention, keyboard rule/step input, reset, and a deterministic final observation: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "sticky-card-stack-accumulation":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "incident-review-card-stack"
+            or interaction["acceptedInputs"] != ["wheel", "mouse", "touch", "pen", "keyboard", "chapter-control"]
+            or not interaction["userInputRequired"]
+            or not interaction["userOwnedProgress"]
+            or not interaction["controlsBuiltWithoutAutoplay"]
+            or interaction["automaticProgress"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["previewClockDriven"]
+            or interaction["syntheticInputDispatch"]
+            or not interaction["initialFrameStatic"]
+            or not interaction["initialStaticVerified"]
+            or interaction["inputCount"] < 20
+            or interaction["wheelInputCount"] < 6
+            or interaction["pointerInputCount"] < 10
+            or interaction["keyboardInputCount"] < 3
+            or interaction["wheelConsumedCount"] < 3
+            or interaction["wheelBoundaryReleaseCount"] < 3
+            or interaction["startBoundaryReleaseCount"] < 1
+            or interaction["endBoundaryReleaseCount"] < 2
+            or interaction["pointerCaptureCount"] < 2
+            or interaction["pointerReleaseCount"] < 2
+            or interaction["dragUpdateCount"] < 8
+            or interaction["keyboardSeekCount"] < 3
+            or interaction["chapterSelectionCount"] < 3
+            or interaction["restartCount"] < 1
+            or interaction["progressMutationCount"] < 12
+            or interaction["motionControlCount"] != 9
+            or interaction["cardStickyCount"] != 4
+            or interaction["progress"] != 1
+            or interaction["activeIndex"] != 3
+            or interaction["activeChapter"] != "response"
+            or not interaction["taskComplete"]
+            or interaction["finding"] != "3 safeguards shipped"
+            or interaction["progressSource"] != "keyboard-End"
+            or interaction["inputKind"] != "wheel"
+            or interaction["lastBoundary"] != "end"
+            or interaction["lastWheelDefaultPrevented"] is not False
+            or interaction["pointerCaptured"]
+            or interaction["activePointerId"] is not None
+            or interaction["activePointerType"] is not None
+            or interaction["lastInputTrusted"] is not True
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture trusted wheel accumulation and boundary release, two captured drags, chapter controls, keyboard navigation, restart, and a completed incident review: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "four-corner-hover-crop-marks":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         if (

@@ -1554,41 +1554,41 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "sticky-card-stack-accumulation",
-    "name": "Sticky card-stack accumulation",
-    "nameZh": "粘性卡片堆叠累积",
+    "name": "Incident review card stack",
+    "nameZh": "事故复盘卡片堆栈",
     "category": "scroll",
     "sourceUrl": "https://github.com/DavidHDev/react-bits/blob/main/public/r/ScrollStack-TS-TW.json",
-    "difference": "卡片逐张 pin、缩放并累积成可见堆栈；现有固定横向场景移动一条轨道而不保留叠层历史。",
+    "difference": "把 sticky 堆叠变成一份 47 分钟结账故障的连续复盘：Signal、Scope、Cause、Response 四章会按真实阅读进度压入可见历史，当前发现与最终防护结果同步更新。",
     "behavior": {
-      "trigger": "scroll",
-      "response": "Pin and compress each card onto a growing stack",
-      "timing": "continuous progress-linked accumulation",
-      "layer": "sticky card scene"
+      "trigger": "trusted wheel, captured mouse/touch/pen drag, keyboard navigation, chapter controls, or explicit restart",
+      "response": "Scrub four incident chapters through a real sticky stack while preserving compressed read-history and updating the current finding",
+      "timing": "static first frame; nine paused Motion controls are synchronously scrubbed by one human-owned progress value",
+      "layer": "full-preview incident dossier, sticky chapter stack, progress rail, navigation, finding summary, and completion state"
     },
     "implementation": {
       "projectId": "motiondivision-motion",
       "projectUrl": "https://github.com/motiondivision/motion",
       "library": "motion@12.42.2",
       "renderer": "dom",
-      "snippet": "animate(card, { y: [i * 22, i * 8, i * 22], scale: [1, 1 - i * 0.035, 1] }, { duration: 3 });",
+      "snippet": "cardMotion[index].time = clamp(progress * 3 - index) * cardMotion[index].duration;",
       "referenceUrl": "https://github.com/DavidHDev/react-bits/blob/main/public/r/ScrollStack-TS-TW.json"
     },
     "scores": {
-      "creativity": 18,
-      "artDirection": 19,
-      "motion": 19,
+      "creativity": 19,
+      "artDirection": 20,
+      "motion": 20,
       "clarity": 15,
       "inspiration": 15,
-      "evidence": 9,
-      "total": 95
+      "evidence": 10,
+      "total": 99
     },
-    "rationaleZh": "堆叠历史和缩放关系在缩略图中清楚。",
+    "rationaleZh": "连续故障叙事给堆叠历史一个必要的产品理由：读过的章节保留为被压缩的证据层，当前章节保持可读，完成态则把四张卡收束为三项已落地防护。",
     "batch": "B",
-    "demo": "五张材料档案随滚动叠到一个固定观察台上。",
-    "capture": "真实滚动逐张累积→停在四层堆栈→反向滚动拆栈。",
+    "demo": "Incident Review Card Stack 使用四张真实 CSS sticky 章节卡和九个 autoplay:false 的 Motion 控制器；滚轮、拖拽、键盘或章节按钮都写入同一个 progress，再把对应时间同步到压缩、详情淡出与进度条。",
+    "capture": "从静止 Signal 开始，先验证起点外滚释放，再用滚轮累积、鼠标捕获拖拽、章节按钮和键盘前后检查；显式 Restart 后跳到 Cause，再以 End 完成 Response 并验证终点外滚释放。",
     "risk": {
       "level": "high",
-      "detail": "React Bits 仓库未给标准 SPDX；复制源码前必须补许可结论。"
+      "detail": "必须保留真实 sticky 布局、paused Motion scrub、可信输入账本和两端 outward-wheel release；自动进度、合成滚轮或伪造卡片截图均不合格。"
     },
     "observedImplementation": {
       "projectId": "davidhdev-react-bits",

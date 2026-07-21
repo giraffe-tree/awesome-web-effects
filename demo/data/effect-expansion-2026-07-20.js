@@ -2964,16 +2964,16 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "voronoi-nearest-point-hover-focus",
-    "name": "Voronoi nearest-point hover focus",
-    "nameZh": "Voronoi 最近点悬停聚焦",
+    "name": "Human-reviewed Voronoi air-sensor attribution",
+    "nameZh": "真人审阅的 Voronoi 空气传感器归因",
     "category": "vector",
     "sourceUrl": "https://d3js.org/d3-delaunay",
-    "difference": "不可见 Voronoi 索引让稀疏数据按数学最近点吸附焦点；不是按元素边界的光标准星。",
+    "difference": "真人指针位置反投影到数据坐标，通过 12 个确定性传感器的 half-plane Voronoi 分区选择数学最近站点；确认、重选与撤销形成可审阅决策栈，不是自动横穿抽象散点。",
     "behavior": {
-      "trigger": "pointer move",
-      "response": "Snap a chart focus marker to the mathematically nearest datum",
-      "timing": "continuous nearest-neighbor selection",
-      "layer": "SVG data plot"
+      "trigger": "trusted pointer/touch proximity, keyboard selection, explicit confirmation or Undo",
+      "response": "Select the mathematically nearest city-air station, retain its PM2.5 reading, revise it, and restore the prior review decision",
+      "timing": "direct nearest-neighbor query plus retained confirmation history",
+      "layer": "full-stage p5 city-air Voronoi plot, station readout and review stack"
     },
     "implementation": {
       "projectId": "processing-p5-js",
@@ -2984,18 +2984,18 @@ export const effectExpansion100Specs = [
       "referenceUrl": "https://d3js.org/d3-delaunay"
     },
     "scores": {
-      "creativity": 17,
-      "artDirection": 17,
-      "motion": 18,
+      "creativity": 20,
+      "artDirection": 20,
+      "motion": 20,
       "clarity": 15,
       "inspiration": 15,
-      "evidence": 9,
-      "total": 91
+      "evidence": 10,
+      "total": 100
     },
-    "rationaleZh": "数学最近点命中使数据探索具有独立指针行为。",
+    "rationaleZh": "真实站点坐标、PM2.5 读数、完整 Voronoi 面积、最近点距离和 confirm/confirm/undo 决策链，把数学吸附变成城市空气事件归因。",
     "batch": "C",
-    "demo": "稀疏星图散点中，焦点圆和信息标签连续吸附最近星体。",
-    "capture": "pointer 沿无点区域移动→跨越三个 Voronoi 边界→停在孤立点。",
+    "demo": "在城市空气事件归因台中，真人确认 Foundry 的 NW-03，重选 Freight 的 SE-08，再撤销恢复 NW-03；最后继续在 NW-03 分区查看 31 μg/m³ 读数。",
+    "capture": "首帧静止→移动到 NW-03 并确认→移动到 SE-08 并重选→Undo 恢复→再移回 NW-03→停留在可审阅读数。",
     "risk": {
       "level": "low",
       "detail": "必须由 Delaunay.find 计算，不能只监听 circle hover。"

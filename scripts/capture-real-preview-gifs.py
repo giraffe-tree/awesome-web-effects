@@ -1671,6 +1671,17 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press('PageUp')
             elif index == 25:
                 page.keyboard.press('End')
+        elif demo["id"] == "voronoi-nearest-point-hover-focus":
+            if index in {2, 4, 11, 22}:
+                station_id = 'CT-05' if index == 2 else 'NW-03' if index in {4, 22} else 'SE-08'
+                point = page.evaluate("stationId => window.__PREVIEW_INTERACTION_STATE__.stationScreenPositions.find(item => item.id === stationId)", station_id)
+                box = page.locator('#voronoi-host').bounding_box()
+                page.mouse.move(box["x"] + point["x"], box["y"] + point["y"])
+            elif index in {7, 14}:
+                page.mouse.down()
+                page.mouse.up()
+            elif index == 18:
+                page.locator('#undo-decision').click()
         elif demo["id"] == "gooey-pixel-cursor-wake":
             if index == 3:
                 box = page.locator('#pixel-wake-host').bounding_box()
@@ -6372,6 +6383,87 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not all(record["trusted"] for record in interaction["transitionRecords"])
         ):
             raise RuntimeError(f"{demo['id']} did not capture a real bidirectional research-evidence review with a retained shade conclusion: {interaction!r}")
+    elif demo["id"] == "voronoi-nearest-point-hover-focus":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        audit_actions = [record["action"] for record in interaction["auditTrail"]]
+        if (
+            not assertion
+            or interaction["task"] != "human-attributes-a-city-air-event-to-the-mathematically-nearest-authored-sensor-and-retains-a-reviewable-reading-decision"
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["mechanism"] != "trusted-pointer-or-keyboard-selection-queries-voronoi-cells-derived-from-real-data-coordinates-and-explicit-confirmation-retains-or-revises-the-reading"
+            or interaction["assetStrategy"] != "code-native-authored-sensor-coordinates-and-half-plane-voronoi-geometry-are-the-functional-input-no-raster-asset-required"
+            or interaction["causality"] != "trusted-human-input-only"
+            or interaction["automaticTraversal"]
+            or interaction["automaticSelection"]
+            or interaction["automaticConfirmation"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticCycle"]
+            or interaction["automaticTimeline"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or interaction["previewClockMutationCount"] != 0
+            or interaction["phase"] != "reviewing-selection"
+            or interaction["activeStationIndex"] != 1
+            or interaction["activeStationId"] != "NW-03"
+            or interaction["activeDistrict"] != "Foundry"
+            or interaction["activeReading"] != 31
+            or interaction["cursorDataX"] != .28
+            or interaction["cursorDataY"] != .12
+            or interaction["nearestDistanceData"] != 0
+            or interaction["nearestDistanceKm"] != 0
+            or not interaction["nearestSelectionVerified"]
+            or interaction["selectionCount"] != 6
+            or interaction["inputCount"] != 7
+            or interaction["trustedInputCount"] != 7
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["pointerMoveCount"] != 4
+            or interaction["pointerConfirmCount"] != 2
+            or interaction["undoButtonCount"] != 1
+            or interaction["keyboardSelectionCount"] != 0
+            or interaction["keyboardConfirmCount"] != 0
+            or interaction["keyboardUndoCount"] != 0
+            or interaction["confirmCount"] != 2
+            or interaction["reselectionCount"] != 1
+            or interaction["undoCount"] != 1
+            or interaction["retainedDecisionCount"] != 1
+            or interaction["decisionStackDepth"] != 1
+            or interaction["confirmedStationId"] != "NW-03"
+            or interaction["confirmedReading"] != 31
+            or interaction["lastUndoRemovedStation"] != "SE-08"
+            or interaction["lastUndoRestoredStation"] != "NW-03"
+            or len(interaction["decisionStack"]) != 1
+            or interaction["decisionStack"][0]["stationId"] != "NW-03"
+            or not interaction["decisionStack"][0]["trusted"]
+            or not interaction["decisionStack"][0]["retained"]
+            or interaction["auditTrailCount"] != 3
+            or audit_actions != ["confirm", "confirm", "undo"]
+            or interaction["auditTrail"][0]["stationId"] != "NW-03"
+            or interaction["auditTrail"][1]["stationId"] != "SE-08"
+            or interaction["auditTrail"][2]["restoredStationId"] != "NW-03"
+            or not interaction["resultHeld"]
+            or not interaction["resultValidated"]
+            or interaction["stationCount"] != 12
+            or interaction["voronoiCellCount"] != 12
+            or interaction["voronoiVertexCounts"] != [5, 4, 5, 6, 4, 6, 6, 4, 6, 4, 5, 6]
+            or interaction["voronoiMinimumVertexCount"] != 4
+            or interaction["voronoiAreaSum"] != 1
+            or interaction["dataReadingSum"] != 283
+            or not interaction["cellOwnershipVerified"]
+            or abs(interaction["canvasWidth"] - interaction["hostWidth"]) > 1
+            or abs(interaction["canvasHeight"] - interaction["hostHeight"]) > 1
+            or interaction["canvasCoverageX"] < .995
+            or interaction["canvasCoverageY"] < .995
+            or len(interaction["stationScreenPositions"]) != 12
+            or not all(interaction["plotLeft"] <= point["x"] <= interaction["plotRight"] and interaction["plotTop"] <= point["y"] <= interaction["plotBottom"] for point in interaction["stationScreenPositions"])
+            or not interaction["initialStillVerified"]
+            or len(interaction["initialPixelHash"]) != 8
+            or any(character not in "0123456789abcdef" for character in interaction["initialPixelHash"])
+            or interaction["initialPixelHash"] == "00000000"
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a real confirm-reselect-undo city-air attribution with retained NW-03 evidence: {interaction!r}")
     elif demo["id"] == "gooey-pixel-cursor-wake":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")

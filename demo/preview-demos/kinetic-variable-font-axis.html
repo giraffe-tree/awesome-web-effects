@@ -1,1 +1,340 @@
-<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Kinetic Variable Font Axis</title><link rel="stylesheet" href="./shared.css"><style>:root{--preview-background:#e7ff38}.preview-stage{background:#e7ff38;color:#0d160e}.copy{position:absolute;left:14px;top:48px;width:100px}.copy small{font:900 6px monospace;letter-spacing:.14em}.copy h1{margin:8px 0;font:950 19px/.84 system-ui;letter-spacing:-.06em}.axis-word{position:absolute;left:131px;top:48px;width:179px;height:86px;display:flex;align-items:center;justify-content:center}.glyph{display:inline-block;font:950 55px/.8 Arial Black,system-ui;letter-spacing:-.15em;transform-origin:center bottom;will-change:transform}.axis{position:absolute;left:139px;right:13px;bottom:18px;border-top:1px solid #0d160e;font:800 6px monospace;padding-top:4px;display:flex;justify-content:space-between}.library-badge{color:#0d160e;background:#f4ff8dcc;border-color:#0d160e44}.scene-caption{display:none}</style></head><body><main class="preview-stage" tabindex="0"><section class="copy"><small>WEIGHT / WIDTH</small><h1>TYPE HAS MUSCLE.</h1></section><div class="axis-word" id="axis-word"><i class="glyph">A</i><i class="glyph">X</i><i class="glyph">I</i><i class="glyph">S</i></div><div class="axis"><b>CONDENSED</b><b>EXPANDED</b></div><span class="library-badge">Motion · kinetic glyph axis</span></main><script type="module" src="./src/kinetic-variable-font-axis-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Kinetic Variable Font Axis</title>
+    <link rel="stylesheet" href="./shared.css">
+    <style>
+      :root { --preview-background: #101514; }
+      button, input { font: inherit; }
+      .preview-stage {
+        overflow: hidden;
+        background: #101514;
+        color: #f3efe5;
+        isolation: isolate;
+      }
+      .scene-image,
+      .scene-shade,
+      .scene-grid {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+      .scene-image {
+        z-index: -4;
+        object-fit: cover;
+        object-position: 50% 54%;
+        filter: saturate(.86) contrast(1.04);
+      }
+      .scene-shade {
+        z-index: -3;
+        background:
+          linear-gradient(90deg, rgba(9,13,12,.91) 0 36%, rgba(9,13,12,.48) 58%, rgba(9,13,12,.16) 100%),
+          linear-gradient(0deg, rgba(9,13,12,.84), transparent 42%);
+        pointer-events: none;
+      }
+      .scene-grid {
+        z-index: -2;
+        opacity: .22;
+        background-image:
+          linear-gradient(rgba(243,239,229,.18) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(243,239,229,.18) 1px, transparent 1px);
+        background-size: 12.5% 25%;
+        pointer-events: none;
+      }
+      .library-badge {
+        top: 5.5%;
+        left: 3.8%;
+        padding: clamp(3px,.8vw,6px) clamp(4px,1vw,8px);
+        border-color: rgba(243,239,229,.28);
+        background: rgba(10,15,14,.65);
+        color: rgba(243,239,229,.82);
+        font-size: clamp(4px,1.25vw,9px);
+        backdrop-filter: blur(8px);
+      }
+      .brief {
+        position: absolute;
+        z-index: 3;
+        top: 22.5%;
+        left: 3.8%;
+        width: 28%;
+        pointer-events: none;
+      }
+      .eyebrow {
+        margin: 0;
+        color: #ff6b42;
+        font: 850 clamp(4px,1.25vw,9px)/1 ui-monospace, monospace;
+        letter-spacing: .15em;
+      }
+      .brief h1 {
+        margin: clamp(5px,1.5vw,11px) 0 0;
+        max-width: 8ch;
+        font: 900 clamp(13px,3.75vw,27px)/.9 system-ui, sans-serif;
+        letter-spacing: -.06em;
+      }
+      .brief-copy {
+        max-width: 22em;
+        margin: clamp(5px,1.5vw,11px) 0 0;
+        color: rgba(243,239,229,.58);
+        font: 650 clamp(4px,1.18vw,8px)/1.35 ui-monospace, monospace;
+      }
+      .source-readout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: clamp(4px,1.2vw,9px);
+        margin-top: clamp(7px,2vw,14px);
+      }
+      .source-readout span {
+        padding-top: clamp(3px,.75vw,6px);
+        border-top: 1px solid rgba(243,239,229,.22);
+      }
+      .source-readout small,
+      .source-readout output {
+        display: block;
+        font-family: ui-monospace, monospace;
+      }
+      .source-readout small {
+        color: rgba(243,239,229,.4);
+        font-size: clamp(3px,.95vw,7px);
+        font-weight: 800;
+        letter-spacing: .11em;
+      }
+      .source-readout output {
+        margin-top: clamp(2px,.55vw,4px);
+        color: #f3efe5;
+        font-size: clamp(5px,1.45vw,10px);
+        font-weight: 850;
+      }
+      .specimen-surface {
+        position: absolute;
+        z-index: 2;
+        top: 12%;
+        right: 3.8%;
+        width: 58%;
+        height: 61%;
+        border: 1px solid rgba(243,239,229,.32);
+        border-radius: clamp(8px,2.2vw,16px);
+        background: rgba(9,13,12,.28);
+        box-shadow: inset 0 0 0 1px rgba(12,16,15,.18), 0 16px 45px rgba(0,0,0,.2);
+        cursor: crosshair;
+        touch-action: none;
+        outline: none;
+        backdrop-filter: blur(2px);
+      }
+      .specimen-surface[data-dragging="true"] { cursor: grabbing; }
+      .specimen-surface:focus-visible { outline: 2px solid #ff6b42; outline-offset: 3px; }
+      .proof-meta,
+      .proof-hint {
+        position: absolute;
+        margin: 0;
+        font: 820 clamp(4px,1.05vw,7px)/1 ui-monospace, monospace;
+        letter-spacing: .12em;
+        pointer-events: none;
+      }
+      .proof-meta { top: 9%; left: 5.5%; color: rgba(243,239,229,.62); }
+      .proof-hint { right: 5.5%; bottom: 9%; color: rgba(243,239,229,.56); }
+      .axis-target {
+        position: absolute;
+        top: 17%;
+        bottom: 17%;
+        width: 1px;
+        background: linear-gradient(transparent, rgba(255,107,66,.88), transparent);
+        pointer-events: none;
+      }
+      .axis-target::before {
+        content: "SCENE FIT";
+        position: absolute;
+        top: -2px;
+        left: 4px;
+        color: #ff8b68;
+        font: 800 clamp(3px,.88vw,6px)/1 ui-monospace, monospace;
+        letter-spacing: .08em;
+        white-space: nowrap;
+      }
+      .specimen {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        display: flex;
+        align-items: baseline;
+        justify-content: center;
+        width: 90%;
+        margin: 0;
+        transform: translate(-50%,-50%);
+        color: #f5f0e5;
+        text-align: center;
+        white-space: nowrap;
+        pointer-events: none;
+      }
+      .glyph {
+        display: inline-block;
+        min-width: .39em;
+        font-family: "Arial Narrow", "Helvetica Neue", Arial, system-ui, sans-serif;
+        font-size: clamp(27px,9.7vw,70px);
+        font-style: normal;
+        font-stretch: 75%;
+        font-synthesis: none;
+        line-height: .74;
+        letter-spacing: -.09em;
+        text-shadow: 0 2px 18px rgba(0,0,0,.25);
+        transform-origin: center 62%;
+        will-change: transform, font-variation-settings;
+      }
+      .axis-panel {
+        position: absolute;
+        z-index: 6;
+        right: 3.8%;
+        bottom: 6%;
+        display: grid;
+        grid-template-columns: minmax(0,1fr) minmax(0,1fr) auto;
+        align-items: end;
+        gap: clamp(5px,1.3vw,10px);
+        width: 58%;
+      }
+      .axis-control {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        gap: clamp(3px,.8vw,6px);
+        min-width: 0;
+        color: rgba(243,239,229,.7);
+        font: 800 clamp(4px,1vw,7px)/1 ui-monospace, monospace;
+        letter-spacing: .08em;
+      }
+      .axis-control output { min-width: 2.8em; color: #fff; text-align: right; }
+      .axis-control input {
+        min-width: 0;
+        width: 100%;
+        height: clamp(7px,1.9vw,14px);
+        margin: 0;
+        accent-color: #ff6b42;
+        cursor: ew-resize;
+      }
+      .axis-control input:focus-visible,
+      .axis-actions button:focus-visible { outline: 2px solid #ff6b42; outline-offset: 2px; }
+      .axis-actions { display: flex; gap: clamp(3px,.75vw,6px); }
+      .axis-actions button {
+        padding: clamp(3px,.8vw,6px) clamp(5px,1.1vw,8px);
+        border: 1px solid rgba(243,239,229,.3);
+        border-radius: 999px;
+        background: rgba(10,15,14,.7);
+        color: #f3efe5;
+        cursor: pointer;
+        font: 850 clamp(4px,1vw,7px)/1 ui-monospace, monospace;
+        letter-spacing: .07em;
+        white-space: nowrap;
+      }
+      #match-button { border-color: #ff6b42; background: #ff6b42; color: #161412; }
+      .decision {
+        position: absolute;
+        z-index: 5;
+        left: 3.8%;
+        bottom: 7.2%;
+        display: flex;
+        align-items: baseline;
+        gap: clamp(5px,1.2vw,9px);
+        margin: 0;
+        pointer-events: none;
+      }
+      .decision strong {
+        color: #ff6b42;
+        font: 900 clamp(11px,3vw,22px)/1 ui-monospace, monospace;
+        letter-spacing: -.07em;
+      }
+      .decision span {
+        color: rgba(243,239,229,.62);
+        font: 780 clamp(4px,1.05vw,7px)/1.2 ui-monospace, monospace;
+        letter-spacing: .08em;
+      }
+      .scene-caption { display: none; }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0,0,0,0);
+        white-space: nowrap;
+        border: 0;
+      }
+      @media (max-width: 180px) {
+        .library-badge { padding: 2px 3px; font-size: 3px; }
+        .brief { top: 24%; }
+        .eyebrow { font-size: 3px; }
+        .brief h1 { margin-top: 3px; font-size: 8px; }
+        .brief-copy, .source-readout, .decision, .proof-hint, .axis-target::before { display: none; }
+        .specimen-surface { top: 15%; height: 59%; border-radius: 5px; }
+        .proof-meta { top: 8%; font-size: 3px; }
+        .glyph { min-width: .34em; font-size: 16px; }
+        .axis-panel { bottom: 6%; gap: 2px; }
+        .axis-control { grid-template-columns: auto 1fr; gap: 1px; font-size: 3px; }
+        .axis-control output { display: none; }
+        .axis-control input { height: 5px; }
+        .axis-actions { gap: 1px; }
+        .axis-actions button { padding: 2px; font-size: 3px; }
+        #reset-button { display: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <main
+      class="preview-stage"
+      id="type-stage"
+      tabindex="0"
+      data-preview-mechanism="motion-human-controlled-variable-font-wayfinding-fit"
+      aria-describedby="type-instructions"
+    >
+      <img class="scene-image" id="scene-image" alt="A fictional coastal transit concourse used as a legibility test scene">
+      <div class="scene-shade" aria-hidden="true"></div>
+      <div class="scene-grid" aria-hidden="true"></div>
+
+      <section class="brief" aria-label="Wayfinding type brief">
+        <p class="eyebrow">FIELD TEST / VF–142</p>
+        <h1>FIT TYPE TO THE PLACE.</h1>
+        <p class="brief-copy">Drag the proof to balance width and weight against measured architecture.</p>
+        <div class="source-readout" aria-label="Image analysis">
+          <span><small>EDGE LOAD</small><output id="edge-output">—</output></span>
+          <span><small>SCENE FIT</small><output id="fit-output">—</output></span>
+        </div>
+      </section>
+
+      <section
+        class="specimen-surface"
+        id="specimen-surface"
+        tabindex="0"
+        role="application"
+        aria-label="Variable font specimen controller"
+      >
+        <p class="proof-meta">WAYFINDING PROOF · NORTH CONCOURSE</p>
+        <div class="axis-target" id="axis-target" aria-hidden="true"></div>
+        <h2 class="specimen" id="specimen" aria-label="North Quay">
+          <i class="glyph">N</i><i class="glyph">O</i><i class="glyph">R</i><i class="glyph">T</i><i class="glyph">H</i><i class="glyph">&nbsp;</i><i class="glyph">Q</i><i class="glyph">U</i><i class="glyph">A</i><i class="glyph">Y</i>
+        </h2>
+        <p class="proof-hint">DRAG ↔ WIDTH · ↕ WEIGHT</p>
+      </section>
+
+      <form class="axis-panel" aria-label="Variable font axis controls" onsubmit="return false">
+        <label class="axis-control" for="width-range">
+          <span>WDTH</span><input id="width-range" type="range" min="64" max="124" step="1" value="92"><output id="width-output">92</output>
+        </label>
+        <label class="axis-control" for="weight-range">
+          <span>WGHT</span><input id="weight-range" type="range" min="350" max="900" step="10" value="610"><output id="weight-output">610</output>
+        </label>
+        <div class="axis-actions">
+          <button type="button" id="match-button">MATCH SCENE</button>
+          <button type="button" id="reset-button">RESET</button>
+        </div>
+      </form>
+
+      <p class="decision"><strong id="score-output">—</strong><span id="decision-output">READING SOURCE PIXELS</span></p>
+      <p class="sr-only" id="type-instructions">Drag inside the specimen to adjust width horizontally and weight vertically. Use arrow keys to tune, Enter to match the scene recommendation, Home or Escape to reset, or use the visible range controls.</p>
+      <output class="sr-only" id="runtime-ledger" aria-hidden="true"></output>
+      <span class="library-badge">Motion · human-owned font axes</span>
+      <span class="scene-caption">real concourse pixels → recommended axes → human-adjusted wayfinding proof</span>
+    </main>
+    <script type="module" src="./src/kinetic-variable-font-axis-demo.js"></script>
+  </body>
+</html>

@@ -184,7 +184,7 @@ Typing, text splitting, vector drawing, handwriting, and SVG morphing.
 | [Elastic SVG rope lettering](https://giraffe-tree.github.io/awesome-web-effects/#elastic-svg-rope-lettering) | [Motion](https://github.com/motiondivision/motion) | **96/100** | — | 32,819 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#elastic-svg-rope-lettering) |
 | [Northlight studio quiet-hour finder](https://giraffe-tree.github.io/awesome-web-effects/#radial-calendar-time-zoom) | [Motion](https://github.com/motiondivision/motion) | **100/100** | — | 32,819 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#radial-calendar-time-zoom) |
 | [SVG metaball cursor separation](https://giraffe-tree.github.io/awesome-web-effects/#svg-metaball-cursor-separation) | [Motion](https://github.com/motiondivision/motion) | **95/100** | — | 32,819 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#svg-metaball-cursor-separation) |
-| [Kinetic variable font axis](https://giraffe-tree.github.io/awesome-web-effects/#kinetic-variable-font-axis) | [Motion](https://github.com/motiondivision/motion) | **96/100** | — | 32,819 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#kinetic-variable-font-axis) |
+| [North Quay wayfinding type fit](https://giraffe-tree.github.io/awesome-web-effects/#kinetic-variable-font-axis) | [Motion](https://github.com/motiondivision/motion) | **100/100** | — | 32,819 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#kinetic-variable-font-axis) |
 | [Northpass cold-chain route check](https://giraffe-tree.github.io/awesome-web-effects/#animated-bezier-route-cartography) | [Motion](https://github.com/motiondivision/motion) | **100/100** | — | 32,819 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#animated-bezier-route-cartography) |
 
 <a id="canvas"></a>
@@ -282,7 +282,7 @@ Scene graphs, creative coding, physics, drawing tools, and 2D renderers.
 - 150 verified previews: 2 official captures and 148 captures from runnable local demos; 0 missing.
 - Human review scores creativity, art direction, motion craft, legibility, creative transfer and evidence quality.
 - Admission requires 80/100 plus core-dimension minimums. Popularity never overrides the gate.
-- The verified GIF set is 26.07 MiB; every preview is 320×180, at most three seconds and below 1 MiB.
+- The verified GIF set is 26.09 MiB; every preview is 320×180, at most three seconds and below 1 MiB.
 - Stars are a 2026-07-20 snapshot. Recommendation sources and observed AI homepages remain separate relationships.
 
 Read the [current 396-candidate admission audit](research/demo-admission-audit-2026-07-20.md), the [100-company homepage research](research/ai-native-homepages-100.md), and the [preview provenance manifest](demo/gifs/provenance.json).

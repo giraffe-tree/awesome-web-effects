@@ -1849,6 +1849,33 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 25:
                 route = page.evaluate("window.__PREVIEW_INTERACTION_STATE__.routeEvidence")
                 page.mouse.move(route[5]["u"] * 320, route[5]["v"] * 180)
+        elif demo["id"] == "kinetic-variable-font-axis":
+            if index == 2:
+                page.mouse.move(165, 95)
+            elif index == 4:
+                page.mouse.move(160, 105)
+                page.mouse.down()
+            elif index == 5:
+                page.mouse.move(190, 88, steps=2)
+            elif index == 6:
+                page.mouse.move(220, 66, steps=2)
+            elif index == 7:
+                page.mouse.move(248, 43, steps=2)
+            elif index == 8:
+                page.mouse.up()
+            elif index == 10:
+                page.locator("#match-button").click()
+            elif index == 13:
+                page.locator("#reset-button").click()
+            elif index == 16:
+                page.locator("#width-range").focus()
+                page.keyboard.press("ArrowRight")
+            elif index == 18:
+                page.locator("#weight-range").focus()
+                page.keyboard.press("ArrowUp")
+            elif index == 20:
+                page.locator("#specimen-surface").focus()
+                page.keyboard.press("Enter")
         elif demo["id"] == "gravity-well-icon-field":
             if index == 2:
                 page.mouse.move(58, 54)
@@ -5284,6 +5311,98 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["ready"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture a trusted six-fix pixel-derived night route, explicit confirmation, undo, keyboard reacquisition, and final reseal without automatic stitching: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "kinetic-variable-font-axis":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-wayfinding-variable-font-fit-from-real-scene-pixels"
+            or interaction["claimedLibrary"] != "motion@12.42.2"
+            or interaction["mechanism"] != "decoded-image-luminance-and-edge-analysis-recommends-human-controlled-per-glyph-wght-wdth-axes"
+            or interaction["acceptedInputs"] != ["captured-mouse-drag", "captured-touch-drag", "captured-pen-drag", "keyboard", "range-controls", "visible-buttons"]
+            or not interaction["userInputRequired"]
+            or not interaction["initialFrameStatic"]
+            or interaction["automaticCycle"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["previewClockMutationCount"] != 0
+            or interaction["timerMutationCount"] != 0
+            or interaction["inputCount"] < 12
+            or interaction["humanInputCausalityCount"] < 10
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["pointerEnterCount"] != 1
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerMoveCount"] < 6
+            or interaction["pointerReleaseCount"] != 1
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerReleaseCaptureCount"] != 1
+            or interaction["dragMutationCount"] < 6
+            or interaction["mouseDragMutationCount"] < 6
+            or interaction["touchDragMutationCount"] != 0
+            or interaction["penDragMutationCount"] != 0
+            or interaction["dragDistance"] < .45
+            or interaction["rangeInputCount"] != 2
+            or interaction["keyboardInputCount"] != 1
+            or interaction["buttonActivationCount"] != 3
+            or interaction["matchSceneCount"] != 2
+            or interaction["resetCount"] != 1
+            or interaction["axisMutationCount"] < 10
+            or interaction["currentWidth"] != interaction["recommendedWidth"]
+            or interaction["currentWeight"] != interaction["recommendedWeight"]
+            or interaction["proofScore"] != 100
+            or interaction["bestProofScore"] != 100
+            or interaction["currentAxisChecksum"] == interaction["initialAxisChecksum"]
+            or interaction["activePointerId"] is not None
+            or interaction["pointerCaptured"]
+            or interaction["lastInputTrusted"] is not True
+            or interaction["lastInputKind"] != "keyboard-Enter"
+            or interaction["lastPointerType"] != "mouse"
+            or interaction["sourceFetchCount"] != 1
+            or interaction["sourceResponseStatus"] != 200
+            or not interaction["sourceSameOrigin"]
+            or interaction["sourceByteLength"] != 195640
+            or interaction["sourceSha256"] != "8f153c760da05ffdc5b00fc8c27790ab45d30186a4680565efa3fad4fbd096d0"
+            or not interaction["sourceShaMatchesExpected"]
+            or not interaction["imageDecoded"]
+            or interaction["imageNaturalWidth"] != 960
+            or interaction["imageNaturalHeight"] != 640
+            or interaction["sourcePixelCount"] != 614400
+            or interaction["analysisWidth"] != 96
+            or interaction["analysisHeight"] != 64
+            or interaction["analysisPixelCount"] != 6144
+            or interaction["analysisByteLength"] != 24576
+            or len(interaction["analysisSha256"]) != 64
+            or not interaction["analysisSha256"].strip("0")
+            or interaction["analysisChecksum"] == 0
+            or interaction["distinctColorCount"] <= 300
+            or interaction["lumaDeviation"] <= 25
+            or interaction["darkPixelRatio"] <= .1
+            or interaction["darkPixelRatio"] >= .8
+            or interaction["brightPixelRatio"] <= .02
+            or interaction["brightPixelRatio"] >= .3
+            or interaction["edgeDensity"] <= .05
+            or interaction["edgeDensity"] >= .2
+            or interaction["edgeSampleCount"] != 12128
+            or interaction["recommendationChecksum"] == 0
+            or interaction["recommendedWidth"] < 72
+            or interaction["recommendedWidth"] > 102
+            or interaction["recommendedWeight"] < 560
+            or interaction["recommendedWeight"] > 860
+            or interaction["glyphCount"] != 10
+            or interaction["glyphVariationCount"] != 10
+            or interaction["glyphTransformCount"] != 10
+            or interaction["motionAnimationCount"] < 80
+            or interaction["motionAnimationSettledCount"] < 10
+            or interaction["activeMotionCount"] != 0
+            or interaction["renderCount"] < 36
+            or interaction["runtimeAssertCount"] < 2
+            or not interaction["ready"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture trusted wayfinding-type drag, native axis controls, reset, and an explicit pixel-derived 100% scene match with ten settled Motion glyphs and no automatic axis playback: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "gravity-well-icon-field":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

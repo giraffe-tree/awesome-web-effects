@@ -151,12 +151,12 @@ export const effectExpansion150BatchB = [
     scores: score(20, 20, 20, 15, 15, 10), rationaleZh: '一张原创 ImageGen 火山海岸中继站照片被真实 fetch、SHA-256 校验并由 p5 解码为 960×640 像素；480×270 采样缓冲的每一列分别按亮度和色相重排，单调性错误为零且各有超过 12.8 万像素发生位置变化。真人 hover、捕获拖拽、键盘与模式按钮直接拥有边界和排序缓冲，首帧保持原图且无自动扫描、fallback、合成输入或预览时钟变更。'
   },
   {
-    id: 'kinetic-variable-font-axis', order: 142, name: 'Kinetic variable font axis', nameZh: '动态可变字体轴', category: 'vector', sourceUrl: 'https://github.com/arrowtype/recursive',
-    difference: '四个字母的宽度、重量、纵向比例和基线波动沿同一轴连续编排，不是整体文字缩放。',
-    behavior: { trigger: 'pointer progress or animation frame', response: 'Individual glyphs traverse coordinated width and weight axes', timing: 'continuous per-glyph axis choreography', layer: 'display typography' },
-    prompt: '逐字控制 font-variation-settings、scaleX、scaleY 和基线波动，构成从压缩到扩展的字体轴演示。',
-    implementation: motionImplementation("const axisMotion = animate(word, { opacity: [.94, 1, .94] }, { duration: 3 }); glyphs.forEach(setFontAxes);", 'https://github.com/arrowtype/recursive'),
-    scores: score(18, 19, 19, 15, 15, 10), rationaleZh: '字母级宽度与重量差异明显，排版主体保持可读且富有节奏。'
+    id: 'kinetic-variable-font-axis', order: 142, name: 'North Quay wayfinding type fit', nameZh: 'North Quay 导视字形适配台', category: 'vector', sourceUrl: 'https://github.com/motiondivision/motion',
+    difference: '把自动变化的四字母试样变成真实导视决策：交通站照片的亮度、明暗比例、对比度和边缘密度计算推荐 WDTH/WGHT，用户再逐字调整并获得可解释的场景适配分。',
+    behavior: { trigger: 'trusted captured pointer drag, ranges, keyboard, or visible match/reset control', response: 'Tune each NORTH QUAY glyph across width and weight, compare it with the pixel-derived scene recommendation, then explicitly match or reset the proof', timing: 'finite human-owned Motion transitions that settle after every input', layer: 'full-stage concourse image, draggable specimen, per-glyph typography, measured axes, score, ranges, and controls' },
+    prompt: '制作一个全舞台公共导视字形适配台：同源加载并精确校验一张 ImageGen 海岸交通站照片，用 96×64 像素的亮度、暗部/亮部比例、方差和边缘密度计算推荐 WDTH/WGHT；真人通过捕获式鼠标/触控/笔拖动、双 range、键盘及 Match Scene/Reset 调整十个字形。每个 glyph 必须写入独立 font-variation-settings，并用有限 Motion 变换落稳；首帧静止，禁止 autoplay、fallback、合成输入或预览时钟变异。',
+    implementation: motionImplementation("glyphs.forEach((glyph, i) => { glyph.style.fontVariationSettings = `'wght' ${localWeight(i)}, 'wdth' ${localWidth(i)}`; animate(glyph, { scaleX: axisScale(i), y: baselineLift(i), rotate: tilt(i) }, { duration: .18 }); });", 'https://github.com/motiondivision/motion'),
+    scores: score(20, 20, 20, 15, 15, 10), rationaleZh: '原创 ImageGen 交通站照片经过同源 fetch、精确源 SHA 与浏览器解码，并读取为 96×64 / 6,144 像素；亮度、方差、暗亮比例和边缘密度真实给出推荐轴值与适配目标。可信捕获拖拽、原生 range、键盘和可见按钮可修改十个 glyph 的独立字重/字宽与 Motion 变换，最终 100% 分数由当前轴和像素建议的距离计算，而非自动时间线。'
   },
   {
     id: 'animated-bezier-route-cartography', order: 143, name: 'Northpass cold-chain route check', nameZh: 'Northpass 冷链路线检查', category: 'vector', sourceUrl: 'https://github.com/motiondivision/motion',

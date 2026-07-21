@@ -1,1 +1,266 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p5.js — Drag Resizable Audio Loop Region</title><link rel="stylesheet" href="./shared.css"><style>:root{--preview-background:#0c0a13}#audio-host{position:absolute;inset:0;cursor:ew-resize}#audio-host canvas{width:100%!important;height:100%!important}.audio-copy{position:absolute;z-index:5;left:13px;top:42px;color:#fff6ff;pointer-events:none}.audio-copy small{font:800 6px/1 ui-monospace;letter-spacing:.15em;color:#dd8cff}.audio-copy h1{width:105px;margin:8px 0 0;font:950 17px/.86 system-ui;letter-spacing:-.05em}.loop-time{position:absolute;right:12px;top:12px;z-index:5;color:#dd8cff;font:900 7px/1 ui-monospace}.library-badge{background:#0c0a13c9}</style></head><body><main class="preview-stage" data-preview-mechanism="editable-audio-loop-region"><div id="audio-host" tabindex="0" aria-label="Drag either loop edge, drag the region, or press Space to enable the synthesized audio loop"></div><section class="audio-copy"><small>LOCAL SYNTH / 8.0 SEC</small><h1>TRIM THE LOOP UNTIL IT BREATHES.</h1></section><output class="loop-time" id="loop-time">01.4 — 05.4</output><span class="library-badge">p5.js · Canvas + Web Audio</span><span class="scene-caption">drag boundaries · playhead wraps inside selection</span></main><script type="module" src="./src/drag-resizable-audio-loop-region-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>p5.js — Podcast Loop Editor</title>
+    <link rel="stylesheet" href="./shared.css" />
+    <style>
+      :root {
+        --preview-background: #171712;
+        --paper: #eee9dc;
+        --ink: #171712;
+        --muted: #827d70;
+        --line: rgba(238, 233, 220, .15);
+        --acid: #e7ff57;
+        --coral: #ff725f;
+      }
+
+      * { box-sizing: border-box; }
+      button { font: inherit; }
+
+      .audio-stage {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        color: var(--paper);
+        background:
+          linear-gradient(rgba(238, 233, 220, .035) 1px, transparent 1px) 0 0 / 100% 18px,
+          #171712;
+      }
+
+      .canvas-host,
+      .canvas-host canvas {
+        position: absolute;
+        inset: 0;
+        width: 100% !important;
+        height: 100% !important;
+        pointer-events: none;
+      }
+
+      .masthead {
+        position: absolute;
+        z-index: 4;
+        top: 39px;
+        left: 12px;
+        display: grid;
+        gap: 1px;
+        pointer-events: none;
+      }
+
+      .masthead span,
+      .metric-label,
+      .status-line,
+      .transport button,
+      .sample-readout {
+        font-size: clamp(5.5px, 1.18vw, 9px);
+        font-weight: 850;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+      }
+
+      .masthead span { color: var(--coral); }
+      .masthead strong {
+        font-size: clamp(12px, 2.6vw, 21px);
+        font-weight: 950;
+        line-height: .9;
+        letter-spacing: -.045em;
+      }
+
+      .metric-deck {
+        position: absolute;
+        z-index: 4;
+        top: 10px;
+        right: 11px;
+        display: grid;
+        grid-template-columns: auto auto;
+        gap: 2px 9px;
+        padding: 5px 7px;
+        border: 1px solid rgba(238, 233, 220, .14);
+        border-radius: 4px;
+        background: rgba(23, 23, 18, .78);
+        backdrop-filter: blur(8px);
+        pointer-events: none;
+      }
+
+      .metric-label { color: rgba(238, 233, 220, .43); }
+      .metric-value {
+        color: var(--acid);
+        font: 900 clamp(7px, 1.5vw, 11px)/1 ui-monospace, monospace;
+        text-align: right;
+      }
+
+      .wave-plot {
+        position: absolute;
+        z-index: 6;
+        left: 12px;
+        right: 12px;
+        top: 67px;
+        bottom: 48px;
+        touch-action: none;
+      }
+
+      .selection-region {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        min-width: 24px;
+        border-top: 1px solid rgba(231, 255, 87, .75);
+        border-bottom: 1px solid rgba(231, 255, 87, .75);
+        background: rgba(231, 255, 87, .065);
+        pointer-events: none;
+      }
+
+      .loop-handle {
+        position: absolute;
+        z-index: 8;
+        top: 0;
+        bottom: 0;
+        width: 17px;
+        padding: 0;
+        border: 0;
+        color: var(--ink);
+        background: transparent;
+        cursor: ew-resize;
+        outline: none;
+        touch-action: none;
+        transform: translateX(-50%);
+      }
+
+      .loop-handle::before {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        width: 2px;
+        background: var(--acid);
+        content: "";
+        transform: translateX(-50%);
+      }
+
+      .loop-handle::after {
+        position: absolute;
+        top: -3px;
+        left: 50%;
+        width: 10px;
+        height: 9px;
+        border-radius: 2px;
+        background: var(--acid);
+        box-shadow: 0 0 0 1px rgba(23, 23, 18, .45);
+        content: "";
+        transform: translateX(-50%);
+      }
+
+      .loop-handle[data-edge="end"]::after { top: auto; bottom: -3px; }
+      .loop-handle:focus-visible::after { box-shadow: 0 0 0 2px white, 0 0 0 4px rgba(231, 255, 87, .24); }
+      .loop-handle[aria-valuenow][data-dragging="true"]::before { width: 4px; }
+
+      .sample-readout {
+        position: absolute;
+        z-index: 4;
+        right: 12px;
+        bottom: 37px;
+        color: rgba(238, 233, 220, .48);
+        font-family: ui-monospace, monospace;
+        pointer-events: none;
+      }
+
+      .transport {
+        position: absolute;
+        z-index: 10;
+        right: 11px;
+        bottom: 9px;
+        left: 11px;
+        display: grid;
+        grid-template-columns: minmax(72px, 1fr) repeat(5, auto);
+        align-items: center;
+        gap: 4px;
+      }
+
+      .status-line {
+        overflow: hidden;
+        color: rgba(238, 233, 220, .57);
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .status-line strong { color: var(--paper); }
+
+      .transport button {
+        min-width: 31px;
+        padding: 5px 7px;
+        border: 1px solid rgba(238, 233, 220, .18);
+        border-radius: 3px;
+        color: var(--paper);
+        background: rgba(238, 233, 220, .035);
+        cursor: pointer;
+        outline: none;
+      }
+
+      .transport button:hover:not(:disabled) { border-color: rgba(231, 255, 87, .65); }
+      .transport button:focus-visible { border-color: white; box-shadow: 0 0 0 2px rgba(231, 255, 87, .18); }
+      .transport button:disabled { opacity: .28; cursor: default; }
+      .transport .primary { color: var(--ink); background: var(--acid); border-color: var(--acid); }
+      .transport .keep { color: var(--acid); border-color: rgba(231, 255, 87, .38); }
+
+      .library-badge { background: rgba(23, 23, 18, .9); }
+      .scene-caption { display: none; }
+
+      @media (max-width: 430px) and (max-height: 250px) {
+        .transport button { padding-inline: 5px; }
+        .sample-readout { display: none; }
+      }
+
+      @media (max-aspect-ratio: 4 / 5) {
+        .masthead { top: 43px; }
+        .metric-deck { top: 43px; }
+        .wave-plot { top: 94px; bottom: 101px; }
+        .sample-readout { right: auto; bottom: 89px; left: 12px; }
+        .transport {
+          grid-template-columns: repeat(3, 1fr);
+          bottom: 10px;
+        }
+        .status-line { grid-column: 1 / -1; }
+        .transport button { min-width: 0; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="preview-stage">
+      <section class="audio-stage" id="audio-stage" data-preview-mechanism="trusted-boundary-editing-of-deterministic-pcm-sample-indices-with-finite-web-audio-audition-and-retained-crop-confirmation" data-phase="waiting">
+        <div class="canvas-host" id="audio-canvas" aria-hidden="true"></div>
+
+        <header class="masthead">
+          <span>Field notes · take 04</span>
+          <strong>Cut the room tone.</strong>
+        </header>
+
+        <section class="metric-deck" aria-live="polite">
+          <span class="metric-label">Loop</span><output class="metric-value" id="duration-value">04.70s</output>
+          <span class="metric-label">Range</span><output class="metric-value" id="range-value">01.15–05.85</output>
+        </section>
+
+        <div class="wave-plot" id="wave-plot">
+          <div class="selection-region" id="selection-region"></div>
+          <button class="loop-handle" id="loop-start-handle" type="button" data-edge="start" role="slider" aria-label="Loop start" aria-valuemin="0" aria-valuemax="8" aria-valuenow="1.15" aria-valuetext="1.15 seconds"></button>
+          <button class="loop-handle" id="loop-end-handle" type="button" data-edge="end" role="slider" aria-label="Loop end" aria-valuemin="0" aria-valuemax="8" aria-valuenow="5.85" aria-valuetext="5.85 seconds"></button>
+        </div>
+
+        <output class="sample-readout" id="sample-readout">samples 009200 → 046800</output>
+
+        <section class="transport" aria-label="Loop audition and edit controls">
+          <output class="status-line" id="status-line"><strong>Ready to trim</strong> · still until you act</output>
+          <button class="primary" id="play-action" type="button">Play</button>
+          <button id="pause-action" type="button" disabled>Pause</button>
+          <button class="keep" id="keep-action" type="button">Keep</button>
+          <button id="undo-action" type="button" disabled>Undo</button>
+          <button id="reset-action" type="button" disabled>Reset</button>
+        </section>
+      </section>
+
+      <span class="library-badge">p5.js · deterministic PCM</span>
+      <span class="scene-caption">human boundary edit · finite audition · retained cut</span>
+    </main>
+    <script type="module" src="./src/drag-resizable-audio-loop-region-demo.js"></script>
+  </body>
+</html>

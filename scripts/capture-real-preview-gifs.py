@@ -1910,6 +1910,34 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.locator('[data-place-id="pier-seven"]').click()
             elif index == 17:
                 page.locator('#keep-place').click()
+        elif demo["id"] == "drag-resizable-audio-loop-region":
+            if index == 4:
+                handle_box = page.locator('#loop-end-handle').bounding_box()
+                wave_box = page.locator('#wave-plot').bounding_box()
+                page.mouse.move(handle_box["x"] + handle_box["width"] * .5, handle_box["y"] + handle_box["height"] * .5)
+                page.mouse.down()
+            elif 5 <= index <= 8:
+                target_fraction = {5: .66, 6: .53, 7: .40, 8: .35}[index]
+                page.mouse.move(wave_box["x"] + wave_box["width"] * target_fraction, wave_box["y"] + wave_box["height"] * .5)
+                if index == 8:
+                    page.mouse.up()
+            elif index == 9:
+                page.locator('#play-action').click()
+            elif 10 <= index <= 12:
+                page.wait_for_timeout(110)
+            elif index == 13:
+                page.locator('#pause-action').click()
+            elif index == 15:
+                page.locator('#play-action').click()
+            elif 16 <= index <= 27:
+                page.wait_for_timeout(125)
+            elif index == 29:
+                page.locator('#keep-action').click()
+            elif index == 31:
+                page.locator('#loop-start-handle').focus()
+                page.keyboard.press('ArrowRight')
+            elif index == 33:
+                page.locator('#undo-action').click()
         elif demo["id"] == "gooey-pixel-cursor-wake":
             if index == 3:
                 box = page.locator('#pixel-wake-host').bounding_box()
@@ -7438,6 +7466,91 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or page.locator('#map-camera').text_content() != "Z 2.60 · P 29° · B -11°"
         ):
             raise RuntimeError(f"{demo['id']} did not capture one real human-requested local-vector camera flight and a retained Pier Seven route: {interaction!r}")
+    elif demo["id"] == "drag-resizable-audio-loop-region":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        if (
+            not assertion
+            or interaction["id"] != "drag-resizable-audio-loop-region"
+            or interaction["task"] != "human-trims-a-podcast-sample-by-dragging-or-keyboard-adjusting-boundaries-auditions-it-once-and-explicitly-keeps-the-crop"
+            or interaction["mechanism"] != "trusted-boundary-input-recalculates-deterministic-pcm-sample-indices-while-web-audio-plays-the-selected-buffer-range-once-without-looping"
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["imageGenUsed"]
+            or "generated bitmap would be decorative" not in interaction["imageGenOmissionReason"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticLooping"]
+            or interaction["automaticSelection"]
+            or interaction["automaticCycle"]
+            or interaction["automaticTimeline"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["previewClockMutationCount"] != 0
+            or not interaction["initialFrameStatic"]
+            or not interaction["initialStillVerified"]
+            or interaction["initialStillMutationCount"] != 0
+            or interaction["pcmSampleRate"] != 8000
+            or interaction["pcmSampleCount"] != 64000
+            or interaction["pcmDurationSeconds"] != 8
+            or not interaction["waveformDerivedFromPcm"]
+            or interaction["waveformBucketCount"] < 72
+            or len(interaction["pcmChecksum"]) != 8
+            or interaction["pcmChecksum"] == "00000000"
+            or abs(interaction["rangeStartSeconds"] - 1.15) > .001
+            or abs(interaction["rangeEndSeconds"] - 2.8) > .001
+            or abs(interaction["rangeDurationSeconds"] - 1.65) > .001
+            or interaction["startSampleIndex"] != 9200
+            or interaction["endSampleIndex"] != 22400
+            or interaction["selectedSampleCount"] != 13200
+            or abs(interaction["committedStartSeconds"] - 1.15) > .001
+            or abs(interaction["committedEndSeconds"] - 2.8) > .001
+            or interaction["committedStartSampleIndex"] != 9200
+            or interaction["committedEndSampleIndex"] != 22400
+            or interaction["phase"] != "retained"
+            or interaction["playing"]
+            or interaction["paused"]
+            or not interaction["retained"]
+            or interaction["playheadVisible"]
+            or interaction["playbackOffsetSeconds"] != 0
+            or interaction["playbackAbsoluteSeconds"] != 1.15
+            or interaction["playbackStartCount"] != 2
+            or interaction["playbackPauseCount"] != 1
+            or interaction["playbackCompleteCount"] != 1
+            or interaction["playbackStopCount"] != 1
+            or interaction["playbackLoopCount"] != 0
+            or not interaction["finitePlaybackVerified"]
+            or interaction["pointerDragStartCount"] != 1
+            or interaction["pointerDragMoveCount"] != 4
+            or interaction["pointerDragCompleteCount"] != 1
+            or interaction["keyboardAdjustCount"] != 1
+            or interaction["rangeRecalculationCount"] != 7
+            or not interaction["rangeChangedByHuman"]
+            or interaction["lastAdjustedEdge"] != "start"
+            or interaction["keepCount"] != 1
+            or interaction["undoCount"] != 1
+            or interaction["resetCount"] != 0
+            or interaction["snapshotDepth"] != 2
+            or interaction["inputCount"] != 7
+            or interaction["trustedInputCount"] != 7
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["prematureCommitCount"] != 0
+            or not interaction["audioContextCreatedAfterTrustedPlay"]
+            or interaction["audioBufferSampleCount"] != 64000
+            or interaction["audioBufferSampleRate"] != 8000
+            or interaction["audioSourceLoopFlag"]
+            or interaction["drawCount"] <= 0
+            or interaction["geometryCoverageX"] < .98
+            or interaction["geometryCoverageY"] < .98
+            or not interaction["ready"]
+            or not interaction["runtimeAssertionPassed"]
+            or page.locator('#audio-stage').get_attribute('data-retained') != "true"
+            or page.locator('#duration-value').text_content() != "01.65s"
+            or page.locator('#range-value').text_content() != "01.15–02.80"
+            or page.locator('#sample-readout').text_content() != "samples 009200 → 022400"
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a real human trim, finite pause/resume audition, and retained podcast cut: {interaction!r}")
     elif demo["id"] == "gooey-pixel-cursor-wake":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")

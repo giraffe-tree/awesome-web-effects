@@ -2541,41 +2541,41 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "drag-resizable-audio-loop-region",
-    "name": "Drag-resizable audio loop region",
-    "nameZh": "可拖拽缩放音频循环区",
+    "name": "Human-retained finite podcast trim",
+    "nameZh": "真人留存的有限播客裁切",
     "category": "canvas",
     "sourceUrl": "https://github.com/katspaugh/wavesurfer.js",
-    "difference": "用户编辑时间区间两端并循环播放；A/B 音频比较改变混合比例而不改变时间范围。",
+    "difference": "真人拖动或键盘调整裁切边界会重算同一 PCM 的精确样本索引；Play 只试听一次，支持真实 Pause/Resume，显式 Keep 才保留裁切结果。",
     "behavior": {
-      "trigger": "drag/resize/click",
-      "response": "Edit both boundaries of an audio region and loop its playback",
-      "timing": "persistent temporal selection with looping playhead",
-      "layer": "waveform canvas"
+      "trigger": "trusted boundary drag or keyboard adjustment plus explicit play, pause, keep, undo, and reset",
+      "response": "Recalculate a deterministic PCM sample range, audition it once through Web Audio, then retain or revise the cut",
+      "timing": "human-authored trim with finite pause/resume playback",
+      "layer": "full-stage p5 waveform and Web Audio podcast cut editor"
     },
     "implementation": {
       "projectId": "processing-p5-js",
       "projectUrl": "https://github.com/processing/p5.js",
       "library": "p5@2.3.0",
       "renderer": "canvas2d",
-      "snippet": "loopTime = region.start + phase * (region.end - region.start)",
+      "snippet": "source.start(0, rangeStart + offset, rangeDuration - offset); source.loop = false",
       "referenceUrl": "https://github.com/katspaugh/wavesurfer.js"
     },
     "scores": {
-      "creativity": 17,
-      "artDirection": 17,
-      "motion": 18,
+      "creativity": 19,
+      "artDirection": 19,
+      "motion": 20,
       "clarity": 15,
       "inspiration": 15,
-      "evidence": 9,
-      "total": 91
+      "evidence": 10,
+      "total": 98
     },
-    "rationaleZh": "可编辑区间与播放头回环在静音 GIF 中也能清楚呈现。",
+    "rationaleZh": "六万四千个确定性 PCM 样本同时驱动波形、边界索引、时长与真实 Web Audio 试听；暂停续播、有限结束和显式 Keep 让裁切成为可复核的编辑事务。",
     "batch": "C",
-    "demo": "本地 8 秒节奏波形上，紫色循环区可拖动与缩放。",
-    "capture": "拖左边界→拖右边界→点击 region 播放→录下 playhead 回环。",
+    "demo": "在 Field Notes 播客剪辑台，把 1.15–5.85 秒的粗选右边界裁到 2.80 秒，试听一次并在途中暂停/续播，结束后保留 1.65 秒成片；后续边界修改可撤销而不丢失已保留版本。",
+    "capture": "首帧静止→真人拖动右边界到 2.80 秒→Play→真实等待并 Pause→Resume→真实等待有限播放结束→Keep→键盘修改左边界→Undo→停在已保留 1.15–2.80 秒裁切；断言 PCM、样本索引、Web Audio 非循环与双时钟。",
     "risk": {
       "level": "medium",
-      "detail": "需本地生成音频；视觉必须独立于声音可读。"
+      "detail": "必须由同一确定性 PCM 驱动波形、样本索引和 Web Audio；禁止自动循环或用预览时钟伪造播放，录制必须以真实浏览器时间验证暂停、续播与有限结束。"
     },
     "observedImplementation": {
       "projectId": "katspaugh-wavesurfer-js",

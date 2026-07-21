@@ -1,1 +1,65 @@
-<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Recursive Arc Forest Growth</title><link rel="stylesheet" href="./shared.css"><style>:root{--preview-background:#06100d}canvas{width:100%;height:100%}.copy{position:absolute;left:14px;top:49px;width:99px;color:#eff9e9}.copy small{font:800 6px monospace;letter-spacing:.14em;color:#85dc79}.copy h1{margin:8px 0;font:950 20px/.84 system-ui;letter-spacing:-.06em}.depth{position:absolute;right:11px;bottom:11px;color:#9ee68f;font:800 6px monospace}.scene-caption{display:none}</style></head><body><main class="preview-stage"><canvas tabindex="0" aria-label="Recursive curved branches grow into a forest"></canvas><section class="copy"><small>RECURSION / 07</small><h1>GROW A FOREST OF ARCS.</h1></section><span class="depth">DEPTH 07 · SEED 31</span><span class="library-badge">p5.js · recursive arc forest</span></main><script type="module" src="./src/recursive-arc-forest-growth-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>p5.js — Human-operated Forest Regeneration Transect</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="./shared.css">
+  <style>
+    :root { --preview-background: #07110d; color-scheme: dark; }
+    button, input { font: inherit; }
+    .forest-stage { position:absolute; inset:0; overflow:hidden; background:#07110d; color:#f0f1df; outline:none; touch-action:none; user-select:none; }
+    .forest-stage:focus-visible { box-shadow:inset 0 0 0 2px #c9f57d; }
+    .canvas-host, .canvas-host canvas, .forest-grade, .forest-grain { position:absolute; inset:0; width:100%; height:100%; }
+    .canvas-host, .forest-grade, .forest-grain { pointer-events:none; }
+    .forest-grade { z-index:2; background:linear-gradient(90deg,rgba(3,10,7,.84),rgba(3,10,7,.28) 37%,rgba(3,10,7,.08) 73%,rgba(3,10,7,.42)),linear-gradient(180deg,rgba(3,10,7,.46),transparent 30%,transparent 65%,rgba(3,10,7,.82)); }
+    .forest-grain { z-index:3; opacity:.08; mix-blend-mode:soft-light; background-image:radial-gradient(#fff9 .4px,transparent .65px); background-size:3px 3px; }
+    .topbar { position:absolute; z-index:7; top:10px; left:12px; right:12px; display:flex; align-items:flex-start; justify-content:space-between; gap:8px; pointer-events:none; }
+    .identity { display:flex; align-items:center; gap:7px; min-width:0; }
+    .identity-mark { display:grid; width:25px; aspect-ratio:1; place-items:center; flex:none; border:1px solid #dff6bd63; border-radius:50%; background:#07110db8; color:#c9f57d; font:900 5px/1 ui-monospace,monospace; }
+    .identity-copy strong,.identity-copy span { display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; text-transform:uppercase; }
+    .identity-copy strong { font:900 6px/1 ui-monospace,monospace; letter-spacing:.14em; }
+    .identity-copy span { margin-top:4px; color:#dbe4d199; font:750 4px/1 ui-monospace,monospace; letter-spacing:.1em; }
+    .forest-stage .library-badge { position:static; padding:5px 7px; border-color:#e4f7c933; background:#07110db5; color:#ecf5df; font:850 4px/1 ui-monospace,monospace; letter-spacing:.1em; white-space:nowrap; }
+    .brief { position:absolute; z-index:6; top:30%; left:12px; width:31%; pointer-events:none; }
+    .eyebrow { display:flex; align-items:center; gap:6px; color:#c9f57d; font:900 4px/1 ui-monospace,monospace; letter-spacing:.14em; text-transform:uppercase; }
+    .eyebrow::before { width:12px; height:1px; background:#c9f57d; box-shadow:0 0 7px #c9f57d; content:""; }
+    h1 { margin:7px 0 0; font:650 clamp(15px,4.1vw,31px)/.87 Georgia,"Times New Roman",serif; letter-spacing:-.055em; }
+    .hint { max-width:150px; margin:7px 0 0; color:#d8e1d0a6; font:750 4px/1.5 ui-monospace,monospace; letter-spacing:.055em; text-transform:uppercase; }
+    .metrics { position:absolute; z-index:7; right:12px; bottom:47px; display:grid; grid-template-columns:repeat(3,auto); background:#07110da8; backdrop-filter:blur(8px); pointer-events:none; }
+    .metric { min-width:49px; padding:7px; border-left:1px solid #e9f5d72b; }
+    .metric span,.metric strong { display:block; white-space:nowrap; text-transform:uppercase; }
+    .metric span { color:#d2dec99e; font:800 3.5px/1 ui-monospace,monospace; letter-spacing:.1em; }
+    .metric strong { margin-top:5px; font:900 7px/1 ui-monospace,monospace; }
+    .bottom-dock { position:absolute; z-index:9; right:12px; bottom:10px; left:12px; display:grid; grid-template-columns:minmax(80px,1fr) auto auto; align-items:end; gap:7px; pointer-events:none; }
+    .season-control { display:grid; gap:4px; min-width:0; padding:6px 8px; border:1px solid #e8f5d52e; border-radius:999px; background:#07110db5; pointer-events:auto; backdrop-filter:blur(8px); }
+    .season-control label { display:flex; justify-content:space-between; gap:8px; color:#d4dfcb; font:800 3.5px/1 ui-monospace,monospace; letter-spacing:.1em; text-transform:uppercase; }
+    .season-control output { color:#f1f2df; }
+    .season-control input { width:100%; min-width:64px; height:3px; margin:0; accent-color:#c9f57d; cursor:ew-resize; }
+    .forest-actions { display:flex; gap:3px; padding:3px; border:1px solid #e8f5d535; border-radius:999px; background:#07110dbd; pointer-events:auto; }
+    .forest-actions button { min-width:34px; padding:6px; border:0; border-radius:999px; background:transparent; color:#e8efdf; cursor:pointer; font:900 4px/1 ui-monospace,monospace; letter-spacing:.08em; text-transform:uppercase; }
+    .forest-actions button[data-action="grow"] { background:#c9f57d; color:#11200f; }
+    .forest-actions button:hover,.forest-actions button:focus-visible { background:#eef8dc; color:#10200e; outline:none; }
+    .keymap { align-self:center; color:#d2ddc88c; font:760 3.5px/1.45 ui-monospace,monospace; letter-spacing:.06em; text-align:right; text-transform:uppercase; white-space:nowrap; }
+    .runtime-ledger { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); }
+    @media (max-width:420px),(max-height:220px) { .hint { display:none; } .brief { top:33%; width:28%; } .metrics { bottom:43px; } }
+    @media (max-width:230px),(max-height:112px) {
+      .topbar { top:5px; left:6px; right:6px; } .identity-mark { width:15px; font-size:3px; } .identity-copy span,.forest-stage .library-badge,.brief,.keymap { display:none; } .identity-copy strong { font-size:3px; }
+      .metrics { right:6px; bottom:31px; } .metric { min-width:26px; padding:3px 4px; } .metric:nth-child(3) { display:none; } .metric span { font-size:3px; } .metric strong { margin-top:2px; font-size:4px; }
+      .bottom-dock { right:6px; bottom:5px; left:6px; grid-template-columns:1fr auto; gap:3px; } .season-control { padding:3px 5px; } .season-control label { display:none; } .forest-actions { padding:2px; } .forest-actions button { min-width:21px; padding:4px 3px; font-size:3px; } .forest-actions button[data-action="reset"] { display:none; }
+    }
+  </style>
+</head>
+<body>
+  <main id="forest-stage" class="preview-stage forest-stage" tabindex="0" role="application" data-preview-mechanism="p5-pixel-derived-recursive-forest-transect" aria-label="Interactive forest regeneration transect. Drag horizontally to grow, vertically to change wind, or use the controls and keyboard.">
+    <div id="forest-canvas-host" class="canvas-host" aria-hidden="true"></div><div class="forest-grade"></div><div class="forest-grain"></div>
+    <header class="topbar"><div class="identity"><span class="identity-mark">R07</span><span class="identity-copy"><strong>Coastal Transect / Plot 31</strong><span>Fictional canopy regeneration survey</span></span></div><span class="library-badge">p5.js · pixel-seeded recursion</span></header>
+    <section class="brief"><span class="eyebrow">Human-grown forest</span><h1>Let every habitat choose its branches.</h1><p class="hint">Hover to inspect a plot. Drag right to advance growth; drag vertically to bend the prevailing wind.</p></section>
+    <section class="metrics" aria-live="polite"><div class="metric"><span>Depth</span><strong id="depth-readout">—</strong></div><div class="metric"><span>Branches</span><strong id="branch-readout">—</strong></div><div class="metric"><span>Verdict</span><strong id="verdict-readout">—</strong></div></section>
+    <footer class="bottom-dock"><div class="season-control"><label for="growth-progress"><span>Growth season</span><output id="progress-readout">26%</output></label><input id="growth-progress" type="range" min="0" max="100" step="2" value="26" aria-label="Forest growth progress"></div><div class="forest-actions"><button type="button" data-action="prune">Prune</button><button type="button" data-action="grow">Grow</button><button type="button" data-action="reset">Reset</button></div><span class="keymap">← → grow · ↑ ↓ wind<br>[ ] depth · R reset</span></footer>
+    <output id="runtime-ledger" class="runtime-ledger"></output>
+  </main>
+  <script type="module" src="./src/recursive-arc-forest-growth-demo.js"></script>
+</body>
+</html>

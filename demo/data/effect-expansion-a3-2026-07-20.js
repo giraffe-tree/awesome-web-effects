@@ -11,12 +11,12 @@ export const effectExpansion150BatchA3 = [
     scores: scores(20, 20, 20, 15, 15, 10), rationaleZh: '原创 ImageGen 棉纸校样经同源 fetch、精确源 SHA、浏览器 decode 与 96×54 / 5,184 像素读取；中央纸张区和三块墨样真实决定画布基材、墨色、吸墨率、约 68 的压力目标、墨迹增益与结论。可信 hover、捕获拖拽、键盘、range、墨色和 Step/Undo/Reset 使八字母校样有限推进、可逆且输入后保持。'
   },
   {
-    id: 'recursive-arc-forest-growth', order: 112, name: 'Recursive arc forest growth', nameZh: '递归弧线森林生长', category: 'canvas', sourceUrl: 'https://github.com/shiffman/The-Nature-of-Code-Examples-p5.js',
-    difference: '五棵树使用弯曲二次贝塞尔分枝并按递归深度逐层生长，区别于直线 L-system 或粒子枝条。',
-    behavior: { trigger: 'pointer progress or animation frame', response: 'Curved branches recursively bifurcate from trunks to fine canopy arcs', timing: 'depth-staged deterministic growth', layer: 'generative forest canvas' },
-    prompt: '实现固定种子的七层递归树，使用 quadraticCurveTo 绘制弯曲分枝，并让进度按深度依次解锁。',
-    implementation: p5("new p5(p => { p.draw = () => trees.forEach(tree => branch(p.drawingContext, tree, depth, progress)); });", 'https://github.com/shiffman/The-Nature-of-Code-Examples-p5.js'),
-    scores: scores(19, 19, 18, 15, 15, 10), rationaleZh: '递归层级、弧线姿态和多树构图在小画面中仍清楚，生成逻辑可复现。'
+    id: 'recursive-arc-forest-growth', order: 112, name: 'Coastal canopy regeneration transect', nameZh: '海岸林冠递归再生样带', category: 'canvas', sourceUrl: 'https://github.com/shiffman/The-Nature-of-Code-Examples-p5.js',
+    difference: '把自动长出的五棵占位树改为真人操作的海岸林冠再生审阅：真实样带像素生成五个 habitat profile，并决定每棵递归树的深度、spread、bend、颜色、适宜度和 ESTABLISHED 结论。',
+    behavior: { trigger: 'trusted hover, captured mouse/touch/pen drag, keyboard, native growth range, or visible Grow/Prune/Reset controls', response: 'Select a habitat plot, scrub growth and wind, change depth budget, and inspect pixel-derived recursive branch coverage and regeneration verdict', timing: 'human-owned p5 noLoop redraws that remain static between inputs', layer: 'full-stage decoded canopy transect, five recursive trees, habitat probe, depth/branch/verdict evidence, and controls' },
+    prompt: '制作一个全舞台海岸林冠再生样带：同源加载并精确校验一张 ImageGen 林冠航拍图，浏览器与 p5 双解码并读取 90×60 像素，按五个连续 plot 计算 RGB、greenness、moisture、texture、depth、spread、bend 和 suitability。真人通过 hover、捕获式鼠标/触控/笔拖拽、键盘、原生 growth range 与 Grow/Prune/Reset 控制 plot、生长、风和递归深度；p5 必须 noLoop，首帧和每个结果保持静止，禁止自动生长、播放、排练、fallback、合成输入或预览时钟变更。',
+    implementation: p5("verifiedCanopyPixels -> fiveHabitatProfiles; trustedGrowthWindDepth -> finite recursive quadraticCurveTo forest redraw with p5.noLoop", 'https://github.com/shiffman/The-Nature-of-Code-Examples-p5.js'),
+    scores: scores(20, 20, 20, 15, 15, 10), rationaleZh: '原创林冠样带经同源 fetch、精确源 SHA、浏览器与 p5 双解码及 90×60 像素读取；五区的真实色彩与纹理决定递归深度、姿态、颜色和再生适宜度。可信拖拽、range、键盘和按钮拥有 571 枝的完整再生过程与 ESTABLISHED 结论，画面输入后保持静止。'
   },
   {
     id: 'pointer-woven-ribbon-loom', order: 113, name: 'Pointer woven ribbon loom', nameZh: '指针编织彩带织机', category: 'pointer', sourceUrl: 'https://github.com/processing/p5.js',

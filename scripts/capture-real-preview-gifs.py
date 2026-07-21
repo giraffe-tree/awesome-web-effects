@@ -2683,6 +2683,37 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.up()
             elif index == 18:
                 page.locator('[data-baseline-action="settle"]').click()
+        elif demo["id"] == "recursive-arc-forest-growth":
+            if index == 2:
+                page.mouse.move(235, 66)
+            elif index == 4:
+                page.mouse.move(178, 104)
+                page.mouse.down()
+            elif index == 5:
+                page.mouse.move(195, 99, steps=2)
+            elif index == 6:
+                page.mouse.move(210, 94, steps=2)
+            elif index == 7:
+                page.mouse.move(228, 88, steps=2)
+            elif index == 8:
+                page.mouse.move(247, 82, steps=2)
+            elif index == 9:
+                page.mouse.move(276, 73, steps=2)
+            elif index == 10:
+                page.mouse.up()
+            elif index == 13:
+                page.locator('[data-action="grow"]').click()
+            elif index == 16:
+                page.locator('[data-action="grow"]').click()
+            elif index == 19:
+                page.locator("#growth-progress").focus()
+                page.keyboard.press("ArrowRight")
+                page.keyboard.press("ArrowRight")
+            elif index == 22:
+                page.locator("#forest-stage").focus()
+                page.keyboard.press("[")
+            elif index == 24:
+                page.keyboard.press("ArrowDown")
         elif demo["id"] == "poisson-constellation-bloom":
             if index == 2:
                 page.mouse.move(170, 92)
@@ -8858,6 +8889,106 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["ready"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture a trusted full-stage WAYFIND elastic-baseline legibility proof with finite solver batches, unclipped glyphs, optical strain and an explicit settled result without automatic wave motion: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "recursive-arc-forest-growth":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        profile_pixel_total = sum(profile["pixelCount"] for profile in interaction["habitatProfiles"])
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-pixel-seeded-recursive-forest-regeneration-transect"
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["renderer"] != "canvas2d"
+            or interaction["mechanism"] != "verified-canopy-raster-pixels-drive-five-recursive-tree-depth-spread-bend-color-and-regeneration-verdict"
+            or interaction["acceptedInputs"] != ["mouse-hover", "captured-mouse-drag", "captured-touch-drag", "captured-pen-drag", "keyboard", "range-control", "visible-buttons"]
+            or not interaction["userInputRequired"]
+            or not interaction["strictTrustedInputGuard"]
+            or not interaction["initialFrameStatic"]
+            or not interaction["initialStillVerified"]
+            or interaction["automaticCycle"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or interaction["previewClockMutationCount"] != 0
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["inputCount"] < 18
+            or interaction["trustedInputCount"] != interaction["inputCount"]
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["hoverInputCount"] < 2
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerDragCount"] < 9
+            or interaction["pointerReleaseCount"] != 1
+            or interaction["pointerCancelCount"] != 0
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerCaptureReleaseCount"] != 1
+            or interaction["pointerCaptured"]
+            or interaction["activePointerId"] is not None
+            or interaction["mouseInputCount"] < 12
+            or interaction["touchInputCount"] != 0
+            or interaction["penInputCount"] != 0
+            or interaction["keyboardInputCount"] != 2
+            or interaction["rangeInputCount"] != 2
+            or interaction["buttonInputCount"] != 2
+            or interaction["humanMutationCount"] < 16
+            or interaction["progressMutationCount"] < 10
+            or interaction["windMutationCount"] < 8
+            or interaction["depthMutationCount"] != 1
+            or interaction["growCount"] != 2
+            or interaction["pruneCount"] != 0
+            or interaction["resetCount"] != 0
+            or interaction["lastInputKind"] != "keyboard"
+            or interaction["lastInputTrusted"] is not True
+            or interaction["progress"] < .98
+            or interaction["depthBudget"] != 7
+            or interaction["activePlot"] != 4
+            or interaction["visibleDepth"] < 6
+            or interaction["visibleBranchCount"] <= 200
+            or interaction["potentialBranchCount"] < interaction["visibleBranchCount"]
+            or interaction["regenerationCoverage"] < .8
+            or interaction["regenerationCoverage"] > 1
+            or interaction["regenerationVerdict"] != "ESTABLISHED"
+            or interaction["assetFetchCount"] != 1
+            or interaction["assetResponseStatus"] != 200
+            or not interaction["assetMimeType"].startswith("image/jpeg")
+            or not interaction["assetSameOrigin"]
+            or interaction["assetByteLength"] != 409376
+            or interaction["assetSha256"] != "e577e2a16d3f28702dad076941c461211eab638f16cc92fa7c5883ea710e9878"
+            or not interaction["assetShaMatchesExpected"]
+            or not interaction["browserImageDecoded"]
+            or interaction["sourceNaturalWidth"] != 960
+            or interaction["sourceNaturalHeight"] != 640
+            or not interaction["p5ImageDecoded"]
+            or interaction["p5ImageClass"] != "p5.Image"
+            or interaction["p5ImageWidth"] != 960
+            or interaction["p5ImageHeight"] != 640
+            or interaction["p5ImagePixelLength"] != 2457600
+            or interaction["sampledWidth"] != 90
+            or interaction["sampledHeight"] != 60
+            or interaction["sampledPixelCount"] != 5400
+            or interaction["sampledPixelByteLength"] != 21600
+            or len(interaction["sampledPixelSha256"]) != 64
+            or not interaction["sampledPixelSha256"].strip("0")
+            or interaction["sampledPixelChecksum"] <= 0
+            or interaction["opaqueSamplePixelCount"] != 5400
+            or interaction["distinctSampleColorCount"] <= 250
+            or interaction["sampledLumaRange"] <= 100
+            or interaction["sampledEdgeMean"] <= 4
+            or interaction["habitatProfileCount"] != 5
+            or len(interaction["habitatProfiles"]) != 5
+            or profile_pixel_total != 5400
+            or any(profile["pixelCount"] <= 900 or profile["depth"] < 5 or profile["depth"] > 8 or profile["spread"] < .34 or profile["spread"] > .62 or profile["suitability"] < 0 or profile["suitability"] > 1 or profile["checksum"] <= 0 for profile in interaction["habitatProfiles"])
+            or not interaction["pixelEvidenceReady"]
+            or not interaction["p5InstanceReady"]
+            or not interaction["p5CanvasReady"]
+            or interaction["p5CanvasWidth"] != 320
+            or interaction["p5CanvasHeight"] != 180
+            or interaction["p5CompletedDrawCount"] < 16
+            or interaction["p5ImageDrawCount"] < 1
+            or interaction["currentCanvasSignature"] <= 0
+            or not interaction["ready"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a trusted full-stage pixel-derived coastal canopy regeneration transect with five habitat profiles, finite recursive growth and a retained ESTABLISHED result without automatic motion: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "poisson-constellation-bloom":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

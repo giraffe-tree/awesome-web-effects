@@ -217,7 +217,7 @@
 | [Storm Port 人工热异常检查](https://giraffe-tree.github.io/awesome-web-effects/#radar-sweep-annotation-reveal) | [p5.js](https://github.com/processing/p5.js) | **100/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#radar-sweep-annotation-reveal) |
 | [光学通道莫尔纹校准](https://giraffe-tree.github.io/awesome-web-effects/#moire-tunnel-zoom) | [p5.js](https://github.com/processing/p5.js) | **100/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#moire-tunnel-zoom) |
 | [Make-ready 活版校样台](https://giraffe-tree.github.io/awesome-web-effects/#kinetic-rain-letterpress) | [p5.js](https://github.com/processing/p5.js) | **100/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#kinetic-rain-letterpress) |
-| [递归弧线森林生长](https://giraffe-tree.github.io/awesome-web-effects/#recursive-arc-forest-growth) | [p5.js](https://github.com/processing/p5.js) | **96/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#recursive-arc-forest-growth) |
+| [海岸林冠递归再生样带](https://giraffe-tree.github.io/awesome-web-effects/#recursive-arc-forest-growth) | [p5.js](https://github.com/processing/p5.js) | **100/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#recursive-arc-forest-growth) |
 | [生物材料培养边界实验](https://giraffe-tree.github.io/awesome-web-effects/#reaction-diffusion-growth-field) | [p5.js](https://github.com/processing/p5.js) | **100/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#reaction-diffusion-growth-field) |
 | [港区风险关系探针](https://giraffe-tree.github.io/awesome-web-effects/#poisson-constellation-bloom) | [p5.js](https://github.com/processing/p5.js) | **100/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#poisson-constellation-bloom) |
 | [沿海应急中继网规划](https://giraffe-tree.github.io/awesome-web-effects/#signed-distance-neon-metaballs) | [p5.js](https://github.com/processing/p5.js) | **100/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#signed-distance-neon-metaballs) |
@@ -282,7 +282,7 @@
 - 150 个已核验预览：2 个官方素材、148 个可运行本地 Demo 录制；缺失数为 0。
 - 人工评审覆盖创意、艺术完成度、动效编排、效果辨识、创作迁移和证据质量。
 - 准入要求 80/100，并同时通过核心维度最低分；流行度不能覆盖质量门槛。
-- 已核验 GIF 总计 25.31 MiB；每个预览为 320×180、最长三秒且小于 1 MiB。
+- 已核验 GIF 总计 25.36 MiB；每个预览为 320×180、最长三秒且小于 1 MiB。
 - Stars 是 2026-07-20 快照；“推荐实现”与“在哪家 AI 官网观察到”始终是两种关系。
 
 继续阅读 [396 个候选的准入审计](research/demo-admission-audit-2026-07-20.md)、[100 家 AI 公司主页特效调研](research/ai-native-homepages-100.md)与[预览来源清单](demo/gifs/provenance.json)。

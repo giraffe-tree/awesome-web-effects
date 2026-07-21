@@ -1,7 +1,43 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Motion — Neighbor Magnifying Navigation Dock</title><style>
-:root{--preview-background:#17202a}.dock-copy{position:absolute;left:15px;top:47px;color:white}.dock-copy small{font:800 6px/1 ui-monospace;letter-spacing:.13em;color:#9cb0c2}.dock-copy h1{width:165px;margin:9px 0 0;font:950 22px/.82 system-ui;letter-spacing:-.06em}.dock{position:absolute;left:50%;bottom:25px;translate:-50% 0;display:flex;align-items:flex-end;gap:7px;padding:8px 10px;border:1px solid #ffffff3b;border-radius:18px;background:#ffffff14;backdrop-filter:blur(12px)}.dock button{width:27px;height:27px;border:1px solid #ffffff3b;border-radius:8px;color:white;background:#ffffff16;font:800 7px/1 ui-monospace;transform-origin:center bottom;cursor:pointer}.dock button:nth-child(2){background:#4d7cff}.dock button:nth-child(3){background:#ff6d58}.dock button:nth-child(4){background:#40b98e}.library-badge{background:#111922c8}.scene-caption{display:none}</style>  <script type="module" crossorigin src="./assets/neighbor-magnifying-navigation-dock-CAQ7xJB-.js"></script>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Motion — Neighbor Magnifying Tool Dock</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root{--preview-background:#11130f;--paper:#e8e6da;--acid:#d6ff4f;--muted:#8c9188}
+    #tool-workspace{background:radial-gradient(circle at 78% 26%,#35402a 0,transparent 30%),linear-gradient(145deg,#171a15,#0c0e0b);color:#f4f6ee}
+    #tool-workspace::before{content:"";position:absolute;inset:0;background-image:linear-gradient(#ffffff07 1px,transparent 1px),linear-gradient(90deg,#ffffff07 1px,transparent 1px);background-size:16px 16px;mask-image:linear-gradient(to bottom,#000 40%,transparent 94%)}
+    .workspace-bar{position:absolute;z-index:4;top:9px;left:11px;right:11px;display:flex;align-items:center;justify-content:space-between;pointer-events:none;font:800 6px/1 ui-monospace;letter-spacing:.12em;text-transform:uppercase}.workspace-id{display:flex;align-items:center;gap:7px}.workspace-id::before{content:"";width:7px;height:7px;border-radius:2px;background:var(--acid);box-shadow:0 0 10px #d6ff4f88}.workspace-meta{color:#8e978b}
+    .dock-copy{position:absolute;z-index:3;left:12px;top:39px;pointer-events:none}.dock-copy small{font:800 5px/1 ui-monospace;letter-spacing:.15em;color:var(--acid)}.dock-copy h1{width:130px;margin:7px 0 0;font:950 18px/.86 system-ui;letter-spacing:-.055em}.dock-copy p{width:112px;margin:7px 0 0;font:600 6px/1.35 system-ui;color:#929b90}
+    .canvas-card{position:absolute;z-index:2;left:43%;right:13px;top:39px;bottom:64px;min-height:52px;border:1px solid #ffffff1c;border-radius:10px;background:#e8e6da;box-shadow:0 16px 45px #0008;overflow:hidden;pointer-events:none}.canvas-card::before{content:"";position:absolute;inset:8px;border:1px dashed #2b302a24;border-radius:5px}.canvas-label{position:absolute;left:9px;top:8px;font:800 5px/1 ui-monospace;letter-spacing:.12em;color:#6e746a}.canvas-tool{position:absolute;right:9px;top:7px;padding:3px 5px;border-radius:99px;background:#252a23;color:#eef2e8;font:800 5px/1 ui-monospace;letter-spacing:.1em}.canvas-art{position:absolute;inset:17px 7px 5px;width:calc(100% - 14px);height:calc(100% - 22px)}
+    .dock-shell{position:absolute;z-index:10;left:50%;bottom:13px;translate:-50% 0;display:flex;align-items:flex-end;gap:5px;padding:7px 8px 6px;border:1px solid #ffffff30;border-radius:16px;background:#20241ee6;box-shadow:0 14px 38px #000b,inset 0 1px #ffffff12;backdrop-filter:blur(14px)}
+    .dock-tool{position:relative;display:grid;place-items:center;width:32px;height:32px;padding:0;border:1px solid #ffffff20;border-radius:9px;background:#30352e;color:#bbc3b7;transform-origin:50% 100%;cursor:pointer;will-change:transform;outline:none;box-shadow:0 5px 13px #0005}.dock-tool::after{content:"";position:absolute;left:50%;bottom:-5px;width:3px;height:3px;border-radius:50%;translate:-50% 0;background:transparent}.dock-tool:hover{border-color:#ffffff48}.dock-tool:focus-visible{box-shadow:0 0 0 2px #11130f,0 0 0 3px var(--acid),0 6px 14px #0007}.dock-tool[data-selected="true"]{color:#11130f;background:var(--acid);border-color:#eaff9d}.dock-tool[data-selected="true"]::after{background:var(--acid)}.dock-tool svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
+    .dock-note{position:absolute;z-index:4;left:12px;bottom:13px;pointer-events:none;font:750 5px/1.35 ui-monospace;letter-spacing:.08em;color:#899186}.dock-note b{color:var(--acid)}
+    .selection-readout{position:absolute;z-index:4;right:12px;bottom:15px;pointer-events:none;text-align:right}.selection-readout small{display:block;font:700 5px/1 ui-monospace;letter-spacing:.12em;color:#70796f}.selection-readout output{display:block;margin-top:4px;font:900 6px/1 ui-monospace;letter-spacing:.09em;color:#f1f4ea}
+    @media(max-width:360px){.dock-copy h1{width:118px;font-size:16px}.dock-copy p{display:none}.canvas-card{left:47%;}.dock-shell{gap:3px;padding-left:6px;padding-right:6px}.dock-tool{width:30px;height:30px}.dock-note,.selection-readout{display:none}}
+    @media(max-width:270px){.workspace-meta{display:none}.canvas-card{left:12px;right:12px;top:91px;bottom:88px}.dock-shell{bottom:22px}.dock-copy h1{width:150px}.dock-tool{width:31px;height:31px}}
+  </style>
+  <script type="module" crossorigin src="./assets/neighbor-magnifying-navigation-dock-Xpik6x-z.js"></script>
   <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
   <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
-  <link rel="modulepreload" crossorigin href="./assets/batch-b-utils-CmA_lC0Z.js">
   <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage"><section class="dock-copy"><small>PROXIMITY / NAV</small><h1>FOCUS SPREADS TO ITS NEIGHBORS.</h1></section><nav class="dock" id="dock" data-preview-mechanism="motion-neighbor-dock" aria-label="Magnifying navigation dock"><button type="button">01</button><button type="button">02</button><button type="button">03</button><button type="button">04</button><button type="button">05</button></nav><span class="library-badge">Motion · neighbor dock</span></main></body></html>
+</head>
+<body>
+  <main id="tool-workspace" class="preview-stage" data-preview-mechanism="motion-distance-weighted-neighbor-tool-dock">
+    <header class="workspace-bar"><span class="workspace-id">Form Studio / Canvas 14</span><span class="workspace-meta">Motion · proximity tools</span></header>
+    <section class="dock-copy"><small>HUMAN-GUIDED TOOL DOCK</small><h1>REACH A TOOL. SEE ITS NEIGHBORS.</h1><p>Proximity enlarges the target and distributes attention across adjacent tools.</p></section>
+    <section class="canvas-card" aria-hidden="true"><span class="canvas-label">POSTER / PATH 03</span><span id="canvas-tool" class="canvas-tool">SELECT</span><svg class="canvas-art" viewBox="0 0 180 80"><path d="M10 58 C44 12 78 75 112 26 S155 18 170 49" fill="none" stroke="#20251f" stroke-width="8"/><path d="M10 58 C44 12 78 75 112 26 S155 18 170 49" fill="none" stroke="#d6ff4f" stroke-width="3"/><g fill="#20251f"><circle cx="10" cy="58" r="3"/><circle cx="60" cy="45" r="3"/><circle cx="112" cy="26" r="3"/><circle cx="170" cy="49" r="3"/></g></svg></section>
+    <nav id="dock" class="dock-shell" aria-label="Design tools">
+      <button class="dock-tool" type="button" data-tool="Select" data-selected="true" aria-label="Select tool" title="Select"><svg viewBox="0 0 24 24"><path d="m6 4 11 8-6 1 3 6-3 1-3-6-3 4z"/></svg></button>
+      <button class="dock-tool" type="button" data-tool="Pen" data-selected="false" aria-label="Pen tool" title="Pen"><svg viewBox="0 0 24 24"><path d="m4 20 3-7 8-8 4 4-8 8zM7 13l4 4M14 6l4 4"/></svg></button>
+      <button class="dock-tool" type="button" data-tool="Shape" data-selected="false" aria-label="Shape tool" title="Shape"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="10" height="10" rx="2"/><circle cx="15.5" cy="15.5" r="4.5"/></svg></button>
+      <button class="dock-tool" type="button" data-tool="Type" data-selected="false" aria-label="Type tool" title="Type"><svg viewBox="0 0 24 24"><path d="M5 6V4h14v2M12 4v16M8 20h8"/></svg></button>
+      <button class="dock-tool" type="button" data-tool="Comment" data-selected="false" aria-label="Comment tool" title="Comment"><svg viewBox="0 0 24 24"><path d="M5 5h14v10H9l-4 4z"/><path d="M9 9h6M9 12h4"/></svg></button>
+    </nav>
+    <span class="dock-note"><b>MOVE</b> TO MAGNIFY<br>CLICK OR ENTER TO KEEP</span>
+    <span class="selection-readout"><small>ACTIVE TOOL</small><output id="selection-output">SELECT · READY</output></span>
+  </main>
+</body>
+</html>

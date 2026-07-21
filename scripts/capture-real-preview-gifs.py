@@ -1594,6 +1594,12 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 if index == 16:
                     page.mouse.down()
                     page.mouse.up()
+        elif demo["id"] == "neighbor-magnifying-navigation-dock":
+            tool_index = {3: 0, 7: 1, 11: 2, 15: 3, 22: 4, 26: 2}.get(index)
+            if tool_index is not None:
+                page.locator('.dock-tool').nth(tool_index).hover()
+            elif index == 18:
+                page.locator('.dock-tool').nth(3).click()
         elif demo["id"] == "metaball-blob-cursor":
             if index == 3:
                 page.locator('#finish-cobalt').hover()
@@ -5814,6 +5820,67 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or page.locator('#finish-coral').get_attribute('aria-pressed') != "true"
         ):
             raise RuntimeError(f"{demo['id']} did not capture a real retained finish selection through a liquid target bridge: {interaction!r}")
+    elif demo["id"] == "neighbor-magnifying-navigation-dock":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        scales = interaction["targetScales"]
+        peak = max(scales)
+        if (
+            not assertion
+            or interaction["task"] != "human-selects-and-retains-a-design-tool-through-a-distance-weighted-dock"
+            or interaction["claimedLibrary"] != "motion@12.42.2"
+            or interaction["mechanism"] != "measured-pointer-distance-or-keyboard-focus-distributes-motion-scale-across-target-and-neighbors"
+            or interaction["assetStrategy"] != "code-native-inline-svg-tool-icons-no-functional-raster-asset-required"
+            or interaction["iconSystem"] != "five-consistent-24px-stroke-svg-tools"
+            or interaction["causality"] != "trusted-human-input-only"
+            or interaction["automaticPlayback"]
+            or interaction["automaticCruise"]
+            or interaction["automaticFocus"]
+            or interaction["automaticFallback"]
+            or interaction["captureClockDriven"]
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["untrustedInputPolicy"] != "reject-before-proximity-or-selection-mutation"
+            or interaction["untrustedMutationCount"] != 0
+            or not interaction["initialStillVerified"]
+            or interaction["svgIconCount"] != 5
+            or interaction["svgViewBoxCount"] != 5
+            or interaction["stageCoverageRatio"] < .995
+            or not interaction["dockWithinStage"]
+            or not interaction["allToolsWithinStage"]
+            or interaction["inputCount"] != interaction["trustedInputCount"]
+            or interaction["pointerMoveCount"] < 6
+            or interaction["activationCount"] != 1
+            or interaction["activationInputCount"] != 1
+            or interaction["selectedIndex"] != 3
+            or interaction["selectedTool"] != "Type"
+            or interaction["focusedIndex"] != 2
+            or interaction["result"] != "type-tool-retained"
+            or not interaction["selectionStable"]
+            or interaction["selectionChangeCount"] != 1
+            or interaction["selectionRetainedAcrossProximityCount"] < 3
+            or page.locator('.dock-tool[data-selected="true"]').count() != 1
+            or page.locator('#selection-output').text_content() != "TYPE · ACTIVE"
+            or interaction["measuredDistanceCount"] < 25
+            or len(interaction["measuredDistances"]) != 5
+            or len(scales) != 5
+            or min(interaction["measuredDistances"]) > 1
+            or peak < 1.48
+            or scales[2] != peak
+            or not any(1.04 < scale < peak for scale in scales)
+            or not any(scale <= 1.01 for scale in scales)
+            or not interaction["targetPeakVerified"]
+            or not interaction["neighborDistributionVerified"]
+            or interaction["maximumObservedScale"] < 1.48
+            or interaction["minimumObservedScale"] != 1
+            or interaction["distributionUpdateCount"] < 5
+            or interaction["motionAnimationCount"] < 25
+            or not all(record["trusted"] for record in interaction["transitionRecords"])
+            or interaction["firstHumanInputScalesBefore"] == interaction["firstHumanInputScalesAfter"]
+            or interaction["renderCount"] <= 0
+            or interaction["geometryMeasureCount"] <= 0
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a real retained design-tool selection through a distance-weighted dock: {interaction!r}")
     elif demo["id"] == "velocity-spaced-image-trail":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

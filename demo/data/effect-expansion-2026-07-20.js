@@ -1789,16 +1789,16 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "neighbor-magnifying-navigation-dock",
-    "name": "Neighbor-magnifying navigation dock",
-    "nameZh": "邻项放大导航坞",
+    "name": "Distance-weighted design tool dock",
+    "nameZh": "距离加权设计工具坞",
     "category": "pointer",
     "sourceUrl": "https://github.com/DavidHDev/react-bits/blob/main/public/r/Dock-TS-TW.json",
-    "difference": "指针距离连续分配当前项及邻项尺度；不是整体卡片 tilt 或单目标 hover scale。",
+    "difference": "真人指针距离或键盘焦点连续分配目标工具与邻项尺度，显式选择后工具状态持续保留；不是自动巡航、整体卡片 tilt 或单目标 hover scale。",
     "behavior": {
-      "trigger": "pointer proximity / keyboard focus",
-      "response": "Magnify the nearest icon and smoothly distribute scale to neighbors",
-      "timing": "continuous proximity field",
-      "layer": "navigation dock"
+      "trigger": "trusted pointer proximity or keyboard focus, followed by explicit activation",
+      "response": "Magnify the nearest SVG tool, distribute scale to its neighbors, and retain the chosen tool",
+      "timing": "continuous human-owned proximity preview plus finite selection",
+      "layer": "full-stage design workspace and five-tool navigation dock"
     },
     "implementation": {
       "projectId": "motiondivision-motion",
@@ -1809,18 +1809,18 @@ export const effectExpansion100Specs = [
       "referenceUrl": "https://github.com/DavidHDev/react-bits/blob/main/public/r/Dock-TS-TW.json"
     },
     "scores": {
-      "creativity": 16,
-      "artDirection": 18,
-      "motion": 18,
+      "creativity": 20,
+      "artDirection": 20,
+      "motion": 20,
       "clarity": 15,
       "inspiration": 15,
-      "evidence": 9,
-      "total": 91
+      "evidence": 10,
+      "total": 100
     },
-    "rationaleZh": "邻域尺度重分配构成独立导航触觉。",
+    "rationaleZh": "真实设计工具、连续距离加权、邻项分布和可留存选择，把抽象放大波转化为可完成的工具切换任务。",
     "batch": "B",
-    "demo": "八枚抽象工具图标随指针移动形成一条连续放大波。",
-    "capture": "pointer 匀速扫过全 dock→停在中间→键盘 ArrowRight 移焦。",
+    "demo": "在 Form Studio 画布中扫过 Select、Pen、Shape、Type、Comment 五枚一致的 24px SVG 工具；目标与邻项按实测距离形成连续尺度波，点击 Type 后继续扫过 Shape 也会保留 Type 的工作状态。",
+    "capture": "pointer 依次扫过五枚工具→点击 Type→继续靠近 Comment 与 Shape→保留 TYPE · ACTIVE；键盘 focus、方向键与 Enter/Space 提供等价路径。",
     "risk": {
       "level": "high",
       "detail": "许可未明；键盘 focus 必须有等价反馈，不能只做鼠标。"

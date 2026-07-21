@@ -139,7 +139,7 @@
 | [真人套印的限量版预留 CTA](https://giraffe-tree.github.io/awesome-web-effects/#opposed-diagonal-offset-cta) | [Motion](https://github.com/motiondivision/motion) | **100/100** | [Unstructured](https://unstructured.io/) | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#opposed-diagonal-offset-cta) |
 | [回访奖励扫雷页脚](https://giraffe-tree.github.io/awesome-web-effects/#playable-brand-minesweeper-footer) | [Motion](https://github.com/motiondivision/motion) | **90/100** | [Tavus](https://www.tavus.io/) | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#playable-brand-minesweeper-footer) |
 | [住宅视廊多层景深审查](https://giraffe-tree.github.io/awesome-web-effects/#pointer-driven-multilayer-depth-stage) | [Motion](https://github.com/motiondivision/motion) | **88/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#pointer-driven-multilayer-depth-stage) |
-| [邻项放大导航坞](https://giraffe-tree.github.io/awesome-web-effects/#neighbor-magnifying-navigation-dock) | [Motion](https://github.com/motiondivision/motion) | **91/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#neighbor-magnifying-navigation-dock) |
+| [距离加权设计工具坞](https://giraffe-tree.github.io/awesome-web-effects/#neighbor-magnifying-navigation-dock) | [Motion](https://github.com/motiondivision/motion) | **100/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#neighbor-magnifying-navigation-dock) |
 | [悬停激活图像跑马菜单](https://giraffe-tree.github.io/awesome-web-effects/#hover-activated-image-marquee-menu) | [Motion](https://github.com/motiondivision/motion) | **95/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#hover-activated-image-marquee-menu) |
 | [拖拽甩出卡片堆](https://giraffe-tree.github.io/awesome-web-effects/#drag-thrown-card-stack) | [Motion](https://github.com/motiondivision/motion) | **94/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#drag-thrown-card-stack) |
 | [融球产品材质目标光标](https://giraffe-tree.github.io/awesome-web-effects/#metaball-blob-cursor) | [Motion](https://github.com/motiondivision/motion) | **100/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#metaball-blob-cursor) |
@@ -282,7 +282,7 @@
 - 150 个已核验预览：2 个官方素材、148 个可运行本地 Demo 录制；缺失数为 0。
 - 人工评审覆盖创意、艺术完成度、动效编排、效果辨识、创作迁移和证据质量。
 - 准入要求 80/100，并同时通过核心维度最低分；流行度不能覆盖质量门槛。
-- 已核验 GIF 总计 24.75 MiB；每个预览为 320×180、最长三秒且小于 1 MiB。
+- 已核验 GIF 总计 24.79 MiB；每个预览为 320×180、最长三秒且小于 1 MiB。
 - Stars 是 2026-07-20 快照；“推荐实现”与“在哪家 AI 官网观察到”始终是两种关系。
 
 继续阅读 [396 个候选的准入审计](research/demo-admission-audit-2026-07-20.md)、[100 家 AI 公司主页特效调研](research/ai-native-homepages-100.md)与[预览来源清单](demo/gifs/provenance.json)。

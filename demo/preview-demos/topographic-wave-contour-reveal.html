@@ -1,1 +1,397 @@
-<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Topographic Wave Contour Reveal</title><link rel="stylesheet" href="./shared.css"><style>:root{--preview-background:#07110f}canvas{width:100%;height:100%}.copy{position:absolute;left:16px;top:50px;width:105px;color:#e8f6da}.copy b{font:900 7px/1 monospace;letter-spacing:.14em;color:#a9de72}.copy h1{margin:9px 0;font:950 22px/.83 system-ui;letter-spacing:-.07em}.legend{position:absolute;right:13px;bottom:13px;color:#cce6bc;font:700 6px monospace}.scene-caption{display:none}</style></head><body><main class="preview-stage"><canvas tabindex="0" aria-label="Animated terrain contour slices"></canvas><section class="copy"><b>ALTITUDE / LIVE</b><h1>LAND RISES IN LINES.</h1></section><span class="legend">0m ━━━ 840m</span><span class="library-badge">Canvas · contour field</span></main><script type="module" src="./src/topographic-wave-contour-reveal-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>p5.js — Human-operated Watershed Contour Survey</title>
+    <link rel="stylesheet" href="./shared.css" />
+    <style>
+      :root {
+        --preview-background: #0b1312;
+        color-scheme: dark;
+      }
+
+      button,
+      input { font: inherit; }
+
+      .terrain-stage {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        background: #0b1312;
+        color: #f3f1df;
+        cursor: crosshair;
+        outline: none;
+        touch-action: none;
+        user-select: none;
+      }
+
+      .terrain-stage:focus-visible {
+        box-shadow: inset 0 0 0 2px #f0d47a;
+      }
+
+      .terrain-canvas,
+      .terrain-canvas canvas,
+      .terrain-grade,
+      .terrain-grain {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .terrain-canvas,
+      .terrain-grade,
+      .terrain-grain { pointer-events: none; }
+
+      .terrain-grade {
+        z-index: 2;
+        background:
+          linear-gradient(180deg, #07100e9c 0%, transparent 25%, transparent 57%, #07100ecc 100%),
+          linear-gradient(90deg, #07100ebd 0%, transparent 34%, transparent 77%, #07100e4d 100%);
+      }
+
+      .terrain-grain {
+        z-index: 3;
+        opacity: .09;
+        mix-blend-mode: soft-light;
+        background-image: radial-gradient(#ffffea80 .45px, transparent .65px);
+        background-size: 3px 3px;
+      }
+
+      .topbar {
+        position: absolute;
+        z-index: 7;
+        top: 11px;
+        left: 12px;
+        right: 12px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 10px;
+        pointer-events: none;
+      }
+
+      .survey-id {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+      }
+
+      .survey-mark {
+        display: grid;
+        width: 24px;
+        height: 24px;
+        place-items: center;
+        flex: 0 0 auto;
+        border: 1px solid #f7edc766;
+        border-radius: 50%;
+        background: #07100e75;
+        color: #f5d773;
+        font: 900 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        backdrop-filter: blur(8px);
+      }
+
+      .survey-copy strong,
+      .survey-copy span {
+        display: block;
+        text-transform: uppercase;
+      }
+
+      .survey-copy strong {
+        font: 900 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .14em;
+      }
+
+      .survey-copy span {
+        margin-top: 4px;
+        color: #e5e0cfae;
+        font: 750 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .11em;
+      }
+
+      .terrain-stage .library-badge {
+        position: static;
+        max-width: 118px;
+        padding: 5px 7px;
+        border-color: #f7edc738;
+        background: #07100e85;
+        color: #ece9d9;
+        font: 850 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .11em;
+        white-space: nowrap;
+        backdrop-filter: blur(8px);
+      }
+
+      .map-title {
+        position: absolute;
+        z-index: 6;
+        top: 50%;
+        left: 12px;
+        width: min(130px, 40vw);
+        transform: translateY(-50%);
+        pointer-events: none;
+      }
+
+      .map-title .eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: #f4d474;
+        font: 900 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .16em;
+        text-transform: uppercase;
+      }
+
+      .map-title .eyebrow::before {
+        width: 14px;
+        height: 2px;
+        background: #f4d474;
+        box-shadow: 0 0 8px #f4d474;
+        content: "";
+      }
+
+      .map-title h1 {
+        margin: 6px 0 0;
+        font: 650 clamp(15px, 4.3vw, 33px)/.86 Georgia, "Times New Roman", serif;
+        letter-spacing: -.055em;
+      }
+
+      .map-title p {
+        max-width: 112px;
+        margin: 7px 0 0;
+        color: #e5e1d2b5;
+        font: 720 4.5px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+      }
+
+      .probe-card {
+        position: absolute;
+        z-index: 6;
+        top: 48%;
+        right: 12px;
+        min-width: 70px;
+        padding: 7px 8px;
+        border: 1px solid #f7edc73d;
+        border-radius: 2px;
+        background: #07100e7d;
+        transform: translateY(-50%);
+        pointer-events: none;
+        backdrop-filter: blur(8px);
+      }
+
+      .probe-card span,
+      .probe-card strong {
+        display: block;
+        text-transform: uppercase;
+      }
+
+      .probe-card span {
+        color: #d8d3c1a8;
+        font: 800 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .12em;
+      }
+
+      .probe-card strong {
+        margin-top: 5px;
+        color: #fff5ce;
+        font: 900 7px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .04em;
+      }
+
+      .probe-card .risk-safe { color: #bde1af; }
+      .probe-card .risk-watch { color: #f4d474; }
+      .probe-card .risk-high { color: #ff977e; }
+
+      .bottom-panel {
+        position: absolute;
+        z-index: 8;
+        right: 12px;
+        bottom: 10px;
+        left: 12px;
+        display: grid;
+        grid-template-columns: auto minmax(74px, 1fr) auto;
+        align-items: end;
+        gap: 10px;
+        pointer-events: none;
+      }
+
+      .scan-summary {
+        min-width: 76px;
+        padding: 6px 7px;
+        border-left: 1px solid #f7edc75c;
+        background: #07100e55;
+        backdrop-filter: blur(6px);
+      }
+
+      .scan-summary span,
+      .scan-summary strong {
+        display: block;
+        white-space: nowrap;
+        text-transform: uppercase;
+      }
+
+      .scan-summary span {
+        color: #d8d3c1a8;
+        font: 800 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .13em;
+      }
+
+      .scan-summary strong {
+        margin-top: 5px;
+        color: #fff5ce;
+        font: 900 7px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+
+      .sweep-control {
+        display: grid;
+        min-width: 0;
+        gap: 4px;
+        padding: 5px 8px;
+        border: 1px solid #f7edc73d;
+        border-radius: 999px;
+        background: #07100e80;
+        pointer-events: auto;
+        backdrop-filter: blur(8px);
+      }
+
+      .sweep-control label {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        color: #ded9c7;
+        font: 850 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .11em;
+        text-transform: uppercase;
+      }
+
+      .sweep-control input {
+        width: 100%;
+        height: 5px;
+        margin: 0;
+        accent-color: #f4d474;
+        cursor: ew-resize;
+      }
+
+      .weather-controls {
+        display: flex;
+        align-items: center;
+        gap: 3px;
+        padding: 3px;
+        border: 1px solid #f7edc73d;
+        border-radius: 999px;
+        background: #07100e91;
+        pointer-events: auto;
+        backdrop-filter: blur(8px);
+      }
+
+      .weather-control {
+        min-width: 34px;
+        padding: 6px 7px;
+        border: 0;
+        border-radius: 999px;
+        background: transparent;
+        color: #e4dfcc;
+        font: 900 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .09em;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+
+      .weather-control:hover,
+      .weather-control:focus-visible {
+        background: #f4d474;
+        color: #11150e;
+        outline: none;
+      }
+
+      @media (max-width: 230px) {
+        .survey-copy span,
+        .map-title p,
+        .probe-card span,
+        .scan-summary span { display: none; }
+
+        .survey-mark { width: 19px; height: 19px; }
+        .terrain-stage .library-badge { max-width: 74px; overflow: hidden; }
+        .map-title { top: 47%; width: 70px; }
+        .map-title h1 { font-size: 13px; }
+        .probe-card { top: 45%; right: 7px; min-width: 48px; padding: 5px; }
+        .probe-card strong { font-size: 5px; }
+        .bottom-panel { right: 7px; bottom: 7px; left: 7px; grid-template-columns: auto minmax(38px, 1fr) auto; gap: 4px; }
+        .scan-summary { min-width: 40px; padding: 4px; }
+        .scan-summary strong { margin-top: 0; font-size: 5px; }
+        .sweep-control { padding: 4px 5px; }
+        .sweep-control label { display: none; }
+        .weather-control { min-width: 18px; padding: 5px 4px; font-size: 0; }
+        .weather-control::before { font-size: 6px; }
+        .weather-control[data-terrain-action="lower"]::before { content: "−"; }
+        .weather-control[data-terrain-action="raise"]::before { content: "+"; }
+        .weather-control[data-terrain-action="reset"]::before { content: "↺"; }
+      }
+
+      @media (max-width: 160px) {
+        .survey-copy { display: none; }
+        .topbar { top: 6px; right: 7px; left: 7px; }
+        .map-title { left: 7px; }
+        .scan-summary { display: none; }
+        .bottom-panel { grid-template-columns: minmax(36px, 1fr) auto; }
+        .weather-controls { gap: 1px; padding: 2px; }
+        .weather-control { min-width: 17px; padding-inline: 3px; }
+      }
+    </style>
+  </head>
+  <body>
+    <main
+      id="terrain-stage"
+      class="preview-stage terrain-stage"
+      tabindex="0"
+      aria-label="Interactive fictional watershed contour scanner. Hover or drag to move the scan and flood threshold; use arrow keys or the controls to reverse changes."
+      data-preview-mechanism="p5-image-pixel-marching-squares-contour-survey"
+    >
+      <div id="terrain-canvas" class="terrain-canvas" aria-hidden="true"></div>
+      <div class="terrain-grade" aria-hidden="true"></div>
+      <div class="terrain-grain" aria-hidden="true"></div>
+
+      <header class="topbar">
+        <div class="survey-id">
+          <span class="survey-mark">W-12</span>
+          <span class="survey-copy"><strong>Rill / Field Survey</strong><span>Fictional watershed · live terrain read</span></span>
+        </div>
+        <span class="library-badge">p5.js · pixel contours</span>
+      </header>
+
+      <section class="map-title">
+        <span class="eyebrow">Route safety scan</span>
+        <h1>READ THE<br />GROUND.</h1>
+        <p>Move the survey wave. Real terrain pixels redraw elevation, flood risk and the high route.</p>
+      </section>
+
+      <output id="probe-card" class="probe-card" aria-live="polite">
+        <span>Probe elevation</span>
+        <strong id="probe-elevation">—</strong>
+        <span style="margin-top:6px">Local risk</span>
+        <strong id="probe-risk" class="risk-safe">—</strong>
+      </output>
+
+      <footer class="bottom-panel">
+        <output class="scan-summary" aria-live="polite">
+          <span>Flood stage</span>
+          <strong id="flood-readout">—</strong>
+        </output>
+
+        <div class="sweep-control">
+          <label for="scan-sweep"><span>Survey wave</span><output id="scan-readout">34%</output></label>
+          <input id="scan-sweep" type="range" min="0" max="100" value="34" aria-label="Survey wave reveal" />
+        </div>
+
+        <nav class="weather-controls" aria-label="Flood stage controls">
+          <button class="weather-control" type="button" data-terrain-action="lower" aria-label="Lower flood stage">Dry −</button>
+          <button class="weather-control" type="button" data-terrain-action="raise" aria-label="Raise flood stage">Storm +</button>
+          <button class="weather-control" type="button" data-terrain-action="reset" aria-label="Reset terrain survey">Reset</button>
+        </nav>
+      </footer>
+    </main>
+    <script type="module" src="./src/topographic-wave-contour-reveal-demo.js"></script>
+  </body>
+</html>

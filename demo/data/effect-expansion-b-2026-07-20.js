@@ -23,12 +23,12 @@ const motionImplementation = (snippet, referenceUrl, renderer = 'dom') => ({
 
 export const effectExpansion150BatchB = [
   {
-    id: 'topographic-wave-contour-reveal', order: 126, name: 'Topographic wave contour reveal', nameZh: '地形波等高线揭示', category: 'canvas', sourceUrl: 'https://github.com/d3/d3-contour',
-    difference: '以连续高度切片逐层显露会呼吸的地形，不是普通波纹、遮罩或单条路径描边。',
-    behavior: { trigger: 'pointer position or animation frame', response: 'A scanning boundary exposes independently warped altitude contours', timing: 'continuous reversible field reveal', layer: 'topographic canvas field' },
-    prompt: '实现一张由固定地形函数生成的等高线地图，让指针横向位置控制扫描边界并逐层显露高度纹理。',
-    implementation: p5Implementation("new p5(p => { p.draw = () => drawWarpedContours(p.drawingContext, revealProgress); });", 'https://github.com/d3/d3-contour'),
-    scores: score(19, 19, 18, 15, 15, 10), rationaleZh: '扫描边界、高度层级和动态形变同时可见，缩略图中无需标题也能读出地形揭示。'
+    id: 'topographic-wave-contour-reveal', order: 126, name: 'Alpine watershed flood-contour review', nameZh: '高山流域洪水等高线审阅', category: 'canvas', sourceUrl: 'https://github.com/d3/d3-contour',
+    difference: '把自动扫描的程序地形改为真人操作的高山流域安全审阅：真实航拍像素生成高程、坡度、洪水风险、九层 Marching Squares 等高线与一条低风险路线。',
+    behavior: { trigger: 'trusted hover, captured mouse/touch/pen drag, keyboard, native survey range, or visible Dry/Storm/Reset controls', response: 'Move the survey wave, probe real pixel-derived elevation and risk, change flood stage, and reveal the safer high route', timing: 'human-owned finite redraws that hold between inputs', layer: 'full-stage p5 aerial survey, elevation contours, flood field, route, probe, readings, and controls' },
+    prompt: '制作一个全舞台高山流域洪水与路线审阅台：同源加载并精确校验一张 ImageGen 航拍图，读取 80×45 像素并平滑成高程场，以真实色彩与坡度生成风险场、九层 Marching Squares 等高线和逐列低风险路线；真人通过 hover、捕获拖拽、键盘、原生 survey range 与 Dry/Storm/Reset 控制揭示、洪水阈值和探针。首帧与每次操作后保持静止，禁止自动扫描、播放、排练、fallback、合成输入或预览时钟驱动。',
+    implementation: p5Implementation("decodedPixels -> smoothedElevation + floodRisk -> marchingSquaresContours + safeRoute; trustedInput -> finite redraw", 'https://github.com/d3/d3-contour'),
+    scores: score(20, 20, 20, 15, 15, 10), rationaleZh: '原创航拍图经同源 fetch、精确源 SHA、浏览器与 p5 双解码，并读取 80×45 / 3,600 像素；真实像素派生 3,121 条等高线段和安全路线。可信 hover、捕获拖拽、键盘、range 与按钮拥有揭示和洪水阈值，完整舞台在输入之间保持静止。'
   },
   {
     id: 'magnetic-orbit-command-dock', order: 127, name: 'Harbor pixel command dock', nameZh: '港口像素命令坞', category: 'pointer', sourceUrl: 'https://github.com/codrops/MagneticButtons',

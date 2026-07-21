@@ -2559,6 +2559,27 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("ArrowLeft")
             elif index == 24:
                 page.keyboard.press("]")
+        elif demo["id"] == "topographic-wave-contour-reveal":
+            if index == 4:
+                page.mouse.move(110, 65)
+            elif index == 5:
+                page.mouse.down()
+            elif index == 6:
+                page.mouse.move(140, 75, steps=2)
+            elif index == 7:
+                page.mouse.move(170, 90, steps=2)
+            elif index == 8:
+                page.mouse.move(200, 100, steps=2)
+            elif index == 9:
+                page.mouse.move(225, 110, steps=2)
+            elif index == 10:
+                page.mouse.move(250, 120, steps=2)
+            elif index == 11:
+                page.mouse.up()
+            elif index == 16:
+                page.locator('[data-terrain-action="raise"]').click()
+            elif index == 19:
+                page.locator('[data-terrain-action="raise"]').click()
         elif demo["id"] == "poisson-constellation-bloom":
             if index == 2:
                 page.mouse.move(170, 92)
@@ -8234,6 +8255,108 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["ready"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture a trusted full-stage composite laminate Delaunay inspection with exact source evidence, valid topology, multiple material classes and a retained human-owned beam: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "topographic-wave-contour-reveal":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-fictional-watershed-route-and-flood-contour-survey"
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["mechanism"] != "real-raster-pixels-to-smoothed-elevation-field-marching-squares-flood-risk-and-safe-route"
+            or interaction["acceptedInputs"] != ["mouse-hover", "mouse-drag", "touch-drag", "pen-drag", "keyboard", "button", "range"]
+            or interaction["causality"] != "trusted-human-input-only"
+            or not interaction["userInputRequired"]
+            or not interaction["strictTrustedInputGuard"]
+            or not interaction["initialFrameStatic"]
+            or not interaction["initialStillVerified"]
+            or interaction["automaticCycle"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or interaction["previewClockMutationCount"] != 0
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["nonInputVisualMutationCountAfterReady"] != 0
+            or interaction["inputCount"] < 14
+            or interaction["trustedInputCount"] != interaction["inputCount"]
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["pointerEnterCount"] < 1
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerDragCount"] < 5
+            or interaction["pointerReleaseCount"] != 1
+            or interaction["pointerCancelCount"] != 0
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerCaptureReleaseCount"] != 1
+            or interaction["pointerCaptured"]
+            or interaction["activePointerId"] is not None
+            or interaction["buttonInputCount"] != 2
+            or interaction["keyboardInputCount"] != 0
+            or interaction["rangeInputCount"] != 0
+            or interaction["mouseInputCount"] < 10
+            or interaction["humanMutationCount"] < 12
+            or interaction["revealMutationCount"] < 6
+            or interaction["floodMutationCount"] < 6
+            or interaction["probeMutationCount"] < 6
+            or interaction["resetCount"] != 0
+            or interaction["reveal"] <= .72
+            or interaction["floodStage"] <= .43
+            or interaction["probeRiskLabel"] != "HIGH"
+            or interaction["lastInputKind"] != "button"
+            or interaction["lastInputSource"] != "button-raise"
+            or interaction["lastInputTrusted"] is not True
+            or interaction["lastPointerType"] != "mouse"
+            or interaction["assetFetchCount"] != 1
+            or interaction["assetResponseStatus"] != 200
+            or not interaction["assetMimeType"].startswith("image/jpeg")
+            or not interaction["assetSameOrigin"]
+            or interaction["assetByteLength"] != 379323
+            or interaction["assetSha256"] != "1821a74b46476b03c5f0aa9a8105c03602873e1ea0ba076da7084daf340e2522"
+            or not interaction["assetShaMatchesExpected"]
+            or not interaction["browserImageDecoded"]
+            or interaction["sourceNaturalWidth"] != 960
+            or interaction["sourceNaturalHeight"] != 640
+            or not interaction["p5ImageDecoded"]
+            or interaction["p5ImageClass"] != "p5.Image"
+            or interaction["p5ImageWidth"] != 960
+            or interaction["p5ImageHeight"] != 640
+            or interaction["p5ImagePixelLength"] != 2457600
+            or interaction["sampledWidth"] != 80
+            or interaction["sampledHeight"] != 45
+            or interaction["sampledPixelCount"] != 3600
+            or interaction["sampledPixelByteLength"] != 14400
+            or len(interaction["sampledPixelSha256"]) != 64
+            or not interaction["sampledPixelSha256"].strip("0")
+            or interaction["sampledPixelChecksum"] <= 0
+            or interaction["distinctSampleColorCount"] <= 350
+            or interaction["sourceAlphaFailureCount"] != 0
+            or interaction["sampledLuminanceRange"] <= .45
+            or interaction["elevationCellCount"] != 3600
+            or interaction["elevationRange"] != 1
+            or interaction["elevationChecksum"] <= 0
+            or interaction["riskCellCount"] != 3600
+            or interaction["riskRange"] <= .45
+            or interaction["riskChecksum"] <= 0
+            or interaction["smoothingPassCount"] != 2
+            or interaction["marchingSquaresLevelCount"] != 9
+            or interaction["marchingSquaresCellEvaluationCount"] != 31284
+            or interaction["marchingSquaresSegmentCount"] <= 350
+            or interaction["contourLevelsWithSegments"] < 8
+            or interaction["contourTopologyChecksum"] <= 0
+            or interaction["routePointCount"] != 80
+            or interaction["routePixelEvaluationCount"] <= 3600
+            or interaction["routeRecomputeCount"] < 1
+            or interaction["routeChecksum"] <= 0
+            or not interaction["rasterDrivenEvidenceReady"]
+            or not interaction["p5InstanceReady"]
+            or not interaction["p5CanvasReady"]
+            or interaction["p5CanvasWidth"] != 320
+            or interaction["p5CanvasHeight"] != 180
+            or interaction["p5CompletedDrawCount"] < 12
+            or not interaction["runtimeAssertionPassed"]
+            or not interaction["ready"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a trusted full-stage alpine watershed contour and flood review with exact source evidence, a real safe route and a retained high-risk human-owned result: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "poisson-constellation-bloom":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

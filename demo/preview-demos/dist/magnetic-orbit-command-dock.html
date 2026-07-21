@@ -1,8 +1,473 @@
-<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Magnetic Orbit Command Dock</title><style>:root{--preview-background:#130f22}.stage{background:radial-gradient(circle at 69% 50%,#592f8155,transparent 38%),#130f22}.copy{position:absolute;left:16px;top:51px;color:#faf3ff;width:106px}.copy small{color:#d2a9ff;font:800 6px monospace;letter-spacing:.14em}.copy h1{margin:9px 0;font:950 21px/.85 system-ui;letter-spacing:-.065em}.dock{position:absolute;left:146px;top:47px;width:150px;height:92px;border:1px solid #ffffff1c;border-radius:48%;}.core,.tool{position:absolute;display:grid;place-items:center;color:#fff}.core{left:54px;top:25px;width:42px;height:42px;border-radius:50%;background:#b967ff;box-shadow:0 0 30px #b967ff88;font:900 9px monospace}.tool{width:25px;height:25px;border-radius:9px;border:1px solid #ffffff36;background:#241630;font:800 10px monospace;will-change:transform}.scene-caption{display:none}</style>  <script type="module" crossorigin src="./assets/magnetic-orbit-command-dock-BLDmSPIT.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
-  <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
-  <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
-  <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
-  <link rel="modulepreload" crossorigin href="./assets/expansion-b-utils-CD_J0IHW.js">
-  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage stage"><section class="copy"><small>COMMAND GRAVITY</small><h1>TOOLS FIND YOUR HAND.</h1></section><div class="dock" id="dock" tabindex="0" aria-label="Pointer attracts orbiting command buttons"><b class="core">⌘</b><i class="tool">↗</i><i class="tool">✦</i><i class="tool">⌁</i><i class="tool">＋</i><i class="tool">↻</i></div><span class="library-badge">DOM · magnetic orbit</span></main></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Motion — Harbor Pixel Command Dock</title>
+    <link rel="icon" href="data:,">
+    <style>
+      :root {
+        --preview-background: #081016;
+        --ink: #edf2eb;
+        --mist: #bdc8c3;
+        --ember: #e99152;
+        --signal: #9fe5d8;
+        color-scheme: dark;
+      }
+
+      button, input { font: inherit; }
+
+      .command-stage {
+        --sample: #d4b48f;
+        position: absolute;
+        inset: 0;
+        overflow: clip;
+        background: #081016;
+        color: var(--ink);
+        outline: none;
+        user-select: none;
+        touch-action: none;
+      }
+
+      .command-stage:focus-visible { box-shadow: inset 0 0 0 2px #f3c092; }
+
+      .source-image {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: saturate(.7) contrast(1.07) brightness(.7);
+        pointer-events: none;
+      }
+
+      .image-grade {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        background:
+          linear-gradient(90deg, #071016f5 0 23%, #071016b5 38%, #0710162b 65%, #07101685),
+          linear-gradient(0deg, #071016d8 0 12%, transparent 38% 73%, #071016b8),
+          radial-gradient(circle at 66% 49%, color-mix(in srgb, var(--sample) 16%, transparent), transparent 38%);
+        pointer-events: none;
+      }
+
+      .scan-grid {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        opacity: .28;
+        background:
+          linear-gradient(90deg, transparent 49.8%, #d7eee81a 50%, transparent 50.2%),
+          linear-gradient(transparent 49.8%, #d7eee812 50%, transparent 50.2%),
+          repeating-linear-gradient(90deg, transparent 0 47px, #d7eee80d 48px),
+          repeating-linear-gradient(0deg, transparent 0 23px, #d7eee80b 24px);
+        pointer-events: none;
+      }
+
+      .mission {
+        position: absolute;
+        z-index: 12;
+        top: 9%;
+        left: 4%;
+        width: min(31%, 218px);
+        text-shadow: 0 2px 18px #000;
+        pointer-events: none;
+      }
+
+      .mission-kicker,
+      .mission-copy,
+      .recommend-label,
+      .recommend-score,
+      .recommend-metrics,
+      .orbit-tool,
+      .dock-core,
+      .sample-label,
+      .control-bar,
+      .status-strip {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-weight: 820;
+        letter-spacing: .095em;
+        text-transform: uppercase;
+      }
+
+      .mission-kicker {
+        color: var(--ember);
+        font-size: clamp(5px, 1vw, 8px);
+      }
+
+      .mission h1 {
+        max-width: 8em;
+        margin: clamp(6px, 1.2vw, 10px) 0 0;
+        font: 930 clamp(16px, 4.5vw, 32px)/.86 system-ui, sans-serif;
+        letter-spacing: -.065em;
+      }
+
+      .mission-copy {
+        max-width: 29em;
+        margin: clamp(7px, 1.4vw, 11px) 0 0;
+        color: #dbe4dec4;
+        font-size: clamp(4px, .8vw, 6px);
+        line-height: 1.48;
+      }
+
+      .recommend-card {
+        position: absolute;
+        z-index: 13;
+        bottom: 19%;
+        left: 4%;
+        width: min(29%, 205px);
+        padding: clamp(7px, 1.25vw, 10px);
+        border: 1px solid #dce8df27;
+        border-radius: clamp(7px, 1.5vw, 11px);
+        background: #071016bf;
+        box-shadow: inset 0 1px #ffffff0d, 0 14px 32px #0007;
+        backdrop-filter: blur(12px);
+        pointer-events: none;
+      }
+
+      .recommend-label {
+        display: flex;
+        justify-content: space-between;
+        gap: 6px;
+        color: #aab8b2;
+        font-size: clamp(4px, .75vw, 6px);
+      }
+
+      .recommend-label b { color: var(--sample); }
+
+      .recommend-command {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 8px;
+        margin-top: clamp(4px, .9vw, 7px);
+      }
+
+      .recommend-command strong {
+        overflow: hidden;
+        font: 900 clamp(11px, 2.5vw, 18px)/.9 system-ui, sans-serif;
+        letter-spacing: -.045em;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .recommend-score {
+        color: var(--sample);
+        font-size: clamp(6px, 1.35vw, 10px);
+      }
+
+      .recommend-metrics {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 3px;
+        margin-top: clamp(5px, 1vw, 8px);
+        color: #dce5df9e;
+        font-size: clamp(3px, .62vw, 5px);
+      }
+
+      .recommend-metrics span:nth-child(2) { text-align: center; }
+      .recommend-metrics span:last-child { text-align: right; }
+
+      .orbit-field {
+        position: absolute;
+        inset: 0;
+        z-index: 8;
+        pointer-events: none;
+      }
+
+      .orbit-ring {
+        position: absolute;
+        left: 63%;
+        top: 49%;
+        width: min(51vw, 59vh);
+        aspect-ratio: 1.7;
+        border: 1px solid #e9f4ed32;
+        border-radius: 50%;
+        box-shadow: inset 0 0 40px #06101676, 0 0 30px #07101670;
+        transform: translate(-50%, -50%);
+      }
+
+      .orbit-ring::before,
+      .orbit-ring::after {
+        position: absolute;
+        border: 1px solid #dcece51b;
+        border-radius: 50%;
+        content: "";
+      }
+
+      .orbit-ring::before { inset: 18%; }
+      .orbit-ring::after { inset: 40%; }
+
+      .dock-core {
+        position: absolute;
+        display: grid;
+        width: clamp(28px, 7vw, 51px);
+        aspect-ratio: 1;
+        place-content: center;
+        border: 1px solid color-mix(in srgb, var(--sample) 62%, #fff);
+        border-radius: 50%;
+        background: #071016df;
+        box-shadow: 0 0 0 5px #07101652, 0 0 28px color-mix(in srgb, var(--sample) 33%, transparent);
+        color: var(--sample);
+        font-size: clamp(5px, 1vw, 8px);
+        line-height: 1.05;
+        text-align: center;
+        pointer-events: none;
+      }
+
+      .dock-core span {
+        color: #eef3ee;
+        font-size: clamp(8px, 2vw, 15px);
+        letter-spacing: 0;
+      }
+
+      .orbit-tool {
+        position: absolute;
+        display: grid;
+        width: clamp(27px, 7vw, 50px);
+        aspect-ratio: 1;
+        padding: 0;
+        place-content: center;
+        border: 1px solid #dce8df3d;
+        border-radius: clamp(9px, 2vw, 15px);
+        background: #071016e6;
+        box-shadow: inset 0 1px #ffffff14, 0 10px 22px #0009;
+        color: #eef2ed;
+        font-size: clamp(4px, .75vw, 6px);
+        line-height: 1.05;
+        text-align: center;
+        pointer-events: auto;
+        cursor: pointer;
+        will-change: transform;
+      }
+
+      .orbit-tool b {
+        display: block;
+        margin-bottom: 2px;
+        color: var(--sample);
+        font: 800 clamp(8px, 1.8vw, 14px)/1 system-ui, sans-serif;
+        letter-spacing: 0;
+      }
+
+      .orbit-tool::after {
+        position: absolute;
+        right: 10%;
+        bottom: 8%;
+        width: 3px;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: #93a19a;
+        content: "";
+      }
+
+      .orbit-tool[data-recommended="true"] {
+        border-color: color-mix(in srgb, var(--sample) 78%, white);
+        background: color-mix(in srgb, var(--sample) 22%, #071016 78%);
+        box-shadow: inset 0 1px #ffffff26, 0 0 0 3px #07101680, 0 0 24px color-mix(in srgb, var(--sample) 42%, transparent);
+      }
+
+      .orbit-tool[data-selected="true"]::after {
+        background: var(--signal);
+        box-shadow: 0 0 8px var(--signal);
+      }
+
+      .orbit-tool:focus-visible { outline: 2px solid #f4c38f; outline-offset: 3px; }
+
+      .sample-cursor {
+        position: absolute;
+        width: clamp(20px, 4.8vw, 35px);
+        aspect-ratio: 1;
+        border: 1px solid color-mix(in srgb, var(--sample) 75%, white);
+        border-radius: 50%;
+        box-shadow: 0 0 0 5px #07101670, 0 0 22px color-mix(in srgb, var(--sample) 45%, transparent);
+        opacity: 0;
+        pointer-events: none;
+        will-change: transform, opacity;
+      }
+
+      .sample-cursor::before,
+      .sample-cursor::after {
+        position: absolute;
+        background: var(--sample);
+        content: "";
+      }
+
+      .sample-cursor::before { top: 50%; left: -7px; width: calc(100% + 14px); height: 1px; }
+      .sample-cursor::after { top: -7px; left: 50%; width: 1px; height: calc(100% + 14px); }
+
+      .sample-label {
+        position: absolute;
+        top: calc(100% + 6px);
+        left: 50%;
+        padding: 3px 5px;
+        border-radius: 4px;
+        background: #061016e8;
+        color: #eef3ed;
+        font-size: clamp(3px, .65vw, 5px);
+        white-space: nowrap;
+        transform: translateX(-50%);
+      }
+
+      .control-bar {
+        position: absolute;
+        z-index: 16;
+        right: 4%;
+        bottom: 5%;
+        left: 4%;
+        display: flex;
+        align-items: center;
+        gap: clamp(5px, 1.2vw, 10px);
+        min-height: clamp(19px, 4.2vw, 30px);
+        padding: 0 clamp(6px, 1.1vw, 9px);
+        border: 1px solid #dbe7df2a;
+        border-radius: 999px;
+        background: #061016d4;
+        box-shadow: inset 0 1px #ffffff0d, 0 8px 26px #0008;
+        font-size: clamp(4px, .72vw, 6px);
+        backdrop-filter: blur(12px);
+      }
+
+      .control-bar label {
+        display: flex;
+        flex: 1 1 auto;
+        align-items: center;
+        gap: 6px;
+        min-width: 0;
+        color: #cbd6d0a8;
+      }
+
+      .control-bar input {
+        min-width: 35px;
+        flex: 1 1 90px;
+        height: 2px;
+        accent-color: var(--sample);
+      }
+
+      .control-bar output { min-width: 2.5em; color: var(--sample); }
+
+      .control-bar button {
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: #eef3ed;
+        font: inherit;
+        letter-spacing: inherit;
+        text-transform: inherit;
+        cursor: pointer;
+      }
+
+      .control-bar button:hover,
+      .control-bar button:focus-visible { color: var(--sample); }
+
+      .status-strip {
+        position: absolute;
+        z-index: 14;
+        top: 6%;
+        right: 4%;
+        display: flex;
+        gap: 6px;
+        align-items: center;
+        color: #e2ebe5c4;
+        font-size: clamp(4px, .72vw, 6px);
+        pointer-events: none;
+      }
+
+      .status-strip i {
+        width: 5px;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: var(--signal);
+        box-shadow: 0 0 8px var(--signal);
+      }
+
+      .source-evidence { display: none; }
+
+      @media (max-width: 430px) {
+        .command-stage .library-badge { display: none; }
+        .mission { width: 34%; }
+        .mission-copy { max-width: 22em; }
+        .recommend-card { width: 30%; }
+        .control-bar { gap: 6px; }
+      }
+
+      @media (max-width: 220px), (max-height: 115px) {
+        .library-badge { display: none; }
+        .mission { top: 8%; width: 39%; }
+        .mission h1 { margin-top: 3px; font-size: 9px; }
+        .mission-copy { display: none; }
+        .recommend-card { bottom: 20%; width: 34%; padding: 4px; }
+        .recommend-command { margin-top: 3px; }
+        .recommend-command strong { font-size: 7px; }
+        .recommend-metrics { display: none; }
+        .orbit-ring { width: min(50vw, 62vh); }
+        .orbit-tool { width: 22px; border-radius: 7px; font-size: 3px; }
+        .orbit-tool b { margin-bottom: 1px; font-size: 7px; }
+        .dock-core { width: 22px; font-size: 3px; }
+        .dock-core span { font-size: 7px; }
+        .sample-label { display: none; }
+        .control-bar { min-height: 14px; padding: 0 4px; font-size: 3px; }
+        .control-bar label > span { display: none; }
+        .control-bar input { min-width: 22px; }
+        .status-strip { font-size: 3px; }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/magnetic-orbit-command-dock-4cgKaUB7.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+    <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main
+      id="command-stage"
+      class="preview-stage command-stage"
+      tabindex="0"
+      aria-label="Pixel-aware magnetic command dock. Move or drag across the harbor scan to attract the most relevant command."
+    >
+      <img id="source-image" class="source-image" alt="" aria-hidden="true">
+      <div class="image-grade"></div>
+      <div class="scan-grid"></div>
+
+      <header class="mission">
+        <div class="mission-kicker">Fictional harbor scan · 09</div>
+        <h1>Pull the right tool closer.</h1>
+        <p class="mission-copy">Move across the source. Local pixels rank the orbiting review commands.</p>
+      </header>
+
+      <section class="recommend-card" aria-live="polite">
+        <div class="recommend-label"><span>Pixel recommendation</span><b data-status>Move pointer</b></div>
+        <div class="recommend-command">
+          <strong data-recommendation>Awaiting sample</strong>
+          <span class="recommend-score" data-score>—</span>
+        </div>
+        <div class="recommend-metrics">
+          <span data-reading="luma">Luma —</span>
+          <span data-reading="edge">Edge —</span>
+          <span data-reading="sat">Sat —</span>
+        </div>
+      </section>
+
+      <div id="orbit-field" class="orbit-field" aria-label="Five pixel-ranked orbiting commands">
+        <div class="orbit-ring"></div>
+        <div id="dock-core" class="dock-core"><span>⌘</span><span data-core-label>Ready</span></div>
+        <button class="orbit-tool" type="button" data-command="lift" aria-label="Queue Lift Shadows"><b>↥</b>Lift</button>
+        <button class="orbit-tool" type="button" data-command="trace" aria-label="Queue Trace Detail"><b>⌁</b>Trace</button>
+        <button class="orbit-tool" type="button" data-command="grade" aria-label="Queue Grade Color"><b>◐</b>Grade</button>
+        <button class="orbit-tool" type="button" data-command="mask" aria-label="Queue Mask Glare"><b>◌</b>Mask</button>
+        <button class="orbit-tool" type="button" data-command="verify" aria-label="Queue Verify Texture"><b>✓</b>Verify</button>
+        <div id="sample-cursor" class="sample-cursor"><span class="sample-label" data-sample-label>Sample</span></div>
+      </div>
+
+      <div class="status-strip"><i></i><span data-asset-status>Decoding source</span></div>
+
+      <div class="control-bar">
+        <label for="pull-strength"><span>Magnetic pull</span><input id="pull-strength" type="range" min="30" max="90" value="68" aria-label="Magnetic pull strength"><output data-pull-output>68%</output></label>
+        <button type="button" data-action="undo">Undo</button>
+        <button type="button" data-action="reset">Reset</button>
+      </div>
+
+      <canvas id="source-evidence" class="source-evidence" width="96" height="54" aria-hidden="true"></canvas>
+      <span class="library-badge">Motion · decoded source pixels</span>
+    </main>
+  </body>
+</html>

@@ -2010,6 +2010,42 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.locator('[data-lens-action="reset"]').click()
             elif index == 23:
                 page.locator('[data-lens-action="lock"]').click()
+        elif demo["id"] == "magnetic-orbit-command-dock":
+            if index == 2:
+                page.mouse.move(95, 92)
+            elif index == 5:
+                page.mouse.move(242, 24)
+            elif index == 8:
+                page.mouse.move(222, 80)
+                page.mouse.down()
+            elif index == 9:
+                page.mouse.move(246, 95, steps=2)
+            elif index == 10:
+                page.mouse.move(278, 115, steps=2)
+            elif index == 11:
+                page.mouse.up()
+            elif index == 14:
+                page.locator("#command-stage").focus()
+                page.keyboard.press("ArrowLeft")
+            elif index == 16:
+                page.keyboard.press("ArrowUp")
+            elif index == 18:
+                page.keyboard.press("Enter")
+            elif index == 21:
+                page.locator("#pull-strength").focus()
+                page.keyboard.press("ArrowRight")
+                page.keyboard.press("ArrowRight")
+            elif index == 24:
+                page.locator('[data-command="trace"]').click()
+            elif index == 27:
+                page.locator('[data-action="reset"]').click()
+            elif index == 29:
+                page.mouse.move(200, 70)
+            elif index == 31:
+                page.locator("#command-stage").focus()
+                page.keyboard.press("ArrowRight")
+            elif index == 33:
+                page.keyboard.press("Enter")
         elif demo["id"] == "stencil-text-scanline-window":
             if index == 2:
                 page.mouse.move(286, 80)
@@ -6040,6 +6076,111 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["ready"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture trusted deep-field hover, captured lens drag, source-derived candidate lock, keyboard position/mass changes, reset, and a final candidate-01 lock without automatic orbits: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "magnetic-orbit-command-dock":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-pixel-aware-harbor-media-command-ranking-and-magnetic-orbit-dock"
+            or interaction["claimedLibrary"] != "motion@12.42.2"
+            or interaction["renderer"] != "dom"
+            or interaction["mechanism"] != "same-origin-decoded-image-pixels-rank-five-commands-and-trusted-human-input-seeks-paused-motion-orbit-transforms"
+            or interaction["acceptedInputs"] != ["mouse-hover", "captured-mouse-drag", "captured-touch-drag", "captured-pen-drag", "keyboard", "range-control", "visible-buttons"]
+            or not interaction["userInputRequired"]
+            or not interaction["strictTrustedInputGuard"]
+            or not interaction["initialFrameStatic"]
+            or not interaction["initialStillVerified"]
+            or interaction["automaticCycle"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticTimeline"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["visualMutationFromPreviewClock"]
+            or interaction["previewClockMutationCount"] != 0
+            or interaction["inputCount"] < 15
+            or interaction["trustedInputCount"] != interaction["inputCount"]
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["pointerEnterCount"] < 1
+            or interaction["hoverInputCount"] < 2
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerMoveCount"] < 6
+            or interaction["pointerDragCount"] < 4
+            or interaction["pointerUpCount"] != 1
+            or interaction["pointerCancelCount"] != 0
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerCaptureReleaseCount"] != 1
+            or interaction["pointerTypesSeen"] != ["mouse"]
+            or interaction["keyboardInputCount"] != 5
+            or interaction["rangeInputCount"] != 2
+            or interaction["buttonInputCount"] != 2
+            or interaction["commandSelectionCount"] != 3
+            or interaction["resetCount"] != 1
+            or interaction["humanVisualMutationCount"] < 14
+            or interaction["humanInputCausalityCount"] != interaction["humanVisualMutationCount"]
+            or not interaction["hasHumanSample"]
+            or interaction["selectedCommandId"] != interaction["recommendedCommandId"]
+            or interaction["recommendedCommandId"] not in ("lift", "trace", "grade", "mask", "verify")
+            or interaction["recommendedCommandScore"] <= 0
+            or interaction["maximumPointerTravel"] <= .05
+            or interaction["minimumPointerU"] >= interaction["maximumPointerU"]
+            or interaction["minimumPointerV"] >= interaction["maximumPointerV"]
+            or interaction["maximumPullStrength"] <= interaction["minimumPullStrength"]
+            or interaction["activePointerId"] is not None
+            or interaction["pointerCaptured"]
+            or interaction["dragging"]
+            or interaction["lastInputKind"] != "keyboard"
+            or interaction["lastInputSource"] != "queue-recommendation"
+            or interaction["lastInputTrusted"] is not True
+            or interaction["lastPointerType"] != "mouse"
+            or interaction["assetFetchCount"] != 1
+            or interaction["assetResponseStatus"] != 200
+            or interaction["assetMimeType"] != "image/jpeg"
+            or not interaction["assetSameOrigin"]
+            or interaction["assetByteLength"] != 257814
+            or interaction["assetSha256"] != "6491e95d92172869c9dcacd2b1b3128cd23e4e050156aac3add581ed8cb105a6"
+            or not interaction["assetShaMatchesExpected"]
+            or not interaction["browserImageDecoded"]
+            or interaction["sourceNaturalWidth"] != 960
+            or interaction["sourceNaturalHeight"] != 640
+            or interaction["sourcePixelCount"] != 614400
+            or not interaction["browserCanvasReadback"]
+            or interaction["sampledWidth"] != 96
+            or interaction["sampledHeight"] != 54
+            or interaction["sampledPixelCount"] != 5184
+            or interaction["sampledPixelByteLength"] != 20736
+            or len(interaction["sampledPixelSha256"]) != 64
+            or not interaction["sampledPixelSha256"].strip("0")
+            or interaction["sampledOpaquePixelCount"] != 5184
+            or interaction["distinctSampleColorCount"] < 600
+            or interaction["sampledLuminanceRange"] < .62
+            or interaction["sampledLuminanceStdDev"] < .13
+            or interaction["sampledSaturationMean"] < .12
+            or interaction["sampledEdgeMean"] < .025
+            or interaction["sampledWarmPixelRatio"] < .01
+            or interaction["pixelProbeCount"] != 6
+            or interaction["probeRecommendationDiversity"] < 3
+            or len(interaction["probeRecommendations"]) != 6
+            or not interaction["pixelEvidenceBoundToCommandRanking"]
+            or not interaction["pixelEvidenceBoundToOrbitGeometry"]
+            or interaction["localSamplePixelCount"] <= 0
+            or not interaction["lastSampleChecksum"].strip("0")
+            or interaction["motionInitialControlCount"] != 5
+            or interaction["motionControlBuildCount"] < 10
+            or interaction["motionSeekCount"] < 6
+            or interaction["motionDrivenToolCount"] != 5
+            or not interaction["motionControlsPaused"]
+            or not interaction["motionControlsBuiltWithoutAutoplay"]
+            or len(interaction["currentToolTransforms"]) != 5
+            or interaction["stageCoverageRatio"] < .94
+            or interaction["initialVisualStateChecksum"] == interaction["currentVisualStateChecksum"]
+            or interaction["runtimeAssertCount"] < 2
+            or not interaction["runtimeAssertionPassed"]
+            or not interaction["ready"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture trusted harbor pixel sampling, five paused Motion command seeks, range/button/keyboard reversibility, and a final source-ranked queued command without automatic orbiting: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "stencil-text-scanline-window":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

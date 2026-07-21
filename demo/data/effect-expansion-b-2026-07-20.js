@@ -31,12 +31,12 @@ export const effectExpansion150BatchB = [
     scores: score(19, 19, 18, 15, 15, 10), rationaleZh: '扫描边界、高度层级和动态形变同时可见，缩略图中无需标题也能读出地形揭示。'
   },
   {
-    id: 'magnetic-orbit-command-dock', order: 127, name: 'Magnetic orbit command dock', nameZh: '磁性轨道命令坞', category: 'pointer', sourceUrl: 'https://github.com/codrops/MagneticButtons',
-    difference: '五个工具持续绕中心公转，又被指针从轨道局部拉偏，区别于单按钮磁吸或静态径向菜单。',
-    behavior: { trigger: 'pointer movement', response: 'Orbiting commands bend their paths toward the pointer while preserving order', timing: 'continuous attraction over orbital motion', layer: 'command dock' },
-    prompt: '实现五个有固定相位的命令按钮轨道，指针靠近时改变轨道中心但不打乱按钮顺序。',
-    implementation: motionImplementation("const orbit = animate(dock, { opacity: [.94, 1, .94] }, { duration: 3 }); orbit.pause();", 'https://github.com/codrops/MagneticButtons'),
-    scores: score(18, 19, 19, 15, 15, 10), rationaleZh: '轨道运动与局部磁吸构成双重因果，工具按钮始终可辨且交互反馈强。'
+    id: 'magnetic-orbit-command-dock', order: 127, name: 'Harbor pixel command dock', nameZh: '港口像素命令坞', category: 'pointer', sourceUrl: 'https://github.com/codrops/MagneticButtons',
+    difference: '把持续自转的抽象图标改为静止待命的港口影像复核工具：真实局部像素会重排五项命令的相关度，并把最合适的工具吸向用户采样点。',
+    behavior: { trigger: 'trusted hover, captured mouse/touch/pen drag, keyboard, native pull range, or visible command/undo/reset control', response: 'Sample the verified harbor image, rank Lift/Trace/Grade/Mask/Verify from local luminance, saturation, edge and variance, magnetically seek the five paused Motion controls, and explicitly queue a command', timing: 'human-owned finite reversible Motion seeks that remain still after input', layer: 'full-stage harbor source, pixel probe, recommendation card, five-command orbit, magnetic pull control, and queue state' },
+    prompt: '制作一个全舞台港口影像复核命令坞：同源加载并精确校验一张 ImageGen 港口航拍图，读取 96×54 像素，让局部亮度、饱和度、边缘、方差和暖度真实决定 Lift/Trace/Grade/Mask/Verify 的排序、强调色与磁吸几何。真人通过 hover、捕获式鼠标/触控/笔拖动、键盘、原生 pull range 和可见命令/Undo/Reset 操作五个无 autoplay 的暂停 Motion 控制器；首帧和每次操作后必须静止，禁止轨道自转、自动播放、排练、fallback、合成输入或预览时钟驱动。',
+    implementation: motionImplementation("const control = animate(tool, { transform: [from, pixelRankedTransform] }, { duration: 1, ease: 'linear', autoplay: false }); control.pause(); control.time = control.duration;", 'https://github.com/motiondivision/motion'),
+    scores: score(20, 20, 20, 15, 15, 10), rationaleZh: '原创 ImageGen 港口航拍图经同源 fetch、精确源 SHA、浏览器 decode 与 96×54 / 5,184 像素读取；局部亮度、饱和度、边缘、方差和暖度产生至少三种不同命令建议，并同步驱动颜色与五按钮磁吸。可信 hover、捕获拖拽、键盘、range 和按钮控制暂停 Motion seek、排队、撤销与复位，首帧和结果均保持静止。'
   },
   {
     id: 'stencil-text-scanline-window', order: 128, name: 'Make-ready print registration gate', nameZh: 'Make-ready 印刷套准检查台', category: 'vector', sourceUrl: 'https://github.com/motiondivision/motion',

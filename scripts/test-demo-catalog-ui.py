@@ -169,6 +169,21 @@ def main() -> int:
                 "element => getComputedStyle(element).gridTemplateColumns.split(' ').length"
             )
             assert desktop_grid_columns == 3
+            full_bleed_geometry = page.locator("#scroll-scrubbed-master-timeline").evaluate(
+                """card => {
+                    const main = card.querySelector('.effect-main').getBoundingClientRect();
+                    const preview = card.querySelector('.row-preview').getBoundingClientRect();
+                    const overlay = card.querySelector('.effect-card-overlay').getBoundingClientRect();
+                    return {
+                        main: [main.width, main.height, main.bottom],
+                        preview: [preview.width, preview.height],
+                        overlayBottom: overlay.bottom,
+                    };
+                }"""
+            )
+            assert abs(full_bleed_geometry["main"][0] - full_bleed_geometry["preview"][0]) < 1
+            assert abs(full_bleed_geometry["main"][1] - full_bleed_geometry["preview"][1]) < 1
+            assert abs(full_bleed_geometry["main"][2] - full_bleed_geometry["overlayBottom"]) < 1
             transition_filter = page.locator('#filters [data-category="transition"]')
             expected_transition_count = page.locator(
                 '#effect-list .effect-row[data-category="transition"]'

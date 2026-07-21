@@ -1579,6 +1579,36 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("Shift+ArrowDown")
             elif index == 29:
                 page.keyboard.press("ArrowLeft")
+        elif demo["id"] == "cursor-heatmap-crystallization":
+            if index == 1:
+                page.mouse.move(160, 90)
+            elif index == 3:
+                page.mouse.move(100, 70, steps=4)
+            elif index == 6:
+                page.mouse.move(80, 80)
+            elif index == 7:
+                page.mouse.down()
+            elif index == 8:
+                page.mouse.move(140, 55, steps=4)
+            elif index == 9:
+                page.mouse.move(210, 90, steps=4)
+            elif index == 10:
+                page.mouse.move(170, 120, steps=4)
+            elif index == 11:
+                page.mouse.up()
+            elif index == 14:
+                page.locator("#thermal-stage").focus()
+                page.keyboard.press("ArrowLeft")
+            elif index == 15:
+                page.keyboard.press("ArrowUp")
+            elif index == 16:
+                page.keyboard.press("Space")
+            elif index in (18, 21):
+                page.locator('[data-thermal-action="pulse"]').click()
+            elif index in (24, 27):
+                page.locator('[data-thermal-action="cool"]').click()
+            elif index == 30:
+                page.locator('[data-thermal-action="reset"]').click()
         elif demo["id"] == "iris-aperture-navigation":
             if index == 1:
                 page.mouse.move(250, 100)
@@ -4076,6 +4106,95 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["lastInputTrusted"] is not True
         ):
             raise RuntimeError(f"{demo['id']} did not capture trusted slow/fast captured traces, keyboard sampling, reset, four unique decoded ImageGen frames, and a nonempty final visual-memory path: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "cursor-heatmap-crystallization":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-pixel-derived-thermal-crystallization-material-test"
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["mechanism"] != "real-micrograph-pixels-derive-material-zones-diffusion-properties-and-crystallization-thresholds"
+            or interaction["acceptedInputs"] != ["mouse-hover", "mouse-drag", "touch-drag", "pen-drag", "keyboard", "button-control"]
+            or not interaction["userInputRequired"]
+            or not interaction["initialFrameStatic"]
+            or not interaction["initialStaticConfirmed"]
+            or interaction["automaticCycle"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or interaction["previewClockMutationCount"] != 0
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["inputCount"] < 28
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["pointerEnterCount"] < 1
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerMoveCount"] < 17
+            or interaction["pointerReleaseCount"] != 1
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerReleaseCaptureCount"] != 1
+            or interaction["keyboardInputCount"] != 3
+            or interaction["buttonActivationCount"] != 5
+            or interaction["heatApplicationCount"] < 22
+            or interaction["coolingActionCount"] != 2
+            or interaction["resetActionCount"] != 1
+            or interaction["humanInputCausalityCount"] != interaction["heatApplicationCount"] + interaction["coolingActionCount"] + interaction["resetActionCount"]
+            or interaction["diffusionIterationCount"] < 150
+            or interaction["settleIterationCount"] != 8
+            or interaction["recoveryIterationCount"] != 68
+            or interaction["heatedCellMutationCount"] < 1000
+            or interaction["crystallizationMutationCount"] < 1000
+            or interaction["recoveryMutationCount"] < 500
+            or interaction["thresholdCrossingCount"] < 40
+            or interaction["probeMoveCount"] < 18
+            or interaction["maxSourcePathPointCount"] < 15
+            or interaction["maximumPeakKelvin"] < 800
+            or interaction["maximumCrystallizedCellCount"] < 40
+            or interaction["currentPeakKelvin"] != 293
+            or interaction["crystallizedCellCount"] != 0
+            or interaction["sourcePathPointCount"] != 0
+            or not interaction["stableAfterInput"]
+            or interaction["activePointerId"] is not None
+            or interaction["pointerCaptured"]
+            or interaction["lastInputKind"] not in ("button-reset", "mouse-reset")
+            or interaction["lastInputTrusted"] is not True
+            or interaction["assetFetchCount"] != 1
+            or interaction["assetResponseStatus"] != 200
+            or not interaction["assetSameOrigin"]
+            or interaction["assetByteLength"] != 456215
+            or interaction["assetSha256"] != "52cc25a66d3f7b4bf699b3cf5b3f8ae3d50311d51638f190852a3d6c6aa1cd4f"
+            or not interaction["assetShaMatchesExpected"]
+            or not interaction["browserImageDecoded"]
+            or interaction["sourceNaturalWidth"] != 960
+            or interaction["sourceNaturalHeight"] != 640
+            or not interaction["p5ImageDecoded"]
+            or interaction["p5ImageClass"] != "p5.Image"
+            or interaction["p5ImageWidth"] != 960
+            or interaction["p5ImageHeight"] != 640
+            or interaction["p5ImagePixelLength"] != 2457600
+            or interaction["sampledWidth"] != 80
+            or interaction["sampledHeight"] != 45
+            or interaction["sampledPixelCount"] != 3600
+            or interaction["sampledByteLength"] != 14400
+            or len(interaction["sourcePixelSha256"]) != 64
+            or interaction["distinctSampleColorCount"] <= 1000
+            or interaction["materialCellCount"] != 3600
+            or interaction["ceramicCellCount"] + interaction["conductorCellCount"] + interaction["poreCellCount"] != 3600
+            or not 2200 < interaction["ceramicCellCount"] < 2600
+            or not 250 < interaction["conductorCellCount"] < 500
+            or not 700 < interaction["poreCellCount"] < 950
+            or interaction["maximumConductivity"] <= interaction["minimumConductivity"] * 3
+            or interaction["maximumHeatCapacity"] <= interaction["minimumHeatCapacity"]
+            or interaction["maximumCrystallizationThreshold"] <= interaction["minimumCrystallizationThreshold"]
+            or interaction["materialPropertyChecksum"] <= 0
+            or not interaction["assetEvidenceReady"]
+            or not interaction["materialEvidenceReady"]
+            or not interaction["p5InstanceReady"]
+            or not interaction["p5CanvasReady"]
+            or interaction["p5CompletedDrawCount"] < 15
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture trusted hover, a captured heat trace, keyboard pulse, explicit pulse/cool/reset, finite pixel-derived thermal diffusion, crystallization and recovery over the verified local p5 material plate: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "iris-aperture-navigation":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

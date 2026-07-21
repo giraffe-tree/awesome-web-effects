@@ -1,1 +1,367 @@
-<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Cursor Heatmap Crystallization</title><link rel="stylesheet" href="./shared.css"><style>:root{--preview-background:#060817}canvas{width:100%;height:100%}.copy{position:absolute;left:15px;top:49px;color:#f6f3ff;width:102px}.copy small{font:800 6px monospace;letter-spacing:.13em;color:#ff97db}.copy h1{margin:9px 0;font:950 20px/.85 system-ui;letter-spacing:-.06em}.readout{position:absolute;right:11px;bottom:11px;color:#ffe3fa;font:700 6px monospace}.scene-caption{display:none}</style></head><body><main class="preview-stage"><canvas tabindex="0" aria-label="Pointer heat crystallizes a triangular field"></canvas><section class="copy"><small>THERMAL MEMORY</small><h1>TOUCH LEAVES CRYSTALS.</h1></section><span class="readout">PEAK 842K · DECAY 0.92</span><span class="library-badge">Canvas · heat lattice</span></main><script type="module" src="./src/cursor-heatmap-crystallization-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>p5.js — Human-operated Thermal Crystallization Atlas</title>
+    <link rel="stylesheet" href="./shared.css" />
+    <style>
+      :root {
+        --preview-background: #07101a;
+        color-scheme: dark;
+      }
+
+      button { font: inherit; }
+
+      .thermal-stage {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        background: #07101a;
+        color: #f5eee3;
+        cursor: crosshair;
+        outline: none;
+        touch-action: none;
+        user-select: none;
+      }
+
+      .thermal-stage:focus-visible {
+        box-shadow: inset 0 0 0 2px #ff9c5c;
+      }
+
+      .canvas-host,
+      .canvas-host canvas,
+      .material-grade,
+      .material-grain {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .canvas-host,
+      .material-grade,
+      .material-grain { pointer-events: none; }
+
+      .material-grade {
+        z-index: 2;
+        background:
+          linear-gradient(180deg, #02091482 0%, transparent 24%, transparent 63%, #020914cc 100%),
+          linear-gradient(90deg, #02091470 0%, transparent 32%, transparent 72%, #02091452 100%);
+      }
+
+      .material-grain {
+        z-index: 3;
+        opacity: .12;
+        mix-blend-mode: soft-light;
+        background-image: radial-gradient(#fff7 .45px, transparent .65px);
+        background-size: 3px 3px;
+      }
+
+      .topbar {
+        position: absolute;
+        z-index: 6;
+        top: 12px;
+        left: 13px;
+        right: 13px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        pointer-events: none;
+      }
+
+      .identity {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .identity-mark {
+        display: grid;
+        width: 24px;
+        height: 24px;
+        place-items: center;
+        flex: 0 0 auto;
+        border: 1px solid #f4eadc80;
+        border-radius: 50%;
+        background: #07101a8c;
+        color: #ffb36f;
+        font: 900 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        backdrop-filter: blur(8px);
+      }
+
+      .identity-copy strong,
+      .identity-copy span {
+        display: block;
+        text-transform: uppercase;
+      }
+
+      .identity-copy strong {
+        font: 900 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .14em;
+      }
+
+      .identity-copy span {
+        margin-top: 4px;
+        color: #d9d1c5b5;
+        font: 750 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .12em;
+      }
+
+      .thermal-stage .library-badge {
+        position: static;
+        max-width: 132px;
+        padding: 5px 7px;
+        border-color: #f4eadc3d;
+        background: #07101a8c;
+        color: #e9e2d7;
+        font: 850 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .12em;
+        white-space: nowrap;
+      }
+
+      .material-key {
+        position: absolute;
+        z-index: 5;
+        top: 50%;
+        left: 12px;
+        display: grid;
+        gap: 5px;
+        transform: translateY(-50%);
+        pointer-events: none;
+      }
+
+      .material-key span {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        color: #eee5dab8;
+        font: 800 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .11em;
+        text-transform: uppercase;
+      }
+
+      .material-key i {
+        width: 8px;
+        height: 2px;
+        border-radius: 2px;
+        background: var(--key-color);
+        box-shadow: 0 0 7px var(--key-color);
+      }
+
+      .bottom-panel {
+        position: absolute;
+        z-index: 7;
+        left: 13px;
+        right: 13px;
+        bottom: 11px;
+        display: grid;
+        grid-template-columns: minmax(92px, 1fr) auto auto;
+        align-items: end;
+        gap: 11px;
+        pointer-events: none;
+      }
+
+      .frame-title { min-width: 0; }
+
+      .frame-title .eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: #ffad6d;
+        font: 900 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .15em;
+        text-transform: uppercase;
+      }
+
+      .frame-title .eyebrow::before {
+        width: 13px;
+        height: 2px;
+        background: #ff9855;
+        box-shadow: 0 0 8px #ff9855;
+        content: "";
+      }
+
+      .frame-title h1 {
+        overflow: hidden;
+        margin: 5px 0 0;
+        font: 650 clamp(15px, 4vw, 32px)/.87 Georgia, "Times New Roman", serif;
+        letter-spacing: -.052em;
+        text-overflow: ellipsis;
+        text-wrap: nowrap;
+      }
+
+      .measurement-grid {
+        display: grid;
+        grid-template-columns: repeat(3, auto);
+        align-items: end;
+        background: #07101a35;
+        backdrop-filter: blur(7px);
+      }
+
+      .measurement {
+        min-width: 52px;
+        padding: 7px 8px 6px;
+        border-left: 1px solid #f4eadc38;
+      }
+
+      .measurement span,
+      .measurement strong {
+        display: block;
+        white-space: nowrap;
+        text-transform: uppercase;
+      }
+
+      .measurement span {
+        color: #c9c1b6;
+        font: 800 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .12em;
+      }
+
+      .measurement strong {
+        margin-top: 5px;
+        color: #fff5e8;
+        font: 900 7px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .035em;
+      }
+
+      .sample-controls {
+        display: flex;
+        align-items: center;
+        align-self: end;
+        gap: 3px;
+        padding: 3px;
+        border: 1px solid #f4eadc3d;
+        border-radius: 999px;
+        background: #07101a9c;
+        pointer-events: auto;
+        backdrop-filter: blur(9px);
+      }
+
+      .sample-control {
+        min-width: 41px;
+        padding: 6px 7px;
+        border: 0;
+        border-radius: 999px;
+        background: transparent;
+        color: #d9d2c8;
+        font: 900 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+
+      .sample-control:hover,
+      .sample-control:focus-visible {
+        background: #fff1df;
+        color: #15100d;
+        outline: none;
+      }
+
+      .interaction-hint {
+        position: absolute;
+        z-index: 5;
+        top: 49px;
+        right: 13px;
+        max-width: 116px;
+        color: #ddd4c8b5;
+        font: 750 4px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .08em;
+        text-align: right;
+        text-transform: uppercase;
+        pointer-events: none;
+      }
+
+      .runtime-ledger {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        clip-path: inset(50%);
+        white-space: nowrap;
+      }
+
+      @media (max-width: 420px), (max-height: 220px) {
+        .interaction-hint { display: none; }
+        .frame-title { display: none; }
+        .bottom-panel { grid-template-columns: 1fr auto; }
+        .measurement { min-width: 45px; }
+        .sample-control { min-width: 36px; }
+      }
+
+      @media (max-width: 230px), (max-height: 112px) {
+        .topbar { top: 5px; left: 6px; right: 6px; }
+        .identity-mark { width: 15px; height: 15px; font-size: 4px; }
+        .identity-copy span,
+        .material-key,
+        .thermal-stage .library-badge,
+        .identity-copy strong { font-size: 3px; letter-spacing: .1em; }
+        .bottom-panel { left: 6px; right: 6px; bottom: 5px; grid-template-columns: 1fr auto; gap: 4px; }
+        .measurement { min-width: 30px; padding: 3px 4px; }
+        .measurement:nth-child(3) { display: none; }
+        .measurement span { font-size: 3px; }
+        .measurement strong { margin-top: 3px; font-size: 4px; }
+        .sample-controls { padding: 2px; }
+        .sample-control { min-width: 24px; padding: 4px; font-size: 3px; }
+        .sample-control[data-thermal-action="reset"] { display: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <main
+      id="thermal-stage"
+      class="preview-stage thermal-stage"
+      tabindex="0"
+      role="application"
+      aria-label="Interactive thermal crystallization map. Move or drag to heat the material, use arrow keys to move the probe, Space to heat, C to cool, and R to reset."
+      data-preview-mechanism="p5-real-micrograph-heterogeneous-heat-diffusion"
+    >
+      <div id="thermal-canvas-host" class="canvas-host" aria-hidden="true"></div>
+      <div class="material-grade" aria-hidden="true"></div>
+      <div class="material-grain" aria-hidden="true"></div>
+
+      <header class="topbar">
+        <div class="identity">
+          <span class="identity-mark">PX</span>
+          <div class="identity-copy">
+            <strong>Phase atlas 07</strong>
+            <span>Fictional ceramic thin film</span>
+          </div>
+        </div>
+        <span class="library-badge">p5.js · pixel-derived thermal lattice</span>
+      </header>
+
+      <aside class="material-key" aria-hidden="true">
+        <span style="--key-color:#68a8ff"><i></i>Ceramic</span>
+        <span style="--key-color:#ffac62"><i></i>Conductor</span>
+        <span style="--key-color:#1a2430"><i></i>Pore</span>
+      </aside>
+
+      <p class="interaction-hint">Move to heat · drag to trace · arrows + Space · C cools · R resets</p>
+
+      <footer class="bottom-panel">
+        <div class="frame-title">
+          <span class="eyebrow">Human-driven phase test</span>
+          <h1>Trace heat. Reveal crystal.</h1>
+        </div>
+
+        <div class="measurement-grid" aria-live="polite">
+          <div class="measurement"><span>Peak</span><strong id="peak-readout">293 K</strong></div>
+          <div class="measurement"><span>Crystal</span><strong id="crystal-readout">0.0%</strong></div>
+          <div class="measurement"><span>Region</span><strong id="region-readout">Ceramic</strong></div>
+        </div>
+
+        <div class="sample-controls" aria-label="Thermal sample controls">
+          <button class="sample-control" type="button" data-thermal-action="pulse">Pulse</button>
+          <button class="sample-control" type="button" data-thermal-action="cool">Cool</button>
+          <button class="sample-control" type="button" data-thermal-action="reset">Reset</button>
+        </div>
+      </footer>
+
+      <output id="runtime-ledger" class="runtime-ledger" aria-hidden="true"></output>
+    </main>
+    <script type="module" src="./src/cursor-heatmap-crystallization-demo.js"></script>
+  </body>
+</html>

@@ -55,12 +55,12 @@ export const effectExpansion150BatchB = [
     scores: score(19, 18, 19, 15, 15, 10), rationaleZh: '路径张力、节点滑移和字形轮廓在同一主体上发生，具有明确的可复用矢量机制。'
   },
   {
-    id: 'cursor-heatmap-crystallization', order: 130, name: 'Cursor heatmap crystallization', nameZh: '指针热场晶化', category: 'canvas', sourceUrl: 'https://github.com/pa7/heatmap.js',
-    difference: '热源距离连续决定三角晶体的尺寸、色相与旋转，不是常见圆形热图叠色。',
-    behavior: { trigger: 'pointer movement', response: 'A moving thermal source crystallizes nearby triangles and lets distant cells decay', timing: 'continuous spatial falloff', layer: 'thermal lattice' },
-    prompt: '实现固定种子三角晶格，按指针距离计算热量并驱动每片晶体的尺度、透明度和旋转。',
-    implementation: p5Implementation("new p5(p => { p.draw = () => crystals.forEach(c => c.draw(p, heatAt(c, pointer))); });", 'https://github.com/pa7/heatmap.js'),
-    scores: score(19, 19, 19, 15, 15, 10), rationaleZh: '热场被翻译为清晰的晶体生长语言，颜色和几何反馈均有因果。'
+    id: 'cursor-heatmap-crystallization', order: 130, name: 'Phase Atlas thermal crystallization probe', nameZh: 'Phase Atlas 热晶化材料探针', category: 'canvas', sourceUrl: 'https://github.com/processing/p5.js',
+    difference: 'A verified local micrograph is sampled into 3,600 heterogeneous material cells whose real pixels determine ceramic, conductor, and pore zones, conductivity, heat capacity, and phase threshold; this is not a generic radial heatmap overlay.',
+    behavior: { trigger: 'trusted mouse hover, captured mouse/touch/pen drag, keyboard command, or Pulse/Cool/Reset control', response: 'Apply a finite heat pulse, diffuse it through pixel-derived properties, crystallize threshold-crossing cells, and explicitly recover or reset the sample', timing: 'human-owned finite solver iterations that remain stable after each input', layer: 'full-stage p5 material micrograph, thermal lattice, source path, and live measurements' },
+    prompt: 'Build a human-operated phase-change material test from one verified local micrograph. Decode it into a real p5.Image, sample an 80×45 lattice, derive heterogeneous conductivity, heat capacity, and crystallization thresholds from its pixels, then let trusted hover, captured drag, keyboard, Pulse, Cool, and Reset run only finite solver iterations with no autoplay or preview-clock mutation.',
+    implementation: p5Implementation("const zone = classify(pixel); heat[i] += humanPulse * falloff / capacity[i]; diffuseFinite(heat, conductivity); crystallinity[i] += heat[i] > threshold[i] ? growth : 0;", 'https://github.com/processing/p5.js/tree/v2.3.0'),
+    scores: score(20, 20, 20, 15, 15, 10), rationaleZh: '原创显微材料图是 p5 的实际机制输入：3,600 个像素格决定三类区域和异质热学参数。真人悬停、捕获拖拽、键盘与 Pulse/Cool/Reset 只触发有限次扩散、晶化或恢复，热源轨迹和测量结果可停留、可逆，首帧无演出。'
   },
   {
     id: 'peelable-paper-corner-reveal', order: 131, name: 'Night Garden ticket access peel', nameZh: 'Night Garden 票券兑换揭角', category: 'pointer', sourceUrl: 'https://github.com/motiondivision/motion',

@@ -1,2 +1,38 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p5.js — Gooey Pixel Cursor Wake</title><link rel="stylesheet" href="./shared.css"><style>
-:root{--preview-background:#0d1117}#pixel-wake-host{position:absolute;inset:0;cursor:none}#pixel-wake-host canvas{width:100%!important;height:100%!important}.wake-copy{position:absolute;z-index:3;left:14px;top:47px;color:white;pointer-events:none}.wake-copy small{font:800 6px/1 ui-monospace;letter-spacing:.13em;color:#9ea9b7}.wake-copy h1{width:100px;margin:9px 0 0;font:950 19px/.82 system-ui;letter-spacing:-.06em}.library-badge{background:#0b1016c8}.scene-caption{left:auto;right:12px}</style></head><body><main class="preview-stage" data-preview-mechanism="p5-gooey-pixel-wake"><div id="pixel-wake-host" tabindex="0" aria-label="Move the pointer or use arrow keys to paint a gooey pixel wake"></div><section class="wake-copy"><small>CURSOR / PIXEL FLUID</small><h1>LEAVE A DIGITAL WAKE.</h1></section><span class="library-badge">p5.js · pixel wake</span><span class="scene-caption">soft light fuses the trailing grid cells</span></main><script type="module" src="./src/gooey-pixel-cursor-wake-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>p5.js — Signal Route Pixel Lab</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="./shared.css">
+  <style>
+    :root{--preview-background:#070a10;--acid:#d7ff52;--cyan:#65e6ff;--ink:#eef2e8}
+    #pixel-route-stage{background:radial-gradient(circle at 76% 18%,#172139 0,transparent 38%),#070a10;color:var(--ink)}
+    #pixel-wake-host{position:absolute;inset:0;outline:none;touch-action:none;cursor:crosshair}
+    #pixel-wake-host:focus-visible{box-shadow:inset 0 0 0 2px var(--acid)}
+    #pixel-wake-host canvas{width:100%!important;height:100%!important}
+    .route-header{position:absolute;z-index:4;left:12px;right:12px;top:10px;display:flex;align-items:flex-start;justify-content:space-between;pointer-events:none}
+    .route-brand{display:flex;align-items:center;gap:7px;font:800 7px/1 ui-monospace;letter-spacing:.14em;text-transform:uppercase;color:#aab3bf}
+    .route-brand::before{content:"";width:7px;height:7px;border-radius:2px;background:var(--acid);box-shadow:0 0 12px #d7ff52aa}
+    .route-task{text-align:right}.route-task small{display:block;font:700 5px/1 ui-monospace;letter-spacing:.16em;color:#778394}.route-task strong{display:block;margin-top:5px;font:900 9px/1 ui-monospace;letter-spacing:.06em;color:#eef2e8}
+    .route-copy{position:absolute;z-index:4;left:13px;top:37px;pointer-events:none}.route-copy small{font:800 5px/1 ui-monospace;letter-spacing:.16em;color:#65e6ff}.route-copy h1{width:132px;margin:6px 0 0;font:950 18px/.85 system-ui;letter-spacing:-.06em}.route-copy p{width:112px;margin:7px 0 0;font:600 6px/1.35 system-ui;color:#818b99}
+    .route-footer{position:absolute;z-index:4;left:12px;right:12px;bottom:9px;display:flex;align-items:flex-end;justify-content:space-between;pointer-events:none}
+    .route-hint{font:750 5px/1.35 ui-monospace;letter-spacing:.08em;color:#8a95a3}.route-hint b{color:#d7ff52}
+    .route-meter{width:86px}.route-meter-label{display:flex;justify-content:space-between;font:800 5px/1 ui-monospace;letter-spacing:.1em;color:#8994a2}.route-meter-label output{color:#eef2e8}.route-meter-track{height:3px;margin-top:5px;border-radius:99px;background:#29313d;overflow:hidden}.route-meter-fill{display:block;width:0;height:100%;background:linear-gradient(90deg,var(--cyan),var(--acid));box-shadow:0 0 9px #d7ff5299;transition:width .18s ease}
+    .route-status{position:absolute;z-index:5;right:12px;top:38px;display:flex;align-items:center;gap:5px;padding:4px 6px;border:1px solid #ffffff1c;border-radius:99px;background:#090d14c9;pointer-events:none;font:800 5px/1 ui-monospace;letter-spacing:.12em;color:#8d98a6}.route-status::before{content:"";width:4px;height:4px;border-radius:50%;background:#5b6675}.route-status[data-complete="true"]{color:var(--acid);border-color:#d7ff525c}.route-status[data-complete="true"]::before{background:var(--acid);box-shadow:0 0 7px var(--acid)}
+    @media(max-width:360px){.route-copy h1{font-size:16px;width:112px}.route-copy p{display:none}.route-meter{width:76px}}
+    @media(max-height:210px){.route-copy{top:33px}.route-copy h1{font-size:16px}.route-copy p{display:none}}
+  </style>
+</head>
+<body>
+  <main id="pixel-route-stage" class="preview-stage" data-preview-mechanism="p5-quantized-gooey-route-decay">
+    <div id="pixel-wake-host" tabindex="0" role="application" aria-label="Signal route pixel lab. Drag to mark grid cells, or use arrow keys. Press Home to reset."></div>
+    <header class="route-header"><span class="route-brand">Lattice / Route 04</span><span class="route-task"><small>FIELD TASK</small><strong id="task-readout">MARK 12 CELLS</strong></span></header>
+    <section class="route-copy"><small>HUMAN-GUIDED SIGNAL MAP</small><h1>DRAW THE SAFE PATH.</h1><p>Drag through the matrix. Quantized cells fuse, cool, and keep the approved route.</p></section>
+    <span id="route-status" class="route-status" data-complete="false">AWAITING INPUT</span>
+    <footer class="route-footer"><span class="route-hint"><b>DRAG</b> TO SAMPLE<br>ARROWS TO NUDGE · HOME TO CLEAR</span><div class="route-meter"><span class="route-meter-label"><span>ROUTE COVERAGE</span><output id="coverage-readout">00 / 12</output></span><span class="route-meter-track"><span id="coverage-fill" class="route-meter-fill"></span></span></div></footer>
+  </main>
+  <script type="module" src="./src/gooey-pixel-cursor-wake-demo.js"></script>
+</body>
+</html>

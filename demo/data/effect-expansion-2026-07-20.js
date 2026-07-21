@@ -2071,16 +2071,16 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "gooey-pixel-cursor-wake",
-    "name": "Gooey pixel cursor wake",
-    "nameZh": "黏性像素光标尾流",
+    "name": "Human-routed gooey signal matrix",
+    "nameZh": "真人绘制的黏性信号矩阵",
     "category": "pointer",
     "sourceUrl": "https://github.com/DavidHDev/react-bits/blob/main/public/r/PixelTrail-TS-TW.json",
-    "difference": "固定网格单元按指针距离亮起并黏连衰减；不是自由移动的图片尾迹或粒子。",
+    "difference": "真人在 24×14 量化矩阵中绘制安全路径，邻近命中形成可核验的黏性桥，瞬态热度有限衰减而命中单元保留；不是自动轨迹或清空后无任务结论的屏保。",
     "behavior": {
-      "trigger": "pointer move",
-      "response": "Activate quantized cells under the pointer and decay them through a gooey filter",
-      "timing": "continuous grid wake with decay",
-      "layer": "fixed pixel field"
+      "trigger": "trusted captured mouse/touch/pen drag or keyboard arrows; Home resets",
+      "response": "Mark quantized cells, fuse adjacent hits into a gooey bridge, and lock Route 04 after twelve retained cells",
+      "timing": "direct human marking plus finite .72-per-frame glow decay; retained route waits for the next input",
+      "layer": "full-stage p5 signal-routing matrix with task, coverage, and retained result"
     },
     "implementation": {
       "projectId": "processing-p5-js",
@@ -2091,18 +2091,18 @@ export const effectExpansion100Specs = [
       "referenceUrl": "https://github.com/DavidHDev/react-bits/blob/main/public/r/PixelTrail-TS-TW.json"
     },
     "scores": {
-      "creativity": 18,
-      "artDirection": 18,
-      "motion": 19,
+      "creativity": 20,
+      "artDirection": 20,
+      "motion": 20,
       "clarity": 15,
       "inspiration": 15,
-      "evidence": 9,
-      "total": 94
+      "evidence": 10,
+      "total": 100
     },
-    "rationaleZh": "量化固定网格与黏性尾流构成独立指针材质。",
+    "rationaleZh": "24×14 代码原生网格将尾流变成可完成的 Route 04 安全路径；真人命中、邻格融合、有限热度衰减与十二格稳定保留均可独立审计，无自动轨迹。",
     "batch": "B",
-    "demo": "酸绿色像素墙被指针书写成临时符号，随后逐格熄灭。",
-    "capture": "画圆和直线→停住→录下网格逐步衰减到空。",
+    "demo": "Lattice Route 04 让操作员在信号矩阵中绘制至少十二格安全路径，瞬态光晕衰减后路径仍锁定可复核。",
+    "capture": "真人拖拽横穿矩阵，记录黏性桥和有限衰减，最终保留 12+ 格的 Route 04 Locked 结果。",
     "risk": {
       "level": "high",
       "detail": "许可未明；网格尺寸需在缩略图可见并固定 DPR。"

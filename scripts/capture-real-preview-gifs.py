@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 import os
 import shutil
 import socket
@@ -1552,6 +1553,22 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.wheel(0, -38)
             elif index == 35:
                 page.locator('#reset-control').click()
+        elif demo["id"] == "gooey-pixel-cursor-wake":
+            if index == 3:
+                box = page.locator('#pixel-wake-host').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * .30, box["y"] + box["height"] * .578)
+                page.mouse.down()
+            elif 4 <= index <= 17:
+                box = page.locator('#pixel-wake-host').bounding_box()
+                progress = (index - 4) / 13
+                page.mouse.move(
+                    box["x"] + box["width"] * (.30 + .544 * progress),
+                    box["y"] + box["height"] * (.578 + .05 * math.sin(progress * math.pi * 2)),
+                )
+            elif index == 18:
+                page.mouse.up()
+            elif index == 19:
+                page.wait_for_timeout(260)
         elif demo["id"] == "metaball-blob-cursor":
             if index == 3:
                 page.locator('#finish-cobalt').hover()
@@ -5581,6 +5598,58 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["lastInputTrusted"] is not True
         ):
             raise RuntimeError(f"{demo['id']} did not capture trusted slow/fast signed wheel velocity, two opposed captured drags, keyboard impulses, repeated reversal, inertia, and exact reset on the real Motion rail: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "gooey-pixel-cursor-wake":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        if (
+            not assertion
+            or interaction["task"] != "human-routed-signal-matrix-safety-path"
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["mechanism"] != "trusted-pointer-touch-or-keyboard-hits-quantized-cells-with-gooey-neighbor-fusion-and-finite-decay"
+            or interaction["assetStrategy"] != "code-native-quantized-signal-grid-no-functional-raster-input-required"
+            or interaction["gridDefinition"] != "24-columns-by-14-rows"
+            or interaction["causality"] != "trusted-human-input-only"
+            or interaction["automaticPlayback"]
+            or interaction["automaticTrajectory"]
+            or interaction["automaticFallback"]
+            or interaction["captureClockDriven"]
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["untrustedInputPolicy"] != "reject-before-mutation"
+            or interaction["untrustedMutationCount"] != 0
+            or not interaction["initialStillVerified"]
+            or interaction["inputCount"] != interaction["trustedInputCount"]
+            or interaction["inputCount"] != interaction["pointerInputCount"]
+            or interaction["inputCount"] < 16
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerMoveCount"] < 13
+            or interaction["pointerUpCount"] != 1
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerReleaseCaptureCount"] != 1
+            or interaction["gridHitCount"] < 14
+            or interaction["uniqueGridHitCount"] < 12
+            or interaction["retainedCellCount"] != interaction["uniqueGridHitCount"]
+            or interaction["maximumBridgeCount"] <= 0
+            or interaction["decayFrameCount"] < 12
+            or interaction["decayedCellCount"] <= 0
+            or interaction["settleCompletionCount"] < 1
+            or not interaction["routeComplete"]
+            or not interaction["resultRetained"]
+            or interaction["phase"] != "complete-retained"
+            or interaction["result"] != "route-04-locked"
+            or not interaction["p5InstanceReady"]
+            or not interaction["canvas2dReady"]
+            or not interaction["fullStageGeometryVerified"]
+            or interaction["canvasCoverageRatio"] < .995
+            or interaction["canvasWidth"] != 320
+            or interaction["canvasHeight"] != 180
+            or interaction["drawCount"] <= 0
+            or interaction["completedDrawCount"] <= 0
+            or interaction["renderCount"] <= 0
+            or not all(record["trusted"] and isinstance(record["mutated"], bool) for record in interaction["transitionRecords"])
+            or not any(record["mutated"] for record in interaction["transitionRecords"])
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a real retained gooey signal route: {interaction!r}")
     elif demo["id"] == "metaball-blob-cursor":
         interaction = page.evaluate("window.__METABALL_TARGET_STATE__")
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")

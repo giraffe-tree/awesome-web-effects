@@ -2449,6 +2449,36 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.locator('[data-relay-action="increase"]').click()
             elif index == 18:
                 page.locator('[data-relay-action="increase"]').click()
+        elif demo["id"] == "elastic-svg-rope-lettering":
+            if index == 2:
+                page.mouse.move(125, 121)
+            elif index == 4:
+                page.mouse.move(151, 121)
+            elif index == 6:
+                page.mouse.down()
+            elif index == 7:
+                page.mouse.move(154, 112, steps=2)
+            elif index == 8:
+                page.mouse.move(156, 106, steps=2)
+            elif index == 9:
+                page.mouse.move(158, 101, steps=2)
+            elif index == 10:
+                page.mouse.move(160, 98, steps=2)
+            elif index == 11:
+                page.mouse.up()
+            elif index == 14:
+                page.locator('[data-material="coral"]').click()
+            elif index == 17:
+                page.locator("#tension-button").click()
+            elif index == 20:
+                page.locator("#rope-workbench").focus()
+                page.keyboard.press("]")
+            elif index == 21:
+                page.keyboard.press("ArrowUp")
+            elif index == 22:
+                page.keyboard.press("ArrowRight")
+            elif index == 25:
+                page.locator("#lock-button").click()
         elif demo["id"] == "poisson-constellation-bloom":
             if index == 2:
                 page.mouse.move(170, 92)
@@ -7730,6 +7760,126 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["ready"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture trusted coastal relay dragging, two human gain adjustments, exact three-colour source evidence, full-stage p5 coverage, and a retained three-link mesh without automatic orbit: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "elastic-svg-rope-lettering":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        coverage = page.evaluate("""() => {
+          const stage = document.querySelector('#rope-stage');
+          const svg = document.querySelector('#rope-workbench');
+          const stageRect = stage.getBoundingClientRect();
+          const svgRect = svg.getBoundingClientRect();
+          return {
+            stageWidth: stageRect.width,
+            stageHeight: stageRect.height,
+            svgWidth: svgRect.width,
+            svgHeight: svgRect.height,
+            bodyScrollWidth: document.body.scrollWidth,
+            bodyScrollHeight: document.body.scrollHeight,
+          };
+        }""")
+        material_pixel_count = sum(profile["pixelCount"] for profile in interaction["materialProfiles"])
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-material-aware-elastic-rope-wayfinding-lettering-proof"
+            or interaction["claimedLibrary"] != "motion@12.42.2"
+            or interaction["renderer"] != "svg"
+            or interaction["mechanism"] != "browser-decoded-rope-source-pixels-drive-material-corner-radius-stroke-coupling-load-and-legibility-while-trusted-human-input-edits-svg-path-nodes"
+            or interaction["acceptedInputs"] != ["trusted-mouse-hover", "captured-mouse-drag", "captured-touch-drag", "captured-pen-drag", "visible-material-buttons", "visible-tension-button", "visible-lock-button", "visible-reset-button", "keyboard"]
+            or not interaction["userInputRequired"]
+            or not interaction["strictTrustedInputGuard"]
+            or not interaction["initialFrameStatic"]
+            or interaction["automaticCycle"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["previewClockMutationCount"] != 0
+            or not interaction["motionControlReady"]
+            or interaction["motionControlSeekCount"] < 1
+            or interaction["motionControlTime"] < 0
+            or interaction["motionControlTime"] > 1
+            or interaction["inputCount"] < 15
+            or interaction["trustedInputCount"] != interaction["inputCount"]
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["hoverInputCount"] < 2
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerDragCount"] < 7
+            or interaction["pointerReleaseCount"] != 1
+            or interaction["pointerCancelCount"] != 0
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerCaptureReleaseCount"] != 1
+            or interaction["pointerCaptured"]
+            or interaction["mouseInputCount"] < 10
+            or interaction["keyboardInputCount"] != 3
+            or interaction["keyboardMutationCount"] != 3
+            or interaction["buttonInputCount"] != 3
+            or interaction["materialSelectionCount"] != 1
+            or interaction["tensionToggleCount"] != 1
+            or interaction["lockToggleCount"] != 1
+            or interaction["resetCount"] != 0
+            or interaction["shapeMutationCount"] < 8
+            or interaction["humanVisualMutationCount"] < 12
+            or interaction["selectedMaterial"] != "coral"
+            or interaction["tensionMode"] != "firm"
+            or not interaction["locked"]
+            or interaction["maximumRecordedNodeDisplacement"] <= 20
+            or interaction["maximumDragDistance"] <= 20
+            or interaction["legibilityScore"] < 60
+            or interaction["loadEstimate"] <= 0
+            or interaction["decision"] != "pass"
+            or interaction["lastInputKind"] != "visible-lock-button"
+            or interaction["lastInputSource"] != "button"
+            or interaction["lastInputTrusted"] is not True
+            or interaction["lastPointerType"] != "mouse"
+            or interaction["pointerTypesSeen"] != ["mouse"]
+            or interaction["assetFetchCount"] != 1
+            or interaction["assetResponseStatus"] != 200
+            or not interaction["assetSameOrigin"]
+            or not interaction["assetMimeType"].startswith("image/jpeg")
+            or interaction["assetByteLength"] != 361333
+            or interaction["assetSha256"] != "3262bccad6dfa4bfafa62ecf3cfae47592fe2ce2cfee030816736464446ee046"
+            or not interaction["assetShaMatchesExpected"]
+            or not interaction["browserImageDecoded"]
+            or interaction["decodedWidth"] != 960
+            or interaction["decodedHeight"] != 640
+            or interaction["sampledWidth"] != 96
+            or interaction["sampledHeight"] != 64
+            or interaction["sampledPixelCount"] != 6144
+            or interaction["sampledPixelByteLength"] != 24576
+            or len(interaction["sampledPixelSha256"]) != 64
+            or not interaction["sampledPixelSha256"].strip("0")
+            or len(interaction["sampledPixelChecksum"]) != 8
+            or interaction["sampledOpaquePixelCount"] != 6144
+            or sum(interaction["classificationCounts"].values()) != 6144
+            or interaction["distinctSampleColorCount"] <= 300
+            or interaction["sampledLumaRange"] <= 145
+            or interaction["sampledEdgeMean"] <= 4
+            or interaction["sampledSaturationMean"] <= .12
+            or interaction["detectedMaterialCount"] != 4
+            or len(interaction["materialProfiles"]) != 4
+            or material_pixel_count <= 800
+            or any(profile["pixelCount"] < 30 or profile["edgeMean"] <= 0 or profile["contrastRatio"] <= 1 for profile in interaction["materialProfiles"])
+            or interaction["materialButtonsCreated"] != 4
+            or not interaction["pixelEvidenceBoundToLetterform"]
+            or interaction["pixelDrivenCornerRadius"] < 2.25
+            or interaction["pixelDrivenCornerRadius"] > 5.4
+            or interaction["initialPathData"] == interaction["currentPathData"]
+            or interaction["basePathLength"] <= 420
+            or interaction["currentPathLength"] <= 400
+            or interaction["stageWidth"] < 319
+            or interaction["stageHeight"] < 179
+            or interaction["signCoverageRatio"] <= .31
+            or coverage["stageWidth"] < 319
+            or coverage["stageHeight"] < 179
+            or coverage["svgWidth"] < 319
+            or coverage["svgHeight"] < 179
+            or coverage["bodyScrollWidth"] > 320
+            or coverage["bodyScrollHeight"] > 180
+            or not interaction["ready"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture trusted material-aware TIDE rope editing, exact source-pixel profiles, full-stage native SVG deformation, and a retained firm locked proof without automatic behavior: assertion={assertion!r}; interaction={interaction!r}; coverage={coverage!r}")
     elif demo["id"] == "poisson-constellation-bloom":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

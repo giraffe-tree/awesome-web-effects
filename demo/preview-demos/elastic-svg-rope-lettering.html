@@ -1,1 +1,354 @@
-<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Elastic SVG Rope Lettering</title><link rel="stylesheet" href="./shared.css"><style>:root{--preview-background:#07162a}.preview-stage{background:linear-gradient(150deg,#07162a,#122a45)}svg{position:absolute;inset:0;width:100%;height:100%}.rope{fill:none;stroke:#ffe27a;stroke-width:3;stroke-linecap:round;filter:drop-shadow(0 0 6px #ffd65f55)}.nodes{fill:#f5fbff}.copy{position:absolute;left:14px;top:51px;color:#f2f7ff;pointer-events:none}.copy small{font:800 6px monospace;letter-spacing:.14em}.copy h1{margin:8px 0;font:950 19px/.85 system-ui;letter-spacing:-.06em;width:90px}.scene-caption{display:none}</style></head><body><main class="preview-stage" tabindex="0" aria-label="Elastic rope spelling a word"><section class="copy"><small>VECTOR TENSION</small><h1>PULL THE LETTERLINE.</h1></section><svg viewBox="0 0 320 180"><path id="rope" class="rope" d="M132 111 C149 38 164 145 181 76 S216 126 232 63 S266 120 294 72"/><g id="rope-nodes" class="nodes"></g></svg><span class="library-badge">SVG · elastic rope</span></main><script type="module" src="./src/elastic-svg-rope-lettering-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Elastic SVG Rope Lettering</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="./shared.css">
+    <style>
+      :root { --preview-background: #121512; }
+      button { font: inherit; }
+      .preview-stage {
+        --rope: rgb(201 137 45);
+        --rope-light: rgb(242 197 100);
+        --rope-dark: rgb(93 62 25);
+        --signal: #e7ff68;
+        background:
+          radial-gradient(circle at 74% 44%, rgba(231,255,104,.055), transparent 27%),
+          linear-gradient(138deg, #171a16 0%, #0d100f 68%, #131713 100%);
+        color: #f2eddf;
+      }
+      .preview-stage::before {
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background-image:
+          linear-gradient(rgba(242,237,223,.035) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(242,237,223,.035) 1px, transparent 1px);
+        background-size: 5.555% 11.111%;
+        content: "";
+        mask-image: linear-gradient(to bottom, transparent 10%, #000 33%, #000 79%, transparent 100%);
+      }
+      .library-badge {
+        top: 5.6%;
+        left: 4.4%;
+        padding: clamp(2px,.7vw,5px) clamp(4px,1vw,8px);
+        border-color: rgba(242,237,223,.18);
+        background: rgba(13,16,15,.72);
+        color: rgba(242,237,223,.76);
+        font: 800 clamp(4px,1.2vw,8px)/1 ui-monospace, monospace;
+      }
+      .brief {
+        position: absolute;
+        z-index: 7;
+        top: 10.5%;
+        left: 4.5%;
+        width: 46%;
+        pointer-events: none;
+      }
+      .eyebrow {
+        margin: 0;
+        color: var(--signal);
+        font: 850 clamp(4px,1.25vw,9px)/1 ui-monospace, monospace;
+        letter-spacing: .14em;
+      }
+      h1 {
+        max-width: none;
+        margin: clamp(4px,1.15vw,8px) 0 0;
+        font: 900 clamp(13px,3.8vw,27px)/.9 system-ui, sans-serif;
+        letter-spacing: -.072em;
+      }
+      .brief p:last-child {
+        display: none;
+        max-width: 23em;
+        margin: clamp(4px,1.2vw,9px) 0 0;
+        color: rgba(242,237,223,.49);
+        font: 680 clamp(4px,1.08vw,7.5px)/1.35 ui-monospace, monospace;
+        letter-spacing: .025em;
+      }
+      .material-card {
+        position: absolute;
+        z-index: 7;
+        top: 6.2%;
+        right: 4.6%;
+        width: 24.5%;
+        height: 22.5%;
+        margin: 0;
+        overflow: hidden;
+        border: 1px solid rgba(242,237,223,.18);
+        border-radius: clamp(4px,1.35vw,10px);
+        background: #24251f;
+        box-shadow: 0 10px 26px rgba(0,0,0,.22);
+        pointer-events: none;
+      }
+      .material-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: saturate(.92) contrast(1.04);
+      }
+      .material-card::after {
+        position: absolute;
+        inset: auto 0 0;
+        height: 45%;
+        background: linear-gradient(transparent, rgba(11,13,12,.88));
+        content: "";
+      }
+      .material-label {
+        position: absolute;
+        z-index: 1;
+        right: 7%;
+        bottom: 12%;
+        left: 7%;
+        display: flex;
+        justify-content: space-between;
+        color: rgba(255,255,255,.82);
+        font: 800 clamp(3px,.92vw,6px)/1 ui-monospace, monospace;
+        letter-spacing: .09em;
+        text-transform: uppercase;
+      }
+      #rope-workbench {
+        position: absolute;
+        z-index: 4;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        cursor: crosshair;
+        outline: none;
+        touch-action: none;
+      }
+      #rope-workbench[data-dragging="true"] { cursor: grabbing; }
+      #rope-workbench:focus-visible { outline: 1px solid rgba(231,255,104,.46); outline-offset: -5px; }
+      .workline {
+        fill: none;
+        stroke: rgba(242,237,223,.12);
+        stroke-dasharray: 1.5 3;
+        stroke-width: .55;
+        vector-effect: non-scaling-stroke;
+      }
+      .sign-frame {
+        fill: rgba(242,237,223,.018);
+        stroke: rgba(242,237,223,.1);
+        stroke-width: .55;
+        vector-effect: non-scaling-stroke;
+      }
+      .rope-shadow,
+      .rope-core,
+      .rope-twist,
+      .rope-sheen {
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .rope-shadow {
+        stroke: rgba(0,0,0,.62);
+        stroke-width: var(--rope-shadow-width, 7px);
+        transform: translate(0 2px);
+        filter: blur(1.2px);
+      }
+      .rope-core {
+        stroke: var(--rope);
+        stroke-width: var(--rope-width, 5px);
+        filter: drop-shadow(0 1px .4px rgba(0,0,0,.65));
+      }
+      .rope-twist {
+        stroke: var(--rope-dark);
+        stroke-width: calc(var(--rope-width, 5px) * .98);
+        stroke-dasharray: .7 2.9;
+        opacity: .52;
+      }
+      .rope-sheen {
+        stroke: var(--rope-light);
+        stroke-width: calc(var(--rope-width, 5px) * .22);
+        stroke-dasharray: 1.35 2.25;
+        opacity: .76;
+        transform: translate(-.5px,-.7px);
+      }
+      .handle-line { stroke: rgba(231,255,104,.38); stroke-width: .55; }
+      .handle-hit { fill: transparent; cursor: grab; }
+      .handle-knot {
+        fill: #171a16;
+        stroke: rgba(242,237,223,.42);
+        stroke-width: .65;
+        pointer-events: none;
+      }
+      .handle[data-active="true"] .handle-knot {
+        fill: var(--signal);
+        stroke: #0d100f;
+        stroke-width: .8;
+      }
+      .handle[data-neighbor="true"] .handle-knot { stroke: var(--rope-light); }
+      .decision {
+        position: absolute;
+        z-index: 7;
+        right: 4.7%;
+        bottom: 28.5%;
+        display: grid;
+        min-width: 18%;
+        grid-template-columns: 1fr auto;
+        gap: clamp(2px,.55vw,4px) clamp(7px,1.8vw,13px);
+        pointer-events: none;
+      }
+      .decision small {
+        color: rgba(242,237,223,.38);
+        font: 760 clamp(3px,.95vw,6.5px)/1 ui-monospace, monospace;
+        letter-spacing: .12em;
+      }
+      .decision output {
+        color: rgba(242,237,223,.88);
+        font: 850 clamp(4px,1.25vw,9px)/1 ui-monospace, monospace;
+        text-align: right;
+      }
+      #decision-output[data-pass="true"] { color: var(--signal); }
+      .controls {
+        position: absolute;
+        z-index: 10;
+        right: 4.6%;
+        bottom: 7.5%;
+        left: 4.5%;
+        display: grid;
+        grid-template-columns: minmax(0,1fr) auto;
+        align-items: end;
+        gap: clamp(5px,1.4vw,10px);
+      }
+      .material-controls,
+      .action-controls { display: flex; gap: clamp(2px,.7vw,5px); }
+      .material-controls { align-items: center; }
+      .material-controls::before {
+        margin-right: clamp(1px,.45vw,3px);
+        color: rgba(242,237,223,.35);
+        content: "MATERIAL";
+        font: 760 clamp(3px,.9vw,6px)/1 ui-monospace, monospace;
+        letter-spacing: .1em;
+      }
+      .controls button {
+        min-width: 0;
+        padding: clamp(2px,.7vw,5px) clamp(4px,1vw,8px);
+        border: 1px solid rgba(242,237,223,.2);
+        border-radius: 999px;
+        background: rgba(13,16,15,.78);
+        color: rgba(242,237,223,.66);
+        cursor: pointer;
+        font: 820 clamp(3.5px,1.08vw,7.5px)/1 ui-monospace, monospace;
+        letter-spacing: .07em;
+      }
+      .controls button:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+      .controls button[aria-pressed="true"],
+      #lock-button[aria-pressed="true"] {
+        border-color: var(--signal);
+        background: var(--signal);
+        color: #11140f;
+      }
+      .material-controls button::before {
+        display: inline-block;
+        width: clamp(3px,.85vw,6px);
+        height: clamp(3px,.85vw,6px);
+        margin-right: clamp(2px,.55vw,4px);
+        border-radius: 50%;
+        background: var(--swatch, #d3a34d);
+        box-shadow: 0 0 0 1px rgba(255,255,255,.28);
+        content: "";
+        vertical-align: -1px;
+      }
+      .status-line {
+        position: absolute;
+        z-index: 7;
+        left: 4.5%;
+        bottom: 25.5%;
+        max-width: 51%;
+        overflow: hidden;
+        color: rgba(242,237,223,.45);
+        font: 730 clamp(3px,.96vw,6.5px)/1 ui-monospace, monospace;
+        letter-spacing: .055em;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        pointer-events: none;
+      }
+      .scene-caption { display: none; }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0,0,0,0);
+        white-space: nowrap;
+        border: 0;
+      }
+      @media (max-width: 180px) {
+        .library-badge { display: none; }
+        .brief { top: 12%; left: 3.5%; width: 45%; }
+        .eyebrow { font-size: 3px; }
+        h1 { margin-top: 2px; font-size: 7px; }
+        .brief p:last-child, .material-label, .decision, .status-line { display: none; }
+        .material-card { top: 5%; right: 3.5%; width: 23%; height: 20%; border-radius: 3px; }
+        .controls { right: 3.5%; bottom: 5%; left: 3.5%; gap: 2px; }
+        .material-controls, .action-controls { gap: 1px; }
+        .material-controls::before { display: none; }
+        .controls button { padding: 1px 2px; font-size: 3px; }
+        .material-controls button::before { width: 3px; height: 3px; margin-right: 1px; }
+      }
+    </style>
+  </head>
+  <body>
+    <main
+      class="preview-stage"
+      id="rope-stage"
+      data-preview-mechanism="browser-decoded-rope-material-pixels-drive-trusted-svg-path-letterform-editor"
+    >
+      <section class="brief" aria-label="Rope sign brief">
+        <p class="eyebrow">WAYFINDING PROOF / TIDE</p>
+        <h1>SHAPE TIDE.</h1>
+        <p>Grab a knot to reshape the continuous rope wordmark. Choose a decoded material swatch, then lock the proof.</p>
+      </section>
+
+      <figure class="material-card" aria-label="Decoded rope source material">
+        <img id="material-image" alt="Braided rope material board in gold, navy, coral and flax">
+        <figcaption class="material-label"><span>SOURCE SCAN</span><output id="material-scan-output">DECODING</output></figcaption>
+      </figure>
+
+      <svg
+        id="rope-workbench"
+        viewBox="0 0 320 180"
+        role="application"
+        tabindex="0"
+        aria-label="Editable SVG rope wordmark spelling TIDE"
+        aria-describedby="rope-instructions"
+      >
+        <rect class="sign-frame" x="28" y="51" width="264" height="84" rx="8"/>
+        <path class="workline" d="M28 91H292M59 51V135M98 51V135M125 51V135M198 51V135"/>
+        <g aria-hidden="true">
+          <path id="rope-shadow" class="rope-shadow"/>
+          <path id="rope-core" class="rope-core"/>
+          <path id="rope-twist" class="rope-twist" pathLength="100"/>
+          <path id="rope-sheen" class="rope-sheen" pathLength="100"/>
+        </g>
+        <g id="handle-layer" aria-hidden="true"></g>
+      </svg>
+
+      <section class="decision" aria-label="Proof evidence">
+        <small>LEGIBILITY</small><output id="legibility-output">—</output>
+        <small>LOAD</small><output id="load-output">—</output>
+        <small>DECISION</small><output id="decision-output">ANALYSING</output>
+      </section>
+
+      <output class="status-line" id="status-output" aria-live="polite">Decoding the committed rope material scan…</output>
+
+      <form class="controls" aria-label="Rope sign controls" onsubmit="return false">
+        <div class="material-controls" id="material-controls" role="group" aria-label="Pixel-derived rope material"></div>
+        <div class="action-controls">
+          <button type="button" id="tension-button" aria-pressed="false">FIRM</button>
+          <button type="button" id="lock-button" aria-pressed="false">LOCK</button>
+          <button type="button" id="reset-button">RESET</button>
+        </div>
+      </form>
+
+      <p class="sr-only" id="rope-instructions">Drag any visible knot with mouse, touch, or pen. Use Tab to focus the editor, arrow keys to nudge the selected knot, T to change tension, Enter to lock the proof, and Escape or R to reset.</p>
+      <span class="library-badge">SVG Path API · material-aware rope</span>
+      <span class="scene-caption">decoded source fibers → direct knot manipulation → lockable rope-sign proof</span>
+    </main>
+    <script type="module" src="./src/elastic-svg-rope-lettering-demo.js"></script>
+  </body>
+</html>

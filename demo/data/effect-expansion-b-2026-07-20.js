@@ -47,12 +47,12 @@ export const effectExpansion150BatchB = [
     scores: score(20, 20, 20, 15, 15, 10), rationaleZh: '原创 ImageGen 四色套准校样被同源 fetch、精确源 SHA 与浏览器解码校验，并读取为 192×128 / 24,576 像素；真实颜色生成七类色板，邻域边缘与四色混合筛出四个空间分离靶点并决定风险与 HOLD/PASS。可信 hover、捕获拖拽、range、键盘和可见控件共同驱动暂停的 Motion seek、CSS 字面扫描窗、证据覆盖和显式放行判断，首帧与操作后都保持静止。'
   },
   {
-    id: 'elastic-svg-rope-lettering', order: 129, name: 'Elastic SVG rope lettering', nameZh: '弹性 SVG 绳索字形', category: 'vector', sourceUrl: 'https://github.com/svgdotjs/svg.js',
-    difference: '可拉伸贝塞尔路径本身成为字形骨架，节点沿实时弧长重排，而非只让文字沿固定路径移动。',
-    behavior: { trigger: 'pointer vertical displacement', response: 'A rope-like letter path deforms and its sampled nodes slide to new arc-length positions', timing: 'continuous elastic deformation', layer: 'SVG lettering path' },
-    prompt: '实现一条由贝塞尔段组成的绳索字形，拉动控制点后按 getPointAtLength 重新放置节点。',
-    implementation: motionImplementation("const tension = animate(path, { opacity: [.94, 1, .94] }, { duration: 3 }); path.setAttribute('d', nextCurve);", 'https://github.com/svgdotjs/svg.js', 'svg'),
-    scores: score(19, 18, 19, 15, 15, 10), rationaleZh: '路径张力、节点滑移和字形轮廓在同一主体上发生，具有明确的可复用矢量机制。'
+    id: 'elastic-svg-rope-lettering', order: 129, name: 'TIDE rope wayfinding material proof', nameZh: 'TIDE 绳索导视材料校样', category: 'vector', sourceUrl: 'https://github.com/svgdotjs/svg.js',
+    difference: '不再用一条无语义波线代表绳索字形；完整 TIDE SVG 路径的颜色、线宽、耦合、刚度、载荷与可读性由真实材料板像素决定，用户亲手编辑节点并锁定材料方案。',
+    behavior: { trigger: 'trusted hover, captured mouse/touch/pen drag, keyboard, material buttons, or visible tension/lock/reset control', response: 'Edit the continuous TIDE rope path, compare four pixel-derived materials, change tension, and retain a wayfinding proof with load, legibility, and PASS/REFINE evidence', timing: 'human-paced direct SVG deformation that remains still between inputs', layer: 'full-stage native SVG rope letterform, material scan, handles, proof evidence, and controls' },
+    prompt: '制作一个全舞台 TIDE 绳索导视校样台：同源加载并精确校验一张 ImageGen 材料板，从真实像素生成 GOLD/NAVY/CORAL/FLAX 的颜色、纹理、刚度、耦合、线宽和载荷；真人通过 hover、捕获拖拽、键盘、材料按钮与 FIRM/LOCK/RESET 编辑连续 SVG 字形，首帧与每个结果保持静止。',
+    implementation: motionImplementation("materialPixels -> ropeProfiles; trustedNodeEdit -> nativeSvgPathData + legibility + loadDecision;", 'https://github.com/svgdotjs/svg.js', 'svg'),
+    scores: score(20, 20, 20, 15, 15, 10), rationaleZh: '原创 ImageGen 绳索材料板经过同源 fetch、精确源 SHA、浏览器解码与像素采样；四类真实材料像素决定 SVG 字形的物理和视觉参数。可信 hover、捕获拖拽、键盘和可见控件拥有路径、张力、材料和锁定状态，无自动路径或录制时钟变更。'
   },
   {
     id: 'cursor-heatmap-crystallization', order: 130, name: 'Phase Atlas thermal crystallization probe', nameZh: 'Phase Atlas 热晶化材料探针', category: 'canvas', sourceUrl: 'https://github.com/processing/p5.js',

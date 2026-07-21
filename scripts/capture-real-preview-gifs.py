@@ -1705,6 +1705,20 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press('End')
             elif index == 26:
                 page.keyboard.press('Enter')
+        elif demo["id"] == "draggable-force-directed-svg-network":
+            if index == 2:
+                page.mouse.move(179, 97)
+                page.mouse.down()
+            elif index == 3:
+                page.mouse.move(187, 100)
+            elif index == 4:
+                page.mouse.move(196, 107)
+            elif index == 5:
+                page.mouse.move(207, 115)
+            elif index == 6:
+                page.mouse.up()
+            elif index == 21:
+                page.locator('#confirm-analysis').click()
         elif demo["id"] == "gooey-pixel-cursor-wake":
             if index == 3:
                 box = page.locator('#pixel-wake-host').bounding_box()
@@ -6584,6 +6598,118 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["geometryMeasureCount"] <= 0
         ):
             raise RuntimeError(f"{demo['id']} did not capture a real retained Bearing B7 anomaly window through linked brush-domain recomputation: {interaction!r}")
+    elif demo["id"] == "draggable-force-directed-svg-network":
+        interaction = page.evaluate("window.__DEPENDENCY_GRAPH_STATE__")
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        expected_graph_signature = "auth-api,web-app,mobile-app,billing,user-db,audit-log,notify,deploy-gate|web-app>auth-api:depends-on,mobile-app>auth-api:depends-on,billing>auth-api:depends-on,notify>auth-api:depends-on,deploy-gate>web-app:depends-on,deploy-gate>billing:depends-on,auth-api>user-db:reads,auth-api>audit-log:emits,billing>audit-log:emits"
+        if (
+            not assertion
+            or interaction["task"] != "human-pins-auth-api-runs-one-finite-release-dependency-solve-and-confirms-retained-blast-radius-analysis"
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["mechanism"] != "trusted-drag-or-keyboard-pin-mutates-one-knowledge-graph-node-then-a-bounded-72-step-force-solver-settles-dependent-nodes-before-explicit-human-analysis-confirmation"
+            or interaction["assetStrategy"] != "code-native-typed-graph-and-deterministic-physics-no-functional-raster-input-required"
+            or interaction["causality"] != "trusted-human-input-only"
+            or interaction["automaticPlayback"]
+            or interaction["automaticSimulation"]
+            or interaction["automaticDrift"]
+            or interaction["automaticPulse"]
+            or interaction["automaticConfirmation"]
+            or interaction["automaticFallback"]
+            or not interaction["previewClockOnlyAdvancesHumanStartedSolver"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["graphNodeCount"] != 8
+            or interaction["graphEdgeCount"] != 9
+            or interaction["nodeOrder"] != ["auth-api", "web-app", "mobile-app", "billing", "user-db", "audit-log", "notify", "deploy-gate"]
+            or interaction["relationTypes"] != ["depends-on", "reads", "emits"]
+            or interaction["relationCounts"] != {"depends-on": 6, "reads": 1, "emits": 2}
+            or interaction["graphSignature"] != expected_graph_signature
+            or len(interaction["nodes"]) != 8
+            or interaction["inputCount"] != 6
+            or interaction["trustedInputCount"] != 6
+            or interaction["pointerInputCount"] != 6
+            or interaction["keyboardInputCount"] != 0
+            or interaction["dragInputCount"] != 5
+            or interaction["confirmInputCount"] != 1
+            or interaction["keyboardMoveInputCount"] != 0
+            or interaction["undoInputCount"] != 0
+            or interaction["resetInputCount"] != 0
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["untrustedMutationCount"] != 0
+            or interaction["lastInputKind"] != "confirm-pointer"
+            or interaction["lastInputTrusted"] is not True
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerMoveCount"] != 3
+            or interaction["pointerUpCount"] != 1
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerReleaseCount"] != 1
+            or interaction["activePointerId"] is not None
+            or interaction["dragAnchor"] is not None
+            or interaction["dragDistance"] <= 30
+            or interaction["pinNodeId"] != "auth-api"
+            or abs(interaction["pinPosition"]["x"] - 207.2) > 1
+            or abs(interaction["pinPosition"]["y"] - 115.2) > 1
+            or interaction["humanPinCount"] != 1
+            or interaction["humanGeometryMutationCount"] != 3
+            or not interaction["nodes"][0]["pinned"]
+            or abs(interaction["nodes"][0]["x"] - interaction["pinPosition"]["x"]) > .01
+            or abs(interaction["nodes"][0]["y"] - interaction["pinPosition"]["y"]) > .01
+            or interaction["nodeChecksumCurrent"] == interaction["nodeChecksumInitial"]
+            or interaction["firstHumanChecksumBefore"] == interaction["firstHumanChecksumAfter"]
+            or interaction["solverActive"]
+            or interaction["solverDuration"] != 1.08
+            or interaction["solverStepLimit"] != 72
+            or interaction["solverStepCount"] != 72
+            or interaction["solverStartCount"] != 1
+            or interaction["solverCompletionCount"] != 1
+            or interaction["solverFrameCount"] < 8
+            or len(interaction["solverEnergySamples"]) != 72
+            or interaction["solverEnergyInitial"] is None
+            or interaction["solverEnergyInitial"] <= 0
+            or interaction["solverEnergyFinal"] != 0
+            or interaction["solverEnergy"] != 0
+            or interaction["solverCompletionReason"] != "bounded-72-step-convergence"
+            or len(interaction["solveRecords"]) != 1
+            or not interaction["solveRecords"][0]["trusted"]
+            or interaction["solveRecords"][0]["sourceKind"] != "pointer-mouse-pin-end"
+            or interaction["solveRecords"][0]["pinNodeId"] != "auth-api"
+            or interaction["solveRecords"][0]["stepLimit"] != 72
+            or interaction["solveRecords"][0]["finalStepCount"] != 72
+            or not interaction["solveRecords"][0]["completed"]
+            or interaction["solveRecords"][0]["energyFinal"] != 0
+            or not interaction["analysisCandidateReady"]
+            or interaction["analysisCandidate"] != "auth-api-high-blast-radius-4-direct-dependents"
+            or interaction["directDependentCount"] != 4
+            or interaction["releasePathCount"] != 4
+            or not interaction["conclusionConfirmed"]
+            or interaction["confirmationCount"] != 1
+            or interaction["prematureConclusionCount"] != 0
+            or interaction["phase"] != "confirmed-retained"
+            or interaction["result"] != "auth-api-release-critical-analysis-confirmed"
+            or not interaction["resultRetained"]
+            or interaction["retainedConclusion"] != interaction["analysisCandidate"]
+            or len(interaction["confirmationRecords"]) != 1
+            or not interaction["confirmationRecords"][0]["trusted"]
+            or not interaction["confirmationRecords"][0]["retained"]
+            or interaction["confirmationRecords"][0]["sourceKind"] != "confirm-pointer"
+            or interaction["historyDepth"] != 2
+            or interaction["undoCount"] != 0
+            or interaction["resetCount"] != 0
+            or interaction["rollbackRecords"] != []
+            or not interaction["initialStillVerified"]
+            or not interaction["p5InstanceReady"]
+            or not interaction["canvas2dReady"]
+            or not interaction["ready"]
+            or not interaction["fullStageGeometryVerified"]
+            or interaction["canvasCoverageRatio"] < .995
+            or page.locator('#graph-result').get_attribute('data-confirmed') != "true"
+            or page.locator('#result-title').text_content() != "AUTH API · HIGH BLAST RADIUS"
+            or page.locator('#result-detail').text_content() != "4 direct dependents · release review retained."
+            or page.locator('#state-label').text_content() != "ANALYSIS CONFIRMED · RETAINED"
+            or not page.locator('#confirm-analysis').is_disabled()
+            or page.locator('#undo-graph').is_disabled()
+            or page.locator('#reset-graph').is_disabled()
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a real human-pinned bounded dependency solve and retained Auth API blast-radius analysis: {interaction!r}")
     elif demo["id"] == "gooey-pixel-cursor-wake":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")

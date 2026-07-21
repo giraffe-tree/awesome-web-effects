@@ -1,1 +1,53 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p5.js — Draggable Force Directed Network</title><link rel="stylesheet" href="./shared.css"><style>:root{--preview-background:#081018}#force-host{position:absolute;inset:0;cursor:grab}#force-host canvas{width:100%!important;height:100%!important}.force-copy{position:absolute;z-index:5;left:13px;top:46px;color:#edf7ff;pointer-events:none}.force-copy small{font:800 6px/1 ui-monospace;letter-spacing:.16em;color:#74c8ff}.force-copy h1{width:101px;margin:8px 0 0;font:950 18px/.84 system-ui;letter-spacing:-.055em}.force-energy{position:absolute;right:12px;top:12px;z-index:5;color:#74c8ff;font:900 7px/1 ui-monospace}.library-badge{background:#081018c9}</style></head><body><main class="preview-stage" data-preview-mechanism="deterministic-force-network"><div id="force-host" tabindex="0" aria-label="Drag the Director node to pin it and pull the connected network"></div><section class="force-copy"><small>CREATIVE GRAPH / 09</small><h1>MOVE ONE ROLE. FEEL EVERY LINK.</h1></section><output class="force-energy" id="force-energy">ENERGY 0.00</output><span class="library-badge">p5.js · force simulation</span><span class="scene-caption">link + charge + center forces · temporary pin</span></main><script type="module" src="./src/draggable-force-directed-svg-network-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>p5.js — Human-pinned Dependency Graph</title>
+  <link rel="stylesheet" href="./shared.css">
+  <style>
+    :root{--preview-background:#091117}
+    .preview-stage{overflow:hidden;background:#091117;color:#edf6f4}
+    #force-host{position:absolute;inset:0;cursor:default;outline:0;touch-action:none}
+    #force-host[data-dragging="true"]{cursor:grabbing}#force-host canvas{display:block;width:100%!important;height:100%!important}
+    #force-host:focus-visible{box-shadow:inset 0 0 0 2px #e9ff76}
+    .graph-copy{position:absolute;z-index:5;left:13px;top:45px;width:82px;pointer-events:none}
+    .graph-copy small,.graph-state,.graph-control,.graph-legend,.graph-result{font-family:ui-monospace,monospace;text-transform:uppercase}
+    .graph-copy small{color:#6fd4ff;font-size:5.5px;font-weight:850;line-height:1;letter-spacing:.14em}
+    .graph-copy h1{margin:8px 0 0;font:900 16px/.88 system-ui;letter-spacing:-.055em}
+    .graph-copy p{margin:7px 0 0;color:#75848a;font:650 5.5px/1.35 ui-monospace}
+    .graph-controls{position:absolute;z-index:7;right:10px;top:10px;display:flex;gap:4px}
+    .graph-control{height:25px;padding:0 7px;border:1px solid #ffffff22;border-radius:99px;background:#111b22dd;color:#d8e5e7;font-size:5px;font-weight:900;letter-spacing:.07em;cursor:pointer;backdrop-filter:blur(6px)}
+    .graph-control.primary{border-color:#e9ff7677;color:#e9ff76}.graph-control:disabled{opacity:.38;cursor:not-allowed}.graph-control:focus-visible{outline:1px solid #e9ff76;outline-offset:2px}
+    .graph-state{position:absolute;z-index:5;right:11px;bottom:9px;display:flex;align-items:center;gap:5px;color:#7e8c91;font-size:4.5px;font-weight:850;letter-spacing:.08em;pointer-events:none}.graph-state i{width:4px;height:4px;border-radius:50%;background:#66757a}.graph-state[data-phase="solving"] i{background:#e9ff76;box-shadow:0 0 7px #e9ff76}.graph-state[data-phase="complete"] i{background:#63e2ba}
+    .graph-legend{position:absolute;z-index:5;right:11px;top:42px;display:flex;gap:7px;color:#718087;font-size:4px;font-weight:800;letter-spacing:.06em;pointer-events:none}.graph-legend span{display:flex;align-items:center;gap:3px}.graph-legend i{width:8px;height:1px}.graph-legend .depends{background:#68cfff}.graph-legend .reads{background:#63e2ba}.graph-legend .emits{background:#b69cff}
+    .graph-result{position:absolute;z-index:5;left:13px;bottom:9px;max-width:142px;color:#75858a;font-size:4.5px;font-weight:800;line-height:1.35;letter-spacing:.07em;pointer-events:none}.graph-result strong{display:block;color:#dbe8e7;font-size:5px}.graph-result[data-confirmed="true"] strong{color:#63e2ba}
+    .library-badge{background:#081018d9}.scene-caption{display:none}
+    @media (max-width:400px) and (orientation:landscape){.graph-result{max-width:82px}}
+    @media (min-width:500px){
+      .graph-copy{left:28px;top:88px;width:158px}.graph-copy small{font-size:10px}.graph-copy h1{margin-top:14px;font-size:33px}.graph-copy p{margin-top:13px;font-size:9px}
+      .graph-controls{right:20px;top:18px;gap:7px}.graph-control{height:38px;padding:0 12px;font-size:8px}.graph-legend{right:22px;top:66px;gap:13px;font-size:7px}.graph-legend i{width:15px}.graph-state{right:20px;bottom:17px;font-size:7px}.graph-result{left:28px;bottom:17px;max-width:270px;font-size:7px}.graph-result strong{font-size:9px}
+    }
+    @media (orientation:portrait){
+      .graph-copy{left:14px;top:48px;width:195px}.graph-copy h1{font-size:19px}.graph-copy p{max-width:166px}
+      .graph-controls{top:38px}.graph-control{padding:0 6px}.graph-legend{right:13px;top:88px;display:grid;gap:5px}.graph-legend span{font-size:0}.graph-legend i{width:12px}.graph-result{left:14px;bottom:8px;max-width:170px}.graph-state{right:12px;bottom:9px}.graph-state span{display:none}
+    }
+  </style>
+</head>
+<body>
+  <main class="preview-stage" id="force-stage" data-preview-mechanism="p5-trusted-finite-dependency-graph-solver">
+    <div id="force-host" tabindex="0" role="application" aria-label="Release dependency graph. Drag the Auth API node or use arrow keys to pin it, then confirm the analysis."></div>
+    <section class="graph-copy" aria-hidden="true"><small>RELEASE GRAPH / 2.4</small><h1>Move one dependency. Read the blast radius.</h1><p>Pin Auth API. The graph solves once, then waits for your confirmation.</p></section>
+    <div class="graph-controls">
+      <button class="graph-control" id="undo-graph" type="button" disabled>UNDO</button>
+      <button class="graph-control" id="reset-graph" type="button" disabled>RESET</button>
+      <button class="graph-control primary" id="confirm-analysis" type="button" disabled>CONFIRM</button>
+    </div>
+    <div class="graph-legend" aria-hidden="true"><span><i class="depends"></i>DEPENDS ON</span><span><i class="reads"></i>READS</span><span><i class="emits"></i>EMITS</span></div>
+    <div class="graph-result" id="graph-result" data-confirmed="false"><strong id="result-title">ANALYSIS NOT CONFIRMED</strong><span id="result-detail">Pin Auth API to calculate release impact.</span></div>
+    <div class="graph-state" id="graph-state" data-phase="idle"><i></i><span id="state-label">GRAPH READY · STATIC</span></div>
+    <span class="library-badge">p5.js · dependency solver</span>
+  </main>
+  <script type="module" src="./src/draggable-force-directed-svg-network-demo.js"></script>
+</body>
+</html>

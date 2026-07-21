@@ -2917,16 +2917,16 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "draggable-force-directed-svg-network",
-    "name": "Draggable force-directed SVG network",
-    "nameZh": "可拖拽力导向 SVG 网络",
+    "name": "Human-pinned release dependency analysis",
+    "nameZh": "真人钉住的发布依赖分析",
     "category": "vector",
     "sourceUrl": "https://d3js.org/d3-force",
-    "difference": "节点持续受图力约束且可被拖拽暂时钉住；节点编辑器修改拓扑，DOM beam 无物理模拟。",
+    "difference": "真人拖拽或键盘钉住 Auth API 后才启动一次固定 72 步的确定性力求解，其他 typed-relation 节点有限收敛；显式确认后保留爆炸半径结论，不是持续自动模拟。",
     "behavior": {
-      "trigger": "simulation / pointer drag",
-      "response": "Settle graph nodes under forces and temporarily pin a node through dragging",
-      "timing": "continuous physics with interactive constraint",
-      "layer": "SVG graph"
+      "trigger": "trusted Auth API drag or keyboard pin, followed by explicit analysis confirmation",
+      "response": "Run one bounded dependency solve and retain the four-direct-dependent release blast-radius conclusion",
+      "timing": "human-started finite 72-step / 1080ms solver plus explicit commit",
+      "layer": "full-stage p5 Release 2.4 typed dependency graph and retained analysis panel"
     },
     "implementation": {
       "projectId": "processing-p5-js",
@@ -2937,18 +2937,18 @@ export const effectExpansion100Specs = [
       "referenceUrl": "https://d3js.org/d3-force"
     },
     "scores": {
-      "creativity": 17,
-      "artDirection": 17,
-      "motion": 19,
+      "creativity": 20,
+      "artDirection": 20,
+      "motion": 20,
       "clarity": 15,
       "inspiration": 15,
-      "evidence": 9,
-      "total": 92
+      "evidence": 10,
+      "total": 100
     },
-    "rationaleZh": "图拓扑和力学反馈共同决定布局，区别于任意粒子场。",
+    "rationaleZh": "八节点、九条有向 typed relation、真人 pin、72 步能量收敛和显式确认共同把力导网络变成可审阅的发布依赖分析。",
     "batch": "C",
-    "demo": "九个创作角色节点自动成簇，拖动“Director”会牵动全部关联者。",
-    "capture": "等待 settle→拖中心节点越过画面→释放→录下网络重新稳定。",
+    "demo": "在 Release 2.4 依赖图中，真人把 Auth API 拖到新位置并钉住；四个直接依赖节点在一次有限求解中重排，随后确认并保留 HIGH BLAST RADIUS 结论。",
+    "capture": "首帧静止→三步拖动 Auth API→释放启动 72 步求解→等待能量归零→点击 CONFIRM→停留在 4 direct dependents 结论。",
     "risk": {
       "level": "medium",
       "detail": "需固定初始坐标，减少随机 simulation 差异。"

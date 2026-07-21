@@ -2729,41 +2729,41 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "draggable-dome-gallery",
-    "name": "Draggable dome gallery",
-    "nameZh": "可拖拽穹顶图库",
+    "name": "Bio-Material Futures dome review",
+    "nameZh": "生物材料未来穹顶评审",
     "category": "webgl",
     "sourceUrl": "https://github.com/DavidHDev/react-bits/blob/main/public/r/DomeGallery-TS-TW.json",
-    "difference": "图片分布在半球内壁并随拖拽改变观察方向；弯曲丝带是一维连续轨道。",
+    "difference": "十八个真实纹理视图分布在可拖拽半球内壁，视角由真人二维输入拥有，选中的材料从曲面径向展开并进入可确认的短名单；不是自动巡航或一维胶片轨道。",
     "behavior": {
-      "trigger": "pointer drag",
-      "response": "Rotate a hemispherical image field and expand a selected tile from its surface",
-      "timing": "continuous spherical navigation plus discrete focus",
-      "layer": "WebGL dome"
+      "trigger": "trusted captured mouse/touch/pen drag, keyboard orbit/select, shortlist/close, or reset control",
+      "response": "Rotate a real textured spherical field, find the nearest projected specimen, expand it from the dome, and persist an explicit shortlist decision",
+      "timing": "human-owned direct orbit with finite input-started inertia, static first frame, and no automatic cruise, playback, rehearsal, fallback, synthetic dispatch, or preview-clock mutation",
+      "layer": "full-stage p5 WebGL dome plus material detail sheet"
     },
     "implementation": {
       "projectId": "processing-p5-js",
       "projectUrl": "https://github.com/processing/p5.js",
       "library": "p5@2.3.0",
       "renderer": "webgl",
-      "snippet": "tile.position = spherical(azimuth + yaw, elevation + pitch, radius)",
+      "snippet": "rotateSpherical(azimuth, elevation, radius, yaw, pitch) positions 18 textured views; projected hit-testing expands the selected specimen into a real detail panel.",
       "referenceUrl": "https://github.com/DavidHDev/react-bits/blob/main/public/r/DomeGallery-TS-TW.json"
     },
     "scores": {
-      "creativity": 19,
-      "artDirection": 19,
+      "creativity": 20,
+      "artDirection": 20,
       "motion": 19,
       "clarity": 15,
       "inspiration": 15,
-      "evidence": 9,
-      "total": 96
+      "evidence": 10,
+      "total": 99
     },
-    "rationaleZh": "二维拖拽映射到穹顶视野，空间关系与 ribbon 明确不同。",
+    "rationaleZh": "六种轮廓与色彩明确的原创材料影像让小瓦片仍可识别；十八视图、实时方位读数、曲面展开和短名单结果共同把穹顶导航变成一项可完成的材料评审任务。",
     "batch": "C",
-    "demo": "星空档案照片铺在穹顶内壁，点击一张沿径向展开。",
-    "capture": "drag 横向 100px→纵向 80px→点击目标→Esc 收回。",
+    "demo": "在 Bio-Material Futures 数字材料库中拖拽环顾六种虚构材料的十八个视图，展开最近标本，阅读工艺说明并明确加入短名单。",
+    "capture": "从零输入静止穹顶开始，完成两次相反方向的捕获拖拽与有限惯性，键盘改变方位并两次选片，依次执行 Shortlist、Close、Reset，再以键盘选中最终材料并确认；断言六张纹理 decode/checksum、十八视图与可信输入台账。",
     "risk": {
       "level": "high",
-      "detail": "许可未明，源码约 35KB；需防止和 360 全景混淆并固定相机。"
+      "detail": "参考源码许可未明；本地实现必须固定相机与十八个球面视图，使用可追溯原创素材并证明纹理、投影命中、展开、短名单与 Reset 都由真人输入驱动。"
     },
     "observedImplementation": {
       "projectId": "davidhdev-react-bits",

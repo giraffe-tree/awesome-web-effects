@@ -1,1 +1,230 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p5.js — Draggable Dome Gallery</title><link rel="stylesheet" href="./shared.css"><style>:root{--preview-background:#040811}#dome-host{position:absolute;inset:0;cursor:grab}#dome-host canvas{width:100%!important;height:100%!important}.dome-copy{position:absolute;z-index:5;left:13px;top:47px;color:#eef5ff;pointer-events:none}.dome-copy small{font:800 6px/1 ui-monospace;letter-spacing:.16em;color:#77c7ff}.dome-copy h1{width:100px;margin:8px 0 0;font:950 18px/.84 system-ui;letter-spacing:-.055em}.dome-focus{position:absolute;right:12px;top:12px;z-index:5;color:#77c7ff;font:900 7px/1 ui-monospace}.library-badge{background:#040811c9}</style></head><body><main class="preview-stage" data-preview-mechanism="hemispherical-image-field"><div id="dome-host" tabindex="0" aria-label="Drag to rotate the dome and click to focus a tile"></div><section class="dome-copy"><small>SKY ARCHIVE / DOME</small><h1>LOOK AROUND THE INNER HORIZON.</h1></section><output class="dome-focus" id="dome-focus">TILE —</output><span class="library-badge">p5.js · WebGL dome gallery</span><span class="scene-caption">hemisphere navigation · radial tile focus</span></main><script type="module" src="./src/draggable-dome-gallery-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>p5.js — Bio-Material Futures Dome</title>
+    <link rel="stylesheet" href="./shared.css" />
+    <style>
+      :root {
+        --preview-background: #0b0d0c;
+        --ink: #edf1e9;
+        --muted: #929a91;
+        --acid: #d8ff47;
+        --line: rgba(237, 241, 233, .18);
+        --panel: rgba(12, 15, 13, .88);
+      }
+      * { box-sizing: border-box; }
+      body { overflow: hidden; background: var(--preview-background); color: var(--ink); }
+      .preview-stage { background: #0b0d0c; }
+      #dome-host {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        cursor: grab;
+        touch-action: none;
+        user-select: none;
+        outline: none;
+      }
+      #dome-host[data-dragging="true"] { cursor: grabbing; }
+      #dome-host:focus-visible { box-shadow: inset 0 0 0 2px var(--acid); }
+      #dome-host canvas {
+        position: absolute;
+        z-index: 0;
+        inset: 0;
+        width: 100% !important;
+        height: 100% !important;
+      }
+      .chrome { position: absolute; z-index: 3; inset: 0; pointer-events: none; }
+      .topbar {
+        position: absolute;
+        top: 12px;
+        left: 14px;
+        right: 14px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .brand { display: flex; align-items: center; gap: 8px; }
+      .brand-mark {
+        width: 13px;
+        height: 13px;
+        border: 1px solid var(--acid);
+        border-radius: 50%;
+        box-shadow: inset 0 0 0 3px #0b0d0c, inset 0 0 0 5px var(--acid);
+      }
+      .eyebrow {
+        margin: 0;
+        font: 760 6px/1.25 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .13em;
+        text-transform: uppercase;
+      }
+      .brand .muted { margin-top: 2px; color: var(--muted); }
+      .actions { display: flex; gap: 5px; pointer-events: auto; }
+      button {
+        min-height: 24px;
+        padding: 0 9px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: rgba(10, 13, 11, .74);
+        color: var(--ink);
+        font: 760 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        backdrop-filter: blur(8px);
+      }
+      button:hover { border-color: rgba(237,241,233,.5); }
+      button:focus-visible { outline: 1px solid var(--acid); outline-offset: 2px; }
+      .intro {
+        position: absolute;
+        left: 14px;
+        top: 53px;
+        width: 155px;
+        text-shadow: 0 2px 18px #000;
+      }
+      .intro h1 { margin: 7px 0 8px; font: 790 clamp(20px, 4.5vw, 36px)/.88 system-ui, sans-serif; letter-spacing: -.065em; }
+      .intro p { margin: 0; max-width: 136px; color: #a7afa6; font: 590 7px/1.42 system-ui, sans-serif; }
+      .view-state {
+        position: absolute;
+        left: 14px;
+        bottom: 13px;
+        display: flex;
+        align-items: flex-end;
+        gap: 12px;
+      }
+      .view-state strong { display: block; margin-top: 3px; font: 790 11px/.95 ui-monospace, monospace; letter-spacing: -.05em; }
+      .divider { width: 1px; height: 26px; background: var(--line); }
+      .hint {
+        position: absolute;
+        left: 50%;
+        bottom: 13px;
+        translate: -50% 0;
+        padding: 5px 8px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: rgba(10, 13, 11, .74);
+        color: #b8c0b7;
+        font: 700 6px/1 ui-monospace, monospace;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        backdrop-filter: blur(8px);
+      }
+      .collection-count { position: absolute; right: 14px; bottom: 14px; text-align: right; }
+      .collection-count strong { display: block; margin-top: 3px; color: var(--acid); font: 790 9px/.9 ui-monospace, monospace; }
+      .detail-panel {
+        position: absolute;
+        z-index: 5;
+        top: 48px;
+        right: 14px;
+        bottom: 48px;
+        width: min(226px, 35vw);
+        display: grid;
+        grid-template-rows: minmax(0, 1fr) auto;
+        border: 1px solid rgba(237,241,233,.25);
+        background: var(--panel);
+        opacity: 0;
+        translate: 18px 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity 180ms ease, translate 240ms cubic-bezier(.2,.8,.2,1);
+        backdrop-filter: blur(14px);
+      }
+      .detail-panel[data-open="true"] { opacity: 1; translate: 0 0; visibility: visible; pointer-events: auto; }
+      .detail-image-wrap { position: relative; min-height: 0; overflow: hidden; background: #080a09; }
+      .detail-image-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+      .detail-index { position: absolute; top: 8px; left: 8px; padding: 4px 6px; border-radius: 999px; background: rgba(7,9,8,.76); color: var(--acid); }
+      .detail-body { padding: 11px; border-top: 1px solid var(--line); }
+      .detail-body h2 { margin: 5px 0 5px; font: 780 22px/.9 system-ui, sans-serif; letter-spacing: -.06em; }
+      .detail-body p { margin: 0; color: #aeb6ad; font: 580 7px/1.4 system-ui, sans-serif; }
+      .detail-meta { display: flex; justify-content: space-between; gap: 8px; padding-top: 9px; margin-top: 9px; border-top: 1px solid var(--line); color: #c9cfc7; }
+      .detail-controls { display: flex; gap: 5px; margin-top: 10px; }
+      #confirm-control { flex: 1; background: var(--acid); color: #12150f; border-color: var(--acid); }
+      #confirm-control[data-confirmed="true"] { background: #8af0c0; border-color: #8af0c0; }
+      #close-control { width: 30px; padding: 0; }
+      .selection-status { min-height: 8px; margin-top: 7px !important; color: var(--acid) !important; font: 730 6px/1 ui-monospace, monospace !important; letter-spacing: .08em; text-transform: uppercase; }
+      .library-badge, .scene-caption { display: none; }
+      @media (max-width: 430px) {
+        .topbar { top: 7px; left: 8px; right: 8px; }
+        .brand-mark { width: 9px; height: 9px; }
+        .brand .muted { display: none; }
+        button { min-height: 20px; padding: 0 6px; font-size: 5px; }
+        .intro { left: 8px; top: 38px; width: 105px; }
+        .intro h1 { font-size: 20px; }
+        .intro p { max-width: 96px; font-size: 5px; }
+        .view-state { left: 8px; bottom: 7px; gap: 7px; }
+        .view-state strong { font-size: 7px; }
+        .divider { height: 18px; }
+        .hint { bottom: 7px; padding: 4px 6px; font-size: 4px; }
+        .collection-count { right: 8px; bottom: 7px; }
+        .collection-count strong { font-size: 6px; }
+        .detail-panel { top: 34px; right: 8px; bottom: 29px; width: 142px; grid-template-rows: minmax(0, 1fr) auto; }
+        .detail-body { padding: 7px; }
+        .detail-body h2 { margin: 3px 0; font-size: 12px; }
+        .detail-body p { font-size: 5px; line-height: 1.25; }
+        .detail-meta { padding-top: 5px; margin-top: 5px; font-size: 4px; }
+        .detail-controls { margin-top: 6px; }
+        .selection-status { font-size: 4px !important; margin-top: 4px !important; }
+      }
+      @media (max-width: 180px) {
+        .topbar { top: 4px; left: 5px; right: 5px; }
+        .brand .eyebrow { display: none; }
+        .intro, .hint, .collection-count { display: none; }
+        button { min-height: 15px; padding: 0 4px; font-size: 4px; }
+        .view-state { left: 5px; bottom: 3px; }
+        .view-state .eyebrow, .divider { display: none; }
+        .view-state strong { margin: 0; font-size: 5px; }
+        .detail-panel { top: 20px; right: 5px; bottom: 3px; width: 74px; grid-template-rows: 1fr auto; }
+        .detail-body { padding: 4px; }
+        .detail-body h2 { margin: 1px 0; font-size: 7px; }
+        .detail-body > p:not(.selection-status), .detail-meta { display: none; }
+        .detail-controls { gap: 2px; margin-top: 3px; }
+        #confirm-control { min-width: 0; }
+        #close-control { width: 17px; }
+        .selection-status { font-size: 3px !important; min-height: 3px; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .detail-panel { transition: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="preview-stage" data-preview-mechanism="p5-textured-spherical-dome">
+      <section
+        id="dome-host"
+        data-dragging="false"
+        data-input-policy="trusted-only"
+        tabindex="0"
+        aria-label="Bio-Material Futures dome. Drag to look around, click a material to open details, or use arrow keys and Enter."
+      >
+        <div class="chrome">
+          <header class="topbar">
+            <div class="brand"><span class="brand-mark" aria-hidden="true"></span><div><p class="eyebrow">Bio-Material Futures</p><p class="eyebrow muted">Dome 02 · Speculative archive</p></div></div>
+            <div class="actions"><button id="reset-control" type="button">Reset view</button></div>
+          </header>
+          <section class="intro"><p class="eyebrow">Digital materials library</p><h1>Look around<br />the living archive.</h1><p>Drag the dome, then select one specimen to inspect its material study.</p></section>
+          <div class="view-state" aria-live="polite">
+            <div><p class="eyebrow">View / azimuth</p><strong id="yaw-output">000°</strong></div><span class="divider"></span><div><p class="eyebrow">Elevation</p><strong id="pitch-output">00°</strong></div>
+          </div>
+          <p class="hint" id="interaction-hint">Drag to orbit · click to inspect</p>
+          <div class="collection-count"><p class="eyebrow">Collection</p><strong>06 MATERIALS / 18 VIEWS</strong></div>
+        </div>
+
+        <aside class="detail-panel" id="detail-panel" data-open="false" aria-hidden="true" aria-live="polite">
+          <div class="detail-image-wrap"><img id="detail-image" alt="" /><span class="detail-index eyebrow" id="detail-index">SPECIMEN 01</span></div>
+          <div class="detail-body">
+            <p class="eyebrow" id="detail-type">Recycled glass composite</p>
+            <h2 id="detail-title">Tidal Glass</h2>
+            <p id="detail-description">A speculative cast-glass sample shaped by erosion channels and mineral inclusions.</p>
+            <div class="detail-meta eyebrow"><span id="detail-process">Cast / reclaimed</span><span id="detail-year">Study 2026</span></div>
+            <div class="detail-controls"><button id="confirm-control" type="button" data-confirmed="false">Shortlist material</button><button id="close-control" type="button" aria-label="Close material details">×</button></div>
+            <p class="selection-status" id="selection-status" role="status"></p>
+          </div>
+        </aside>
+      </section>
+      <span class="library-badge">p5.js · textured WebGL dome</span>
+      <span class="scene-caption">trusted drag rotates a spherical material archive and selection expands a textured tile</span>
+    </main>
+    <script type="module" src="./src/draggable-dome-gallery-demo.js"></script>
+  </body>
+</html>

@@ -1579,6 +1579,60 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("Shift+ArrowDown")
             elif index == 29:
                 page.keyboard.press("ArrowLeft")
+        elif demo["id"] == "draggable-dome-gallery":
+            viewport_width = page.viewport_size["width"]
+            viewport_height = page.viewport_size["height"]
+            point = lambda x, y: (round(viewport_width * x), round(viewport_height * y))
+            if index == 2:
+                page.mouse.move(*point(.794, .622))
+                page.mouse.down()
+            elif index == 3:
+                page.mouse.move(*point(.656, .556), steps=4)
+            elif index == 4:
+                page.mouse.move(*point(.475, .472), steps=4)
+            elif index == 5:
+                page.mouse.up()
+            elif index == 7:
+                page.wait_for_timeout(260)
+            elif index == 8:
+                page.mouse.move(*point(.269, .556))
+                page.mouse.down()
+            elif index == 9:
+                page.mouse.move(*point(.438, .639), steps=4)
+            elif index == 10:
+                page.mouse.move(*point(.656, .711), steps=4)
+            elif index == 11:
+                page.mouse.up()
+            elif index == 12:
+                page.wait_for_timeout(320)
+            elif index == 14:
+                page.locator('#dome-host').focus()
+                page.keyboard.press("ArrowRight")
+            elif index == 15:
+                page.keyboard.press("ArrowUp")
+            elif index == 16:
+                page.keyboard.press("Shift+ArrowLeft")
+            elif index == 17:
+                page.keyboard.press("Enter")
+            elif index == 18:
+                page.wait_for_timeout(380)
+            elif index == 20:
+                page.locator('#confirm-control').click()
+            elif index == 22:
+                page.locator('#close-control').click()
+            elif index == 24:
+                page.locator('#reset-control').click()
+            elif index == 26:
+                page.locator('#dome-host').focus()
+                page.keyboard.press("ArrowLeft")
+            elif index == 27:
+                page.keyboard.press("ArrowDown")
+            elif index == 28:
+                page.keyboard.press("Enter")
+            elif index == 29:
+                page.wait_for_timeout(380)
+            elif index == 31:
+                page.locator('#confirm-control').click()
         elif demo["id"] == "bending-webgl-gallery-ribbon":
             if index == 2:
                 page.mouse.wheel(0, 160)
@@ -2010,7 +2064,7 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("1")
             elif index == 34:
                 page.wait_for_timeout(500)
-        if demo["id"] not in {"emergent-particle-life-colonies", "velocity-reactive-marquee", "bending-webgl-gallery-ribbon"}:
+        if demo["id"] not in {"emergent-particle-life-colonies", "velocity-reactive-marquee", "draggable-dome-gallery", "bending-webgl-gallery-ribbon"}:
             page.evaluate("time => window.__setPreviewTime(time)", preview_time)
         frame_path = frame_root / f"{index:04d}.png"
         page.screenshot(path=str(frame_path), type="png")
@@ -3396,6 +3450,63 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["lastInputTrusted"] is not True
         ):
             raise RuntimeError(f"{demo['id']} did not capture trusted slow/fast captured traces, keyboard sampling, reset, four unique decoded ImageGen frames, and a nonempty final visual-memory path: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "draggable-dome-gallery":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "orbit-and-inspect-material-dome"
+            or interaction["acceptedInputs"] != ["mouse", "touch", "pen", "keyboard", "control"]
+            or not interaction["userInputRequired"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["automaticCruise"]
+            or interaction["previewClockDriven"]
+            or interaction["previewClockMutations"] != 0
+            or interaction["syntheticDispatch"]
+            or not interaction["firstFrameStatic"]
+            or not interaction["initialStaticVerified"]
+            or not interaction["userOwnedView"]
+            or not interaction["finiteInputInertiaOnly"]
+            or interaction["trustedInputCount"] < 31
+            or interaction["untrustedInputCount"] != 0
+            or interaction["captureCount"] < 2
+            or interaction["captureVerifiedCount"] < 2
+            or interaction["releaseCount"] < 2
+            or interaction["dragMoveCount"] < 16
+            or interaction["keyboardInputCount"] < 7
+            or interaction["controlInputCount"] < 4
+            or interaction["selectionCount"] < 2
+            or interaction["resetCount"] < 1
+            or interaction["confirmCount"] < 2
+            or not interaction["sawPositiveYaw"]
+            or not interaction["sawNegativeYaw"]
+            or interaction["reversalCount"] < 1
+            or not interaction["reverseMathVerified"]
+            or not interaction["resetMathVerified"]
+            or not interaction["resetSnapshotValid"]
+            or len(interaction["decodedAssets"]) != 6
+            or len(interaction["textures"]) != 6
+            or len(interaction["assetChecksums"]) != 6
+            or not interaction["assetChecksumsUnique"]
+            or interaction["sampledPixelCount"] != 36864
+            or interaction["geometryChecksum"] == 0
+            or len(interaction["projections"]) < 6
+            or interaction["selected"] < 0
+            or interaction["selectedTileIndex"] < 0
+            or not interaction["confirmed"]
+            or interaction["selectionProgress"] != 1
+            or interaction["selectionAnimating"]
+            or interaction["dragging"]
+            or interaction["pointer"] is not None
+            or interaction["velocityYaw"] != 0
+            or interaction["velocityPitch"] != 0
+            or interaction["lastInputTrusted"] is not True
+            or interaction["lastSelectionTrusted"] is not True
+            or interaction["lastResetTrusted"] is not True
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture two trusted opposed dome drags, finite input-owned inertia, keyboard material selection, close/reset, two shortlist confirmations, six unique decoded textures, and eighteen fixed spherical views: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "bending-webgl-gallery-ribbon":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

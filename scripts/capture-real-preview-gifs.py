@@ -1988,6 +1988,22 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 11:
                 status_box = page.locator('#decision-status').bounding_box()
                 page.mouse.click(status_box["x"] + status_box["width"] * .5, status_box["y"] + status_box["height"] * .5)
+        elif demo["id"] == "image-palette-ambient-color-transition":
+            if index == 3:
+                page.locator('[data-stay="1"]').dispatch_event('click')
+            elif index == 5:
+                page.locator('[data-stay="1"]').click()
+            elif 6 <= index <= 11:
+                page.wait_for_timeout(95)
+            elif index == 13:
+                page.locator('#keep-action').click()
+            elif index == 17:
+                page.locator('[data-stay="1"]').focus()
+                page.keyboard.press('End')
+            elif 18 <= index <= 23:
+                page.wait_for_timeout(95)
+            elif index == 30:
+                page.locator('#undo-action').click()
         elif demo["id"] == "gooey-pixel-cursor-wake":
             if index == 3:
                 box = page.locator('#pixel-wake-host').bounding_box()
@@ -7761,6 +7777,85 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or page.locator('#decision-output').text_content() != "KEPT · ATACAMA SKY"
         ):
             raise RuntimeError(f"{demo['id']} did not capture one real pixel-driven row rail and a retained Atacama destination after hover exit: {interaction!r}")
+    elif demo["id"] == "image-palette-ambient-color-transition":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        if (
+            not assertion
+            or interaction["id"] != "image-palette-ambient-color-transition"
+            or interaction["task"] != "human-previews-a-real-image-derived-ambient-palette-and-explicitly-keeps-it-without-changing-the-retained-choice-during-preview"
+            or interaction["mechanism"] != "trusted-click-or-keyboard-candidate-selection-starts-a-finite-p5-image-and-palette-transition-using-verified-local-image-pixels-before-explicit-keep"
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["assetStrategy"] != "reuse-three-project-local-imagegen-photographs-with-dedicated-byte-sha-identity-manifest-and-runtime-pixel-sampling"
+            or interaction["imageGenUsedThisPass"]
+            or interaction["imageGenDecision"] != "reuse-existing-functional-images"
+            or interaction["automaticPlayback"]
+            or interaction["automaticSelection"]
+            or interaction["automaticCycle"]
+            or interaction["automaticTimeline"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["previewClockMutationCount"] != 0
+            or not interaction["initialFrameStatic"]
+            or not interaction["initialStillVerified"]
+            or interaction["initialStillMutationCount"] != 0
+            or interaction["manifestCount"] != 3
+            or interaction["verifiedAssetCount"] != 3
+            or interaction["sourceShaMatchCount"] != 3
+            or interaction["sourceByteMatchCount"] != 3
+            or interaction["decodedImageCount"] != 3
+            or interaction["sourceDimensions"] != ["960x540", "960x540", "960x540"]
+            or interaction["sampledPixelsPerImage"] != 2304
+            or interaction["sampledPixelCount"] != 6912
+            or interaction["paletteCount"] != 3
+            or interaction["uniquePixelChecksumCount"] != 3
+            or interaction["minimumAmbientColorDistance"] <= 18
+            or not interaction["palettesDerivedFromImagePixels"]
+            or interaction["phase"] != "retained"
+            or interaction["transitioning"]
+            or interaction["transitionProgress"] != 1
+            or interaction["candidateIndex"] != 1
+            or interaction["retainedIndex"] != 1
+            or interaction["visualIndex"] != 1
+            or interaction["transitionFromIndex"] != 1
+            or interaction["transitionToIndex"] != 1
+            or interaction["candidatePaletteChecksum"] <= 0
+            or interaction["candidatePaletteChecksum"] != interaction["retainedPaletteChecksum"]
+            or interaction["retainedSourceSha256"] != "4f59a03ef2c8444193fa966befc4294c8369ee08b480e6a4a91924d7c7707aa7"
+            or interaction["pointerCandidateInputCount"] != 1
+            or interaction["keyboardCandidateInputCount"] != 1
+            or interaction["candidateChangeCount"] != 2
+            or interaction["transitionStartCount"] != 2
+            or interaction["transitionCompleteCount"] != 2
+            or interaction["canceledTransitionCount"] != 0
+            or interaction["keepCount"] != 1
+            or interaction["keepInputCount"] != 1
+            or interaction["undoCount"] != 1
+            or interaction["undoInputCount"] != 1
+            or interaction["resetCount"] != 0
+            or interaction["resetInputCount"] != 0
+            or interaction["snapshotDepth"] != 2
+            or interaction["inputCount"] != 4
+            or interaction["trustedInputCount"] != 4
+            or interaction["rejectedUntrustedInputCount"] != 1
+            or interaction["retainedChangedWithoutKeepCount"] != 0
+            or interaction["prematureCommitCount"] != 0
+            or interaction["drawCount"] <= 0
+            or interaction["geometryCoverageX"] < .98
+            or interaction["geometryCoverageY"] < .98
+            or not interaction["ready"]
+            or not interaction["runtimeAssertionPassed"]
+            or page.locator('#palette-stage').get_attribute('data-candidate-index') != "1"
+            or page.locator('#palette-stage').get_attribute('data-retained-index') != "1"
+            or page.locator('[data-stay="1"]').get_attribute('aria-pressed') != "true"
+            or page.locator('[data-stay="1"]').get_attribute('data-kept') != "true"
+            or page.locator('#kept-value').text_content() != "Olive Court"
+            or page.locator('#stay-name').inner_text() != "OLIVE\nCOURT"
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture two real pixel-derived palette transitions, candidate-retained separation, and Undo to retained Court: {interaction!r}")
     elif demo["id"] == "gooey-pixel-cursor-wake":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")

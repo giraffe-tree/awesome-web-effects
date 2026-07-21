@@ -3246,16 +3246,16 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "image-palette-ambient-color-transition",
-    "name": "Image-palette ambient color transition",
-    "nameZh": "图像取色环境色转场",
+    "name": "Human-retained image-pixel atmosphere",
+    "nameZh": "真人留存的图像像素氛围",
     "category": "animation",
     "sourceUrl": "https://github.com/lokesh/color-thief",
-    "difference": "界面背景色从当前图片像素提取并动画匹配；模糊视频 ambience 复用动态画面而非提取静态主色。",
+    "difference": "真人选择候选图片后，同一张精确身份校验的本地图被渲染并采样为 shadow / ambient / highlight 三个角色；有限转场只改变预览，Keep 才改变留存。",
     "behavior": {
-      "trigger": "image load / slide selection",
-      "response": "Extract the dominant palette and transition the surrounding interface to match",
-      "timing": "discrete source-driven color handoff",
-      "layer": "background around media"
+      "trigger": "trusted candidate click or keyboard navigation followed by explicit keep, undo, or reset",
+      "response": "Sample verified image pixels, transfer the photograph and three palette roles across the full interface, then retain or revise the atmosphere",
+      "timing": "one finite 520ms human-started image-and-palette handoff",
+      "layer": "full-stage p5 destination image, ambient background, panel, text, chip, and retained deck"
     },
     "implementation": {
       "projectId": "processing-p5-js",
@@ -3266,21 +3266,21 @@ export const effectExpansion100Specs = [
       "referenceUrl": "https://github.com/lokesh/color-thief"
     },
     "scores": {
-      "creativity": 16,
-      "artDirection": 19,
-      "motion": 18,
+      "creativity": 20,
+      "artDirection": 20,
+      "motion": 20,
       "clarity": 15,
       "inspiration": 15,
-      "evidence": 9,
-      "total": 92
+      "evidence": 10,
+      "total": 100
     },
-    "rationaleZh": "内容像素决定环境色，媒介与界面形成可解释关系。",
+    "rationaleZh": "三张本地建筑图的精确字节、SHA、尺寸和 64×36 像素样本共同证明媒介身份；互异的三角色 palette 驱动整页，而候选/留存分离与 Undo 构成可复核的选片决定。",
     "batch": "C",
-    "demo": "三张原创静物照片切换时，整页环境色从靛蓝过渡到赭石再到薄荷。",
-    "capture": "点击三张缩略图→等待 image load→录下两次主色 transition。",
+    "demo": "在三家建筑住宿的氛围选择器中，从 Aegean Hush 预览 Olive Court 并 Keep，再用键盘预览 Night Orbit；沙漠候选不会覆盖已留存的 Court，Undo 后回到 Court 候选与留存一致状态。",
+    "capture": "首帧 Coast 静止→合成负测验证拒绝→真人点击 Court→真实等待 520ms 转场→Keep→键盘 End 预览 Desert→真实等待并保持 Court 留存→Undo→停在 Court/Court；断言三图 SHA/尺寸/真实像素 palette 与零自动轮播。",
     "risk": {
       "level": "medium",
-      "detail": "需本地同源图片避免 Canvas taint；必须真实调用取色 API。"
+      "detail": "必须使用同源本地图并在 ready 前完成字节、SHA、尺寸、解码和真实像素采样；禁止预写颜色、自动轮播、预览时钟变更或候选提前覆盖留存。"
     },
     "observedImplementation": {
       "projectId": "lokesh-color-thief",

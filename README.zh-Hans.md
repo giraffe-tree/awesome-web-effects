@@ -72,7 +72,7 @@
 | [可见性门控 Agent 终端回放](https://giraffe-tree.github.io/awesome-web-effects/#visibility-gated-agent-terminal-replay) | [Motion](https://github.com/motiondivision/motion) | **93/100** | [Poolside](https://poolside.ai/) | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#visibility-gated-agent-terminal-replay) |
 | [音轨卡播放态协同切换](https://giraffe-tree.github.io/awesome-web-effects/#track-card-play-state-handoff) | [Motion](https://github.com/motiondivision/motion) | **84/100** | [Udio](https://www.udio.com/) | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#track-card-play-state-handoff) |
 | [按住输入的房间场景助手](https://giraffe-tree.github.io/awesome-web-effects/#interactive-vector-state-machine) | [Motion](https://github.com/motiondivision/motion) | **94/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#interactive-vector-state-machine) |
-| [图像取色环境色转场](https://giraffe-tree.github.io/awesome-web-effects/#image-palette-ambient-color-transition) | [p5.js](https://github.com/processing/p5.js) | **92/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#image-palette-ambient-color-transition) |
+| [真人留存的图像像素氛围](https://giraffe-tree.github.io/awesome-web-effects/#image-palette-ambient-color-transition) | [p5.js](https://github.com/processing/p5.js) | **100/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#image-palette-ambient-color-transition) |
 | [BlurHash 到照片渐进揭示](https://giraffe-tree.github.io/awesome-web-effects/#blurhash-to-photo-progressive-reveal) | [p5.js](https://github.com/processing/p5.js) | **88/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#blurhash-to-photo-progressive-reveal) |
 | [港湾艺术区折叠步行地图](https://giraffe-tree.github.io/awesome-web-effects/#kinetic-paper-fold-map) | [p5.js](https://github.com/processing/p5.js) | **100/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#kinetic-paper-fold-map) |
 | [Harbor Hall 座席放票核验](https://giraffe-tree.github.io/awesome-web-effects/#spring-loaded-split-flap-counter) | [Motion](https://github.com/motiondivision/motion) | **100/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/#spring-loaded-split-flap-counter) |
@@ -282,7 +282,7 @@
 - 150 个已核验预览：2 个官方素材、148 个可运行本地 Demo 录制；缺失数为 0。
 - 人工评审覆盖创意、艺术完成度、动效编排、效果辨识、创作迁移和证据质量。
 - 准入要求 80/100，并同时通过核心维度最低分；流行度不能覆盖质量门槛。
-- 已核验 GIF 总计 24.42 MiB；每个预览为 320×180、最长三秒且小于 1 MiB。
+- 已核验 GIF 总计 24.07 MiB；每个预览为 320×180、最长三秒且小于 1 MiB。
 - Stars 是 2026-07-20 快照；“推荐实现”与“在哪家 AI 官网观察到”始终是两种关系。
 
 继续阅读 [396 个候选的准入审计](research/demo-admission-audit-2026-07-20.md)、[100 家 AI 公司主页特效调研](research/ai-native-homepages-100.md)与[预览来源清单](demo/gifs/provenance.json)。

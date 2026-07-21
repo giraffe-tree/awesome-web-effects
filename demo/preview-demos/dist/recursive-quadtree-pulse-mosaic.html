@@ -1,7 +1,370 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p5.js — Recursive Quadtree Pulse Mosaic</title><style>:root{--preview-background:#13100d}.a2-stage{background:#13100d;color:#fff8e8}.p5-host{position:absolute;inset:0;cursor:zoom-in;touch-action:none}.p5-host canvas{width:100%!important;height:100%!important}.copy{position:absolute;z-index:3;left:14px;top:48px;width:98px;pointer-events:none}.copy h1{margin:0;font:950 18px/.86 system-ui;letter-spacing:-.06em}.copy p{margin:9px 0 0;color:#ffc554;font:750 6px/1.4 ui-monospace;letter-spacing:.09em;text-transform:uppercase}.scene-caption{display:none}</style>  <script type="module" crossorigin src="./assets/recursive-quadtree-pulse-mosaic-DpiXQFfS.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
-  <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
-  <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
-  <link rel="modulepreload" crossorigin href="./assets/expansion-a2-utils-DN2D_StR.js">
-  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage a2-stage"><div class="p5-host" data-p5-host tabindex="0" aria-label="Move the pointer to recursively subdivide the mosaic"></div><section class="copy"><h1>DETAIL APPEARS WHERE YOU LOOK.</h1><p>recursive focus / four-way split</p></section><span class="library-badge">p5.js · quadtree mosaic</span></main></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>p5.js — Human-directed Quadtree Survey LOD</title>
+    <style>
+      :root {
+        --preview-background: #061213;
+        color-scheme: dark;
+      }
+
+      button { font: inherit; }
+
+      .survey-stage {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        background: #061213;
+        color: #f4f0de;
+        cursor: crosshair;
+        outline: none;
+        touch-action: none;
+        user-select: none;
+      }
+
+      .survey-stage:focus-visible {
+        box-shadow: inset 0 0 0 2px #f0bd63;
+      }
+
+      .canvas-host,
+      .canvas-host canvas,
+      .map-grade,
+      .map-grid {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .canvas-host,
+      .map-grade,
+      .map-grid { pointer-events: none; }
+
+      .map-grade {
+        z-index: 2;
+        background:
+          linear-gradient(180deg, #0310107d 0%, transparent 25%, transparent 64%, #031010ca 100%),
+          linear-gradient(90deg, #0310107a 0%, transparent 25%, transparent 77%, #03101066 100%);
+      }
+
+      .map-grid {
+        z-index: 3;
+        opacity: .12;
+        background-image:
+          linear-gradient(#d8efe820 1px, transparent 1px),
+          linear-gradient(90deg, #d8efe820 1px, transparent 1px);
+        background-size: 24px 24px;
+        mix-blend-mode: screen;
+      }
+
+      .topbar {
+        position: absolute;
+        z-index: 7;
+        top: 11px;
+        left: 12px;
+        right: 12px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 10px;
+        pointer-events: none;
+      }
+
+      .identity {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+      }
+
+      .identity-mark {
+        display: grid;
+        width: 23px;
+        height: 23px;
+        place-items: center;
+        flex: 0 0 auto;
+        border: 1px solid #e8f1d86e;
+        border-radius: 50%;
+        background: #041112a8;
+        color: #f0bd63;
+        font: 900 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        backdrop-filter: blur(8px);
+      }
+
+      .identity-copy strong,
+      .identity-copy span {
+        display: block;
+        text-transform: uppercase;
+      }
+
+      .identity-copy strong {
+        font: 900 6px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .14em;
+      }
+
+      .identity-copy span {
+        margin-top: 4px;
+        color: #dbe6d4b3;
+        font: 750 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .12em;
+      }
+
+      .survey-stage .library-badge {
+        position: static;
+        max-width: 138px;
+        padding: 5px 7px;
+        border-color: #e8f1d83b;
+        background: #041112a8;
+        color: #eef3e6;
+        font: 850 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .12em;
+        white-space: nowrap;
+      }
+
+      .signal-rail {
+        position: absolute;
+        z-index: 6;
+        top: 48px;
+        left: 12px;
+        display: grid;
+        gap: 5px;
+        pointer-events: none;
+      }
+
+      .signal {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        color: #e8edddb8;
+        font: 800 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+      }
+
+      .signal::before {
+        width: 8px;
+        height: 2px;
+        border-radius: 2px;
+        background: var(--signal-color);
+        box-shadow: 0 0 7px var(--signal-color);
+        content: "";
+      }
+
+      .interaction-hint {
+        position: absolute;
+        z-index: 6;
+        top: 48px;
+        right: 12px;
+        max-width: 112px;
+        color: #e0e7d7b0;
+        font: 760 4px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .08em;
+        text-align: right;
+        text-transform: uppercase;
+        pointer-events: none;
+      }
+
+      .bottom-panel {
+        position: absolute;
+        z-index: 8;
+        left: 12px;
+        right: 12px;
+        bottom: 10px;
+        display: grid;
+        grid-template-columns: minmax(92px, 1fr) auto auto;
+        align-items: end;
+        gap: 10px;
+        pointer-events: none;
+      }
+
+      .frame-title { min-width: 0; }
+
+      .frame-title .eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: #f2c46d;
+        font: 900 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .15em;
+        text-transform: uppercase;
+      }
+
+      .frame-title .eyebrow::before {
+        width: 14px;
+        height: 2px;
+        background: #edb356;
+        box-shadow: 0 0 8px #edb356;
+        content: "";
+      }
+
+      .frame-title h1 {
+        overflow: hidden;
+        margin: 5px 0 0;
+        font: 650 clamp(15px, 4vw, 32px)/.88 Georgia, "Times New Roman", serif;
+        letter-spacing: -.05em;
+        text-overflow: ellipsis;
+        text-wrap: nowrap;
+      }
+
+      .measurement-grid {
+        display: grid;
+        grid-template-columns: repeat(3, auto);
+        align-items: end;
+        background: #0411124d;
+        backdrop-filter: blur(7px);
+      }
+
+      .measurement {
+        min-width: 48px;
+        padding: 7px 8px 6px;
+        border-left: 1px solid #e8f1d838;
+      }
+
+      .measurement span,
+      .measurement strong {
+        display: block;
+        white-space: nowrap;
+        text-transform: uppercase;
+      }
+
+      .measurement span {
+        color: #cad6c9;
+        font: 800 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .12em;
+      }
+
+      .measurement strong {
+        margin-top: 5px;
+        color: #fff7e2;
+        font: 900 7px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .035em;
+      }
+
+      .lod-controls {
+        display: flex;
+        align-items: center;
+        align-self: end;
+        gap: 3px;
+        padding: 3px;
+        border: 1px solid #e8f1d83d;
+        border-radius: 999px;
+        background: #041112ad;
+        pointer-events: auto;
+        backdrop-filter: blur(9px);
+      }
+
+      .lod-control {
+        min-width: 34px;
+        padding: 6px 7px;
+        border: 0;
+        border-radius: 999px;
+        background: transparent;
+        color: #d9e4d6;
+        font: 900 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+
+      .lod-control:hover,
+      .lod-control:focus-visible {
+        background: #f2e7c9;
+        color: #10201e;
+        outline: none;
+      }
+
+      .runtime-ledger {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        clip-path: inset(50%);
+        white-space: nowrap;
+      }
+
+      @media (max-width: 420px), (max-height: 220px) {
+        .interaction-hint { display: none; }
+        .frame-title { display: none; }
+        .bottom-panel { grid-template-columns: 1fr auto; }
+        .measurement { min-width: 43px; }
+      }
+
+      @media (max-width: 230px), (max-height: 112px) {
+        .topbar { top: 5px; left: 6px; right: 6px; }
+        .identity-mark { width: 15px; height: 15px; font-size: 3px; }
+        .identity-copy strong,
+        .identity-copy span,
+        .survey-stage .library-badge { font-size: 3px; letter-spacing: .09em; }
+        .signal-rail { top: 28px; left: 6px; gap: 3px; }
+        .signal { font-size: 3px; }
+        .bottom-panel { left: 6px; right: 6px; bottom: 5px; gap: 4px; }
+        .measurement { min-width: 28px; padding: 3px 4px; }
+        .measurement:nth-child(3) { display: none; }
+        .measurement span { font-size: 3px; }
+        .measurement strong { margin-top: 3px; font-size: 4px; }
+        .lod-controls { padding: 2px; }
+        .lod-control { min-width: 22px; padding: 4px; font-size: 3px; }
+        .lod-control[data-lod-action="reset"] { display: none; }
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/recursive-quadtree-pulse-mosaic-D34WDAv_.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
+    <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
+    <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
+    <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+  </head>
+  <body>
+    <main
+      id="survey-stage"
+      class="preview-stage survey-stage"
+      tabindex="0"
+      role="application"
+      aria-label="Interactive satellite map level-of-detail inspection. Move or drag the scan focus, use arrow keys to move it, plus and minus to change detail, or Home to reset."
+      data-preview-mechanism="p5-pixel-sampled-quadtree-lod-inspection"
+    >
+      <div class="canvas-host" data-canvas-host aria-hidden="true"></div>
+      <div class="map-grade" aria-hidden="true"></div>
+      <div class="map-grid" aria-hidden="true"></div>
+
+      <header class="topbar">
+        <div class="identity">
+          <div class="identity-mark" aria-hidden="true">QT</div>
+          <div class="identity-copy">
+            <strong>Watershed Survey / 07</strong>
+            <span>Fictional multispectral source</span>
+          </div>
+        </div>
+        <span class="library-badge">p5.js · adaptive LOD</span>
+      </header>
+
+      <div class="signal-rail" aria-hidden="true">
+        <span class="signal" style="--signal-color:#85e1d1">terrain</span>
+        <span class="signal" style="--signal-color:#e9bc61">dry anomaly</span>
+        <span class="signal" style="--signal-color:#73b8d0">water</span>
+      </div>
+
+      <div class="interaction-hint" aria-hidden="true">Move to inspect · drag to scan<br />Arrows move · + / − changes LOD</div>
+
+      <section class="bottom-panel" aria-label="Survey reading and LOD controls">
+        <div class="frame-title">
+          <span class="eyebrow">Adaptive tile review</span>
+          <h1>Detail follows evidence.</h1>
+        </div>
+        <div class="measurement-grid" aria-live="polite">
+          <div class="measurement"><span>Tiles</span><strong data-reading="tiles">—</strong></div>
+          <div class="measurement"><span>Max LOD</span><strong data-reading="depth">—</strong></div>
+          <div class="measurement"><span>Signal</span><strong data-reading="signal">—</strong></div>
+        </div>
+        <div class="lod-controls" aria-label="Map detail controls">
+          <button class="lod-control" type="button" data-lod-action="less" aria-label="Reduce level of detail">−</button>
+          <button class="lod-control" type="button" data-lod-action="more" aria-label="Increase level of detail">+</button>
+          <button class="lod-control" type="button" data-lod-action="reset">Reset</button>
+        </div>
+      </section>
+
+      <output class="runtime-ledger" aria-hidden="true" data-runtime-ledger></output>
+    </main>
+  </body>
+</html>

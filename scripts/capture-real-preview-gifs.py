@@ -2499,6 +2499,36 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.move(240, 95)
             elif index == 16:
                 page.mouse.up()
+        elif demo["id"] == "recursive-quadtree-pulse-mosaic":
+            if index == 3:
+                page.mouse.move(226, 68)
+            elif index == 6:
+                page.mouse.down()
+            elif index == 7:
+                page.mouse.move(205, 79, steps=2)
+            elif index == 8:
+                page.mouse.move(180, 91, steps=2)
+            elif index == 9:
+                page.mouse.move(151, 106, steps=2)
+            elif index == 10:
+                page.mouse.move(121, 119, steps=2)
+            elif index == 11:
+                page.mouse.move(91, 108, steps=2)
+            elif index == 12:
+                page.mouse.up()
+            elif index == 16:
+                page.locator('[data-lod-action="more"]').click()
+            elif index == 20:
+                page.locator("#survey-stage").focus()
+                page.keyboard.press("ArrowRight")
+            elif index == 21:
+                page.keyboard.press("ArrowUp")
+            elif index == 24:
+                page.keyboard.press("-")
+            elif index == 27:
+                page.keyboard.press("Home")
+            elif index == 31:
+                page.mouse.move(167, 73)
         elif demo["id"] == "poisson-constellation-bloom":
             if index == 2:
                 page.mouse.move(170, 92)
@@ -8001,6 +8031,90 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or not interaction["ready"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture trusted CLEAR-to-DIVERT-to-CLEAR terminal egress routing, exact source-pixel risk evidence, finite boid steps, and a retained full-stage result without automatic simulation: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "recursive-quadtree-pulse-mosaic":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["mechanism"] != "p5-pixel-sampled-quadtree-lod-inspection"
+            or interaction["causality"] != "trusted-human-input-only"
+            or interaction["automaticPlayback"]
+            or interaction["automaticCycle"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["trustedInputCount"] < 15
+            or interaction["pointerDownCount"] != 1
+            or interaction["pointerUpCount"] != 1
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerReleaseCount"] != 1
+            or interaction["pointerCaptured"]
+            or interaction["activePointerId"] is not None
+            or interaction["pointerMoveCount"] < 7
+            or interaction["dragMoveCount"] < 5
+            or interaction["hoverMoveCount"] < 2
+            or interaction["keyboardCount"] != 4
+            or interaction["controlCount"] != 1
+            or interaction["resetCount"] != 1
+            or interaction["visualRevision"] < 15
+            or not interaction["topologyChangedByHuman"]
+            or interaction["lastInputTrusted"] is not True
+            or interaction["lastInputKind"] != "pointer-hover"
+            or interaction["lastPointerType"] != "mouse"
+            or interaction["detailLevel"] != 2
+            or interaction["assetFetchCount"] != 1
+            or interaction["assetResponseStatus"] != 200
+            or not interaction["assetSameOrigin"]
+            or interaction["assetByteLength"] != 372834
+            or interaction["assetSha256"] != "c75158904bebaf28e77b7217e3b4bda5b40be4ba10e28c1879b04e98f2620151"
+            or not interaction["assetShaMatchesExpected"]
+            or not interaction["browserImageDecoded"]
+            or interaction["sourceNaturalWidth"] != 960
+            or interaction["sourceNaturalHeight"] != 640
+            or not interaction["p5ImageDecoded"]
+            or interaction["p5ImageClass"] != "p5.Image"
+            or interaction["p5ImageWidth"] != 960
+            or interaction["p5ImageHeight"] != 640
+            or interaction["p5ImagePixelLength"] != 2457600
+            or interaction["sampledWidth"] != 96
+            or interaction["sampledHeight"] != 54
+            or interaction["sampledPixelCount"] != 5184
+            or interaction["sampledByteLength"] != 20736
+            or len(interaction["sourcePixelSha256"]) != 64
+            or not interaction["sourcePixelSha256"].strip("0")
+            or interaction["distinctSampleColorCount"] <= 500
+            or interaction["maximumLuma"] - interaction["minimumLuma"] <= 140
+            or interaction["averageTexture"] <= 10
+            or interaction["maximumTexture"] <= 60
+            or interaction["textureCellCount"] <= 500
+            or interaction["waterPixelCount"] <= 300
+            or interaction["vegetationPixelCount"] <= 500
+            or interaction["dryPixelCount"] <= 100
+            or interaction["brightPixelCount"] <= 30
+            or interaction["classificationChecksum"] <= 0
+            or interaction["rootCount"] != 1
+            or interaction["leafCount"] <= 100
+            or interaction["totalNodeCount"] != interaction["internalNodeCount"] + interaction["leafCount"]
+            or interaction["childLinkCount"] != interaction["internalNodeCount"] * 4
+            or interaction["leafCount"] != interaction["internalNodeCount"] * 3 + 1
+            or sum(interaction["depthHistogram"]) != interaction["leafCount"]
+            or interaction["leafCoveragePixels"] != 5184
+            or interaction["leafCoverageRatio"] != 1
+            or interaction["overlapOrGapCount"] != 0
+            or interaction["maximumTreeDepth"] < 3
+            or interaction["pixelDrivenSplitCount"] <= 0
+            or interaction["focusDrivenSplitCount"] <= 0
+            or interaction["topologyChecksum"] <= 0
+            or not interaction["p5InstanceReady"]
+            or not interaction["p5CanvasReady"]
+            or interaction["p5CanvasWidth"] != 320
+            or interaction["p5CanvasHeight"] != 180
+            or interaction["completedDrawCount"] < 15
+            or not interaction["initialStaticConfirmed"]
+            or not interaction["ready"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a trusted full-stage coastal quadtree LOD review with exact source evidence, verified topology and a retained human-owned focus without automatic motion: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "poisson-constellation-bloom":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

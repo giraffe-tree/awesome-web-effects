@@ -1579,6 +1579,47 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("Shift+ArrowDown")
             elif index == 29:
                 page.keyboard.press("ArrowLeft")
+        elif demo["id"] == "kinetic-paper-fold-map":
+            if index == 1:
+                page.mouse.move(280, 100)
+            elif index == 2:
+                page.mouse.down()
+            elif index == 3:
+                page.mouse.move(230, 95, steps=3)
+            elif index == 4:
+                page.mouse.move(180, 95, steps=3)
+            elif index == 5:
+                page.mouse.move(130, 95, steps=3)
+            elif index == 6:
+                page.mouse.up()
+            elif index == 9:
+                page.locator('[data-destination="1"]').click()
+            elif index == 11:
+                page.locator('[data-destination="2"]').click()
+            elif index == 13:
+                page.locator('[data-destination="0"]').click()
+            elif index == 15:
+                page.locator('[data-fold="open"]').click()
+            elif index == 18:
+                page.locator("#expansion-stage").focus()
+                page.keyboard.press("End")
+            elif index == 20:
+                page.keyboard.press("ArrowLeft")
+            elif index == 22:
+                page.keyboard.press("ArrowRight")
+            elif index == 24:
+                page.keyboard.press("2")
+            elif index == 26:
+                page.keyboard.press("3")
+            elif index == 28:
+                page.keyboard.press("Home")
+            elif index == 30:
+                page.locator('[data-fold="folded"]').click()
+            elif index == 32:
+                page.locator('[data-fold="open"]').click()
+            elif index == 34:
+                page.locator("#expansion-stage").focus()
+                page.keyboard.press("1")
         elif demo["id"] == "cursor-heatmap-crystallization":
             if index == 1:
                 page.mouse.move(160, 90)
@@ -4106,6 +4147,80 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["lastInputTrusted"] is not True
         ):
             raise RuntimeError(f"{demo['id']} did not capture trusted slow/fast captured traces, keyboard sampling, reset, four unique decoded ImageGen frames, and a nonempty final visual-memory path: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "kinetic-paper-fold-map":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "human-folded-fictional-harbor-walking-map"
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["mechanism"] != "p5-canvas2d-four-panel-eight-affine-texture-triangle-fold"
+            or interaction["acceptedInputs"] != ["mouse", "touch", "pen", "keyboard", "visible-buttons"]
+            or not interaction["userInputRequired"]
+            or not interaction["strictTrustedInputGuard"]
+            or interaction["autoPlayback"]
+            or interaction["rehearsal"]
+            or interaction["fallback"]
+            or interaction["syntheticInput"]
+            or interaction["captureClockMutation"]
+            or interaction["inputCount"] < 24
+            or interaction["rejectedInputCount"] != 0
+            or interaction["inputCounts"]["pointerdown"] != 1
+            or interaction["inputCounts"]["pointermove"] < 9
+            or interaction["inputCounts"]["pointerup"] != 1
+            or interaction["inputCounts"]["mouse"] < 11
+            or interaction["inputCounts"]["touch"] != 0
+            or interaction["inputCounts"]["pen"] != 0
+            or interaction["inputCounts"]["keyboard"] != 7
+            or interaction["inputCounts"]["button"] != 6
+            or interaction["pointerCaptureCount"] != 1
+            or interaction["pointerReleaseCount"] != 1
+            or interaction["visualMutationCount"] < 22
+            or interaction["geometryMutationCount"] < 16
+            or interaction["destinationMutationCount"] < 6
+            or interaction["geometryMutationCount"] + interaction["destinationMutationCount"] != interaction["visualMutationCount"]
+            or interaction["fold"] != 0
+            or interaction["destination"] != 0
+            or interaction["dragging"]
+            or interaction["pointerId"] is not None
+            or interaction["pointerType"] != "mouse"
+            or interaction["firstInput"]["kind"] != "pointerdown"
+            or interaction["firstInput"]["trusted"] is not True
+            or interaction["lastInput"]["kind"] != "keydown-destination-1"
+            or interaction["lastInput"]["trusted"] is not True
+            or interaction["initialStill"]["fold"] != 0
+            or interaction["initialStill"]["destination"] != 0
+            or interaction["initialStill"]["inputCount"] != 0
+            or not interaction["asset"]["requested"]
+            or not interaction["asset"]["decoded"]
+            or not interaction["asset"]["sameOrigin"]
+            or interaction["asset"]["bytes"] != 267598
+            or interaction["asset"]["sha256"] != "21b5265a21ba86ce963df14d267875320c0d723d16761c3c5be37c36e4fbdafd"
+            or interaction["asset"]["width"] != 960
+            or interaction["asset"]["height"] != 540
+            or interaction["asset"]["pixelCount"] != 518400
+            or interaction["asset"]["rgbaBytes"] != 2073600
+            or interaction["asset"]["pixelFingerprint"] <= 0
+            or len(interaction["asset"]["samples"]) != 4
+            or len({tuple(sample[:3]) for sample in interaction["asset"]["samples"]}) != 4
+            or interaction["geometry"]["faceCount"] != 4
+            or interaction["geometry"]["triangleCount"] != 8
+            or interaction["geometry"]["sourceCoverage"] != 960
+            or not interaction["geometry"]["continuous"]
+            or interaction["geometry"]["maxSeamError"] >= 1e-6
+            or interaction["geometry"]["projectedWidth"] != interaction["geometry"]["flatWidth"]
+            or abs(interaction["geometry"]["foldAngle"]) >= 1e-6
+            or interaction["geometry"]["selectedPanel"] != 3
+            or interaction["geometry"]["selectedPanel"] != interaction["geometry"]["expectedSelectedPanel"]
+            or interaction["geometry"]["landmarkPanels"] != interaction["geometry"]["expectedLandmarkPanels"]
+            or not interaction["geometry"]["landmarkPointsVisible"]
+            or not interaction["geometry"]["selectedPointVisible"]
+            or not interaction["geometry"]["routeOriginVisible"]
+            or interaction["geometry"]["canvasWidth"] != 320
+            or interaction["geometry"]["canvasHeight"] != 180
+            or interaction["renderCount"] < 20
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a trusted captured fold, destination controls, keyboard reversibility, four continuous textured faces, eight affine triangles, and registered landmarks over the verified local map: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "cursor-heatmap-crystallization":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

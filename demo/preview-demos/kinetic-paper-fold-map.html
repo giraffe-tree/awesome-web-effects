@@ -1,1 +1,48 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p5.js — Kinetic Paper-fold Map</title><link rel="stylesheet" href="./shared.css"><style>:root{--preview-background:#ed5944;color-scheme:light}.expansion-stage{position:absolute;inset:0;overflow:hidden;cursor:pointer}.expansion-stage canvas{display:block}.library-badge{color:#21150f;background:#ffe8cbd8;border-color:#21150f22}.scene-caption{color:#2d181186}</style></head><body><main class="preview-stage"><div class="expansion-stage" id="expansion-stage" data-preview-mechanism="p5-paper-fold" tabindex="0" aria-label="Move or click to fold the kinetic paper map"></div><span class="library-badge">p5.js · folded geometry</span><span class="scene-caption">a flat map becomes a directional paper instrument</span></main><script type="module" src="./src/kinetic-paper-fold-map-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>p5.js — Kinetic Paper-fold Map</title>
+    <link rel="stylesheet" href="./shared.css">
+    <style>
+      :root { --preview-background: #071923; color-scheme: dark; }
+      .map-stage { position: absolute; inset: 0; overflow: hidden; background: #071923; outline: none; touch-action: none; user-select: none; cursor: ew-resize; }
+      .map-stage canvas { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; display: block; }
+      .map-stage:focus-visible::after { content: ""; position: absolute; inset: 3px; z-index: 8; border: 1px solid #f7e8c6; border-radius: 12px; pointer-events: none; }
+      .map-stage .library-badge { top: 7px; left: 8px; z-index: 6; color: #f8ead0; background: #071923d9; border-color: #f8ead04d; box-shadow: 0 5px 18px #07192340; }
+      .destination-controls, .fold-controls { position: absolute; z-index: 6; display: flex; gap: 4px; }
+      .destination-controls { top: 7px; right: 8px; }
+      .fold-controls { left: 8px; bottom: 7px; }
+      .map-control { min-width: 0; height: 23px; padding: 0 8px; border: 1px solid #f8ead070; border-radius: 999px; background: #071923d9; color: #f8ead0; font: 800 7px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; backdrop-filter: blur(8px); }
+      .map-control:hover, .map-control:focus-visible { border-color: #f8ead0; outline: none; }
+      .map-control[aria-pressed="true"] { color: #071923; background: #f7e8c6; border-color: #f7e8c6; }
+      .route-status { position: absolute; right: 9px; bottom: 10px; z-index: 6; max-width: 42%; color: #f8ead0; font: 800 7px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .08em; text-align: right; text-transform: uppercase; text-shadow: 0 1px 5px #071923; pointer-events: none; }
+      @media (max-width: 200px), (max-height: 100px) {
+        .map-stage .library-badge { top: 3px; left: 3px; padding: 3px 4px; font-size: 5px; letter-spacing: .03em; }
+        .destination-controls { top: 3px; right: 3px; gap: 2px; }
+        .fold-controls { left: 3px; bottom: 3px; gap: 2px; }
+        .map-control { height: 14px; padding: 0 4px; font-size: 5px; letter-spacing: .03em; }
+        .route-status { right: 3px; bottom: 5px; font-size: 5px; letter-spacing: .03em; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="preview-stage">
+      <section class="map-stage" id="expansion-stage" data-preview-mechanism="p5-texture-mapped-paper-fold" tabindex="0" aria-label="Portable harbor map. Drag left or right to fold and unfold. Use arrow keys, Home, End, Enter, or the visible controls. Press 1, 2, or 3 to select a destination.">
+        <span class="library-badge">p5.js · live map fold</span>
+        <nav class="destination-controls" aria-label="Choose destination">
+          <button class="map-control" type="button" data-destination="0" aria-pressed="true">Hall</button>
+          <button class="map-control" type="button" data-destination="1" aria-pressed="false">Look</button>
+          <button class="map-control" type="button" data-destination="2" aria-pressed="false">Dome</button>
+        </nav>
+        <div class="fold-controls" aria-label="Fold controls">
+          <button class="map-control" type="button" data-fold="open" aria-pressed="true">Open</button>
+          <button class="map-control" type="button" data-fold="folded" aria-pressed="false">Fold</button>
+        </div>
+        <output class="route-status" id="route-status" aria-live="polite">Hall · open</output>
+      </section>
+    </main>
+    <script type="module" src="./src/kinetic-paper-fold-map-demo.js"></script>
+  </body>
+</html>

@@ -119,7 +119,7 @@ Page transitions, FLIP motion, filtering, packing, and animated reflow.
 | [Layered staggered full-screen menu](https://giraffe-tree.github.io/awesome-web-effects/#layered-staggered-full-screen-menu) | [Motion](https://github.com/motiondivision/motion) | **94/100** | — | 32,819 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#layered-staggered-full-screen-menu) |
 | [Clip-shape theme reveal](https://giraffe-tree.github.io/awesome-web-effects/#clip-shape-theme-reveal) | [Motion](https://github.com/motiondivision/motion) | **93/100** | — | 32,819 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#clip-shape-theme-reveal) |
 | [Orbital card constellation](https://giraffe-tree.github.io/awesome-web-effects/#orbital-card-constellation) | [p5.js](https://github.com/processing/p5.js) | **94/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#orbital-card-constellation) |
-| [Accordion image slices](https://giraffe-tree.github.io/awesome-web-effects/#accordion-image-slices) | [p5.js](https://github.com/processing/p5.js) | **95/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#accordion-image-slices) |
+| [Tidal Gallery accordion proof](https://giraffe-tree.github.io/awesome-web-effects/#accordion-image-slices) | [p5.js](https://github.com/processing/p5.js) | **100/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#accordion-image-slices) |
 | [Accordion depth tunnel navigation](https://giraffe-tree.github.io/awesome-web-effects/#accordion-depth-tunnel-navigation) | [Motion](https://github.com/motiondivision/motion) | **96/100** | — | 32,819 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/#accordion-depth-tunnel-navigation) |
 
 <a id="pointer"></a>
@@ -282,7 +282,7 @@ Scene graphs, creative coding, physics, drawing tools, and 2D renderers.
 - 150 verified previews: 2 official captures and 148 captures from runnable local demos; 0 missing.
 - Human review scores creativity, art direction, motion craft, legibility, creative transfer and evidence quality.
 - Admission requires 80/100 plus core-dimension minimums. Popularity never overrides the gate.
-- The verified GIF set is 24.58 MiB; every preview is 320×180, at most three seconds and below 1 MiB.
+- The verified GIF set is 24.68 MiB; every preview is 320×180, at most three seconds and below 1 MiB.
 - Stars are a 2026-07-20 snapshot. Recommendation sources and observed AI homepages remain separate relationships.
 
 Read the [current 396-candidate admission audit](research/demo-admission-audit-2026-07-20.md), the [100-company homepage research](research/ai-native-homepages-100.md), and the [preview provenance manifest](demo/gifs/provenance.json).

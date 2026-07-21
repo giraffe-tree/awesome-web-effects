@@ -1,1 +1,107 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p5.js — Accordion Image Slices</title><link rel="stylesheet" href="./shared.css"><style>:root{--preview-background:#efe9d9;color-scheme:light}.expansion-stage{position:absolute;inset:0;overflow:hidden;cursor:col-resize}.expansion-stage canvas{display:block}.library-badge{color:#191814;background:#fff9e9d9;border-color:#19181422}.scene-caption{color:#24231c82}</style></head><body><main class="preview-stage"><div class="expansion-stage" id="expansion-stage" data-preview-mechanism="p5-accordion-slices" tabindex="0" aria-label="Move the pointer to open the accordion image slices"></div><span class="library-badge">p5.js · accordion slicing</span><span class="scene-caption">one image flexes into alternating editorial planes</span></main><script type="module" src="./src/accordion-image-slices-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>p5.js — Tidal Gallery Accordion Proof</title>
+    <link rel="stylesheet" href="./shared.css">
+    <style>
+      :root { --preview-background: #07131a; color-scheme: dark; }
+      .preview-stage { background: #07131a; }
+      #accordion-canvas {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+        cursor: ew-resize;
+        touch-action: none;
+        outline: none;
+      }
+      #accordion-canvas:focus-visible { outline: 2px solid #ffbd5a; outline-offset: -5px; }
+      .proof-copy {
+        position: absolute;
+        z-index: 5;
+        left: 4.375%;
+        top: 27%;
+        width: 29%;
+        color: #f2ede2;
+        pointer-events: none;
+      }
+      .proof-copy small {
+        display: block;
+        color: #77a8ff;
+        font: 850 clamp(5px,1.875vw,13px)/1 ui-monospace, monospace;
+        letter-spacing: .16em;
+      }
+      .proof-copy h1 {
+        margin: clamp(7px,2.3vw,17px) 0 0;
+        font: 950 clamp(10px,5.3vw,38px)/.86 system-ui, sans-serif;
+        letter-spacing: -.055em;
+      }
+      .proof-copy p {
+        margin: clamp(7px,2.2vw,16px) 0 0;
+        color: rgba(226,236,237,.62);
+        font: 750 clamp(4px,1.55vw,11px)/1.45 ui-monospace, monospace;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+      }
+      .open-readout {
+        position: absolute;
+        z-index: 6;
+        top: 7.2%;
+        right: 3.75%;
+        color: #f6bd66;
+        font: 850 clamp(5px,1.875vw,13px)/1 ui-monospace, monospace;
+        letter-spacing: .1em;
+        pointer-events: none;
+      }
+      .library-badge {
+        top: 5.5%;
+        left: 4.375%;
+        padding: clamp(3px,1vw,7px) clamp(5px,1.6vw,12px);
+        color: #eef5f3;
+        background: rgba(7,19,26,.74);
+        border-color: rgba(220,236,233,.18);
+        font-size: clamp(5px,2.1vw,11px);
+      }
+      .scene-caption { display: none; }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0,0,0,0);
+        white-space: nowrap;
+        border: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="preview-stage" id="accordion-stage" data-preview-mechanism="p5-image-sampled-accordion-proof">
+      <canvas
+        id="accordion-canvas"
+        tabindex="0"
+        role="slider"
+        aria-label="Accordion-mounted exhibition photograph opening"
+        aria-describedby="accordion-instructions"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        aria-valuenow="38"
+        aria-valuetext="Accordion proof 38 percent open"
+      ></canvas>
+      <section class="proof-copy" aria-hidden="true">
+        <small>EXHIBITION PROOF / 09</small>
+        <h1>OPEN<br>THE<br>PRINT.</h1>
+        <p>Press + drag<br>Arrows adjust</p>
+      </section>
+      <p class="sr-only" id="accordion-instructions">Press and drag horizontally to open or close the nine image slices. Use the left and right arrow keys for smaller adjustments, Home to close, or End to open fully.</p>
+      <output class="open-readout" id="open-readout" aria-live="polite">FOLD 38%</output>
+      <span class="library-badge">p5.js · live image folds</span>
+      <span class="scene-caption">real local photograph → nine sampled panels → human-controlled accordion</span>
+    </main>
+    <script type="module" src="./src/accordion-image-slices-demo.js"></script>
+  </body>
+</html>

@@ -1579,6 +1579,46 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("Shift+ArrowDown")
             elif index == 29:
                 page.keyboard.press("ArrowLeft")
+        elif demo["id"] == "accordion-image-slices":
+            if index == 2:
+                page.mouse.move(95, 94)
+                page.mouse.down()
+            elif index == 3:
+                page.mouse.move(178, 94, steps=4)
+            elif index == 4:
+                page.mouse.move(296, 94, steps=4)
+            elif index == 5:
+                page.mouse.up()
+            elif index == 8:
+                page.mouse.move(288, 104)
+                page.mouse.down()
+            elif index == 9:
+                page.mouse.move(176, 104, steps=4)
+            elif index == 10:
+                page.mouse.move(46, 104, steps=4)
+            elif index == 11:
+                page.mouse.up()
+            elif index == 13:
+                page.locator('#accordion-canvas').focus()
+                page.keyboard.press("End")
+            elif index == 15:
+                page.keyboard.press("Home")
+            elif index == 17:
+                page.keyboard.press("PageUp")
+            elif index == 19:
+                page.keyboard.press("ArrowRight")
+            elif index == 21:
+                page.keyboard.press("PageUp")
+            elif index == 23:
+                page.keyboard.press("End")
+            elif index == 26:
+                page.keyboard.press("ArrowLeft")
+            elif index == 28:
+                page.keyboard.press("Home")
+            elif index in (30, 32):
+                page.keyboard.press("PageUp")
+            elif index == 34:
+                page.keyboard.press("End")
         elif demo["id"] == "collision-reactive-3d-physics-stack":
             if index == 1:
                 page.locator('[data-payload="fragile"]').click()
@@ -3804,6 +3844,72 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["lastInputTrusted"] is not True
         ):
             raise RuntimeError(f"{demo['id']} did not capture trusted slow/fast captured traces, keyboard sampling, reset, four unique decoded ImageGen frames, and a nonempty final visual-memory path: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "accordion-image-slices":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-exhibition-accordion-proof"
+            or interaction["mechanism"] != "p5-canvas-nine-slice-local-raster-accordion"
+            or interaction["acceptedInputs"] != ["mouse", "touch", "pen", "keyboard"]
+            or not interaction["userInputRequired"]
+            or not interaction["strictTrustedInputGuard"]
+            or interaction["automaticPath"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticFallback"]
+            or interaction["previewClockDriven"]
+            or interaction["previewClockMutation"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["sliceCount"] != 9
+            or interaction["initialOpen"] != .38
+            or interaction["open"] != 1
+            or not interaction["initialStillVerified"]
+            or not interaction["ready"]
+            or not interaction["listenersBound"]
+            or interaction["activePointerId"] is not None
+            or interaction["activePointerType"] != "none"
+            or interaction["pointerCaptured"]
+            or interaction["inputCount"] < 30
+            or interaction["inputCount"] != interaction["trustedInputCount"]
+            or interaction["rejectedUntrustedCount"] != 0
+            or interaction["pointerDownCount"] != 2
+            or interaction["pointerMoveCount"] < 16
+            or interaction["pointerReleaseCount"] != 2
+            or interaction["pointerCancelCount"] != 0
+            or interaction["pointerCaptureCount"] != 2
+            or interaction["pointerCaptureReleaseCount"] != 2
+            or interaction["keyboardInputCount"] < 10
+            or interaction["openMutationCount"] < 25
+            or interaction["humanOpenMutationCount"] != interaction["openMutationCount"]
+            or interaction["nonInputOpenMutationCount"] != 0
+            or interaction["lastInputKind"] != "keyboard"
+            or interaction["lastInputSource"] != "keyboard-End"
+            or interaction["lastInputTrusted"] is not True
+            or len(interaction["inputRecords"]) < 25
+            or interaction["assetFetchCount"] != 1
+            or interaction["assetFetchStatus"] != 200
+            or "image/jpeg" not in interaction["assetMimeType"]
+            or interaction["assetByteLength"] != 161328
+            or not interaction["assetDecoded"]
+            or interaction["assetDecodeCount"] != 1
+            or interaction["assetNaturalWidth"] != 960
+            or interaction["assetNaturalHeight"] != 640
+            or interaction["assetSha256"] != "220ad04c64ee1b8d8266e62aa93c16819406d7082956595f4fce6fffb34be0b5"
+            or not interaction["assetChecksumVerified"]
+            or interaction["sampledPixelCount"] != 6144
+            or interaction["sourcePixelChecksum"] <= 0
+            or not interaction["p5CanvasCreated"]
+            or interaction["p5DrawCount"] < 20
+            or interaction["imageDrawCalls"] < 180
+            or interaction["lastDrawnAssetSha256"] != interaction["assetSha256"]
+            or interaction["renderedSampleCount"] <= 1000
+            or interaction["renderedPixelChecksum"] <= 0
+            or interaction["renderedLuminanceRange"] <= 80
+            or interaction["previewRenderCalls"] < 30
+            or interaction["layout"]["width"] != 320
+            or interaction["layout"]["height"] != 180
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture two opposed trusted accordion drags, exact keyboard endpoints, nine continuous image-sampled folds, verified local ImageGen pixels, pointer capture accounting, and zero automatic or preview-clock mutation: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "curved-3d-text-orbit":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

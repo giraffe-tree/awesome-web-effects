@@ -2750,6 +2750,11 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("ArrowUp")
             elif index == 33:
                 page.locator('[data-action="reset"]').click()
+        elif demo["id"] == "traveling-dot-headline-rewriter":
+            if index == 4:
+                page.locator('[data-revision="shared-clarity"]').click()
+            elif index == 24:
+                page.locator('#undo-revision').click()
         elif demo["id"] == "poisson-constellation-bloom":
             if index == 2:
                 page.mouse.move(170, 92)
@@ -9099,6 +9104,55 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["currentVisualChecksum"] != interaction["initialVisualChecksum"]
         ):
             raise RuntimeError(f"{demo['id']} did not capture a trusted full-stage pixel-derived material weave specification with four distinct structures, commit/undo/reset, strict control separation and no automatic motion: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "traveling-dot-headline-rewriter":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "human-approved-headline-revision-with-finite-spatial-marker"
+            or interaction["claimedLibrary"] != "motion@12.42.2"
+            or interaction["mechanism"] != "measured-spatial-marker-erases-current-copy-visits-the-selected-revision-and-writes-the-approved-copy"
+            or interaction["assetStrategy"] != "code-native-editorial-typography-no-functional-raster-input-required"
+            or interaction["acceptedInputs"] != ["trusted-pointer-click", "trusted-keyboard-activation", "escape-undo", "visible-revision-buttons", "visible-undo-button"]
+            or not interaction["userInputRequired"]
+            or not interaction["strictTrustedInputGuard"]
+            or not interaction["initialFrameStatic"]
+            or not interaction["initialStaticVerified"]
+            or interaction["automaticCycle"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticLoop"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["previewClockMutationBeforeInput"]
+            or not interaction["previewClockDrivesFiniteTransitionAfterInput"]
+            or interaction["inputCount"] != 2
+            or interaction["trustedInputCount"] != 2
+            or interaction["pointerInputCount"] != 2
+            or interaction["keyboardInputCount"] != 0
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["revisionSelectionCount"] != 1
+            or interaction["undoCount"] != 1
+            or interaction["transitionStartCount"] != 2
+            or interaction["transitionCompleteCount"] != 2
+            or interaction["textMutationCount"] != 2
+            or interaction["finiteTransitionStepCount"] < 20
+            or interaction["markerSeekCount"] < 40
+            or interaction["motionControlCreateCount"] < 6
+            or interaction["currentRevisionId"] != "source-v03"
+            or interaction["currentCopy"] != "without the noise."
+            or interaction["phase"] != "draft"
+            or interaction["transitionActive"]
+            or interaction["transitionProgress"] != 1
+            or interaction["lastInputTrusted"] is not True
+            or interaction["lastInputKind"] != "pointer"
+            or interaction["lastInputSource"] != "undo-button"
+            or not interaction["geometryValidated"]
+            or not interaction["markerWithinWorkspace"]
+            or not interaction["motionControlReady"]
+            or not interaction["ready"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture two trusted finite headline revision passes with retained copy, explicit undo, full-stage geometry and no automatic motion: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "poisson-constellation-bloom":
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")

@@ -166,8 +166,8 @@ export const reviewedDemoScores = {
     rationaleZh: '输入、真实选择态、覆盖替换和光标落位构成完整编辑语义，区别于普通打字机，短循环也能读懂行为。'
   },
   'traveling-dot-headline-rewriter': {
-    creativity: 19, artDirection: 18, motion: 20, clarity: 15, inspiration: 15, evidence: 10,
-    rationaleZh: '圆点是擦除与写入的可见因果主体，字符级方向、停顿和新词着色形成鲜明的标题级视觉签名。'
+    creativity: 20, artDirection: 20, motion: 20, clarity: 15, inspiration: 15, evidence: 10,
+    rationaleZh: '真人选择候选修订后，圆点沿实测字形与控件位置完成一次有限擦除、取回和写入；保留结果、显式撤销与静止首帧共同证明它是可用的文案审阅交互。'
   },
   'infinite-curved-text-conveyor': {
     creativity: 18, artDirection: 19, motion: 19, clarity: 15, inspiration: 15, evidence: 10,

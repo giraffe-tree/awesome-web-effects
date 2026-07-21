@@ -898,14 +898,14 @@ const expansionEffects = [
     rationaleZh: '输入、真实选择态、覆盖替换和光标落位构成完整编辑语义，区别于普通打字机，短循环也能读懂行为。'
   },
   {
-    id: 'traveling-dot-headline-rewriter', category: 'vector', name: 'Traveling-dot headline eraser-writer', nameZh: '旅行圆点擦写标题', order: 20,
+    id: 'traveling-dot-headline-rewriter', category: 'vector', name: 'Human-approved headline revision marker', nameZh: '人工确认的标题修订标记', order: 20,
     company: 'PolyAI', homepage: 'https://poly.ai/', observedAs: 'Traveling-dot headline eraser-writer',
-    difference: 'A spatial marker crosses measured glyph positions to erase the old word and write the new word in opposing directions instead of fading or scrambling text in place.',
-    behavior: { trigger: 'animation frame', response: 'A traveling dot erases one headline word and writes the next along its measured path', timing: 'bidirectional sequenced rewrite', layer: 'Headline typography' },
+    difference: 'A trusted revision choice sends one spatial marker across measured glyph and control positions to erase the current copy, collect the selected edit, and write the approved line.',
+    behavior: { trigger: 'trusted revision choice or explicit undo', response: 'The marker performs one finite erase, collect, and write pass before retaining the approved copy', timing: '950ms seekable transition after input only', layer: 'Editorial headline review workspace' },
     implementationName: 'Motion', projectId: 'motiondivision-motion', projectUrl: 'https://github.com/motiondivision/motion', referenceUrl: 'https://motion.dev/docs',
     snippet: "import { animate, stagger } from 'motion';\nanimate('.travel-dot', { x: [0, wordWidth] });\nanimate('.glyph', { opacity: [1, 0] }, { delay: stagger(.04) });",
-    scores: { creativity: 19, artDirection: 18, motion: 20, clarity: 15, inspiration: 15, evidence: 10 },
-    rationaleZh: '圆点是擦除与写入的可见因果主体，字符级方向、停顿和新词着色形成鲜明的标题级视觉签名。'
+    scores: { creativity: 20, artDirection: 20, motion: 20, clarity: 15, inspiration: 15, evidence: 10 },
+    rationaleZh: '它把抽象的标题特效改造成可决策的文案审阅台：真人选择一个候选修订后，圆点沿实测字形与按钮位置完成一次有限的擦除、取回与写入，结果会保留并可显式撤销；首帧和无输入时完全静止。'
   },
   {
     id: 'infinite-curved-text-conveyor', category: 'vector', name: 'Infinite curved text-path conveyor', nameZh: '无限曲线文字传送带', order: 21,

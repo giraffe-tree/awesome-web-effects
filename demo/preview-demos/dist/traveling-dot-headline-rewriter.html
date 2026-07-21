@@ -3,84 +3,376 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Motion — Traveling Dot Headline Rewriter</title>
+    <title>Motion — Headline Revision Marker</title>
     <style>
-      :root { --preview-background: #f2eeda; color-scheme: light; }
+      :root {
+        --preview-background: #eee9df;
+        color-scheme: light;
+      }
+
+      button { font: inherit; }
+
       .rewrite-stage {
+        display: grid;
+        grid-template-rows: auto minmax(0, 1fr);
+        gap: clamp(5px, 1.5vh, 10px);
+        padding: clamp(9px, 2.8vh, 20px) clamp(10px, 2.4vw, 18px) clamp(10px, 2.7vh, 19px);
         background:
-          radial-gradient(circle at 83% 18%, rgba(255, 94, 86, .25), transparent 30%),
-          linear-gradient(142deg, #f6f1dd, #e9e1c2 70%, #d7e4dd);
-        color: #171a18;
+          radial-gradient(circle at 88% 4%, rgba(207, 77, 43, .1), transparent 28%),
+          linear-gradient(135deg, #f4f0e8 0%, #e7e0d5 100%);
+        color: #17211e;
       }
-      .rewrite-stage::before {
-        content: "";
-        position: absolute;
-        inset: 18px;
-        border: 1px solid rgba(20, 26, 22, .14);
-        border-radius: 24px;
+
+      .review-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-width: 0;
+        padding-inline: 2px;
       }
-      .headline-kicker { position: absolute; left: 30px; top: 42px; font-size: 7px; font-weight: 900; letter-spacing: .16em; text-transform: uppercase; }
-      .headline-kicker::after { content: ""; display: inline-block; width: 34px; height: 1px; margin: 0 0 2px 8px; background: currentColor; opacity: .3; }
-      .headline-row { position: absolute; left: 29px; top: 66px; width: 250px; height: 50px; }
-      .headline-prefix { display: block; font-family: Georgia, serif; font-size: 26px; font-style: italic; letter-spacing: -.05em; line-height: .9; }
-      .word-stage { position: relative; display: block; width: 190px; height: 31px; margin-top: 2px; overflow: visible; font-size: 28px; font-weight: 950; letter-spacing: -.065em; line-height: 1; text-transform: uppercase; }
-      .rewrite-word { position: absolute; left: 0; top: 0; white-space: nowrap; }
-      .rewrite-word span { display: inline-block; }
-      .traveling-dot {
-        position: absolute;
-        z-index: 5;
-        left: -1px;
-        top: 8px;
-        width: 14px;
-        height: 14px;
+
+      .review-id {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        min-width: 0;
+        font-size: clamp(6px, 1.65vw, 11px);
+        font-weight: 850;
+        letter-spacing: .13em;
+        text-transform: uppercase;
+      }
+
+      .review-id::before {
+        width: 7px;
+        height: 7px;
         border-radius: 50%;
-        background: #ff4338;
-        box-shadow: 0 0 0 5px rgba(255, 67, 56, .16), 0 5px 15px rgba(166, 39, 32, .22);
+        background: #d04c2c;
+        content: "";
+        box-shadow: 0 0 0 3px rgba(208, 76, 44, .11);
       }
-      .traveling-dot::after { content: ""; position: absolute; inset: 4px; border-radius: 50%; background: #fff3d5; }
-      .motion-trace { position: absolute; left: 4px; top: 14px; width: 170px; height: 2px; border-radius: 99px; background: linear-gradient(90deg, #ff4338, rgba(255,67,56,0)); transform-origin: left center; }
-      .rewrite-readout { position: absolute; right: 31px; bottom: 31px; color: rgba(23,26,24,.52); font-size: 6px; font-weight: 900; letter-spacing: .11em; text-transform: uppercase; }
-      .rewrite-button {
-        position: absolute;
-        left: 29px;
-        bottom: 25px;
-        height: 24px;
-        padding: 0 10px;
-        border: 1px solid rgba(23,26,24,.2);
-        border-radius: 99px;
-        background: rgba(255,255,255,.35);
-        color: #171a18;
-        font-size: 6px;
-        font-weight: 900;
+
+      .review-state {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        color: #53605b;
+        font-size: clamp(5.5px, 1.5vw, 10px);
+        font-weight: 780;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+      }
+
+      .state-dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: #ac7e42;
+      }
+
+      .rewrite-stage[data-phase="resolved"] .state-dot { background: #2c8161; }
+      .rewrite-stage[data-phase="erasing"] .state-dot,
+      .rewrite-stage[data-phase="collecting"] .state-dot,
+      .rewrite-stage[data-phase="writing"] .state-dot { background: #d04c2c; }
+
+      .review-workspace {
+        position: relative;
+        display: grid;
+        grid-template-columns: minmax(0, 1.62fr) minmax(86px, .75fr);
+        min-height: 0;
+        overflow: hidden;
+        border: 1px solid rgba(35, 42, 38, .17);
+        border-radius: clamp(13px, 3vw, 23px);
+        background: rgba(255, 253, 248, .79);
+        box-shadow: 0 16px 42px rgba(72, 57, 37, .1);
+      }
+
+      .headline-proof {
+        position: relative;
+        display: flex;
+        min-width: 0;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: clamp(12px, 3.7vh, 27px) clamp(13px, 3.1vw, 25px) clamp(10px, 3vh, 22px);
+        border-right: 1px solid rgba(35, 42, 38, .12);
+        background:
+          linear-gradient(rgba(33, 42, 37, .045) 1px, transparent 1px) 0 0 / 100% clamp(18px, 5vh, 36px),
+          rgba(255, 254, 250, .58);
+      }
+
+      .proof-label {
+        display: flex;
+        justify-content: space-between;
+        color: #7a7770;
+        font-size: clamp(5px, 1.45vw, 9px);
+        font-weight: 800;
         letter-spacing: .1em;
+        text-transform: uppercase;
+      }
+
+      .headline-copy {
+        min-width: 0;
+        max-width: 95%;
+        margin-block: auto;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(21px, 6.8vw, 51px);
+        font-weight: 600;
+        letter-spacing: -.055em;
+        line-height: .88;
+      }
+
+      .headline-prefix { display: block; }
+
+      .rewrite-slot {
+        position: relative;
+        display: block;
+        width: 100%;
+        height: 1.05em;
+        margin-top: .06em;
+        color: #bd4027;
+        white-space: nowrap;
+      }
+
+      .rewrite-line {
+        position: absolute;
+        left: 0;
+        top: 0;
+        display: inline-flex;
+        align-items: baseline;
+        white-space: nowrap;
+      }
+
+      .rewrite-line[aria-hidden="true"] { pointer-events: none; }
+
+      .rewrite-letter {
+        display: inline-block;
+        will-change: opacity, transform;
+      }
+
+      .proof-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        color: #716f69;
+        font-size: clamp(5px, 1.4vw, 9px);
+        font-weight: 720;
+        letter-spacing: .07em;
+        text-transform: uppercase;
+      }
+
+      .motion-key {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .motion-key::before {
+        width: 13px;
+        height: 1px;
+        background: #bd4027;
+        content: "";
+      }
+
+      .revision-panel {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        min-width: 0;
+        flex-direction: column;
+        padding: clamp(10px, 3vh, 22px) clamp(8px, 2.2vw, 16px);
+        background: rgba(231, 225, 214, .62);
+      }
+
+      .revision-heading {
+        margin: 0 0 3px;
+        color: #27312d;
+        font-size: clamp(6px, 1.75vw, 12px);
+        font-weight: 850;
+        letter-spacing: .11em;
+        text-transform: uppercase;
+      }
+
+      .revision-note {
+        margin: 0 0 clamp(5px, 1.5vh, 10px);
+        color: #78766e;
+        font-size: clamp(5px, 1.35vw, 9px);
+        line-height: 1.25;
+      }
+
+      .revision-list {
+        display: grid;
+        gap: clamp(3px, .8vh, 6px);
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .revision-choice {
+        display: grid;
+        width: 100%;
+        min-width: 0;
+        grid-template-columns: 13px minmax(0, 1fr);
+        align-items: center;
+        gap: 4px;
+        padding: clamp(4px, 1.15vh, 8px) 5px;
+        border: 1px solid rgba(39, 49, 45, .14);
+        border-radius: 8px;
+        background: rgba(255, 254, 250, .72);
+        color: #25302b;
+        text-align: left;
+        cursor: pointer;
+        transition: border-color 160ms ease, background 160ms ease, color 160ms ease;
+      }
+
+      .revision-choice:hover,
+      .revision-choice:focus-visible {
+        border-color: rgba(189, 64, 39, .68);
+        outline: none;
+        background: #fffdf8;
+      }
+
+      .revision-choice[aria-pressed="true"] {
+        border-color: #bd4027;
+        background: #bd4027;
+        color: #fffaf1;
+      }
+
+      .choice-index {
+        color: currentColor;
+        font-size: clamp(5px, 1.35vw, 9px);
+        font-weight: 900;
+        opacity: .6;
+      }
+
+      .choice-copy {
+        overflow: hidden;
+        font-size: clamp(5.5px, 1.5vw, 10px);
+        font-weight: 780;
+        line-height: 1.08;
+        text-overflow: clip;
+        white-space: normal;
+      }
+
+      .undo-button {
+        align-self: flex-start;
+        margin-top: auto;
+        padding: 4px 0 1px;
+        border: 0;
+        border-bottom: 1px solid currentColor;
+        background: transparent;
+        color: #6d6d67;
+        font-size: clamp(5px, 1.4vw, 9px);
+        font-weight: 820;
+        letter-spacing: .08em;
         text-transform: uppercase;
         cursor: pointer;
       }
-      .rewrite-button:hover { background: #ff5b50; color: white; }
-      .rewrite-stage .library-badge { color: #171a18; border-color: rgba(23,26,24,.16); background: rgba(246,241,221,.72); }
+
+      .undo-button:disabled {
+        opacity: .34;
+        cursor: default;
+      }
+
+      .undo-button:focus-visible { outline: 2px solid rgba(189, 64, 39, .45); outline-offset: 3px; }
+
+      .traveling-marker {
+        position: absolute;
+        z-index: 9;
+        left: 0;
+        top: 0;
+        width: clamp(9px, 2.6vw, 18px);
+        aspect-ratio: 1;
+        border: 1px solid rgba(111, 29, 13, .32);
+        border-radius: 50%;
+        background: #d54b2d;
+        box-shadow: 0 0 0 4px rgba(213, 75, 45, .12), 0 5px 12px rgba(111, 29, 13, .22);
+        pointer-events: none;
+        will-change: transform;
+      }
+
+      .traveling-marker::after {
+        position: absolute;
+        inset: 34%;
+        border-radius: 50%;
+        background: #fff7e6;
+        content: "";
+      }
+
+      .marker-trail {
+        position: absolute;
+        z-index: 8;
+        left: 0;
+        top: 0;
+        width: clamp(26px, 8vw, 58px);
+        height: 1px;
+        border-radius: 99px;
+        background: linear-gradient(90deg, transparent, rgba(189, 64, 39, .5));
+        opacity: 0;
+        pointer-events: none;
+        transform-origin: right center;
+        will-change: transform, opacity;
+      }
+
+      .rewrite-stage .library-badge,
       .rewrite-stage .scene-caption { display: none; }
+
+      @media (max-width: 270px), (max-aspect-ratio: 4 / 3) {
+        .rewrite-stage { grid-template-rows: auto minmax(0, 1fr); }
+        .review-workspace { grid-template-columns: 1fr; grid-template-rows: minmax(0, 1.35fr) minmax(82px, .65fr); }
+        .headline-proof { border-right: 0; border-bottom: 1px solid rgba(35, 42, 38, .12); }
+        .headline-copy { font-size: clamp(21px, 10vw, 42px); }
+        .revision-panel { padding-block: 8px; }
+        .revision-note { display: none; }
+        .revision-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .revision-choice { grid-template-columns: 1fr; gap: 1px; }
+        .choice-copy { white-space: normal; }
+        .undo-button { position: absolute; right: 9px; top: 5px; }
+      }
     </style>
-    <script type="module" crossorigin src="./assets/traveling-dot-headline-rewriter-BCfEbf3Y.js"></script>
+    <script type="module" crossorigin src="./assets/traveling-dot-headline-rewriter-DUzGy93z.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
     <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
     <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
   </head>
   <body>
-    <main class="preview-stage rewrite-stage" aria-label="A traveling red dot erases one word and writes another">
-      <span class="headline-kicker">Spatial typography study</span>
-      <section class="headline-row" data-preview-mechanism="motion-traveling-dot-rewriter">
-        <span class="headline-prefix">Turn the ordinary</span>
-        <span class="word-stage" id="word-stage">
-          <span class="motion-trace" id="motion-trace" aria-hidden="true"></span>
-          <span class="rewrite-word" id="word-old">STATIC</span>
-          <span class="rewrite-word" id="word-new">ALIVE</span>
-          <span class="traveling-dot" id="traveling-dot" aria-hidden="true"></span>
-        </span>
+    <main class="preview-stage rewrite-stage" id="rewrite-stage" data-phase="draft" aria-label="Headline revision approval workspace">
+      <header class="review-header">
+        <span class="review-id">Northstar / Launch 04</span>
+        <span class="review-state"><span class="state-dot" aria-hidden="true"></span><span id="review-state-copy">Draft awaiting decision</span></span>
+      </header>
+
+      <section class="review-workspace" id="review-workspace" data-preview-mechanism="motion-spatial-headline-revision">
+        <article class="headline-proof" aria-labelledby="proof-heading">
+          <div class="proof-label"><span id="proof-heading">Homepage headline</span><span>V.03</span></div>
+          <h1 class="headline-copy">
+            <span class="headline-prefix">Move work forward</span>
+            <span class="rewrite-slot" id="rewrite-slot" aria-live="polite">
+              <span class="rewrite-line" id="rewrite-old">without the noise.</span>
+              <span class="rewrite-line" id="rewrite-new" aria-hidden="true"></span>
+            </span>
+          </h1>
+          <footer class="proof-footer">
+            <span class="motion-key" id="phase-copy">Choose a revision</span>
+            <span id="revision-count">0 edits</span>
+          </footer>
+        </article>
+
+        <aside class="revision-panel" aria-labelledby="revision-heading">
+          <h2 class="revision-heading" id="revision-heading">Editor revisions</h2>
+          <p class="revision-note">Select one line to apply it to the live proof.</p>
+          <ul class="revision-list">
+            <li><button class="revision-choice" type="button" data-revision="shared-clarity" data-copy="with shared clarity."><span class="choice-index">01</span><span class="choice-copy">with shared clarity.</span></button></li>
+            <li><button class="revision-choice" type="button" data-revision="status-churn" data-copy="without status churn."><span class="choice-index">02</span><span class="choice-copy">without status churn.</span></button></li>
+            <li><button class="revision-choice" type="button" data-revision="one-path" data-copy="on one clear path."><span class="choice-index">03</span><span class="choice-copy">on one clear path.</span></button></li>
+          </ul>
+          <button class="undo-button" id="undo-revision" type="button" disabled>Undo to V.03</button>
+        </aside>
+
+        <span class="marker-trail" id="marker-trail" aria-hidden="true"></span>
+        <span class="traveling-marker" id="traveling-marker" aria-hidden="true"></span>
       </section>
-      <button class="rewrite-button" id="rewrite-button" type="button">Rewrite now</button>
-      <span class="rewrite-readout" id="rewrite-readout">erase → travel → write</span>
-      <span class="library-badge">Motion · measured word edges</span>
-      <span class="scene-caption">a spatial marker acts as both eraser and writer</span>
+      <span class="library-badge">Motion · finite spatial rewrite</span>
+      <span class="scene-caption">A human-approved revision is erased, collected, and written once</span>
     </main>
   </body>
 </html>

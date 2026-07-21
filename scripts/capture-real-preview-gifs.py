@@ -1527,6 +1527,58 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.wheel(0, -38)
             elif index == 35:
                 page.locator('#reset-control').click()
+        elif demo["id"] == "bending-webgl-gallery-ribbon":
+            if index == 2:
+                page.mouse.wheel(0, 160)
+            elif index == 4:
+                page.mouse.wheel(0, -130)
+            elif index == 6:
+                page.mouse.move(252, 104)
+                page.mouse.down()
+            elif index == 7:
+                page.mouse.move(188, 104, steps=4)
+            elif index == 8:
+                page.mouse.move(104, 104, steps=4)
+                page.mouse.up()
+            elif index == 10:
+                page.wait_for_timeout(320)
+            elif index == 12:
+                page.mouse.move(76, 104)
+                page.mouse.down()
+            elif index == 13:
+                page.mouse.move(148, 104, steps=4)
+            elif index == 14:
+                page.mouse.move(236, 104, steps=4)
+                page.mouse.up()
+            elif index == 16:
+                page.wait_for_timeout(260)
+            elif index == 17:
+                page.locator('#ribbon-host').focus()
+                page.keyboard.press("ArrowRight")
+            elif index == 18:
+                page.keyboard.press("ArrowUp")
+            elif index == 20:
+                page.keyboard.press("Enter")
+            elif index == 22:
+                page.keyboard.press("Escape")
+            elif index == 24:
+                page.keyboard.press("End")
+            elif index == 25:
+                page.mouse.wheel(0, 180)
+            elif index == 27:
+                page.locator('#ribbon-host').focus()
+                page.keyboard.press("Home")
+            elif index == 28:
+                page.mouse.wheel(0, -180)
+            elif index == 30:
+                page.locator('#reset-button').click()
+            elif index == 32:
+                page.locator('#ribbon-host').focus()
+                page.keyboard.press("ArrowRight")
+            elif index == 33:
+                page.wait_for_timeout(320)
+            elif index == 35:
+                page.locator('#inspect-button').click()
         elif demo["id"] == "four-corner-hover-crop-marks":
             if index == round(.35 * args.fps):
                 page.mouse.move(92, 78)
@@ -1906,7 +1958,7 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("1")
             elif index == 34:
                 page.wait_for_timeout(500)
-        if demo["id"] not in {"emergent-particle-life-colonies", "velocity-reactive-marquee"}:
+        if demo["id"] not in {"emergent-particle-life-colonies", "velocity-reactive-marquee", "bending-webgl-gallery-ribbon"}:
             page.evaluate("time => window.__setPreviewTime(time)", preview_time)
         frame_path = frame_root / f"{index:04d}.png"
         page.screenshot(path=str(frame_path), type="png")
@@ -3237,6 +3289,68 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["lastInputTrusted"] is not True
         ):
             raise RuntimeError(f"{demo['id']} did not capture trusted slow/fast signed wheel velocity, two opposed captured drags, keyboard impulses, repeated reversal, inertia, and exact reset on the real Motion rail: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "bending-webgl-gallery-ribbon":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "tidal-archive-film-review"
+            or interaction["acceptedInputs"] != ["wheel", "mouse", "touch", "pen", "keyboard", "control"]
+            or not interaction["userInputRequired"]
+            or not interaction["userOwnedPosition"]
+            or not interaction["finiteInputInertiaOnly"]
+            or interaction["automaticCruise"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["previewClockDriven"]
+            or interaction["syntheticInputDispatch"]
+            or not interaction["firstFrameStatic"]
+            or not interaction["initialStaticVerified"]
+            or interaction["inputCount"] < 25
+            or interaction["inputCount"] != interaction["trustedInputCount"]
+            or interaction["rejectedUntrustedCount"] != 0
+            or interaction["wheelInputCount"] < 4
+            or interaction["pointerInputCount"] < 12
+            or interaction["keyboardInputCount"] < 7
+            or interaction["controlInputCount"] < 2
+            or interaction["positiveInputCount"] < 4
+            or interaction["negativeInputCount"] < 4
+            or interaction["reversalCount"] < 4
+            or interaction["pointerCaptureCount"] < 2
+            or interaction["pointerReleaseCount"] < 2
+            or interaction["dragUpdateCount"] < 8
+            or interaction["inertiaStartCount"] < 4
+            or interaction["inertiaStepCount"] < 2
+            or interaction["bendMutationCount"] < 1
+            or interaction["inspectionCount"] < 2
+            or interaction["inspectionClearCount"] < 1
+            or interaction["resetCount"] < 1
+            or interaction["wheelBoundaryReleaseCount"] < 2
+            or interaction["startBoundaryCount"] < 1
+            or interaction["endBoundaryCount"] < 1
+            or interaction["assetCount"] != 5
+            or interaction["assetDecodedCount"] != 5
+            or not interaction["assetDimensionsValid"]
+            or not interaction["assetChecksumsUnique"]
+            or interaction["sampledPixelCount"] != 32400
+            or not interaction["textureImagesReady"]
+            or not interaction["p5Ready"]
+            or not interaction["webglReady"]
+            or interaction["webglVersion"] not in {"webgl1", "webgl2"}
+            or interaction["texturedPanelCount"] != 5
+            or interaction["meshVertexCount"] != 360
+            or interaction["expectedMeshVertexCount"] != 360
+            or interaction["resultState"] != "inspecting"
+            or interaction["inspectedIndex"] != interaction["activeIndex"]
+            or interaction["inertiaActive"]
+            or interaction["velocity"] != 0
+            or interaction["pointerCaptured"]
+            or interaction["activePointerId"] is not None
+            or interaction["activePointerType"] is not None
+            or interaction["inputKind"] != "control"
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture trusted bidirectional wheel/drag browsing, finite inertia, bend control, two-sided boundary release, explicit inspection/clear/reset, and five unique decoded textures on the real p5 WebGL ribbon: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "four-corner-hover-crop-marks":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         if (

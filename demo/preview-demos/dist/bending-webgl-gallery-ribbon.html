@@ -1,7 +1,342 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p5.js — Bending WebGL Gallery Ribbon</title><style>:root{--preview-background:#0a0c10}#ribbon-host{position:absolute;inset:0;cursor:grab}#ribbon-host canvas{width:100%!important;height:100%!important}.ribbon-copy{position:absolute;z-index:5;left:13px;top:47px;color:#fff9ed;pointer-events:none}.ribbon-copy small{font:800 6px/1 ui-monospace;letter-spacing:.16em;color:#ffc966}.ribbon-copy h1{width:98px;margin:8px 0 0;font:950 18px/.84 system-ui;letter-spacing:-.055em}.ribbon-index{position:absolute;right:12px;top:12px;z-index:5;color:#ffc966;font:900 7px/1 ui-monospace}.library-badge{background:#0a0c10c9}</style>  <script type="module" crossorigin src="./assets/bending-webgl-gallery-ribbon-BGZf-FwM.js"></script>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>p5.js — Tidal Archive Film Ribbon</title>
+  <style>
+    :root {
+      --preview-background: #080b0d;
+      --paper: #ece8df;
+      --muted: rgba(236, 232, 223, .53);
+      --cobalt: #245d9c;
+      --amber: #ffc967;
+      --acid: #caff70;
+      color-scheme: dark;
+    }
+
+    * { box-sizing: border-box; }
+
+    .ribbon-stage {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 52% 44%, rgba(41, 72, 94, .2), transparent 35%),
+        linear-gradient(180deg, #0d1114 0%, #060809 100%);
+      color: var(--paper);
+      isolation: isolate;
+    }
+
+    .ribbon-stage::before {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background:
+        linear-gradient(90deg, rgba(6, 8, 9, .76), transparent 25%, transparent 76%, rgba(6, 8, 9, .6)),
+        linear-gradient(180deg, rgba(6, 8, 9, .66), transparent 23%, transparent 72%, rgba(6, 8, 9, .8));
+      content: "";
+      pointer-events: none;
+    }
+
+    #ribbon-host {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      cursor: grab;
+      outline: none;
+      touch-action: none;
+    }
+
+    #ribbon-host[data-dragging="true"] { cursor: grabbing; }
+    #ribbon-host canvas { display: block; width: 100% !important; height: 100% !important; }
+    #ribbon-host:focus-visible::after { position:absolute; inset:7px; border:2px solid var(--acid); border-radius:9px; content:""; pointer-events:none; }
+
+    .archive-header {
+      position: absolute;
+      z-index: 5;
+      top: 18px;
+      right: 22px;
+      left: 185px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--muted);
+      font: 800 5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+
+    .archive-state {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--paper);
+    }
+
+    .archive-state::before {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--acid);
+      box-shadow: 0 0 0 3px rgba(202, 255, 112, .1);
+      content: "";
+    }
+
+    .ribbon-stage[data-inspecting="true"] .archive-state::before { background: var(--amber); }
+
+    .archive-copy {
+      position: absolute;
+      z-index: 5;
+      top: 62px;
+      left: 24px;
+      width: 150px;
+      pointer-events: none;
+    }
+
+    .archive-kicker,
+    .archive-note,
+    .frame-sequence,
+    .frame-meta dt,
+    .motion-readout,
+    .control-button,
+    .inspection-badge {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      text-transform: uppercase;
+    }
+
+    .archive-kicker {
+      display: block;
+      color: var(--amber);
+      font-size: 5px;
+      font-weight: 900;
+      letter-spacing: .14em;
+    }
+
+    .archive-copy h1 {
+      margin: 9px 0 0;
+      font: 740 34px/.82 Georgia, "Times New Roman", serif;
+      letter-spacing: -.065em;
+    }
+
+    .archive-copy h1 em { color: #7ca8d3; font-weight: inherit; }
+
+    .archive-note {
+      display: block;
+      width: 27em;
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 4px;
+      font-weight: 750;
+      line-height: 1.5;
+      letter-spacing: .08em;
+    }
+
+    .frame-meta {
+      position: absolute;
+      z-index: 5;
+      top: 61px;
+      right: 24px;
+      display: grid;
+      width: 130px;
+      margin: 0;
+      padding: 11px;
+      border: 1px solid rgba(236, 232, 223, .16);
+      border-radius: 8px;
+      background: rgba(8, 11, 13, .66);
+      backdrop-filter: blur(10px);
+      pointer-events: none;
+      gap: 8px;
+    }
+
+    .frame-meta div { display: flex; align-items: baseline; justify-content: space-between; gap: 7px; }
+    .frame-meta dt { color: var(--muted); font-size: 4px; font-weight: 850; letter-spacing: .09em; }
+    .frame-meta dd { margin: 0; color: var(--paper); font: 720 8px/1 Georgia, serif; text-align: right; }
+    .frame-meta .frame-title { grid-column: 1 / -1; display: grid; padding-top: 7px; border-top: 1px solid rgba(236,232,223,.14); }
+    .frame-meta .frame-title dd { margin-top: 4px; color: var(--amber); font-size: 13px; line-height: .95; }
+
+    .inspection-badge {
+      position: absolute;
+      z-index: 7;
+      top: 56px;
+      left: 50%;
+      min-width: 90px;
+      padding: 7px 10px;
+      border: 1px solid var(--acid);
+      border-radius: 999px;
+      background: rgba(8, 11, 13, .82);
+      color: var(--acid);
+      font-size: 5px;
+      font-weight: 900;
+      letter-spacing: .11em;
+      text-align: center;
+      transform: translateX(-50%);
+      pointer-events: none;
+    }
+
+    .inspection-badge[hidden] { display: none; }
+
+    .control-dock {
+      position: absolute;
+      z-index: 8;
+      right: 24px;
+      bottom: 15px;
+      left: 24px;
+      display: flex;
+      min-height: 38px;
+      align-items: flex-end;
+      border-top: 1px solid rgba(236, 232, 223, .17);
+    }
+
+    .frame-sequence {
+      color: var(--paper);
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: -.02em;
+    }
+
+    .frame-sequence span { color: rgba(236,232,223,.28); font-weight: 700; }
+
+    .motion-readout {
+      display: grid;
+      margin-left: 19px;
+      color: var(--muted);
+      font-size: 4px;
+      font-weight: 800;
+      line-height: 1.5;
+      letter-spacing: .08em;
+    }
+
+    .motion-readout strong { color: var(--paper); font-size: 5px; }
+
+    .action-group { display: flex; margin-left: auto; gap: 6px; }
+    .control-button {
+      min-height: 25px;
+      padding: 0 11px;
+      border: 1px solid rgba(236,232,223,.24);
+      border-radius: 999px;
+      background: rgba(8,11,13,.68);
+      color: var(--paper);
+      cursor: pointer;
+      font-size: 5px;
+      font-weight: 900;
+      letter-spacing: .08em;
+    }
+
+    .control-button.primary { border-color: var(--acid); background: var(--acid); color: #10150e; }
+    .control-button.primary[aria-pressed="true"] { border-color: var(--amber); background: var(--amber); }
+    .control-button:disabled { cursor: default; opacity: .28; }
+    .control-button:focus-visible { outline: 2px solid var(--acid); outline-offset: 2px; }
+
+    .input-hint {
+      position: absolute;
+      z-index: 5;
+      right: 24px;
+      bottom: 61px;
+      color: rgba(236,232,223,.36);
+      font: 800 4px/1 ui-monospace, monospace;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+
+    .library-badge { color: var(--paper); background: rgba(8,11,13,.82); border-color: rgba(236,232,223,.17); }
+    .scene-caption { display: none; }
+
+    @media (max-width: 420px) {
+      .archive-header { top: 7px; right: 8px; left: 160px; font-size: 2.5px; }
+      .archive-id { display: none; }
+      .archive-state { gap: 3px; }
+      .archive-state::before { width: 3px; height: 3px; box-shadow: none; }
+      .archive-copy { top: 32px; left: 10px; width: 72px; }
+      .archive-kicker { font-size: 2.5px; }
+      .archive-copy h1 { margin-top: 5px; font-size: 17px; }
+      .archive-note { width: 22em; margin-top: 6px; font-size: 1.8px; }
+      .frame-meta { top: 31px; right: 8px; width: 64px; padding: 5px; border-radius: 4px; gap: 3px; backdrop-filter: blur(5px); }
+      .frame-meta dt { font-size: 1.8px; }
+      .frame-meta dd { font-size: 4px; }
+      .frame-meta .frame-title { padding-top: 3px; }
+      .frame-meta .frame-title dd { margin-top: 2px; font-size: 6px; }
+      .inspection-badge { top: 27px; min-width: 46px; padding: 3px 5px; font-size: 2.2px; }
+      .control-dock { right: 8px; bottom: 6px; left: 10px; min-height: 20px; }
+      .frame-sequence { font-size: 7px; }
+      .motion-readout { margin-left: 8px; font-size: 1.7px; }
+      .motion-readout strong { font-size: 2.2px; }
+      .action-group { gap: 3px; }
+      .control-button { min-height: 12px; padding: 0 5px; font-size: 2px; }
+      .input-hint { right: 8px; bottom: 31px; font-size: 1.5px; }
+    }
+
+    @media (max-width: 220px), (max-height: 105px) {
+      .library-badge { display: none; }
+      #ribbon-host:focus-visible::after { inset: 2px; border-width: 1px; border-radius: 2px; }
+      .ribbon-stage::before { background: linear-gradient(180deg,rgba(6,8,9,.4),transparent 26%,transparent 69%,rgba(6,8,9,.72)); }
+      .archive-header { top: 2px; right: 3px; left: 46px; font-size: .7px; }
+      .archive-state { gap: 1px; }
+      .archive-state::before { width: 1px; height: 1px; }
+      .archive-copy { top: 10px; left: 3px; width: 27px; }
+      .archive-kicker { font-size: .65px; }
+      .archive-copy h1 { margin-top: 1px; font-size: 6px; }
+      .archive-note { width: 25em; margin-top: 2px; font-size: .48px; }
+      .frame-meta { top: 10px; right: 3px; width: 28px; padding: 2px; border-width: .5px; border-radius: 1px; gap: 1px; backdrop-filter: none; }
+      .frame-meta div:not(.frame-title) { display: none; }
+      .frame-meta .frame-title { padding-top: 0; border: 0; }
+      .frame-meta dt { font-size: .5px; }
+      .frame-meta .frame-title dd { margin-top: 1px; font-size: 2px; }
+      .inspection-badge { top: 8px; min-width: 20px; padding: 1px 2px; border-width: .5px; font-size: .55px; }
+      .control-dock { right: 3px; bottom: 2px; left: 3px; min-height: 8px; border-width: .5px; }
+      .frame-sequence { font-size: 3px; }
+      .motion-readout { margin-left: 3px; font-size: .45px; line-height: 1.2; }
+      .motion-readout strong { font-size: .7px; }
+      .action-group { gap: 1px; }
+      .control-button { min-height: 5px; padding: 0 2px; border-width: .5px; font-size: .55px; }
+      .input-hint { display: none; }
+    }
+  </style>
+  <script type="module" crossorigin src="./assets/bending-webgl-gallery-ribbon-CgWO87LE.js"></script>
   <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
   <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
   <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
-  <link rel="modulepreload" crossorigin href="./assets/batch-c-utils-g_3IBZ2b.js">
   <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage" data-preview-mechanism="cylindrically-bent-gallery"><div id="ribbon-host" tabindex="0" aria-label="Drag or use arrow keys to move the gallery ribbon with inertia"></div><section class="ribbon-copy"><small>MEDIA FILM / 09</small><h1>BEND THE ARCHIVE INTO A LOOP.</h1></section><output class="ribbon-index" id="ribbon-index">FRAME 05</output><span class="library-badge">p5.js · WebGL gallery ribbon</span><span class="scene-caption">planes follow a cylindrical arc with inertial offset</span></main></body></html>
+</head>
+<body>
+  <main class="preview-stage">
+    <section class="ribbon-stage" id="ribbon-stage" data-preview-mechanism="p5-textured-cylindrical-film-ribbon" data-inspecting="false">
+      <div id="ribbon-host" tabindex="0" role="slider" aria-valuemin="1" aria-valuemax="5" aria-valuenow="3" aria-valuetext="Frame 3, Circular light well" aria-label="Tidal Archive film ribbon. Wheel, drag horizontally, or use arrow keys." data-dragging="false"></div>
+
+      <header class="archive-header">
+        <span class="archive-id">Field Index · Tidal Archive · Study 07</span>
+        <span class="archive-state" id="archive-state">Browse · Ribbon at rest</span>
+      </header>
+
+      <section class="archive-copy">
+        <span class="archive-kicker">Architecture contact ribbon</span>
+        <h1>Tidal <em>Archive</em></h1>
+        <span class="archive-note">Five fictional field photographs follow one concrete pavilion from first light to blue hour.</span>
+      </section>
+
+      <dl class="frame-meta" aria-live="polite">
+        <div><dt>Frame</dt><dd id="frame-number">03 / 05</dd></div>
+        <div><dt>Light</dt><dd id="frame-light">08:04</dd></div>
+        <div class="frame-title"><dt>Current view</dt><dd id="frame-title">Circular light well</dd></div>
+      </dl>
+
+      <output class="inspection-badge" id="inspection-badge" hidden>Inspecting frame 03</output>
+
+      <footer class="control-dock">
+        <output class="frame-sequence" id="frame-sequence">03 <span>/ 05</span></output>
+        <output class="motion-readout"><strong id="motion-state">Still · bend 68</strong><span id="motion-source">Wheel / capture drag / arrows</span></output>
+        <div class="action-group">
+          <button class="control-button" id="reset-button" type="button" disabled>Reset</button>
+          <button class="control-button primary" id="inspect-button" type="button" aria-pressed="false">Inspect frame</button>
+        </div>
+      </footer>
+
+      <span class="input-hint">← → move · ↑ ↓ bend · Enter inspect · Home / End · R reset</span>
+    </section>
+    <span class="library-badge">p5.js · textured WebGL ribbon</span>
+    <span class="scene-caption">Original photographs bend across a user-driven cylindrical WebGL mesh.</span>
+  </main>
+</body>
+</html>

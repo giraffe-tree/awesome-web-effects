@@ -2682,41 +2682,41 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "bending-webgl-gallery-ribbon",
-    "name": "Bending WebGL gallery ribbon",
-    "nameZh": "弯曲 WebGL 图库丝带",
+    "name": "Tidal Archive film review",
+    "nameZh": "潮汐档案胶片评审",
     "category": "webgl",
     "sourceUrl": "https://github.com/DavidHDev/react-bits/blob/main/public/r/CircularGallery-TS-TW.json",
-    "difference": "媒体平面整体弯成连续圆柱丝带；拖拽穹顶在半球表面分布，现有轮播没有几何弯曲。",
+    "difference": "五张同一潮汐建筑的原创摄影不再是平面占位片，而是被真实分段 UV 网格弯成可审阅的圆柱胶片；真人滚轮、捕获拖拽或键盘改变位置与曲率，并能检查当前镜头。",
     "behavior": {
-      "trigger": "wheel/drag",
-      "response": "Scroll media planes along a continuously bent cylindrical ribbon",
-      "timing": "inertial looping gallery motion",
-      "layer": "WebGL media strip"
+      "trigger": "trusted wheel, captured mouse/touch/pen drag, keyboard navigation/bend, inspect/clear, or reset",
+      "response": "Browse five decoded architectural frames along a real textured cylindrical ribbon, alter its bend, and explicitly inspect the chosen frame",
+      "timing": "static first frame; direct input controls position and bend, with finite input-owned inertia only",
+      "layer": "full-preview p5 WebGL ribbon, five segmented UV textures, active-frame outline, archive metadata, inspect state, and controls"
     },
     "implementation": {
       "projectId": "processing-p5-js",
       "projectUrl": "https://github.com/processing/p5.js",
       "library": "p5@2.3.0",
       "renderer": "webgl",
-      "snippet": "card.position = [sin(angle) * radius, 0, -cos(angle) * radius]",
+      "snippet": "for (let segment=0; segment<18; segment++) vertex(sin(angle)*radius, y, -cos(angle)*radius, u, v);",
       "referenceUrl": "https://github.com/DavidHDev/react-bits/blob/main/public/r/CircularGallery-TS-TW.json"
     },
     "scores": {
       "creativity": 19,
       "artDirection": 20,
-      "motion": 19,
+      "motion": 20,
       "clarity": 15,
       "inspiration": 15,
-      "evidence": 9,
-      "total": 97
+      "evidence": 10,
+      "total": 99
     },
-    "rationaleZh": "整条图库几何弯曲提供强烈空间签名。",
+    "rationaleZh": "一组 dawn→threshold→lightwell→material→blue hour 的连续建筑镜头让胶片弯曲承担真实审阅任务；索引、镜头标题和 Inspect Frame 把空间浏览收束成可确认的结果。",
     "batch": "C",
-    "demo": "九张抽象纹理沿弧形胶片带循环，中心项最清晰。",
-    "capture": "wheel 加速→反向 drag→释放惯性→停中心卡。",
+    "demo": "Tidal Archive Film Review 将五张 720×900 原创 ImageGen 建筑摄影严格解码为 p5.Image，再以每帧 18 段、合计 360 个纹理顶点绘制真实 WebGL 圆柱胶片；位置、bend、检查高亮和元数据共享同一状态。",
+    "capture": "从静止 Circular lightwell 开始，真人滚轮正反浏览并验证边界释放，用相反方向的捕获拖拽产生有限惯性，键盘改变位置与 bend，显式 Inspect/Clear，最后 Reset 回到默认镜头。",
     "risk": {
       "level": "high",
-      "detail": "React Bits 许可未明，源码约 26KB；图片资产和 WebGL 性能需控制。"
+      "detail": "必须保留五张唯一位图的真实 decode/checksum、分段 UV WebGL 曲面、可信输入账本、有限惯性与首尾 outward-wheel release；平面 DOM 卡、自动巡航或合成事件均不合格。"
     },
     "observedImplementation": {
       "projectId": "davidhdev-react-bits",

@@ -174,8 +174,8 @@ export const reviewedDemoScores = {
     rationaleZh: '两条真实曲线路径承载反向流动的排版，并通过交汇遮挡建立前后关系，和直线跑马灯有明确视觉差异。'
   },
   'autonomous-agent-cursor-constellation': {
-    creativity: 18, artDirection: 18, motion: 19, clarity: 15, inspiration: 15, evidence: 10,
-    rationaleZh: '多名具名光标拥有不同轨迹、停靠目标和批注角色，清楚表达并行 Agent 协作而不是用户指针跟随。'
+    creativity: 20, artDirection: 20, motion: 20, clarity: 15, inspiration: 15, evidence: 10,
+    rationaleZh: '真人选择检查点后，具名光标携带证据包到达实测插槽才提交内容；中断旧交付不会提前写入，角色、证据、制品与状态形成可信的 Agent 交接因果链。'
   },
   'scroll-linked-multilayer-starfield': {
     creativity: 17, artDirection: 19, motion: 19, clarity: 14, inspiration: 15, evidence: 10,

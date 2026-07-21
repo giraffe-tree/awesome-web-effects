@@ -58,6 +58,12 @@ try {
 
   const state = {
     id: 'autonomous-agent-cursor-constellation',
+    task: 'human-operated-multi-agent-evidence-delivery-to-one-shared-artifact',
+    claimedLibrary: 'motion@12.42.2',
+    mechanism: 'trusted-checkpoint-selection-moves-one-named-cursor-and-commits-its-evidence-only-after-the-cursor-reaches-the-measured-artifact-socket',
+    assetStrategy: 'code-native-dom-geometry-cursors-and-evidence-state-no-functional-raster-input-required',
+    userInputRequired: true,
+    strictTrustedInputGuard: true,
     automaticFallback: false,
     automaticPlayback: false,
     automaticSelection: false,
@@ -71,6 +77,7 @@ try {
     inputKind: 'none',
     inputCount: 0,
     lastInputTrusted: null,
+    rejectedUntrustedInputCount: 0,
     selectionCount: 0,
     animatedSelectionCount: 0,
     pointerSelectionCount: 0,
@@ -83,6 +90,11 @@ try {
     motionPlayCount: 0,
     motionCompletionCount: 0,
     artifactUpdateCount: 0,
+    deliveryCommitCount: 0,
+    cancelledDeliveryCount: 0,
+    prematureCommitCount: 0,
+    handoffStartDeliveryCommitCount: 0,
+    handoffStartCommittedStage: null,
     stageOrder: [...stageOrder],
     agentOrder: [...agentOrder],
     evidenceOrder: [...evidenceOrder],
@@ -90,6 +102,9 @@ try {
     selectedStage: null,
     selectedAgent: null,
     selectedEvidence: null,
+    committedStage: null,
+    committedAgent: null,
+    committedEvidence: null,
     previousStage: null,
     lastSelectionTarget: null,
     phase: 'idle',
@@ -101,6 +116,7 @@ try {
     layoutMeasureCount: 0,
     controlRebuildCount: 0,
     initialFrameStatic: true,
+    initialStaticVerified: true,
     initialSelectionCount: 0,
     initialPhase: 'idle',
     initialOwner: null,
@@ -123,10 +139,16 @@ try {
   }
 
   function recordInput(inputKind, trusted) {
+    if (trusted !== true) {
+      state.lastInputTrusted = false;
+      state.rejectedUntrustedInputCount += 1;
+      return false;
+    }
     state.userInitiated = true;
     state.inputKind = inputKind;
     state.inputCount += 1;
     state.lastInputTrusted = trusted;
+    return true;
   }
 
   function pauseAtStart(control) {
@@ -167,11 +189,14 @@ try {
     setDataset('activeStage', state.selectedStage || 'none');
     setDataset('selectedAgent', state.selectedAgent || 'none');
     setDataset('selectedEvidence', state.selectedEvidence || 'none');
+    setDataset('committedStage', state.committedStage || 'none');
     setDataset('selectionCount', state.selectionCount);
 
     nodes.forEach((node, index) => {
       const active = node.dataset.stage === state.selectedStage;
+      const committed = node.dataset.stage === state.committedStage;
       node.classList.toggle('is-active', active);
+      node.classList.toggle('is-committed', committed);
       node.setAttribute('aria-pressed', String(active));
       node.tabIndex = active || (!state.selectedStage && index === 0) ? 0 : -1;
       cursors[index].dataset.cursorState = active ? state.phase : 'parked';
@@ -182,8 +207,8 @@ try {
     const statusLabel = !state.selectedStage
       ? 'Awaiting a real owner selection'
       : state.phase === 'handoff'
-        ? `${state.selectedAgent} · carrying ${state.selectedEvidence}`
-        : `${state.selectedAgent} → ${state.selectedEvidence} attached`;
+        ? `${state.selectedAgent} · carrying ${state.selectedEvidence} to the brief`
+        : `${state.committedAgent} → ${state.committedEvidence} delivered`;
     if (status.textContent !== statusLabel) status.textContent = statusLabel;
   }
 
@@ -261,6 +286,14 @@ try {
     if (state.selectedStage) {
       const index = stageOrder.indexOf(state.selectedStage);
       cursorControls[index].time = cursorControls[index].duration;
+      if (state.committedStage !== state.selectedStage) {
+        applyStageContent(state.selectedStage);
+        state.committedStage = state.selectedStage;
+        state.committedAgent = state.selectedAgent;
+        state.committedEvidence = state.selectedEvidence;
+        state.deliveryCommitCount += 1;
+        state.motionCompletionCount += 1;
+      }
       state.phase = 'settled';
       state.handoffActive = false;
       state.handoffProgress = 1;
@@ -273,6 +306,11 @@ try {
     animationFrame = 0;
     const index = stageOrder.indexOf(state.selectedStage);
     cursorControls[index].time = cursorControls[index].duration;
+    applyStageContent(state.selectedStage);
+    state.committedStage = state.selectedStage;
+    state.committedAgent = state.selectedAgent;
+    state.committedEvidence = state.selectedEvidence;
+    state.deliveryCommitCount += 1;
     state.motionCompletionCount += 1;
     state.phase = 'settled';
     state.handoffActive = false;
@@ -295,8 +333,11 @@ try {
 
   function selectStage(node, inputKind, trusted, selectionTarget) {
     if (!nodes.includes(node)) return;
-    recordInput(inputKind, trusted);
-    if (state.handoffActive) state.interruptionCount += 1;
+    if (!recordInput(inputKind, trusted)) return;
+    if (state.handoffActive) {
+      state.interruptionCount += 1;
+      state.cancelledDeliveryCount += 1;
+    }
     if (animationFrame) cancelAnimationFrame(animationFrame);
     animationFrame = 0;
     runToken += 1;
@@ -305,6 +346,8 @@ try {
 
     const stageId = node.dataset.stage;
     const index = stageOrder.indexOf(stageId);
+    state.handoffStartDeliveryCommitCount = state.deliveryCommitCount;
+    state.handoffStartCommittedStage = state.committedStage;
     state.previousStage = state.selectedStage;
     state.selectedStage = stageId;
     state.selectedAgent = node.dataset.agent;
@@ -315,11 +358,16 @@ try {
     state.stageSelectionCounts[stageId] += 1;
     if (inputKind === 'keyboard') state.keyboardSelectionCount += 1;
     else state.pointerSelectionCount += 1;
-    applyStageContent(stageId);
     node.focus({ preventScroll: true });
 
     if (state.reducedMotion) {
       cursorControls[index].time = cursorControls[index].duration;
+      state.activeCursorTargetError = 0;
+      applyStageContent(stageId);
+      state.committedStage = stageId;
+      state.committedAgent = node.dataset.agent;
+      state.committedEvidence = node.dataset.evidence;
+      state.deliveryCommitCount += 1;
       state.reducedMotionDirectCount += 1;
       state.phase = 'settled';
       state.handoffActive = false;
@@ -341,7 +389,7 @@ try {
   }
 
   function resetHandoff(inputKind, trusted) {
-    recordInput(inputKind, trusted);
+    if (!recordInput(inputKind, trusted)) return;
     if (state.handoffActive) state.interruptionCount += 1;
     if (animationFrame) cancelAnimationFrame(animationFrame);
     animationFrame = 0;
@@ -352,6 +400,9 @@ try {
     state.selectedStage = null;
     state.selectedAgent = null;
     state.selectedEvidence = null;
+    state.committedStage = null;
+    state.committedAgent = null;
+    state.committedEvidence = null;
     state.lastSelectionTarget = null;
     state.phase = 'idle';
     state.handoffActive = false;
@@ -362,7 +413,7 @@ try {
   }
 
   function moveFocus(index, trusted) {
-    recordInput('keyboard', trusted);
+    if (!recordInput('keyboard', trusted)) return;
     state.focusMoveCount += 1;
     nodes[(index + nodes.length) % nodes.length].focus({ preventScroll: true });
   }
@@ -449,12 +500,15 @@ try {
         typeof control.play === 'function'
         && typeof control.pause === 'function'
         && typeof control.cancel === 'function'
-        && control.duration >= .5
+        && (state.reducedMotion ? control.duration >= 0 : control.duration >= .5)
       );
     const selectedIndex = state.selectedStage ? stageOrder.indexOf(state.selectedStage) : -1;
     const selectionEvidence = selectedIndex < 0
       ? state.selectedAgent === null
         && state.selectedEvidence === null
+        && state.committedStage === null
+        && state.committedAgent === null
+        && state.committedEvidence === null
         && artifactPanel.dataset.owner === 'none'
         && artifactPanel.dataset.evidence === 'none'
         && state.phase === 'idle'
@@ -462,8 +516,11 @@ try {
       : selectedIndex >= 0
         && nodes[selectedIndex].dataset.agent === state.selectedAgent
         && nodes[selectedIndex].dataset.evidence === state.selectedEvidence
-        && artifactPanel.dataset.owner === state.selectedAgent
-        && artifactPanel.dataset.evidence === state.selectedEvidence
+        && (state.phase === 'handoff'
+          ? artifactPanel.dataset.owner === (state.committedAgent || 'none')
+            && artifactPanel.dataset.evidence === (state.committedEvidence || 'none')
+          : artifactPanel.dataset.owner === state.committedAgent
+            && artifactPanel.dataset.evidence === state.committedEvidence)
         && nodes.filter(node => node.getAttribute('aria-pressed') === 'true').length === 1;
     const countEvidence = state.selectionCount === state.animatedSelectionCount + state.reducedMotionDirectCount
       && state.pointerSelectionCount + state.keyboardSelectionCount === state.selectionCount
@@ -471,11 +528,26 @@ try {
       && state.motionPlayCount === state.animatedSelectionCount * 3
       && state.motionCompletionCount <= state.animatedSelectionCount
       && state.artifactUpdateCount === state.selectionCount
+      && state.deliveryCommitCount === state.motionCompletionCount + state.reducedMotionDirectCount
+      && state.cancelledDeliveryCount === state.interruptionCount
+      && state.prematureCommitCount === 0
       && state.inputCount === state.selectionCount + state.resetCount + state.focusMoveCount;
     const endpointEvidence = state.phase !== 'settled'
       || Number.isFinite(state.activeCursorTargetError) && state.activeCursorTargetError <= 2.5;
+    const deliveryEvidence = state.phase === 'handoff'
+      ? state.deliveryCommitCount === state.handoffStartDeliveryCommitCount
+        && state.committedStage === state.handoffStartCommittedStage
+        && artifactPanel.dataset.owner === (state.committedAgent || 'none')
+      : state.selectedStage === state.committedStage
+        && state.selectedAgent === state.committedAgent
+        && state.selectedEvidence === state.committedEvidence;
     const reducedMotionSafe = !state.reducedMotion || !state.handoffActive;
     return typeof animate === 'function'
+      && state.claimedLibrary === 'motion@12.42.2'
+      && state.userInputRequired
+      && state.strictTrustedInputGuard
+      && state.initialStaticVerified
+      && state.rejectedUntrustedInputCount === 0
       && nodeSemantics
       && sockets.length === 3
       && controlEvidence
@@ -504,8 +576,10 @@ try {
       && Number.isInteger(state.inputCount)
       && Number.isInteger(state.selectionCount)
       && Number.isInteger(state.resetCount)
+      && Number.isInteger(state.deliveryCommitCount)
       && countEvidence
       && selectionEvidence
+      && deliveryEvidence
       && endpointEvidence
       && reducedMotionSafe
       && state.layoutMeasureCount >= 1

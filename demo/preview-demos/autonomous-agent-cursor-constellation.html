@@ -116,6 +116,19 @@
         box-shadow: inset 0 0 0 1px #ffffff0a;
       }
       .handoff-node.is-active::before { opacity: 1; }
+      .handoff-node.is-committed:not(.is-active) {
+        border-color: color-mix(in srgb, var(--agent-color), transparent 60%);
+      }
+      .handoff-node.is-committed .stage-index::after {
+        display: inline-block;
+        width: 3px;
+        height: 3px;
+        margin-left: 2px;
+        border-radius: 50%;
+        background: currentColor;
+        content: "";
+        vertical-align: 1px;
+      }
 
       .handoff-node:focus-visible,
       .reset-handoff:focus-visible {
@@ -171,6 +184,44 @@
         line-height: 1;
         text-transform: uppercase;
         white-space: nowrap;
+      }
+
+      .cursor-packet {
+        position: absolute;
+        top: -11px;
+        left: 7px;
+        display: flex;
+        align-items: center;
+        gap: 3px;
+        padding: 2px 4px;
+        border: 1px solid color-mix(in srgb, var(--agent-color), white 20%);
+        border-radius: 4px;
+        background: #13201de8;
+        box-shadow: 0 4px 10px #0007;
+        color: #edf4f1;
+        font-size: 4px;
+        font-style: normal;
+        font-weight: 900;
+        letter-spacing: .06em;
+        line-height: 1;
+        opacity: 0;
+        transform: translate(-3px, 2px) scale(.82);
+        transition: opacity 120ms ease, transform 120ms ease;
+        white-space: nowrap;
+      }
+
+      .cursor-packet::before {
+        width: 4px;
+        height: 4px;
+        border-radius: 1px;
+        background: var(--agent-color);
+        box-shadow: inset 0 0 0 1px #fff7;
+        content: "";
+      }
+
+      .agent-cursor[data-cursor-state="handoff"] .cursor-packet {
+        opacity: 1;
+        transform: translate(0, 0) scale(1);
       }
 
       .artifact-panel {
@@ -272,6 +323,22 @@
         transform-origin: left center;
       }
 
+      .handoff-stage[data-phase="handoff"] .evidence-receipt {
+        border-style: dashed;
+        opacity: .58;
+      }
+
+      .handoff-stage[data-phase="handoff"] .owner-state::before {
+        display: inline-block;
+        width: 4px;
+        height: 4px;
+        margin-right: 4px;
+        border-radius: 50%;
+        background: var(--active);
+        content: "";
+        vertical-align: 1px;
+      }
+
       .receipt-copy { min-width: 0; }
       .receipt-label { display: block; color: #7a8580; font-size: 5px; font-weight: 900; }
       .receipt-value { display: block; overflow: hidden; margin-top: 3px; color: #202825; font-size: 9px; font-weight: 850; text-overflow: ellipsis; white-space: nowrap; }
@@ -351,6 +418,7 @@
         .agent-cursor { right: -5px; }
         .agent-cursor svg { width: 8px; height: 10px; }
         .agent-label { display: none; }
+        .cursor-packet { top: -9px; left: 5px; font-size: 3px; }
         .artifact-panel { padding: 11px 10px 9px 12px; border-radius: 13px; }
         .artifact-kicker { overflow: hidden; font-size: 4px; text-overflow: ellipsis; white-space: nowrap; }
         .owner-state { padding: 3px 4px; font-size: 4px; }
@@ -378,7 +446,7 @@
         .node-copy span { display: none; }
         .agent-cursor { right: -5px; top: calc(50% - 5px); }
         .agent-cursor svg { width: 7px; height: 9px; }
-        .agent-label { display: none; }
+        .agent-label, .cursor-packet { display: none; }
         .artifact-panel { padding: 7px 7px 6px 9px; border-radius: 9px; }
         .artifact-kicker { font-size: 4px; }
         .owner-state { padding: 2px 3px; font-size: 3px; }
@@ -420,6 +488,7 @@
               <span class="agent-cursor" data-cursor-agent="scout" aria-hidden="true">
                 <svg viewBox="0 0 16 20"><path fill="currentColor" d="M1 1v16l4.3-4.2 3.1 6 3-1.6-3.2-5.9H14z" /></svg>
                 <b class="agent-label">Scout</b>
+                <em class="cursor-packet">12 calls</em>
               </span>
             </button>
             <button class="handoff-node" type="button" data-stage="compose" data-agent="maker" data-evidence="narrative-v3" aria-label="Compose · Maker · attach narrative v3" aria-pressed="false">
@@ -428,6 +497,7 @@
               <span class="agent-cursor" data-cursor-agent="maker" aria-hidden="true">
                 <svg viewBox="0 0 16 20"><path fill="currentColor" d="M1 1v16l4.3-4.2 3.1 6 3-1.6-3.2-5.9H14z" /></svg>
                 <b class="agent-label">Maker</b>
+                <em class="cursor-packet">story v3</em>
               </span>
             </button>
             <button class="handoff-node" type="button" data-stage="verify" data-agent="critic" data-evidence="claim-checklist" aria-label="Verify · Critic · attach 9 of 9 claim checks" aria-pressed="false">
@@ -436,6 +506,7 @@
               <span class="agent-cursor" data-cursor-agent="critic" aria-hidden="true">
                 <svg viewBox="0 0 16 20"><path fill="currentColor" d="M1 1v16l4.3-4.2 3.1 6 3-1.6-3.2-5.9H14z" /></svg>
                 <b class="agent-label">Critic</b>
+                <em class="cursor-packet">9 checks</em>
               </span>
             </button>
           </div>

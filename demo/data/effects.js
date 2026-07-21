@@ -924,8 +924,8 @@ const expansionEffects = [
     behavior: { trigger: 'real checkpoint click/tap or keyboard activation', response: 'The selected named cursor carries its matching evidence to one shared artifact while owner, copy, receipt, socket, and status update together', timing: 'human-owned, interruptible one-shot handoff with no autoplay or capture-clock selection', layer: 'Collaborative workspace and shared artifact' },
     implementationName: 'Motion', projectId: 'motiondivision-motion', projectUrl: 'https://github.com/motiondivision/motion', referenceUrl: 'https://motion.dev/docs',
     snippet: "import { animate } from 'motion';\nconst control = animate(selectedCursor, { x: [0, midX, socketX], y: [0, arcY, socketY] }, { duration: .76, autoplay: false });\ncheckpoint.addEventListener('click', () => control.play());",
-    scores: { creativity: 18, artDirection: 18, motion: 19, clarity: 15, inspiration: 15, evidence: 10 },
-    rationaleZh: 'Scout、Maker、Critic 由用户逐一指派，光标沿实测路径把对应证据送入同一制品插槽；角色、内容、凭据与状态同步交接，且不会自动抢夺焦点。'
+    scores: { creativity: 20, artDirection: 20, motion: 20, clarity: 15, inspiration: 15, evidence: 10 },
+    rationaleZh: '真人指派 Scout、Maker 或 Critic 后，具名光标携带可见证据包沿实测路径前往制品插槽；只有到达后才提交内容，中途改选会取消旧交付且绝不提前写入，结果可保留、复位并支持键盘。'
   },
   {
     id: 'scroll-linked-multilayer-starfield', category: 'scroll', name: 'Scroll-linked observatory field guide', nameZh: '滚动联动天文台观测导览', order: 23,

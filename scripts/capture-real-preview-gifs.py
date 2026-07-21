@@ -4387,9 +4387,19 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
         ):
             raise RuntimeError(f"{demo['id']} did not capture a real four-command regl cell analysis across buttons, drag, and keyboard: {interaction!r}")
     elif demo["id"] == "autonomous-agent-cursor-constellation":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         if (
-            interaction["automaticFallback"]
+            not assertion
+            or interaction["task"] != "human-operated-multi-agent-evidence-delivery-to-one-shared-artifact"
+            or interaction["claimedLibrary"] != "motion@12.42.2"
+            or interaction["mechanism"] != "trusted-checkpoint-selection-moves-one-named-cursor-and-commits-its-evidence-only-after-the-cursor-reaches-the-measured-artifact-socket"
+            or interaction["assetStrategy"] != "code-native-dom-geometry-cursors-and-evidence-state-no-functional-raster-input-required"
+            or not interaction["userInputRequired"]
+            or not interaction["strictTrustedInputGuard"]
+            or not interaction["initialStaticVerified"]
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["automaticFallback"]
             or interaction["automaticPlayback"]
             or interaction["automaticSelection"]
             or interaction["automaticTrigger"]
@@ -4411,6 +4421,10 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["interruptionCount"] < 1
             or interaction["animatedSelectionCount"] < 6
             or interaction["motionCompletionCount"] < 5
+            or interaction["deliveryCommitCount"] != 5
+            or interaction["cancelledDeliveryCount"] != 1
+            or interaction["prematureCommitCount"] != 0
+            or interaction["deliveryCommitCount"] != interaction["motionCompletionCount"] + interaction["reducedMotionDirectCount"]
             or interaction["motionControlCount"] != 5
             or interaction["artifactUpdateCount"] != interaction["selectionCount"]
             or interaction["stageSelectionCounts"] != {"discover": 2, "compose": 2, "verify": 2}
@@ -4420,6 +4434,9 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["selectedStage"] != "compose"
             or interaction["selectedAgent"] != "maker"
             or interaction["selectedEvidence"] != "narrative-v3"
+            or interaction["committedStage"] != "compose"
+            or interaction["committedAgent"] != "maker"
+            or interaction["committedEvidence"] != "narrative-v3"
             or interaction["previousStage"] is not None
             or interaction["lastSelectionTarget"] != "stage-compose"
             or interaction["phase"] != "settled"

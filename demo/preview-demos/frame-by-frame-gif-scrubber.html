@@ -1,1 +1,306 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p5.js — Frame by Frame GIF Scrubber</title><link rel="stylesheet" href="./shared.css"><style>:root{--preview-background:#0b0c12}#gif-host{position:absolute;inset:0}#gif-host canvas{width:100%!important;height:100%!important}.gif-copy{position:absolute;z-index:5;left:13px;top:43px;color:#f5f5ff;pointer-events:none}.gif-copy small{font:800 6px/1 ui-monospace;letter-spacing:.16em;color:#ff8fb6}.gif-copy h1{width:102px;margin:8px 0 0;font:950 17px/.85 system-ui;letter-spacing:-.055em}.gif-control{position:absolute;z-index:6;right:12px;bottom:13px;width:150px;color:#ff8fb6;font:800 6px/1 ui-monospace;display:grid;gap:5px}.gif-control input{width:100%;accent-color:#ff8fb6}.gif-frame{position:absolute;right:12px;top:12px;z-index:5;color:#ff8fb6;font:900 7px/1 ui-monospace}.library-badge{background:#0b0c12c9}</style></head><body><main class="preview-stage" data-preview-mechanism="decoded-gif-frame-seek"><div id="gif-host"></div><section class="gif-copy"><small>GIF89a / 12 FRAMES</small><h1>SCRUB TIME IN EITHER DIRECTION.</h1></section><output class="gif-frame" id="gif-frame">FRAME 00</output><label class="gif-control">DISPOSAL-AWARE FRAME <input id="gif-slider" type="range" min="0" max="11" value="0" aria-label="GIF frame"></label><span class="library-badge">p5.js · browser GIF decoder</span><span class="scene-caption">valid in-memory GIF89a decoded to seekable frames</span></main><script type="module" src="./src/frame-by-frame-gif-scrubber-demo.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>p5.js — Frame by Frame GIF Scrubber</title>
+  <link rel="stylesheet" href="./shared.css">
+  <style>
+    :root {
+      --preview-background: #0d1111;
+      --ink: #eff1e9;
+      --muted: #969d96;
+      --cyan: #58d4d9;
+      --coral: #f36b49;
+      color-scheme: dark;
+      font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+    }
+
+    button,
+    input { font: inherit; }
+
+    .preview-stage {
+      background: var(--preview-background);
+      color: var(--ink);
+    }
+
+    #gif-host {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      outline: none;
+    }
+
+    #gif-host:focus-visible::after {
+      content: "";
+      position: absolute;
+      inset: 5px;
+      border: 1px solid var(--cyan);
+      border-radius: 3px;
+      pointer-events: none;
+    }
+
+    #gif-host canvas {
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    .editorial-copy {
+      position: absolute;
+      z-index: 4;
+      top: 12px;
+      left: 13px;
+      width: min(27vw, 188px);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin: 0;
+      color: var(--cyan);
+      font: 800 clamp(5px, 1vw, 8px)/1 ui-monospace, SFMono-Regular, monospace;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 14px;
+      height: 2px;
+      background: var(--coral);
+    }
+
+    .editorial-copy h1 {
+      margin: clamp(14px, 3.5vh, 28px) 0 9px;
+      font-size: clamp(19px, 4.9vw, 40px);
+      font-weight: 880;
+      line-height: .88;
+      letter-spacing: -.068em;
+      text-wrap: balance;
+    }
+
+    .editorial-copy p:last-child {
+      max-width: 164px;
+      margin: 0;
+      color: var(--muted);
+      font: 620 clamp(6px, 1.13vw, 9px)/1.4 ui-monospace, SFMono-Regular, monospace;
+    }
+
+    .frame-metadata {
+      position: absolute;
+      z-index: 6;
+      top: 12px;
+      right: 12px;
+      display: flex;
+      gap: 1px;
+      filter: drop-shadow(0 4px 14px rgba(0, 0, 0, .22));
+      pointer-events: none;
+    }
+
+    .metadata-cell {
+      min-width: 63px;
+      padding: 7px 8px 6px;
+      background: rgba(9, 14, 14, .84);
+      backdrop-filter: blur(9px);
+    }
+
+    .metadata-cell:first-child { border-radius: 2px 0 0 2px; }
+    .metadata-cell:last-child { border-radius: 0 2px 2px 0; }
+
+    .metadata-cell small,
+    .metadata-cell strong {
+      display: block;
+      white-space: nowrap;
+    }
+
+    .metadata-cell small {
+      margin-bottom: 4px;
+      color: #7e8881;
+      font: 760 5px/1 ui-monospace, SFMono-Regular, monospace;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .metadata-cell strong {
+      color: #f1f2eb;
+      font: 800 clamp(7px, 1.4vw, 11px)/1 ui-monospace, SFMono-Regular, monospace;
+    }
+
+    .scrub-controls {
+      position: absolute;
+      z-index: 8;
+      right: 11px;
+      bottom: 9px;
+      left: max(68px, min(31vw, 228px));
+      display: grid;
+      grid-template-columns: auto minmax(80px, 1fr) auto;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 8px;
+      border: 1px solid rgba(209, 224, 218, .15);
+      border-radius: 3px;
+      background: rgba(8, 12, 12, .9);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, .24);
+      backdrop-filter: blur(11px);
+    }
+
+    .transport {
+      display: flex;
+      gap: 3px;
+    }
+
+    .transport-button,
+    .reset-button {
+      height: 25px;
+      min-width: 27px;
+      padding: 0 7px;
+      border: 1px solid rgba(211, 226, 219, .18);
+      border-radius: 2px;
+      background: #171d1c;
+      color: #edf0e9;
+      font: 800 7px/1 ui-monospace, SFMono-Regular, monospace;
+      letter-spacing: .06em;
+      cursor: pointer;
+    }
+
+    .transport-button[data-action="play"] {
+      min-width: 48px;
+      border-color: rgba(88, 212, 217, .55);
+      color: var(--cyan);
+    }
+
+    .transport-button:hover,
+    .reset-button:hover { background: #222a28; }
+
+    .transport-button:focus-visible,
+    .reset-button:focus-visible,
+    #gif-slider:focus-visible {
+      outline: 2px solid var(--cyan);
+      outline-offset: 2px;
+    }
+
+    .range-wrap {
+      display: grid;
+      grid-template-columns: 1fr;
+      align-items: center;
+      gap: 3px;
+      min-width: 0;
+    }
+
+    #gif-slider {
+      width: 100%;
+      height: 13px;
+      margin: 0;
+      accent-color: var(--coral);
+      cursor: ew-resize;
+      touch-action: none;
+    }
+
+    .frame-ticks {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 2px;
+      height: 3px;
+      pointer-events: none;
+    }
+
+    .frame-ticks i {
+      display: block;
+      border-radius: 3px;
+      background: #35403c;
+    }
+
+    .frame-ticks i[data-active="true"] { background: var(--coral); }
+    .frame-ticks i[data-passed="true"] { background: #7caaa8; }
+
+    .runtime-ledger {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    .library-badge,
+    .scene-caption { display: none; }
+
+    @media (max-width: 360px) {
+      .editorial-copy { width: 31vw; }
+      .editorial-copy h1 { font-size: clamp(18px, 6.7vw, 24px); }
+      .metadata-cell { min-width: 45px; padding: 6px; }
+      .scrub-controls { left: max(67px, 32vw); gap: 4px; padding: 5px; }
+      .transport-button,
+      .reset-button { height: 22px; min-width: 23px; padding: 0 5px; font-size: 6px; }
+      .transport-button[data-action="play"] { min-width: 37px; }
+    }
+
+    @media (max-width: 190px), (max-height: 100px) {
+      .editorial-copy { top: 6px; left: 7px; width: 33px; }
+      .eyebrow,
+      .editorial-copy p:last-child,
+      .metadata-cell:nth-child(2),
+      .metadata-cell:nth-child(3),
+      .transport-button[data-action="previous"],
+      .transport-button[data-action="next"],
+      .reset-button,
+      .frame-ticks { display: none; }
+      .editorial-copy h1 { margin-top: 0; font-size: 12px; line-height: .88; }
+      .frame-metadata { top: 5px; right: 5px; }
+      .metadata-cell { min-width: 31px; padding: 4px; }
+      .metadata-cell small { margin-bottom: 2px; font-size: 4px; }
+      .metadata-cell strong { font-size: 6px; }
+      .scrub-controls {
+        right: 5px;
+        bottom: 4px;
+        left: 41px;
+        grid-template-columns: auto 1fr;
+        gap: 3px;
+        padding: 2px 3px;
+      }
+      .transport-button[data-action="play"] { height: 14px; min-width: 23px; padding: 0 3px; font-size: 4px; }
+      #gif-slider { height: 9px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="preview-stage" id="gif-stage" data-preview-mechanism="native-disposal-aware-gif-inspector">
+    <div id="gif-host" tabindex="0" role="application" aria-label="Animation frame inspector. Use Left and Right arrows to step, Space to play or pause, Home to return to frame one, and R to reset."></div>
+
+    <header class="editorial-copy">
+      <p class="eyebrow">Motion QA · GIF89a</p>
+      <h1>Inspect the seams.</h1>
+      <p>Stop on occlusion, glass, and alpha edges before the animation ships.</p>
+    </header>
+
+    <aside class="frame-metadata" aria-live="polite" aria-label="Decoded frame metadata">
+      <div class="metadata-cell"><small>Frame</small><strong id="frame-output">01 / 12</strong></div>
+      <div class="metadata-cell"><small>Delay</small><strong id="delay-output">140 ms</strong></div>
+      <div class="metadata-cell"><small>Disposal</small><strong id="disposal-output">1 · KEEP</strong></div>
+    </aside>
+
+    <section class="scrub-controls" aria-label="GIF transport controls">
+      <div class="transport">
+        <button class="transport-button" type="button" data-action="previous" aria-label="Previous frame">←</button>
+        <button class="transport-button" type="button" data-action="play" aria-label="Play animation" aria-pressed="false">PLAY</button>
+        <button class="transport-button" type="button" data-action="next" aria-label="Next frame">→</button>
+      </div>
+      <label class="range-wrap">
+        <span class="runtime-ledger">Frame scrubber</span>
+        <input id="gif-slider" type="range" min="0" max="11" step="1" value="0" aria-label="Frame scrubber" aria-valuetext="Frame 1 of 12, 140 milliseconds, disposal keep">
+        <span class="frame-ticks" id="frame-ticks" aria-hidden="true"></span>
+      </label>
+      <button class="reset-button" id="reset-control" type="button">RESET · R</button>
+    </section>
+
+    <output class="runtime-ledger" id="runtime-ledger" aria-label="Interaction ledger"></output>
+  </main>
+  <script type="module" src="./src/frame-by-frame-gif-scrubber-demo.js"></script>
+</body>
+</html>

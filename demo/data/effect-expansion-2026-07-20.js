@@ -3387,41 +3387,41 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "frame-by-frame-gif-scrubber",
-    "name": "Frame-by-frame GIF scrubber",
-    "nameZh": "逐帧 GIF 擦洗器",
+    "name": "Occlusion Check GIF frame inspector",
+    "nameZh": "遮挡检查 GIF 逐帧质检器",
     "category": "canvas",
-    "sourceUrl": "https://github.com/matt-way/gifuct-js",
-    "difference": "range 非线性选择解码后的合成帧；目录中的 GIF 只是播放预览，视频 scrub 使用媒体 timecode。",
+    "sourceUrl": "https://developer.mozilla.org/en-US/docs/Web/API/ImageDecoder",
+    "difference": "不是把一组 PNG 当成 GIF，也不是开屏自动播放：浏览器逐帧解码同一个本地 GIF，保留真实 delay、frame rect 与 disposal metadata；人类拖动 range、按键步进或明确 Play 后才改变当前帧。",
     "behavior": {
-      "trigger": "range drag",
-      "response": "Decode disposal-aware GIF frames and scrub them nonlinearly",
-      "timing": "direct discrete frame selection",
-      "layer": "Canvas media inspector"
+      "trigger": "trusted range drag, transport control, or keyboard",
+      "response": "Decode and inspect twelve disposal-composited GIF frames around glass and foreground occlusion edges",
+      "timing": "direct discrete seeking plus user-started variable-delay playback",
+      "layer": "full-stage p5 Canvas motion-QA workstation"
     },
     "implementation": {
       "projectId": "processing-p5-js",
       "projectUrl": "https://github.com/processing/p5.js",
       "library": "p5@2.3.0",
       "renderer": "canvas2d",
-      "snippet": "frames = await Promise.all([...Array(frameCount)].map((_,i) => decoder.decode({frameIndex:i})))",
-      "referenceUrl": "https://github.com/matt-way/gifuct-js"
+      "snippet": "const result = await decoder.decode({ frameIndex, completeFramesOnly: true }); setFrame(Number(slider.value), 'range-input')",
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/API/ImageDecoder/decode"
     },
     "scores": {
-      "creativity": 16,
-      "artDirection": 17,
-      "motion": 18,
+      "creativity": 19,
+      "artDirection": 20,
+      "motion": 20,
       "clarity": 15,
       "inspiration": 15,
-      "evidence": 9,
-      "total": 90
+      "evidence": 10,
+      "total": 99
     },
-    "rationaleZh": "逐帧检查把 GIF 从被动媒体变成时间直接操纵界面。",
+    "rationaleZh": "同一原创 GIF 的真实逐帧解码、variable delay、两种 disposal 与十二个像素校验和，把动画从被动播放变成可以停在玻璃、遮挡和透明边缘上的质检工具。首帧静止，只有可信人类输入可以拖动、步进或启动播放。",
     "batch": "C",
-    "demo": "原创 24 帧墨滴 GIF 旁带时间刻度，拖动可正放、倒放、跳帧。",
-    "capture": "drag slider 0→23→8→17，展示 disposal 后画面仍正确。",
+    "demo": "在原创 12 帧 Occlusion Check 动效上拖动时间滑杆，停在折纸标记穿过玻璃和双色前景闸门的位置，核对每帧 delay 与 disposal；也可逐帧前后跳转，或明确播放、暂停和重置。",
+    "capture": "首帧静止→真实拖动 0→4→8→11→按钮与键盘往返逐帧→Play 后按 GIF delay 推进→Pause→Reset→再次拖到遮挡关键帧；断言 12 个独立像素校验和、1/2 disposal、1,210 ms 总时长与可信输入计数。",
     "risk": {
       "level": "medium",
-      "detail": "必须正确合成 disposal frames；逐帧 PNG 列表不算真实 GIF 解码。"
+      "detail": "必须从同一 GIF 字节流解码完整合成帧并核对 timing/disposal/checksum；逐帧 PNG 列表、合成事件或开屏自动播放都不算真实交互演示。"
     },
     "observedImplementation": {
       "projectId": "matt-way-gifuct-js",

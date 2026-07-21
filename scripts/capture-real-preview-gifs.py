@@ -1738,6 +1738,66 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.wait_for_timeout(320)
             elif index == 35:
                 page.locator('#inspect-button').click()
+        elif demo["id"] == "frame-by-frame-gif-scrubber":
+            if index == 2:
+                box = page.locator('#gif-slider').bounding_box()
+                page.mouse.move(box["x"] + 2, box["y"] + box["height"] * .5)
+                page.mouse.down()
+            elif index == 3:
+                box = page.locator('#gif-slider').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * .35, box["y"] + box["height"] * .5, steps=3)
+            elif index == 4:
+                box = page.locator('#gif-slider').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * .7, box["y"] + box["height"] * .5, steps=3)
+            elif index == 5:
+                box = page.locator('#gif-slider').bounding_box()
+                page.mouse.move(box["x"] + box["width"] - 2, box["y"] + box["height"] * .5, steps=3)
+                page.mouse.up()
+            elif index == 7:
+                page.locator('.transport-button[data-action="previous"]').click()
+            elif index == 8:
+                page.locator('.transport-button[data-action="next"]').click()
+            elif index == 10:
+                page.locator('#gif-stage').focus()
+                page.keyboard.press("ArrowLeft")
+            elif index == 11:
+                page.keyboard.press("ArrowRight")
+            elif index == 12:
+                page.keyboard.press("Home")
+            elif index == 13:
+                page.keyboard.press("End")
+            elif index == 15:
+                page.locator('.transport-button[data-action="play"]').click()
+            elif index == 16:
+                page.wait_for_timeout(420)
+            elif index == 17:
+                page.locator('.transport-button[data-action="play"]').click()
+            elif index == 19:
+                page.locator('#reset-control').click()
+            elif index == 21:
+                page.locator('#gif-stage').focus()
+                page.keyboard.press("ArrowRight")
+            elif index == 22:
+                page.keyboard.press("ArrowRight")
+            elif index == 23:
+                page.locator('.transport-button[data-action="play"]').click()
+            elif index == 24:
+                page.wait_for_timeout(260)
+            elif index == 25:
+                page.locator('.transport-button[data-action="play"]').click()
+            elif index == 28:
+                box = page.locator('#gif-slider').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * .45, box["y"] + box["height"] * .5)
+                page.mouse.down()
+            elif index == 29:
+                box = page.locator('#gif-slider').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * .78, box["y"] + box["height"] * .5, steps=4)
+                page.mouse.up()
+            elif index == 31:
+                page.locator('.transport-button[data-action="previous"]').click()
+            elif index == 33:
+                page.locator('#gif-stage').focus()
+                page.keyboard.press("End")
         elif demo["id"] == "four-corner-hover-crop-marks":
             if index == round(.35 * args.fps):
                 page.mouse.move(92, 78)
@@ -3686,6 +3746,62 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or interaction["inputKind"] != "control"
         ):
             raise RuntimeError(f"{demo['id']} did not capture trusted bidirectional wheel/drag browsing, finite inertia, bend control, two-sided boundary release, explicit inspection/clear/reset, and five unique decoded textures on the real p5 WebGL ribbon: assertion={assertion!r}; interaction={interaction!r}")
+    elif demo["id"] == "frame-by-frame-gif-scrubber":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["task"] != "human-operated-animation-asset-frame-inspection"
+            or interaction["acceptedInputs"] != ["mouse", "touch", "pen", "keyboard", "control"]
+            or not interaction["userInputRequired"]
+            or not interaction["strictTrustedInputGuard"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["previewClockDriven"]
+            or interaction["previewClockMutation"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["decoder"] != "native-ImageDecoder-completeFramesOnly"
+            or not interaction["gifAssetDecoded"]
+            or interaction["gifSignature"] != "GIF89a"
+            or interaction["gifWidth"] != 480
+            or interaction["gifHeight"] != 320
+            or interaction["gifByteLength"] != 767684
+            or interaction["gifRawChecksum"] != "d9541344f4edc43a137a0e68a856183173463adca25d7cc59aeac33e3c0e2b77"
+            or interaction["parsedFrameCount"] != 12
+            or interaction["decodedFrameCount"] != 12
+            or interaction["completeFrameCount"] != 12
+            or interaction["uniqueFrameChecksumCount"] != 12
+            or len(set(interaction["frameChecksums"])) != 12
+            or set(interaction["disposalMethods"]) != {1, 2}
+            or interaction["totalDurationMs"] != 1210
+            or len(set(interaction["frameDurationsMs"])) < 5
+            or not interaction["gifTrailerFound"]
+            or not interaction["firstFramePaused"]
+            or not interaction["initialStillVerified"]
+            or interaction["inputCount"] < 18
+            or interaction["inputCount"] != interaction["trustedInputCount"]
+            or interaction["rejectedUntrustedCount"] != 0
+            or interaction["pointerInputCount"] < 8
+            or interaction["keyboardInputCount"] < 7
+            or interaction["controlInputCount"] < 4
+            or interaction["rangeInputCount"] < 4
+            or interaction["rangeDragCount"] < 2
+            or interaction["pointerCaptureCount"] < 2
+            or interaction["pointerReleaseCount"] < 2
+            or interaction["stepCount"] < 7
+            or interaction["resetCount"] < 1
+            or interaction["playbackStartCount"] < 2
+            or interaction["playbackPauseCount"] < 2
+            or interaction["playbackFrameAdvanceCount"] < 2
+            or interaction["playbackActive"]
+            or interaction["currentFrameIndex"] != 11
+            or interaction["pointerCaptured"]
+            or interaction["activeRangePointerId"] is not None
+            or interaction["lastInputKind"] != "keyboard"
+            or interaction["lastInputTrusted"] is not True
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture two trusted range drags, transport and keyboard stepping, user-started variable-delay playback, reset, twelve unique complete native GIF frames, and disposal-aware final inspection: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "four-corner-hover-crop-marks":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         if (

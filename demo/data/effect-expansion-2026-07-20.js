@@ -2588,16 +2588,16 @@ export const effectExpansion100Specs = [
   },
   {
     "id": "streaming-line-chart-window",
-    "name": "Streaming line-chart window",
-    "nameZh": "流式折线图窗口推进",
+    "name": "Human-kept cold-room telemetry window",
+    "nameZh": "真人留存的冷库遥测窗口",
     "category": "canvas",
     "sourceUrl": "https://github.com/apache/echarts",
-    "difference": "新数据从右进入、旧数据滑出且整窗连续插值；多图表启动只展示一次上线序列。",
+    "difference": "每次真人 Add/Space 只推进一个确定性冷库读数并严格移出一个最旧样本；越过 6.5°C 只产生候选事件，显式 Keep 后才保留审阅决定。",
     "behavior": {
-      "trigger": "data timer/event",
-      "response": "Advance a fixed data window and interpolate each incoming telemetry sample",
-      "timing": "continuous recent-history stream",
-      "layer": "Canvas chart"
+      "trigger": "trusted add-sample input and explicit keep/undo/reset controls",
+      "response": "Advance one deterministic reading through a fixed window, surface threshold evidence, and retain the chosen event",
+      "timing": "human-paced one-in/one-out sample transactions",
+      "layer": "full-stage p5 Harbor Cold Store telemetry review"
     },
     "implementation": {
       "projectId": "processing-p5-js",
@@ -2608,18 +2608,18 @@ export const effectExpansion100Specs = [
       "referenceUrl": "https://github.com/apache/echarts"
     },
     "scores": {
-      "creativity": 15,
-      "artDirection": 18,
-      "motion": 18,
+      "creativity": 20,
+      "artDirection": 20,
+      "motion": 20,
       "clarity": 15,
-      "inspiration": 14,
-      "evidence": 9,
-      "total": 89
+      "inspiration": 15,
+      "evidence": 10,
+      "total": 100
     },
-    "rationaleZh": "推进窗口和阈值变色能形成持续遥测叙事。",
+    "rationaleZh": "二十四点确定性来源、十二点固定窗口、三组一进一出记录、6.5°C 阈值与显式 Keep 把流式曲线变成可复核的冷库事件审阅。",
     "batch": "C",
-    "demo": "一条固定 60 样本心跳曲线不断前移，越过阈值时整段短暂变色。",
-    "capture": "固定数据序列运行 6 次更新→停在阈值峰值→继续恢复。",
+    "demo": "审阅 Harbor Cold Store Probe A2：真人逐次加入 C424、C425、C426，窗口同步移出 C412–C414，并保留最新 8.2°C 事件。",
+    "capture": "首帧十二点窗口静止→点击 Add 三次并分别停留→观察两次阈值越界与最旧点移出→点击 Keep Event→停留在 C426 · 8.2°C。",
     "risk": {
       "level": "medium",
       "detail": "禁止 Math.random；默认图表主题会降低艺术分。"

@@ -1843,6 +1843,17 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.locator('#apply-curve').focus()
             elif index == 30:
                 page.keyboard.press('Enter')
+        elif demo["id"] == "streaming-line-chart-window":
+            if index == 5:
+                page.locator('#add-sample').click()
+            elif index == 10:
+                page.locator('#add-sample').click()
+            elif index == 15:
+                page.locator('#add-sample').click()
+            elif index == 20:
+                page.locator('#keep-event').hover()
+            elif index == 21:
+                page.locator('#keep-event').click()
         elif demo["id"] == "gooey-pixel-cursor-wake":
             if index == 3:
                 box = page.locator('#pixel-wake-host').bounding_box()
@@ -7139,6 +7150,89 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             or page.locator('#status-pill').get_attribute('data-state') != "saved"
         ):
             raise RuntimeError(f"{demo['id']} did not capture a real transactional checkout easing edit and retained second human commit: {interaction!r}")
+    elif demo["id"] == "streaming-line-chart-window":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        visible_ids = [sample["id"] for sample in interaction["visibleSamples"]]
+        eviction_pairs = [(record["removed"]["id"], record["added"]["id"]) for record in interaction["history"]]
+        if (
+            not assertion
+            or interaction["id"] != "streaming-line-chart-window"
+            or interaction["task"] != "human-advances-a-deterministic-cold-room-telemetry-window-one-sample-at-a-time-and-explicitly-keeps-a-threshold-event"
+            or interaction["claimedLibrary"] != "p5@2.3.0"
+            or interaction["mechanism"] != "each-trusted-add-appends-one-deterministic-sample-and-shifts-exactly-one-oldest-sample-out-of-a-fixed-p5-line-chart-window"
+            or interaction["assetStrategy"] != "code-native-deterministic-time-series-no-functional-raster-input-required"
+            or interaction["imageGenerationDecision"] != "omitted-because-raster-pixels-would-not-drive-sample-order-fixed-window-eviction-threshold-detection-or-review-retention"
+            or interaction["causality"] != "trusted-human-input-only"
+            or interaction["automaticSampling"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticCycle"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["infiniteTimer"]
+            or interaction["previewClockDriven"]
+            or not interaction["renderIgnoresPreviewClock"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["untrustedMutationCount"] != 0
+            or not interaction["initialWindowVerified"]
+            or interaction["initialWindowChecksum"] != 1647261095
+            or interaction["sourceSampleCount"] != 24
+            or interaction["sourceChecksum"] != 530109401
+            or interaction["sourceCursor"] != 15
+            or len(interaction["history"]) != 3
+            or len(interaction["visibleSamples"]) != 12
+            or interaction["windowSize"] != 12
+            or visible_ids != [f"C{index}" for index in range(415, 427)]
+            or eviction_pairs != [("C412", "C424"), ("C413", "C425"), ("C414", "C426")]
+            or interaction["latestSampleId"] != "C426"
+            or abs(interaction["latestValue"] - 8.2) > .001
+            or not interaction["latestIsAnomaly"]
+            or interaction["sampleAdvanceInputCount"] != 3
+            or interaction["sampleAdvanceCount"] != 3
+            or interaction["appliedSampleCount"] != 3
+            or interaction["windowShiftCount"] != 3
+            or interaction["oldestRemovalCount"] != 3
+            or interaction["rejectedSampleAdvanceCount"] != 0
+            or interaction["lastRemovedSampleId"] != "C414"
+            or interaction["lastAddedSampleId"] != "C426"
+            or not interaction["fixedWindowVerified"]
+            or not interaction["evictionVerified"]
+            or not interaction["allVisibleSamplesFromSource"]
+            or interaction["anomalyArrivalCount"] != 2
+            or interaction["visibleAnomalyCount"] != 2
+            or interaction["lastEventSampleId"] != "C426"
+            or not interaction["thresholdLineVisible"]
+            or not interaction["reviewRetained"]
+            or interaction["phase"] != "event-kept"
+            or interaction["result"] != "cold-room-threshold-event-kept"
+            or interaction["retainedEvent"] != {"id": "C426", "minute": 28, "value": 8.2}
+            or interaction["retainedSourceCursor"] != 15
+            or interaction["visibleWindowChecksum"] != 1493955976
+            or interaction["retainedWindowChecksum"] != 1493955976
+            or interaction["inputCount"] != 4
+            or interaction["trustedInputCount"] != 4
+            or interaction["pointerInputCount"] != 4
+            or interaction["keyboardInputCount"] != 0
+            or interaction["controlInputCount"] != 0
+            or interaction["confirmationCount"] != 1
+            or interaction["rejectedConfirmationCount"] != 0
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["undoCount"] != 0
+            or interaction["resetCount"] != 0
+            or interaction["decisionClearCount"] != 0
+            or interaction["prematureCommitCount"] != 0
+            or len(interaction["transitionRecords"]) != 4
+            or any(not record["trusted"] for record in interaction["transitionRecords"])
+            or not interaction["fullStageGeometryVerified"]
+            or not interaction["chartWithinStage"]
+            or interaction["canvasCoverageRatio"] < .995
+            or not interaction["p5InstanceReady"]
+            or not interaction["canvas2dReady"]
+            or not interaction["ready"]
+            or page.locator('#review-state').get_attribute('data-retained') != "true"
+            or page.locator('#review-output').text_content() != "KEPT #C426 · 8.2°C"
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture three real one-in/one-out cold-room samples and a retained 8.2°C event: {interaction!r}")
     elif demo["id"] == "gooey-pixel-cursor-wake":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")

@@ -1,7 +1,45 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>p5.js — Streaming Line Chart Window</title><style>:root{--preview-background:#071114}#stream-host{position:absolute;inset:0}#stream-host canvas{width:100%!important;height:100%!important}.stream-copy{position:absolute;z-index:4;left:13px;top:47px;color:#ecfffb;pointer-events:none}.stream-copy small{font:800 6px/1 ui-monospace;letter-spacing:.16em;color:#65efc1}.stream-copy h1{width:101px;margin:8px 0 0;font:950 18px/.84 system-ui;letter-spacing:-.055em}.sample-state{position:absolute;right:12px;top:12px;z-index:4;color:#65efc1;font:900 7px/1 ui-monospace}.library-badge{background:#071114c9}</style>  <script type="module" crossorigin src="./assets/streaming-line-chart-window-CGyiMnmx.js"></script>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>p5.js — Cold-Room Telemetry Review</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root{--preview-background:#f1eee5;color-scheme:light;--ink:#172726;--muted:#75827e;--teal:#087f79;--red:#e7573f;--green:#287b57}
+    #telemetry-stage{overflow:hidden;background:#f1eee5;color:var(--ink)}
+    #stream-host{position:absolute;inset:0;outline:none;touch-action:manipulation}
+    #stream-host:focus-visible{box-shadow:inset 0 0 0 2px #087f7959}
+    #stream-host canvas{width:100%!important;height:100%!important}
+    .telemetry-header{position:absolute;z-index:7;left:11px;right:11px;top:9px;display:flex;align-items:center;justify-content:space-between;pointer-events:none;font:850 5px/1 ui-monospace;letter-spacing:.13em;text-transform:uppercase}.telemetry-header span:first-child{display:flex;align-items:center;gap:6px}.telemetry-header span:first-child::before{content:"";width:7px;height:7px;border-radius:2px;background:var(--teal)}.telemetry-header span:last-child{color:#89938f}
+    .telemetry-copy{position:absolute;z-index:6;left:12px;top:40px;width:78px;pointer-events:none}.telemetry-copy small{font:800 5px/1 ui-monospace;letter-spacing:.14em;color:var(--teal)}.telemetry-copy h1{margin:7px 0 0;font:950 15px/.87 system-ui;letter-spacing:-.05em}.telemetry-copy p{margin:7px 0 0;font:650 5px/1.35 system-ui;color:var(--muted)}
+    .latest-reading{position:absolute;z-index:7;right:12px;top:28px;pointer-events:none;text-align:right}.latest-reading small{display:block;font:750 5px/1 ui-monospace;letter-spacing:.11em;color:#7c8884}.latest-reading output{display:block;margin-top:3px;font:950 11px/1 system-ui;letter-spacing:-.04em;color:var(--teal)}.latest-reading[data-alert="true"] output{color:var(--red)}
+    .window-event{position:absolute;z-index:7;left:103px;right:12px;bottom:48px;display:flex;align-items:flex-end;justify-content:space-between;gap:7px;pointer-events:none}.drop-readout small,.review-state small{display:block;font:750 4px/1 ui-monospace;letter-spacing:.1em;color:#89938f}.drop-readout output,.review-state output{display:block;margin-top:3px;font:900 5px/1 ui-monospace;letter-spacing:.06em;color:#697672}.review-state{text-align:right}.review-state[data-retained="true"] output{color:var(--green)}.review-state[data-alert="true"] output{color:var(--red)}
+    .telemetry-controls{position:absolute;z-index:11;left:11px;right:11px;bottom:8px;display:flex;align-items:center;justify-content:flex-end;gap:5px}.telemetry-action{height:34px;min-width:42px;padding:0 8px;border:1px solid #17272624;border-radius:8px;background:#e5e0d4;color:#5f6b67;cursor:pointer;font:850 5px/1 ui-monospace;letter-spacing:.07em;transition:transform 120ms ease,box-shadow 120ms ease}.telemetry-action:not(:disabled):hover{transform:translateY(-1px);box-shadow:0 5px 12px #1727261f}.telemetry-action:disabled{opacity:.35;cursor:not-allowed}.telemetry-action:focus-visible{outline:1px solid var(--teal);outline-offset:1px}.telemetry-action.add{margin-right:auto;min-width:69px;border-color:#087f7952;background:#deebe5;color:var(--teal)}.telemetry-action.keep{min-width:65px;border-color:#287b5752;background:#e1ebe2;color:var(--green)}
+    @media(max-width:270px){.telemetry-header span:last-child{display:none}.telemetry-copy{top:38px;width:210px}.telemetry-copy h1{width:195px;font-size:17px}.telemetry-copy p{width:195px}.latest-reading{top:102px}.window-event{left:12px;bottom:57px}.telemetry-controls{gap:4px}.telemetry-action{height:40px;min-width:0;flex:1;padding:0 4px}.telemetry-action.add{margin-right:0;flex:1.35}.telemetry-action.keep{min-width:0;flex:1.25}}
+  </style>
+  <script type="module" crossorigin src="./assets/streaming-line-chart-window-DXbM4p2b.js"></script>
   <link rel="modulepreload" crossorigin href="./assets/shared-DJbJzhDe.js">
   <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-CNC7AqOf.js">
   <link rel="modulepreload" crossorigin href="./assets/app-Dj3RhBXi.js">
-  <link rel="modulepreload" crossorigin href="./assets/batch-c-utils-g_3IBZ2b.js">
   <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
-</head><body><main class="preview-stage" data-preview-mechanism="fixed-window-telemetry-stream"><div id="stream-host" tabindex="0" aria-label="Press Space to freeze or resume the deterministic incoming telemetry"></div><section class="stream-copy"><small>TELEMETRY / 60 SAMPLES</small><h1>THE WINDOW MOVES, HISTORY FALLS AWAY.</h1></section><output class="sample-state" id="sample-state">LIVE · 000</output><span class="library-badge">p5.js · streaming Canvas chart</span><span class="scene-caption">fixed data window · interpolated incoming sample</span></main></body></html>
+</head>
+<body>
+  <main id="telemetry-stage" class="preview-stage" data-preview-mechanism="trusted-single-step-fixed-window-telemetry">
+    <div id="stream-host" tabindex="0" role="application" aria-label="Cold-room telemetry review. Press Space or A to add one deterministic sample, Enter to keep the latest threshold event, Z to undo, and R to reset."></div>
+    <header class="telemetry-header"><span>Harbor Cold Store / Probe A2</span><span>p5.js · fixed window</span></header>
+    <section class="telemetry-copy"><small>INTAKE TEMPERATURE</small><h1>REVIEW EACH NEW READING.</h1><p>A 12-sample window drops its oldest reading only when you request the next one.</p></section>
+    <span id="latest-reading" class="latest-reading" data-alert="false"><small>LATEST SAMPLE</small><output id="sample-state">4.6°C · #C423</output></span>
+    <section class="window-event">
+      <span class="drop-readout"><small>WINDOW SHIFT</small><output id="drop-output">NO SAMPLE ADDED</output></span>
+      <span id="review-state" class="review-state" data-alert="false" data-retained="false"><small>EVENT REVIEW</small><output id="review-output">NO EVENT KEPT</output></span>
+    </section>
+    <footer class="telemetry-controls">
+      <button id="add-sample" class="telemetry-action add" type="button">+ ADD SAMPLE</button>
+      <button id="undo-sample" class="telemetry-action" type="button" disabled>UNDO</button>
+      <button id="reset-window" class="telemetry-action" type="button" disabled>RESET</button>
+      <button id="keep-event" class="telemetry-action keep" type="button">KEEP EVENT</button>
+    </footer>
+  </main>
+</body>
+</html>

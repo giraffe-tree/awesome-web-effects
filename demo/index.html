@@ -1003,7 +1003,7 @@
       const effectReferenceUrl = effect => `https://giraffe-tree.github.io/awesome-web-effects/${isChinese() ? '?lang=zh-Hans' : ''}#${encodeURIComponent(effect.id)}`;
       const briefEffectPrompt = (effect, project) => isChinese()
         ? `在当前项目中实现「${effect.nameZh}」（${effect.name}）。把 ${effectReferenceUrl(effect)} 作为准绳：查看其已验证 Demo、最小代码、触发、时序和层级，并定义 2–3 条可观察验收标准。优先使用 ${project.name} 和现有依赖，用原创素材适配。保留响应式、键盘、指针、触控、prefers-reduced-motion、性能与资源清理。运行测试及桌面/移动浏览器检查，报告改动文件、逐条证据和遗留风险。`
-        : `Implement “${effect.name}” (${effect.nameZh}) in the current project. Use ${effectReferenceUrl(effect)} as the source of truth: inspect its verified demo, minimal code, trigger, timing, and layering, then define 2–3 observable acceptance criteria. Prefer ${project.name} and existing dependencies; adapt with original assets. Preserve responsive, keyboard, pointer, touch, prefers-reduced-motion, performance, and cleanup. Run tests and desktop/mobile browser checks; report changed files, evidence per criterion, and remaining risks.`;
+        : `Implement “${effect.name}” (${effect.nameZh}) in the current project. Use ${effectReferenceUrl(effect)} as the source of truth: inspect its verified demo, minimal code, trigger, timing, and layering, then define 2–3 observable acceptance criteria. Prefer ${project.name} and existing dependencies; use original assets. Preserve responsive, keyboard, pointer, touch, prefers-reduced-motion, performance, and cleanup. Run tests and desktop/mobile browser checks; report changed files, evidence per criterion, and remaining risks.`;
       const officialPreviewUrl = source => {
         const githubBlob = source.originUrl?.match(/^https:\/\/github\.com\/([^/]+)\/([^/]+)\/blob\/([^/]+)\/(.+)$/);
         return githubBlob

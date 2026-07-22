@@ -68,7 +68,7 @@ const messages = {
     effects: '种效果', sources: '来源项目', gifs: '真实 GIF', prompts: 'Agent Prompt',
     visualTitle: '动手之前，先看真实 Demo。', visualCopy: '每个发布条目都通过创意、艺术、动效、辨识度、启发价值与证据质量六项 100 分制评审。',
     codeTitle: '从可用的最小代码开始。', codeCopy: '展开任意效果，即可复制推荐来源最小而有用的实现。',
-    promptTitle: '复制一段清晰的实现 Prompt。', promptCopy: '选效果、按当前项目适配、保留无障碍与动效降级，再完成验证。',
+    promptTitle: '一键优化你的项目动效', promptCopy: '选效果、按当前项目适配、保留无障碍与动效降级，再完成验证。',
     section: '交互效果目录', catalogTitle: '先选交互行为，再选实现工具。',
     search: '搜索效果、来源项目或关键词…', searchLabel: '搜索效果', filterLabel: '效果分类', sortLabel: '效果排序',
     curated: '效果策展顺序', scoreSort: '策展评分最高', stars: '推荐来源 Stars', name: '效果名称 A–Z', sourcesSort: '实现来源最多', all: '全部',

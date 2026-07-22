@@ -1130,6 +1130,26 @@ const expansion150Effects = [...effectExpansion150BatchA1, ...effectExpansion150
 
 export const effects = [...existingEffects, ...expansionEffects, ...expansion100Effects, ...expansion150Effects];
 
+// A deliberately small, effect-level homepage edit. This is separate from
+// source.recommended, which identifies the preferred implementation *within*
+// an effect rather than whether the effect itself is featured.
+export const featuredEffectIds = Object.freeze([
+  'pinned-horizontal-scroll-scene',
+  'prompt-select-replace-loop',
+  'staggered-transform-choreography',
+  'motion-graphics-burst',
+  'visually-authored-keyframe-sequence',
+  'compact-svg-shape-tween',
+  'filterable-grid-reflow',
+  'perspective-tilt-and-glare',
+  'context-aware-custom-cursor',
+  'displacement-map-image-hover',
+  'svg-stroke-drawing',
+  'dom-aware-drag-spawned-fish-flock',
+  'pointer-injected-gpu-fluid',
+  'dom-synced-shader-planes',
+]);
+
 export const projects = [
   {
     "id": "greensock-gsap",

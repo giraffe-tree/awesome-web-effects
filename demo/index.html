@@ -339,12 +339,13 @@
       .effect-modal[hidden] { display: none; }
       .effect-modal { position: fixed; z-index: 100; inset: 0; display: grid; place-items: center; padding: 24px; }
       .effect-modal-backdrop { position: absolute; inset: 0; background: rgba(6, 8, 20, .62); backdrop-filter: blur(14px); animation: modal-fade .24s ease-out; }
-      .effect-modal-dialog { position: relative; width: min(980px, 100%); max-height: calc(100dvh - 48px); overflow: auto; border: 1px solid rgba(154, 168, 216, .26); border-radius: 28px; background: #181e3a; box-shadow: 0 2px 8px rgba(4, 6, 18, .5), 0 32px 100px rgba(2, 4, 12, .7); animation: modal-rise .28s cubic-bezier(.22, 1, .36, 1); }
+      .effect-modal-dialog { position: relative; width: min(1180px, 100%); max-height: calc(100dvh - 48px); overflow: auto; border: 1px solid rgba(154, 168, 216, .26); border-radius: 28px; background: #181e3a; box-shadow: 0 2px 8px rgba(4, 6, 18, .5), 0 32px 100px rgba(2, 4, 12, .7); animation: modal-rise .28s cubic-bezier(.22, 1, .36, 1); }
+      #effect-modal-content { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(410px, .85fr); align-items: start; }
       .effect-modal-close { position: sticky; z-index: 4; top: 14px; float: right; display: grid; place-items: center; width: 38px; height: 38px; margin: 14px 14px -52px 0; border: 1px solid rgba(244, 239, 233, .3); border-radius: 50%; color: #f2ede4; background: rgba(8, 10, 24, .58); backdrop-filter: blur(12px); cursor: pointer; font-size: 24px; line-height: 1; transition: background .2s ease; }
       .effect-modal-close:hover { background: rgba(8, 10, 24, .8); }
       html[dir="rtl"] .effect-modal-close { float: left; margin: 14px 0 -52px 14px; }
-      .modal-preview { position: relative; display: grid; place-items: center; min-height: 360px; overflow: hidden; color: #f2ede4; background: #0e1226; }
-      .modal-preview-live { min-height: 453px; padding: 24px; background: radial-gradient(circle at 50% 28%, #232c4e, #0e1226 70%); }
+      .modal-preview { position: sticky; top: 0; display: grid; place-items: center; min-height: min(700px, calc(100dvh - 48px)); overflow: hidden; color: #f2ede4; background: #0e1226; }
+      .modal-preview-live { min-height: min(700px, calc(100dvh - 48px)); padding: 24px; background: radial-gradient(circle at 50% 28%, #232c4e, #0e1226 70%); }
       .modal-preview-frame-shell { position: relative; width: min(100%, 720px); aspect-ratio: 16 / 9; overflow: hidden; border-radius: 18px; background: #070a16; box-shadow: 0 22px 70px rgba(2, 4, 12, .6); }
       .modal-preview-frame { position: absolute; inset: 0 auto auto 0; display: block; width: 320px; height: 180px; border: 0; background: #070a16; transform: scale(var(--preview-scale, 1)); transform-origin: top left; }
       .modal-preview-live .media-load-state { margin: 24px; border-radius: 18px; }
@@ -393,9 +394,15 @@
       .modal-copy-code { flex: 0 0 auto; min-height: 36px; padding: 0 12px; border: 1px solid rgba(244, 239, 233, .22); border-radius: 99px; color: #f2ede4; background: rgba(244, 239, 233, .09); cursor: pointer; font-size: 11px; font-weight: 650; transition: background .2s ease, border-color .2s ease; }
       .modal-copy-code:hover { border-color: rgba(244, 239, 233, .34); background: rgba(244, 239, 233, .18); }
       .modal-code-card pre { min-height: 0; max-height: 290px; padding: 20px; }
-      .modal-primary-actions { display: flex; justify-content: flex-start; margin-top: 20px; }
+      .modal-prompt-card { margin-top: 22px; padding: 20px; border: 1px solid rgba(232, 160, 180, .28); border-radius: 18px; background: linear-gradient(135deg, rgba(232, 160, 180, .11), rgba(154, 168, 216, .06)); }
+      .modal-prompt-text { max-height: 170px; margin: 10px 0 0; overflow: auto; color: rgba(240, 235, 228, .82); font-size: 13px; line-height: 1.62; scrollbar-width: thin; }
+      .modal-primary-actions { display: flex; justify-content: flex-start; margin-top: 14px; }
       .modal-prompt-button { min-height: 44px; padding: 0 20px; border: 0; border-radius: 99px; color: var(--pink-ink); background: var(--pink); cursor: pointer; font-size: 13px; font-weight: 650; transition: transform .24s var(--ease-out), box-shadow .24s var(--ease-out), background .2s ease; }
       .modal-prompt-button:hover { background: var(--pink-hover); box-shadow: 0 6px 18px rgba(232, 160, 180, .3); transform: translateY(-1px); }
+      .modal-more { margin-top: 16px; border: 1px solid var(--line-soft); border-radius: 18px; background: rgba(154, 168, 216, .025); }
+      .modal-more > summary { padding: 16px 18px; color: var(--muted); cursor: pointer; font-size: 12px; font-weight: 650; list-style-position: inside; }
+      .modal-more[open] > summary { border-bottom: 1px solid var(--line-soft); }
+      .modal-more-body { padding: 0 18px 18px; }
       @keyframes modal-fade { from { opacity: 0; } }
       @keyframes modal-rise { from { opacity: 0; transform: translateY(18px) scale(.98); } }
 
@@ -482,9 +489,10 @@
         .footer-link { display: inline-block; margin-top: 16px; }
         .effect-modal { align-items: end; padding: 0; }
         .effect-modal-dialog { width: 100%; max-height: 94dvh; border-radius: 24px 24px 0 0; }
+        #effect-modal-content { display: block; }
         .effect-modal-close { top: 10px; margin: 10px 10px -48px 0; }
         html[dir="rtl"] .effect-modal-close { margin: 10px 0 -48px 10px; }
-        .modal-preview, .modal-preview-unavailable { min-height: 220px; }
+        .modal-preview, .modal-preview-unavailable { position: relative; min-height: 220px; }
         .modal-preview-live { min-height: 0; padding: 0; }
         .modal-preview-frame-shell { width: 100%; border-radius: 0; box-shadow: none; }
         .modal-preview-live .media-load-state { margin: 0; border-radius: 0; }
@@ -496,6 +504,7 @@
         .score-breakdown { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         .modal-code-header { align-items: flex-start; }
         .modal-prompt-button { width: 100%; }
+        .modal-prompt-card { padding: 17px; }
       }
 
       /* 2026 homepage composition: editorial hero, effect reel, and FLIP-ready card grid. */
@@ -606,14 +615,25 @@
         position: relative;
         padding: 20px 0 120px;
         border-radius: 0;
-        background: var(--surface-soft);
+        color: #18243b;
+        background:
+          radial-gradient(52% 24% at 18% 22%, rgba(227, 235, 243, .34), transparent 76%),
+          radial-gradient(42% 26% at 82% 48%, rgba(245, 205, 198, .24), transparent 78%),
+          linear-gradient(180deg, #324d70 0%, #78809a 16%, #a590a6 48%, #d2afb6 76%, #a5b1c0 100%);
+        --ink: #18243b;
+        --muted: rgba(31, 44, 70, .76);
+        --quiet: rgba(31, 44, 70, .58);
+        --line: rgba(34, 51, 77, .2);
+        --line-soft: rgba(34, 51, 77, .12);
+        --surface: rgba(238, 234, 238, .7);
+        --surface-soft: rgba(226, 224, 232, .66);
       }
       .catalog-section::before {
         content: "";
         position: absolute;
         inset: 0 0 auto;
         height: 1px;
-        background: linear-gradient(90deg, transparent, rgba(232, 160, 180, .38), rgba(245, 203, 184, .52), rgba(232, 160, 180, .38), transparent);
+        background: linear-gradient(90deg, transparent, rgba(238, 226, 235, .4), rgba(245, 222, 218, .72), rgba(238, 226, 235, .4), transparent);
         pointer-events: none;
       }
       .catalog-section::after {
@@ -621,7 +641,7 @@
         position: absolute;
         inset: 0 0 auto;
         height: 300px;
-        background: linear-gradient(180deg, rgba(232, 160, 180, .05), transparent 82%);
+        background: linear-gradient(180deg, rgba(225, 231, 239, .18), transparent 82%);
         pointer-events: none;
       }
       .section-label { color: var(--pink); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; }
@@ -633,18 +653,23 @@
         margin-inline: -12px;
         padding: 14px 12px 12px;
         border-radius: 0 0 22px 22px;
-        background: color-mix(in srgb, var(--surface-soft) 88%, transparent);
+        border: 1px solid rgba(238, 233, 239, .22);
+        background: rgba(226, 224, 232, .48);
+        box-shadow: 0 12px 40px rgba(38, 44, 70, .14);
+        backdrop-filter: saturate(135%) blur(22px);
       }
-      .search, .sort { height: 50px; border-color: rgba(154, 168, 216, .2); border-radius: 15px; background: rgba(26, 32, 64, .85); box-shadow: none; }
+      .search, .sort { height: 50px; border-color: rgba(34, 51, 77, .2); border-radius: 15px; color: #18243b; background: rgba(244, 240, 241, .62); box-shadow: 0 1px rgba(255, 255, 255, .35) inset; }
+      .search::placeholder { color: rgba(31, 44, 70, .55); }
+      .search-wrap::before { color: rgba(31, 44, 70, .62); }
       .filters { gap: 6px; padding-top: 2px; }
-      .filter { min-height: 34px; padding-inline: 14px; color: #9aa3c6; background: rgba(154, 168, 216, .09); font-size: 11px; }
-      .filter:hover { background: rgba(154, 168, 216, .17); }
-      .filter[aria-pressed="true"] { color: var(--pink-ink); background: var(--pink); box-shadow: 0 0 18px rgba(232, 160, 180, .2); }
-      .result-meta { padding: 22px 2px 14px; }
+      .filter { min-height: 34px; padding-inline: 14px; color: #263852; background: rgba(241, 237, 241, .42); font-size: 11px; }
+      .filter:hover { color: #17243d; background: rgba(248, 244, 245, .66); }
+      .filter[aria-pressed="true"] { color: var(--pink-ink); background: #efb2c0; box-shadow: 0 8px 24px rgba(91, 58, 81, .16); }
+      .result-meta { padding: 22px 2px 14px; color: rgba(24, 36, 59, .66); }
       .catalog { overflow: visible; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
       .catalog-head { display: none; }
       #effect-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; align-items: stretch; }
-      #effect-list > .empty { grid-column: 1 / -1; border: 1px dashed var(--line); border-radius: 24px; background: rgba(154, 168, 216, .04); }
+      #effect-list > .empty { grid-column: 1 / -1; border: 1px dashed var(--line); border-radius: 24px; background: rgba(244, 240, 242, .44); }
 
       .effect-row {
         --card-rx: 0deg;
@@ -654,18 +679,18 @@
         position: relative;
         min-width: 0;
         overflow: hidden;
-        border: 1px solid rgba(154, 168, 216, .13);
+        border: 1px solid rgba(241, 234, 240, .34);
         border-radius: 24px;
-        background: var(--surface);
-        box-shadow: var(--shadow-sm);
+        background: rgba(238, 234, 238, .68);
+        box-shadow: 0 16px 42px rgba(35, 43, 70, .22);
         transition: border-color .35s ease, box-shadow .45s var(--ease-out), translate .65s var(--ease-out);
         scroll-margin-top: 172px;
         contain: layout paint style;
       }
-      .effect-row:last-child { border-bottom: 1px solid rgba(154, 168, 216, .13); }
-      .effect-row:hover { border-color: rgba(232, 160, 180, .38); box-shadow: var(--shadow-lg), 0 0 44px rgba(232, 160, 180, .07); }
-      .effect-row:target { background: var(--surface); box-shadow: 0 0 0 3px rgba(232, 160, 180, .55), var(--shadow); }
-      html[dir="rtl"] .effect-row:target { background: var(--surface); box-shadow: 0 0 0 3px rgba(232, 160, 180, .55), var(--shadow); }
+      .effect-row:last-child { border-bottom: 1px solid rgba(241, 234, 240, .34); }
+      .effect-row:hover { border-color: rgba(246, 211, 220, .76); box-shadow: 0 24px 62px rgba(35, 43, 70, .3), 0 0 44px rgba(245, 203, 184, .12); }
+      .effect-row:target { background: rgba(238, 234, 238, .8); box-shadow: 0 0 0 3px rgba(239, 178, 192, .72), 0 24px 62px rgba(35, 43, 70, .26); }
+      html[dir="rtl"] .effect-row:target { background: rgba(238, 234, 238, .8); box-shadow: 0 0 0 3px rgba(239, 178, 192, .72), 0 24px 62px rgba(35, 43, 70, .26); }
       .effect-card-trigger:focus-visible { border-radius: 24px; outline-offset: 4px; }
       .effect-main {
         position: relative;
@@ -708,7 +733,7 @@
       .prompt-button:hover { color: var(--pink-ink); background: var(--pink-hover); box-shadow: 0 0 16px rgba(232, 160, 180, .3); }
       .code-button { color: #f0e9e0; border: 1px solid rgba(244, 239, 233, .22); background: rgba(244, 239, 233, .1); backdrop-filter: blur(10px); }
       .code-button:hover { color: var(--pink-ink); border-color: var(--pink-hover); background: var(--pink-hover); }
-      .detail-panel { padding: 0 22px 22px; background: var(--surface); }
+      .detail-panel { padding: 0 22px 22px; color: #18243b; background: rgba(238, 234, 238, .94); }
       .effect-row:has(.detail-panel:not([hidden])) { grid-column: 1 / -1; contain: paint style; }
       .effect-row:has(.detail-panel:not([hidden])) .effect-main { grid-template-columns: minmax(360px, .9fr) minmax(0, 1.1fr); min-height: 300px; aspect-ratio: auto; }
       .effect-row:has(.detail-panel:not([hidden])) .row-preview { grid-area: 1 / 1; min-height: 300px; }
@@ -716,7 +741,11 @@
       .effect-row:has(.detail-panel:not([hidden])) .effect-cell, .effect-row:has(.detail-panel:not([hidden])) .source-cell, .effect-row:has(.detail-panel:not([hidden])) .row-actions { grid-column: 1; }
       .effect-row:has(.detail-panel:not([hidden])) .effect-cell h3 { font-size: clamp(30px, 4vw, 54px); }
       .effect-row:has(.detail-panel:not([hidden])) .row-actions { justify-content: flex-start; }
-      .effect-row:has(.detail-panel:not([hidden])) .detail-panel { border-top: 1px solid var(--line); }
+      .effect-row:has(.detail-panel:not([hidden])) .detail-panel { border-top: 1px solid rgba(34, 51, 77, .14); }
+      .detail-panel .implementation { border-color: rgba(34, 51, 77, .16); background: rgba(250, 246, 246, .6); }
+      .detail-panel .implementation h4 { color: #18243b; }
+      .detail-panel .recommendation { color: #6d2940; background: rgba(232, 160, 180, .3); }
+      .detail-panel .repo-link, .detail-panel .origin-link, .detail-panel .permalink { color: #4a4268; }
 
       .agent-prompt-section { padding: 72px 0 22px; scroll-margin-top: 72px; }
       .agent-prompt-card { grid-template-columns: minmax(240px, .62fr) minmax(0, 1.38fr); gap: clamp(24px, 4vw, 52px); padding: clamp(26px, 3.6vw, 42px); border-radius: 28px; background: radial-gradient(circle at 88% 12%, rgba(232, 160, 180, .18), transparent 36%), #150f2b; }
@@ -728,13 +757,24 @@
       .agent-prompt-action { color: var(--pink-ink); background: var(--signal); }
       .agent-prompt-box .agent-prompt-action { min-height: 44px; margin-top: 0; white-space: nowrap; }
       .agent-prompt-action:hover { background: var(--signal-hover); box-shadow: 0 8px 26px rgba(232, 160, 180, .2); }
-      .features { padding: 0 0 100px; }
+      .hero .agent-prompt-section { padding: 28px 0 0; scroll-margin-top: 72px; }
+      .hero .agent-prompt-card { display: grid; grid-template-columns: 1fr; gap: 16px; padding: 20px; border-color: rgba(42, 53, 79, .18); border-radius: 22px; color: #18243b; background: rgba(239, 232, 236, .27); box-shadow: 0 18px 48px rgba(40, 44, 70, .16), inset 0 1px rgba(255, 255, 255, .28); backdrop-filter: blur(18px) saturate(125%); }
+      .hero .agent-prompt-card .section-label { color: #4a4268; }
+      .hero .agent-prompt-card h2 { max-width: 520px; margin-top: 6px; color: #17243d; font-size: clamp(25px, 2.5vw, 38px); line-height: 1.02; }
+      .hero .agent-prompt-intro { max-width: 540px; margin-top: 9px; color: rgba(31, 44, 70, .68); font-size: 13px; }
+      .hero .agent-prompt-box { display: grid; grid-template-columns: 1fr; gap: 12px; }
+      .hero .agent-prompt-text { max-height: 124px; padding: 14px 16px; border-color: rgba(42, 53, 79, .16); border-radius: 15px; color: rgba(24, 36, 59, .84); background: rgba(249, 244, 244, .42); font: 500 12px/1.55 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Noto Sans", sans-serif; }
+      .hero .agent-prompt-action { justify-self: start; min-height: 40px; padding-inline: 16px; color: #f8f3ef; background: linear-gradient(180deg, #3f5576, #293e5d); }
+      .hero .agent-prompt-action:hover { background: linear-gradient(180deg, #4b6386, #314968); box-shadow: 0 9px 24px rgba(35, 53, 81, .22); }
+
+      .feature-section { background: linear-gradient(180deg, #a5b1c0 0%, #c3b6c2 48%, #d0aeb4 100%); }
+      .features { padding: 72px 0 100px; }
       .feature-grid { gap: 14px; }
-      .feature-card { min-height: 310px; border-radius: 24px; box-shadow: var(--shadow-sm); }
-      .feature-card:nth-child(2) { color: #f4efe9; background: #232a4e; }
-      .feature-card:nth-child(2) p { color: rgba(234, 230, 242, .6); }
-      .feature-card:nth-child(3) { color: #f4efe9; background: linear-gradient(150deg, #2a2b52, #1d2244); }
-      .feature-card:nth-child(3) p { color: rgba(234, 230, 242, .6); }
+      .feature-card, .feature-card:nth-child(2), .feature-card:nth-child(3) { min-height: 310px; border-color: rgba(42, 53, 79, .16); border-radius: 24px; color: #18243b; background: rgba(241, 235, 238, .42); box-shadow: 0 18px 48px rgba(40, 44, 70, .16), inset 0 1px rgba(255, 255, 255, .28); backdrop-filter: blur(16px); }
+      .feature-card p, .feature-card:nth-child(2) p, .feature-card:nth-child(3) p { color: rgba(31, 44, 70, .68); }
+      .feature-visual { background: rgba(249, 244, 244, .34); box-shadow: inset 0 0 0 1px rgba(42, 53, 79, .12); }
+      .visual-code { color: #405777; background: rgba(249, 244, 244, .42); }
+      .prompt-lines span { background: rgba(52, 73, 104, .3); }
 
       footer { background: var(--bg-deep); }
 
@@ -829,6 +869,20 @@
             <a class="primary-action" href="#catalog" id="browse-action">Browse effects</a>
             <button class="secondary-action" type="button" id="prompt-action" aria-describedby="agent-prompt-intro">Copy prompt</button>
           </div>
+
+          <section class="agent-prompt-section" id="agent-prompt" aria-labelledby="agent-prompt-title">
+            <div class="agent-prompt-card">
+              <div>
+                <p class="section-label" id="agent-prompt-label">Agent prompts</p>
+                <h2 id="agent-prompt-title">Improve your project motion in one click.</h2>
+                <p class="agent-prompt-intro" id="agent-prompt-intro">Choose an effect, adapt it to the current project, preserve access and motion safeguards, then verify.</p>
+              </div>
+              <div class="agent-prompt-box">
+                <p class="agent-prompt-text" id="one-line-agent-prompt" lang="en" dir="ltr" tabindex="0"></p>
+                <button class="agent-prompt-action" type="button" id="agent-prompt-action" aria-describedby="agent-prompt-intro">Copy prompt</button>
+              </div>
+            </div>
+          </section>
         </div>
 
         <section class="hero-experience" id="hero-experience" data-step="0" tabindex="0" aria-label="Interactive effect story">
@@ -887,25 +941,13 @@
       </div>
     </main>
 
-    <section class="agent-prompt-section shell" id="agent-prompt" aria-labelledby="agent-prompt-title">
-      <div class="agent-prompt-card">
-        <div>
-          <p class="section-label" id="agent-prompt-label">Agent prompts</p>
-          <h2 id="agent-prompt-title">Copy a clear implementation prompt.</h2>
-          <p class="agent-prompt-intro" id="agent-prompt-intro">Choose an effect, adapt it to the current project, preserve access and motion safeguards, then verify.</p>
+    <section class="feature-section">
+      <div class="features shell" aria-label="Catalog coverage">
+        <div class="feature-grid">
+          <article class="feature-card"><h2 id="feature-visual-title">See the real demo before you build it.</h2><p id="feature-visual-copy">Every published entry has passed a 100-point creativity, art direction, motion, legibility, inspiration, and evidence review.</p><div class="feature-visual visual-gif" aria-hidden="true"></div></article>
+          <article class="feature-card"><h2 id="feature-code-title">Start from working code.</h2><p id="feature-code-copy">Open any effect to copy the smallest useful implementation for its recommended source.</p><div class="feature-visual visual-code" aria-hidden="true"><span style="--w:44%;--o:.8"></span><span style="--w:86%"></span><span style="--w:68%;--o:.35"></span><span style="--w:76%"></span></div></article>
+          <article class="feature-card"><h2 id="feature-prompt-title">Hand it to your coding agent.</h2><p id="feature-prompt-copy">One click copies a scoped prompt with accessibility, responsive, cleanup, and reduced-motion requirements.</p><div class="feature-visual visual-prompt" aria-hidden="true"><span class="prompt-dot"></span><div class="prompt-lines"><span style="--w:88%"></span><span style="--w:72%"></span><span style="--w:54%"></span></div></div></article>
         </div>
-        <div class="agent-prompt-box">
-          <p class="agent-prompt-text" id="one-line-agent-prompt" lang="en" dir="ltr" tabindex="0"></p>
-          <button class="agent-prompt-action" type="button" id="agent-prompt-action" aria-describedby="agent-prompt-intro">Copy prompt</button>
-        </div>
-      </div>
-    </section>
-
-    <section class="features shell" aria-label="Catalog coverage">
-      <div class="feature-grid">
-        <article class="feature-card"><h2 id="feature-visual-title">See the real demo before you build it.</h2><p id="feature-visual-copy">Every published entry has passed a 100-point creativity, art direction, motion, legibility, inspiration, and evidence review.</p><div class="feature-visual visual-gif" aria-hidden="true"></div></article>
-        <article class="feature-card"><h2 id="feature-code-title">Start from working code.</h2><p id="feature-code-copy">Open any effect to copy the smallest useful implementation for its recommended source.</p><div class="feature-visual visual-code" aria-hidden="true"><span style="--w:44%;--o:.8"></span><span style="--w:86%"></span><span style="--w:68%;--o:.35"></span><span style="--w:76%"></span></div></article>
-        <article class="feature-card"><h2 id="feature-prompt-title">Hand it to your coding agent.</h2><p id="feature-prompt-copy">One click copies a scoped prompt with accessibility, responsive, cleanup, and reduced-motion requirements.</p><div class="feature-visual visual-prompt" aria-hidden="true"><span class="prompt-dot"></span><div class="prompt-lines"><span style="--w:88%"></span><span style="--w:72%"></span><span style="--w:54%"></span></div></div></article>
       </div>
     </section>
 
@@ -916,14 +958,14 @@
 
     <div class="effect-modal" id="effect-modal" hidden>
       <div class="effect-modal-backdrop" data-modal-close></div>
-      <section class="effect-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-description" tabindex="-1">
+      <section class="effect-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-prompt-text" tabindex="-1">
         <button class="effect-modal-close" type="button" data-modal-close aria-label="Close details">×</button>
         <div id="effect-modal-content"></div>
       </section>
     </div>
 
     <script type="module">
-      import { categories, effects, projects } from './data/effects.js?v=20260720-catalog-150';
+      import { categories, effects, featuredEffectIds, projects } from './data/effects.js?v=20260722-home-recommendations';
       import { admissionPolicy } from './data/demo-admission.js?v=20260720-catalog-150';
       import { getOneLineAgentPrompt } from './data/agent-prompts.js?v=20260722-verifiable-prompt';
       import { defaultLocale, getMessages, resolveLocale, supportedLocales } from './data/locales.js?v=20260722-blue-hour';
@@ -934,6 +976,7 @@
 
       const projectById = new Map(projects.map(project => [project.id, project]));
       const categoryById = new Map(categories.map(category => [category.id, category]));
+      const featuredEffectIdSet = new Set(featuredEffectIds);
       const list = document.querySelector('#effect-list');
       const filters = document.querySelector('#filters');
       const search = document.querySelector('#search');
@@ -1256,9 +1299,6 @@
         const provenance = source.previewKind === 'official-capture' ? t.officialProvenance
           : source.previewKind === 'local-demo-capture' ? t.localProvenance
             : t.unavailableProvenance;
-        const description = isChinese()
-          ? `${effect.nameZh}由“${effect.behavior.trigger}”触发，以“${effect.behavior.timing}”的时间关系呈现在“${effect.behavior.layer}”层。${category.descriptionZh}`
-          : `${effect.name} is triggered by ${effect.behavior.trigger}, uses ${effect.behavior.timing} timing, and appears on the ${effect.behavior.layer} layer. ${category.description}`;
         const previewTitle = escapeHTML(`${effect.name} / ${effect.nameZh}`);
         const preview = !realPreview
           ? `<div class="modal-preview modal-preview-unavailable"><div><span aria-hidden="true">◎</span><strong>${t.unavailableDetail}</strong><p>${t.unavailableHelp}</p></div><span class="modal-preview-status">${previewStatus}</span></div>`
@@ -1282,10 +1322,13 @@
         const scoreSummary = isChinese() ? effect.admission.rationaleZh : t.scoreSummary;
         const scoreBreakdown = admissionPolicy.dimensions.map(dimension => `<div class="score-dimension"><span>${escapeHTML(isChinese() ? dimension.labelZh : dimension.label)}</span><strong>${formatNumber(effect.admission.scores[dimension.id])} / ${formatNumber(dimension.maximum)}</strong></div>`).join('');
         const scoreSection = `<section class="modal-score-card"><div><p class="modal-detail-label">${t.curatorialScore} · ${t.scorePassed}</p><div class="modal-score-total">${effect.admission.total}<span>/ 100</span></div><p class="modal-score-summary">${escapeHTML(scoreSummary)}</p></div><div class="score-breakdown">${scoreBreakdown}</div></section>`;
+        const promptSection = `<section class="modal-prompt-card"><p class="modal-detail-label">${t.prompts}</p><p class="modal-prompt-text" id="modal-prompt-text" tabindex="0">${escapeHTML(effectPromptText)}</p><div class="modal-primary-actions"><button class="modal-prompt-button" type="button">${promptLabel}</button></div></section>`;
+        const factsSection = `<div class="modal-facts"><div class="modal-fact"><span>${t.triggerLabel}</span><strong>${escapeHTML(effect.behavior.trigger)}</strong></div><div class="modal-fact"><span>${t.timingLabel}</span><strong>${escapeHTML(effect.behavior.timing)}</strong></div><div class="modal-fact"><span>${t.layerLabel}</span><strong>${escapeHTML(effect.behavior.layer)}</strong></div></div>`;
+        const sourceSection = `<div class="modal-detail-grid"><section class="modal-detail-card"><p class="modal-detail-label">${t.implementationLabel}</p><h3 class="modal-project-name">${escapeHTML(project.name)}</h3><p class="modal-project-meta" dir="ltr"><bdi>${escapeHTML(project.repo)}</bdi> · ★ ${formatNumber(project.stars)}</p><div class="modal-links">${links.join('')}</div>${source.demoPath ? '' : `<p class="modal-no-demo">${t.noRunnableDemo}</p>`}</section><section class="modal-detail-card"><p class="modal-detail-label">${t.provenanceLabel}</p><h3 class="modal-project-name">${previewStatus}</h3><p class="modal-provenance-text">${provenance}${provenancePaths}</p></section></div>`;
 
         modalTrigger = trigger || document.activeElement;
         modalClose.setAttribute('aria-label', t.closeDetails);
-        modalContent.innerHTML = `${preview}<div class="modal-content-body"><p class="modal-category">${escapeHTML(labelFor(category))}</p><h2 class="modal-title" id="modal-title">${escapeHTML(primaryName)}</h2><p class="modal-title-secondary" lang="${isChinese() ? 'en' : 'zh-Hans'}">${escapeHTML(secondaryName)}</p><p class="modal-description" id="modal-description">${escapeHTML(description)}</p><div class="modal-primary-actions"><button class="modal-prompt-button" type="button">${promptLabel}</button></div>${scoreSection}<div class="modal-facts"><div class="modal-fact"><span>${t.triggerLabel}</span><strong>${escapeHTML(effect.behavior.trigger)}</strong></div><div class="modal-fact"><span>${t.timingLabel}</span><strong>${escapeHTML(effect.behavior.timing)}</strong></div><div class="modal-fact"><span>${t.layerLabel}</span><strong>${escapeHTML(effect.behavior.layer)}</strong></div></div><div class="modal-detail-grid"><section class="modal-detail-card"><p class="modal-detail-label">${t.implementationLabel}</p><h3 class="modal-project-name">${escapeHTML(project.name)}</h3><p class="modal-project-meta" dir="ltr"><bdi>${escapeHTML(project.repo)}</bdi> · ★ ${formatNumber(project.stars)}</p><div class="modal-links">${links.join('')}</div>${source.demoPath ? '' : `<p class="modal-no-demo">${t.noRunnableDemo}</p>`}</section><section class="modal-detail-card"><p class="modal-detail-label">${t.provenanceLabel}</p><h3 class="modal-project-name">${previewStatus}</h3><p class="modal-provenance-text">${provenance}${provenancePaths}</p></section></div>${codeSection}</div>`;
+        modalContent.innerHTML = `${preview}<div class="modal-content-body"><p class="modal-category">${escapeHTML(labelFor(category))}</p><h2 class="modal-title" id="modal-title">${escapeHTML(primaryName)}</h2><p class="modal-title-secondary" lang="${isChinese() ? 'en' : 'zh-Hans'}">${escapeHTML(secondaryName)}</p>${promptSection}${codeSection}<details class="modal-more"><summary>${escapeHTML(t.detailsLabel)}</summary><div class="modal-more-body">${factsSection}${sourceSection}${scoreSection}</div></details></div>`;
         const promptButton = modalContent.querySelector('.modal-prompt-button');
         promptButton.addEventListener('click', event => {
           event.stopPropagation();
@@ -1405,13 +1448,13 @@
 
       function buildFilters() {
         filters.replaceChildren();
-        [{ id: 'all', label: copy[language].all, labelZh: copy[language].all }, ...categories].forEach(category => {
+        [{ id: 'all', label: copy[language].all, labelZh: copy[language].all }, { id: 'recommended', label: 'Recommended', labelZh: '推荐' }, ...categories].forEach(category => {
           const button = document.createElement('button');
           button.className = 'filter';
           button.type = 'button';
           button.dataset.category = category.id;
           button.setAttribute('aria-pressed', String(category.id === activeCategory));
-          button.textContent = category.id === 'all' ? copy[language].all : labelFor(category);
+          button.textContent = category.id === 'all' ? copy[language].all : category.id === 'recommended' ? (isChinese() ? category.labelZh : category.label) : labelFor(category);
           button.addEventListener('click', () => { activeCategory = category.id; buildFilters(); render(); });
           filters.append(button);
         });
@@ -1440,7 +1483,9 @@
           const sourceText = effect.sources.map(source => { const project = projectById.get(source.projectId); return `${project.name} ${project.repo}`; }).join(' ');
           const partyText = effect.relatedParties.map(party => `${party.name} ${party.observedAs}`).join(' ');
           const haystack = normalizeForSearch(`${effect.id} ${effect.name} ${effect.nameZh} ${category.label} ${category.labelZh} ${sourceText} ${partyText}`);
-          return (activeCategory === 'all' || effect.category === activeCategory) && (!query || haystack.includes(query));
+          const matchesFilter = activeCategory === 'all'
+            || (activeCategory === 'recommended' ? featuredEffectIdSet.has(effect.id) : effect.category === activeCategory);
+          return matchesFilter && (!query || haystack.includes(query));
         });
         if (sort.value === 'stars') visible = [...visible].sort((a, b) => projectById.get(recommendedSource(b).projectId).stars - projectById.get(recommendedSource(a).projectId).stars);
         if (sort.value === 'score') visible = [...visible].sort((a, b) => b.admission.total - a.admission.total || a.order - b.order);

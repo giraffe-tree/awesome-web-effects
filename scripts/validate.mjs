@@ -6,7 +6,7 @@ import { dirname, resolve } from 'node:path';
 import { createHash } from 'node:crypto';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
-import { categories, effects, projects, snapshotDate } from '../demo/data/effects.js';
+import { categories, effects, featuredEffectIds, projects, snapshotDate } from '../demo/data/effects.js';
 import { admissionAuditSummary, admissionPolicy, reviewedDemoScores } from '../demo/data/demo-admission.js';
 import { getOneLineAgentPrompt, oneLineAgentPrompts } from '../demo/data/agent-prompts.js';
 import { defaultLocale, getMessages, resolveLocale, supportedLocales } from '../demo/data/locales.js';
@@ -213,6 +213,10 @@ for (const category of categories) {
   const count = effects.filter(effect => effect.category === category.id).length;
   assert(count > 0, `Empty effect category: ${category.id}.`);
 }
+assert(featuredEffectIds.length > 0 && featuredEffectIds.length < effects.length, 'Homepage recommendations must be a selective, non-empty effect edit.');
+assert(duplicates(featuredEffectIds).length === 0, `Duplicate homepage recommendation ids: ${duplicates(featuredEffectIds).join(', ')}.`);
+const effectIds = new Set(effects.map(effect => effect.id));
+for (const effectId of featuredEffectIds) assert(effectIds.has(effectId), `Unknown homepage recommendation: ${effectId}.`);
 
 const localizedReadmeFiles = supportedLocales.map(readmeFilename);
 const [html, admissionAudit, languageSupportDoc, legacyChineseReadme, ...localizedReadmes] = await Promise.all([
@@ -249,6 +253,7 @@ assert(modalRenderer.includes('source.snippet'), 'Effect-detail modal must rende
 assert(/<pre[^>]*>\s*<code[^>]*>\$\{escapeHTML\(source\.snippet\)\}<\/code>\s*<\/pre>/.test(modalRenderer), 'Effect-detail modal must display source.snippet in a code block.');
 assert(/(?:class="[^"]*modal-copy-code|data-modal-copy-code)/.test(modalRenderer), 'Effect-detail modal must expose a dedicated copy-code button.');
 assert(/copyText\(\s*[^,]+\s*,\s*source\.snippet\s*,/.test(modalRenderer), 'Effect-detail copy-code button must copy source.snippet independently.');
+assert(modalRenderer.includes('modal-prompt-text') && modalRenderer.includes('escapeHTML(effectPromptText)'), 'Effect-detail modal must visibly render the exact prompt it copies.');
 assert(modalRenderer.includes('hasRealPreview(source)') && /realPreview\s*\?/.test(modalRenderer), 'Effect-detail modal must branch on verified preview availability.');
 assert(/<img[^>]*source\.preview[^>]*\.gif/.test(modalRenderer), 'Effect-detail modal must render the selected real GIF when available.');
 assert(modalRenderer.includes('modal-preview-unavailable'), 'Effect-detail modal must render an explicit unavailable-preview state.');

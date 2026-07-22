@@ -115,6 +115,8 @@ def main() -> int:
             expect(page.locator("#hero-story-eyebrow")).to_have_text("Live interaction story")
 
             one_line_prompt = page.locator("#one-line-agent-prompt")
+            expect(page.locator("#agent-prompt")).to_be_visible()
+            assert page.locator("#agent-prompt").evaluate("section => Boolean(section.closest('.hero-message'))")
             english_prompt = one_line_prompt.text_content()
             assert english_prompt and "\n" not in english_prompt and len(english_prompt) < 520
             expect(one_line_prompt).to_have_attribute("tabindex", "0")
@@ -141,6 +143,7 @@ def main() -> int:
             page.locator("#agent-prompt").screenshot(path=str(prompt_screenshot))
 
             language_select.select_option("zh-Hans")
+            expect(page.locator("#agent-prompt-title")).to_have_text("一键优化你的项目动效")
             chinese_prompt = one_line_prompt.text_content()
             assert chinese_prompt and "\n" not in chinese_prompt and len(chinese_prompt) < 260 and "作为只读参考" in chinese_prompt
             expect(hero_prompt_button).to_have_text("复制 Prompt")
@@ -215,6 +218,12 @@ def main() -> int:
             expect(rows).to_have_count(expected_transition_count)
             page.locator('#filters [data-category="all"]').click()
             expect(rows).to_have_count(expected_effect_count)
+            recommended_filter = page.locator('#filters [data-category="recommended"]')
+            recommended_filter.click()
+            expect(recommended_filter).to_have_attribute("aria-pressed", "true")
+            expect(rows).to_have_count(14)
+            page.locator('#filters [data-category="all"]').click()
+            expect(rows).to_have_count(expected_effect_count)
             page.wait_for_timeout(650)
 
             for effect_id in admitted_local_preview_ids:
@@ -244,15 +253,18 @@ def main() -> int:
             assert not live_frame.evaluate("window.__PREVIEW_ERROR__ || null")
             expect(modal.locator(".modal-preview-live")).to_have_attribute("data-media-state", "ready")
             expect(modal.locator(".modal-preview-live")).to_have_attribute("aria-busy", "false")
-            assert live_preview.bounding_box()["width"] > 640
+            assert live_preview.bounding_box()["width"] > 560
+            expect(modal.locator(".modal-more")).not_to_have_attribute("open", "")
             expect(modal.locator(".modal-score-total")).to_contain_text("85")
             expect(modal.locator(".score-dimension")).to_have_count(6)
             modal_prompt_button = modal.locator(".modal-prompt-button")
+            modal_prompt_text = modal.locator("#modal-prompt-text")
+            expect(modal_prompt_text).to_be_visible()
             expect(modal_prompt_button).to_have_text("Copy prompt")
-            assert modal_prompt_button.bounding_box()["y"] < modal.locator(".modal-score-card").bounding_box()["y"]
             modal_prompt_button.click()
             expect(modal_prompt_button).to_have_text("Prompt copied")
             effect_prompt = page.evaluate("navigator.clipboard.readText()")
+            assert modal_prompt_text.text_content() == effect_prompt
             assert "Scroll-scrubbed master timeline" in effect_prompt
             assert "https://giraffe-tree.github.io/awesome-web-effects/#scroll-scrubbed-master-timeline" in effect_prompt
             assert "observable acceptance criteria" in effect_prompt
@@ -452,7 +464,7 @@ def main() -> int:
             server.kill()
             server.wait()
 
-    print(f"Catalog UI verified: 20 locales (including RTL and URL persistence), {expected_effect_count} admitted demos, concise homepage and per-effect prompts, score-free catalog cards, early detail prompt action, paused 6s hero autoplay, uncropped 16:9 cards, loading/error transitions, live detail previews, native-size official GIFs, detail scoring, copy actions, focus, reduced motion, and mobile layout.")
+    print(f"Catalog UI verified: 20 locales (including RTL and URL persistence), {expected_effect_count} admitted demos, 14 homepage recommendations, visible homepage and per-effect prompts, unified light catalog styling, collapsed implementation evidence, paused 6s hero autoplay, uncropped 16:9 cards, loading/error transitions, live detail previews, native-size official GIFs, copy actions, focus, reduced motion, and mobile layout.")
     return 0
 
 

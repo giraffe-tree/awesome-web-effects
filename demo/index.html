@@ -613,6 +613,7 @@
 
       .catalog-section {
         position: relative;
+        scroll-margin-top: 56px;
         padding: 20px 0 120px;
         border-radius: 0;
         color: #18243b;
@@ -647,18 +648,20 @@
       .section-label { color: var(--pink); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; }
 
       .controls {
-        top: 56px;
+        position: relative;
+        top: auto;
+        z-index: 2;
         grid-template-columns: minmax(260px, 1fr) 250px;
         gap: 10px;
-        margin-inline: -12px;
-        padding: 14px 12px 12px;
-        border-radius: 0 0 22px 22px;
-        border: 1px solid rgba(238, 233, 239, .22);
-        background: rgba(226, 224, 232, .48);
-        box-shadow: 0 12px 40px rgba(38, 44, 70, .14);
-        backdrop-filter: saturate(135%) blur(22px);
+        margin: 0;
+        padding: 18px 0 10px;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+        backdrop-filter: none;
       }
-      .search, .sort { height: 50px; border-color: rgba(34, 51, 77, .2); border-radius: 15px; color: #18243b; background: rgba(244, 240, 241, .62); box-shadow: 0 1px rgba(255, 255, 255, .35) inset; }
+      .search, .sort { height: 44px; border-color: rgba(34, 51, 77, .18); border-radius: 14px; color: #18243b; background: rgba(244, 240, 241, .58); box-shadow: 0 8px 24px rgba(38, 44, 70, .1), 0 1px rgba(255, 255, 255, .35) inset; }
       .search::placeholder { color: rgba(31, 44, 70, .55); }
       .search-wrap::before { color: rgba(31, 44, 70, .62); }
       .filters { gap: 6px; padding-top: 2px; }
@@ -757,14 +760,14 @@
       .agent-prompt-action { color: var(--pink-ink); background: var(--signal); }
       .agent-prompt-box .agent-prompt-action { min-height: 44px; margin-top: 0; white-space: nowrap; }
       .agent-prompt-action:hover { background: var(--signal-hover); box-shadow: 0 8px 26px rgba(232, 160, 180, .2); }
-      .hero .agent-prompt-section { padding: 28px 0 0; scroll-margin-top: 72px; }
-      .hero .agent-prompt-card { display: grid; grid-template-columns: 1fr; gap: 16px; padding: 20px; border-color: rgba(42, 53, 79, .18); border-radius: 22px; color: #18243b; background: rgba(239, 232, 236, .27); box-shadow: 0 18px 48px rgba(40, 44, 70, .16), inset 0 1px rgba(255, 255, 255, .28); backdrop-filter: blur(18px) saturate(125%); }
+      .hero .agent-prompt-section { grid-column: 1 / -1; padding: 10px 0 0; scroll-margin-top: 72px; }
+      .hero .agent-prompt-card { display: grid; grid-template-columns: minmax(250px, .42fr) minmax(0, 1.58fr); gap: clamp(20px, 3vw, 42px); align-items: center; padding: 18px 20px; border-color: rgba(42, 53, 79, .18); border-radius: 22px; color: #18243b; background: rgba(239, 232, 236, .27); box-shadow: 0 18px 48px rgba(40, 44, 70, .16), inset 0 1px rgba(255, 255, 255, .28); backdrop-filter: blur(18px) saturate(125%); }
       .hero .agent-prompt-card .section-label { color: #4a4268; }
       .hero .agent-prompt-card h2 { max-width: 520px; margin-top: 6px; color: #17243d; font-size: clamp(25px, 2.5vw, 38px); line-height: 1.02; }
       .hero .agent-prompt-intro { max-width: 540px; margin-top: 9px; color: rgba(31, 44, 70, .68); font-size: 13px; }
-      .hero .agent-prompt-box { display: grid; grid-template-columns: 1fr; gap: 12px; }
-      .hero .agent-prompt-text { max-height: 124px; padding: 14px 16px; border-color: rgba(42, 53, 79, .16); border-radius: 15px; color: rgba(24, 36, 59, .84); background: rgba(249, 244, 244, .42); font: 500 12px/1.55 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Noto Sans", sans-serif; }
-      .hero .agent-prompt-action { justify-self: start; min-height: 40px; padding-inline: 16px; color: #f8f3ef; background: linear-gradient(180deg, #3f5576, #293e5d); }
+      .hero .agent-prompt-box { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: center; }
+      .hero .agent-prompt-text { max-height: 96px; padding: 13px 15px; border-color: rgba(42, 53, 79, .16); border-radius: 15px; color: rgba(24, 36, 59, .84); background: rgba(249, 244, 244, .42); font: 500 12px/1.5 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Noto Sans", sans-serif; }
+      .hero .agent-prompt-action { justify-self: end; min-height: 40px; padding-inline: 16px; color: #f8f3ef; background: linear-gradient(180deg, #3f5576, #293e5d); }
       .hero .agent-prompt-action:hover { background: linear-gradient(180deg, #4b6386, #314968); box-shadow: 0 9px 24px rgba(35, 53, 81, .22); }
 
       .feature-section { background: linear-gradient(180deg, #a5b1c0 0%, #c3b6c2 48%, #d0aeb4 100%); }
@@ -793,7 +796,8 @@
         .hero-metrics { display: grid; grid-template-columns: 1fr 1fr; }
         .metric:nth-child(2) { border-inline-end: 0; }
         .metric:nth-child(-n + 2) { border-bottom: 1px solid rgba(34, 51, 77, .16); }
-        .agent-prompt-card { grid-template-columns: 1fr; }
+        .agent-prompt-card, .hero .agent-prompt-card { grid-template-columns: 1fr; }
+        .hero .agent-prompt-box { grid-template-columns: 1fr auto; }
         #effect-list { grid-template-columns: 1fr; }
         .detail-panel { padding: 0 18px 18px; }
       }
@@ -808,7 +812,8 @@
         .metric { min-width: 0; padding: 18px 12px 14px; }
         .metric strong { font-size: 27px; }
         .catalog-section { padding-top: 12px; }
-        .controls { top: 52px; grid-template-columns: minmax(0, 1fr) 132px; margin-inline: -6px; padding-inline: 6px; }
+        .catalog-section { scroll-margin-top: 52px; }
+        .controls { top: auto; grid-template-columns: minmax(0, 1fr) 132px; margin: 0; padding-inline: 0; }
         .sort { padding-inline-start: 12px; text-overflow: ellipsis; }
         .filters { grid-column: 1 / -1; }
         #effect-list { grid-template-columns: 1fr; gap: 14px; }
@@ -829,8 +834,10 @@
         .effect-row:has(.detail-panel:not([hidden])) .effect-card-overlay { align-self: end; grid-template-columns: 1fr; padding: 56px 14px 14px; background: linear-gradient(180deg, transparent 0%, rgba(8, 11, 24, .74) 38%, rgba(8, 11, 24, .97) 100%); }
         .effect-row:has(.detail-panel:not([hidden])) .effect-cell h3 { font-size: clamp(20px, 6.2vw, 27px); }
         .agent-prompt-section { padding-top: 64px; }
+        .hero .agent-prompt-section { padding-top: 10px; }
         .agent-prompt-card { border-radius: 24px; }
         .agent-prompt-box { grid-template-columns: 1fr; }
+        .hero .agent-prompt-box { grid-template-columns: 1fr; }
         .agent-prompt-box .agent-prompt-action { width: 100%; }
       }
       @media (prefers-reduced-motion: reduce) {
@@ -867,22 +874,7 @@
           <p class="hero-copy" id="hero-copy">Explore visually reviewed effects with a real preview, minimal code, and a concise implementation prompt.</p>
           <div class="hero-actions">
             <a class="primary-action" href="#catalog" id="browse-action">Browse effects</a>
-            <button class="secondary-action" type="button" id="prompt-action" aria-describedby="agent-prompt-intro">Copy prompt</button>
           </div>
-
-          <section class="agent-prompt-section" id="agent-prompt" aria-labelledby="agent-prompt-title">
-            <div class="agent-prompt-card">
-              <div>
-                <p class="section-label" id="agent-prompt-label">Agent prompts</p>
-                <h2 id="agent-prompt-title">Improve your project motion in one click.</h2>
-                <p class="agent-prompt-intro" id="agent-prompt-intro">Choose an effect, adapt it to the current project, preserve access and motion safeguards, then verify.</p>
-              </div>
-              <div class="agent-prompt-box">
-                <p class="agent-prompt-text" id="one-line-agent-prompt" lang="en" dir="ltr" tabindex="0"></p>
-                <button class="agent-prompt-action" type="button" id="agent-prompt-action" aria-describedby="agent-prompt-intro">Copy prompt</button>
-              </div>
-            </div>
-          </section>
         </div>
 
         <section class="hero-experience" id="hero-experience" data-step="0" tabindex="0" aria-label="Interactive effect story">
@@ -910,6 +902,21 @@
             <button class="hero-story-step" type="button" data-hero-step="3" aria-pressed="false">Ship</button>
           </div>
         </section>
+
+        <section class="agent-prompt-section" id="agent-prompt" aria-labelledby="agent-prompt-title">
+          <div class="agent-prompt-card">
+            <div>
+              <p class="section-label" id="agent-prompt-label">Agent prompts</p>
+              <h2 id="agent-prompt-title">Improve your project motion in one click.</h2>
+              <p class="agent-prompt-intro" id="agent-prompt-intro">Choose an effect, adapt it to the current project, preserve access and motion safeguards, then verify.</p>
+            </div>
+            <div class="agent-prompt-box">
+              <p class="agent-prompt-text" id="one-line-agent-prompt" lang="en" dir="ltr" tabindex="0"></p>
+              <button class="agent-prompt-action" type="button" id="agent-prompt-action" aria-describedby="agent-prompt-intro">Copy prompt</button>
+            </div>
+          </div>
+        </section>
+
         <div class="hero-metrics">
           <div class="metric"><strong id="effect-count">0</strong><span id="effect-label">Effects</span></div>
           <div class="metric"><strong id="source-count">0</strong><span id="source-label">Source projects</span></div>
@@ -994,7 +1001,6 @@
       const heroStepCopy = document.querySelector('#hero-step-copy');
       const heroStoryToggle = document.querySelector('#hero-story-toggle');
       const heroStepButtons = [...document.querySelectorAll('[data-hero-step]')];
-      const heroPromptAction = document.querySelector('#prompt-action');
       const agentPromptText = document.querySelector('#one-line-agent-prompt');
       const agentPromptAction = document.querySelector('#agent-prompt-action');
       const languageSelect = document.querySelector('#language');
@@ -1008,7 +1014,7 @@
         navigator.language,
       ];
       let language = requestedLanguages.map(candidate => resolveLocale(candidate, null)).find(Boolean) || defaultLocale;
-      let activeCategory = 'all';
+      let activeCategory = 'recommended';
       let modalTrigger = null;
       let heroStep = 0;
       let heroAutoPlaying = !reducedMotion.matches;
@@ -1399,8 +1405,6 @@
         updateHeroToggle();
         document.querySelector('#browse-action').textContent = t.browse;
         const oneLineAction = promptActionLabel(t);
-        heroPromptAction.textContent = oneLineAction;
-        heroPromptAction.dataset.defaultLabel = oneLineAction;
         agentPromptAction.textContent = oneLineAction;
         agentPromptAction.dataset.defaultLabel = oneLineAction;
         agentPromptText.textContent = getOneLineAgentPrompt(language);
@@ -1442,6 +1446,10 @@
         sort.options[2].textContent = t.name;
         sort.options[3].textContent = t.stars;
         sort.options[4].textContent = t.sourcesSort;
+        const linkedEffectId = decodeURIComponent(location.hash.slice(1));
+        if (activeCategory === 'recommended' && linkedEffectId && !featuredEffectIdSet.has(linkedEffectId) && effects.some(effect => effect.id === linkedEffectId)) {
+          activeCategory = 'all';
+        }
         buildFilters();
         render();
       }
@@ -1574,7 +1582,6 @@
         if (!modal.hidden) closeEffectModal();
         setLanguage(event.target.value);
       });
-      heroPromptAction.addEventListener('click', () => copyOneLinePrompt(heroPromptAction));
       agentPromptAction.addEventListener('click', () => copyOneLinePrompt(agentPromptAction));
       const entryReveal = document.querySelector('#entry-reveal');
       entryReveal?.addEventListener('animationend', event => {

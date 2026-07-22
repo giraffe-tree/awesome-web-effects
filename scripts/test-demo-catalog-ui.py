@@ -116,7 +116,7 @@ def main() -> int:
 
             one_line_prompt = page.locator("#one-line-agent-prompt")
             expect(page.locator("#agent-prompt")).to_be_visible()
-            assert page.locator("#agent-prompt").evaluate("section => Boolean(section.closest('.hero-message'))")
+            assert page.locator("#agent-prompt").evaluate("section => section.parentElement?.classList.contains('hero-layout')")
             english_prompt = one_line_prompt.text_content()
             assert english_prompt and "\n" not in english_prompt and len(english_prompt) < 520
             expect(one_line_prompt).to_have_attribute("tabindex", "0")
@@ -127,7 +127,7 @@ def main() -> int:
                 "read-only", "prefers-reduced-motion", "browser check",
             ]:
                 assert requirement in english_prompt
-            hero_prompt_button = page.locator("#prompt-action")
+            hero_prompt_button = page.locator("#agent-prompt-action")
             expect(hero_prompt_button).to_have_text("Copy prompt")
             hero_prompt_button.click()
             expect(hero_prompt_button).to_have_text("Prompt copied")
@@ -175,6 +175,11 @@ def main() -> int:
             page.locator("#language").select_option("en")
 
             rows = page.locator("#effect-list .effect-row")
+            recommended_filter = page.locator('#filters [data-category="recommended"]')
+            expect(recommended_filter).to_have_attribute("aria-pressed", "true")
+            expect(rows).to_have_count(14)
+            assert page.locator("#catalog-controls").evaluate("controls => getComputedStyle(controls).position") != "sticky"
+            page.locator('#filters [data-category="all"]').click()
             expect(rows).to_have_count(expected_effect_count)
             expect(page.locator("#effect-list .effect-score")).to_have_count(0)
             expect(page.locator("#effect-list .media-load-state[role]")).to_have_count(0)
@@ -218,7 +223,6 @@ def main() -> int:
             expect(rows).to_have_count(expected_transition_count)
             page.locator('#filters [data-category="all"]').click()
             expect(rows).to_have_count(expected_effect_count)
-            recommended_filter = page.locator('#filters [data-category="recommended"]')
             recommended_filter.click()
             expect(recommended_filter).to_have_attribute("aria-pressed", "true")
             expect(rows).to_have_count(14)
@@ -450,8 +454,8 @@ def main() -> int:
             reduced_hero = reduced_page.locator("#hero-experience")
             reduced_hero.press("ArrowRight")
             expect(reduced_hero).to_have_attribute("data-step", "1")
-            reduced_page.locator("#prompt-action").click()
-            expect(reduced_page.locator("#prompt-action")).to_have_text("Prompt copied")
+            reduced_page.locator("#agent-prompt-action").click()
+            expect(reduced_page.locator("#agent-prompt-action")).to_have_text("Prompt copied")
             reduced_page.close()
 
             context.close()

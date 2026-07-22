@@ -237,7 +237,7 @@ assert(/<select[^>]+id="language"/.test(html), 'Demo must expose a native locale
 assert(html.includes("url.searchParams.set('lang', language)"), 'Demo language selection must update a shareable lang query parameter.');
 assert(html.includes('document.documentElement.dir = locale.dir'), 'Demo must set the document direction from locale metadata.');
 assert(html.includes('prompt-button') && html.includes('copyPrompt'), 'Demo does not expose one-click agent prompts.');
-assert(html.includes('id="prompt-action"') && html.includes('id="agent-prompt-action"') && html.includes('getOneLineAgentPrompt(language)'), 'Demo does not expose the global one-line Agent Prompt copy actions.');
+assert(html.includes('id="agent-prompt-action"') && !html.includes('id="prompt-action"') && html.includes('getOneLineAgentPrompt(language)'), 'Demo must expose one non-duplicated global Agent Prompt copy action.');
 assert(html.includes('copy-code') && html.includes('source.snippet'), 'Demo does not expose copyable minimal code.');
 
 const modalRendererStart = html.indexOf('function openEffectModal');

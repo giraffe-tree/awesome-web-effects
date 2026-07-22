@@ -18,19 +18,70 @@ Na only Demo wey pass visual review with 80 score or more we dey publish; each o
 
 ---
 
-<h3 align="center">9 Verified GIFs / 150 Effects</h3>
+<h3 align="center">14 Verified GIFs / 150 Effects</h3>
 
 <table>
 <tr>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=pcm#synchronized-scenario-scene-handoff"><img src="demo/gifs/captured/synchronized-scenario-scene-handoff.gif" width="270" alt="Synchronized scenario scene handoff"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=pcm#pinned-horizontal-scroll-scene"><img src="demo/gifs/captured/pinned-horizontal-scroll-scene.gif" width="270" alt="Pinned horizontal scroll scene"></a>
 <br>
-<sub><strong>Synchronized scenario scene handoff</strong><br>Page &amp; layout · 98/100</sub>
+<sub><strong>Pinned horizontal scroll scene</strong><br>Scroll &amp; reveal · 96/100</sub>
 </td>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=pcm#pointer-injected-gpu-fluid"><img src="demo/gifs/captured/pointer-injected-gpu-fluid.gif" width="270" alt="Stage haze colour lab"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=pcm#prompt-select-replace-loop"><img src="demo/gifs/captured/prompt-select-replace-loop.gif" width="270" alt="Semantic prompt revision workspace"></a>
 <br>
-<sub><strong>Stage haze colour lab</strong><br>3D &amp; WebGL · 99/100</sub>
+<sub><strong>Semantic prompt revision workspace</strong><br>Text &amp; SVG · 100/100</sub>
+</td>
+<td width="33%" align="center">
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=pcm#staggered-transform-choreography"><img src="demo/gifs/captured/staggered-transform-choreography.gif" width="270" alt="Staggered transform choreography"></a>
+<br>
+<sub><strong>Staggered transform choreography</strong><br>Motion &amp; choreography · 92/100</sub>
+</td>
+</tr>
+<tr>
+<td width="33%" align="center">
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=pcm#motion-graphics-burst"><img src="demo/gifs/captured/motion-graphics-burst.gif" width="270" alt="Motion-graphics burst"></a>
+<br>
+<sub><strong>Motion-graphics burst</strong><br>Motion &amp; choreography · 92/100</sub>
+</td>
+<td width="33%" align="center">
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=pcm#visually-authored-keyframe-sequence"><img src="demo/gifs/captured/visually-authored-keyframe-sequence.gif" width="270" alt="Visually authored keyframe sequence"></a>
+<br>
+<sub><strong>Visually authored keyframe sequence</strong><br>Motion &amp; choreography · 84/100</sub>
+</td>
+<td width="33%" align="center">
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=pcm#compact-svg-shape-tween"><img src="demo/gifs/captured/compact-svg-shape-tween.gif" width="270" alt="Compact SVG shape tween"></a>
+<br>
+<sub><strong>Compact SVG shape tween</strong><br>Motion &amp; choreography · 89/100</sub>
+</td>
+</tr>
+<tr>
+<td width="33%" align="center">
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=pcm#filterable-grid-reflow"><img src="demo/gifs/captured/filterable-grid-reflow.gif" width="270" alt="Filterable grid reflow"></a>
+<br>
+<sub><strong>Filterable grid reflow</strong><br>Page &amp; layout · 85/100</sub>
+</td>
+<td width="33%" align="center">
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=pcm#perspective-tilt-and-glare"><img src="demo/gifs/captured/perspective-tilt-and-glare.gif" width="270" alt="Perspective tilt and glare"></a>
+<br>
+<sub><strong>Perspective tilt and glare</strong><br>Pointer &amp; hover · 90/100</sub>
+</td>
+<td width="33%" align="center">
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=pcm#context-aware-custom-cursor"><img src="demo/gifs/mouse-follower.gif" width="270" alt="Context-aware custom cursor"></a>
+<br>
+<sub><strong>Context-aware custom cursor</strong><br>Pointer &amp; hover · 86/100</sub>
+</td>
+</tr>
+<tr>
+<td width="33%" align="center">
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=pcm#displacement-map-image-hover"><img src="demo/gifs/hover-effect.gif" width="270" alt="Displacement-map image hover"></a>
+<br>
+<sub><strong>Displacement-map image hover</strong><br>Pointer &amp; hover · 90/100</sub>
+</td>
+<td width="33%" align="center">
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=pcm#svg-stroke-drawing"><img src="demo/gifs/captured/svg-stroke-drawing.gif" width="270" alt="SVG stroke drawing"></a>
+<br>
+<sub><strong>SVG stroke drawing</strong><br>Text &amp; SVG · 86/100</sub>
 </td>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=pcm#dom-aware-drag-spawned-fish-flock"><img src="demo/gifs/captured/dom-aware-drag-spawned-fish-flock.gif" width="270" alt="Human-released DOM-avoiding fish school"></a>
@@ -40,36 +91,14 @@ Na only Demo wey pass visual review with 80 score or more we dey publish; each o
 </tr>
 <tr>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=pcm#traveling-dot-headline-rewriter"><img src="demo/gifs/captured/traveling-dot-headline-rewriter.gif" width="270" alt="Human-approved headline revision marker"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=pcm#pointer-injected-gpu-fluid"><img src="demo/gifs/captured/pointer-injected-gpu-fluid.gif" width="270" alt="Stage haze colour lab"></a>
 <br>
-<sub><strong>Human-approved headline revision marker</strong><br>Text &amp; SVG · 100/100</sub>
+<sub><strong>Stage haze colour lab</strong><br>3D &amp; WebGL · 99/100</sub>
 </td>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=pcm#drag-thrown-card-stack"><img src="demo/gifs/captured/drag-thrown-card-stack.gif" width="270" alt="Release-velocity rental discovery stack"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=pcm#dom-synced-shader-planes"><img src="demo/gifs/captured/dom-synced-shader-planes.gif" width="270" alt="Human-calibrated DOM / GPU media registration"></a>
 <br>
-<sub><strong>Release-velocity rental discovery stack</strong><br>Pointer &amp; hover · 100/100</sub>
-</td>
-<td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=pcm#scroll-scrubbed-document-generation-playback"><img src="demo/gifs/captured/scroll-scrubbed-document-generation-playback.gif" width="270" alt="Scroll-scrubbed document generation playback"></a>
-<br>
-<sub><strong>Scroll-scrubbed document generation playback</strong><br>Scroll &amp; reveal · 97/100</sub>
-</td>
-</tr>
-<tr>
-<td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=pcm#interactive-vector-state-machine"><img src="demo/gifs/captured/interactive-vector-state-machine.gif" width="270" alt="Held-input room-scene assistant"></a>
-<br>
-<sub><strong>Held-input room-scene assistant</strong><br>Motion &amp; choreography · 94/100</sub>
-</td>
-<td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=pcm#live-hand-landmark-video-overlay"><img src="demo/gifs/captured/live-hand-landmark-video-overlay.gif" width="270" alt="Hand rehabilitation landmark calibration"></a>
-<br>
-<sub><strong>Hand rehabilitation landmark calibration</strong><br>Canvas &amp; 2D · 98/100</sub>
-</td>
-<td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=pcm#refractive-glass-transmission-sculpture"><img src="demo/gifs/captured/refractive-glass-transmission-sculpture.gif" width="270" alt="Glass under light optical material review"></a>
-<br>
-<sub><strong>Glass under light optical material review</strong><br>3D &amp; WebGL · 99/100</sub>
+<sub><strong>Human-calibrated DOM / GPU media registration</strong><br>3D &amp; WebGL · 100/100</sub>
 </td>
 </tr>
 </table>

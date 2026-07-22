@@ -3,7 +3,7 @@
 import { stat, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
-import { categories, effects, projects, snapshotDate } from '../demo/data/effects.js';
+import { categories, effects, featuredEffectIds, projects, snapshotDate } from '../demo/data/effects.js';
 import { admissionAuditSummary, admissionPolicy } from '../demo/data/demo-admission.js';
 import { getOneLineAgentPrompt } from '../demo/data/agent-prompts.js';
 import { getMessages, supportedLocales } from '../demo/data/locales.js';
@@ -30,26 +30,29 @@ const relatedPartyLinks = effect => effect.relatedParties.length
 
 function categorySummary(language) {
   const isZh = language === 'zh';
+  const locale = supportedLocales.find(item => item.code === (isZh ? 'zh-Hans' : 'en'));
   const headers = isZh
     ? '| 分类 | 效果数 | 来源项目 | 关注结果 |\n| --- | ---: | ---: | --- |'
     : '| Category | Effects | Source projects | Visible result |\n| --- | ---: | ---: | --- |';
   const rows = categories.map(category => {
     const categoryEffects = effects.filter(effect => effect.category === category.id);
     const sourceCount = new Set(categoryEffects.flatMap(effect => effect.sources.map(source => source.projectId))).size;
-    return `| [${isZh ? category.labelZh : category.label}](${liveDemo}#catalog) | ${categoryEffects.length} | ${sourceCount} | ${isZh ? category.descriptionZh : category.description} |`;
+    return `| [${isZh ? category.labelZh : category.label}](${siteUrlFor(locale)}#catalog) | ${categoryEffects.length} | ${sourceCount} | ${isZh ? category.descriptionZh : category.description} |`;
   });
   return [headers, ...rows].join('\n');
 }
 
 function effectTables(language) {
   const isZh = language === 'zh';
+  const locale = supportedLocales.find(item => item.code === (isZh ? 'zh-Hans' : 'en'));
   return categories.map(category => {
     const rows = effects.filter(effect => effect.category === category.id).map(effect => {
       const source = recommendedSource(effect);
       const project = projectById.get(source.projectId);
       const status = project.legacy ? (isZh ? '经典旧版' : 'Legacy') : (isZh ? '当前推荐' : 'Recommended');
       const name = isZh ? effect.nameZh : effect.name;
-      return `| [${name}](${liveDemo}#${effect.id}) | [${project.name}](${project.url}) | **${effect.admission.total}/100** | ${relatedPartyLinks(effect)} | ${formatStars(project.stars)} | ${effect.sources.length} | ${status} | [${isZh ? '评分 + 代码 + 提示词' : 'Score + code + prompt'}](${liveDemo}#${effect.id}) |`;
+      const effectUrl = `${siteUrlFor(locale)}#${encodeURIComponent(effect.id)}`;
+      return `| [${name}](${effectUrl}) | [${project.name}](${project.url}) | **${effect.admission.total}/100** | ${relatedPartyLinks(effect)} | ${formatStars(project.stars)} | ${effect.sources.length} | ${status} | [${isZh ? '评分 + 代码 + 提示词' : 'Score + code + prompt'}](${effectUrl}) |`;
     });
     const heading = isZh ? category.labelZh : category.label;
     const description = isZh ? category.descriptionZh : category.description;
@@ -60,17 +63,7 @@ function effectTables(language) {
   }).join('\n\n');
 }
 
-const showcaseIds = [
-  'synchronized-scenario-scene-handoff',
-  'pointer-injected-gpu-fluid',
-  'dom-aware-drag-spawned-fish-flock',
-  'traveling-dot-headline-rewriter',
-  'drag-thrown-card-stack',
-  'scroll-scrubbed-document-generation-playback',
-  'interactive-vector-state-machine',
-  'live-hand-landmark-video-overlay',
-  'refractive-glass-transmission-sculpture',
-];
+const showcaseIds = featuredEffectIds;
 const categoryById = new Map(categories.map(category => [category.id, category]));
 const escapeHtml = value => String(value)
   .replaceAll('&', '&amp;')
@@ -210,7 +203,7 @@ function localizedReadme(locale) {
 
 ---
 
-<h3 align="center">9 ${escapeHtml(t.gifs)} / ${effects.length} ${escapeHtml(t.effects)}</h3>
+<h3 align="center">${featuredEffectIds.length} ${escapeHtml(t.gifs)} / ${effects.length} ${escapeHtml(t.effects)}</h3>
 
 ${visualShowcase(locale.code)}
 
@@ -280,7 +273,7 @@ const english = `${heroBlock({
 
 ---
 
-<h3 align="center">9 of the ${effects.length} effects — every preview a real capture</h3>
+<h3 align="center">${featuredEffectIds.length} recommended effects — every preview a real capture</h3>
 
 ${visualShowcase('en')}
 
@@ -387,7 +380,7 @@ const chinese = `${heroBlock({
 
 ---
 
-<h3 align="center">${effects.length} 个效果中的 9 个 · 每个预览都是真实录制</h3>
+<h3 align="center">${featuredEffectIds.length} 个推荐效果 · 每个预览都是真实录制</h3>
 
 ${visualShowcase('zh-Hans')}
 

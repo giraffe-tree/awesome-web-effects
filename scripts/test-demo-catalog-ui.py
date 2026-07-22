@@ -249,11 +249,19 @@ def main() -> int:
                 )
                 expect(migrated_row.locator(".preview-demo-link")).to_have_count(1)
 
-            page.goto(f"{origin}/#scroll-scrubbed-master-timeline", wait_until="networkidle")
+            page.goto(f"{origin}/?lang=en#scroll-scrubbed-master-timeline", wait_until="networkidle")
             real_row = page.locator("#scroll-scrubbed-master-timeline")
             expect(real_row).to_be_in_viewport()
             expect(real_row.locator(".detail-panel")).to_be_visible()
             expect(real_row.locator(".code-button")).to_have_attribute("aria-expanded", "true")
+            effect_permalink = real_row.locator(".permalink")
+            expect(effect_permalink).to_have_attribute(
+                "href",
+                "https://giraffe-tree.github.io/awesome-web-effects/?lang=en#scroll-scrubbed-master-timeline",
+            )
+            expect(effect_permalink.locator("code")).to_have_text(
+                "https://giraffe-tree.github.io/awesome-web-effects/?lang=en#scroll-scrubbed-master-timeline"
+            )
             real_row.locator(".effect-cell").click()
             modal = page.locator("#effect-modal")
             expect(modal).to_be_visible()
@@ -284,7 +292,7 @@ def main() -> int:
             effect_prompt = page.evaluate("navigator.clipboard.readText()")
             assert modal_prompt_text.input_value() == effect_prompt
             assert "Scroll-scrubbed master timeline" in effect_prompt
-            assert "https://giraffe-tree.github.io/awesome-web-effects/#scroll-scrubbed-master-timeline" in effect_prompt
+            assert "https://giraffe-tree.github.io/awesome-web-effects/?lang=en#scroll-scrubbed-master-timeline" in effect_prompt
             assert "observable acceptance criteria" in effect_prompt
             assert "evidence per criterion" in effect_prompt
             assert len(effect_prompt) < 620 and "Interaction contract" not in effect_prompt

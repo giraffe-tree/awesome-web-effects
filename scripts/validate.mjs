@@ -291,6 +291,11 @@ assert(languageSupportDoc.includes('Ethnologue 200') && languageSupportDoc.inclu
 assert(legacyChineseReadme.includes('README.zh-Hans.md'), 'Legacy README.zh-CN.md must point to the canonical Simplified Chinese README.');
 assert(readme.includes('research/ai-native-homepages-100.md'), 'English README does not link to the homepage research summary.');
 assert(readmeZh.includes('research/ai-native-homepages-100.md'), 'Chinese README does not link to the homepage research summary.');
+for (const effectId of featuredEffectIds) {
+  assert(readme.includes(`https://giraffe-tree.github.io/awesome-web-effects/?lang=en#${effectId}`), `English README is missing recommended effect link: ${effectId}.`);
+  assert(readmeZh.includes(`https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#${effectId}`), `Chinese README is missing recommended effect link: ${effectId}.`);
+}
+assert(html.includes('?lang=${encodeURIComponent(language)}#${encodeURIComponent(effect.id)}'), 'Effect detail and prompt links must preserve the active locale.');
 assert(!`${html}\n${localizedReadmes.join('\n')}\n${languageSupportDoc}`.includes('giraffe-tree/awesome-interaction'), 'Stale awesome-interaction repository or Pages link detected.');
 
 try {

@@ -296,7 +296,6 @@
       .effect-heading { display: flex; align-items: flex-start; gap: 12px; }
       .effect-cell h3 { margin: 0; font-size: clamp(21px, 2vw, 29px); line-height: 1.04; letter-spacing: -.04em; text-wrap: balance; transition: color .22s ease; }
       .effect-row:hover .effect-cell h3 { color: var(--pink-hover); }
-      .effect-score { flex: 0 0 auto; display: inline-grid; place-items: center; min-width: 44px; height: 28px; padding: 0 8px; border-radius: 99px; color: #f5d8e0; background: rgba(232, 160, 180, .16); font-size: 11px; font-weight: 750; letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
       .effect-key { display: block; margin-top: 8px; color: #6f78a0; font: 10px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; overflow-wrap: anywhere; }
       .source-label { display: block; margin-bottom: 5px; color: var(--quiet); font-size: 9px; font-weight: 650; text-transform: uppercase; letter-spacing: .05em; }
       .source-name { display: block; color: var(--ink); font-size: 16px; font-weight: 650; line-height: 1.2; text-decoration: none; overflow-wrap: anywhere; transition: color .2s ease; }
@@ -394,7 +393,7 @@
       .modal-copy-code { flex: 0 0 auto; min-height: 36px; padding: 0 12px; border: 1px solid rgba(244, 239, 233, .22); border-radius: 99px; color: #f2ede4; background: rgba(244, 239, 233, .09); cursor: pointer; font-size: 11px; font-weight: 650; transition: background .2s ease, border-color .2s ease; }
       .modal-copy-code:hover { border-color: rgba(244, 239, 233, .34); background: rgba(244, 239, 233, .18); }
       .modal-code-card pre { min-height: 0; max-height: 290px; padding: 20px; }
-      .modal-actions { display: flex; justify-content: flex-end; margin-top: 24px; }
+      .modal-primary-actions { display: flex; justify-content: flex-start; margin-top: 20px; }
       .modal-prompt-button { min-height: 44px; padding: 0 20px; border: 0; border-radius: 99px; color: var(--pink-ink); background: var(--pink); cursor: pointer; font-size: 13px; font-weight: 650; transition: transform .24s var(--ease-out), box-shadow .24s var(--ease-out), background .2s ease; }
       .modal-prompt-button:hover { background: var(--pink-hover); box-shadow: 0 6px 18px rgba(232, 160, 180, .3); transform: translateY(-1px); }
       @keyframes modal-fade { from { opacity: 0; } }
@@ -496,7 +495,6 @@
         .modal-facts, .modal-detail-grid, .modal-score-card { grid-template-columns: 1fr; }
         .score-breakdown { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         .modal-code-header { align-items: flex-start; }
-        .modal-actions { justify-content: stretch; }
         .modal-prompt-button { width: 100%; }
       }
 
@@ -535,56 +533,74 @@
       .hero {
         min-height: 0;
         padding: clamp(72px, 8vw, 118px) 0 44px;
-        color: #f4efe9;
+        color: #18243b;
         background:
-          radial-gradient(135% 66% at 50% 112%, rgba(232, 160, 180, .28), transparent 62%),
-          radial-gradient(54% 32% at 50% 106%, rgba(245, 203, 184, .2), transparent 72%),
-          radial-gradient(circle at 84% 12%, rgba(127, 143, 196, .15), transparent 36%),
-          linear-gradient(180deg, #0a0e20 0%, #11162e 42%, #1d1d40 72%, #312441 100%);
+          radial-gradient(82% 30% at 50% 100%, rgba(202, 224, 237, .6), transparent 72%),
+          radial-gradient(42% 24% at 78% 58%, rgba(238, 196, 193, .42), transparent 74%),
+          linear-gradient(180deg, #9facbf 0%, #b8b5c4 24%, #d0b5bd 43%, #d9aaad 59%, #8b7b9d 78%, #324d70 100%);
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        inset: auto -8% -1px;
+        height: 24%;
+        opacity: .56;
+        background: linear-gradient(180deg, rgba(220, 231, 240, .04), rgba(221, 233, 241, .56));
+        clip-path: polygon(0 78%, 8% 58%, 16% 70%, 24% 42%, 31% 67%, 40% 51%, 49% 76%, 59% 44%, 68% 69%, 78% 52%, 87% 73%, 94% 48%, 100% 68%, 100% 100%, 0 100%);
+        filter: blur(.2px);
+        pointer-events: none;
       }
       .hero::after {
         content: "";
         position: absolute;
         z-index: -1;
         inset: 0;
-        opacity: .62;
-        background-image:
-          radial-gradient(rgba(255, 255, 255, .9) .9px, transparent 1px),
-          radial-gradient(rgba(255, 240, 238, .65) .7px, transparent .8px),
-          radial-gradient(rgba(196, 206, 255, .75) .6px, transparent .7px);
-        background-size: 212px 212px, 297px 297px, 389px 389px;
-        background-position: 6% 10%, 58% 4%, 27% 18%;
-        mask-image: linear-gradient(to bottom, black 0%, transparent 52%);
+        opacity: .68;
+        background:
+          radial-gradient(44% 34% at 18% 20%, rgba(227, 235, 243, .44), transparent 76%),
+          radial-gradient(52% 30% at 82% 44%, rgba(245, 205, 198, .2), transparent 78%),
+          linear-gradient(112deg, transparent 12%, rgba(255, 255, 255, .08) 44%, transparent 68%);
+        mix-blend-mode: screen;
         pointer-events: none;
       }
       .hero-layout { grid-template-columns: minmax(0, .82fr) minmax(480px, 1.18fr); gap: clamp(42px, 7vw, 104px); }
-      .hero-kicker { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 28px; color: var(--signal); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
+      .hero-message { text-shadow: 0 1px rgba(255, 255, 255, .22); }
+      .hero-kicker { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 28px; color: #4a4268; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
       .hero-kicker::before { content: ""; width: 24px; height: 1px; background: currentColor; }
-      h1 { max-width: 820px; font-size: clamp(62px, 7.6vw, 118px); font-weight: 760; line-height: .86; letter-spacing: -.068em; }
+      h1 { max-width: 820px; color: #17243d; font-size: clamp(62px, 7.6vw, 118px); font-weight: 760; line-height: .86; letter-spacing: -.068em; }
       html[lang="zh-Hans"] h1 { font-size: clamp(58px, 5.9vw, 84px); }
-      .hero-copy { max-width: 590px; margin-top: 30px; color: rgba(244, 239, 233, .62); font-size: clamp(17px, 1.45vw, 21px); line-height: 1.52; }
+      .hero-copy { max-width: 590px; margin-top: 30px; color: rgba(31, 44, 70, .76); font-size: clamp(17px, 1.45vw, 21px); line-height: 1.52; }
       .hero-actions { margin-top: 34px; }
       .primary-action, .secondary-action { min-height: 50px; padding-inline: 22px; font-size: 14px; }
-      .primary-action { color: var(--pink-ink); background: linear-gradient(180deg, #f2bfc9, #e8a0b4); box-shadow: 0 0 0 1px rgba(232, 160, 180, .28), 0 12px 34px rgba(6, 8, 20, .45), 0 0 34px rgba(232, 160, 180, .14); }
-      .primary-action:hover { color: var(--pink-ink); background: linear-gradient(180deg, #f6d0d6, #efb6c2); box-shadow: 0 12px 32px rgba(232, 160, 180, .2); }
-      .secondary-action { color: #f4efe9; border-color: rgba(244, 239, 233, .26); background: rgba(244, 239, 233, .06); backdrop-filter: blur(12px); }
-      .secondary-action:hover { color: var(--pink-ink); border-color: var(--signal); background: var(--signal); box-shadow: 0 12px 30px rgba(232, 160, 180, .18); }
+      .primary-action { color: #f5f1ed; background: linear-gradient(180deg, #334e73, #213958); box-shadow: 0 0 0 1px rgba(255, 255, 255, .12), 0 12px 34px rgba(25, 40, 65, .26); }
+      .primary-action:hover { color: white; background: linear-gradient(180deg, #405d82, #294464); box-shadow: 0 12px 32px rgba(35, 53, 81, .3); }
+      .secondary-action { color: #253852; border-color: rgba(37, 56, 82, .28); background: rgba(238, 239, 244, .2); backdrop-filter: blur(12px); }
+      .secondary-action:hover { color: #f8f3ef; border-color: #564966; background: #564966; box-shadow: 0 12px 30px rgba(62, 49, 80, .2); }
       .hero-experience {
+        --stage-accent: #efbac4;
         min-height: 480px;
-        border-color: rgba(154, 168, 216, .16);
+        border-color: rgba(241, 232, 236, .28);
         border-radius: 30px;
-        background: #14102e;
-        box-shadow: 0 1px rgba(244, 239, 233, .09) inset, 0 42px 110px rgba(4, 6, 18, .55);
+        background: linear-gradient(180deg, rgba(34, 49, 78, .92), rgba(36, 38, 73, .94));
+        box-shadow: 0 1px rgba(255, 255, 255, .16) inset, 0 42px 110px rgba(28, 35, 62, .38);
+        backdrop-filter: blur(18px) saturate(118%);
       }
-      .hero-story-canvas { height: 260px; background: rgba(154, 168, 216, .045); }
-      .hero-story-grid { opacity: .16; }
-      .hero-story-word { font-size: clamp(58px, 7vw, 94px); }
-      .hero-metrics { justify-content: stretch; gap: 0; margin-top: 48px; border-top: 1px solid rgba(232, 160, 180, .16); }
-      .metric { flex: 1 1 0; min-width: 150px; padding: 24px 20px 12px; border: 0; border-inline-end: 1px solid rgba(154, 168, 216, .13); border-radius: 0; color: #f4efe9; background: transparent; box-shadow: none; backdrop-filter: none; }
+      .hero-experience[data-step="0"] { --stage-accent: #d7b5c7; background: linear-gradient(180deg, rgba(42, 59, 91, .94), rgba(51, 45, 82, .95)); }
+      .hero-experience[data-step="1"] { --stage-accent: #f0b8b6; background: linear-gradient(180deg, rgba(72, 70, 106, .94), rgba(97, 59, 85, .94)); }
+      .hero-experience[data-step="2"] { --stage-accent: #c8bddb; background: linear-gradient(180deg, rgba(73, 77, 118, .94), rgba(51, 55, 94, .95)); }
+      .hero-experience[data-step="3"] { --stage-accent: #a9cee3; background: linear-gradient(180deg, rgba(45, 77, 111, .94), rgba(34, 53, 87, .96)); }
+      .hero-story-canvas { height: 260px; background: linear-gradient(180deg, rgba(168, 185, 208, .38), rgba(217, 171, 182, .32) 58%, rgba(68, 98, 139, .44)); }
+      .hero-story-canvas::before { content: ""; position: absolute; inset: 0; background: radial-gradient(60% 36% at 50% 66%, rgba(246, 210, 203, .2), transparent 72%); pointer-events: none; }
+      .hero-story-canvas::after { content: ""; position: absolute; z-index: 1; inset: auto -5% 0; height: 30%; background: linear-gradient(180deg, rgba(222, 232, 239, .55), rgba(184, 205, 221, .34)); clip-path: polygon(0 76%, 12% 32%, 21% 68%, 34% 38%, 45% 72%, 58% 27%, 69% 70%, 82% 40%, 91% 66%, 100% 30%, 100% 100%, 0 100%); pointer-events: none; }
+      .hero-story-grid { opacity: .2; background-image: linear-gradient(rgba(232, 225, 235, .16) 1px, transparent 1px); background-size: 100% 32px; transform: none; }
+      .hero-story-word { color: #f8f3ed; font-size: clamp(58px, 7vw, 94px); text-shadow: 0 6px 34px rgba(35, 37, 70, .42); }
+      .hero-metrics { justify-content: stretch; gap: 0; margin-top: 48px; border-top: 1px solid rgba(34, 51, 77, .18); }
+      .metric { flex: 1 1 0; min-width: 150px; padding: 24px 20px 12px; border: 0; border-inline-end: 1px solid rgba(34, 51, 77, .16); border-radius: 0; color: #18243b; background: transparent; box-shadow: none; backdrop-filter: none; }
       .metric:last-child { border-inline-end: 0; }
       .metric:hover { box-shadow: none; transform: translateY(-2px); }
       .metric strong { font-size: clamp(27px, 3vw, 38px); }
-      .metric span { color: rgba(234, 230, 242, .45); }
+      .metric span { color: rgba(31, 44, 70, .58); }
 
       .catalog-section {
         position: relative;
@@ -682,7 +698,6 @@
       .effect-heading { align-items: center; }
       .effect-cell h3 { color: #f6f1ea; font-size: clamp(20px, 1.65vw, 27px); line-height: 1; text-shadow: 0 2px 18px rgba(0, 0, 0, .7); }
       .effect-row:hover .effect-cell h3 { color: #f6f1ea; }
-      .effect-score { min-width: 40px; height: 25px; color: var(--pink-ink); background: var(--pink); font-size: 10px; }
       .effect-key, .source-label, .source-meta, .party-label, .party-list { display: none; }
       .source-cell { grid-column: 1; min-width: 0; margin: 0; padding: 0; border: 0; align-self: center; }
       .source-name { overflow: hidden; color: rgba(244, 239, 233, .8); font-size: 11px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
@@ -703,10 +718,15 @@
       .effect-row:has(.detail-panel:not([hidden])) .row-actions { justify-content: flex-start; }
       .effect-row:has(.detail-panel:not([hidden])) .detail-panel { border-top: 1px solid var(--line); }
 
-      .agent-prompt-section { padding: 96px 0 22px; scroll-margin-top: 72px; }
-      .agent-prompt-card { border-radius: 32px; background: radial-gradient(circle at 88% 12%, rgba(232, 160, 180, .22), transparent 36%), #150f2b; }
+      .agent-prompt-section { padding: 72px 0 22px; scroll-margin-top: 72px; }
+      .agent-prompt-card { grid-template-columns: minmax(240px, .62fr) minmax(0, 1.38fr); gap: clamp(24px, 4vw, 52px); padding: clamp(26px, 3.6vw, 42px); border-radius: 28px; background: radial-gradient(circle at 88% 12%, rgba(232, 160, 180, .18), transparent 36%), #150f2b; }
       .agent-prompt-card .section-label { color: var(--signal-hover); }
+      .agent-prompt-card h2 { margin-top: 10px; font-size: clamp(30px, 3.4vw, 48px); }
+      .agent-prompt-intro { margin-top: 13px; font-size: 14px; }
+      .agent-prompt-box { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px; align-items: end; }
+      .agent-prompt-text { max-height: none; padding: 18px 20px; color: rgba(246, 241, 235, .88); background: rgba(10, 14, 32, .42); font: 500 15px/1.65 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Noto Sans", sans-serif; white-space: normal; }
       .agent-prompt-action { color: var(--pink-ink); background: var(--signal); }
+      .agent-prompt-box .agent-prompt-action { min-height: 44px; margin-top: 0; white-space: nowrap; }
       .agent-prompt-action:hover { background: var(--signal-hover); box-shadow: 0 8px 26px rgba(232, 160, 180, .2); }
       .features { padding: 0 0 100px; }
       .feature-grid { gap: 14px; }
@@ -732,7 +752,8 @@
         .hero-experience { width: 100%; }
         .hero-metrics { display: grid; grid-template-columns: 1fr 1fr; }
         .metric:nth-child(2) { border-inline-end: 0; }
-        .metric:nth-child(-n + 2) { border-bottom: 1px solid rgba(154, 168, 216, .13); }
+        .metric:nth-child(-n + 2) { border-bottom: 1px solid rgba(34, 51, 77, .16); }
+        .agent-prompt-card { grid-template-columns: 1fr; }
         #effect-list { grid-template-columns: 1fr; }
         .detail-panel { padding: 0 18px 18px; }
       }
@@ -769,6 +790,8 @@
         .effect-row:has(.detail-panel:not([hidden])) .effect-cell h3 { font-size: clamp(20px, 6.2vw, 27px); }
         .agent-prompt-section { padding-top: 64px; }
         .agent-prompt-card { border-radius: 24px; }
+        .agent-prompt-box { grid-template-columns: 1fr; }
+        .agent-prompt-box .agent-prompt-action { width: 100%; }
       }
       @media (prefers-reduced-motion: reduce) {
         html { scroll-behavior: auto; }
@@ -801,10 +824,10 @@
         <div class="hero-message">
           <p class="hero-kicker" id="hero-kicker">The effect-first interaction atlas</p>
           <h1 id="hero-title">Find the effect.<br />Ship the feeling.</h1>
-          <p class="hero-copy" id="hero-copy">Only visually reviewed demos scoring 80 or higher are published, each with a real preview, minimal code, and an implementation prompt.</p>
+          <p class="hero-copy" id="hero-copy">Explore visually reviewed effects with a real preview, minimal code, and a concise implementation prompt.</p>
           <div class="hero-actions">
             <a class="primary-action" href="#catalog" id="browse-action">Browse effects</a>
-            <button class="secondary-action" type="button" id="prompt-action" aria-describedby="agent-prompt-intro">Copy one-line prompt</button>
+            <button class="secondary-action" type="button" id="prompt-action" aria-describedby="agent-prompt-intro">Copy prompt</button>
           </div>
         </div>
 
@@ -856,7 +879,7 @@
           <div class="filters" id="filters" aria-label="Effect categories"></div>
         </section>
 
-        <div class="result-meta"><span id="result-count" role="status" aria-live="polite">0 effects</span><span id="result-note">GIF · Effect key · Source · Copy prompt · Code</span></div>
+        <div class="result-meta"><span id="result-count" role="status" aria-live="polite">0 effects</span><span id="result-note">Verified preview · Effect · Implementation · Prompt · Code</span></div>
         <section class="catalog" id="catalog-grid" aria-label="Interaction catalog">
           <div class="catalog-head" aria-hidden="true"><span>#</span><span id="head-preview">Preview</span><span id="head-effect">Effect</span><span id="head-source">Recommended source</span><span id="head-action">Actions</span></div>
           <div id="effect-list"></div>
@@ -868,12 +891,12 @@
       <div class="agent-prompt-card">
         <div>
           <p class="section-label" id="agent-prompt-label">Agent prompts</p>
-          <h2 id="agent-prompt-title">Use one prompt with any coding agent.</h2>
-          <p class="agent-prompt-intro" id="agent-prompt-intro">One click copies a single self-contained prompt for Codex, Claude Code, or another coding agent—no skill or installation required.</p>
+          <h2 id="agent-prompt-title">Copy a clear implementation prompt.</h2>
+          <p class="agent-prompt-intro" id="agent-prompt-intro">Choose an effect, adapt it to the current project, preserve access and motion safeguards, then verify.</p>
         </div>
         <div class="agent-prompt-box">
           <p class="agent-prompt-text" id="one-line-agent-prompt" lang="en" dir="ltr" tabindex="0"></p>
-          <button class="agent-prompt-action" type="button" id="agent-prompt-action" aria-describedby="agent-prompt-intro">Copy one-line prompt</button>
+          <button class="agent-prompt-action" type="button" id="agent-prompt-action" aria-describedby="agent-prompt-intro">Copy prompt</button>
         </div>
       </div>
     </section>
@@ -902,8 +925,8 @@
     <script type="module">
       import { categories, effects, projects } from './data/effects.js?v=20260720-catalog-150';
       import { admissionPolicy } from './data/demo-admission.js?v=20260720-catalog-150';
-      import { getOneLineAgentPrompt } from './data/agent-prompts.js?v=20260720-one-prompt';
-      import { defaultLocale, getMessages, resolveLocale, supportedLocales } from './data/locales.js?v=20260720-i18n-20';
+      import { getOneLineAgentPrompt } from './data/agent-prompts.js?v=20260722-concise-prompt';
+      import { defaultLocale, getMessages, resolveLocale, supportedLocales } from './data/locales.js?v=20260722-blue-hour';
 
 
       const copy = Object.fromEntries(supportedLocales.map(locale => [locale.code, getMessages(locale.code)]));
@@ -976,7 +999,10 @@
           ? `<picture><source type="image/webp" srcset="./gifs/webp/${escapeHTML(source.preview.split('/').at(-1))}.webp" />${image}</picture>`
           : image;
       };
-      const oneLinePromptActionLabel = t => language === 'zh-Hans' ? '复制一句话 Prompt' : language === 'en' ? 'Copy one-line prompt' : t.copyPrompt;
+      const promptActionLabel = t => language === 'zh-Hans' ? '复制 Prompt' : language === 'en' ? 'Copy prompt' : t.copyPrompt;
+      const briefEffectPrompt = (effect, project) => isChinese()
+        ? `在当前项目中实现「${effect.nameZh}」（${effect.name}）。优先使用 ${project.name} 和现有依赖，参照已验证 Demo 与最小代码还原核心触发、动效和层级，并使用原创素材。保留响应式、键盘、指针、触控、prefers-reduced-motion、性能与资源清理；运行现有测试并报告改动。`
+        : `Implement “${effect.name}” (${effect.nameZh}) in the current project. Prefer ${project.name} and existing dependencies; follow the verified demo and minimal code for the core trigger, motion, and layering, using original assets. Preserve responsive, keyboard, pointer, touch, prefers-reduced-motion, performance, and cleanup behavior. Run the existing tests and report the changes.`;
       const officialPreviewUrl = source => {
         const githubBlob = source.originUrl?.match(/^https:\/\/github\.com\/([^/]+)\/([^/]+)\/blob\/([^/]+)\/(.+)$/);
         return githubBlob
@@ -1249,6 +1275,8 @@
         const primaryName = isChinese() ? effect.nameZh : effect.name;
         const secondaryName = isChinese() ? effect.name : effect.nameZh;
         const minimalCodeNote = source.demoPath ? t.minimalCodeHelp : t.minimalCodeUnavailableHelp;
+        const promptLabel = promptActionLabel(t);
+        const effectPromptText = briefEffectPrompt(effect, project);
         const codeSection = `<section class="modal-code-card modal-code-block"><div class="modal-code-header"><div class="modal-code-heading"><p class="modal-detail-label">${t.minimalCodeLabel}</p><p class="modal-code-note">${minimalCodeNote}</p></div><button class="modal-copy-code" data-modal-copy-code type="button">${t.copyMinimalCode}</button></div><pre><code>${escapeHTML(source.snippet)}</code></pre></section>`;
         const scoreSummary = isChinese() ? effect.admission.rationaleZh : t.scoreSummary;
         const scoreBreakdown = admissionPolicy.dimensions.map(dimension => `<div class="score-dimension"><span>${escapeHTML(isChinese() ? dimension.labelZh : dimension.label)}</span><strong>${formatNumber(effect.admission.scores[dimension.id])} / ${formatNumber(dimension.maximum)}</strong></div>`).join('');
@@ -1256,11 +1284,11 @@
 
         modalTrigger = trigger || document.activeElement;
         modalClose.setAttribute('aria-label', t.closeDetails);
-        modalContent.innerHTML = `${preview}<div class="modal-content-body"><p class="modal-category">${escapeHTML(labelFor(category))}</p><h2 class="modal-title" id="modal-title">${escapeHTML(primaryName)}</h2><p class="modal-title-secondary" lang="${isChinese() ? 'en' : 'zh-Hans'}">${escapeHTML(secondaryName)}</p><p class="modal-description" id="modal-description">${escapeHTML(description)}</p>${scoreSection}<div class="modal-facts"><div class="modal-fact"><span>${t.triggerLabel}</span><strong>${escapeHTML(effect.behavior.trigger)}</strong></div><div class="modal-fact"><span>${t.timingLabel}</span><strong>${escapeHTML(effect.behavior.timing)}</strong></div><div class="modal-fact"><span>${t.layerLabel}</span><strong>${escapeHTML(effect.behavior.layer)}</strong></div></div><div class="modal-detail-grid"><section class="modal-detail-card"><p class="modal-detail-label">${t.implementationLabel}</p><h3 class="modal-project-name">${escapeHTML(project.name)}</h3><p class="modal-project-meta" dir="ltr"><bdi>${escapeHTML(project.repo)}</bdi> · ★ ${formatNumber(project.stars)}</p><div class="modal-links">${links.join('')}</div>${source.demoPath ? '' : `<p class="modal-no-demo">${t.noRunnableDemo}</p>`}</section><section class="modal-detail-card"><p class="modal-detail-label">${t.provenanceLabel}</p><h3 class="modal-project-name">${previewStatus}</h3><p class="modal-provenance-text">${provenance}${provenancePaths}</p></section></div>${codeSection}<div class="modal-actions"><button class="modal-prompt-button" type="button">${t.copyPrompt}</button></div></div>`;
+        modalContent.innerHTML = `${preview}<div class="modal-content-body"><p class="modal-category">${escapeHTML(labelFor(category))}</p><h2 class="modal-title" id="modal-title">${escapeHTML(primaryName)}</h2><p class="modal-title-secondary" lang="${isChinese() ? 'en' : 'zh-Hans'}">${escapeHTML(secondaryName)}</p><p class="modal-description" id="modal-description">${escapeHTML(description)}</p><div class="modal-primary-actions"><button class="modal-prompt-button" type="button">${promptLabel}</button></div>${scoreSection}<div class="modal-facts"><div class="modal-fact"><span>${t.triggerLabel}</span><strong>${escapeHTML(effect.behavior.trigger)}</strong></div><div class="modal-fact"><span>${t.timingLabel}</span><strong>${escapeHTML(effect.behavior.timing)}</strong></div><div class="modal-fact"><span>${t.layerLabel}</span><strong>${escapeHTML(effect.behavior.layer)}</strong></div></div><div class="modal-detail-grid"><section class="modal-detail-card"><p class="modal-detail-label">${t.implementationLabel}</p><h3 class="modal-project-name">${escapeHTML(project.name)}</h3><p class="modal-project-meta" dir="ltr"><bdi>${escapeHTML(project.repo)}</bdi> · ★ ${formatNumber(project.stars)}</p><div class="modal-links">${links.join('')}</div>${source.demoPath ? '' : `<p class="modal-no-demo">${t.noRunnableDemo}</p>`}</section><section class="modal-detail-card"><p class="modal-detail-label">${t.provenanceLabel}</p><h3 class="modal-project-name">${previewStatus}</h3><p class="modal-provenance-text">${provenance}${provenancePaths}</p></section></div>${codeSection}</div>`;
         const promptButton = modalContent.querySelector('.modal-prompt-button');
         promptButton.addEventListener('click', event => {
           event.stopPropagation();
-          copyText(promptButton, effect.prompt, t.promptCopied, t.copyPrompt);
+          copyText(promptButton, effectPromptText, t.promptCopied, promptLabel);
         });
         const codeButton = modalContent.querySelector('.modal-copy-code');
         codeButton.addEventListener('click', event => {
@@ -1298,7 +1326,7 @@
 
       function copyOneLinePrompt(button) {
         const t = copy[language];
-        copyText(button, getOneLineAgentPrompt(language), t.promptCopied, oneLinePromptActionLabel(t));
+        copyText(button, getOneLineAgentPrompt(language), t.promptCopied, promptActionLabel(t));
       }
 
       function setLanguage(nextLanguage) {
@@ -1326,7 +1354,7 @@
         renderHeroStep(false);
         updateHeroToggle();
         document.querySelector('#browse-action').textContent = t.browse;
-        const oneLineAction = oneLinePromptActionLabel(t);
+        const oneLineAction = promptActionLabel(t);
         heroPromptAction.textContent = oneLineAction;
         heroPromptAction.dataset.defaultLabel = oneLineAction;
         agentPromptAction.textContent = oneLineAction;
@@ -1430,6 +1458,8 @@
           const category = categoryById.get(effect.category);
           const primary = recommendedSource(effect);
           const primaryProject = projectById.get(primary.projectId);
+          const promptLabel = promptActionLabel(t);
+          const effectPromptText = briefEffectPrompt(effect, primaryProject);
           const realPreview = hasRealPreview(primary);
           const previewMedia = !realPreview
             ? `<span class="paused-preview">${t.previewUnavailable}</span>`
@@ -1452,7 +1482,7 @@
             return `<section class="implementation"><div class="implementation-meta">${source.recommended ? `<span class="recommendation">${t.recommended}</span>` : ''}<h4>${escapeHTML(project.name)}</h4><a class="repo-link" href="${escapeHTML(project.url)}" target="_blank" rel="noreferrer" aria-label="${escapeHTML(project.name)} ${t.repositoryLabel}"><bdi>${escapeHTML(project.repo)}</bdi> ↗</a>${source.demoPath ? `<a class="origin-link" href="./${escapeHTML(source.demoPath)}" target="_blank" rel="noreferrer">${t.openDemo}</a>` : source.originUrl ? `<a class="origin-link" href="${escapeHTML(source.originUrl)}" target="_blank" rel="noreferrer">${t.previewSource}</a>` : source.referenceUrl ? `<a class="origin-link" href="${escapeHTML(source.referenceUrl)}" target="_blank" rel="noreferrer">${t.referenceSource}</a>` : ''}<div class="source-meta"><span>★ ${formatNumber(project.stars)}</span>${project.legacy ? `<span class="legacy-tag">${t.legacy}</span>` : ''}</div></div><div class="code-wrap" dir="ltr"><pre><code>${escapeHTML(source.snippet)}</code></pre><button class="copy-code" type="button">${t.copyCode}</button></div></section>`;
           }).join('');
           const relatedParties = effect.relatedParties.map(party => `<a class="party-link" href="${escapeHTML(party.url)}" target="_blank" rel="noreferrer" title="${escapeHTML(party.observedAs)}">${escapeHTML(party.name)} ↗</a>`).join('');
-          row.innerHTML = `<div class="effect-main"><span class="row-number">${String(effect.order).padStart(3, '0')}</span><div class="row-preview"${previewShell}>${previewMedia}${demoLink}<span class="preview-kind">${previewLabel}</span></div><div class="effect-card-overlay"><div class="effect-cell"><p class="category-label">${escapeHTML(labelFor(category))}</p><div class="effect-heading"><h3>${escapeHTML(effectName(effect))}</h3><span class="effect-score" aria-label="${escapeHTML(t.curatorialScore)}">${formatNumber(effect.admission.total)}</span></div><span class="effect-key" dir="ltr">effect:${escapeHTML(effect.id)}</span></div><div class="source-cell"><span class="source-label">${t.recommended}</span><a class="source-name" href="${escapeHTML(primaryProject.url)}" target="_blank" rel="noreferrer">${escapeHTML(primaryProject.name)} ↗</a><span class="source-meta"><span>★ ${formatNumber(primaryProject.stars)}</span><span>${formatNumber(effect.sources.length)} ${effect.sources.length === 1 ? t.implementation : t.implementations}</span>${primaryProject.legacy ? `<span class="legacy-tag">${t.legacy}</span>` : ''}</span>${relatedParties ? `<span class="source-label party-label">${t.observedOn}</span><span class="party-list">${relatedParties}</span>` : ''}</div><div class="row-actions"><button class="action-button prompt-button" type="button">${t.copyPrompt}</button><button class="action-button code-button" type="button" aria-expanded="false" aria-controls="detail-${escapeHTML(effect.id)}">${t.showCode}</button></div></div></div><div class="detail-panel" id="detail-${escapeHTML(effect.id)}" hidden><div class="detail-top"><p><strong>${t.definition}:</strong> ${escapeHTML(effectName(effect))}. ${formatNumber(effect.sources.length)} ${effect.sources.length === 1 ? t.implementation : t.implementations}. ${t.curatorialScore}: ${formatNumber(effect.admission.total)}/100.</p><a class="permalink" href="#${escapeHTML(effect.id)}"># ${t.permalink}</a></div><div class="implementations">${implementations}</div></div>`;
+          row.innerHTML = `<div class="effect-main"><span class="row-number">${String(effect.order).padStart(3, '0')}</span><div class="row-preview"${previewShell}>${previewMedia}${demoLink}<span class="preview-kind">${previewLabel}</span></div><div class="effect-card-overlay"><div class="effect-cell"><p class="category-label">${escapeHTML(labelFor(category))}</p><div class="effect-heading"><h3>${escapeHTML(effectName(effect))}</h3></div><span class="effect-key" dir="ltr">effect:${escapeHTML(effect.id)}</span></div><div class="source-cell"><span class="source-label">${t.recommended}</span><a class="source-name" href="${escapeHTML(primaryProject.url)}" target="_blank" rel="noreferrer">${escapeHTML(primaryProject.name)} ↗</a><span class="source-meta"><span>★ ${formatNumber(primaryProject.stars)}</span><span>${formatNumber(effect.sources.length)} ${effect.sources.length === 1 ? t.implementation : t.implementations}</span>${primaryProject.legacy ? `<span class="legacy-tag">${t.legacy}</span>` : ''}</span>${relatedParties ? `<span class="source-label party-label">${t.observedOn}</span><span class="party-list">${relatedParties}</span>` : ''}</div><div class="row-actions"><button class="action-button prompt-button" type="button">${promptLabel}</button><button class="action-button code-button" type="button" aria-expanded="false" aria-controls="detail-${escapeHTML(effect.id)}">${t.showCode}</button></div></div></div><div class="detail-panel" id="detail-${escapeHTML(effect.id)}" hidden><div class="detail-top"><p><strong>${t.definition}:</strong> ${escapeHTML(effectName(effect))}. ${formatNumber(effect.sources.length)} ${effect.sources.length === 1 ? t.implementation : t.implementations}.</p><a class="permalink" href="#${escapeHTML(effect.id)}"># ${t.permalink}</a></div><div class="implementations">${implementations}</div></div>`;
 
           row.classList.add('effect-card-trigger');
           row.tabIndex = 0;
@@ -1472,7 +1502,7 @@
           row.addEventListener('pointerleave', () => resetPointerSurface(row));
 
           const promptButton = row.querySelector('.prompt-button');
-          promptButton.addEventListener('click', event => { event.stopPropagation(); copyText(promptButton, effect.prompt, t.promptCopied, t.copyPrompt); });
+          promptButton.addEventListener('click', event => { event.stopPropagation(); copyText(promptButton, effectPromptText, t.promptCopied, promptLabel); });
           const codeButton = row.querySelector('.code-button');
           const panel = row.querySelector('.detail-panel');
           codeButton.addEventListener('click', event => {

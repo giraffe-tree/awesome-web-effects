@@ -116,18 +116,17 @@ def main() -> int:
 
             one_line_prompt = page.locator("#one-line-agent-prompt")
             english_prompt = one_line_prompt.text_content()
-            assert english_prompt and "\n" not in english_prompt
+            assert english_prompt and "\n" not in english_prompt and len(english_prompt) < 520
             expect(one_line_prompt).to_have_attribute("tabindex", "0")
             one_line_prompt.focus()
             assert page.evaluate("document.activeElement.id") == "one-line-agent-prompt"
             for requirement in [
                 "https://giraffe-tree.github.io/awesome-web-effects/",
-                "https://github.com/giraffe-tree/awesome-web-effects",
                 "read-only", "prefers-reduced-motion", "browser check",
             ]:
                 assert requirement in english_prompt
             hero_prompt_button = page.locator("#prompt-action")
-            expect(hero_prompt_button).to_have_text("Copy one-line prompt")
+            expect(hero_prompt_button).to_have_text("Copy prompt")
             hero_prompt_button.click()
             expect(hero_prompt_button).to_have_text("Prompt copied")
             assert page.evaluate("navigator.clipboard.readText()") == english_prompt
@@ -143,10 +142,10 @@ def main() -> int:
 
             language_select.select_option("zh-Hans")
             chinese_prompt = one_line_prompt.text_content()
-            assert chinese_prompt and "\n" not in chinese_prompt and "作为只读参考" in chinese_prompt
-            expect(hero_prompt_button).to_have_text("复制一句话 Prompt")
+            assert chinese_prompt and "\n" not in chinese_prompt and len(chinese_prompt) < 260 and "作为只读参考" in chinese_prompt
+            expect(hero_prompt_button).to_have_text("复制 Prompt")
             page.wait_for_timeout(1600)
-            expect(hero_prompt_button).to_have_text("复制一句话 Prompt")
+            expect(hero_prompt_button).to_have_text("复制 Prompt")
             page.locator("#agent-prompt-action").click()
             expect(page.locator("#agent-prompt-action")).to_have_text("Prompt 已复制")
             assert page.evaluate("navigator.clipboard.readText()") == chinese_prompt
@@ -174,6 +173,7 @@ def main() -> int:
 
             rows = page.locator("#effect-list .effect-row")
             expect(rows).to_have_count(expected_effect_count)
+            expect(page.locator("#effect-list .effect-score")).to_have_count(0)
             expect(page.locator("#effect-list .media-load-state[role]")).to_have_count(0)
             expect(page.locator('#effect-list picture source[type="image/webp"]')).to_have_count(
                 len(admitted_local_preview_ids)
@@ -243,6 +243,14 @@ def main() -> int:
             assert live_preview.bounding_box()["width"] > 640
             expect(modal.locator(".modal-score-total")).to_contain_text("85")
             expect(modal.locator(".score-dimension")).to_have_count(6)
+            modal_prompt_button = modal.locator(".modal-prompt-button")
+            expect(modal_prompt_button).to_have_text("Copy prompt")
+            assert modal_prompt_button.bounding_box()["y"] < modal.locator(".modal-score-card").bounding_box()["y"]
+            modal_prompt_button.click()
+            expect(modal_prompt_button).to_have_text("Prompt copied")
+            effect_prompt = page.evaluate("navigator.clipboard.readText()")
+            assert "Scroll-scrubbed master timeline" in effect_prompt
+            assert len(effect_prompt) < 620 and "Interaction contract" not in effect_prompt
             expect(modal.locator(".modal-code-card code")).to_contain_text("gsap.registerPlugin")
             page.wait_for_timeout(250)
             desktop_screenshot = ROOT / "tmp" / "catalog-detail-desktop.png"
@@ -386,6 +394,7 @@ def main() -> int:
             prompt_button.click()
             expect(modal).to_be_hidden()
             expect(prompt_button).to_have_text("Prompt copied")
+            assert page.evaluate("navigator.clipboard.readText()") == effect_prompt
 
             page.set_viewport_size({"width": 390, "height": 844})
             page.locator("#language").select_option("ur")
@@ -436,7 +445,7 @@ def main() -> int:
             server.kill()
             server.wait()
 
-    print(f"Catalog UI verified: 20 locales (including RTL and URL persistence), {expected_effect_count} admitted demos, one-line and per-effect Agent Prompts, paused 6s hero autoplay, uncropped 16:9 cards, loading/error transitions, live detail previews, native-size official GIFs, visible scores, copy actions, focus, reduced motion, and mobile layout.")
+    print(f"Catalog UI verified: 20 locales (including RTL and URL persistence), {expected_effect_count} admitted demos, concise homepage and per-effect prompts, score-free catalog cards, early detail prompt action, paused 6s hero autoplay, uncropped 16:9 cards, loading/error transitions, live detail previews, native-size official GIFs, detail scoring, copy actions, focus, reduced motion, and mobile layout.")
     return 0
 
 

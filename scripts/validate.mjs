@@ -64,34 +64,27 @@ for (const rtlLocale of ['ar', 'ur', 'arz']) assert(supportedLocales.find(locale
 
 assert(Object.keys(oneLineAgentPrompts).sort().join(',') === 'en,zh-Hans', 'One-line Agent Prompt must have canonical English and Simplified Chinese variants.');
 for (const [locale, prompt] of Object.entries(oneLineAgentPrompts)) {
-  assert(prompt.length >= 400 && prompt.length <= 2000, `${locale}: one-line Agent Prompt must remain self-contained without becoming an embedded playbook.`);
+  assert(prompt.length >= 180 && prompt.length <= 650, `${locale}: one-line Agent Prompt must remain concise and self-contained.`);
   assert(!/[\r\n]/.test(prompt), `${locale}: one-line Agent Prompt must not contain line breaks.`);
   assert(prompt.includes('https://giraffe-tree.github.io/awesome-web-effects/'), `${locale}: one-line Agent Prompt is missing the live catalog fallback.`);
-  assert(prompt.includes('https://github.com/giraffe-tree/awesome-web-effects'), `${locale}: one-line Agent Prompt is missing the source repository fallback.`);
-  assert(prompt.includes('demo/data/effects.js') && prompt.includes('demo/preview-demos/'), `${locale}: one-line Agent Prompt is missing machine-readable fallback paths.`);
   assert(prompt.includes('prefers-reduced-motion'), `${locale}: one-line Agent Prompt is missing reduced-motion requirements.`);
-  assert(/read-only|只读/.test(prompt) && /modifying the reference repository|不修改/.test(prompt), `${locale}: one-line Agent Prompt must keep the reference repository read-only.`);
+  assert(/read-only|只读/.test(prompt), `${locale}: one-line Agent Prompt must keep the catalog read-only.`);
   const semanticRequirements = [
     [/current project|当前项目/, 'the current project as the implementation target'],
-    [/single effect|一个效果/, 'a single default effect'],
-    [/second only|第二个效果/, 'a conditional second effect'],
-    [/verified preview|已验证预览/, 'verified preview review'],
+    [/one effect|一个.+效果/, 'one selected effect'],
+    [/verified demo|已验证 Demo/, 'verified demo review'],
     [/minimal code|最小代码/, 'minimal code review'],
-    [/Agent Prompt/, 'the per-effect Agent Prompt'],
-    [/adapt and implement|适配实现/, 'direct adaptation and implementation'],
+    [/adapt|适配/, 'direct adaptation'],
+    [/original assets|原创素材/, 'original asset boundaries'],
     [/responsive|响应式/, 'responsive behavior'],
     [/keyboard|键盘/, 'keyboard access'],
+    [/pointer|指针/, 'pointer access'],
     [/touch|触控/, 'touch access'],
     [/performance|性能/, 'performance'],
     [/cleanup|清理/, 'resource cleanup'],
     [/tests|测试/, 'tests'],
     [/browser check|浏览器检查/, 'a browser check'],
     [/changed files|改动文件/, 'changed-file reporting'],
-    [/verification results|验证结果/, 'verification reporting'],
-    [/do not invent|不要臆造/, 'a no-invention fallback'],
-    [/blocker|阻塞/, 'blocker reporting'],
-    [/branding|品牌/, 'branding boundaries'],
-    [/proprietary|专有/, 'proprietary-code boundaries'],
   ];
   for (const [pattern, requirement] of semanticRequirements) {
     assert(pattern.test(prompt), `${locale}: one-line Agent Prompt is missing ${requirement}.`);

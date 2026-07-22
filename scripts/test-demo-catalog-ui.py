@@ -117,9 +117,10 @@ def main() -> int:
             one_line_prompt = page.locator("#one-line-agent-prompt")
             expect(page.locator("#agent-prompt")).to_be_visible()
             assert page.locator("#agent-prompt").evaluate("section => section.parentElement?.classList.contains('hero-layout')")
-            english_prompt = one_line_prompt.text_content()
+            expect(one_line_prompt).to_be_editable()
+            assert one_line_prompt.evaluate("element => element.tagName") == "TEXTAREA"
+            english_prompt = one_line_prompt.input_value()
             assert english_prompt and "\n" not in english_prompt and len(english_prompt) < 520
-            expect(one_line_prompt).to_have_attribute("tabindex", "0")
             one_line_prompt.focus()
             assert page.evaluate("document.activeElement.id") == "one-line-agent-prompt"
             for requirement in [
@@ -142,9 +143,20 @@ def main() -> int:
             prompt_screenshot.parent.mkdir(parents=True, exist_ok=True)
             page.locator("#agent-prompt").screenshot(path=str(prompt_screenshot))
 
+            edited_home_prompt = "Use this edited prompt for the current page only."
+            one_line_prompt.fill(edited_home_prompt)
+            page.wait_for_timeout(1500)
+            hero_prompt_button.click()
+            expect(hero_prompt_button).to_have_text("Prompt copied")
+            assert page.evaluate("navigator.clipboard.readText()") == edited_home_prompt
+            page.reload(wait_until="networkidle")
+            expect(page.locator("#one-line-agent-prompt")).to_be_editable()
+            assert page.locator("#one-line-agent-prompt").input_value() == english_prompt
+            assert edited_home_prompt not in page.evaluate("Object.values(localStorage).join(' ')")
+
             language_select.select_option("zh-Hans")
             expect(page.locator("#agent-prompt-title")).to_have_text("一键优化你的项目动效")
-            chinese_prompt = one_line_prompt.text_content()
+            chinese_prompt = one_line_prompt.input_value()
             assert chinese_prompt and "\n" not in chinese_prompt and len(chinese_prompt) < 260 and "作为只读参考" in chinese_prompt
             expect(hero_prompt_button).to_have_text("复制 Prompt")
             page.wait_for_timeout(1600)
@@ -264,11 +276,13 @@ def main() -> int:
             modal_prompt_button = modal.locator(".modal-prompt-button")
             modal_prompt_text = modal.locator("#modal-prompt-text")
             expect(modal_prompt_text).to_be_visible()
+            expect(modal_prompt_text).to_be_editable()
+            assert modal_prompt_text.evaluate("element => element.tagName") == "TEXTAREA"
             expect(modal_prompt_button).to_have_text("Copy prompt")
             modal_prompt_button.click()
             expect(modal_prompt_button).to_have_text("Prompt copied")
             effect_prompt = page.evaluate("navigator.clipboard.readText()")
-            assert modal_prompt_text.text_content() == effect_prompt
+            assert modal_prompt_text.input_value() == effect_prompt
             assert "Scroll-scrubbed master timeline" in effect_prompt
             assert "https://giraffe-tree.github.io/awesome-web-effects/#scroll-scrubbed-master-timeline" in effect_prompt
             assert "observable acceptance criteria" in effect_prompt
@@ -282,9 +296,21 @@ def main() -> int:
             modal.locator(".modal-copy-code").click()
             expect(modal.locator(".modal-copy-code")).to_have_text("Copied")
 
+            edited_effect_prompt = f"{effect_prompt} Keep this page-only edit."
+            modal_prompt_text.fill(edited_effect_prompt)
+            page.wait_for_timeout(1500)
+            modal_prompt_button.click()
+            expect(modal_prompt_button).to_have_text("Prompt copied")
+            assert page.evaluate("navigator.clipboard.readText()") == edited_effect_prompt
+
             page.keyboard.press("Escape")
             expect(modal).to_be_hidden()
             assert page.evaluate("document.activeElement?.id") == "scroll-scrubbed-master-timeline"
+            real_row.locator(".effect-cell").click()
+            expect(modal).to_be_visible()
+            assert modal.locator("#modal-prompt-text").input_value() == edited_effect_prompt
+            page.keyboard.press("Escape")
+            expect(modal).to_be_hidden()
 
             blurhash_row = page.locator("#blurhash-to-photo-progressive-reveal")
             blurhash_row.locator(".effect-cell").click()
@@ -417,7 +443,16 @@ def main() -> int:
             prompt_button.click()
             expect(modal).to_be_hidden()
             expect(prompt_button).to_have_text("Prompt copied")
-            assert page.evaluate("navigator.clipboard.readText()") == effect_prompt
+            assert page.evaluate("navigator.clipboard.readText()") == edited_effect_prompt
+
+            page.reload(wait_until="networkidle")
+            real_row.locator(".effect-cell").click()
+            expect(modal).to_be_visible()
+            reset_effect_prompt = modal.locator("#modal-prompt-text").input_value()
+            assert reset_effect_prompt == effect_prompt
+            assert edited_effect_prompt not in page.evaluate("Object.values(localStorage).join(' ')")
+            page.keyboard.press("Escape")
+            expect(modal).to_be_hidden()
 
             page.set_viewport_size({"width": 390, "height": 844})
             page.locator("#language").select_option("ur")
@@ -468,7 +503,7 @@ def main() -> int:
             server.kill()
             server.wait()
 
-    print(f"Catalog UI verified: 20 locales (including RTL and URL persistence), {expected_effect_count} admitted demos, 14 homepage recommendations, visible homepage and per-effect prompts, unified light catalog styling, collapsed implementation evidence, paused 6s hero autoplay, uncropped 16:9 cards, loading/error transitions, live detail previews, native-size official GIFs, copy actions, focus, reduced motion, and mobile layout.")
+    print(f"Catalog UI verified: 20 locales (including RTL and URL persistence), {expected_effect_count} admitted demos, 14 homepage recommendations, editable page-only homepage and per-effect prompts with refresh reset, unified light catalog styling, collapsed implementation evidence, paused 6s hero autoplay, uncropped 16:9 cards, loading/error transitions, live detail previews, native-size official GIFs, copy actions, focus, reduced motion, and mobile layout.")
     return 0
 
 

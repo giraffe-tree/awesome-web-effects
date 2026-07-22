@@ -253,7 +253,8 @@ assert(modalRenderer.includes('source.snippet'), 'Effect-detail modal must rende
 assert(/<pre[^>]*>\s*<code[^>]*>\$\{escapeHTML\(source\.snippet\)\}<\/code>\s*<\/pre>/.test(modalRenderer), 'Effect-detail modal must display source.snippet in a code block.');
 assert(/(?:class="[^"]*modal-copy-code|data-modal-copy-code)/.test(modalRenderer), 'Effect-detail modal must expose a dedicated copy-code button.');
 assert(/copyText\(\s*[^,]+\s*,\s*source\.snippet\s*,/.test(modalRenderer), 'Effect-detail copy-code button must copy source.snippet independently.');
-assert(modalRenderer.includes('modal-prompt-text') && modalRenderer.includes('escapeHTML(effectPromptText)'), 'Effect-detail modal must visibly render the exact prompt it copies.');
+assert(modalRenderer.includes('modal-prompt-text') && modalRenderer.includes('escapeHTML(effectPromptText)') && modalRenderer.includes('promptEditor.value'), 'Effect-detail modal must render an editable prompt and copy its current value.');
+assert(html.includes('editedAgentPrompt') && html.includes('editedEffectPrompts = new Map()') && !html.includes("localStorage.setItem('awesome-effects-prompt"), 'Prompt edits must remain in page memory and reset on refresh.');
 assert(modalRenderer.includes('hasRealPreview(source)') && /realPreview\s*\?/.test(modalRenderer), 'Effect-detail modal must branch on verified preview availability.');
 assert(/<img[^>]*source\.preview[^>]*\.gif/.test(modalRenderer), 'Effect-detail modal must render the selected real GIF when available.');
 assert(modalRenderer.includes('modal-preview-unavailable'), 'Effect-detail modal must render an explicit unavailable-preview state.');

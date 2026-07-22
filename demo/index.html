@@ -194,7 +194,8 @@
       .agent-prompt-card h2 { max-width: 470px; margin: 14px 0 0; font-size: clamp(38px, 4.8vw, 68px); line-height: 1; letter-spacing: -.055em; text-wrap: balance; }
       .agent-prompt-intro { max-width: 510px; margin: 18px 0 0; color: rgba(234, 230, 242, .62); font-size: 16px; line-height: 1.5; }
       .agent-prompt-box { min-width: 0; }
-      .agent-prompt-text { max-height: 238px; margin: 0; overflow: auto; padding: 22px; border: 1px solid rgba(154, 168, 216, .18); border-radius: 20px; color: rgba(240, 235, 228, .8); background: rgba(10, 14, 32, .5); font: 12px/1.65 ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre-wrap; overflow-wrap: anywhere; scrollbar-color: rgba(232, 160, 180, .5) rgba(154, 168, 216, .1); scrollbar-gutter: stable; scrollbar-width: thin; }
+      .agent-prompt-text { display: block; box-sizing: border-box; width: 100%; min-height: 104px; max-height: 238px; margin: 0; overflow: auto; resize: vertical; padding: 22px; border: 1px solid rgba(154, 168, 216, .18); border-radius: 20px; outline: 0; color: rgba(240, 235, 228, .8); background: rgba(10, 14, 32, .5); font: 12px/1.65 ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre-wrap; overflow-wrap: anywhere; scrollbar-color: rgba(232, 160, 180, .5) rgba(154, 168, 216, .1); scrollbar-gutter: stable; scrollbar-width: thin; }
+      .agent-prompt-text:focus { border-color: rgba(232, 160, 180, .72); box-shadow: 0 0 0 3px rgba(232, 160, 180, .13); }
       .agent-prompt-text::-webkit-scrollbar { width: 8px; }
       .agent-prompt-text::-webkit-scrollbar-track { background: rgba(154, 168, 216, .1); }
       .agent-prompt-text::-webkit-scrollbar-thumb { border: 0; border-radius: 99px; background: rgba(232, 160, 180, .5); }
@@ -395,7 +396,9 @@
       .modal-copy-code:hover { border-color: rgba(244, 239, 233, .34); background: rgba(244, 239, 233, .18); }
       .modal-code-card pre { min-height: 0; max-height: 290px; padding: 20px; }
       .modal-prompt-card { margin-top: 22px; padding: 20px; border: 1px solid rgba(232, 160, 180, .28); border-radius: 18px; background: linear-gradient(135deg, rgba(232, 160, 180, .11), rgba(154, 168, 216, .06)); }
-      .modal-prompt-text { max-height: 170px; margin: 10px 0 0; overflow: auto; color: rgba(240, 235, 228, .82); font-size: 13px; line-height: 1.62; scrollbar-width: thin; }
+      .modal-prompt-text { display: block; box-sizing: border-box; width: 100%; min-height: 132px; max-height: 280px; margin: 10px 0 0; overflow: auto; resize: vertical; padding: 14px 15px; border: 1px solid rgba(154, 168, 216, .2); border-radius: 14px; outline: 0; color: rgba(240, 235, 228, .88); background: rgba(8, 11, 27, .48); font: 13px/1.62 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Noto Sans", sans-serif; scrollbar-width: thin; }
+      .modal-prompt-text:focus { border-color: rgba(232, 160, 180, .72); box-shadow: 0 0 0 3px rgba(232, 160, 180, .12); }
+      .prompt-edit-note { margin-inline-start: 8px; color: rgba(232, 160, 180, .78); font-weight: 600; letter-spacing: 0; text-transform: none; }
       .modal-primary-actions { display: flex; justify-content: flex-start; margin-top: 14px; }
       .modal-prompt-button { min-height: 44px; padding: 0 20px; border: 0; border-radius: 99px; color: var(--pink-ink); background: var(--pink); cursor: pointer; font-size: 13px; font-weight: 650; transition: transform .24s var(--ease-out), box-shadow .24s var(--ease-out), background .2s ease; }
       .modal-prompt-button:hover { background: var(--pink-hover); box-shadow: 0 6px 18px rgba(232, 160, 180, .3); transform: translateY(-1px); }
@@ -766,7 +769,8 @@
       .hero .agent-prompt-card h2 { max-width: 520px; margin-top: 6px; color: #17243d; font-size: clamp(25px, 2.5vw, 38px); line-height: 1.02; }
       .hero .agent-prompt-intro { max-width: 540px; margin-top: 9px; color: rgba(31, 44, 70, .68); font-size: 13px; }
       .hero .agent-prompt-box { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: center; }
-      .hero .agent-prompt-text { max-height: 96px; padding: 13px 15px; border-color: rgba(42, 53, 79, .16); border-radius: 15px; color: rgba(24, 36, 59, .84); background: rgba(249, 244, 244, .42); font: 500 12px/1.5 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Noto Sans", sans-serif; }
+      .hero .agent-prompt-text { min-height: 96px; max-height: 220px; padding: 13px 15px; border-color: rgba(42, 53, 79, .16); border-radius: 15px; color: rgba(24, 36, 59, .84); background: rgba(249, 244, 244, .42); font: 500 12px/1.5 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Noto Sans", sans-serif; }
+      .hero .agent-prompt-text:focus { border-color: rgba(44, 64, 94, .58); box-shadow: 0 0 0 3px rgba(44, 64, 94, .1); }
       .hero .agent-prompt-action { justify-self: end; min-height: 40px; padding-inline: 16px; color: #f8f3ef; background: linear-gradient(180deg, #3f5576, #293e5d); }
       .hero .agent-prompt-action:hover { background: linear-gradient(180deg, #4b6386, #314968); box-shadow: 0 9px 24px rgba(35, 53, 81, .22); }
 
@@ -911,7 +915,7 @@
               <p class="agent-prompt-intro" id="agent-prompt-intro">Choose an effect, adapt it to the current project, preserve access and motion safeguards, then verify.</p>
             </div>
             <div class="agent-prompt-box">
-              <p class="agent-prompt-text" id="one-line-agent-prompt" lang="en" dir="ltr" tabindex="0"></p>
+              <textarea class="agent-prompt-text" id="one-line-agent-prompt" lang="en" dir="auto" rows="4" spellcheck="true" aria-labelledby="agent-prompt-title" aria-describedby="agent-prompt-intro"></textarea>
               <button class="agent-prompt-action" type="button" id="agent-prompt-action" aria-describedby="agent-prompt-intro">Copy prompt</button>
             </div>
           </div>
@@ -1016,6 +1020,8 @@
       let language = requestedLanguages.map(candidate => resolveLocale(candidate, null)).find(Boolean) || defaultLocale;
       let activeCategory = 'recommended';
       let modalTrigger = null;
+      let editedAgentPrompt = null;
+      const editedEffectPrompts = new Map();
       let heroStep = 0;
       let heroAutoPlaying = !reducedMotion.matches;
       let heroTimer = 0;
@@ -1049,6 +1055,7 @@
           : image;
       };
       const promptActionLabel = t => language === 'zh-Hans' ? '复制 Prompt' : language === 'en' ? 'Copy prompt' : t.copyPrompt;
+      const promptEditNote = () => isChinese() ? '可编辑 · 刷新后重置' : 'Editable · resets on refresh';
       const effectReferenceUrl = effect => `https://giraffe-tree.github.io/awesome-web-effects/${isChinese() ? '?lang=zh-Hans' : ''}#${encodeURIComponent(effect.id)}`;
       const briefEffectPrompt = (effect, project) => isChinese()
         ? `在当前项目中实现「${effect.nameZh}」（${effect.name}）。把 ${effectReferenceUrl(effect)} 作为准绳：查看其已验证 Demo、最小代码、触发、时序和层级，并定义 2–3 条可观察验收标准。优先使用 ${project.name} 和现有依赖，用原创素材适配。保留响应式、键盘、指针、触控、prefers-reduced-motion、性能与资源清理。运行测试及桌面/移动浏览器检查，报告改动文件、逐条证据和遗留风险。`
@@ -1323,22 +1330,25 @@
         const secondaryName = isChinese() ? effect.name : effect.nameZh;
         const minimalCodeNote = source.demoPath ? t.minimalCodeHelp : t.minimalCodeUnavailableHelp;
         const promptLabel = promptActionLabel(t);
-        const effectPromptText = briefEffectPrompt(effect, project);
+        const defaultEffectPromptText = briefEffectPrompt(effect, project);
+        const effectPromptText = editedEffectPrompts.get(effect.id) ?? defaultEffectPromptText;
         const codeSection = `<section class="modal-code-card modal-code-block"><div class="modal-code-header"><div class="modal-code-heading"><p class="modal-detail-label">${t.minimalCodeLabel}</p><p class="modal-code-note">${minimalCodeNote}</p></div><button class="modal-copy-code" data-modal-copy-code type="button">${t.copyMinimalCode}</button></div><pre><code>${escapeHTML(source.snippet)}</code></pre></section>`;
         const scoreSummary = isChinese() ? effect.admission.rationaleZh : t.scoreSummary;
         const scoreBreakdown = admissionPolicy.dimensions.map(dimension => `<div class="score-dimension"><span>${escapeHTML(isChinese() ? dimension.labelZh : dimension.label)}</span><strong>${formatNumber(effect.admission.scores[dimension.id])} / ${formatNumber(dimension.maximum)}</strong></div>`).join('');
         const scoreSection = `<section class="modal-score-card"><div><p class="modal-detail-label">${t.curatorialScore} · ${t.scorePassed}</p><div class="modal-score-total">${effect.admission.total}<span>/ 100</span></div><p class="modal-score-summary">${escapeHTML(scoreSummary)}</p></div><div class="score-breakdown">${scoreBreakdown}</div></section>`;
-        const promptSection = `<section class="modal-prompt-card"><p class="modal-detail-label">${t.prompts}</p><p class="modal-prompt-text" id="modal-prompt-text" tabindex="0">${escapeHTML(effectPromptText)}</p><div class="modal-primary-actions"><button class="modal-prompt-button" type="button">${promptLabel}</button></div></section>`;
+        const promptSection = `<section class="modal-prompt-card"><p class="modal-detail-label">${t.prompts}<span class="prompt-edit-note">${promptEditNote()}</span></p><textarea class="modal-prompt-text" id="modal-prompt-text" rows="6" dir="auto" spellcheck="true" aria-label="${escapeHTML(t.prompts)}">${escapeHTML(effectPromptText)}</textarea><div class="modal-primary-actions"><button class="modal-prompt-button" type="button">${promptLabel}</button></div></section>`;
         const factsSection = `<div class="modal-facts"><div class="modal-fact"><span>${t.triggerLabel}</span><strong>${escapeHTML(effect.behavior.trigger)}</strong></div><div class="modal-fact"><span>${t.timingLabel}</span><strong>${escapeHTML(effect.behavior.timing)}</strong></div><div class="modal-fact"><span>${t.layerLabel}</span><strong>${escapeHTML(effect.behavior.layer)}</strong></div></div>`;
         const sourceSection = `<div class="modal-detail-grid"><section class="modal-detail-card"><p class="modal-detail-label">${t.implementationLabel}</p><h3 class="modal-project-name">${escapeHTML(project.name)}</h3><p class="modal-project-meta" dir="ltr"><bdi>${escapeHTML(project.repo)}</bdi> · ★ ${formatNumber(project.stars)}</p><div class="modal-links">${links.join('')}</div>${source.demoPath ? '' : `<p class="modal-no-demo">${t.noRunnableDemo}</p>`}</section><section class="modal-detail-card"><p class="modal-detail-label">${t.provenanceLabel}</p><h3 class="modal-project-name">${previewStatus}</h3><p class="modal-provenance-text">${provenance}${provenancePaths}</p></section></div>`;
 
         modalTrigger = trigger || document.activeElement;
         modalClose.setAttribute('aria-label', t.closeDetails);
         modalContent.innerHTML = `${preview}<div class="modal-content-body"><p class="modal-category">${escapeHTML(labelFor(category))}</p><h2 class="modal-title" id="modal-title">${escapeHTML(primaryName)}</h2><p class="modal-title-secondary" lang="${isChinese() ? 'en' : 'zh-Hans'}">${escapeHTML(secondaryName)}</p>${promptSection}${codeSection}<details class="modal-more"><summary>${escapeHTML(t.detailsLabel)}</summary><div class="modal-more-body">${factsSection}${sourceSection}${scoreSection}</div></details></div>`;
+        const promptEditor = modalContent.querySelector('#modal-prompt-text');
+        promptEditor.addEventListener('input', () => editedEffectPrompts.set(effect.id, promptEditor.value));
         const promptButton = modalContent.querySelector('.modal-prompt-button');
         promptButton.addEventListener('click', event => {
           event.stopPropagation();
-          copyText(promptButton, effectPromptText, t.promptCopied, promptLabel);
+          copyText(promptButton, promptEditor.value, t.promptCopied, promptLabel);
         });
         const codeButton = modalContent.querySelector('.modal-copy-code');
         codeButton.addEventListener('click', event => {
@@ -1376,7 +1386,7 @@
 
       function copyOneLinePrompt(button) {
         const t = copy[language];
-        copyText(button, getOneLineAgentPrompt(language), t.promptCopied, promptActionLabel(t));
+        copyText(button, agentPromptText.value, t.promptCopied, promptActionLabel(t));
       }
 
       function setLanguage(nextLanguage) {
@@ -1407,9 +1417,11 @@
         const oneLineAction = promptActionLabel(t);
         agentPromptAction.textContent = oneLineAction;
         agentPromptAction.dataset.defaultLabel = oneLineAction;
-        agentPromptText.textContent = getOneLineAgentPrompt(language);
-        agentPromptText.lang = language === 'zh-Hans' ? 'zh-Hans' : 'en';
-        document.querySelector('#agent-prompt-label').textContent = t.prompts;
+        if (editedAgentPrompt === null) {
+          agentPromptText.value = getOneLineAgentPrompt(language);
+          agentPromptText.lang = language === 'zh-Hans' ? 'zh-Hans' : 'en';
+        }
+        document.querySelector('#agent-prompt-label').textContent = `${t.prompts} · ${promptEditNote()}`;
         document.querySelector('#agent-prompt-title').textContent = t.promptTitle;
         document.querySelector('#agent-prompt-intro').textContent = t.promptCopy;
         document.querySelector('#effect-count').textContent = formatNumber(effects.length);
@@ -1513,7 +1525,6 @@
           const primary = recommendedSource(effect);
           const primaryProject = projectById.get(primary.projectId);
           const promptLabel = promptActionLabel(t);
-          const effectPromptText = briefEffectPrompt(effect, primaryProject);
           const realPreview = hasRealPreview(primary);
           const previewMedia = !realPreview
             ? `<span class="paused-preview">${t.previewUnavailable}</span>`
@@ -1556,7 +1567,11 @@
           row.addEventListener('pointerleave', () => resetPointerSurface(row));
 
           const promptButton = row.querySelector('.prompt-button');
-          promptButton.addEventListener('click', event => { event.stopPropagation(); copyText(promptButton, effectPromptText, t.promptCopied, promptLabel); });
+          promptButton.addEventListener('click', event => {
+            event.stopPropagation();
+            const currentPrompt = editedEffectPrompts.get(effect.id) ?? briefEffectPrompt(effect, primaryProject);
+            copyText(promptButton, currentPrompt, t.promptCopied, promptLabel);
+          });
           const codeButton = row.querySelector('.code-button');
           const panel = row.querySelector('.detail-panel');
           codeButton.addEventListener('click', event => {
@@ -1583,6 +1598,7 @@
         setLanguage(event.target.value);
       });
       agentPromptAction.addEventListener('click', () => copyOneLinePrompt(agentPromptAction));
+      agentPromptText.addEventListener('input', () => { editedAgentPrompt = agentPromptText.value; });
       const entryReveal = document.querySelector('#entry-reveal');
       entryReveal?.addEventListener('animationend', event => {
         if (event.target === entryReveal) entryReveal.remove();

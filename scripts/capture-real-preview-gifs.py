@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Capture deterministic GIFs from the repository's real, library-backed preview demos."""
+"""Capture deterministic evidence GIFs and high-resolution WebP previews from real demos."""
 
 from __future__ import annotations
 
 import argparse
+import base64
 import hashlib
 import json
 import math
@@ -22,6 +23,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DEMO_ROOT = ROOT / "demo" / "preview-demos"
 MANIFEST_PATH = DEMO_ROOT / "preview-manifest.json"
 OUTPUT_ROOT = ROOT / "demo" / "gifs" / "captured"
+WEB_OUTPUT_ROOT = ROOT / "demo" / "gifs" / "webp"
 DEFAULT_WIDTH = 320
 DEFAULT_HEIGHT = 180
 
@@ -29,10 +31,16 @@ DEFAULT_HEIGHT = 180
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--only", help="Comma-separated effect ids to capture")
+    parser.add_argument("--shard", help="One-based shard as INDEX/TOTAL for parallel capture")
     parser.add_argument("--fps", type=int, default=12)
     parser.add_argument("--duration", type=float, default=3.0)
     parser.add_argument("--width", type=int, default=DEFAULT_WIDTH)
     parser.add_argument("--height", type=int, default=DEFAULT_HEIGHT)
+    parser.add_argument("--webp-scale", type=float, default=2, help="High-resolution WebP scale applied without changing the demo viewport")
+    parser.add_argument("--webp-fps", type=int, default=6, help="Base playback rate for the high-resolution WebP")
+    parser.add_argument("--webp-quality", type=int, default=75, help="Animated WebP quality (0-100)")
+    parser.add_argument("--web-assets-only", action="store_true", help="Write high-resolution WebP assets without replacing the evidence GIFs")
+    parser.add_argument("--continue-on-error", action="store_true", help="Finish the selected batch, then report every failed demo")
     parser.add_argument("--skip-install", action="store_true", help="Fail instead of running npm ci when dependencies are absent")
     parser.add_argument("--built", action="store_true", help="Capture the committed static dist pages instead of Vite source pages")
     parser.add_argument("--headed", action="store_true", help="Show Chrome while capturing")
@@ -102,6 +110,32 @@ def encode_gif(frame_root: Path, output: Path, fps: int) -> None:
         raise RuntimeError(f"Encoded GIF is unexpectedly small: {output}")
 
 
+def encode_webp(frame_root: Path, output: Path, frame_delays: list[float], quality: int) -> None:
+    output.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        from PIL import Image, features
+    except ImportError as error:
+        raise RuntimeError("Pillow with animated WebP support is required: pip install Pillow") from error
+    if not features.check("webp"):
+        raise RuntimeError("The installed Pillow build does not support WebP")
+    frames = [Image.open(frame_root / f"{index:04d}.png").convert("RGB") for index in range(len(frame_delays))]
+    frames[0].save(
+        output,
+        format="WEBP",
+        save_all=True,
+        append_images=frames[1:],
+        duration=[round(delay * 1000) for delay in frame_delays],
+        loop=0,
+        quality=quality,
+        method=6,
+        minimize_size=True,
+    )
+    for frame in frames:
+        frame.close()
+    if output.stat().st_size < 4096:
+        raise RuntimeError(f"Encoded WebP is unexpectedly small: {output}")
+
+
 def live_surface_check(page, renderer: str) -> dict:
     return page.evaluate(
         """renderer => {
@@ -132,7 +166,7 @@ def live_surface_check(page, renderer: str) -> dict:
     )
 
 
-def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Namespace) -> tuple[int, int]:
+def capture_demo(page, url: str, demo: dict, frame_root: Path, web_frame_root: Path, args: argparse.Namespace) -> tuple[int, int, list[float]]:
     errors: list[str] = []
     page.on("pageerror", lambda error: errors.append(f"{error}\n{getattr(error, 'stack', '')}"))
     page.goto(url, wait_until="load", timeout=45_000)
@@ -168,9 +202,22 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
               && Boolean(await window.__PREVIEW_RUNTIME_ASSERT__())"""
         )
         if not runtime_assertion:
-            raise RuntimeError(f"{demo['id']} failed its library-specific runtime assertion")
+            assertion_state = page.evaluate("window.__PREVIEW_INTERACTION_STATE__ || window.__TILT_GLARE_STATE__ || null")
+            raise RuntimeError(f"{demo['id']} failed its library-specific runtime assertion: {assertion_state!r}")
 
     frame_count = max(2, round(args.duration * args.fps))
+    base_delay = 1 / args.webp_fps
+    frame_delays = [base_delay] * frame_count
+    pending_hold = 0.0
+
+    def settle(milliseconds: float) -> None:
+        nonlocal pending_hold
+        page.wait_for_timeout(milliseconds)
+        if milliseconds >= 250:
+            pending_hold = max(pending_hold, min(1.2, max(.7, milliseconds / 1000)))
+
+    web_frame_root.mkdir(parents=True, exist_ok=True)
+    cdp_session = page.context.new_cdp_session(page)
     hashes: set[str] = set()
     for index in range(frame_count):
         preview_time = index / args.fps
@@ -191,21 +238,21 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.click(244, 92)
                 page.keyboard.press("End")
             elif index == 19:
-                page.wait_for_timeout(420)
+                settle(420)
             elif index == 22:
                 page.mouse.wheel(0, 120)
             elif index == 25:
                 page.keyboard.press("PageUp")
             elif index == 26:
-                page.wait_for_timeout(420)
+                settle(420)
             elif index == 29:
                 page.keyboard.press("Home")
             elif index == 30:
-                page.wait_for_timeout(420)
+                settle(420)
             elif index == 33:
                 page.keyboard.press("End")
             elif index == 34:
-                page.wait_for_timeout(420)
+                settle(420)
         elif demo["id"] == "pinned-horizontal-scroll-scene":
             if index == 2:
                 page.mouse.move(238, 96)
@@ -234,33 +281,33 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             if index == 3:
                 page.locator('.queue-option[data-index="1"]').click()
             elif index == 4:
-                page.wait_for_timeout(900)
+                settle(900)
             elif index == 10:
                 page.locator('#shared-card').click()
             elif index == 11:
-                page.wait_for_timeout(900)
+                settle(900)
             elif index == 16:
                 page.locator('.queue-option[data-index="2"]').click()
             elif index == 17:
-                page.wait_for_timeout(900)
+                settle(900)
             elif index == 23:
                 page.keyboard.press("Escape")
             elif index == 24:
-                page.wait_for_timeout(900)
+                settle(900)
             elif index == 28:
                 page.locator('.queue-option[data-index="1"]').focus()
                 page.keyboard.press("Enter")
             elif index == 29:
-                page.wait_for_timeout(900)
+                settle(900)
             elif index == 34:
                 page.keyboard.press("Space")
             elif index == 35:
-                page.wait_for_timeout(900)
+                settle(900)
         elif demo["id"] == "staggered-transform-choreography":
             if index == 3:
                 page.locator('#assemble-button').click()
             elif index == 4:
-                page.wait_for_timeout(1_150)
+                settle(1_150)
             elif index == 10:
                 page.locator('.action-card').nth(4).hover()
             elif index == 14:
@@ -273,46 +320,46 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 23:
                 page.locator('#assemble-button').click()
             elif index == 24:
-                page.wait_for_timeout(1_150)
+                settle(1_150)
             elif index == 28:
                 page.locator('#incident-board').focus()
                 page.keyboard.press("Enter")
             elif index == 29:
-                page.wait_for_timeout(1_150)
+                settle(1_150)
             elif index == 34:
                 page.locator('.action-card').nth(2).hover()
         elif demo["id"] == "motion-graphics-burst":
             if index == 3:
                 page.locator('.burst-node[data-node-id="ingest"]').click()
             elif index == 4:
-                page.wait_for_timeout(1_050)
+                settle(1_050)
             elif index == 9:
                 page.locator('.burst-node[data-node-id="verify"]').click()
             elif index == 10:
-                page.wait_for_timeout(350)
+                settle(350)
             elif index == 11:
-                page.wait_for_timeout(800)
+                settle(800)
             elif index == 15:
                 page.locator('.burst-node[data-node-id="verify"]').focus()
                 page.keyboard.press("ArrowRight")
             elif index == 16:
                 page.keyboard.press("Enter")
             elif index == 17:
-                page.wait_for_timeout(1_050)
+                settle(1_050)
             elif index == 22:
                 page.locator('.burst-node[data-node-id="verify"]').click()
             elif index == 23:
-                page.wait_for_timeout(250)
+                settle(250)
             elif index == 24:
                 page.locator('.burst-node[data-node-id="release"]').click()
             elif index == 25:
-                page.wait_for_timeout(1_050)
+                settle(1_050)
             elif index == 30:
                 page.keyboard.press("Escape")
             elif index == 33:
                 page.locator('.burst-node[data-node-id="verify"]').click()
             elif index == 34:
-                page.wait_for_timeout(1_050)
+                settle(1_050)
         elif demo["id"] == "visually-authored-keyframe-sequence":
             if index == 3:
                 page.locator('.keyframe-button[data-index="1"]').click()
@@ -327,18 +374,18 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 18:
                 page.locator('#play-button').click()
             elif index == 19:
-                page.wait_for_timeout(300)
+                settle(300)
             elif index == 20:
                 page.locator('.keyframe-button[data-index="3"]').click()
             elif index == 22:
                 page.locator('#play-button').click()
             elif index == 23:
-                page.wait_for_timeout(900)
+                settle(900)
             elif index == 26:
                 page.locator('.keyframe-button[data-index="1"]').click()
                 page.locator('#theatre-actor').click()
             elif index == 27:
-                page.wait_for_timeout(150)
+                settle(150)
                 page.locator('#play-button').click()
             elif index == 29:
                 page.locator('#theatre-actor').click()
@@ -351,69 +398,69 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             if index == 3:
                 page.locator('#save-control').click()
             elif index == 4:
-                page.wait_for_timeout(750)
+                settle(750)
             elif index == 8:
                 page.locator('#shortlist-stage').focus()
                 page.keyboard.press("ArrowLeft")
             elif index == 9:
-                page.wait_for_timeout(750)
+                settle(750)
             elif index == 13:
                 page.locator('#shortlist-stage').focus()
                 page.keyboard.press("Enter")
             elif index == 14:
-                page.wait_for_timeout(750)
+                settle(750)
             elif index == 18:
                 page.locator('#save-control').click()
             elif index == 19:
-                page.wait_for_timeout(250)
+                settle(250)
             elif index == 20:
-                page.wait_for_timeout(550)
+                settle(550)
             elif index == 24:
                 page.locator('#shortlist-stage').focus()
                 page.keyboard.press("ArrowRight")
             elif index == 25:
-                page.wait_for_timeout(750)
+                settle(750)
             elif index == 29:
                 page.locator('#shortlist-stage').focus()
                 page.keyboard.press("Escape")
             elif index == 30:
-                page.wait_for_timeout(750)
+                settle(750)
             elif index == 34:
                 page.locator('#save-control').click()
             elif index == 35:
-                page.wait_for_timeout(750)
+                settle(750)
         elif demo["id"] == "svg-stroke-drawing":
             if index == 3:
                 page.locator('#trace-route').click()
             elif index == 4:
-                page.wait_for_timeout(700)
+                settle(700)
             elif index == 5:
-                page.wait_for_timeout(1_300)
+                settle(1_300)
             elif index == 10:
                 page.locator('#route-map').click()
             elif index == 11:
-                page.wait_for_timeout(400)
+                settle(400)
             elif index == 12:
                 page.locator('#trace-route').click()
             elif index == 13:
-                page.wait_for_timeout(2_000)
+                settle(2_000)
             elif index == 18:
                 page.keyboard.press("Escape")
             elif index == 21:
                 page.locator('#route-map').focus()
                 page.keyboard.press("Enter")
             elif index == 22:
-                page.wait_for_timeout(2_000)
+                settle(2_000)
             elif index == 27:
                 page.locator('#clear-route').click()
             elif index == 30:
                 page.locator('#trace-route').click()
             elif index == 31:
-                page.wait_for_timeout(700)
+                settle(120)
             elif index == 32:
                 page.locator('#route-map').click()
             elif index == 33:
-                page.wait_for_timeout(2_000)
+                settle(2_000)
         elif demo["id"] == "sketch-style-creative-coding-loop":
             if index == 3:
                 box = page.locator('#poster-surface').bounding_box()
@@ -433,7 +480,7 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 14:
                 page.locator('#loop-button').click()
             elif index == 15:
-                page.wait_for_timeout(400)
+                settle(400)
             elif index == 16:
                 page.locator('#loop-button').click()
             elif index == 20:
@@ -444,7 +491,7 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 24:
                 page.keyboard.press("Space")
             elif index == 25:
-                page.wait_for_timeout(300)
+                settle(300)
             elif index == 26:
                 page.keyboard.press("Space")
             elif index == 29:
@@ -482,17 +529,17 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             if index == 3:
                 page.locator('.handoff-node[data-stage="discover"]').click()
             elif index == 4:
-                page.wait_for_timeout(850)
+                settle(850)
             elif index == 8:
                 page.locator('.handoff-node[data-stage="compose"]').click()
             elif index == 9:
-                page.wait_for_timeout(850)
+                settle(850)
             elif index == 13:
                 page.locator('.handoff-node[data-stage="verify"]').click()
             elif index == 14:
                 page.locator('.handoff-node[data-stage="discover"]').click()
             elif index == 15:
-                page.wait_for_timeout(850)
+                settle(850)
             elif index == 19:
                 page.locator('#reset-handoff').click()
             elif index == 22:
@@ -500,7 +547,7 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("End")
                 page.keyboard.press("Enter")
             elif index == 23:
-                page.wait_for_timeout(850)
+                settle(850)
             elif index == 27:
                 page.keyboard.press("Escape")
             elif index == 30:
@@ -508,7 +555,7 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.keyboard.press("ArrowDown")
                 page.keyboard.press("Enter")
             elif index == 31:
-                page.wait_for_timeout(850)
+                settle(850)
         elif demo["id"] == "scroll-linked-multilayer-starfield":
             if index == 2:
                 box = page.locator('#sky-viewport').bounding_box()
@@ -555,21 +602,21 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             if index == 3:
                 page.locator('#research-card').hover()
             elif index == 4:
-                page.wait_for_timeout(340)
+                settle(340)
             elif index == 7:
                 page.mouse.move(1, 1)
             elif index == 8:
-                page.wait_for_timeout(340)
+                settle(340)
             elif index == 11:
                 page.locator('#research-card').hover()
             elif index == 12:
                 page.mouse.move(1, 1)
             elif index == 13:
-                page.wait_for_timeout(340)
+                settle(340)
             elif index == 16:
                 page.locator('#research-card').focus()
             elif index == 17:
-                page.wait_for_timeout(340)
+                settle(340)
             elif index == 19:
                 page.keyboard.press("Enter")
             elif index == 21:
@@ -577,22 +624,22 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 24:
                 page.keyboard.press("Escape")
             elif index == 25:
-                page.wait_for_timeout(340)
+                settle(340)
             elif index == 26:
                 page.mouse.move(1, 1)
             elif index == 28:
                 page.locator('#research-card').hover()
             elif index == 29:
-                page.wait_for_timeout(340)
+                settle(340)
             elif index == 31:
                 page.locator('#reset-button').click()
             elif index == 32:
-                page.wait_for_timeout(340)
+                settle(340)
             elif index == 34:
                 page.locator('#research-card').focus()
                 page.keyboard.press("Space")
             elif index == 35:
-                page.wait_for_timeout(340)
+                settle(340)
         elif demo["id"] == "interaction-history-hiring-badge":
             if index == 3:
                 page.locator('[data-role-id="product"]').click()
@@ -653,7 +700,7 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             if index == 2:
                 page.locator('#menu-toggle').click()
             elif index == 4:
-                page.wait_for_timeout(900)
+                settle(900)
             elif index == 7:
                 page.locator('#menu-toggle').focus()
                 page.keyboard.press("Tab")
@@ -662,58 +709,58 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 11:
                 page.keyboard.press("Enter")
             elif index == 12:
-                page.wait_for_timeout(900)
+                settle(900)
             elif index == 15:
                 page.locator('#menu-toggle').click()
             elif index == 16:
-                page.wait_for_timeout(900)
+                settle(900)
             elif index == 19:
                 page.keyboard.press("Shift+Tab")
             elif index == 21:
                 page.keyboard.press("Escape")
             elif index == 22:
-                page.wait_for_timeout(900)
+                settle(900)
             elif index == 25:
                 page.locator('#menu-toggle').click()
             elif index == 26:
-                page.wait_for_timeout(900)
+                settle(900)
             elif index == 29:
                 page.locator('.menu-link[data-section="artists"]').click()
             elif index == 30:
-                page.wait_for_timeout(900)
+                settle(900)
             elif index == 33:
                 page.locator('#menu-toggle').click()
             elif index == 34:
-                page.wait_for_timeout(900)
+                settle(900)
         elif demo["id"] == "playable-brand-minesweeper-footer":
             if index == 2:
                 page.locator('.mine-cell[data-index="0"]').click()
             elif index == 3:
-                page.wait_for_timeout(360)
+                settle(360)
             elif index == 6:
                 page.locator('.mine-cell[data-index="5"]').click(button="right")
             elif index == 7:
-                page.wait_for_timeout(280)
+                settle(280)
             elif index == 9:
                 page.locator('#flag-mode').click()
             elif index == 11:
                 page.locator('.mine-cell[data-index="13"]').click()
             elif index == 12:
-                page.wait_for_timeout(280)
+                settle(280)
             elif index == 14:
                 page.locator('#flag-mode').click()
             elif index == 16:
                 page.locator('.mine-cell[data-index="7"]').click()
             elif index == 17:
-                page.wait_for_timeout(520)
+                settle(520)
             elif index == 20:
                 page.locator('#mine-reset').click()
             elif index == 21:
-                page.wait_for_timeout(320)
+                settle(320)
             elif index == 23:
                 page.locator('.mine-cell[data-index="18"]').click()
             elif index == 24:
-                page.wait_for_timeout(520)
+                settle(520)
             elif index == 27:
                 page.locator('#mine-reset').click()
             elif index == 28:
@@ -726,11 +773,11 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 31:
                 page.keyboard.press("Enter")
             elif index == 32:
-                page.wait_for_timeout(360)
+                settle(360)
             elif index == 34:
                 page.keyboard.press("Escape")
             elif index == 35:
-                page.wait_for_timeout(320)
+                settle(320)
         elif demo["id"] == "noise-cancellation-audio-comparison":
             if index == 2:
                 page.locator('#audio-play').click()
@@ -808,79 +855,79 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             if index == 2:
                 page.locator('#phrase-attention').click()
             elif index == 3:
-                page.wait_for_timeout(650)
+                settle(650)
             elif index == 6:
                 page.locator('#phrase-questions').click()
             elif index == 7:
-                page.wait_for_timeout(120)
+                settle(120)
             elif index == 8:
                 page.locator('#phrase-trace').click()
             elif index == 9:
-                page.wait_for_timeout(650)
+                settle(650)
             elif index == 12:
                 page.locator('#replay-button').click()
             elif index == 13:
-                page.wait_for_timeout(650)
+                settle(650)
             elif index == 16:
                 page.locator('#phrase-trace').click()
             elif index == 17:
-                page.wait_for_timeout(650)
+                settle(650)
             elif index == 20:
                 page.locator('#phrase-trace').focus()
                 page.keyboard.press("ArrowLeft")
             elif index == 21:
-                page.wait_for_timeout(650)
+                settle(650)
             elif index == 24:
                 page.keyboard.press("r")
             elif index == 25:
-                page.wait_for_timeout(650)
+                settle(650)
             elif index == 28:
                 page.locator('#reset-button').click()
             elif index == 30:
                 page.locator('#phrase-attention').focus()
                 page.keyboard.press("Enter")
             elif index == 31:
-                page.wait_for_timeout(650)
+                settle(650)
             elif index == 33:
                 page.keyboard.press("Escape")
         elif demo["id"] == "mechanical-split-flap-character-change":
             if index == 2:
                 page.locator('#advance-button').click()
             elif index == 3:
-                page.wait_for_timeout(900)
+                settle(900)
             elif index == 6:
                 page.locator('#flap-board').click()
             elif index == 7:
-                page.wait_for_timeout(900)
+                settle(900)
             elif index == 10:
                 page.locator('#flap-board').focus()
                 page.keyboard.press("ArrowRight")
             elif index == 11:
-                page.wait_for_timeout(900)
+                settle(900)
             elif index == 14:
                 page.locator('#advance-button').click()
             elif index == 15:
-                page.wait_for_timeout(150)
+                settle(150)
             elif index == 16:
                 page.locator('#flap-board').click()
             elif index == 17:
-                page.wait_for_timeout(900)
+                settle(900)
             elif index == 20:
                 page.locator('#flap-board').focus()
                 page.keyboard.press("ArrowDown")
             elif index == 21:
-                page.wait_for_timeout(900)
+                settle(900)
             elif index == 24:
                 page.keyboard.press("Enter")
             elif index == 25:
-                page.wait_for_timeout(900)
+                settle(900)
             elif index == 28:
                 page.locator('#reset-button').click()
             elif index == 31:
                 page.locator('#flap-board').focus()
                 page.keyboard.press("N")
             elif index == 32:
-                page.wait_for_timeout(900)
+                settle(900)
             elif index == 34:
                 page.keyboard.press("Home")
         elif demo["id"] == "interactive-vector-state-machine":
@@ -890,21 +937,21 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 4:
                 page.mouse.up()
             elif index == 5:
-                page.wait_for_timeout(120)
+                settle(120)
             elif index == 6:
                 page.locator('#confirm-button').click()
             elif index == 8:
-                page.wait_for_timeout(520)
+                settle(520)
             elif index == 10:
                 page.locator('#talk-button').hover()
                 page.mouse.down()
             elif index == 11:
-                page.wait_for_timeout(90)
+                settle(90)
                 page.mouse.up()
             elif index == 12:
                 page.locator('#reset-button').click()
             elif index == 14:
-                page.wait_for_timeout(420)
+                settle(420)
             elif index == 16:
                 page.locator('#talk-button').focus()
                 page.keyboard.down("Enter")
@@ -913,7 +960,7 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 20:
                 page.locator('#confirm-button').click()
             elif index == 22:
-                page.wait_for_timeout(520)
+                settle(520)
             elif index == 25:
                 page.locator('#talk-button').focus()
                 page.keyboard.down("Space")
@@ -922,7 +969,7 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 29:
                 page.keyboard.press("Escape")
             elif index == 31:
-                page.wait_for_timeout(520)
+                settle(520)
         elif demo["id"] == "pointer-rotated-dot-matrix-globe":
             if index == 2:
                 page.locator('#focus-button').click()
@@ -967,43 +1014,43 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             if index == 2:
                 page.locator('#scene-toggle').click()
             elif index == 3:
-                page.wait_for_timeout(120)
+                settle(120)
             elif index == 4:
-                page.locator('#scene-toggle').click()
-                page.locator('#scene-toggle').click()
+                for _ in range(4):
+                    page.locator('#scene-toggle').click()
             elif index == 5:
-                page.wait_for_timeout(100)
+                settle(100)
             elif index == 7:
-                page.wait_for_timeout(1000)
+                settle(1000)
             elif index == 10:
                 page.locator('#wipe-stage').focus()
                 page.keyboard.press("ArrowLeft")
             elif index == 11:
-                page.wait_for_timeout(1000)
+                settle(1000)
             elif index == 14:
                 page.keyboard.press("ArrowRight")
             elif index == 15:
-                page.wait_for_timeout(120)
+                settle(120)
             elif index == 16:
                 page.keyboard.press("ArrowLeft")
                 page.keyboard.press("ArrowRight")
             elif index == 17:
-                page.wait_for_timeout(120)
+                settle(120)
             elif index == 19:
-                page.wait_for_timeout(1000)
+                settle(1000)
             elif index == 23:
                 page.locator('#scene-toggle').click()
             elif index == 24:
-                page.wait_for_timeout(1000)
+                settle(1000)
             elif index == 27:
                 page.locator('#wipe-stage').focus()
                 page.keyboard.press("ArrowRight")
             elif index == 28:
-                page.wait_for_timeout(1000)
+                settle(1000)
             elif index == 31:
                 page.locator('#scene-toggle').click()
             elif index == 32:
-                page.wait_for_timeout(1000)
+                settle(1000)
         elif demo["id"] == "draggable-packed-editorial-wall":
             if index == 2:
                 box = page.locator('.story-tile[data-tile-id="night-market"]').bounding_box()
@@ -1014,28 +1061,28 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.move(box["x"] + box["width"] * .88, box["y"] + box["height"] * .5, steps=6)
                 page.mouse.up()
             elif index == 6:
-                page.wait_for_timeout(500)
+                settle(500)
             elif index == 8:
                 page.locator('#repack-button').click()
             elif index == 9:
-                page.wait_for_timeout(500)
+                settle(500)
             elif index == 11:
                 page.locator('.story-tile[data-tile-id="neon-memory"]').focus()
                 page.keyboard.press("ArrowRight")
             elif index == 12:
-                page.wait_for_timeout(500)
+                settle(500)
             elif index == 14:
                 page.keyboard.press("ArrowDown")
             elif index == 15:
-                page.wait_for_timeout(500)
+                settle(500)
             elif index == 17:
                 page.keyboard.press("Enter")
             elif index == 18:
-                page.wait_for_timeout(500)
+                settle(500)
             elif index == 20:
                 page.locator('#repack-button').click()
             elif index == 21:
-                page.wait_for_timeout(500)
+                settle(500)
             elif index == 23:
                 box = page.locator('.story-tile[data-tile-id="field-notes"]').bounding_box()
                 page.mouse.move(box["x"] + box["width"] * .5, box["y"] + box["height"] * .5)
@@ -1044,23 +1091,23 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.move(box["x"] + box["width"] * .53, box["y"] + box["height"] * .52, steps=3)
                 page.mouse.up()
             elif index == 25:
-                page.wait_for_timeout(500)
+                settle(500)
             elif index == 27:
                 page.locator('.story-tile[data-tile-id="maker"]').focus()
                 page.keyboard.press("Space")
             elif index == 28:
-                page.wait_for_timeout(500)
+                settle(500)
             elif index == 30:
                 page.locator('#reset-button').click()
             elif index == 31:
-                page.wait_for_timeout(500)
+                settle(500)
             elif index == 33:
                 page.locator('.story-tile[data-tile-id="route-credits"]').focus()
                 page.keyboard.press("ArrowLeft")
             elif index == 34:
                 page.keyboard.press("Escape")
             elif index == 35:
-                page.wait_for_timeout(500)
+                settle(500)
         elif demo["id"] == "velocity-aware-swipe-drawer":
             if index == 2:
                 handle_box = page.locator('#drawer-handle').bounding_box()
@@ -1070,26 +1117,26 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.down()
             elif index == 3:
                 page.mouse.move(slow_x, slow_y - 17)
-                page.wait_for_timeout(95)
+                settle(95)
             elif index == 4:
                 page.mouse.move(slow_x, slow_y - 34)
-                page.wait_for_timeout(95)
+                settle(95)
             elif index == 5:
                 page.mouse.move(slow_x, slow_y - 50)
-                page.wait_for_timeout(95)
+                settle(95)
             elif index == 6:
                 page.mouse.up()
             elif index == 7:
-                page.wait_for_timeout(520)
+                settle(520)
             elif index == 10:
                 page.locator('#drawer-handle').focus()
                 page.keyboard.press("End")
             elif index == 11:
-                page.wait_for_timeout(520)
+                settle(520)
             elif index == 13:
                 page.locator('#start-route').click()
             elif index == 14:
-                page.wait_for_timeout(520)
+                settle(520)
             elif index == 17:
                 handle_box = page.locator('#drawer-handle').bounding_box()
                 fast_x = handle_box["x"] + handle_box["width"] * .5
@@ -1097,19 +1144,23 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.move(fast_x, fast_y)
                 page.mouse.down()
             elif index == 18:
+                # Refresh the velocity sample in this frame before the decisive
+                # downward swipe. Otherwise the prior screenshot time is folded
+                # into the pointer-down sample and a real fast swipe reads medium.
+                page.mouse.move(fast_x, min(175, fast_y + 2))
                 page.mouse.move(fast_x, 177)
                 page.mouse.up()
             elif index == 19:
-                page.wait_for_timeout(520)
+                settle(520)
             elif index == 21:
                 page.locator('#details-toggle').click()
             elif index == 22:
-                page.wait_for_timeout(520)
+                settle(520)
             elif index == 24:
                 page.locator('#drawer-handle').focus()
                 page.keyboard.press("ArrowRight")
             elif index == 25:
-                page.wait_for_timeout(520)
+                settle(520)
             elif index == 28:
                 handle_box = page.locator('#drawer-handle').bounding_box()
                 fast_x = handle_box["x"] + handle_box["width"] * .5
@@ -1117,47 +1168,50 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.move(fast_x, fast_y)
                 page.mouse.down()
             elif index == 29:
+                # Keep the fast opening sample local to this frame for the same
+                # reason as the closing swipe above.
+                page.mouse.move(fast_x, max(5, fast_y - 2))
                 page.mouse.move(fast_x, 3)
                 page.mouse.up()
             elif index == 30:
-                page.wait_for_timeout(520)
+                settle(520)
             elif index == 32:
                 page.locator('#drawer-handle').focus()
                 page.keyboard.press("Home")
             elif index == 33:
-                page.wait_for_timeout(520)
+                settle(520)
         elif demo["id"] == "spatial-slide-deck-navigation":
             if index == 2:
                 page.locator('.control-button[data-direction="right"]').click()
             elif index == 3:
-                page.wait_for_timeout(520)
+                settle(520)
             elif index == 5:
                 page.locator('.control-button[data-direction="down"]').click()
             elif index == 6:
-                page.wait_for_timeout(520)
+                settle(520)
             elif index == 8:
                 page.locator('#spatial-stage').focus()
                 page.keyboard.press("ArrowDown")
             elif index == 9:
-                page.wait_for_timeout(520)
+                settle(520)
             elif index == 11:
                 page.keyboard.press("ArrowUp")
             elif index == 12:
                 page.keyboard.press("ArrowUp")
             elif index == 13:
-                page.wait_for_timeout(520)
+                settle(520)
             elif index == 15:
                 page.keyboard.press("o")
             elif index == 16:
-                page.wait_for_timeout(520)
+                settle(520)
             elif index == 18:
                 page.locator('.slide[data-slide-id="proposal"]').click()
             elif index == 19:
-                page.wait_for_timeout(520)
+                settle(520)
             elif index == 21:
                 page.locator('.map-node[data-slide-id="access"]').click()
             elif index == 22:
-                page.wait_for_timeout(520)
+                settle(520)
             elif index == 24:
                 box = page.locator('#spatial-stage').bounding_box()
                 page.mouse.move(box["x"] + box["width"] * .55, box["y"] + box["height"] * .42)
@@ -1166,7 +1220,7 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.move(box["x"] + box["width"] * .55, box["y"] + box["height"] * .78, steps=5)
                 page.mouse.up()
             elif index == 26:
-                page.wait_for_timeout(520)
+                settle(520)
             elif index == 28:
                 page.locator('#spatial-stage').focus()
                 page.keyboard.press("ArrowUp")
@@ -1175,11 +1229,11 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 30:
                 page.keyboard.press("ArrowRight")
             elif index == 31:
-                page.wait_for_timeout(520)
+                settle(520)
             elif index == 33:
                 page.keyboard.press("o")
             elif index == 34:
-                page.wait_for_timeout(520)
+                settle(520)
         elif demo["id"] == "dom-to-3d-scroll-synchronization":
             if index == 2:
                 box = page.locator('#sync-stage').bounding_box()
@@ -1236,15 +1290,15 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             if index == 2:
                 page.locator('.sample-control[data-sample="facade"]').click()
             elif index == 3:
-                page.wait_for_timeout(260)
+                settle(260)
             elif index == 5:
                 page.mouse.move(210, 110)
             elif index == 6:
-                page.wait_for_timeout(260)
+                settle(260)
             elif index == 8:
                 page.mouse.move(270, 78)
             elif index == 10:
-                page.wait_for_timeout(1750)
+                settle(1750)
             elif index == 12:
                 page.mouse.move(120, 135)
                 page.mouse.down()
@@ -1258,32 +1312,32 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 17:
                 page.keyboard.press("ArrowUp")
             elif index == 18:
-                page.wait_for_timeout(260)
+                settle(260)
             elif index == 20:
                 page.keyboard.press("p")
             elif index == 21:
-                page.wait_for_timeout(320)
+                settle(320)
             elif index == 23:
                 page.locator('.sample-control[data-sample="horizon"]').click()
             elif index == 24:
-                page.wait_for_timeout(320)
+                settle(320)
             elif index == 26:
                 page.locator('#ripple-canvas').focus()
                 page.keyboard.press("Enter")
             elif index == 27:
-                page.wait_for_timeout(320)
+                settle(320)
             elif index == 29:
                 page.locator('.sample-control[data-sample="reset"]').click()
             elif index == 30:
-                page.wait_for_timeout(320)
+                settle(320)
             elif index == 32:
                 page.locator('.sample-control[data-sample="pool"]').click()
             elif index == 33:
-                page.wait_for_timeout(420)
+                settle(420)
             elif index == 34:
                 page.locator('.sample-control[data-sample="reset"]').click()
             elif index == 35:
-                page.wait_for_timeout(320)
+                settle(320)
         elif demo["id"] == "draggable-rigid-body-poster-pile":
             if index == 2:
                 page.locator('#next-poster').click()
@@ -1316,17 +1370,17 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 20:
                 page.mouse.up()
             elif index == 22:
-                page.wait_for_timeout(260)
+                settle(260)
             elif index == 25:
-                page.wait_for_timeout(420)
+                settle(420)
             elif index == 28:
-                page.wait_for_timeout(520)
+                settle(520)
             elif index == 30:
                 page.locator('#previous-poster').click()
             elif index == 32:
                 page.locator('#place-poster').click()
             elif index == 35:
-                page.wait_for_timeout(260)
+                settle(260)
         elif demo["id"] == "point-constructed-generative-corolla":
             if index == 2:
                 page.mouse.move(286, 92)
@@ -1385,7 +1439,7 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 7:
                 page.mouse.up()
             elif index == 9:
-                page.wait_for_timeout(260)
+                settle(260)
             elif index == 10:
                 page.locator('.gel[data-gel="magenta"]').click()
             elif index == 11:
@@ -1417,11 +1471,11 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 27:
                 page.locator('#save-control').click()
             elif index == 29:
-                page.wait_for_timeout(260)
+                settle(260)
             elif index == 31:
                 page.locator('#clear-control').click()
             elif index == 35:
-                page.wait_for_timeout(320)
+                settle(320)
         elif demo["id"] == "emergent-particle-life-colonies":
             if index == 2:
                 page.locator('#reset-life').click()
@@ -1444,7 +1498,7 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 12:
                 page.locator('#run-toggle').click()
             elif index == 13:
-                page.wait_for_timeout(820)
+                settle(820)
             elif index == 17:
                 page.locator('#life-stage').focus()
                 page.keyboard.press("q")
@@ -1466,9 +1520,9 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 28:
                 page.locator('#run-toggle').click()
             elif index == 30:
-                page.wait_for_timeout(1200)
+                settle(1200)
             elif index == 35:
-                page.wait_for_timeout(260)
+                settle(260)
         elif demo["id"] == "sticky-card-stack-accumulation":
             if index == 2:
                 page.mouse.wheel(0, -160)
@@ -1562,17 +1616,17 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             if index == 3:
                 page.locator('#nav-toggle').click()
             elif 4 <= index <= 9:
-                page.wait_for_timeout(100)
+                settle(100)
             elif index == 11:
                 page.locator('.nav-link').nth(1).click()
             elif index == 16:
                 page.locator('#nav-toggle').click()
             elif 17 <= index <= 22:
-                page.wait_for_timeout(100)
+                settle(100)
             elif index == 26:
                 page.locator('#nav-toggle').click()
             elif 27 <= index <= 33:
-                page.wait_for_timeout(100)
+                settle(100)
         elif demo["id"] == "drag-thrown-card-stack":
             if index in {3, 18}:
                 box = page.locator('.throw-card[data-active="true"]').bounding_box()
@@ -1588,7 +1642,7 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 11:
                 page.mouse.up()
             elif 12 <= index <= 17:
-                page.wait_for_timeout(80)
+                settle(80)
             elif index == 19:
                 page.mouse.down()
             elif index == 20:
@@ -1599,7 +1653,7 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.move(center_x + 120, center_y - 8)
                 page.mouse.up()
             elif 21 <= index <= 27:
-                page.wait_for_timeout(80)
+                settle(80)
         elif demo["id"] == "layered-staggered-full-screen-menu":
             if index == 3:
                 page.locator('#menu-toggle').click()
@@ -1609,41 +1663,41 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             if index == 3:
                 page.locator('.defect-target').nth(1).hover()
             elif 4 <= index <= 7:
-                page.wait_for_timeout(120)
+                settle(120)
             elif index == 8:
                 page.locator('.defect-target').nth(1).click()
             elif 9 <= index <= 12:
-                page.wait_for_timeout(120)
+                settle(120)
             elif index == 13:
                 page.locator('.defect-target').nth(0).hover()
             elif 14 <= index <= 17:
-                page.wait_for_timeout(120)
+                settle(120)
             elif index == 18:
                 page.locator('.defect-target').nth(0).click()
             elif 19 <= index <= 22:
-                page.wait_for_timeout(120)
+                settle(120)
             elif index == 23:
                 page.locator('#undo-annotation').click()
             elif index == 24:
                 page.locator('#inspection-stage').focus()
                 page.keyboard.press('End')
             elif 25 <= index <= 29:
-                page.wait_for_timeout(120)
+                settle(120)
             elif index == 30:
                 page.keyboard.press('Enter')
             elif 31 <= index <= 35:
-                page.wait_for_timeout(120)
+                settle(120)
         elif demo["id"] == "clip-shape-theme-reveal":
             if index == 4:
                 page.locator('#theme-focus').click()
             elif 5 <= index <= 12:
-                page.wait_for_timeout(100)
+                settle(100)
             elif index == 15:
                 page.keyboard.press('ArrowDown')
             elif index == 19:
                 page.locator('#theme-research').click()
             elif 20 <= index <= 27:
-                page.wait_for_timeout(100)
+                settle(100)
         elif demo["id"] == "animated-dom-node-connection-beam":
             if index == 3:
                 page.locator('#layout-toggle').click()
@@ -1727,11 +1781,11 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 8:
                 page.locator('#node-components').click()
             elif 9 <= index <= 15:
-                page.wait_for_timeout(80)
+                settle(80)
             elif index == 16:
                 page.locator('#node-components').click()
             elif 17 <= index <= 22:
-                page.wait_for_timeout(90)
+                settle(90)
             elif index == 23:
                 page.locator('#node-filter-bar').click()
             elif index == 25:
@@ -1744,7 +1798,7 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.down()
             elif 4 <= index <= 15:
                 geometry = page.evaluate("window.__PREVIEW_INTERACTION_STATE__.signatureBounds")
-                page.wait_for_timeout(70 if index <= 8 else 8)
+                settle(70 if index <= 8 else 8)
                 u, v = path[index - 3]
                 page.mouse.move(geometry["left"] + geometry["width"] * u, geometry["top"] + geometry["height"] * v)
             elif index == 16:
@@ -1755,11 +1809,11 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.down()
             elif index == 19:
                 geometry = page.evaluate("window.__PREVIEW_INTERACTION_STATE__.signatureBounds")
-                page.wait_for_timeout(40)
+                settle(40)
                 page.mouse.move(geometry["left"] + geometry["width"] * .48, geometry["top"] + geometry["height"] * .80)
             elif index == 20:
                 geometry = page.evaluate("window.__PREVIEW_INTERACTION_STATE__.signatureBounds")
-                page.wait_for_timeout(8)
+                settle(8)
                 page.mouse.move(geometry["left"] + geometry["width"] * .66, geometry["top"] + geometry["height"] * .77)
             elif index == 21:
                 page.mouse.up()
@@ -1899,7 +1953,7 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.locator('#run-workflow').focus()
                 page.keyboard.press('Enter')
             elif 23 <= index <= 28:
-                page.wait_for_timeout(83)
+                settle(83)
             elif index == 29:
                 page.evaluate("async () => await window.__PREVIEW_WAIT_FOR_IDLE__()")
             elif index == 31:
@@ -1924,13 +1978,13 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 9:
                 page.locator('#play-action').click()
             elif 10 <= index <= 12:
-                page.wait_for_timeout(110)
+                settle(110)
             elif index == 13:
                 page.locator('#pause-action').click()
             elif index == 15:
                 page.locator('#play-action').click()
             elif 16 <= index <= 27:
-                page.wait_for_timeout(125)
+                settle(125)
             elif index == 29:
                 page.locator('#keep-action').click()
             elif index == 31:
@@ -2062,14 +2116,14 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 5:
                 page.locator('[data-stay="1"]').click()
             elif 6 <= index <= 11:
-                page.wait_for_timeout(95)
+                settle(95)
             elif index == 13:
                 page.locator('#keep-action').click()
             elif index == 17:
                 page.locator('[data-stay="1"]').focus()
                 page.keyboard.press('End')
             elif 18 <= index <= 23:
-                page.wait_for_timeout(95)
+                settle(95)
             elif index == 30:
                 page.locator('#undo-action').click()
         elif demo["id"] == "gooey-pixel-cursor-wake":
@@ -2087,7 +2141,7 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 18:
                 page.mouse.up()
             elif index == 19:
-                page.wait_for_timeout(260)
+                settle(260)
         elif demo["id"] == "pointer-reactive-cell-grid":
             if index == 2:
                 page.mouse.move(137, 70)
@@ -2123,19 +2177,19 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             if index == 3:
                 page.locator('#finish-cobalt').hover()
             elif index == 4:
-                page.wait_for_timeout(380)
+                settle(380)
             elif index == 8:
                 page.locator('#finish-moss').hover()
             elif index == 9:
-                page.wait_for_timeout(380)
+                settle(380)
             elif index == 13:
                 page.locator('#finish-coral').hover()
             elif index == 14:
-                page.wait_for_timeout(380)
+                settle(380)
             elif index == 18:
                 page.locator('#finish-coral').click()
             elif 19 <= index <= 24:
-                page.wait_for_timeout(115)
+                settle(115)
         elif demo["id"] == "velocity-spaced-image-trail":
             if index == 1:
                 page.locator('.frame-button[data-frame="1"]').click()
@@ -2143,13 +2197,13 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.move(126, 142)
                 page.mouse.down()
             elif index == 3:
-                page.wait_for_timeout(120)
+                settle(120)
                 page.mouse.move(143, 134, steps=2)
             elif index == 4:
-                page.wait_for_timeout(120)
+                settle(120)
                 page.mouse.move(161, 125, steps=2)
             elif index == 5:
-                page.wait_for_timeout(120)
+                settle(120)
                 page.mouse.move(180, 115, steps=2)
             elif index == 6:
                 page.mouse.move(248, 92, steps=3)
@@ -2363,6 +2417,7 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 18:
                 page.locator("#inventory-stage").focus()
                 page.keyboard.press("Home")
+                page.keyboard.press("ArrowLeft")
             elif index == 20:
                 page.keyboard.press("End")
             elif index == 22:
@@ -3700,7 +3755,7 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 4:
                 page.mouse.up()
             elif index == 5:
-                page.wait_for_timeout(360)
+                settle(360)
             elif index == 7:
                 page.mouse.move(handle_x, handle_y)
             elif index == 8:
@@ -3726,7 +3781,7 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 16:
                 page.mouse.up()
             elif index == 17:
-                page.wait_for_timeout(360)
+                settle(360)
             elif index == 20:
                 page.locator("#peel-handle").focus()
                 page.keyboard.press("Home")
@@ -3739,11 +3794,11 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 25:
                 page.locator("#peel-toggle").click()
             elif index == 26:
-                page.wait_for_timeout(360)
+                settle(360)
             elif index == 29:
                 page.locator("#peel-toggle").click()
             elif index == 30:
-                page.wait_for_timeout(360)
+                settle(360)
         elif demo["id"] == "pixel-sort-hover-wipe":
             if index == 1:
                 page.mouse.move(96, 88)
@@ -3866,15 +3921,15 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 3:
                 page.mouse.click(128, 58)
             elif index == 5:
-                page.wait_for_timeout(520)
+                settle(520)
             elif index == 8:
-                page.wait_for_timeout(360)
+                settle(360)
             elif index == 10:
                 page.locator('#jolt-button').click()
             elif index == 11:
-                page.wait_for_timeout(500)
+                settle(500)
             elif index == 14:
-                page.wait_for_timeout(500)
+                settle(500)
             elif index == 18:
                 page.locator('#reset-button').click()
             elif index == 20:
@@ -3885,19 +3940,19 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 23:
                 page.keyboard.press("Space")
             elif index == 24:
-                page.wait_for_timeout(520)
+                settle(520)
             elif index == 28:
-                page.wait_for_timeout(360)
+                settle(360)
             elif index == 30:
                 page.locator('[data-payload="fragile"]').click()
             elif index == 31:
                 page.locator('#drop-button').click()
             elif index == 32:
-                page.wait_for_timeout(520)
+                settle(520)
             elif index == 34:
                 page.locator('#jolt-button').click()
             elif index == 35:
-                page.wait_for_timeout(620)
+                settle(620)
         elif demo["id"] == "curved-3d-text-orbit":
             if index == 2:
                 page.mouse.move(112, 92)
@@ -3936,7 +3991,7 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 31:
                 page.keyboard.press("Enter")
             elif index == 35:
-                page.wait_for_timeout(420)
+                settle(420)
         elif demo["id"] == "refractive-glass-transmission-sculpture":
             viewport_width = page.viewport_size["width"]
             viewport_height = page.viewport_size["height"]
@@ -4004,7 +4059,7 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 5:
                 page.mouse.up()
             elif index == 7:
-                page.wait_for_timeout(260)
+                settle(260)
             elif index == 8:
                 page.mouse.move(*point(.269, .556))
                 page.mouse.down()
@@ -4015,7 +4070,7 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 11:
                 page.mouse.up()
             elif index == 12:
-                page.wait_for_timeout(320)
+                settle(320)
             elif index == 14:
                 page.locator('#dome-host').focus()
                 page.keyboard.press("ArrowRight")
@@ -4026,7 +4081,7 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 17:
                 page.keyboard.press("Enter")
             elif index == 18:
-                page.wait_for_timeout(380)
+                settle(380)
             elif index == 20:
                 page.locator('#confirm-control').click()
             elif index == 22:
@@ -4041,7 +4096,7 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 28:
                 page.keyboard.press("Enter")
             elif index == 29:
-                page.wait_for_timeout(380)
+                settle(380)
             elif index == 31:
                 page.locator('#confirm-control').click()
         elif demo["id"] == "bending-webgl-gallery-ribbon":
@@ -4058,7 +4113,7 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.move(104, 104, steps=4)
                 page.mouse.up()
             elif index == 10:
-                page.wait_for_timeout(320)
+                settle(320)
             elif index == 12:
                 page.mouse.move(76, 104)
                 page.mouse.down()
@@ -4068,7 +4123,7 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.move(236, 104, steps=4)
                 page.mouse.up()
             elif index == 16:
-                page.wait_for_timeout(260)
+                settle(260)
             elif index == 17:
                 page.locator('#ribbon-host').focus()
                 page.keyboard.press("ArrowRight")
@@ -4093,7 +4148,7 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.locator('#ribbon-host').focus()
                 page.keyboard.press("ArrowRight")
             elif index == 33:
-                page.wait_for_timeout(320)
+                settle(320)
             elif index == 35:
                 page.locator('#inspect-button').click()
         elif demo["id"] == "frame-by-frame-gif-scrubber":
@@ -4127,7 +4182,7 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 15:
                 page.locator('.transport-button[data-action="play"]').click()
             elif index == 16:
-                page.wait_for_timeout(420)
+                settle(420)
             elif index == 17:
                 page.locator('.transport-button[data-action="play"]').click()
             elif index == 19:
@@ -4140,7 +4195,7 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 23:
                 page.locator('.transport-button[data-action="play"]').click()
             elif index == 24:
-                page.wait_for_timeout(260)
+                settle(260)
             elif index == 25:
                 page.locator('.transport-button[data-action="play"]').click()
             elif index == 28:
@@ -4160,7 +4215,7 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             if index == 2:
                 page.locator('#play-button').click()
             elif index in (3, 4):
-                page.wait_for_timeout(360)
+                settle(360)
             elif index == 5:
                 page.locator('#play-button').click()
             elif index == 7:
@@ -4175,7 +4230,7 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.move(box["x"] + box["width"] * .82, box["y"] + box["height"] * .5, steps=3)
                 page.mouse.up()
             elif index == 10:
-                page.wait_for_timeout(350)
+                settle(350)
             elif index == 11:
                 page.locator('#hold-button').click()
             elif index == 13:
@@ -4197,11 +4252,11 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 21:
                 page.locator('#seek-input').focus()
                 page.keyboard.press("Home")
-                page.wait_for_timeout(120)
+                settle(120)
                 page.locator('#hand-frame').focus()
                 page.keyboard.press("Space")
             elif index == 22:
-                page.wait_for_timeout(420)
+                settle(420)
             elif index == 23:
                 page.keyboard.press("Space")
             elif index == 25:
@@ -4225,17 +4280,17 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.locator('#seek-input').focus()
                 page.keyboard.press("End")
             elif index == 35:
-                page.wait_for_timeout(350)
+                settle(350)
         elif demo["id"] == "pixel-grid-content-dissolve":
             if index == 2:
                 page.locator('#tree-toggle').click()
             elif index in (3, 4):
-                page.wait_for_timeout(400)
+                settle(400)
             elif index == 6:
                 page.locator('#dissolve-stage').focus()
                 page.keyboard.press("Home")
             elif index in (7, 8):
-                page.wait_for_timeout(400)
+                settle(400)
             elif index == 10:
                 page.mouse.move(80, 92)
                 page.mouse.down()
@@ -4244,7 +4299,7 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 12:
                 page.mouse.up()
             elif index in (13, 14):
-                page.wait_for_timeout(360)
+                settle(360)
             elif index == 16:
                 page.mouse.move(58, 105)
                 page.mouse.down()
@@ -4253,31 +4308,31 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 19:
                 page.mouse.up()
             elif index in (20, 21):
-                page.wait_for_timeout(400)
+                settle(400)
             elif 22 <= index <= 29:
                 page.locator('#dissolve-stage').focus()
                 page.keyboard.press("ArrowLeft")
             elif index == 30:
-                page.wait_for_timeout(240)
+                settle(240)
             elif index == 31:
                 page.keyboard.press("ArrowLeft")
             elif index == 32:
-                page.wait_for_timeout(360)
+                settle(360)
             elif index == 34:
                 page.locator('#tree-toggle').click()
             elif index == 35:
-                page.wait_for_timeout(760)
+                settle(760)
         elif demo["id"] == "scroll-controlled-video-scrubbing":
             if index in (2, 4, 6, 8, 10, 12, 14, 15):
                 page.mouse.wheel(0, 520)
             elif index == 16:
-                page.wait_for_timeout(320)
+                settle(320)
             elif index == 17:
                 page.mouse.wheel(0, 520)
             elif index == 18:
                 page.locator('#reset-control').click()
             elif index == 19:
-                page.wait_for_timeout(260)
+                settle(260)
             elif index == 20:
                 page.mouse.move(160, 46)
                 page.mouse.down()
@@ -4288,7 +4343,7 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 23:
                 page.mouse.up()
             elif index == 24:
-                page.wait_for_timeout(260)
+                settle(260)
             elif index == 25:
                 page.mouse.move(160, 150)
                 page.mouse.down()
@@ -4299,20 +4354,20 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 28:
                 page.mouse.up()
             elif index == 29:
-                page.wait_for_timeout(260)
+                settle(260)
             elif index == 30:
                 page.locator('.chapter-button[data-progress="1"]').click()
             elif index == 31:
-                page.wait_for_timeout(260)
+                settle(260)
             elif index == 32:
                 page.locator('#video-stage').focus()
                 page.keyboard.press("3")
             elif index == 33:
-                page.wait_for_timeout(260)
+                settle(260)
             elif index == 34:
                 page.keyboard.press("ArrowRight")
             elif index == 35:
-                page.wait_for_timeout(260)
+                settle(260)
         elif demo["id"] == "four-corner-hover-crop-marks":
             if index == round(.35 * args.fps):
                 page.mouse.move(92, 78)
@@ -4332,6 +4387,8 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.move(260 - 82 * progress, 90)
             elif index == 21:
                 page.mouse.up()
+            elif index == 25:
+                page.locator('#align-button').click()
         elif demo["id"] == "hover-rehearsed-video-style-rail":
             if index == 5:
                 page.mouse.move(69, 161)
@@ -4420,33 +4477,33 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             if index == 2:
                 page.locator('#blend-action').hover()
             elif index == 4:
-                page.wait_for_timeout(520)
+                settle(520)
             elif index == 6:
                 page.locator('#blend-action').click()
             elif index == 7:
-                page.wait_for_timeout(560)
+                settle(560)
             elif index == 10:
                 page.locator('#formula-panel').hover()
             elif index == 12:
-                page.wait_for_timeout(360)
+                settle(360)
             elif index == 14:
                 page.keyboard.press("Tab")
             elif index == 16:
                 page.keyboard.press("Escape")
             elif index == 17:
-                page.wait_for_timeout(520)
+                settle(520)
             elif index == 19:
                 page.keyboard.press("Enter")
             elif index == 20:
-                page.wait_for_timeout(520)
+                settle(520)
             elif index == 22:
                 page.keyboard.press("Escape")
             elif index == 23:
-                page.wait_for_timeout(520)
+                settle(520)
             elif index == 24:
                 page.keyboard.press("Tab")
             elif index == 25:
-                page.wait_for_timeout(520)
+                settle(520)
             elif index == 27:
                 page.locator('#blend-action').hover()
             elif index == 29:
@@ -4458,7 +4515,7 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 34:
                 page.locator('#formula-panel').hover()
             elif index == 35:
-                page.wait_for_timeout(520)
+                settle(520)
         elif demo["id"] == "track-card-play-state-handoff":
             if index == 3:
                 page.mouse.click(276, 64)
@@ -4470,21 +4527,27 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 page.mouse.click(276, 64)
         elif demo["id"] == "gesture-sliced-image-shutters":
             if index == 3:
-                page.mouse.move(75, 100)
+                box = page.locator('#shutters').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * .18, box["y"] + box["height"] * .5)
                 page.mouse.down()
             elif 4 <= index <= 10:
                 progress = (index - 4) / 6
-                page.mouse.move(75 + 195 * progress, 100)
+                box = page.locator('#shutters').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * (.18 + .64 * progress), box["y"] + box["height"] * .5)
             elif index == 11:
                 page.mouse.up()
             elif index == 16:
-                page.mouse.move(260, 100)
+                box = page.locator('#shutters').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * .82, box["y"] + box["height"] * .5)
                 page.mouse.down()
             elif 17 <= index <= 21:
                 progress = (index - 17) / 4
-                page.mouse.move(260 - 210 * progress, 100)
+                box = page.locator('#shutters').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * (.82 - .15 * progress), box["y"] + box["height"] * .5)
             elif index == 22:
                 page.mouse.up()
+            elif index == 26:
+                page.locator('#align-button').click()
         elif demo["id"] == "duration-aware-hero-film-handoff":
             if index == 3:
                 page.mouse.click(35, 156)
@@ -4492,13 +4555,13 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 # This preview is intentionally driven by the real HTMLVideoElement
                 # clock. Let the 2.4 s opening clip reach its 0.72 s preload window
                 # so the GIF records a genuine duration-aware handoff.
-                page.wait_for_timeout(2250)
+                settle(2250)
             elif index == 28:
                 page.mouse.click(270, 156)
             elif index == 29:
                 # Preserve the authored 0.48 s Motion crossfade after the viewer
                 # explicitly selects scene four.
-                page.wait_for_timeout(550)
+                settle(550)
             elif index == 35:
                 page.mouse.click(35, 156)
         elif demo["id"] == "blurred-autoplay-video-ambience":
@@ -4536,27 +4599,27 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             if index == 3:
                 page.mouse.click(274, 24)
             elif index == 4:
-                page.wait_for_timeout(690)
+                settle(690)
             elif index == 10:
-                page.wait_for_timeout(850)
+                settle(850)
             elif index == 14:
                 page.keyboard.press("Escape")
             elif index == 15:
-                page.wait_for_timeout(400)
+                settle(400)
             elif index == 20:
                 page.mouse.click(274, 24)
             elif index == 21:
-                page.wait_for_timeout(250)
+                settle(250)
             elif index == 22:
                 page.mouse.click(5, 175)
             elif index == 23:
-                page.wait_for_timeout(400)
+                settle(400)
             elif index == 27:
                 page.mouse.click(274, 24)
             elif index == 28:
-                page.wait_for_timeout(690)
+                settle(690)
             elif index == 33:
-                page.wait_for_timeout(850)
+                settle(850)
         elif demo["id"] == "inertial-vertical-capability-rail":
             if index == 3:
                 page.mouse.move(220, 132)
@@ -4565,19 +4628,20 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
                 progress = (index - 4) / 4
                 page.mouse.move(220, 132 - 92 * progress)
             elif index == 9:
+                page.mouse.move(220, 18, steps=2)
                 page.mouse.up()
             elif index == 10:
-                page.wait_for_timeout(250)
+                settle(250)
             elif index == 18:
                 page.mouse.click(220, 92)
             elif index == 19:
                 page.keyboard.press("End")
             elif index == 20:
-                page.wait_for_timeout(700)
+                settle(700)
             elif index == 27:
                 page.keyboard.press("Home")
             elif index == 28:
-                page.wait_for_timeout(700)
+                settle(700)
         elif demo["id"] == "scroll-scrubbed-document-generation-playback":
             if index == 2:
                 page.mouse.move(230, 90)
@@ -4588,121 +4652,121 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             elif index == 14:
                 page.locator('.chapter-button[data-section="2"]').click()
             elif index == 15:
-                page.wait_for_timeout(500)
+                settle(500)
             elif index == 21:
                 page.mouse.click(230, 90)
                 page.keyboard.press("Home")
             elif index == 22:
-                page.wait_for_timeout(500)
+                settle(500)
             elif index == 27:
                 page.keyboard.press("PageDown")
             elif index == 28:
-                page.wait_for_timeout(500)
+                settle(500)
             elif index == 32:
                 page.keyboard.press("End")
             elif index == 33:
-                page.wait_for_timeout(500)
+                settle(500)
         elif demo["id"] == "visibility-gated-agent-terminal-replay":
             if index == 2:
                 page.locator("#play-toggle").click()
             elif index in (3, 5, 7):
-                page.wait_for_timeout(650)
+                settle(650)
             elif index == 9:
                 page.locator("#play-toggle").click()
             elif index == 13:
                 page.mouse.click(250, 108)
                 page.keyboard.press("ArrowRight")
             elif index == 14:
-                page.wait_for_timeout(300)
+                settle(300)
             elif index == 18:
                 page.keyboard.press("ArrowRight")
             elif index == 19:
-                page.wait_for_timeout(300)
+                settle(300)
             elif index == 23:
                 page.keyboard.press("End")
             elif index == 24:
-                page.wait_for_timeout(300)
+                settle(300)
             elif index == 28:
                 page.locator("#restart").click()
             elif index == 29:
-                page.wait_for_timeout(650)
+                settle(650)
             elif index == 32:
                 page.locator("#play-toggle").click()
         elif demo["id"] == "synchronized-scenario-scene-handoff":
             if index == 3:
                 page.locator('.scenario-tab[data-index="1"]').click()
             elif index == 4:
-                page.wait_for_timeout(650)
+                settle(650)
             elif index == 9:
                 page.locator("#case-action").click()
             elif index == 15:
                 page.locator('.scenario-tab[data-index="2"]').click()
             elif index == 16:
-                page.wait_for_timeout(650)
+                settle(650)
             elif index == 21:
                 page.locator("#case-action").click()
             elif index == 25:
                 page.mouse.click(250, 110)
                 page.keyboard.press("Home")
             elif index == 26:
-                page.wait_for_timeout(650)
+                settle(650)
             elif index == 31:
                 page.keyboard.press("ArrowRight")
             elif index == 32:
-                page.wait_for_timeout(650)
+                settle(650)
         elif demo["id"] == "filterable-grid-reflow":
             if index == 3:
                 page.locator('.filter-button[data-filter="field-tools"]').click()
             elif index == 4:
-                page.wait_for_timeout(600)
+                settle(600)
             elif index == 10:
                 page.locator('.sort-button[data-sort="name"]').click()
             elif index == 11:
-                page.wait_for_timeout(600)
+                settle(600)
             elif index == 17:
                 page.locator('.filter-button[data-filter="field-archive"]').click()
             elif index == 18:
-                page.wait_for_timeout(600)
+                settle(600)
             elif index == 24:
                 page.keyboard.press("Home")
             elif index == 25:
-                page.wait_for_timeout(600)
+                settle(600)
             elif index == 30:
                 page.locator('.sort-button[data-sort="name"]').focus()
                 page.keyboard.press("ArrowLeft")
             elif index == 31:
-                page.wait_for_timeout(600)
+                settle(600)
         elif demo["id"] == "device-silhouette-masked-video":
             if index == 3:
                 page.locator('[data-device-option="phone"]').click()
             elif index == 4:
-                page.wait_for_timeout(600)
+                settle(600)
             elif index == 8:
                 page.locator("#device-play").click()
             elif index in (9, 12):
-                page.wait_for_timeout(800)
+                settle(800)
             elif index == 14:
                 page.locator('[data-device-option="watch"]').click()
             elif index == 15:
-                page.wait_for_timeout(600)
+                settle(600)
             elif index == 19:
                 page.locator("#device-play").click()
             elif index == 23:
                 page.mouse.click(217, 80)
                 page.keyboard.press("ArrowLeft")
             elif index == 24:
-                page.wait_for_timeout(600)
+                settle(600)
             elif index == 28:
                 page.mouse.move(217, 80)
                 page.mouse.down()
                 page.mouse.move(180, 80, steps=4)
                 page.mouse.up()
             elif index == 29:
-                page.wait_for_timeout(600)
+                settle(600)
             elif index == 33:
                 page.keyboard.press("1")
             elif index == 34:
-                page.wait_for_timeout(500)
+                settle(500)
         if demo["id"] not in {
             "emergent-particle-life-colonies",
             "velocity-reactive-marquee",
@@ -4715,6 +4779,17 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             page.evaluate("time => window.__setPreviewTime(time)", preview_time)
         frame_path = frame_root / f"{index:04d}.png"
         page.screenshot(path=str(frame_path), type="png")
+        web_frame_path = web_frame_root / f"{index:04d}.png"
+        web_capture = cdp_session.send("Page.captureScreenshot", {
+            "format": "png",
+            "fromSurface": True,
+            "captureBeyondViewport": False,
+            "clip": {"x": 0, "y": 0, "width": args.width, "height": args.height, "scale": args.webp_scale},
+        })
+        web_frame_path.write_bytes(base64.b64decode(web_capture["data"]))
+        if pending_hold:
+            frame_delays[index] = max(frame_delays[index], pending_hold)
+            pending_hold = 0.0
         hashes.add(hashlib.sha256(frame_path.read_bytes()).hexdigest())
 
     if demo["id"] == "scroll-scrubbed-master-timeline":
@@ -13998,19 +14073,33 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
         ):
             raise RuntimeError(f"{demo['id']} did not capture a real pointer enter/move/leave sequence: {interaction!r}")
     elif demo["id"] == "chromatic-channel-drag-portrait":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         if (
-            interaction["automaticFallback"]
-            or interaction["inputCount"] < 10
-            or interaction["inputKind"] != "mouse"
-            or interaction["inputMode"] != "idle"
+            not assertion
+            or interaction["automaticFallback"]
+            or interaction["timerMutationCount"] != 0
+            or interaction["previewClockMutationCount"] != 0
+            or interaction["inputCount"] < 15
+            or interaction["inputCount"] != interaction["trustedInputCount"]
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["lastInputKind"] != "button"
+            or interaction["lastInputTrusted"] is not True
+            or not {"mouse", "button"}.issubset(set(interaction["inputKinds"]))
             or interaction["activePointerId"] is not None
-            or interaction["maxObservedShift"] < 17
-            or abs(interaction["shift"]) > .15
+            or interaction["pointerCaptured"]
+            or interaction["pointerCaptureCount"] < 1
+            or interaction["dragMutationCount"] < 10
+            or interaction["alignCount"] < 1
+            or interaction["buttonMutationCount"] < 1
+            or abs(interaction["maximumSeparation"]) > .001
+            or interaction["alignmentScore"] != 100
+            or any(abs(offset[axis]) > .001 for offset in interaction["offsets"].values() for axis in ("x", "y"))
             or not interaction["ready"]
+            or not interaction["imageDecoded"]
             or not interaction["channelIntegrity"]
         ):
-            raise RuntimeError(f"{demo['id']} did not capture a real bidirectional drag and spring recovery: {interaction!r}")
+            raise RuntimeError(f"{demo['id']} did not capture a real captured bidirectional RGB-plate drag and explicit trusted alignment recovery: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "hover-rehearsed-video-style-rail":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         if (
@@ -14188,25 +14277,49 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
             raise RuntimeError(f"{demo['id']} did not preserve three user-driven play-state handoffs and final pause: {interaction!r}")
     elif demo["id"] == "gesture-sliced-image-shutters":
         page.wait_for_function(
-            "window.__PREVIEW_INTERACTION_STATE__.mode === 'idle' && !window.__PREVIEW_INTERACTION_STATE__.springActive",
+            "window.__PREVIEW_INTERACTION_STATE__.mode === 'aligned' && window.__PREVIEW_INTERACTION_STATE__.activePointerId === null",
             timeout=2_000,
         )
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         if (
-            interaction["automaticFallback"]
-            or interaction["inputCount"] < 14
-            or interaction["inputKind"] != "mouse"
-            or interaction["releaseCount"] < 2
-            or interaction["mode"] != "idle"
-            or abs(interaction["open"]) > .001
-            or interaction["pointerCaptured"]
-            or interaction["keyboardActive"]
-            or interaction["springActive"]
-            or not interaction["imageReady"]
-            or interaction["sourceCount"] != 1
-            or not interaction["initialRegistration"]
+            not assertion
+            or interaction["automaticCycle"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticRehearsal"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["captureClockDriven"]
+            or interaction["previewClockMutationCount"] != 0
+            or interaction["inputCount"] < 17
+            or interaction["inputCount"] != interaction["trustedInputCount"]
+            or interaction["rejectedUntrustedInputCount"] != 0
+            or interaction["pointerCaptureCount"] < 2
+            or interaction["capturedPointerDownCount"] < 2
+            or interaction["capturedPointerMoveCount"] < 12
+            or interaction["capturedPointerUpCount"] < 2
+            or interaction["pointerSeparationMutationCount"] < 12
+            or interaction["buttonInputCount"] < 1
+            or interaction["alignButtonCount"] < 1
+            or interaction["buttonSeparationMutationCount"] < 1
+            or interaction["maximumSeparation"] < .95
+            or interaction["reviewReachedCount"] < 1
+            or interaction["alignedAfterReviewCount"] < 1
+            or interaction["resultTransitionCount"] < 2
+            or interaction["inspectedBandCount"] < 2
+            or interaction["mode"] != "aligned"
+            or interaction["result"] != "source-sealed"
+            or abs(interaction["separation"]) > .001
+            or interaction["activePointerId"] is not None
+            or interaction["lastInputKind"] != "visible-align-button"
+            or interaction["lastInputTrusted"] is not True
+            or "mouse" not in interaction["pointerTypesSeen"]
+            or interaction["lastPointerType"] != "mouse"
+            or not interaction["ready"]
+            or not interaction["browserImageDecoded"]
+            or not interaction["assetShaMatchesExpected"]
         ):
-            raise RuntimeError(f"{demo['id']} did not capture two real signed drags and exact shared-image registration: {interaction!r}")
+            raise RuntimeError(f"{demo['id']} did not capture two trusted captured drags, decoded-image review, and exact aligned recovery: assertion={assertion!r}; interaction={interaction!r}")
     elif demo["id"] == "duration-aware-hero-film-handoff":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         if (
@@ -14478,13 +14591,24 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, args: argparse.Na
     minimum_unique = min(6, max(2, frame_count // 6))
     if len(hashes) < minimum_unique:
         raise RuntimeError(f"{demo['id']} produced only {len(hashes)} distinct frames; expected at least {minimum_unique}")
-    return frame_count, len(hashes)
+    frame_delays[0] = max(frame_delays[0], .7)
+    frame_delays[-1] = max(frame_delays[-1], .9)
+    maximum_loop_duration = 7.2
+    if sum(frame_delays) > maximum_loop_duration:
+        base_total = base_delay * frame_count
+        extra_total = sum(delay - base_delay for delay in frame_delays)
+        extra_budget = max(0, maximum_loop_duration - base_total)
+        scale = extra_budget / extra_total if extra_total else 1
+        frame_delays = [base_delay + (delay - base_delay) * scale for delay in frame_delays]
+    return frame_count, len(hashes), frame_delays
 
 
 def main() -> int:
     args = parse_args()
-    if args.fps < 1 or args.duration <= 0 or args.width < 64 or args.height < 64:
-        raise RuntimeError("fps, duration, width, and height must be positive capture values")
+    if args.fps < 1 or args.webp_fps < 1 or args.duration <= 0 or args.width < 64 or args.height < 64 or args.webp_scale < 1:
+        raise RuntimeError("fps, webp-fps, duration, width, height, and webp-scale must be positive capture values")
+    if not 0 <= args.webp_quality <= 100:
+        raise RuntimeError("webp-quality must be between 0 and 100")
 
     try:
         from playwright.sync_api import sync_playwright
@@ -14497,6 +14621,16 @@ def main() -> int:
     unknown = selected - {demo["id"] for demo in demos}
     if unknown:
         raise RuntimeError(f"Unknown effect id(s): {', '.join(sorted(unknown))}")
+    if args.shard:
+        try:
+            shard_index, shard_total = (int(value) for value in args.shard.split("/", 1))
+        except (TypeError, ValueError) as error:
+            raise RuntimeError("shard must use INDEX/TOTAL, for example 1/3") from error
+        if shard_total < 1 or not 1 <= shard_index <= shard_total:
+            raise RuntimeError("shard INDEX must be between 1 and TOTAL")
+        demos = [demo for index, demo in enumerate(demos) if index % shard_total == shard_index - 1]
+    if not demos:
+        raise RuntimeError("No demos matched the requested selection")
 
     if args.built and not (DEMO_ROOT / "dist" / f"{demos[0]['id']}.html").exists():
         raise RuntimeError(f"Built demos are absent. Run: npm run build --prefix {DEMO_ROOT}")
@@ -14538,6 +14672,7 @@ def main() -> int:
 
         wait_for_server(demo_url(demos[0]), server, vite_log)
         OUTPUT_ROOT.mkdir(parents=True, exist_ok=True)
+        WEB_OUTPUT_ROOT.mkdir(parents=True, exist_ok=True)
         persistent_frames = ROOT / "tmp" / "real-preview-frames" if args.keep_frames else None
         if persistent_frames:
             if persistent_frames.exists():
@@ -14555,26 +14690,48 @@ def main() -> int:
                 device_scale_factor=1,
                 reduced_motion="no-preference",
             )
+            failures: list[str] = []
+            success_count = 0
             for demo in demos:
                 page = context.new_page()
                 try:
                     if persistent_frames:
-                        frame_root = persistent_frames / demo["id"]
-                        frame_root.mkdir()
-                        frame_count, unique_count = capture_demo(page, demo_url(demo), demo, frame_root, args)
-                        encode_gif(frame_root, OUTPUT_ROOT / f"{demo['id']}.gif", args.fps)
+                        demo_frame_root = persistent_frames / demo["id"]
+                        frame_root = demo_frame_root / "gif"
+                        web_frame_root = demo_frame_root / "webp"
+                        frame_root.mkdir(parents=True)
+                        frame_count, unique_count, frame_delays = capture_demo(page, demo_url(demo), demo, frame_root, web_frame_root, args)
+                        if not args.web_assets_only:
+                            encode_gif(frame_root, OUTPUT_ROOT / f"{demo['id']}.gif", args.fps)
+                        encode_webp(web_frame_root, WEB_OUTPUT_ROOT / f"{demo['id']}.webp", frame_delays, args.webp_quality)
                     else:
                         with tempfile.TemporaryDirectory(prefix=f"{demo['id']}-") as temporary:
-                            frame_root = Path(temporary)
-                            frame_count, unique_count = capture_demo(page, demo_url(demo), demo, frame_root, args)
-                            encode_gif(frame_root, OUTPUT_ROOT / f"{demo['id']}.gif", args.fps)
+                            demo_frame_root = Path(temporary)
+                            frame_root = demo_frame_root / "gif"
+                            web_frame_root = demo_frame_root / "webp"
+                            frame_root.mkdir()
+                            frame_count, unique_count, frame_delays = capture_demo(page, demo_url(demo), demo, frame_root, web_frame_root, args)
+                            if not args.web_assets_only:
+                                encode_gif(frame_root, OUTPUT_ROOT / f"{demo['id']}.gif", args.fps)
+                            encode_webp(web_frame_root, WEB_OUTPUT_ROOT / f"{demo['id']}.webp", frame_delays, args.webp_quality)
+                except Exception as error:
+                    if not args.continue_on_error:
+                        raise
+                    failures.append(f"{demo['id']}: {error}")
+                    print(f"Failed {demo['id']}: {error}", file=sys.stderr, flush=True)
+                    continue
                 finally:
                     page.close()
-                size_kib = (OUTPUT_ROOT / f"{demo['id']}.gif").stat().st_size / 1024
-                print(f"Captured {demo['id']}: {frame_count} frames, {unique_count} unique, {size_kib:.1f} KiB", flush=True)
+                gif_size_kib = (OUTPUT_ROOT / f"{demo['id']}.gif").stat().st_size / 1024
+                webp_size_kib = (WEB_OUTPUT_ROOT / f"{demo['id']}.webp").stat().st_size / 1024
+                loop_seconds = sum(frame_delays)
+                print(f"Captured {demo['id']}: {frame_count} frames, {unique_count} unique, WebP {loop_seconds:.1f}s/{webp_size_kib:.1f} KiB, GIF {gif_size_kib:.1f} KiB", flush=True)
+                success_count += 1
 
             context.close()
             browser.close()
+            if failures:
+                raise RuntimeError(f"Captured {success_count}/{len(demos)} demos; failures:\n" + "\n".join(failures))
     finally:
         server.terminate()
         try:
@@ -14583,7 +14740,9 @@ def main() -> int:
             server.kill()
             server.wait()
 
-    print(f"Wrote {len(demos)} real preview GIF(s) to {OUTPUT_ROOT}")
+    print(f"Wrote {success_count} high-resolution WebP preview(s) to {WEB_OUTPUT_ROOT}")
+    if not args.web_assets_only:
+        print(f"Wrote {success_count} evidence GIF(s) to {OUTPUT_ROOT}")
     return 0
 
 

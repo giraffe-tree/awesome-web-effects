@@ -82,6 +82,16 @@ def main() -> int:
             expect(page.locator("#entry-reveal")).to_have_count(0)
             hero = page.locator("#hero-experience")
             expect(hero).to_have_attribute("data-step", "0")
+            expect(hero).to_have_attribute("data-autoplay-interval", "6000")
+            expect(hero).to_have_attribute("data-autoplay-state", "playing")
+            hero.hover()
+            expect(hero).to_have_attribute("data-autoplay-state", "paused")
+            page.locator(".site-nav").hover()
+            expect(hero).to_have_attribute("data-autoplay-state", "playing")
+            hero.focus()
+            expect(hero).to_have_attribute("data-autoplay-state", "paused")
+            page.locator("#language").focus()
+            expect(hero).to_have_attribute("data-autoplay-state", "playing")
             hero.press("ArrowRight")
             expect(hero).to_have_attribute("data-step", "1")
             page.locator('[data-hero-step="3"]').click()
@@ -90,6 +100,7 @@ def main() -> int:
             expect(hero_toggle).to_be_visible()
             hero_toggle.click()
             expect(hero_toggle).to_have_text("Play")
+            expect(hero).to_have_attribute("data-autoplay-state", "off")
             language_select = page.locator("#language")
             locale_directions = {
                 "en": "ltr", "zh-Hans": "ltr", "hi": "ltr", "es": "ltr", "ar": "rtl",
@@ -164,7 +175,9 @@ def main() -> int:
             rows = page.locator("#effect-list .effect-row")
             expect(rows).to_have_count(expected_effect_count)
             expect(page.locator("#effect-list .media-load-state[role]")).to_have_count(0)
-            expect(page.locator("#featured-effects .featured-effect")).to_have_count(3)
+            expect(page.locator('#effect-list picture source[type="image/webp"]')).to_have_count(
+                len(admitted_local_preview_ids)
+            )
             desktop_grid_columns = page.locator("#effect-list").evaluate(
                 "element => getComputedStyle(element).gridTemplateColumns.split(' ').length"
             )
@@ -174,16 +187,25 @@ def main() -> int:
                     const main = card.querySelector('.effect-main').getBoundingClientRect();
                     const preview = card.querySelector('.row-preview').getBoundingClientRect();
                     const overlay = card.querySelector('.effect-card-overlay').getBoundingClientRect();
+                    const image = card.querySelector('.row-preview img');
+                    const imageFit = getComputedStyle(image).objectFit;
                     return {
                         main: [main.width, main.height, main.bottom],
                         preview: [preview.width, preview.height],
                         overlayBottom: overlay.bottom,
+                        imageFit,
+                        naturalSize: [image.naturalWidth, image.naturalHeight],
+                        currentSource: image.currentSrc,
                     };
                 }"""
             )
             assert abs(full_bleed_geometry["main"][0] - full_bleed_geometry["preview"][0]) < 1
             assert abs(full_bleed_geometry["main"][1] - full_bleed_geometry["preview"][1]) < 1
             assert abs(full_bleed_geometry["main"][2] - full_bleed_geometry["overlayBottom"]) < 1
+            assert abs(full_bleed_geometry["main"][0] / full_bleed_geometry["main"][1] - 16 / 9) < 0.01
+            assert full_bleed_geometry["imageFit"] == "contain"
+            assert full_bleed_geometry["naturalSize"] == [640, 360]
+            assert full_bleed_geometry["currentSource"].endswith("/gifs/webp/scroll-scrubbed-master-timeline.webp")
             transition_filter = page.locator('#filters [data-category="transition"]')
             expected_transition_count = page.locator(
                 '#effect-list .effect-row[data-category="transition"]'
@@ -373,6 +395,9 @@ def main() -> int:
                 "element => getComputedStyle(element).gridTemplateColumns.split(' ').length"
             )
             assert mobile_grid_columns == 1
+            mobile_card_box = page.locator("#scroll-scrubbed-master-timeline .effect-main").bounding_box()
+            assert mobile_card_box
+            assert abs(mobile_card_box["width"] / mobile_card_box["height"] - 16 / 9) < 0.01
             page.locator("#language").select_option("en")
             mobile_prompt_screenshot = ROOT / "tmp" / "agent-prompt-mobile.png"
             page.locator("#agent-prompt").screenshot(path=str(mobile_prompt_screenshot))
@@ -411,7 +436,7 @@ def main() -> int:
             server.kill()
             server.wait()
 
-    print(f"Catalog UI verified: 20 locales (including RTL and URL persistence), {expected_effect_count} admitted demos, one-line and per-effect Agent Prompts, interactive hero, loading/error transitions, live detail previews, native-size official GIFs, visible scores, copy actions, focus, reduced motion, and mobile layout.")
+    print(f"Catalog UI verified: 20 locales (including RTL and URL persistence), {expected_effect_count} admitted demos, one-line and per-effect Agent Prompts, paused 6s hero autoplay, uncropped 16:9 cards, loading/error transitions, live detail previews, native-size official GIFs, visible scores, copy actions, focus, reduced motion, and mobile layout.")
     return 0
 
 

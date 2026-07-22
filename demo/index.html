@@ -220,9 +220,7 @@
       .prompt-lines span { display: block; width: var(--w); height: 7px; margin: 7px 0; border-radius: 99px; background: rgba(154, 168, 216, .38); }
 
       .catalog-section { padding: 104px 0 128px; border-radius: 52px 52px 0 0; background: var(--surface-soft); }
-      .catalog-intro { display: grid; grid-template-columns: .72fr 1.28fr; gap: 72px; align-items: end; padding-bottom: 40px; }
       .section-label { margin: 0; color: var(--pink); font-size: 15px; font-weight: 650; }
-      .catalog-intro h2 { max-width: 800px; margin: 0; font-size: clamp(46px, 6vw, 82px); line-height: .98; letter-spacing: -.058em; text-wrap: balance; }
 
       .controls {
         position: sticky;
@@ -267,8 +265,8 @@
       .row-number { align-self: start; padding-top: 5px; color: #6f78a0; font: 600 12px/1 ui-monospace, SFMono-Regular, Menlo, monospace; }
       .row-preview { position: relative; width: 144px; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 15px; background: #0e1330; box-shadow: var(--shadow-xs); transition: box-shadow .4s var(--ease-out); }
       .effect-row:hover .row-preview { box-shadow: 0 10px 28px rgba(4, 6, 18, .5); }
-      .row-preview img { display: block; width: 100%; height: 100%; object-fit: cover; transition: opacity .38s ease, transform .55s var(--ease-out); }
-      .effect-row:hover .row-preview img { transform: scale(1.045); }
+      .row-preview picture { display: block; width: 100%; height: 100%; }
+      .row-preview img { display: block; width: 100%; height: 100%; object-fit: contain; transition: opacity .38s ease; }
       [data-media-shell] { position: relative; isolation: isolate; }
       [data-managed-media] { opacity: 0; transition: opacity .38s ease; }
       [data-media-state="ready"] [data-managed-media] { opacity: 1; }
@@ -433,7 +431,6 @@
         .agent-prompt-card { grid-template-columns: 1fr; }
         .feature-grid { grid-template-columns: 1fr; }
         .feature-card { min-height: 300px; }
-        .catalog-intro { grid-template-columns: 1fr; gap: 18px; }
         .catalog-head { display: none; }
         .effect-main { grid-template-columns: 34px 116px minmax(0, 1fr); gap: 12px; }
         .row-number { grid-row: 1 / span 2; }
@@ -591,7 +588,7 @@
 
       .catalog-section {
         position: relative;
-        padding: clamp(72px, 8vw, 112px) 0 120px;
+        padding: 20px 0 120px;
         border-radius: 0;
         background: var(--surface-soft);
       }
@@ -611,39 +608,7 @@
         background: linear-gradient(180deg, rgba(232, 160, 180, .05), transparent 82%);
         pointer-events: none;
       }
-      .catalog-intro { grid-template-columns: .48fr 1.52fr; gap: 48px; padding-bottom: 44px; }
       .section-label { color: var(--pink); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; }
-      .catalog-intro h2 { max-width: 980px; font-size: clamp(48px, 6.3vw, 94px); line-height: .91; letter-spacing: -.064em; }
-
-      .featured-effects { display: grid; grid-template-columns: 1.35fr 1fr 1fr; gap: 14px; margin-bottom: 28px; }
-      .featured-effect {
-        --featured-x: 50%;
-        --featured-y: 50%;
-        position: relative;
-        min-width: 0;
-        height: 184px;
-        overflow: hidden;
-        padding: 0;
-        border: 1px solid rgba(154, 168, 216, .13);
-        border-radius: 24px;
-        color: #f4efe9;
-        background: #141830;
-        box-shadow: var(--shadow-sm);
-        cursor: pointer;
-        text-align: start;
-        isolation: isolate;
-        transition: border-color .3s ease, box-shadow .4s var(--ease-out);
-      }
-      .featured-effect:hover { border-color: rgba(232, 160, 180, .36); box-shadow: var(--shadow); }
-      .featured-effect:first-child { height: 212px; }
-      .featured-effect img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .7s var(--ease-out), filter .5s ease; }
-      .featured-effect-static { display: block; width: 100%; height: 100%; background: radial-gradient(circle at 26% 30%, rgba(232, 160, 180, .3), transparent 24%), radial-gradient(circle at 70% 62%, rgba(127, 143, 196, .34), transparent 32%), #171a38; }
-      .featured-effect::after { content: ""; position: absolute; z-index: 1; inset: 0; background: radial-gradient(circle at var(--featured-x) var(--featured-y), rgba(245, 203, 184, .26), transparent 28%), linear-gradient(to top, rgba(8, 10, 24, .88), transparent 64%); opacity: .86; pointer-events: none; }
-      .featured-effect:hover img { transform: scale(1.055); filter: saturate(1.08); }
-      .featured-effect-copy { position: absolute; z-index: 2; inset-inline: 18px; bottom: 16px; display: flex; justify-content: space-between; gap: 12px; align-items: end; }
-      .featured-effect-copy span { display: block; color: rgba(244, 239, 233, .64); font-size: 9px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; }
-      .featured-effect-copy strong { display: block; max-width: 300px; margin-top: 4px; font-size: clamp(16px, 1.8vw, 24px); line-height: 1; letter-spacing: -.035em; }
-      .featured-effect-copy b { display: grid; place-items: center; flex: 0 0 auto; width: 30px; height: 30px; border: 1px solid rgba(244, 239, 233, .26); border-radius: 50%; background: rgba(244, 239, 233, .09); font-size: 14px; }
 
       .controls {
         top: 56px;
@@ -692,7 +657,7 @@
         grid-template: 1fr / minmax(0, 1fr);
         gap: 0;
         min-height: 0;
-        aspect-ratio: 16 / 10;
+        aspect-ratio: 16 / 9;
         overflow: hidden;
         padding: 0;
         color: #f4efe9;
@@ -704,11 +669,10 @@
       .effect-main:hover { background: #10142e; }
       .row-number { position: absolute; z-index: 5; top: 14px; inset-inline-start: 14px; padding: 7px 8px 6px; border: 1px solid rgba(154, 168, 216, .24); border-radius: 9px; color: #eae4dc; background: rgba(10, 13, 30, .6); backdrop-filter: blur(10px); font-size: 9px; }
       .row-preview { grid-area: 1 / 1; width: 100%; height: 100%; aspect-ratio: auto; border-radius: 0; background: #141830; box-shadow: none; }
-      .row-preview img { width: 100%; height: 100%; object-fit: cover; }
+      .row-preview img { width: 100%; height: 100%; object-fit: contain; }
       .row-preview::after { content: ""; position: absolute; z-index: 2; inset: 0; background: radial-gradient(circle at var(--card-x) var(--card-y), rgba(245, 203, 184, .4), transparent 29%); opacity: 0; mix-blend-mode: soft-light; transition: opacity .28s ease; pointer-events: none; }
       .effect-row:hover .row-preview::after { opacity: .48; }
       .effect-row:hover .row-preview { box-shadow: none; }
-      .effect-row:hover .row-preview img { transform: scale(1.025); }
       .preview-kind { inset-inline-start: 58px; inset-inline-end: auto; top: 14px; bottom: auto; border: 1px solid rgba(154, 168, 216, .18); background: rgba(10, 13, 30, .6); }
       .preview-demo-link { top: 12px; inset-inline-end: 12px; }
       .effect-card-overlay { position: relative; z-index: 4; grid-area: 1 / 1; align-self: end; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px 12px; padding: 68px 16px 15px; background: linear-gradient(180deg, transparent 0%, rgba(8, 11, 24, .74) 38%, rgba(8, 11, 24, .97) 100%); pointer-events: none; }
@@ -769,9 +733,6 @@
         .hero-metrics { display: grid; grid-template-columns: 1fr 1fr; }
         .metric:nth-child(2) { border-inline-end: 0; }
         .metric:nth-child(-n + 2) { border-bottom: 1px solid rgba(154, 168, 216, .13); }
-        .catalog-intro { grid-template-columns: 1fr; gap: 18px; }
-        .featured-effects { grid-template-columns: 1fr 1fr; }
-        .featured-effect:first-child { grid-column: 1 / -1; }
         #effect-list { grid-template-columns: 1fr; }
         .detail-panel { padding: 0 18px 18px; }
       }
@@ -785,16 +746,13 @@
         .hero-metrics { margin-top: 34px; }
         .metric { min-width: 0; padding: 18px 12px 14px; }
         .metric strong { font-size: 27px; }
-        .catalog-section { padding-top: 62px; }
-        .catalog-intro h2 { font-size: clamp(46px, 14vw, 66px); }
-        .featured-effects { display: flex; margin-inline-end: -14px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
-        .featured-effect, .featured-effect:first-child { flex: 0 0 82%; height: 176px; scroll-snap-align: start; }
+        .catalog-section { padding-top: 12px; }
         .controls { top: 52px; grid-template-columns: minmax(0, 1fr) 132px; margin-inline: -6px; padding-inline: 6px; }
         .sort { padding-inline-start: 12px; text-overflow: ellipsis; }
         .filters { grid-column: 1 / -1; }
         #effect-list { grid-template-columns: 1fr; gap: 14px; }
         .effect-row, .effect-card-trigger:focus-visible { border-radius: 21px; }
-        .effect-main { display: grid; aspect-ratio: 16 / 10; padding: 0; }
+        .effect-main { display: grid; aspect-ratio: 16 / 9; padding: 0; }
         .row-number { top: 12px; inset-inline-start: 12px; }
         .row-preview { grid-area: 1 / 1; width: 100%; max-width: none; }
         .effect-card-overlay { grid-template-columns: 1fr; gap: 8px; padding: 56px 14px 14px; }
@@ -805,7 +763,7 @@
         .row-actions { justify-content: flex-start; }
         .action-button { flex: 0 1 auto; min-height: 32px; padding-inline: 9px; }
         .effect-row:has(.detail-panel:not([hidden])) { grid-column: auto; }
-        .effect-row:has(.detail-panel:not([hidden])) .effect-main { grid-template-columns: 1fr; min-height: 0; aspect-ratio: 16 / 10; }
+        .effect-row:has(.detail-panel:not([hidden])) .effect-main { grid-template-columns: 1fr; min-height: 0; aspect-ratio: 16 / 9; }
         .effect-row:has(.detail-panel:not([hidden])) .row-preview, .effect-row:has(.detail-panel:not([hidden])) .effect-card-overlay { grid-area: 1 / 1; min-height: 0; }
         .effect-row:has(.detail-panel:not([hidden])) .effect-card-overlay { align-self: end; grid-template-columns: 1fr; padding: 56px 14px 14px; background: linear-gradient(180deg, transparent 0%, rgba(8, 11, 24, .74) 38%, rgba(8, 11, 24, .97) 100%); }
         .effect-row:has(.detail-panel:not([hidden])) .effect-cell h3 { font-size: clamp(20px, 6.2vw, 27px); }
@@ -816,12 +774,12 @@
         html { scroll-behavior: auto; }
         .entry-reveal { display: none; }
         .visual-gif::before, .visual-gif::after, .media-load-icon, .row-preview .media-load-state { animation: none; }
-        .hero-experience, .hero-experience::before, .hero-story-word, .hero-shape, .hero-story-cursor, [data-managed-media], .media-load-state, .featured-effect img, .effect-main, .row-preview::after { transition: none; }
+        .hero-experience, .hero-experience::before, .hero-story-word, .hero-shape, .hero-story-cursor, [data-managed-media], .media-load-state, .effect-main, .row-preview::after { transition: none; }
         .hero-story-cursor { display: none; }
         .effect-main { transition: none; }
         .effect-modal-backdrop, .effect-modal-dialog { animation: none; }
         .nav-link, .nav-button, .language-select, .primary-action, .secondary-action, .hero-story-toggle, .hero-story-step, .metric, .agent-prompt-action, .feature-card, .search, .sort, .filter, .effect-row, .row-preview, .row-preview img, .effect-cell h3, .source-name, .party-link, .preview-demo-link, .action-button, .copy-code, .modal-link, .modal-copy-code, .modal-prompt-button, .effect-modal-close { transition: none; }
-        .primary-action:hover, .primary-action:active, .secondary-action:hover, .secondary-action:active, .metric:hover, .feature-card:hover, .action-button:hover, .agent-prompt-action:hover, .modal-prompt-button:hover, .effect-row:hover .row-preview img, .featured-effect:hover img, .effect-main { transform: none; }
+        .primary-action:hover, .primary-action:active, .secondary-action:hover, .secondary-action:active, .metric:hover, .feature-card:hover, .action-button:hover, .agent-prompt-action:hover, .modal-prompt-button:hover, .effect-row:hover .row-preview img, .effect-main { transform: none; }
       }
     </style>
   </head>
@@ -886,13 +844,6 @@
 
     <main class="catalog-section" id="catalog">
       <div class="shell">
-        <section class="catalog-intro" aria-labelledby="catalog-title">
-          <p class="section-label" id="section-label">Interaction catalog</p>
-          <h2 id="catalog-title">Choose the behavior first. Choose the tool second.</h2>
-        </section>
-
-        <section class="featured-effects" id="featured-effects" aria-label="Featured effects"></section>
-
         <section class="controls" id="catalog-controls" aria-label="Filter effects">
           <label class="search-wrap"><span class="sr-only" id="search-label">Search effects</span><input class="search" id="search" type="search" placeholder="Search effect, source project, or keyword…" autocomplete="off" /></label>
           <select class="sort" id="sort" aria-label="Sort effects">
@@ -906,7 +857,7 @@
         </section>
 
         <div class="result-meta"><span id="result-count" role="status" aria-live="polite">0 effects</span><span id="result-note">GIF · Effect key · Source · Copy prompt · Code</span></div>
-        <section class="catalog" aria-labelledby="catalog-title">
+        <section class="catalog" id="catalog-grid" aria-label="Interaction catalog">
           <div class="catalog-head" aria-hidden="true"><span>#</span><span id="head-preview">Preview</span><span id="head-effect">Effect</span><span id="head-source">Recommended source</span><span id="head-action">Actions</span></div>
           <div id="effect-list"></div>
         </section>
@@ -961,7 +912,6 @@
       const projectById = new Map(projects.map(project => [project.id, project]));
       const categoryById = new Map(categories.map(category => [category.id, category]));
       const list = document.querySelector('#effect-list');
-      const featuredEffects = document.querySelector('#featured-effects');
       const filters = document.querySelector('#filters');
       const search = document.querySelector('#search');
       const sort = document.querySelector('#sort');
@@ -998,6 +948,9 @@
       let heroAutoPlaying = !reducedMotion.matches;
       let heroTimer = 0;
       let heroWordTimer = 0;
+      let heroHoverPaused = false;
+      let heroFocusPaused = false;
+      const HERO_STORY_INTERVAL_MS = 6000;
 
       supportedLocales.forEach(locale => {
         const option = document.createElement('option');
@@ -1016,6 +969,13 @@
       const normalizeForSearch = value => String(value).normalize('NFC').toLocaleLowerCase(localeByCode.get(language)?.intlLocale || language);
       const recommendedSource = effect => effect.sources.find(source => source.recommended) || effect.sources[0];
       const hasRealPreview = source => ['official-capture', 'local-demo-capture'].includes(source.previewKind) && Boolean(source.preview);
+      const catalogPreviewImage = (source, alt) => {
+        const gifPath = `./gifs/${escapeHTML(source.preview)}.gif`;
+        const image = `<img data-managed-media src="${gifPath}" alt="${escapeHTML(alt)}" loading="lazy" decoding="async" />`;
+        return source.previewKind === 'local-demo-capture'
+          ? `<picture><source type="image/webp" srcset="./gifs/webp/${escapeHTML(source.preview.split('/').at(-1))}.webp" />${image}</picture>`
+          : image;
+      };
       const oneLinePromptActionLabel = t => language === 'zh-Hans' ? '复制一句话 Prompt' : language === 'en' ? 'Copy one-line prompt' : t.copyPrompt;
       const officialPreviewUrl = source => {
         const githubBlob = source.originUrl?.match(/^https:\/\/github\.com\/([^/]+)\/([^/]+)\/blob\/([^/]+)\/(.+)$/);
@@ -1024,56 +984,23 @@
           : source.originUrl;
       };
       const interactiveSelector = 'a, button, input, select, textarea, pre, code';
-      const featuredEffectIds = ['filterable-grid-reflow', 'perspective-tilt-and-glare', 'gooey-pixel-cursor-wake'];
 
-      function setPointerSurface(element, event, featured = false) {
+      function setPointerSurface(element, event) {
         if (reducedMotion.matches || event.pointerType === 'touch') return;
         const bounds = element.getBoundingClientRect();
         const x = Math.max(0, Math.min(1, (event.clientX - bounds.left) / bounds.width));
         const y = Math.max(0, Math.min(1, (event.clientY - bounds.top) / bounds.height));
-        if (featured) {
-          element.style.setProperty('--featured-x', `${x * 100}%`);
-          element.style.setProperty('--featured-y', `${y * 100}%`);
-          return;
-        }
         element.style.setProperty('--card-x', `${x * 100}%`);
         element.style.setProperty('--card-y', `${y * 100}%`);
         element.style.setProperty('--card-rx', `${(0.5 - y) * 4.5}deg`);
         element.style.setProperty('--card-ry', `${(x - 0.5) * 5.5}deg`);
       }
 
-      function resetPointerSurface(element, featured = false) {
-        if (featured) {
-          element.style.setProperty('--featured-x', '50%');
-          element.style.setProperty('--featured-y', '50%');
-          return;
-        }
+      function resetPointerSurface(element) {
         element.style.setProperty('--card-x', '50%');
         element.style.setProperty('--card-y', '38%');
         element.style.setProperty('--card-rx', '0deg');
         element.style.setProperty('--card-ry', '0deg');
-      }
-
-      function buildFeaturedEffects() {
-        const t = copy[language];
-        featuredEffects.replaceChildren();
-        featuredEffects.setAttribute('aria-label', `${t.section} · ${t.openDetails}`);
-        featuredEffectIds.map(id => effects.find(effect => effect.id === id)).filter(Boolean).forEach(effect => {
-          const category = categoryById.get(effect.category);
-          const source = recommendedSource(effect);
-          const button = document.createElement('button');
-          button.className = 'featured-effect';
-          button.type = 'button';
-          button.setAttribute('aria-label', `${t.openDetails}: ${effectName(effect)}`);
-          const media = reducedMotion.matches || !hasRealPreview(source)
-            ? `<span class="featured-effect-static" aria-hidden="true"></span>`
-            : `<img src="./gifs/${escapeHTML(source.preview)}.gif" alt="" loading="eager" decoding="async" />`;
-          button.innerHTML = `${media}<span class="featured-effect-copy"><span><span>${escapeHTML(labelFor(category))}</span><strong>${escapeHTML(effectName(effect))}</strong></span><b aria-hidden="true">↗</b></span>`;
-          button.addEventListener('click', () => openEffectModal(effect, button));
-          button.addEventListener('pointermove', event => setPointerSurface(button, event, true));
-          button.addEventListener('pointerleave', () => resetPointerSurface(button, true));
-          featuredEffects.append(button);
-        });
       }
 
       function animateCatalogReflow(previousPositions) {
@@ -1256,11 +1183,16 @@
 
       function scheduleHeroStory() {
         clearInterval(heroTimer);
-        if (!heroAutoPlaying || reducedMotion.matches) return;
+        const interactionPaused = heroHoverPaused || heroFocusPaused || document.hidden;
+        heroExperience.dataset.autoplayInterval = String(HERO_STORY_INTERVAL_MS);
+        heroExperience.dataset.autoplayState = !heroAutoPlaying || reducedMotion.matches
+          ? 'off'
+          : interactionPaused ? 'paused' : 'playing';
+        if (!heroAutoPlaying || reducedMotion.matches || interactionPaused) return;
         heroTimer = setInterval(() => {
           heroStep = (heroStep + 1) % copy[language].heroSteps.length;
           renderHeroStep();
-        }, 2800);
+        }, HERO_STORY_INTERVAL_MS);
       }
 
       function setHeroStep(nextStep, restart = true) {
@@ -1418,9 +1350,7 @@
         document.querySelector('#feature-code-copy').textContent = t.codeCopy;
         document.querySelector('#feature-prompt-title').textContent = t.promptTitle;
         document.querySelector('#feature-prompt-copy').textContent = t.promptCopy;
-        document.querySelector('#section-label').textContent = t.section;
-        document.querySelector('#catalog-title').textContent = t.catalogTitle;
-        buildFeaturedEffects();
+        document.querySelector('#catalog-grid').setAttribute('aria-label', t.section);
         document.querySelector('#result-note').textContent = t.note;
         document.querySelector('#head-preview').textContent = t.headPreview;
         document.querySelector('#head-effect').textContent = t.headEffect;
@@ -1505,7 +1435,7 @@
             ? `<span class="paused-preview">${t.previewUnavailable}</span>`
             : reducedMotion.matches
               ? `<span class="paused-preview">${t.previewPaused}</span>`
-              : `<img data-managed-media src="./gifs/${escapeHTML(primary.preview)}.gif" alt="${escapeHTML(effectName(effect))}" loading="lazy" decoding="async" />${mediaStateMarkup(t.loadingPreview)}`;
+              : `${catalogPreviewImage(primary, effectName(effect))}${mediaStateMarkup(t.loadingPreview)}`;
           const previewShell = realPreview && !reducedMotion.matches
             ? ' data-media-shell data-media-state="loading" data-media-error-key="previewLoadError" aria-busy="true"'
             : '';
@@ -1575,6 +1505,11 @@
         if (event.target === entryReveal) entryReveal.remove();
       });
       if (reducedMotion.matches) entryReveal?.remove();
+      heroExperience.addEventListener('pointerenter', event => {
+        if (event.pointerType === 'touch') return;
+        heroHoverPaused = true;
+        scheduleHeroStory();
+      });
       heroExperience.addEventListener('pointermove', event => {
         if (reducedMotion.matches) return;
         const bounds = heroExperience.getBoundingClientRect();
@@ -1586,10 +1521,21 @@
         heroExperience.style.setProperty('--pointer-focus-y', `${48 + y * 32}%`);
       });
       heroExperience.addEventListener('pointerleave', () => {
+        heroHoverPaused = false;
         heroExperience.style.setProperty('--pointer-x', '0px');
         heroExperience.style.setProperty('--pointer-y', '0px');
         heroExperience.style.setProperty('--pointer-focus-x', '50%');
         heroExperience.style.setProperty('--pointer-focus-y', '48%');
+        scheduleHeroStory();
+      });
+      heroExperience.addEventListener('focusin', () => {
+        heroFocusPaused = true;
+        scheduleHeroStory();
+      });
+      heroExperience.addEventListener('focusout', event => {
+        if (event.relatedTarget && heroExperience.contains(event.relatedTarget)) return;
+        heroFocusPaused = false;
+        scheduleHeroStory();
       });
       heroExperience.addEventListener('click', event => {
         if (event.target.closest('button')) return;
@@ -1612,9 +1558,9 @@
         renderHeroStep(false);
         updateHeroToggle();
         scheduleHeroStory();
-        buildFeaturedEffects();
         render();
       });
+      document.addEventListener('visibilitychange', scheduleHeroStory);
       search.addEventListener('input', render);
       sort.addEventListener('change', render);
       window.addEventListener('hashchange', openHashTarget);

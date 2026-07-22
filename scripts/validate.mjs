@@ -19,6 +19,32 @@ const execFileAsync = promisify(execFile);
 const realPreviewKinds = new Set(['official-capture', 'local-demo-capture']);
 const readmeFilename = locale => locale.code === 'en' ? 'README.md' : `README.${locale.code}.md`;
 
+function inspectAnimatedWebP(bytes) {
+  const readUint24LE = offset => bytes[offset] | bytes[offset + 1] << 8 | bytes[offset + 2] << 16;
+  if (bytes.subarray(0, 4).toString('ascii') !== 'RIFF' || bytes.subarray(8, 12).toString('ascii') !== 'WEBP') {
+    throw new Error('not a WebP RIFF container');
+  }
+  let width = 0;
+  let height = 0;
+  let frames = 0;
+  let durationMs = 0;
+  for (let offset = 12; offset + 8 <= bytes.length;) {
+    const kind = bytes.subarray(offset, offset + 4).toString('ascii');
+    const size = bytes.readUInt32LE(offset + 4);
+    const payload = offset + 8;
+    if (kind === 'VP8X' && size >= 10) {
+      width = readUint24LE(payload + 4) + 1;
+      height = readUint24LE(payload + 7) + 1;
+    }
+    if (kind === 'ANMF' && size >= 16) {
+      frames += 1;
+      durationMs += readUint24LE(payload + 12);
+    }
+    offset = payload + size + (size % 2);
+  }
+  return { width, height, frames, durationMs };
+}
+
 assert(supportedLocales.length === 20, 'The website must expose exactly the top 20 total-speaker locales.');
 assert(defaultLocale === 'en', 'English must remain the default locale.');
 assert(new Set(supportedLocales.map(locale => locale.code)).size === supportedLocales.length, 'Locale codes must be unique.');
@@ -167,6 +193,11 @@ for (const effect of effects) {
       } catch {
         errors.push(`${effect.id}/${source.projectId}: missing reusable demo source demo/${source.demoSourcePath || '(unset)'}.`);
       }
+      try {
+        await access(resolve(root, 'demo', 'gifs', 'webp', `${effect.id}.webp`));
+      } catch {
+        errors.push(`${effect.id}/${source.projectId}: missing enhanced preview demo/gifs/webp/${effect.id}.webp.`);
+      }
     }
     if (source.previewKind === 'unavailable') {
       assert(source.preview === null, `${effect.id}/${source.projectId}: unavailable preview must not reference a GIF.`);
@@ -307,6 +338,22 @@ for (let index = 0; index < previewRecords.length; index += 8) {
   }));
 }
 
+const enhancedPreviewRecords = effects.flatMap(effect => effect.sources
+  .filter(source => source.previewKind === 'local-demo-capture')
+  .map(source => ({ effectId: effect.id, path: resolve(root, 'demo', 'gifs', 'webp', `${source.preview.split('/').at(-1)}.webp`) })));
+for (const record of enhancedPreviewRecords) {
+  try {
+    const bytes = await readFile(record.path);
+    const metadata = inspectAnimatedWebP(bytes);
+    assert(bytes.length <= 1024 * 1024, `${record.effectId}: enhanced WebP exceeds the 1 MiB budget (${bytes.length} bytes).`);
+    assert(metadata.width === 640 && metadata.height === 360, `${record.effectId}: enhanced WebP must be 640×360.`);
+    assert(metadata.frames >= 6, `${record.effectId}: enhanced WebP has too few distinct frames.`);
+    assert(metadata.durationMs >= 5800 && metadata.durationMs <= 7300, `${record.effectId}: enhanced WebP duration must be between 5.8 and 7.3 seconds.`);
+  } catch (error) {
+    errors.push(`${record.effectId}: enhanced WebP could not be validated (${error.message}).`);
+  }
+}
+
 if (errors.length) {
   console.error(errors.map(error => `- ${error}`).join('\n'));
   process.exitCode = 1;
@@ -315,5 +362,5 @@ if (errors.length) {
   const previewCount = sources.filter(source => source.preview).length;
   const promptCount = effects.filter(effect => effect.prompt).length;
   const repeatedProjectCount = projects.filter(project => effects.filter(effect => effect.sources.some(source => source.projectId === project.id)).length > 1).length;
-  console.log(`Validated ${effects.length} unique effects, ${projects.length} source projects, ${categories.length} categories, ${previewCount} GIF previews, ${promptCount} prompts, and ${repeatedProjectCount} multi-effect projects.`);
+  console.log(`Validated ${effects.length} unique effects, ${projects.length} source projects, ${categories.length} categories, ${previewCount} GIF previews, ${enhancedPreviewRecords.length} enhanced WebP previews, ${promptCount} prompts, and ${repeatedProjectCount} multi-effect projects.`);
 }

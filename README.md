@@ -83,7 +83,7 @@ A visual atlas for the moment when you know the feeling you want, but not the wo
 No skill or installation is required. Copy this single sentence into Codex, Claude Code, or another coding agent while your target project is open.
 
 ```text
-Review the current project and use the Awesome Web Effects catalog (https://giraffe-tree.github.io/awesome-web-effects/) as read-only inspiration. Choose one effect that fits the product and existing stack, then adapt its verified demo and minimal code with original assets. Preserve responsive, keyboard, pointer, touch, prefers-reduced-motion, performance, and cleanup behavior. Run the existing tests and a browser check, then report the selected effect and changed files.
+Review the current project using https://giraffe-tree.github.io/awesome-web-effects/ as read-only inspiration. Pick one effect suited to the product and stack. Inspect its verified demo and minimal code; define 2–3 observable acceptance criteria, then adapt it with original assets, preserving responsive, keyboard, pointer, touch, prefers-reduced-motion, performance, and cleanup. Run tests and desktop/mobile browser checks. Report the effect URL, changed files, evidence per criterion, and remaining risks.
 ```
 
 <p align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#agent-prompt"><strong>Copy the one-line prompt on the live site →</strong></a></p>

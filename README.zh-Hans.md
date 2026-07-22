@@ -83,7 +83,7 @@
 无需 Skill 或安装；在目标项目中打开 Codex、Claude Code 或其他编程 Agent，点击代码块右上角复制按钮并粘贴发送。
 
 ```text
-审查当前项目，把 Awesome Web Effects 目录（https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans）作为只读参考。选择一个符合产品与现有技术栈的效果，依据已验证 Demo 和最小代码，用原创素材完成适配。保留响应式、键盘、指针、触控、prefers-reduced-motion、性能与资源清理；运行现有测试和浏览器检查，最后说明所选效果与改动文件。
+审查当前项目，把 Awesome Web Effects（https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans）作为只读参考。选择一个符合产品和技术栈的效果，查看已验证 Demo 与最小代码，并定义 2–3 条可观察验收标准。用原创素材适配，保留响应式、键盘、指针、触控、prefers-reduced-motion、性能与资源清理。运行现有测试及桌面/移动浏览器检查，报告效果直达地址、改动文件、逐条证据和遗留风险。
 ```
 
 <p align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#agent-prompt"><strong>在在线目录一键复制这句话 →</strong></a></p>

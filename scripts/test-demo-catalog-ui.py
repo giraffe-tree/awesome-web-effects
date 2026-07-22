@@ -224,7 +224,11 @@ def main() -> int:
                 )
                 expect(migrated_row.locator(".preview-demo-link")).to_have_count(1)
 
+            page.goto(f"{origin}/#scroll-scrubbed-master-timeline", wait_until="networkidle")
             real_row = page.locator("#scroll-scrubbed-master-timeline")
+            expect(real_row).to_be_in_viewport()
+            expect(real_row.locator(".detail-panel")).to_be_visible()
+            expect(real_row.locator(".code-button")).to_have_attribute("aria-expanded", "true")
             real_row.locator(".effect-cell").click()
             modal = page.locator("#effect-modal")
             expect(modal).to_be_visible()
@@ -250,6 +254,9 @@ def main() -> int:
             expect(modal_prompt_button).to_have_text("Prompt copied")
             effect_prompt = page.evaluate("navigator.clipboard.readText()")
             assert "Scroll-scrubbed master timeline" in effect_prompt
+            assert "https://giraffe-tree.github.io/awesome-web-effects/#scroll-scrubbed-master-timeline" in effect_prompt
+            assert "observable acceptance criteria" in effect_prompt
+            assert "evidence per criterion" in effect_prompt
             assert len(effect_prompt) < 620 and "Interaction contract" not in effect_prompt
             expect(modal.locator(".modal-code-card code")).to_contain_text("gsap.registerPlugin")
             page.wait_for_timeout(250)

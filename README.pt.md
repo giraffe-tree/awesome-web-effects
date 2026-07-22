@@ -81,7 +81,7 @@ Só publicamos demos avaliadas visualmente com nota 80 ou superior; cada uma inc
 Um clique copia um prompt delimitado com requisitos de acessibilidade, responsividade, limpeza e redução de movimento.
 
 ```text
-Review the current project and use the Awesome Web Effects catalog (https://giraffe-tree.github.io/awesome-web-effects/) as read-only inspiration. Choose one effect that fits the product and existing stack, then adapt its verified demo and minimal code with original assets. Preserve responsive, keyboard, pointer, touch, prefers-reduced-motion, performance, and cleanup behavior. Run the existing tests and a browser check, then report the selected effect and changed files.
+Review the current project using https://giraffe-tree.github.io/awesome-web-effects/ as read-only inspiration. Pick one effect suited to the product and stack. Inspect its verified demo and minimal code; define 2–3 observable acceptance criteria, then adapt it with original assets, preserving responsive, keyboard, pointer, touch, prefers-reduced-motion, performance, and cleanup. Run tests and desktop/mobile browser checks. Report the effect URL, changed files, evidence per criterion, and remaining risks.
 ```
 
 <p align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=pt#agent-prompt"><strong>Copiar prompt do agente →</strong></a></p>

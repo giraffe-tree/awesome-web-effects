@@ -1010,6 +1010,53 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, web_frame_root: P
             elif index == 33:
                 page.locator('#globe-host').focus()
                 page.keyboard.press("Home")
+        elif demo["id"] == "topographic-relief-expedition-globe":
+            if index == 2:
+                page.locator('#next-summit').click()
+            elif index == 3:
+                settle(760)
+            elif index == 6:
+                page.locator('#earth-host').focus()
+                page.keyboard.press("ArrowLeft")
+            elif index == 8:
+                page.keyboard.press("ArrowUp")
+            elif index == 10:
+                page.keyboard.press("n")
+            elif index == 11:
+                settle(760)
+            elif index == 14:
+                box = page.locator('#earth-host').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * .72, box["y"] + box["height"] * .48)
+                page.mouse.wheel(0, -120)
+            elif index == 16:
+                page.keyboard.press("+")
+            elif index == 18:
+                box = page.locator('#earth-host').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * .69, box["y"] + box["height"] * .50)
+                page.mouse.down()
+            elif index == 20:
+                box = page.locator('#earth-host').bounding_box()
+                page.mouse.move(box["x"] + box["width"] * .53, box["y"] + box["height"] * .61, steps=6)
+                page.mouse.up()
+            elif index == 22:
+                page.locator('#next-summit').click()
+            elif index == 23:
+                settle(760)
+            elif index == 25:
+                page.locator('#reset-earth').click()
+            elif index == 26:
+                settle(760)
+            elif index == 28:
+                page.locator('#earth-host').focus()
+                page.keyboard.press("ArrowRight")
+            elif index == 29:
+                page.keyboard.press("n")
+            elif index == 30:
+                settle(760)
+            elif index == 32:
+                page.keyboard.press("Home")
+            elif index == 33:
+                settle(760)
         elif demo["id"] == "scene-wipe-progressive-page-swap":
             if index == 2:
                 page.locator('#scene-toggle').click()
@@ -5718,6 +5765,52 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, web_frame_root: P
             or interaction["canvasHeight"] < 64
         ):
             raise RuntimeError(f"{demo['id']} did not capture a human-rotated geodata globe with real nearest-node focus, routes, keyboard control, and reset: {interaction!r}")
+    elif demo["id"] == "topographic-relief-expedition-globe":
+        assertion = page.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            not assertion
+            or interaction["claimedLibrary"] != "three@0.185.1"
+            or interaction["renderer"] != "webgl"
+            or interaction["mechanism"] != "displaced-shader-earth-from-real-atlas-land-and-authored-relief"
+            or interaction["inputAdapters"] != ["pointer", "touch", "wheel", "click", "keyboard"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticRotation"]
+            or interaction["automaticFallback"]
+            or interaction["syntheticInputDispatch"]
+            or interaction["previewClockDrivesMotion"]
+            or not interaction["initialStaticConfirmed"]
+            or not interaction["realAtlasLand"]
+            or interaction["atlasResolution"] != "512x256"
+            or interaction["atlasPixelCount"] != 131072
+            or interaction["landPixelCount"] < 32000
+            or interaction["landPixelCount"] > 48000
+            or interaction["reliefPixelCount"] < 5000
+            or interaction["reliefChecksum"] == 0
+            or interaction["peakCount"] != 4
+            or interaction["starCount"] != 620
+            or interaction["geometrySegments"] != [160, 96]
+            or interaction["terrainExaggeration"] != 45
+            or interaction["inputCount"] < 12
+            or interaction["pointerInputCount"] < 1
+            or interaction["pointerMoveCount"] < 5
+            or interaction["keyboardInputCount"] < 7
+            or interaction["wheelInputCount"] < 1
+            or interaction["buttonInputCount"] < 3
+            or interaction["focusCount"] < 4
+            or interaction["resetCount"] < 2
+            or interaction["zoomCount"] < 2
+            or interaction["dragDistance"] <= 0
+            or interaction["dragging"]
+            or interaction["motionActive"]
+            or interaction["motionCompletionCount"] < 5
+            or interaction["selectedPeakIndex"] != 0
+            or interaction["selectedPeakId"] != "everest"
+            or abs(interaction["cameraDistance"] - 3.55) > .001
+            or interaction["lastInput"] != "keyboard:Home"
+            or interaction["renderCount"] < 20
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a real displaced Three.js Earth with atlas land, relief contours, orbit, zoom, summit focus, and reset: {interaction!r}")
     elif demo["id"] == "scene-wipe-progressive-page-swap":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         if (

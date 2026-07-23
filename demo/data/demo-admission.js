@@ -25,10 +25,10 @@ export const admissionPolicy = {
 
 export const admissionAuditSummary = {
   auditedAt: '2026-07-23',
-  candidateCount: 397,
-  reviewedPreviewCount: 164,
+  candidateCount: 398,
+  reviewedPreviewCount: 165,
   missingPreviewCount: 233,
-  admittedCount: 151,
+  admittedCount: 152,
   rejectedCount: 246
 };
 
@@ -37,6 +37,10 @@ export const admissionAuditSummary = {
 // evaluateDemoAdmission: visual and motion quality cannot be inferred from a
 // repository name, code snippet, or star count.
 export const reviewedDemoScores = {
+  'topographic-relief-expedition-globe': {
+    creativity: 19, artDirection: 20, motion: 19, clarity: 15, inspiration: 15, evidence: 10,
+    rationaleZh: '真实 World Atlas 陆地、多段山系高程场、15,000 级球体细分、顶点位移、等高线与大气层共同构成可辨认的浮雕地球；真人拖拽、缩放和切换高峰时，空间标记与语义证据保持配准，且与既有点阵网络地球明显不同。'
+  },
   'connected-fragment-story-stage': {
     creativity: 18, artDirection: 19, motion: 18, clarity: 15, inspiration: 15, evidence: 10,
     rationaleZh: '四个语义问题节点、证据碎片、连线与中心命题在同一真人步骤中同步交接；构图、叙事和实现边界清楚，且与普通粒子星座或缩略图拼贴明显不同。'

@@ -6,8 +6,8 @@
 
 Tunachapisha Demo zilizokaguliwa kwa kuona na kupata alama 80 au zaidi pekee; kila moja ina onyesho halisi, code ya kiwango cha chini na prompt ya utekelezaji.
 
-[![151 curated effects](https://img.shields.io/badge/curated_effects-151-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
-[![151 real GIF previews](https://img.shields.io/badge/real_GIF_previews-151-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
+[![152 curated effects](https://img.shields.io/badge/curated_effects-152-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
+[![152 real GIF previews](https://img.shields.io/badge/real_GIF_previews-152-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
 [![GitHub stars](https://img.shields.io/github/stars/giraffe-tree/awesome-web-effects?style=flat-square&color=0969da)](https://github.com/giraffe-tree/awesome-web-effects/stargazers)
 
 [**Vinjari athari →**](https://giraffe-tree.github.io/awesome-web-effects/?lang=sw) · [Language metadata / 语言资料](../docs/LANGUAGES.md)
@@ -18,7 +18,7 @@ Tunachapisha Demo zilizokaguliwa kwa kuona na kupata alama 80 au zaidi pekee; ki
 
 ---
 
-<h3 align="center">14 GIF zilizothibitishwa / 151 Athari</h3>
+<h3 align="center">14 GIF zilizothibitishwa / 152 Athari</h3>
 
 <table>
 <tr>
@@ -121,9 +121,9 @@ Chagua tabia kwanza. Chagua zana baadaye.
 
 <table>
 <tr>
-<td width="25%" align="center"><strong>151</strong><br><sub>Athari</sub></td>
-<td width="25%" align="center"><strong>151</strong><br><sub>GIF zilizothibitishwa</sub></td>
-<td width="25%" align="center"><strong>149</strong><br><sub>Demo ya ndani</sub></td>
+<td width="25%" align="center"><strong>152</strong><br><sub>Athari</sub></td>
+<td width="25%" align="center"><strong>152</strong><br><sub>GIF zilizothibitishwa</sub></td>
+<td width="25%" align="center"><strong>150</strong><br><sub>Demo ya ndani</sub></td>
 <td width="25%" align="center"><strong>80/100</strong><br><sub>Alama ya kuingia kwenye uratibu</sub></td>
 </tr>
 </table>

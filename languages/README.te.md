@@ -6,8 +6,8 @@
 
 దృశ్య సమీక్షలో 80 లేదా అంతకంటే ఎక్కువ స్కోర్ చేసిన Demoలనే ప్రచురిస్తాము; ప్రతి దానిలో నిజమైన preview, కనిష్ఠ code, implementation prompt ఉంటాయి.
 
-[![151 curated effects](https://img.shields.io/badge/curated_effects-151-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
-[![151 real GIF previews](https://img.shields.io/badge/real_GIF_previews-151-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
+[![152 curated effects](https://img.shields.io/badge/curated_effects-152-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
+[![152 real GIF previews](https://img.shields.io/badge/real_GIF_previews-152-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
 [![GitHub stars](https://img.shields.io/github/stars/giraffe-tree/awesome-web-effects?style=flat-square&color=0969da)](https://github.com/giraffe-tree/awesome-web-effects/stargazers)
 
 [**ఎఫెక్ట్‌లను చూడండి →**](https://giraffe-tree.github.io/awesome-web-effects/?lang=te) · [Language metadata / 语言资料](../docs/LANGUAGES.md)
@@ -18,7 +18,7 @@
 
 ---
 
-<h3 align="center">14 ధృవీకరించిన GIFలు / 151 ఎఫెక్ట్‌లు</h3>
+<h3 align="center">14 ధృవీకరించిన GIFలు / 152 ఎఫెక్ట్‌లు</h3>
 
 <table>
 <tr>
@@ -121,9 +121,9 @@ Review the current project using https://giraffe-tree.github.io/awesome-web-effe
 
 <table>
 <tr>
-<td width="25%" align="center"><strong>151</strong><br><sub>ఎఫెక్ట్‌లు</sub></td>
-<td width="25%" align="center"><strong>151</strong><br><sub>ధృవీకరించిన GIFలు</sub></td>
-<td width="25%" align="center"><strong>149</strong><br><sub>స్థానిక Demo</sub></td>
+<td width="25%" align="center"><strong>152</strong><br><sub>ఎఫెక్ట్‌లు</sub></td>
+<td width="25%" align="center"><strong>152</strong><br><sub>ధృవీకరించిన GIFలు</sub></td>
+<td width="25%" align="center"><strong>150</strong><br><sub>స్థానిక Demo</sub></td>
 <td width="25%" align="center"><strong>80/100</strong><br><sub>క్యురేటోరియల్ ప్రవేశ స్కోర్</sub></td>
 </tr>
 </table>

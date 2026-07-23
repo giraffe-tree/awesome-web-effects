@@ -6,8 +6,8 @@
 
 視覚レビューで80点以上を獲得した Demo のみを公開し、各項目に実際のプレビュー、最小コード、実装 prompt を用意しています。
 
-[![151 curated effects](https://img.shields.io/badge/curated_effects-151-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
-[![151 real GIF previews](https://img.shields.io/badge/real_GIF_previews-151-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
+[![152 curated effects](https://img.shields.io/badge/curated_effects-152-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
+[![152 real GIF previews](https://img.shields.io/badge/real_GIF_previews-152-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
 [![GitHub stars](https://img.shields.io/github/stars/giraffe-tree/awesome-web-effects?style=flat-square&color=0969da)](https://github.com/giraffe-tree/awesome-web-effects/stargazers)
 
 [**エフェクトを見る →**](https://giraffe-tree.github.io/awesome-web-effects/?lang=ja) · [Language metadata / 语言资料](../docs/LANGUAGES.md)
@@ -18,7 +18,7 @@
 
 ---
 
-<h3 align="center">14 検証済み GIF / 151 エフェクト</h3>
+<h3 align="center">14 検証済み GIF / 152 エフェクト</h3>
 
 <table>
 <tr>
@@ -121,9 +121,9 @@ Review the current project using https://giraffe-tree.github.io/awesome-web-effe
 
 <table>
 <tr>
-<td width="25%" align="center"><strong>151</strong><br><sub>エフェクト</sub></td>
-<td width="25%" align="center"><strong>151</strong><br><sub>検証済み GIF</sub></td>
-<td width="25%" align="center"><strong>149</strong><br><sub>ローカル Demo</sub></td>
+<td width="25%" align="center"><strong>152</strong><br><sub>エフェクト</sub></td>
+<td width="25%" align="center"><strong>152</strong><br><sub>検証済み GIF</sub></td>
+<td width="25%" align="center"><strong>150</strong><br><sub>ローカル Demo</sub></td>
 <td width="25%" align="center"><strong>80/100</strong><br><sub>キュレーション採用スコア</sub></td>
 </tr>
 </table>

@@ -6,8 +6,8 @@
 
 Solo se publican demos revisadas visualmente con 80 puntos o más; cada una incluye una vista previa real, código mínimo y un prompt de implementación.
 
-[![151 curated effects](https://img.shields.io/badge/curated_effects-151-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
-[![151 real GIF previews](https://img.shields.io/badge/real_GIF_previews-151-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
+[![152 curated effects](https://img.shields.io/badge/curated_effects-152-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
+[![152 real GIF previews](https://img.shields.io/badge/real_GIF_previews-152-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
 [![GitHub stars](https://img.shields.io/github/stars/giraffe-tree/awesome-web-effects?style=flat-square&color=0969da)](https://github.com/giraffe-tree/awesome-web-effects/stargazers)
 
 [**Explorar efectos →**](https://giraffe-tree.github.io/awesome-web-effects/?lang=es) · [Language metadata / 语言资料](../docs/LANGUAGES.md)
@@ -18,7 +18,7 @@ Solo se publican demos revisadas visualmente con 80 puntos o más; cada una incl
 
 ---
 
-<h3 align="center">14 GIF verificados / 151 Efectos</h3>
+<h3 align="center">14 GIF verificados / 152 Efectos</h3>
 
 <table>
 <tr>
@@ -121,9 +121,9 @@ Elige primero el comportamiento. Después, la herramienta.
 
 <table>
 <tr>
-<td width="25%" align="center"><strong>151</strong><br><sub>Efectos</sub></td>
-<td width="25%" align="center"><strong>151</strong><br><sub>GIF verificados</sub></td>
-<td width="25%" align="center"><strong>149</strong><br><sub>Demo local</sub></td>
+<td width="25%" align="center"><strong>152</strong><br><sub>Efectos</sub></td>
+<td width="25%" align="center"><strong>152</strong><br><sub>GIF verificados</sub></td>
+<td width="25%" align="center"><strong>150</strong><br><sub>Demo local</sub></td>
 <td width="25%" align="center"><strong>80/100</strong><br><sub>Puntuación de admisión curatorial</sub></td>
 </tr>
 </table>

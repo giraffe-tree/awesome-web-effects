@@ -6,8 +6,8 @@
 
 صرف وہ Demo شائع ہوتے ہیں جو بصری جانچ میں 80 یا زیادہ اسکور کریں؛ ہر ایک کے ساتھ حقیقی preview، کم سے کم code اور implementation prompt ہوتا ہے۔
 
-[![151 curated effects](https://img.shields.io/badge/curated_effects-151-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
-[![151 real GIF previews](https://img.shields.io/badge/real_GIF_previews-151-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
+[![152 curated effects](https://img.shields.io/badge/curated_effects-152-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
+[![152 real GIF previews](https://img.shields.io/badge/real_GIF_previews-152-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
 [![GitHub stars](https://img.shields.io/github/stars/giraffe-tree/awesome-web-effects?style=flat-square&color=0969da)](https://github.com/giraffe-tree/awesome-web-effects/stargazers)
 
 [**اثرات دیکھیں →**](https://giraffe-tree.github.io/awesome-web-effects/?lang=ur) · [Language metadata / 语言资料](../docs/LANGUAGES.md)
@@ -18,7 +18,7 @@
 
 ---
 
-<h3 align="center">14 تصدیق شدہ GIF / 151 اثرات</h3>
+<h3 align="center">14 تصدیق شدہ GIF / 152 اثرات</h3>
 
 <table>
 <tr>
@@ -121,9 +121,9 @@ Review the current project using https://giraffe-tree.github.io/awesome-web-effe
 
 <table>
 <tr>
-<td width="25%" align="center"><strong>151</strong><br><sub>اثرات</sub></td>
-<td width="25%" align="center"><strong>151</strong><br><sub>تصدیق شدہ GIF</sub></td>
-<td width="25%" align="center"><strong>149</strong><br><sub>مقامی Demo</sub></td>
+<td width="25%" align="center"><strong>152</strong><br><sub>اثرات</sub></td>
+<td width="25%" align="center"><strong>152</strong><br><sub>تصدیق شدہ GIF</sub></td>
+<td width="25%" align="center"><strong>150</strong><br><sub>مقامی Demo</sub></td>
 <td width="25%" align="center"><strong>80/100</strong><br><sub>کیوریٹوریل داخلہ اسکور</sub></td>
 </tr>
 </table>

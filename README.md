@@ -6,8 +6,8 @@
 
 A visual atlas for the moment when you know the feeling you want, but not the words to describe the effect.
 
-[![151 curated effects](https://img.shields.io/badge/curated_effects-151-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
-[![151 real GIF previews](https://img.shields.io/badge/real_GIF_previews-151-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
+[![152 curated effects](https://img.shields.io/badge/curated_effects-152-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
+[![152 real GIF previews](https://img.shields.io/badge/real_GIF_previews-152-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
 [![GitHub stars](https://img.shields.io/github/stars/giraffe-tree/awesome-web-effects?style=flat-square&color=0969da)](https://github.com/giraffe-tree/awesome-web-effects/stargazers)
 
 [**Open the live visual catalog**](https://giraffe-tree.github.io/awesome-web-effects/?lang=en) · [Language metadata](docs/LANGUAGES.md)
@@ -103,7 +103,7 @@ A visual atlas for the moment when you know the feeling you want, but not the wo
 </tr>
 </table>
 
-<p align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en"><strong>Explore all 151 live effects →</strong></a></p>
+<p align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en"><strong>Explore all 152 live effects →</strong></a></p>
 
 <a id="agent-quick-start"></a>
 
@@ -121,9 +121,9 @@ Review the current project using https://giraffe-tree.github.io/awesome-web-effe
 
 <table>
 <tr>
-<td width="25%" align="center"><strong>151</strong><br><sub>admitted effects</sub></td>
-<td width="25%" align="center"><strong>151</strong><br><sub>real GIFs</sub></td>
-<td width="25%" align="center"><strong>149</strong><br><sub>runnable demos</sub></td>
+<td width="25%" align="center"><strong>152</strong><br><sub>admitted effects</sub></td>
+<td width="25%" align="center"><strong>152</strong><br><sub>real GIFs</sub></td>
+<td width="25%" align="center"><strong>150</strong><br><sub>runnable demos</sub></td>
 <td width="25%" align="center"><strong>80/100</strong><br><sub>minimum score</sub></td>
 </tr>
 </table>
@@ -148,10 +148,10 @@ This is an **effect-first**, curator-reviewed reference—not another repository
 | [Pointer & hover](https://giraffe-tree.github.io/awesome-web-effects/?lang=en#catalog) | 24 | 5 | Tilt, depth, custom cursors, magnetic motion, and image distortion. |
 | [Text & SVG](https://giraffe-tree.github.io/awesome-web-effects/?lang=en#catalog) | 23 | 3 | Typing, text splitting, vector drawing, handwriting, and SVG morphing. |
 | [Canvas & 2D](https://giraffe-tree.github.io/awesome-web-effects/?lang=en#catalog) | 45 | 3 | Scene graphs, creative coding, physics, drawing tools, and 2D renderers. |
-| [3D & WebGL](https://giraffe-tree.github.io/awesome-web-effects/?lang=en#catalog) | 13 | 3 | 3D engines, declarative renderers, shader layers, and post-processing. |
+| [3D & WebGL](https://giraffe-tree.github.io/awesome-web-effects/?lang=en#catalog) | 14 | 4 | 3D engines, declarative renderers, shader layers, and post-processing. |
 
 <details>
-<summary><strong>Open the complete 151-effect index</strong> — implementation, score, source and direct link</summary>
+<summary><strong>Open the complete 152-effect index</strong> — implementation, score, source and direct link</summary>
 
 <a id="animation"></a>
 
@@ -353,6 +353,7 @@ Scene graphs, creative coding, physics, drawing tools, and 2D renderers.
 
 | Effect | Recommended implementation | Curatorial score | AI homepage references (max 3) | Stars | Implementations | Status | Implementation |
 | --- | --- | ---: | --- | ---: | ---: | --- | --- |
+| [Topographic relief expedition globe](https://giraffe-tree.github.io/awesome-web-effects/?lang=en#topographic-relief-expedition-globe) | [Three.js](https://github.com/mrdoob/three.js) | **98/100** | — | 114,000 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/?lang=en#topographic-relief-expedition-globe) |
 | [Functional WebGL draw commands](https://giraffe-tree.github.io/awesome-web-effects/?lang=en#functional-webgl-draw-commands) | [regl](https://github.com/regl-project/regl) | **96/100** | — | 5,557 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/?lang=en#functional-webgl-draw-commands) |
 | [Human-calibrated DOM / GPU media registration](https://giraffe-tree.github.io/awesome-web-effects/?lang=en#dom-synced-shader-planes) | [Curtains.js](https://github.com/martinlaxenaire/curtainsjs) | **100/100** | — | 1,823 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/?lang=en#dom-synced-shader-planes) |
 | [Nearest-edge dot-matrix globe](https://giraffe-tree.github.io/awesome-web-effects/?lang=en#pointer-rotated-dot-matrix-globe) | [p5.js](https://github.com/processing/p5.js) | **93/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/?lang=en#pointer-rotated-dot-matrix-globe) |
@@ -382,14 +383,14 @@ Scene graphs, creative coding, physics, drawing tools, and 2D renderers.
 <details>
 <summary><strong>Curation, provenance and audit numbers</strong></summary>
 
-- 397 candidates audited: **151 admitted**, **246 rejected**.
-- 151 verified previews: 2 official captures and 149 captures from runnable local demos; 0 missing.
+- 398 candidates audited: **152 admitted**, **246 rejected**.
+- 152 verified previews: 2 official captures and 150 captures from runnable local demos; 0 missing.
 - Human review scores creativity, art direction, motion craft, legibility, creative transfer and evidence quality.
 - Admission requires 80/100 plus core-dimension minimums. Popularity never overrides the gate.
-- The verified GIF set is 23.98 MiB; every preview is 320×180, at most three seconds and below 1 MiB.
+- The verified GIF set is 24.26 MiB; every preview is 320×180, at most three seconds and below 1 MiB.
 - Stars are a 2026-07-23 snapshot. Recommendation sources and observed AI homepages remain separate relationships.
 
-Read the [current 397-candidate admission audit](research/demo-admission-audit-2026-07-23.md), the [100-company homepage research](research/ai-native-homepages-100.md), and the [preview provenance manifest](demo/gifs/provenance.json).
+Read the [current 398-candidate admission audit](research/demo-admission-audit-2026-07-23.md), the [100-company homepage research](research/ai-native-homepages-100.md), and the [preview provenance manifest](demo/gifs/provenance.json).
 
 </details>
 

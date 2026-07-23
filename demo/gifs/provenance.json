@@ -508,6 +508,17 @@
       "usageBasis": "original local mechanism demo using p5@2.3.0; verify license https://github.com/processing/p5.js/blob/HEAD/license.txt"
     },
     {
+      "effectId": "topographic-relief-expedition-globe",
+      "projectId": "mrdoob-three-js",
+      "sourceType": "demo",
+      "originUrl": "https://github.com/mrdoob/three.js",
+      "demoSourcePath": "demo/preview-demos/topographic-relief-expedition-globe.html",
+      "libraryVersion": "three@0.185.1; topojson-client@3.1.0; world-atlas@2.0.2",
+      "generatedAt": "2026-07-23",
+      "outputPath": "demo/gifs/captured/topographic-relief-expedition-globe.gif",
+      "usageBasis": "original local mechanism demo adapted from the user-owned Orogen relief project using bundled Three.js and atlas data; verify license https://github.com/mrdoob/three.js/blob/HEAD/LICENSE"
+    },
+    {
       "effectId": "interactive-vector-state-machine",
       "projectId": "motiondivision-motion",
       "sourceType": "demo",

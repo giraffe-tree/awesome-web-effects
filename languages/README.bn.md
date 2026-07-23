@@ -6,8 +6,8 @@
 
 শুধু দৃশ্যগতভাবে পর্যালোচিত ৮০ বা তার বেশি স্কোরের Demo প্রকাশিত হয়; প্রতিটিতে বাস্তব preview, ন্যূনতম code এবং implementation prompt থাকে।
 
-[![151 curated effects](https://img.shields.io/badge/curated_effects-151-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
-[![151 real GIF previews](https://img.shields.io/badge/real_GIF_previews-151-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
+[![152 curated effects](https://img.shields.io/badge/curated_effects-152-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
+[![152 real GIF previews](https://img.shields.io/badge/real_GIF_previews-152-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
 [![GitHub stars](https://img.shields.io/github/stars/giraffe-tree/awesome-web-effects?style=flat-square&color=0969da)](https://github.com/giraffe-tree/awesome-web-effects/stargazers)
 
 [**ইফেক্ট দেখুন →**](https://giraffe-tree.github.io/awesome-web-effects/?lang=bn) · [Language metadata / 语言资料](../docs/LANGUAGES.md)
@@ -18,7 +18,7 @@
 
 ---
 
-<h3 align="center">14 যাচাইকৃত GIF / 151 ইফেক্ট</h3>
+<h3 align="center">14 যাচাইকৃত GIF / 152 ইফেক্ট</h3>
 
 <table>
 <tr>
@@ -121,9 +121,9 @@ Review the current project using https://giraffe-tree.github.io/awesome-web-effe
 
 <table>
 <tr>
-<td width="25%" align="center"><strong>151</strong><br><sub>ইফেক্ট</sub></td>
-<td width="25%" align="center"><strong>151</strong><br><sub>যাচাইকৃত GIF</sub></td>
-<td width="25%" align="center"><strong>149</strong><br><sub>লোকাল Demo</sub></td>
+<td width="25%" align="center"><strong>152</strong><br><sub>ইফেক্ট</sub></td>
+<td width="25%" align="center"><strong>152</strong><br><sub>যাচাইকৃত GIF</sub></td>
+<td width="25%" align="center"><strong>150</strong><br><sub>লোকাল Demo</sub></td>
 <td width="25%" align="center"><strong>80/100</strong><br><sub>কিউরেটোরিয়াল ভর্তি স্কোর</sub></td>
 </tr>
 </table>

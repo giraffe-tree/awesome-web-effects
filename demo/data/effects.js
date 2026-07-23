@@ -61,6 +61,56 @@ export const categories = [
 
 const existingEffects = [
   {
+    "id": "topographic-relief-expedition-globe",
+    "category": "webgl",
+    "name": "Topographic relief expedition globe",
+    "nameZh": "地形浮雕探险地球",
+    "addedIn": "2026-effect-expansion",
+    "research": {
+      "sourceUrl": "https://orogen.giraffetree.cn",
+      "difference": "Unlike the existing orthographic dot-matrix network globe, this effect uses a genuinely tessellated Three.js sphere, real World Atlas land geometry, a deterministic authored mountain field, vertex displacement, contour shading, atmospheric depth, camera zoom, and summit-to-summit expedition focus.",
+      "verifiedAt": "2026-07-23"
+    },
+    "behavior": {
+      "trigger": "trusted mouse/touch/pen drag, wheel zoom, arrow and zoom keys, Next summit activation, or Home/Escape reset",
+      "response": "Orbit and zoom a displaced topographic Earth, then focus Everest, Aconcagua, Denali, or Kilimanjaro while the summit marker and expedition evidence remain spatially registered",
+      "timing": "direct human-owned orbit and zoom plus a finite 680 ms summit focus; static initial frame with no auto-rotation, autoplay, fallback, synthetic input, or preview-clock motion",
+      "layer": "full-stage Three.js WebGL Earth with real atlas land mask, authored mountain relief, contour shader, atmosphere, star field, and semantic expedition controls"
+    },
+    "prompt": "Implement the \"Topographic relief expedition globe\" (地形浮雕探险地球) web interaction effect in the current project.\n\nUse Three.js with real atlas land geometry and a deterministic relief texture. Build a sufficiently tessellated sphere whose vertex shader displaces land by the relief field, then use fragment shading for ocean depth, alpine color, contour bands, latitude/longitude registration lines, and atmospheric rim light. The globe must be a real WebGL scene, not a flat map, CSS sphere, video, or reused dot-matrix approximation.\n\nInteraction contract:\n- Trigger: trusted pointer/touch drag, wheel zoom, arrow and +/- keys, visible summit control, or Home/Escape reset\n- Visual response: orbit and zoom the relief globe, then focus a named summit while its marker, height, range, and position stay spatially registered\n- Timing relationship: direct orbit and zoom plus a finite human-started focus transition; no automatic rotation or capture-clock mutation\n- Page layer: Three.js Earth and stars below accessible expedition controls and live summit evidence\n\nRequirements:\n- Keep the initial frame meaningful and fully static until trusted input.\n- Use deterministic local data and bundled dependencies; do not depend on remote runtime assets.\n- Preserve pointer capture, touch behavior, keyboard controls, responsive composition, prefers-reduced-motion, rendering cleanup, and context-loss-safe failure reporting.\n- Keep the displaced globe visually distinct from a dotted network globe by making land shape, relief, contour bands, light, and summit focus the primary evidence.\n- Expose auditable scene state and verify the real WebGL context, atlas texture, geometry density, draw calls, controls, and no-autoplay contract.\n\nStart from this minimal API shape:\n\n```js\nimport * as THREE from 'three';\nconst geometry = new THREE.SphereGeometry(1, 160, 96);\nconst material = new THREE.ShaderMaterial({ uniforms: { uRelief: { value: reliefTexture } }, vertexShader, fragmentShader });\nconst globe = new THREE.Mesh(geometry, material);\nscene.add(globe);\n```\n\nReturn the working code, files changed, evidence provenance, and a short explanation of how to tune relief exaggeration, contour density, focus duration, camera range, and reduced-motion behavior.",
+    "sources": [
+      {
+        "projectId": "mrdoob-three-js",
+        "recommended": true,
+        "snippet": "import * as THREE from 'three';\nconst globe = new THREE.Mesh(new THREE.SphereGeometry(1, 160, 96), new THREE.ShaderMaterial({ uniforms: { uRelief: { value: reliefTexture } }, vertexShader, fragmentShader }));\nscene.add(globe);",
+        "preview": "captured/topographic-relief-expedition-globe",
+        "previewKind": "local-demo-capture",
+        "demoPath": "preview-demos/dist/topographic-relief-expedition-globe.html",
+        "demoSourcePath": "preview-demos/topographic-relief-expedition-globe.html",
+        "originUrl": "https://github.com/mrdoob/three.js",
+        "referenceUrl": "https://orogen.giraffetree.cn",
+        "previewRecipe": null
+      }
+    ],
+    "order": 152,
+    "relatedParties": [],
+    "admission": {
+      "policyVersion": "2026-07-17",
+      "scores": {
+        "creativity": 19,
+        "artDirection": 20,
+        "motion": 19,
+        "clarity": 15,
+        "inspiration": 15,
+        "evidence": 10
+      },
+      "total": 98,
+      "decision": "admit",
+      "reasonCode": "passed",
+      "rationaleZh": "真实 World Atlas 陆地、多段山系高程场、15,000 级球体细分、顶点位移、等高线与大气层共同构成可辨认的浮雕地球；真人拖拽、缩放和切换高峰时，空间标记与语义证据保持配准，且与既有点阵网络地球明显不同。"
+    }
+  },
+  {
     "id": "connected-fragment-story-stage",
     "category": "animation",
     "name": "Connected fragment story stage",
@@ -1305,6 +1355,15 @@ export const projects = [
     "stars": 15479,
     "addedIn": "baseline",
     "legacy": true
+  },
+  {
+    "id": "mrdoob-three-js",
+    "name": "Three.js",
+    "repo": "mrdoob/three.js",
+    "url": "https://github.com/mrdoob/three.js",
+    "stars": 114000,
+    "addedIn": "2026-effect-expansion",
+    "legacy": false
   },
   {
     "id": "processing-p5-js",

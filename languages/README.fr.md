@@ -6,8 +6,8 @@
 
 Seules les démos évaluées visuellement et notées au moins 80 sont publiées ; chacune propose un aperçu réel, un code minimal et un prompt d’implémentation.
 
-[![151 curated effects](https://img.shields.io/badge/curated_effects-151-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
-[![151 real GIF previews](https://img.shields.io/badge/real_GIF_previews-151-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
+[![152 curated effects](https://img.shields.io/badge/curated_effects-152-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
+[![152 real GIF previews](https://img.shields.io/badge/real_GIF_previews-152-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
 [![GitHub stars](https://img.shields.io/github/stars/giraffe-tree/awesome-web-effects?style=flat-square&color=0969da)](https://github.com/giraffe-tree/awesome-web-effects/stargazers)
 
 [**Parcourir les effets →**](https://giraffe-tree.github.io/awesome-web-effects/?lang=fr) · [Language metadata / 语言资料](../docs/LANGUAGES.md)
@@ -18,7 +18,7 @@ Seules les démos évaluées visuellement et notées au moins 80 sont publiées 
 
 ---
 
-<h3 align="center">14 GIF vérifiés / 151 Effets</h3>
+<h3 align="center">14 GIF vérifiés / 152 Effets</h3>
 
 <table>
 <tr>
@@ -121,9 +121,9 @@ Choisissez d’abord le comportement, puis l’outil.
 
 <table>
 <tr>
-<td width="25%" align="center"><strong>151</strong><br><sub>Effets</sub></td>
-<td width="25%" align="center"><strong>151</strong><br><sub>GIF vérifiés</sub></td>
-<td width="25%" align="center"><strong>149</strong><br><sub>Démo locale</sub></td>
+<td width="25%" align="center"><strong>152</strong><br><sub>Effets</sub></td>
+<td width="25%" align="center"><strong>152</strong><br><sub>GIF vérifiés</sub></td>
+<td width="25%" align="center"><strong>150</strong><br><sub>Démo locale</sub></td>
 <td width="25%" align="center"><strong>80/100</strong><br><sub>Note d’admission éditoriale</sub></td>
 </tr>
 </table>

@@ -395,6 +395,15 @@
       "gifPath": "gifs/captured/pointer-rotated-dot-matrix-globe.gif"
     },
     {
+      "id": "topographic-relief-expedition-globe",
+      "library": "three@0.185.1 + topojson-client@3.1.0 + world-atlas@2.0.2",
+      "renderer": "webgl",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/topographic-relief-expedition-globe.html",
+      "demoSourcePath": "preview-demos/topographic-relief-expedition-globe.html",
+      "gifPath": "gifs/captured/topographic-relief-expedition-globe.gif"
+    },
+    {
       "id": "interactive-vector-state-machine",
       "library": "motion@12.42.2",
       "renderer": "svg",

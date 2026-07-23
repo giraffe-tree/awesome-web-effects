@@ -6,8 +6,8 @@
 
 当你脑中已经有想要的感觉，却不知道如何描述特效时，这里就是一张可直接观看的 Web 交互图鉴。
 
-[![151 curated effects](https://img.shields.io/badge/curated_effects-151-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
-[![151 real GIF previews](https://img.shields.io/badge/real_GIF_previews-151-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
+[![152 curated effects](https://img.shields.io/badge/curated_effects-152-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
+[![152 real GIF previews](https://img.shields.io/badge/real_GIF_previews-152-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
 [![GitHub stars](https://img.shields.io/github/stars/giraffe-tree/awesome-web-effects?style=flat-square&color=0969da)](https://github.com/giraffe-tree/awesome-web-effects/stargazers)
 
 [**打开在线视觉目录**](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans) · [语言资料](../docs/LANGUAGES.md)
@@ -103,7 +103,7 @@
 </tr>
 </table>
 
-<p align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans"><strong>查看全部 151 个实时效果 →</strong></a></p>
+<p align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans"><strong>查看全部 152 个实时效果 →</strong></a></p>
 
 <a id="agent-quick-start"></a>
 
@@ -121,9 +121,9 @@
 
 <table>
 <tr>
-<td width="25%" align="center"><strong>151</strong><br><sub>入选效果</sub></td>
-<td width="25%" align="center"><strong>151</strong><br><sub>真实 GIF</sub></td>
-<td width="25%" align="center"><strong>149</strong><br><sub>可运行 Demo</sub></td>
+<td width="25%" align="center"><strong>152</strong><br><sub>入选效果</sub></td>
+<td width="25%" align="center"><strong>152</strong><br><sub>真实 GIF</sub></td>
+<td width="25%" align="center"><strong>150</strong><br><sub>可运行 Demo</sub></td>
 <td width="25%" align="center"><strong>80/100</strong><br><sub>最低准入分</sub></td>
 </tr>
 </table>
@@ -148,10 +148,10 @@
 | [指针与悬停](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#catalog) | 24 | 5 | 倾斜、景深、自定义光标、磁性运动与图像扭曲。 |
 | [文本与 SVG](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#catalog) | 23 | 3 | 打字、文字拆分、矢量绘制、手写与 SVG 变形。 |
 | [Canvas 与 2D](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#catalog) | 45 | 3 | 场景图、创意编程、物理、绘图工具与 2D 渲染器。 |
-| [3D 与 WebGL](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#catalog) | 13 | 3 | 3D 引擎、声明式渲染器、着色器图层与后期处理。 |
+| [3D 与 WebGL](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#catalog) | 14 | 4 | 3D 引擎、声明式渲染器、着色器图层与后期处理。 |
 
 <details>
-<summary><strong>展开完整 151 项效果索引</strong> — 实现、评分、来源与直达链接</summary>
+<summary><strong>展开完整 152 项效果索引</strong> — 实现、评分、来源与直达链接</summary>
 
 <a id="animation"></a>
 
@@ -353,6 +353,7 @@
 
 | 效果 | 推荐实现 | 策展评分 | AI 官网参考（最多 3 家） | Stars | 实现数 | 状态 | 实现 |
 | --- | --- | ---: | --- | ---: | ---: | --- | --- |
+| [地形浮雕探险地球](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#topographic-relief-expedition-globe) | [Three.js](https://github.com/mrdoob/three.js) | **98/100** | — | 114,000 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#topographic-relief-expedition-globe) |
 | [函数式 WebGL 绘制命令](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#functional-webgl-draw-commands) | [regl](https://github.com/regl-project/regl) | **96/100** | — | 5,557 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#functional-webgl-draw-commands) |
 | [人工校准的 DOM / GPU 媒体配准](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#dom-synced-shader-planes) | [Curtains.js](https://github.com/martinlaxenaire/curtainsjs) | **100/100** | — | 1,823 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#dom-synced-shader-planes) |
 | [最近边缘节点点阵地球](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#pointer-rotated-dot-matrix-globe) | [p5.js](https://github.com/processing/p5.js) | **93/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#pointer-rotated-dot-matrix-globe) |
@@ -382,14 +383,14 @@
 <details>
 <summary><strong>评分、来源与审计数据</strong></summary>
 
-- 已审计 397 个候选：**151 个入选**，**246 个拒绝**。
-- 151 个已核验预览：2 个官方素材、149 个可运行本地 Demo 录制；缺失数为 0。
+- 已审计 398 个候选：**152 个入选**，**246 个拒绝**。
+- 152 个已核验预览：2 个官方素材、150 个可运行本地 Demo 录制；缺失数为 0。
 - 人工评审覆盖创意、艺术完成度、动效编排、效果辨识、创作迁移和证据质量。
 - 准入要求 80/100，并同时通过核心维度最低分；流行度不能覆盖质量门槛。
-- 已核验 GIF 总计 23.98 MiB；每个预览为 320×180、最长三秒且小于 1 MiB。
+- 已核验 GIF 总计 24.26 MiB；每个预览为 320×180、最长三秒且小于 1 MiB。
 - Stars 是 2026-07-23 快照；“推荐实现”与“在哪家 AI 官网观察到”始终是两种关系。
 
-继续阅读 [397 个候选的准入审计](../research/demo-admission-audit-2026-07-23.md)、[100 家 AI 公司主页特效调研](../research/ai-native-homepages-100.md)与[预览来源清单](../demo/gifs/provenance.json)。
+继续阅读 [398 个候选的准入审计](../research/demo-admission-audit-2026-07-23.md)、[100 家 AI 公司主页特效调研](../research/ai-native-homepages-100.md)与[预览来源清单](../demo/gifs/provenance.json)。
 
 </details>
 

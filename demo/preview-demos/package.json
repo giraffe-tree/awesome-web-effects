@@ -17,8 +17,11 @@
     "motion": "12.42.2",
     "p5": "2.3.0",
     "regl": "2.1.1",
+    "three": "0.185.1",
+    "topojson-client": "3.1.0",
     "vanilla-tilt": "1.8.1",
-    "vivus": "0.4.6"
+    "vivus": "0.4.6",
+    "world-atlas": "2.0.2"
   },
   "devDependencies": {
     "vite": "8.1.5"

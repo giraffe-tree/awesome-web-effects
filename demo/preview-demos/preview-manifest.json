@@ -1329,6 +1329,15 @@
       "demoPath": "preview-demos/dist/procedural-folding-kaleidoscope.html",
       "demoSourcePath": "preview-demos/procedural-folding-kaleidoscope.html",
       "gifPath": "gifs/captured/procedural-folding-kaleidoscope.gif"
+    },
+    {
+      "id": "connected-fragment-story-stage",
+      "library": "motion@12.42.2",
+      "renderer": "dom",
+      "runtimeAssertion": true,
+      "demoPath": "preview-demos/dist/connected-fragment-story-stage.html",
+      "demoSourcePath": "preview-demos/connected-fragment-story-stage.html",
+      "gifPath": "gifs/captured/connected-fragment-story-stage.gif"
     }
   ]
 }

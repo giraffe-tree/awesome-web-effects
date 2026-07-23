@@ -6,8 +6,8 @@
 
 Seules les démos évaluées visuellement et notées au moins 80 sont publiées ; chacune propose un aperçu réel, un code minimal et un prompt d’implémentation.
 
-[![150 curated effects](https://img.shields.io/badge/curated_effects-150-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
-[![150 real GIF previews](https://img.shields.io/badge/real_GIF_previews-150-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
+[![151 curated effects](https://img.shields.io/badge/curated_effects-151-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
+[![151 real GIF previews](https://img.shields.io/badge/real_GIF_previews-151-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
 [![GitHub stars](https://img.shields.io/github/stars/giraffe-tree/awesome-web-effects?style=flat-square&color=0969da)](https://github.com/giraffe-tree/awesome-web-effects/stargazers)
 
 [**Parcourir les effets →**](https://giraffe-tree.github.io/awesome-web-effects/?lang=fr) · [Language metadata / 语言资料](docs/LANGUAGES.md)
@@ -18,10 +18,15 @@ Seules les démos évaluées visuellement et notées au moins 80 sont publiées 
 
 ---
 
-<h3 align="center">14 GIF vérifiés / 150 Effets</h3>
+<h3 align="center">15 GIF vérifiés / 151 Effets</h3>
 
 <table>
 <tr>
+<td width="33%" align="center">
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=fr#connected-fragment-story-stage"><img src="demo/gifs/captured/connected-fragment-story-stage.gif" width="270" alt="Connected fragment story stage"></a>
+<br>
+<sub><strong>Connected fragment story stage</strong><br>Motion &amp; choreography · 95/100</sub>
+</td>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=fr#pinned-horizontal-scroll-scene"><img src="demo/gifs/captured/pinned-horizontal-scroll-scene.gif" width="270" alt="Pinned horizontal scroll scene"></a>
 <br>
@@ -32,13 +37,13 @@ Seules les démos évaluées visuellement et notées au moins 80 sont publiées 
 <br>
 <sub><strong>Semantic prompt revision workspace</strong><br>Text &amp; SVG · 100/100</sub>
 </td>
+</tr>
+<tr>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=fr#staggered-transform-choreography"><img src="demo/gifs/captured/staggered-transform-choreography.gif" width="270" alt="Staggered transform choreography"></a>
 <br>
 <sub><strong>Staggered transform choreography</strong><br>Motion &amp; choreography · 92/100</sub>
 </td>
-</tr>
-<tr>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=fr#motion-graphics-burst"><img src="demo/gifs/captured/motion-graphics-burst.gif" width="270" alt="Motion-graphics burst"></a>
 <br>
@@ -49,13 +54,13 @@ Seules les démos évaluées visuellement et notées au moins 80 sont publiées 
 <br>
 <sub><strong>Visually authored keyframe sequence</strong><br>Motion &amp; choreography · 84/100</sub>
 </td>
+</tr>
+<tr>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=fr#compact-svg-shape-tween"><img src="demo/gifs/captured/compact-svg-shape-tween.gif" width="270" alt="Compact SVG shape tween"></a>
 <br>
 <sub><strong>Compact SVG shape tween</strong><br>Motion &amp; choreography · 89/100</sub>
 </td>
-</tr>
-<tr>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=fr#filterable-grid-reflow"><img src="demo/gifs/captured/filterable-grid-reflow.gif" width="270" alt="Filterable grid reflow"></a>
 <br>
@@ -66,13 +71,13 @@ Seules les démos évaluées visuellement et notées au moins 80 sont publiées 
 <br>
 <sub><strong>Perspective tilt and glare</strong><br>Pointer &amp; hover · 90/100</sub>
 </td>
+</tr>
+<tr>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=fr#context-aware-custom-cursor"><img src="demo/gifs/mouse-follower.gif" width="270" alt="Context-aware custom cursor"></a>
 <br>
 <sub><strong>Context-aware custom cursor</strong><br>Pointer &amp; hover · 86/100</sub>
 </td>
-</tr>
-<tr>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=fr#displacement-map-image-hover"><img src="demo/gifs/hover-effect.gif" width="270" alt="Displacement-map image hover"></a>
 <br>
@@ -83,13 +88,13 @@ Seules les démos évaluées visuellement et notées au moins 80 sont publiées 
 <br>
 <sub><strong>SVG stroke drawing</strong><br>Text &amp; SVG · 86/100</sub>
 </td>
+</tr>
+<tr>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=fr#dom-aware-drag-spawned-fish-flock"><img src="demo/gifs/captured/dom-aware-drag-spawned-fish-flock.gif" width="270" alt="Human-released DOM-avoiding fish school"></a>
 <br>
 <sub><strong>Human-released DOM-avoiding fish school</strong><br>Canvas &amp; 2D · 100/100</sub>
 </td>
-</tr>
-<tr>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=fr#pointer-injected-gpu-fluid"><img src="demo/gifs/captured/pointer-injected-gpu-fluid.gif" width="270" alt="Stage haze colour lab"></a>
 <br>
@@ -121,9 +126,9 @@ Choisissez d’abord le comportement, puis l’outil.
 
 <table>
 <tr>
-<td width="25%" align="center"><strong>150</strong><br><sub>Effets</sub></td>
-<td width="25%" align="center"><strong>150</strong><br><sub>GIF vérifiés</sub></td>
-<td width="25%" align="center"><strong>148</strong><br><sub>Démo locale</sub></td>
+<td width="25%" align="center"><strong>151</strong><br><sub>Effets</sub></td>
+<td width="25%" align="center"><strong>151</strong><br><sub>GIF vérifiés</sub></td>
+<td width="25%" align="center"><strong>149</strong><br><sub>Démo locale</sub></td>
 <td width="25%" align="center"><strong>80/100</strong><br><sub>Note d’admission éditoriale</sub></td>
 </tr>
 </table>

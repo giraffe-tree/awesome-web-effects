@@ -6,8 +6,8 @@
 
 Demo da aka duba a gani kuma suka samu maki 80 ko fiye kawai ake wallafawa; kowanne yana da preview na gaske, ƙaramin code da prompt na aiwatarwa.
 
-[![150 curated effects](https://img.shields.io/badge/curated_effects-150-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
-[![150 real GIF previews](https://img.shields.io/badge/real_GIF_previews-150-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
+[![151 curated effects](https://img.shields.io/badge/curated_effects-151-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
+[![151 real GIF previews](https://img.shields.io/badge/real_GIF_previews-151-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
 [![GitHub stars](https://img.shields.io/github/stars/giraffe-tree/awesome-web-effects?style=flat-square&color=0969da)](https://github.com/giraffe-tree/awesome-web-effects/stargazers)
 
 [**Duba tasirai →**](https://giraffe-tree.github.io/awesome-web-effects/?lang=ha) · [Language metadata / 语言资料](docs/LANGUAGES.md)
@@ -18,10 +18,15 @@ Demo da aka duba a gani kuma suka samu maki 80 ko fiye kawai ake wallafawa; kowa
 
 ---
 
-<h3 align="center">14 GIF da aka tabbatar / 150 Tasirai</h3>
+<h3 align="center">15 GIF da aka tabbatar / 151 Tasirai</h3>
 
 <table>
 <tr>
+<td width="33%" align="center">
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=ha#connected-fragment-story-stage"><img src="demo/gifs/captured/connected-fragment-story-stage.gif" width="270" alt="Connected fragment story stage"></a>
+<br>
+<sub><strong>Connected fragment story stage</strong><br>Motion &amp; choreography · 95/100</sub>
+</td>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=ha#pinned-horizontal-scroll-scene"><img src="demo/gifs/captured/pinned-horizontal-scroll-scene.gif" width="270" alt="Pinned horizontal scroll scene"></a>
 <br>
@@ -32,13 +37,13 @@ Demo da aka duba a gani kuma suka samu maki 80 ko fiye kawai ake wallafawa; kowa
 <br>
 <sub><strong>Semantic prompt revision workspace</strong><br>Text &amp; SVG · 100/100</sub>
 </td>
+</tr>
+<tr>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=ha#staggered-transform-choreography"><img src="demo/gifs/captured/staggered-transform-choreography.gif" width="270" alt="Staggered transform choreography"></a>
 <br>
 <sub><strong>Staggered transform choreography</strong><br>Motion &amp; choreography · 92/100</sub>
 </td>
-</tr>
-<tr>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=ha#motion-graphics-burst"><img src="demo/gifs/captured/motion-graphics-burst.gif" width="270" alt="Motion-graphics burst"></a>
 <br>
@@ -49,13 +54,13 @@ Demo da aka duba a gani kuma suka samu maki 80 ko fiye kawai ake wallafawa; kowa
 <br>
 <sub><strong>Visually authored keyframe sequence</strong><br>Motion &amp; choreography · 84/100</sub>
 </td>
+</tr>
+<tr>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=ha#compact-svg-shape-tween"><img src="demo/gifs/captured/compact-svg-shape-tween.gif" width="270" alt="Compact SVG shape tween"></a>
 <br>
 <sub><strong>Compact SVG shape tween</strong><br>Motion &amp; choreography · 89/100</sub>
 </td>
-</tr>
-<tr>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=ha#filterable-grid-reflow"><img src="demo/gifs/captured/filterable-grid-reflow.gif" width="270" alt="Filterable grid reflow"></a>
 <br>
@@ -66,13 +71,13 @@ Demo da aka duba a gani kuma suka samu maki 80 ko fiye kawai ake wallafawa; kowa
 <br>
 <sub><strong>Perspective tilt and glare</strong><br>Pointer &amp; hover · 90/100</sub>
 </td>
+</tr>
+<tr>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=ha#context-aware-custom-cursor"><img src="demo/gifs/mouse-follower.gif" width="270" alt="Context-aware custom cursor"></a>
 <br>
 <sub><strong>Context-aware custom cursor</strong><br>Pointer &amp; hover · 86/100</sub>
 </td>
-</tr>
-<tr>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=ha#displacement-map-image-hover"><img src="demo/gifs/hover-effect.gif" width="270" alt="Displacement-map image hover"></a>
 <br>
@@ -83,13 +88,13 @@ Demo da aka duba a gani kuma suka samu maki 80 ko fiye kawai ake wallafawa; kowa
 <br>
 <sub><strong>SVG stroke drawing</strong><br>Text &amp; SVG · 86/100</sub>
 </td>
+</tr>
+<tr>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=ha#dom-aware-drag-spawned-fish-flock"><img src="demo/gifs/captured/dom-aware-drag-spawned-fish-flock.gif" width="270" alt="Human-released DOM-avoiding fish school"></a>
 <br>
 <sub><strong>Human-released DOM-avoiding fish school</strong><br>Canvas &amp; 2D · 100/100</sub>
 </td>
-</tr>
-<tr>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=ha#pointer-injected-gpu-fluid"><img src="demo/gifs/captured/pointer-injected-gpu-fluid.gif" width="270" alt="Stage haze colour lab"></a>
 <br>
@@ -121,9 +126,9 @@ Zaɓi hali farko. Zaɓi kayan aiki daga baya.
 
 <table>
 <tr>
-<td width="25%" align="center"><strong>150</strong><br><sub>Tasirai</sub></td>
-<td width="25%" align="center"><strong>150</strong><br><sub>GIF da aka tabbatar</sub></td>
-<td width="25%" align="center"><strong>148</strong><br><sub>Demo na gida</sub></td>
+<td width="25%" align="center"><strong>151</strong><br><sub>Tasirai</sub></td>
+<td width="25%" align="center"><strong>151</strong><br><sub>GIF da aka tabbatar</sub></td>
+<td width="25%" align="center"><strong>149</strong><br><sub>Demo na gida</sub></td>
 <td width="25%" align="center"><strong>80/100</strong><br><sub>Makin shiga zaɓe</sub></td>
 </tr>
 </table>

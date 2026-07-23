@@ -1650,6 +1650,17 @@
       "generatedAt": "2026-07-20",
       "outputPath": "demo/gifs/captured/procedural-folding-kaleidoscope.gif",
       "usageBasis": "original local mechanism demo using p5@2.3.0; verify license https://github.com/processing/p5.js/blob/HEAD/license.txt"
+    },
+    {
+      "effectId": "connected-fragment-story-stage",
+      "projectId": "motiondivision-motion",
+      "sourceType": "demo",
+      "originUrl": "https://github.com/motiondivision/motion",
+      "demoSourcePath": "demo/preview-demos/connected-fragment-story-stage.html",
+      "libraryVersion": "motion@12.42.2",
+      "generatedAt": "2026-07-23",
+      "outputPath": "demo/gifs/captured/connected-fragment-story-stage.gif",
+      "usageBasis": "original local mechanism demo using motion@12.42.2; verify license https://github.com/motiondivision/motion/blob/HEAD/LICENSE.md"
     }
   ]
 }

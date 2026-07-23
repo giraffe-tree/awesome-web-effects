@@ -4714,6 +4714,24 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, web_frame_root: P
                 page.keyboard.press("ArrowRight")
             elif index == 32:
                 settle(650)
+        elif demo["id"] == "connected-fragment-story-stage":
+            if index == 2:
+                page.mouse.move(48, 68)
+            elif index == 4:
+                page.locator("#next-story").click()
+            elif index == 8:
+                page.mouse.move(270, 42)
+            elif index == 11:
+                page.locator("#next-story").click()
+            elif index == 16:
+                page.mouse.move(64, 148)
+            elif index == 19:
+                page.locator("#next-story").click()
+            elif index == 25:
+                page.locator("#fragment-stage").focus()
+                page.keyboard.press("Home")
+            elif index == 28:
+                page.mouse.move(252, 147)
         elif demo["id"] == "filterable-grid-reflow":
             if index == 3:
                 page.locator('.filter-button[data-filter="field-tools"]').click()
@@ -14520,6 +14538,32 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, web_frame_root: P
             or interaction["synchronizedLayers"] != expected_layers
         ):
             raise RuntimeError(f"{demo['id']} did not capture real five-layer scenario and action handoffs: {interaction!r}")
+    elif demo["id"] == "connected-fragment-story-stage":
+        interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+        if (
+            interaction["task"] != "trusted-human-connected-fragment-story"
+            or interaction["library"] != "motion@12.42.2"
+            or interaction["acceptedInputs"] != ["mouse", "touch", "pen", "keyboard", "visible-chapter-buttons"]
+            or interaction["automaticPlayback"]
+            or interaction["automaticFallback"]
+            or interaction["captureClockDriven"]
+            or interaction["syntheticInputDispatch"]
+            or not interaction["initialFrameStatic"]
+            or not interaction["initialStaticVerified"]
+            or interaction["inputCount"] < 8
+            or interaction["pointerMoveCount"] < 4
+            or interaction["pointerInputCount"] < 4
+            or interaction["buttonInputCount"] != 3
+            or interaction["keyboardInputCount"] != 1
+            or interaction["transitionCount"] != 4
+            or interaction["activeStep"] != 0
+            or interaction["activeWord"] != "Find"
+            or interaction["fragmentCount"] != 12
+            or interaction["lineGroupCount"] != 4
+            or interaction["lastInputTrusted"] is not True
+            or not interaction["ready"]
+        ):
+            raise RuntimeError(f"{demo['id']} did not capture a trusted four-chapter fragment-and-line story with pointer depth and explicit navigation: {interaction!r}")
     elif demo["id"] == "filterable-grid-reflow":
         page.wait_for_function(
             "window.__PREVIEW_INTERACTION_STATE__.layoutComplete && !window.__PREVIEW_INTERACTION_STATE__.arrangePending",

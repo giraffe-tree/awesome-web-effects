@@ -110,9 +110,9 @@ def main() -> int:
             }
             expect(language_select.locator("option")).to_have_count(20)
             language_select.select_option("zh-Hans")
-            expect(page.locator("#hero-story-eyebrow")).to_have_text("实时交互叙事")
+            expect(page.locator("#hero-story-eyebrow")).to_have_text("会讲故事的特效图鉴")
             language_select.select_option("en")
-            expect(page.locator("#hero-story-eyebrow")).to_have_text("Live interaction story")
+            expect(page.locator("#hero-story-eyebrow")).to_have_text("A living effect atlas")
 
             one_line_prompt = page.locator("#one-line-agent-prompt")
             expect(page.locator("#agent-prompt")).to_be_visible()
@@ -189,7 +189,7 @@ def main() -> int:
             rows = page.locator("#effect-list .effect-row")
             recommended_filter = page.locator('#filters [data-category="recommended"]')
             expect(recommended_filter).to_have_attribute("aria-pressed", "true")
-            expect(rows).to_have_count(14)
+            expect(rows).to_have_count(15)
             assert page.locator("#catalog-controls").evaluate("controls => getComputedStyle(controls).position") != "sticky"
             page.locator('#filters [data-category="all"]').click()
             expect(rows).to_have_count(expected_effect_count)
@@ -237,7 +237,7 @@ def main() -> int:
             expect(rows).to_have_count(expected_effect_count)
             recommended_filter.click()
             expect(recommended_filter).to_have_attribute("aria-pressed", "true")
-            expect(rows).to_have_count(14)
+            expect(rows).to_have_count(15)
             page.locator('#filters [data-category="all"]').click()
             expect(rows).to_have_count(expected_effect_count)
             page.wait_for_timeout(650)

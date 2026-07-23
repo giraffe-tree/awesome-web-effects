@@ -5,7 +5,7 @@ import { effectExpansion150BatchA3 } from './effect-expansion-a3-2026-07-20.js';
 import { effectExpansion150BatchB } from './effect-expansion-b-2026-07-20.js';
 
 // Curator-approved release catalog. Rejected candidates remain documented in the current dated admission audit.
-export const snapshotDate = "2026-07-20";
+export const snapshotDate = "2026-07-23";
 
 export const categories = [
   {
@@ -60,6 +60,62 @@ export const categories = [
 ];
 
 const existingEffects = [
+  {
+    "id": "connected-fragment-story-stage",
+    "category": "animation",
+    "name": "Connected fragment story stage",
+    "nameZh": "碎片连线叙事舞台",
+    "addedIn": "2026-ai-native-expansion",
+    "research": {
+      "sourceUrl": "https://www.anthropic.com/",
+      "difference": "Unlike a generic particle constellation or thumbnail collage, this effect gives four editorial questions separate semantic hubs, connects each hub to evidence fragments, and lets one trusted human action move the entire composition to the next narrative chapter.",
+      "verifiedAt": "2026-07-23"
+    },
+    "behavior": {
+      "trigger": "real chapter-button activation, stage click/tap, Arrow/Home/End keyboard input, or pointer movement over the stage",
+      "response": "Shift emphasis across four localized question hubs while their connected preview fragments, line groups, central word, and supporting copy change as one editorial story",
+      "timing": "human-owned finite chapter transitions with staggered Motion reveals; pointer depth is direct and reduced motion becomes an immediate static state",
+      "layer": "central thesis and controls above localized question hubs, animated evidence fragments, and an SVG connection network"
+    },
+    "prompt": "Implement the \"Connected fragment story stage\" (碎片连线叙事舞台) as an editorial opening scene, not a decorative thumbnail cloud.\n\nUse Motion (motiondivision/motion) to coordinate a central thesis, four semantic question hubs, small evidence fragments, and their SVG connection groups. Each trusted chapter action must update the active hub, central word, supporting copy, fragment emphasis, and line drawing from one shared step index.\n\nInteraction contract:\n- Trigger: visible chapter controls, stage click/tap, Arrow keys, Home/End, plus direct pointer movement for subtle depth\n- Visual response: the selected question hub brightens, its evidence fragments assemble, its lines draw in, and the central chapter copy changes\n- Timing relationship: finite human-owned transitions with a short stagger; no autonomous carousel or capture-clock mutation\n- Page layer: central semantic content above an aria-hidden fragment-and-line network\n\nRequirements:\n- Keep the first frame meaningful and static until a trusted user action.\n- Use real preview or editorial assets with declared provenance; never copy another brand's imagery.\n- Preserve buttons and keyboard navigation, pointer and touch behavior, responsive composition, prefers-reduced-motion, performance, cleanup, and legible central content.\n- Expose one shared chapter state so active buttons, copy, fragments, and lines cannot drift apart.\n- Test desktop and mobile browser layouts and report changed files, acceptance evidence, and remaining risks.\n\nStart from this minimal API shape:\n\n```js\nimport { animate, stagger } from 'motion';\nconst renderChapter = index => {\n  stage.dataset.step = index;\n  animate(stage.querySelectorAll(`[data-chapter=\"${index}\"]`), { opacity: [0.35, 1], scale: [0.86, 1] }, { duration: 0.42, delay: stagger(0.05) });\n  animate(stage.querySelectorAll(`[data-network=\"${index}\"] line`), { opacity: [0, 1], strokeDashoffset: [18, 0] }, { duration: 0.48, delay: stagger(0.04) });\n};\n```\n\nReturn the working code, the files changed, and a short explanation of how to tune hub placement, fragment density, stagger timing, pointer depth, and reduced-motion behavior.",
+    "sources": [
+      {
+        "projectId": "motiondivision-motion",
+        "recommended": true,
+        "snippet": "import { animate, stagger } from 'motion';\nconst renderChapter = index => {\n  stage.dataset.step = index;\n  animate(stage.querySelectorAll(`[data-chapter=\"${index}\"]`), { opacity: [0.35, 1], scale: [0.86, 1] }, { duration: 0.42, delay: stagger(0.05) });\n  animate(stage.querySelectorAll(`[data-network=\"${index}\"] line`), { opacity: [0, 1], strokeDashoffset: [18, 0] }, { duration: 0.48, delay: stagger(0.04) });\n};",
+        "preview": "captured/connected-fragment-story-stage",
+        "previewKind": "local-demo-capture",
+        "demoPath": "preview-demos/dist/connected-fragment-story-stage.html",
+        "demoSourcePath": "preview-demos/connected-fragment-story-stage.html",
+        "originUrl": "https://github.com/motiondivision/motion",
+        "referenceUrl": "https://motion.dev/docs/animate",
+        "previewRecipe": null
+      }
+    ],
+    "order": 151,
+    "relatedParties": [
+      {
+        "name": "Anthropic",
+        "url": "https://www.anthropic.com/",
+        "observedAs": "Connected hard-question hubs and editorial evidence fragments"
+      }
+    ],
+    "admission": {
+      "policyVersion": "2026-07-17",
+      "scores": {
+        "creativity": 18,
+        "artDirection": 19,
+        "motion": 18,
+        "clarity": 15,
+        "inspiration": 15,
+        "evidence": 10
+      },
+      "total": 95,
+      "decision": "admit",
+      "reasonCode": "passed",
+      "rationaleZh": "四个语义问题节点、证据碎片、连线与中心命题在同一真人步骤中同步交接；构图、叙事和实现边界清楚，且与普通粒子星座或缩略图拼贴明显不同。"
+    }
+  },
   {
     "id": "scroll-scrubbed-master-timeline",
     "category": "animation",
@@ -1134,6 +1190,7 @@ export const effects = [...existingEffects, ...expansionEffects, ...expansion100
 // source.recommended, which identifies the preferred implementation *within*
 // an effect rather than whether the effect itself is featured.
 export const featuredEffectIds = Object.freeze([
+  'connected-fragment-story-stage',
   'pinned-horizontal-scroll-scene',
   'prompt-select-replace-loop',
   'staggered-transform-choreography',

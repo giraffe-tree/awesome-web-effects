@@ -6,8 +6,8 @@
 
 当你脑中已经有想要的感觉，却不知道如何描述特效时，这里就是一张可直接观看的 Web 交互图鉴。
 
-[![150 curated effects](https://img.shields.io/badge/curated_effects-150-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
-[![150 real GIF previews](https://img.shields.io/badge/real_GIF_previews-150-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
+[![151 curated effects](https://img.shields.io/badge/curated_effects-151-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
+[![151 real GIF previews](https://img.shields.io/badge/real_GIF_previews-151-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
 [![GitHub stars](https://img.shields.io/github/stars/giraffe-tree/awesome-web-effects?style=flat-square&color=0969da)](https://github.com/giraffe-tree/awesome-web-effects/stargazers)
 
 [**打开在线视觉目录**](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans) · [语言资料](docs/LANGUAGES.md)
@@ -18,10 +18,15 @@
 
 ---
 
-<h3 align="center">14 个推荐效果 · 每个预览都是真实录制</h3>
+<h3 align="center">15 个推荐效果 · 每个预览都是真实录制</h3>
 
 <table>
 <tr>
+<td width="33%" align="center">
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#connected-fragment-story-stage"><img src="demo/gifs/captured/connected-fragment-story-stage.gif" width="270" alt="碎片连线叙事舞台"></a>
+<br>
+<sub><strong>碎片连线叙事舞台</strong><br>动画与编排 · 95/100</sub>
+</td>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#pinned-horizontal-scroll-scene"><img src="demo/gifs/captured/pinned-horizontal-scroll-scene.gif" width="270" alt="固定式横向滚动场景"></a>
 <br>
@@ -32,13 +37,13 @@
 <br>
 <sub><strong>语义提示词修订工作台</strong><br>文本与 SVG · 100/100</sub>
 </td>
+</tr>
+<tr>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#staggered-transform-choreography"><img src="demo/gifs/captured/staggered-transform-choreography.gif" width="270" alt="交错变换编排"></a>
 <br>
 <sub><strong>交错变换编排</strong><br>动画与编排 · 92/100</sub>
 </td>
-</tr>
-<tr>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#motion-graphics-burst"><img src="demo/gifs/captured/motion-graphics-burst.gif" width="270" alt="动态图形爆发"></a>
 <br>
@@ -49,13 +54,13 @@
 <br>
 <sub><strong>可视化编排关键帧序列</strong><br>动画与编排 · 84/100</sub>
 </td>
+</tr>
+<tr>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#compact-svg-shape-tween"><img src="demo/gifs/captured/compact-svg-shape-tween.gif" width="270" alt="轻量 SVG 形状补间"></a>
 <br>
 <sub><strong>轻量 SVG 形状补间</strong><br>动画与编排 · 89/100</sub>
 </td>
-</tr>
-<tr>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#filterable-grid-reflow"><img src="demo/gifs/captured/filterable-grid-reflow.gif" width="270" alt="可筛选网格重排"></a>
 <br>
@@ -66,13 +71,13 @@
 <br>
 <sub><strong>透视倾斜与高光</strong><br>指针与悬停 · 90/100</sub>
 </td>
+</tr>
+<tr>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#context-aware-custom-cursor"><img src="demo/gifs/mouse-follower.gif" width="270" alt="情境感知自定义光标"></a>
 <br>
 <sub><strong>情境感知自定义光标</strong><br>指针与悬停 · 86/100</sub>
 </td>
-</tr>
-<tr>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#displacement-map-image-hover"><img src="demo/gifs/hover-effect.gif" width="270" alt="位移贴图图像悬停"></a>
 <br>
@@ -83,13 +88,13 @@
 <br>
 <sub><strong>SVG 描边绘制</strong><br>文本与 SVG · 86/100</sub>
 </td>
+</tr>
+<tr>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#dom-aware-drag-spawned-fish-flock"><img src="demo/gifs/captured/dom-aware-drag-spawned-fish-flock.gif" width="270" alt="真人释放并避让 DOM 的鱼群"></a>
 <br>
 <sub><strong>真人释放并避让 DOM 的鱼群</strong><br>Canvas 与 2D · 100/100</sub>
 </td>
-</tr>
-<tr>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#pointer-injected-gpu-fluid"><img src="demo/gifs/captured/pointer-injected-gpu-fluid.gif" width="270" alt="舞台烟雾配色实验室"></a>
 <br>
@@ -103,7 +108,7 @@
 </tr>
 </table>
 
-<p align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans"><strong>查看全部 150 个实时效果 →</strong></a></p>
+<p align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans"><strong>查看全部 151 个实时效果 →</strong></a></p>
 
 <a id="agent-quick-start"></a>
 
@@ -121,9 +126,9 @@
 
 <table>
 <tr>
-<td width="25%" align="center"><strong>150</strong><br><sub>入选效果</sub></td>
-<td width="25%" align="center"><strong>150</strong><br><sub>真实 GIF</sub></td>
-<td width="25%" align="center"><strong>148</strong><br><sub>可运行 Demo</sub></td>
+<td width="25%" align="center"><strong>151</strong><br><sub>入选效果</sub></td>
+<td width="25%" align="center"><strong>151</strong><br><sub>真实 GIF</sub></td>
+<td width="25%" align="center"><strong>149</strong><br><sub>可运行 Demo</sub></td>
 <td width="25%" align="center"><strong>80/100</strong><br><sub>最低准入分</sub></td>
 </tr>
 </table>
@@ -142,7 +147,7 @@
 
 | 分类 | 效果数 | 来源项目 | 关注结果 |
 | --- | ---: | ---: | --- |
-| [动画与编排](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#catalog) | 18 | 7 | 时间线、弹簧、补间、类动画与框架原生动效。 |
+| [动画与编排](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#catalog) | 19 | 7 | 时间线、弹簧、补间、类动画与框架原生动效。 |
 | [滚动与揭示](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#catalog) | 12 | 3 | 平滑滚动、滚动关联场景、进入揭示、视差与整屏吸附。 |
 | [页面与布局](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#catalog) | 15 | 3 | 页面转场、FLIP 动画、筛选、紧密排布与布局重排。 |
 | [指针与悬停](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#catalog) | 24 | 5 | 倾斜、景深、自定义光标、磁性运动与图像扭曲。 |
@@ -151,7 +156,7 @@
 | [3D 与 WebGL](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#catalog) | 13 | 3 | 3D 引擎、声明式渲染器、着色器图层与后期处理。 |
 
 <details>
-<summary><strong>展开完整 150 项效果索引</strong> — 实现、评分、来源与直达链接</summary>
+<summary><strong>展开完整 151 项效果索引</strong> — 实现、评分、来源与直达链接</summary>
 
 <a id="animation"></a>
 
@@ -161,6 +166,7 @@
 
 | 效果 | 推荐实现 | 策展评分 | AI 官网参考（最多 3 家） | Stars | 实现数 | 状态 | 实现 |
 | --- | --- | ---: | --- | ---: | ---: | --- | --- |
+| [碎片连线叙事舞台](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#connected-fragment-story-stage) | [Motion](https://github.com/motiondivision/motion) | **95/100** | [Anthropic](https://www.anthropic.com/) | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#connected-fragment-story-stage) |
 | [滚动擦洗主时间线](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#scroll-scrubbed-master-timeline) | [GSAP](https://github.com/greensock/GSAP) | **85/100** | [Hebbia](https://www.hebbia.com/)<br>[Decagon](https://decagon.ai/) | 26,600 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#scroll-scrubbed-master-timeline) |
 | [共享布局弹簧变形](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#shared-layout-spring-morph) | [Motion](https://github.com/motiondivision/motion) | **94/100** | — | 32,819 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#shared-layout-spring-morph) |
 | [交错变换编排](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#staggered-transform-choreography) | [Anime.js](https://github.com/juliangarnier/anime) | **92/100** | [Factory](https://factory.ai/)<br>[Read AI](https://www.read.ai/)<br>[Cursor (Anysphere)](https://cursor.com/) | 71,056 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#staggered-transform-choreography) |
@@ -381,14 +387,14 @@
 <details>
 <summary><strong>评分、来源与审计数据</strong></summary>
 
-- 已审计 396 个候选：**150 个入选**，**246 个拒绝**。
-- 150 个已核验预览：2 个官方素材、148 个可运行本地 Demo 录制；缺失数为 0。
+- 已审计 397 个候选：**151 个入选**，**246 个拒绝**。
+- 151 个已核验预览：2 个官方素材、149 个可运行本地 Demo 录制；缺失数为 0。
 - 人工评审覆盖创意、艺术完成度、动效编排、效果辨识、创作迁移和证据质量。
 - 准入要求 80/100，并同时通过核心维度最低分；流行度不能覆盖质量门槛。
-- 已核验 GIF 总计 23.85 MiB；每个预览为 320×180、最长三秒且小于 1 MiB。
-- Stars 是 2026-07-20 快照；“推荐实现”与“在哪家 AI 官网观察到”始终是两种关系。
+- 已核验 GIF 总计 23.98 MiB；每个预览为 320×180、最长三秒且小于 1 MiB。
+- Stars 是 2026-07-23 快照；“推荐实现”与“在哪家 AI 官网观察到”始终是两种关系。
 
-继续阅读 [396 个候选的准入审计](research/demo-admission-audit-2026-07-20.md)、[100 家 AI 公司主页特效调研](research/ai-native-homepages-100.md)与[预览来源清单](demo/gifs/provenance.json)。
+继续阅读 [397 个候选的准入审计](research/demo-admission-audit-2026-07-23.md)、[100 家 AI 公司主页特效调研](research/ai-native-homepages-100.md)与[预览来源清单](demo/gifs/provenance.json)。
 
 </details>
 

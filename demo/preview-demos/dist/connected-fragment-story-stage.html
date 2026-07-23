@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Connected Fragment Story Stage</title>
+  <style>
+    :root {
+      --preview-background: #ece8de;
+      --paper: #f5f1e9;
+      --ink: #f6f2eb;
+      --quiet: #aaa79f;
+      --line: rgba(246, 242, 235, .28);
+      --coral: #df8f82;
+      --blue: #8ba8c8;
+      --moss: #8ca07a;
+      --amber: #e6b35e;
+    }
+
+    button { font: inherit; }
+
+    .preview-stage {
+      --pointer-x: 0px;
+      --pointer-y: 0px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      color: var(--ink);
+      background: #111210;
+      outline: none;
+      touch-action: none;
+    }
+
+    .preview-stage:focus-visible { box-shadow: inset 0 0 0 2px var(--coral); }
+
+    .network {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .network line {
+      stroke: var(--line);
+      stroke-width: .75;
+      stroke-dasharray: 2.4 2.4;
+      vector-effect: non-scaling-stroke;
+      transition: opacity .22s ease, stroke .22s ease;
+    }
+
+    .network [data-network] { opacity: .28; transition: opacity .3s ease; }
+    .preview-stage[data-step="0"] [data-network="0"],
+    .preview-stage[data-step="1"] [data-network="1"],
+    .preview-stage[data-step="2"] [data-network="2"],
+    .preview-stage[data-step="3"] [data-network="3"] { opacity: 1; }
+
+    .preview-stage[data-step="0"] [data-network="0"] line,
+    .preview-stage[data-step="1"] [data-network="1"] line,
+    .preview-stage[data-step="2"] [data-network="2"] line,
+    .preview-stage[data-step="3"] [data-network="3"] line { stroke: rgba(239, 178, 160, .74); }
+
+    .fragment {
+      --depth: 1;
+      position: absolute;
+      width: 22px;
+      height: 19px;
+      overflow: hidden;
+      border: 1px solid rgba(245, 241, 233, .18);
+      background: #22231f;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, .24);
+      opacity: .38;
+      transform: translate(var(--pointer-x), var(--pointer-y)) scale(.88);
+      transition: opacity .32s ease, transform .42s cubic-bezier(.22, 1, .36, 1), filter .32s ease;
+      pointer-events: none;
+    }
+
+    .fragment::before,
+    .fragment::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+    }
+
+    .fragment::after {
+      inset: 3px -4px auto;
+      height: 1px;
+      background: rgba(248, 244, 235, .65);
+      box-shadow: 0 4px rgba(248, 244, 235, .28), 0 8px rgba(248, 244, 235, .42);
+      transform: rotate(-18deg);
+    }
+
+    .fragment[data-tone="coral"] { background: linear-gradient(135deg, #351d27 0 49%, var(--coral) 50%); }
+    .fragment[data-tone="blue"] { background: linear-gradient(135deg, #c7d4de 0 34%, #577ba6 35% 67%, #172438 68%); }
+    .fragment[data-tone="moss"] { background: radial-gradient(circle at 30% 40%, #b5c59e 0 12%, transparent 13%), #31402d; }
+    .fragment[data-tone="amber"] { background: linear-gradient(155deg, #8c5925 0 44%, var(--amber) 45% 100%); }
+
+    .preview-stage[data-step="0"] .fragment[data-chapter="0"],
+    .preview-stage[data-step="1"] .fragment[data-chapter="1"],
+    .preview-stage[data-step="2"] .fragment[data-chapter="2"],
+    .preview-stage[data-step="3"] .fragment[data-chapter="3"] {
+      opacity: 1;
+      filter: saturate(1.2) brightness(1.12);
+      transform: translate(var(--pointer-x), var(--pointer-y)) scale(1);
+    }
+
+    .fragment:nth-of-type(1) { left: 5%; top: 18%; }
+    .fragment:nth-of-type(2) { left: 13%; top: 38%; width: 27px; }
+    .fragment:nth-of-type(3) { left: 19%; bottom: 11%; }
+    .fragment:nth-of-type(4) { left: 29%; top: 8%; width: 18px; }
+    .fragment:nth-of-type(5) { right: 30%; top: 7%; width: 25px; }
+    .fragment:nth-of-type(6) { right: 18%; top: 18%; }
+    .fragment:nth-of-type(7) { right: 7%; top: 37%; width: 28px; }
+    .fragment:nth-of-type(8) { right: 4%; bottom: 13%; }
+    .fragment:nth-of-type(9) { right: 22%; bottom: 7%; width: 26px; }
+    .fragment:nth-of-type(10) { left: 35%; bottom: 5%; width: 19px; }
+    .fragment:nth-of-type(11) { left: 3%; bottom: 4%; width: 18px; height: 15px; }
+    .fragment:nth-of-type(12) { right: 39%; top: 18%; width: 17px; height: 15px; }
+
+    .hub {
+      position: absolute;
+      z-index: 4;
+      max-width: 67px;
+      padding: 0;
+      border: 0;
+      color: rgba(214, 211, 203, .46);
+      background: transparent;
+      font: 500 6px/1.08 Georgia, serif;
+      text-align: left;
+      cursor: pointer;
+      transition: color .24s ease, transform .24s ease;
+    }
+
+    .hub:hover,
+    .hub:focus-visible { color: var(--paper); outline: none; }
+    .hub[aria-pressed="true"] { color: var(--paper); transform: translateY(-1px); }
+    .hub[data-step-index="0"] { left: 5%; top: 47%; }
+    .hub[data-step-index="1"] { right: 6%; top: 15%; text-align: right; }
+    .hub[data-step-index="2"] { left: 13%; bottom: 10%; }
+    .hub[data-step-index="3"] { right: 13%; bottom: 8%; text-align: right; }
+
+    .thesis {
+      position: relative;
+      z-index: 6;
+      width: 57%;
+      max-width: 186px;
+      text-align: center;
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      margin: 0 0 6px;
+      color: rgba(246, 242, 235, .55);
+      font: 750 4px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+    }
+
+    .thesis h1 {
+      margin: 0;
+      font: 400 clamp(17px, 7.5vw, 25px)/.92 Georgia, serif;
+      letter-spacing: -.045em;
+      text-wrap: balance;
+    }
+
+    .thesis h1 em { color: #f4c7b8; font-style: normal; }
+
+    .chapter-copy {
+      min-height: 20px;
+      margin: 7px auto 0;
+      max-width: 150px;
+      color: rgba(246, 242, 235, .58);
+      font: 520 5px/1.35 system-ui, sans-serif;
+    }
+
+    .chapter-word {
+      display: inline-block;
+      margin-right: 4px;
+      color: #f4c7b8;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    #next-story {
+      position: absolute;
+      z-index: 9;
+      left: 50%;
+      bottom: 17px;
+      min-height: 17px;
+      padding: 0 8px;
+      border: 1px solid rgba(246, 242, 235, .28);
+      border-radius: 99px;
+      color: #171714;
+      background: var(--paper);
+      font: 750 5px/1 system-ui, sans-serif;
+      transform: translateX(-50%);
+      cursor: pointer;
+    }
+
+    #next-story:hover,
+    #next-story:focus-visible { background: #f4c7b8; outline: none; }
+
+    .step-index {
+      position: absolute;
+      z-index: 7;
+      top: 10px;
+      left: 11px;
+      color: rgba(246, 242, 235, .52);
+      font: 700 4px/1 ui-monospace, monospace;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .library-badge {
+      display: none;
+      top: 8px;
+      right: 9px;
+      left: auto;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: rgba(246, 242, 235, .42);
+      font-size: 4px;
+      backdrop-filter: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .network [data-network],
+      .fragment,
+      .hub { transition: none; }
+    }
+  </style>
+  <script type="module" crossorigin src="./assets/connected-fragment-story-stage-DnP3bC-A.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/shared-DRJThx9H.js">
+  <link rel="modulepreload" crossorigin href="./assets/animate-C1TGnsDs.js">
+  <link rel="modulepreload" crossorigin href="./assets/stagger-X6dg4md1.js">
+  <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
+</head>
+<body>
+  <main
+    id="fragment-stage"
+    class="preview-stage"
+    data-preview-mechanism="connected-fragment-story-stage"
+    data-step="0"
+    tabindex="0"
+    aria-label="Connected fragment story. Use the next button or arrow keys to move through four chapters."
+  >
+    <svg class="network" viewBox="0 0 320 180" preserveAspectRatio="none" aria-hidden="true">
+      <g data-network="0">
+        <line x1="42" y1="89" x2="18" y2="34"/>
+        <line x1="42" y1="89" x2="56" y2="74"/>
+        <line x1="42" y1="89" x2="69" y2="151"/>
+      </g>
+      <g data-network="1">
+        <line x1="279" y1="34" x2="260" y2="18"/>
+        <line x1="279" y1="34" x2="292" y2="74"/>
+        <line x1="279" y1="34" x2="231" y2="29"/>
+      </g>
+      <g data-network="2">
+        <line x1="74" y1="153" x2="13" y2="169"/>
+        <line x1="74" y1="153" x2="111" y2="169"/>
+        <line x1="74" y1="153" x2="42" y2="75"/>
+      </g>
+      <g data-network="3">
+        <line x1="250" y1="153" x2="299" y2="151"/>
+        <line x1="250" y1="153" x2="237" y2="169"/>
+        <line x1="250" y1="153" x2="291" y2="75"/>
+      </g>
+    </svg>
+
+    <span class="fragment" data-chapter="0" data-tone="moss"></span>
+    <span class="fragment" data-chapter="0" data-tone="coral"></span>
+    <span class="fragment" data-chapter="2" data-tone="blue"></span>
+    <span class="fragment" data-chapter="0" data-tone="amber"></span>
+    <span class="fragment" data-chapter="1" data-tone="blue"></span>
+    <span class="fragment" data-chapter="1" data-tone="moss"></span>
+    <span class="fragment" data-chapter="1" data-tone="coral"></span>
+    <span class="fragment" data-chapter="3" data-tone="blue"></span>
+    <span class="fragment" data-chapter="3" data-tone="amber"></span>
+    <span class="fragment" data-chapter="2" data-tone="coral"></span>
+    <span class="fragment" data-chapter="2" data-tone="moss"></span>
+    <span class="fragment" data-chapter="3" data-tone="amber"></span>
+
+    <button class="hub" type="button" data-step-index="0" aria-pressed="true">How does a feeling become a name?</button>
+    <button class="hub" type="button" data-step-index="1" aria-pressed="false">What makes a preview trustworthy?</button>
+    <button class="hub" type="button" data-step-index="2" aria-pressed="false">How does motion become reusable?</button>
+    <button class="hub" type="button" data-step-index="3" aria-pressed="false">When is an effect ready to ship?</button>
+
+    <section class="thesis" aria-live="polite">
+      <p class="eyebrow">A four-chapter effect atlas</p>
+      <h1>ONE EFFECT<br><em>BECOMES A STORY.</em></h1>
+      <p class="chapter-copy"><span id="chapter-word" class="chapter-word">Find</span><span id="chapter-copy">Name the visual behavior hiding inside a feeling.</span></p>
+    </section>
+
+    <span id="step-index" class="step-index">01 / 04 · FIND</span>
+    <span class="library-badge">Motion 12.42.2 · DOM + SVG</span>
+    <button id="next-story" type="button">Next chapter →</button>
+  </main>
+
+</body>
+</html>

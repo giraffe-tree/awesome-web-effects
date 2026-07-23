@@ -26,14 +26,14 @@ export const defaultLocale = 'en';
 const messages = {
   en: {
     language: 'English', languageLabel: 'Choose language', navCatalog: 'Catalog',
-    kicker: 'The effect-first interaction atlas', title: 'Find the effect.<br />Ship the feeling.',
-    hero: 'Explore visually reviewed effects with a real preview, minimal code, and a concise implementation prompt.', browse: 'Browse effects', repo: 'View repository',
-    heroStoryLabel: 'Live interaction story', heroHint: 'Move your pointer · click to advance', heroPause: 'Pause', heroPlay: 'Play', heroStoryAria: 'Interactive effect story', heroStepsAria: 'Interaction story steps',
+    kicker: 'A living atlas of web interaction', title: 'Every effect starts<br />as a question.',
+    hero: 'We collect the answer in motion—verified in a real demo, reduced to useful code, and ready to hand to your coding agent.', browse: 'Browse effects', repo: 'View repository',
+    heroStoryLabel: 'A living effect atlas', heroHint: 'Move your pointer · click to advance', heroPause: 'Pause', heroPlay: 'Play', heroStoryAria: 'Connected fragment effect story', heroStepsAria: 'Interaction story chapters',
     heroSteps: [
-      { label: 'Imagine', word: 'IDEA', title: 'Begin with a feeling', copy: 'A visual instinct appears before the implementation words do.' },
-      { label: 'Describe', word: 'WORDS', title: 'Give the feeling a behavior', copy: 'Name the trigger, timing, and visual layer instead of guessing a library.' },
-      { label: 'Preview', word: 'MOTION', title: 'See the effect become real', copy: 'A runnable preview turns vague intent into something you can judge.' },
-      { label: 'Ship', word: 'SHIP', title: 'Carry the feeling into product', copy: 'Take the code and scoped prompt, then preserve the motion with intent.' }
+      { label: 'Find', word: 'FIND', title: 'A feeling needs a name', copy: 'Start with the visual behavior you can picture but cannot yet describe.' },
+      { label: 'See', word: 'SEE', title: 'A real demo makes it legible', copy: 'A verified preview turns vague intent into something you can judge.' },
+      { label: 'Adapt', word: 'ADAPT', title: 'The mechanism becomes reusable', copy: 'Minimal code and a scoped prompt carry the effect into your own product.' },
+      { label: 'Ship', word: 'SHIP', title: 'The feeling survives the handoff', copy: 'Responsive behavior, access, and reduced motion remain part of the result.' }
     ],
     effects: 'Effects', sources: 'Source projects', gifs: 'Verified GIFs', prompts: 'Agent prompts',
     visualTitle: 'See the real demo before you build it.', visualCopy: 'Every published entry has passed a 100-point creativity, art direction, motion, legibility, inspiration, and evidence review.',
@@ -56,14 +56,14 @@ const messages = {
   },
   'zh-Hans': {
     language: '简体中文', languageLabel: '选择语言', navCatalog: '效果目录',
-    kicker: '以效果为先的交互图鉴', title: '先找到效果。<br />再实现体验。',
-    hero: '浏览经过视觉评审的真实 Demo；每项均提供清晰预览、最小代码和简明的实现 Prompt。', browse: '浏览效果', repo: '查看仓库',
-    heroStoryLabel: '实时交互叙事', heroHint: '移动指针 · 点击推进', heroPause: '暂停', heroPlay: '播放', heroStoryAria: '交互效果叙事体验', heroStepsAria: '交互叙事步骤',
+    kicker: '一座会呼吸的网页特效图鉴', title: '每一种效果，<br />都始于一个问题。',
+    hero: '我们把答案放进真实动效里：先验证 Demo，再提炼最小代码，最后交给你的编程 Agent 继续实现。', browse: '浏览效果', repo: '查看仓库',
+    heroStoryLabel: '会讲故事的特效图鉴', heroHint: '移动指针 · 点击推进', heroPause: '暂停', heroPlay: '播放', heroStoryAria: '碎片连线特效叙事体验', heroStepsAria: '特效叙事章节',
     heroSteps: [
-      { label: '想象', word: '想法', title: '从一种感觉开始', copy: '在实现语言出现之前，视觉直觉已经先发生。' },
-      { label: '描述', word: '描述', title: '把感觉变成交互行为', copy: '先说清触发、时间关系和视觉层级，而不是先猜技术库。' },
-      { label: '预览', word: '动效', title: '让效果真正发生', copy: '可运行预览把模糊意图变成能够判断的真实体验。' },
-      { label: '发布', word: '上线', title: '把感觉带进产品', copy: '带走代码与范围明确的 Prompt，并有意识地保留动效。' }
+      { label: '发现', word: '发现', title: '先给感觉一个名字', copy: '从你能想象、却还说不清楚的视觉行为开始。' },
+      { label: '看见', word: '看见', title: '真实 Demo 让它变得可判断', copy: '经过验证的预览，把模糊意图变成可以比较的体验。' },
+      { label: '改造', word: '改造', title: '让机制变成可复用语言', copy: '最小代码和范围明确的 Prompt，把效果带进你自己的产品。' },
+      { label: '上线', word: '上线', title: '让感觉完整地交接下去', copy: '响应式、无障碍与减少动态，仍然是最终结果的一部分。' }
     ],
     effects: '种效果', sources: '来源项目', gifs: '真实 GIF', prompts: 'Agent Prompt',
     visualTitle: '动手之前，先看真实 Demo。', visualCopy: '每个发布条目都通过创意、艺术、动效、辨识度、启发价值与证据质量六项 100 分制评审。',

@@ -6,8 +6,8 @@
 
 A visual atlas for the moment when you know the feeling you want, but not the words to describe the effect.
 
-[![150 curated effects](https://img.shields.io/badge/curated_effects-150-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
-[![150 real GIF previews](https://img.shields.io/badge/real_GIF_previews-150-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
+[![151 curated effects](https://img.shields.io/badge/curated_effects-151-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
+[![151 real GIF previews](https://img.shields.io/badge/real_GIF_previews-151-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
 [![GitHub stars](https://img.shields.io/github/stars/giraffe-tree/awesome-web-effects?style=flat-square&color=0969da)](https://github.com/giraffe-tree/awesome-web-effects/stargazers)
 
 [**Open the live visual catalog**](https://giraffe-tree.github.io/awesome-web-effects/?lang=en) · [Language metadata](docs/LANGUAGES.md)
@@ -18,10 +18,15 @@ A visual atlas for the moment when you know the feeling you want, but not the wo
 
 ---
 
-<h3 align="center">14 recommended effects — every preview a real capture</h3>
+<h3 align="center">15 recommended effects — every preview a real capture</h3>
 
 <table>
 <tr>
+<td width="33%" align="center">
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#connected-fragment-story-stage"><img src="demo/gifs/captured/connected-fragment-story-stage.gif" width="270" alt="Connected fragment story stage"></a>
+<br>
+<sub><strong>Connected fragment story stage</strong><br>Motion &amp; choreography · 95/100</sub>
+</td>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#pinned-horizontal-scroll-scene"><img src="demo/gifs/captured/pinned-horizontal-scroll-scene.gif" width="270" alt="Pinned horizontal scroll scene"></a>
 <br>
@@ -32,13 +37,13 @@ A visual atlas for the moment when you know the feeling you want, but not the wo
 <br>
 <sub><strong>Semantic prompt revision workspace</strong><br>Text &amp; SVG · 100/100</sub>
 </td>
+</tr>
+<tr>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#staggered-transform-choreography"><img src="demo/gifs/captured/staggered-transform-choreography.gif" width="270" alt="Staggered transform choreography"></a>
 <br>
 <sub><strong>Staggered transform choreography</strong><br>Motion &amp; choreography · 92/100</sub>
 </td>
-</tr>
-<tr>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#motion-graphics-burst"><img src="demo/gifs/captured/motion-graphics-burst.gif" width="270" alt="Motion-graphics burst"></a>
 <br>
@@ -49,13 +54,13 @@ A visual atlas for the moment when you know the feeling you want, but not the wo
 <br>
 <sub><strong>Visually authored keyframe sequence</strong><br>Motion &amp; choreography · 84/100</sub>
 </td>
+</tr>
+<tr>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#compact-svg-shape-tween"><img src="demo/gifs/captured/compact-svg-shape-tween.gif" width="270" alt="Compact SVG shape tween"></a>
 <br>
 <sub><strong>Compact SVG shape tween</strong><br>Motion &amp; choreography · 89/100</sub>
 </td>
-</tr>
-<tr>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#filterable-grid-reflow"><img src="demo/gifs/captured/filterable-grid-reflow.gif" width="270" alt="Filterable grid reflow"></a>
 <br>
@@ -66,13 +71,13 @@ A visual atlas for the moment when you know the feeling you want, but not the wo
 <br>
 <sub><strong>Perspective tilt and glare</strong><br>Pointer &amp; hover · 90/100</sub>
 </td>
+</tr>
+<tr>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#context-aware-custom-cursor"><img src="demo/gifs/mouse-follower.gif" width="270" alt="Context-aware custom cursor"></a>
 <br>
 <sub><strong>Context-aware custom cursor</strong><br>Pointer &amp; hover · 86/100</sub>
 </td>
-</tr>
-<tr>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#displacement-map-image-hover"><img src="demo/gifs/hover-effect.gif" width="270" alt="Displacement-map image hover"></a>
 <br>
@@ -83,13 +88,13 @@ A visual atlas for the moment when you know the feeling you want, but not the wo
 <br>
 <sub><strong>SVG stroke drawing</strong><br>Text &amp; SVG · 86/100</sub>
 </td>
+</tr>
+<tr>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#dom-aware-drag-spawned-fish-flock"><img src="demo/gifs/captured/dom-aware-drag-spawned-fish-flock.gif" width="270" alt="Human-released DOM-avoiding fish school"></a>
 <br>
 <sub><strong>Human-released DOM-avoiding fish school</strong><br>Canvas &amp; 2D · 100/100</sub>
 </td>
-</tr>
-<tr>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#pointer-injected-gpu-fluid"><img src="demo/gifs/captured/pointer-injected-gpu-fluid.gif" width="270" alt="Stage haze colour lab"></a>
 <br>
@@ -103,7 +108,7 @@ A visual atlas for the moment when you know the feeling you want, but not the wo
 </tr>
 </table>
 
-<p align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en"><strong>Explore all 150 live effects →</strong></a></p>
+<p align="center"><a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en"><strong>Explore all 151 live effects →</strong></a></p>
 
 <a id="agent-quick-start"></a>
 
@@ -121,9 +126,9 @@ Review the current project using https://giraffe-tree.github.io/awesome-web-effe
 
 <table>
 <tr>
-<td width="25%" align="center"><strong>150</strong><br><sub>admitted effects</sub></td>
-<td width="25%" align="center"><strong>150</strong><br><sub>real GIFs</sub></td>
-<td width="25%" align="center"><strong>148</strong><br><sub>runnable demos</sub></td>
+<td width="25%" align="center"><strong>151</strong><br><sub>admitted effects</sub></td>
+<td width="25%" align="center"><strong>151</strong><br><sub>real GIFs</sub></td>
+<td width="25%" align="center"><strong>149</strong><br><sub>runnable demos</sub></td>
 <td width="25%" align="center"><strong>80/100</strong><br><sub>minimum score</sub></td>
 </tr>
 </table>
@@ -142,7 +147,7 @@ This is an **effect-first**, curator-reviewed reference—not another repository
 
 | Category | Effects | Source projects | Visible result |
 | --- | ---: | ---: | --- |
-| [Motion & choreography](https://giraffe-tree.github.io/awesome-web-effects/?lang=en#catalog) | 18 | 7 | Timelines, springs, tweens, class animation, and framework-native motion. |
+| [Motion & choreography](https://giraffe-tree.github.io/awesome-web-effects/?lang=en#catalog) | 19 | 7 | Timelines, springs, tweens, class animation, and framework-native motion. |
 | [Scroll & reveal](https://giraffe-tree.github.io/awesome-web-effects/?lang=en#catalog) | 12 | 3 | Smooth scrolling, scroll-linked scenes, reveals, parallax, and snap navigation. |
 | [Page & layout](https://giraffe-tree.github.io/awesome-web-effects/?lang=en#catalog) | 15 | 3 | Page transitions, FLIP motion, filtering, packing, and animated reflow. |
 | [Pointer & hover](https://giraffe-tree.github.io/awesome-web-effects/?lang=en#catalog) | 24 | 5 | Tilt, depth, custom cursors, magnetic motion, and image distortion. |
@@ -151,7 +156,7 @@ This is an **effect-first**, curator-reviewed reference—not another repository
 | [3D & WebGL](https://giraffe-tree.github.io/awesome-web-effects/?lang=en#catalog) | 13 | 3 | 3D engines, declarative renderers, shader layers, and post-processing. |
 
 <details>
-<summary><strong>Open the complete 150-effect index</strong> — implementation, score, source and direct link</summary>
+<summary><strong>Open the complete 151-effect index</strong> — implementation, score, source and direct link</summary>
 
 <a id="animation"></a>
 
@@ -161,6 +166,7 @@ Timelines, springs, tweens, class animation, and framework-native motion.
 
 | Effect | Recommended implementation | Curatorial score | AI homepage references (max 3) | Stars | Implementations | Status | Implementation |
 | --- | --- | ---: | --- | ---: | ---: | --- | --- |
+| [Connected fragment story stage](https://giraffe-tree.github.io/awesome-web-effects/?lang=en#connected-fragment-story-stage) | [Motion](https://github.com/motiondivision/motion) | **95/100** | [Anthropic](https://www.anthropic.com/) | 32,819 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/?lang=en#connected-fragment-story-stage) |
 | [Scroll-scrubbed master timeline](https://giraffe-tree.github.io/awesome-web-effects/?lang=en#scroll-scrubbed-master-timeline) | [GSAP](https://github.com/greensock/GSAP) | **85/100** | [Hebbia](https://www.hebbia.com/)<br>[Decagon](https://decagon.ai/) | 26,600 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/?lang=en#scroll-scrubbed-master-timeline) |
 | [Shared-layout spring morph](https://giraffe-tree.github.io/awesome-web-effects/?lang=en#shared-layout-spring-morph) | [Motion](https://github.com/motiondivision/motion) | **94/100** | — | 32,819 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/?lang=en#shared-layout-spring-morph) |
 | [Staggered transform choreography](https://giraffe-tree.github.io/awesome-web-effects/?lang=en#staggered-transform-choreography) | [Anime.js](https://github.com/juliangarnier/anime) | **92/100** | [Factory](https://factory.ai/)<br>[Read AI](https://www.read.ai/)<br>[Cursor (Anysphere)](https://cursor.com/) | 71,056 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/?lang=en#staggered-transform-choreography) |
@@ -381,14 +387,14 @@ Scene graphs, creative coding, physics, drawing tools, and 2D renderers.
 <details>
 <summary><strong>Curation, provenance and audit numbers</strong></summary>
 
-- 396 candidates audited: **150 admitted**, **246 rejected**.
-- 150 verified previews: 2 official captures and 148 captures from runnable local demos; 0 missing.
+- 397 candidates audited: **151 admitted**, **246 rejected**.
+- 151 verified previews: 2 official captures and 149 captures from runnable local demos; 0 missing.
 - Human review scores creativity, art direction, motion craft, legibility, creative transfer and evidence quality.
 - Admission requires 80/100 plus core-dimension minimums. Popularity never overrides the gate.
-- The verified GIF set is 23.85 MiB; every preview is 320×180, at most three seconds and below 1 MiB.
-- Stars are a 2026-07-20 snapshot. Recommendation sources and observed AI homepages remain separate relationships.
+- The verified GIF set is 23.98 MiB; every preview is 320×180, at most three seconds and below 1 MiB.
+- Stars are a 2026-07-23 snapshot. Recommendation sources and observed AI homepages remain separate relationships.
 
-Read the [current 396-candidate admission audit](research/demo-admission-audit-2026-07-20.md), the [100-company homepage research](research/ai-native-homepages-100.md), and the [preview provenance manifest](demo/gifs/provenance.json).
+Read the [current 397-candidate admission audit](research/demo-admission-audit-2026-07-23.md), the [100-company homepage research](research/ai-native-homepages-100.md), and the [preview provenance manifest](demo/gifs/provenance.json).
 
 </details>
 

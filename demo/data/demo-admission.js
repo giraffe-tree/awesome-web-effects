@@ -24,11 +24,11 @@ export const admissionPolicy = {
 };
 
 export const admissionAuditSummary = {
-  auditedAt: '2026-07-20',
-  candidateCount: 396,
-  reviewedPreviewCount: 163,
+  auditedAt: '2026-07-23',
+  candidateCount: 397,
+  reviewedPreviewCount: 164,
   missingPreviewCount: 233,
-  admittedCount: 150,
+  admittedCount: 151,
   rejectedCount: 246
 };
 
@@ -37,6 +37,10 @@ export const admissionAuditSummary = {
 // evaluateDemoAdmission: visual and motion quality cannot be inferred from a
 // repository name, code snippet, or star count.
 export const reviewedDemoScores = {
+  'connected-fragment-story-stage': {
+    creativity: 18, artDirection: 19, motion: 18, clarity: 15, inspiration: 15, evidence: 10,
+    rationaleZh: '四个语义问题节点、证据碎片、连线与中心命题在同一真人步骤中同步交接；构图、叙事和实现边界清楚，且与普通粒子星座或缩略图拼贴明显不同。'
+  },
   'scroll-scrubbed-master-timeline': {
     creativity: 13, artDirection: 16, motion: 17, clarity: 15, inspiration: 14, evidence: 10,
     rationaleZh: '滚动进度、三段卡片状态与时间线关系清楚，视觉完成度足以作为编排参考。'

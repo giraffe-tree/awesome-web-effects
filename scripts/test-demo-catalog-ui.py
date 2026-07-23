@@ -111,19 +111,31 @@ def main() -> int:
             expect(language_select.locator("option")).to_have_count(20)
             language_select.select_option("zh-Hans")
             expect(page.locator("#hero-kicker")).to_have_text("网页交互动效图鉴")
-            expect(page.locator("#hero-title")).to_have_text("找网页动效。看 Demo，拿代码。")
-            expect(page.locator("#hero-copy")).to_contain_text("可运行预览、最小代码和可直接交给 AI 的实现 Prompt")
+            expect(page.locator("#hero-title")).to_have_text("找网页动效，看 Demo，一键复制 Prompt")
+            expect(page.locator("#hero-title .hero-title-line")).to_have_count(3)
+            expect(page.locator("#hero-copy")).to_contain_text("可运行预览、最小代码和可一键复制的实现 Prompt")
             chinese_title_metrics = page.locator("#hero-title").evaluate(
                 """title => {
                     const style = getComputedStyle(title);
                     return {
                         fontSize: Number.parseFloat(style.fontSize),
                         lineHeight: Number.parseFloat(style.lineHeight),
+                        linesFit: [...title.querySelectorAll('.hero-title-line')].every(
+                            line => line.getBoundingClientRect().width <= title.getBoundingClientRect().width + 1
+                        ),
                     };
                 }"""
             )
             expected_chinese_line_height = chinese_title_metrics["fontSize"] * 0.86 + 4
             assert abs(chinese_title_metrics["lineHeight"] - expected_chinese_line_height) < 0.2
+            assert chinese_title_metrics["linesFit"]
+            page.set_viewport_size({"width": 1024, "height": 960})
+            assert page.locator("#hero-title").evaluate(
+                """title => [...title.querySelectorAll('.hero-title-line')].every(
+                    line => line.getBoundingClientRect().width <= title.getBoundingClientRect().width + 1
+                )"""
+            )
+            page.set_viewport_size({"width": 1440, "height": 960})
             expect(page.locator("#hero-story-eyebrow")).to_have_text("实时交互叙事")
             language_select.select_option("en")
             expect(page.locator("#hero-story-eyebrow")).to_have_text("Live interaction story")

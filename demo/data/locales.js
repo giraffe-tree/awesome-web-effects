@@ -56,8 +56,8 @@ const messages = {
   },
   'zh-Hans': {
     language: '简体中文', languageLabel: '选择语言', navCatalog: '效果目录',
-    kicker: '网页交互动效图鉴', title: '找网页动效。<br />看 Demo，拿代码。',
-    hero: '浏览经过视觉评审的真实网页动效案例；每个效果都提供可运行预览、最小代码和可直接交给 AI 的实现 Prompt。', browse: '浏览效果', repo: '查看仓库',
+    kicker: '网页交互动效图鉴', title: '<span class="hero-title-line">找网页动效，</span><br /><span class="hero-title-line">看 Demo，</span><br /><span class="hero-title-line">一键复制 Prompt</span>',
+    hero: '浏览经过视觉评审的真实网页动效案例；每个效果都提供可运行预览、最小代码和可一键复制的实现 Prompt。', browse: '浏览效果', repo: '查看仓库',
     heroStoryLabel: '实时交互叙事', heroHint: '移动指针 · 点击推进', heroPause: '暂停', heroPlay: '播放', heroStoryAria: '交互效果叙事体验', heroStepsAria: '交互叙事步骤',
     heroSteps: [
       { label: '想象', word: '想法', title: '从一种感觉开始', copy: '在实现语言出现之前，视觉直觉已经先发生。' },

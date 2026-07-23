@@ -3,17 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Three.js — Orogen Relief Expedition Globe</title>
+    <title>Three.js — ETOPO Relief Expedition Globe</title>
     <style>
       :root {
-        --preview-background: #02070d;
-        --paper: #f4efe3;
-        --paper-soft: #c9c6bc;
-        --ink: #111617;
-        --muted: #72818b;
-        --line: rgba(221, 231, 230, .16);
-        --signal: #ec6547;
-        --cyan: #8fd8d2;
+        --preview-background: #02070b;
+        --paper: #f4efe2;
+        --paper-soft: #bac6c5;
+        --muted: #71858e;
+        --line: rgba(220, 233, 229, .15);
+        --signal: #ef6b4d;
+        --cyan: #80d8d0;
+        --ink: #02070b;
       }
 
       button { font: inherit; }
@@ -21,9 +21,9 @@
       .relief-stage {
         color: var(--paper);
         background:
-          radial-gradient(circle at 69% 48%, rgba(77, 121, 130, .17), transparent 35%),
-          radial-gradient(circle at 23% 81%, rgba(236, 101, 71, .08), transparent 29%),
-          linear-gradient(136deg, #02070d, #061018 58%, #02070d);
+          radial-gradient(circle at 65% 46%, rgba(82, 144, 148, .16), transparent 37%),
+          radial-gradient(circle at 19% 84%, rgba(239, 107, 77, .075), transparent 29%),
+          linear-gradient(135deg, #02070b 0%, #06131b 54%, #02070b 100%);
       }
 
       .relief-stage::before,
@@ -36,17 +36,19 @@
       }
 
       .relief-stage::before {
-        opacity: .22;
+        opacity: .25;
         background-image:
-          linear-gradient(rgba(143, 216, 210, .07) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(143, 216, 210, .07) 1px, transparent 1px);
+          linear-gradient(rgba(128, 216, 208, .065) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(128, 216, 208, .065) 1px, transparent 1px);
         background-size: 20px 20px;
-        -webkit-mask-image: linear-gradient(90deg, #000 0 18%, transparent 54%);
-        mask-image: linear-gradient(90deg, #000 0 18%, transparent 54%);
+        -webkit-mask-image: linear-gradient(90deg, #000 0 28%, transparent 67%);
+        mask-image: linear-gradient(90deg, #000 0 28%, transparent 67%);
       }
 
       .relief-stage::after {
-        box-shadow: inset 0 0 50px rgba(0, 0, 0, .34);
+        background:
+          linear-gradient(90deg, rgba(2, 7, 11, .24), transparent 28%, transparent 82%, rgba(2, 7, 11, .18));
+        box-shadow: inset 0 0 55px rgba(0, 0, 0, .38);
       }
 
       .earth-host {
@@ -59,26 +61,28 @@
       }
 
       .earth-host:active { cursor: grabbing; }
+      .earth-host:focus-visible { box-shadow: inset 0 0 0 1px rgba(128, 216, 208, .46); }
       .earth-host canvas { width: 100% !important; height: 100% !important; }
 
       .mission-copy,
       .summit-marker,
       .topline,
       .control-rail,
-      .camera-readout {
+      .camera-readout,
+      .data-legend {
         position: absolute;
         z-index: 5;
       }
 
       .topline {
-        top: 13px;
-        right: 15px;
+        top: 12px;
+        right: 14px;
         display: flex;
         align-items: center;
-        gap: 9px;
-        color: #788b96;
-        font: 800 5.5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
-        letter-spacing: .15em;
+        gap: 7px;
+        color: #6f848d;
+        font: 800 5.25px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .14em;
         text-transform: uppercase;
         pointer-events: none;
       }
@@ -88,14 +92,13 @@
       .status-light {
         width: 4px;
         height: 4px;
-        margin-right: -5px;
         border-radius: 50%;
         background: var(--signal);
-        box-shadow: 0 0 0 3px rgba(236, 101, 71, .13), 0 0 10px rgba(236, 101, 71, .65);
+        box-shadow: 0 0 0 3px rgba(239, 107, 77, .13), 0 0 11px rgba(239, 107, 77, .72);
       }
 
       .mission-copy {
-        top: 18px;
+        top: 17px;
         left: 16px;
         width: 126px;
         pointer-events: none;
@@ -105,64 +108,93 @@
       .summit-label,
       .stat span,
       .camera-readout,
-      .control-hint {
-        font: 800 5.5px/1.25 ui-monospace, SFMono-Regular, Menlo, monospace;
+      .control-hint,
+      .legend-label {
+        font: 800 5.25px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace;
         letter-spacing: .13em;
         text-transform: uppercase;
       }
 
       .kicker {
-        margin: 0 0 10px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin: 0 0 9px;
         color: var(--signal);
+      }
+
+      .kicker::before {
+        width: 11px;
+        height: 1px;
+        background: currentColor;
+        content: "";
       }
 
       .mission-copy h1 {
         margin: 0;
-        max-width: 118px;
-        font: 650 25px/.91 Inter, ui-sans-serif, system-ui, sans-serif;
-        letter-spacing: -.064em;
+        max-width: 121px;
+        font: 640 24px/.91 Inter, ui-sans-serif, system-ui, sans-serif;
+        letter-spacing: -.062em;
         text-wrap: balance;
       }
 
       .mission-copy > p:not(.kicker) {
-        max-width: 118px;
-        margin: 9px 0 0;
-        color: #8c9aa1;
-        font: 500 7px/1.42 Inter, ui-sans-serif, system-ui, sans-serif;
+        max-width: 116px;
+        margin: 8px 0 0;
+        color: #82929a;
+        font: 500 6.6px/1.4 Inter, ui-sans-serif, system-ui, sans-serif;
       }
 
       .summit-card {
-        width: 118px;
-        min-height: 46px;
-        margin-top: 11px;
+        width: 120px;
+        min-height: 48px;
+        margin-top: 10px;
         padding: 8px 9px 7px;
         border: 1px solid var(--line);
-        border-left-color: rgba(236, 101, 71, .76);
-        background: rgba(3, 10, 15, .7);
-        box-shadow: 0 14px 30px rgba(0, 0, 0, .2);
-        backdrop-filter: blur(10px);
+        border-left-color: rgba(239, 107, 77, .82);
+        background:
+          linear-gradient(110deg, rgba(11, 24, 29, .92), rgba(4, 12, 17, .72));
+        box-shadow: 0 15px 34px rgba(0, 0, 0, .24);
+        backdrop-filter: blur(12px);
+      }
+
+      .summit-card__top {
+        display: flex;
+        justify-content: space-between;
+        gap: 5px;
       }
 
       .summit-card strong {
         display: block;
+        max-width: 90px;
         margin-top: 4px;
+        overflow: hidden;
         color: var(--paper);
-        font: 760 10px/1 Inter, ui-sans-serif, system-ui, sans-serif;
+        font: 760 9.5px/1 Inter, ui-sans-serif, system-ui, sans-serif;
         letter-spacing: -.03em;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
       .summit-label { color: #7f9097; }
+      #summit-index { color: var(--signal); }
 
       .stats {
         display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 7px;
+        grid-template-columns: 1fr 1.25fr;
+        gap: 6px;
         margin-top: 7px;
       }
 
-      .stat { display: grid; gap: 2px; }
-      .stat span { color: #677983; font-size: 4.5px; }
-      .stat b { color: #c5d0cf; font: 760 6.5px/1 ui-monospace, SFMono-Regular, Menlo, monospace; }
+      .stat { display: grid; gap: 2px; min-width: 0; }
+      .stat span { color: #61747d; font-size: 4.25px; }
+      .stat b {
+        overflow: hidden;
+        color: #c6d1ce;
+        font: 730 5.8px/1.1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
 
       .summit-marker {
         --marker-x: 70%;
@@ -174,7 +206,7 @@
         gap: 5px;
         opacity: 0;
         transform: translate(-4px, -50%);
-        transition: opacity 140ms ease;
+        transition: opacity 150ms ease;
         pointer-events: none;
       }
 
@@ -183,35 +215,35 @@
       .summit-marker i {
         position: relative;
         display: block;
-        width: 6px;
-        height: 6px;
-        border: 1px solid #fff5e8;
+        width: 7px;
+        height: 7px;
+        border: 1px solid #fff4df;
         border-radius: 50%;
         background: var(--signal);
-        box-shadow: 0 0 0 3px rgba(236, 101, 71, .17), 0 0 13px rgba(236, 101, 71, .76);
+        box-shadow: 0 0 0 3px rgba(239, 107, 77, .17), 0 0 15px rgba(239, 107, 77, .82);
       }
 
       .summit-marker i::after {
         position: absolute;
         top: 50%;
         left: 7px;
-        width: 14px;
+        width: 15px;
         height: 1px;
-        background: rgba(244, 239, 227, .58);
+        background: rgba(244, 239, 226, .62);
         content: "";
       }
 
       .summit-marker span {
         margin-left: 12px;
-        color: #f8f1e4;
+        color: #fff5e7;
         text-shadow: 0 1px 8px #010508;
-        font: 820 5.5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        font: 820 5.25px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
         letter-spacing: .1em;
       }
 
       .control-rail {
         left: 16px;
-        bottom: 13px;
+        bottom: 12px;
         display: flex;
         align-items: center;
         gap: 5px;
@@ -222,18 +254,18 @@
         padding: 0 9px;
         border: 1px solid rgba(226, 233, 229, .18);
         border-radius: 999px;
-        color: #b6c1c0;
-        background: rgba(7, 16, 21, .82);
+        color: #b8c5c2;
+        background: rgba(7, 16, 21, .84);
         cursor: pointer;
-        font: 800 5.5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        font: 800 5.25px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
         letter-spacing: .09em;
         text-transform: uppercase;
         transition: border-color 160ms ease, color 160ms ease, transform 160ms ease;
       }
 
       .control-button.primary {
-        border-color: rgba(236, 101, 71, .58);
-        color: #ff9a7f;
+        border-color: rgba(239, 107, 77, .62);
+        color: #ff9b82;
       }
 
       .control-button:hover {
@@ -243,12 +275,32 @@
       }
 
       .control-button:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
-      .control-hint { margin-left: 2px; color: #53666f; white-space: nowrap; }
+      .control-hint { margin-left: 2px; color: #51656e; white-space: nowrap; }
+
+      .data-legend {
+        top: 29px;
+        right: 14px;
+        display: grid;
+        grid-template-columns: auto auto;
+        gap: 3px 8px;
+        min-width: 82px;
+        padding: 6px 7px;
+        border-top: 1px solid rgba(128, 216, 208, .22);
+        background: linear-gradient(90deg, transparent, rgba(3, 11, 16, .48));
+        pointer-events: none;
+      }
+
+      .legend-label { color: #52666e; font-size: 4.25px; }
+      .data-legend b {
+        color: #a9bbb8;
+        font: 750 5.3px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        text-align: right;
+      }
 
       .camera-readout {
-        right: 15px;
-        bottom: 14px;
-        color: #5e727d;
+        right: 14px;
+        bottom: 13px;
+        color: #536b74;
         text-align: right;
         pointer-events: none;
       }
@@ -256,105 +308,284 @@
       .camera-readout strong {
         display: block;
         margin-top: 3px;
-        color: #a9b8b8;
-        font-size: 6px;
+        color: #a8bab8;
+        font-size: 5.8px;
       }
 
+      .earth-loading {
+        position: absolute;
+        inset: 0;
+        z-index: 30;
+        display: grid;
+        place-items: center;
+        padding: 14px;
+        background:
+          radial-gradient(circle at 50% 48%, rgba(128, 216, 208, .08), transparent 34%),
+          linear-gradient(rgba(128, 216, 208, .035) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(128, 216, 208, .035) 1px, transparent 1px),
+          #02070b;
+        background-size: auto, 24px 24px, 24px 24px, auto;
+        transition: opacity 520ms ease, visibility 520ms;
+      }
+
+      .relief-stage[data-ready="true"] .earth-loading {
+        visibility: hidden;
+        opacity: 0;
+      }
+
+      .loading-panel {
+        position: relative;
+        display: grid;
+        grid-template-columns: 42px minmax(0, 1fr) auto;
+        gap: 12px;
+        align-items: center;
+        width: min(300px, calc(100vw - 28px));
+        padding: 15px 16px 13px;
+        overflow: hidden;
+        border: 1px solid rgba(211, 231, 226, .17);
+        background: rgba(5, 15, 20, .84);
+        box-shadow: 0 24px 70px rgba(0, 0, 0, .38);
+        backdrop-filter: blur(16px);
+      }
+
+      .loading-panel::before {
+        position: absolute;
+        inset: 0 auto auto;
+        width: 46%;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--signal), transparent);
+        animation: loading-scan 2.2s ease-in-out infinite;
+        content: "";
+      }
+
+      .loading-orbit {
+        position: relative;
+        width: 38px;
+        height: 38px;
+        border: 1px solid rgba(128, 216, 208, .22);
+        border-radius: 50%;
+        animation: loading-orbit 5s linear infinite;
+      }
+
+      .loading-orbit::before,
+      .loading-orbit::after {
+        position: absolute;
+        border-radius: 50%;
+        content: "";
+      }
+
+      .loading-orbit::before {
+        inset: 6px;
+        border: 1px dashed rgba(128, 216, 208, .25);
+      }
+
+      .loading-orbit::after {
+        top: -2px;
+        left: 18px;
+        width: 4px;
+        height: 4px;
+        background: var(--signal);
+        box-shadow: 0 0 8px rgba(239, 107, 77, .8);
+      }
+
+      .loading-copy {
+        display: grid;
+        min-width: 0;
+        gap: 4px;
+      }
+
+      .loading-copy small,
+      .loading-meta,
+      .loading-detail {
+        font: 720 4.6px/1.25 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .11em;
+        text-transform: uppercase;
+      }
+
+      .loading-copy small { color: var(--signal); }
+      .loading-copy strong {
+        overflow: hidden;
+        color: var(--paper);
+        font: 800 7.4px/1.1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: .04em;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .loading-detail {
+        overflow: hidden;
+        color: #6d8189;
+        letter-spacing: .045em;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .loading-percent {
+        color: var(--cyan);
+        font: 780 14px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+        letter-spacing: -.08em;
+      }
+
+      .loading-track {
+        grid-column: 1 / -1;
+        height: 2px;
+        overflow: hidden;
+        background: rgba(128, 216, 208, .12);
+      }
+
+      .loading-track span {
+        display: block;
+        width: 0;
+        height: 100%;
+        background: linear-gradient(90deg, var(--signal), #f2bf7d 46%, var(--cyan));
+        box-shadow: 0 0 9px rgba(128, 216, 208, .35);
+        transition: width 120ms linear;
+      }
+
+      .loading-meta {
+        grid-column: 1 / -1;
+        display: flex;
+        justify-content: space-between;
+        color: #52666e;
+      }
+
+      .relief-stage[data-failed="true"] .loading-panel {
+        border-color: rgba(239, 107, 77, .55);
+      }
+
+      .relief-stage[data-failed="true"] .loading-orbit { animation: none; }
       .library-badge,
       .scene-caption { display: none; }
 
+      @keyframes loading-scan {
+        0% { transform: translateX(-100%); }
+        55%, 100% { transform: translateX(320%); }
+      }
+
+      @keyframes loading-orbit { to { transform: rotate(360deg); } }
+
       @media (max-width: 420px) {
-        .mission-copy { top: 15px; left: 12px; width: 108px; }
-        .mission-copy h1 { max-width: 105px; font-size: 22px; }
-        .mission-copy > p:not(.kicker) { max-width: 103px; font-size: 6px; }
-        .summit-card { width: 104px; min-height: 42px; padding: 7px 8px 6px; }
-        .summit-card strong { font-size: 8.5px; }
-        .topline { top: 10px; right: 10px; }
-        .control-rail { left: 12px; bottom: 10px; }
-        .camera-readout { right: 10px; bottom: 11px; }
+        .mission-copy { top: 14px; left: 12px; width: 109px; }
+        .mission-copy h1 { max-width: 105px; font-size: 21px; }
+        .mission-copy > p:not(.kicker) { max-width: 104px; font-size: 6px; }
+        .summit-card { width: 105px; min-height: 44px; padding: 7px 8px 6px; }
+        .summit-card strong { font-size: 8.4px; }
+        .topline { top: 9px; right: 10px; }
+        .data-legend { top: 24px; right: 10px; }
+        .control-rail { left: 12px; bottom: 9px; }
+        .camera-readout { right: 10px; bottom: 10px; }
       }
 
       @media (max-width: 420px) and (max-height: 220px) {
         .mission-copy > p:not(.kicker) { display: none; }
-        .summit-card { margin-top: 9px; }
-      }
-
-      @media (max-width: 190px), (max-height: 110px) {
-        .mission-copy { top: 9px; left: 8px; width: 75px; }
-        .mission-copy h1 { max-width: 72px; font-size: 14px; }
-        .kicker { margin-bottom: 5px; font-size: 4px; }
-        .summit-card { width: 71px; min-height: 29px; margin-top: 6px; padding: 4px 5px; }
-        .summit-card strong { margin-top: 2px; font-size: 6px; }
-        .stats { gap: 3px; margin-top: 4px; }
-        .stat span { display: none; }
-        .stat b { font-size: 4.5px; }
-        .topline span:last-child { display: none; }
-        .control-rail { left: 8px; bottom: 7px; gap: 3px; }
-        .control-button { min-height: 16px; padding: 0 5px; font-size: 4px; }
-        .control-hint { display: none; }
-        .camera-readout { right: 7px; bottom: 7px; font-size: 4px; }
-        .camera-readout strong { font-size: 4.5px; }
+        .summit-card { margin-top: 8px; }
+        .data-legend { display: none; }
       }
 
       @media (prefers-reduced-motion: reduce) {
         .summit-marker,
-        .control-button { transition: none; }
+        .earth-loading,
+        .loading-track span { transition: none; }
+        .loading-panel::before,
+        .loading-orbit { animation: none; }
       }
     </style>
-    <script type="module" crossorigin src="./assets/topographic-relief-expedition-globe-5RYJZ28E.js"></script>
+    <script type="module" crossorigin src="./assets/topographic-relief-expedition-globe-C9rwBhD_.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/shared-DRJThx9H.js">
     <link rel="modulepreload" crossorigin href="./assets/shared-CArD_xX8.js">
     <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
   </head>
   <body>
-    <main class="preview-stage relief-stage" data-preview-mechanism="three-shader-topographic-relief">
+    <main class="preview-stage relief-stage" aria-label="Interactive ETOPO topographic relief Earth">
       <div
-        class="earth-host"
         id="earth-host"
-        tabindex="0"
+        class="earth-host"
         role="application"
-        aria-describedby="earth-instruction"
-        aria-label="Interactive topographic Earth. Drag to orbit, use arrow keys to rotate, use plus and minus to zoom, N to visit the next summit, and Home to reset."
+        aria-label="3D relief Earth. Drag to orbit, use the wheel to zoom, arrow keys to rotate, N for the next summit, and Home to reset."
+        tabindex="0"
       ></div>
 
       <div class="topline" aria-hidden="true">
-        <span class="status-light"></span>
-        <strong>Relief online</strong>
-        <span>Terrain ×45 / 110 m land</span>
+        <i class="status-light"></i>
+        <strong>ETOPO 2022</strong>
+        <span>4,320 × 2,160</span>
+        <span>50M LAND</span>
       </div>
 
-      <section class="mission-copy" aria-live="polite">
-        <p class="kicker">Orogen field atlas 04</p>
-        <h1>Read the relief.</h1>
-        <p id="earth-instruction">Orbit real land geometry, inspect authored relief, then jump between the seven summits.</p>
-        <div class="summit-card">
-          <span class="summit-label">Expedition focus</span>
-          <strong id="summit-name">Everest · Himalaya</strong>
-          <div class="stats">
-            <div class="stat"><span>Elevation</span><b id="summit-height">8,849 m</b></div>
-            <div class="stat"><span>Position</span><b id="summit-position">27.99° N</b></div>
+      <aside class="mission-copy" aria-live="polite">
+        <p class="kicker">Relief expedition / 01</p>
+        <h1>Read the planet in relief.</h1>
+        <p>Real elevation, bathymetry and 700 named summits—drawn as one navigable terrain instrument.</p>
+        <section class="summit-card" aria-label="Focused summit">
+          <div class="summit-card__top">
+            <span id="summit-continent" class="summit-label">ASIA</span>
+            <span id="summit-index" class="summit-label">01 / 08</span>
           </div>
-        </div>
-      </section>
+          <strong id="summit-name">Everest</strong>
+          <div class="stats">
+            <div class="stat">
+              <span>Elevation</span>
+              <b id="summit-height">8,849 m</b>
+            </div>
+            <div class="stat">
+              <span>Position</span>
+              <b id="summit-position">27.99° N · 86.93° E</b>
+            </div>
+          </div>
+        </section>
+      </aside>
 
-      <div class="summit-marker" id="summit-marker" data-visible="false" aria-hidden="true">
+      <div id="summit-marker" class="summit-marker" data-visible="false" aria-hidden="true">
         <i></i>
         <span id="summit-marker-label">EVEREST</span>
       </div>
 
-      <div class="control-rail">
-        <button class="control-button primary" id="next-summit" type="button">Next summit</button>
-        <button class="control-button" id="reset-earth" type="button">Reset</button>
-        <span class="control-hint">Drag · wheel · arrows · N</span>
+      <aside class="data-legend" aria-hidden="true">
+        <span class="legend-label">Peak index</span><b>700</b>
+        <span class="legend-label">In view</span><b id="visible-peak-count">000</b>
+        <span class="legend-label">Terrain</span><b>×45</b>
+      </aside>
+
+      <div class="control-rail" aria-label="Expedition controls">
+        <button id="next-summit" class="control-button primary" type="button">Next summit</button>
+        <button id="reset-earth" class="control-button" type="button">Reset</button>
+        <span class="control-hint" aria-hidden="true">Drag · Wheel · N</span>
       </div>
 
       <div class="camera-readout" aria-hidden="true">
-        Camera range
-        <strong id="camera-range">3.08 R</strong>
+        orbital altitude
+        <strong id="camera-range">16,246 km</strong>
       </div>
 
-      <span class="library-badge">Three.js · custom relief shader</span>
-      <span class="scene-caption">Real atlas land geometry, deterministic authored relief, and human-controlled summit focus.</span>
+      <section class="earth-loading" aria-live="polite">
+        <div class="loading-panel" role="status" aria-atomic="true">
+          <div class="loading-orbit" aria-hidden="true"></div>
+          <div class="loading-copy">
+            <small>Data earth / resource stream</small>
+            <strong id="loading-stage">BOOTING RELIEF ENGINE</strong>
+            <span id="loading-detail" class="loading-detail">Preparing deterministic WebGL scene</span>
+          </div>
+          <output id="loading-percent" class="loading-percent">000%</output>
+          <div
+            id="loading-track"
+            class="loading-track"
+            role="progressbar"
+            aria-label="3D Earth resource loading progress"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-valuenow="0"
+          >
+            <span id="loading-bar"></span>
+          </div>
+          <div class="loading-meta" aria-hidden="true">
+            <span>NOAA/NCEI · ETOPO 2022</span>
+            <span>LOSSLESS WEBP · 3.43 MB</span>
+          </div>
+        </div>
+      </section>
+
+      <span class="library-badge">Three.js</span>
+      <span class="scene-caption">ETOPO relief expedition globe</span>
     </main>
   </body>
 </html>

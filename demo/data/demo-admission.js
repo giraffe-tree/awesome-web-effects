@@ -39,7 +39,7 @@ export const admissionAuditSummary = {
 export const reviewedDemoScores = {
   'topographic-relief-expedition-globe': {
     creativity: 19, artDirection: 20, motion: 19, clarity: 15, inspiration: 15, evidence: 10,
-    rationaleZh: '真实 World Atlas 陆地、多段山系高程场、15,000 级球体细分、顶点位移、等高线与大气层共同构成可辨认的浮雕地球；真人拖拽、缩放和切换高峰时，空间标记与语义证据保持配准，且与既有点阵网络地球明显不同。'
+    rationaleZh: '4,320×2,160 ETOPO 2022 真实高程与海深、Natural Earth 50m 海岸线、700 座跨七大洲山峰、61,953 顶点球体、分阶段进度加载、顶点位移、等高线与大气层共同构成数据密度和观看完成度都足够的浮雕地球；真人拖拽、缩放和切换八个高峰时，空间标记与语义证据保持配准，且与既有点阵网络地球明显不同。'
   },
   'connected-fragment-story-stage': {
     creativity: 18, artDirection: 19, motion: 18, clarity: 15, inspiration: 15, evidence: 10,

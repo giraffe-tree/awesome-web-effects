@@ -5772,7 +5772,7 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, web_frame_root: P
             not assertion
             or interaction["claimedLibrary"] != "three@0.185.1"
             or interaction["renderer"] != "webgl"
-            or interaction["mechanism"] != "displaced-shader-earth-from-real-atlas-land-and-authored-relief"
+            or interaction["mechanism"] != "etopo-2022-displaced-earth-with-50m-coastline-and-700-real-peaks"
             or interaction["inputAdapters"] != ["pointer", "touch", "wheel", "click", "keyboard"]
             or interaction["automaticPlayback"]
             or interaction["automaticRotation"]
@@ -5781,16 +5781,26 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, web_frame_root: P
             or interaction["previewClockDrivesMotion"]
             or not interaction["initialStaticConfirmed"]
             or not interaction["realAtlasLand"]
-            or interaction["atlasResolution"] != "512x256"
-            or interaction["atlasPixelCount"] != 131072
-            or interaction["landPixelCount"] < 32000
-            or interaction["landPixelCount"] > 48000
-            or interaction["reliefPixelCount"] < 5000
-            or interaction["reliefChecksum"] == 0
-            or interaction["peakCount"] != 4
-            or interaction["starCount"] != 620
-            or interaction["geometrySegments"] != [160, 96]
+            or interaction["atlasDataset"] != "Natural Earth 50m via world-atlas"
+            or interaction["topologyResolution"] != [1024, 512]
+            or interaction["topologyPixelCount"] != 524288
+            or interaction["landPixelCount"] < 110000
+            or interaction["landPixelCount"] > 190000
+            or interaction["topologyChecksum"] == 0
+            or interaction["reliefDataset"] != "NOAA/NCEI ETOPO 2022 60 arc-second surface elevation"
+            or interaction["reliefResolution"] != [4320, 2160]
+            or interaction["reliefAssetBytes"] != 3429836
+            or not interaction["reliefLoaded"]
+            or interaction["peakCount"] != 700
+            or interaction["focusPeakCount"] != 8
+            or sorted(interaction["continentCounts"].values()) != [100, 100, 100, 100, 100, 100, 100]
+            or interaction["peakChecksum"] == 0
+            or interaction["starCount"] != 1800
+            or interaction["geometrySegments"] != [320, 192]
             or interaction["terrainExaggeration"] != 45
+            or interaction["loaderProgress"] != 100
+            or interaction["loaderStageCount"] < 7
+            or not interaction["loaderDismissed"]
             or interaction["inputCount"] < 12
             or interaction["pointerInputCount"] < 1
             or interaction["pointerMoveCount"] < 5
@@ -5805,12 +5815,12 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, web_frame_root: P
             or interaction["motionActive"]
             or interaction["motionCompletionCount"] < 5
             or interaction["selectedPeakIndex"] != 0
-            or interaction["selectedPeakId"] != "everest"
+            or interaction["selectedPeakId"] != "asia-everest"
             or abs(interaction["cameraDistance"] - 3.55) > .001
             or interaction["lastInput"] != "keyboard:Home"
             or interaction["renderCount"] < 20
         ):
-            raise RuntimeError(f"{demo['id']} did not capture a real displaced Three.js Earth with atlas land, relief contours, orbit, zoom, summit focus, and reset: {interaction!r}")
+            raise RuntimeError(f"{demo['id']} did not capture the streamed ETOPO Earth with 50m land, 700 real peaks, loading progress, relief contours, orbit, zoom, summit focus, and reset: {interaction!r}")
     elif demo["id"] == "scene-wipe-progressive-page-swap":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         if (

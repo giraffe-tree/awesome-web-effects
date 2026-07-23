@@ -15,9 +15,9 @@
 | ID | 中文名 | 触发 | 主体变化 | 推荐实现 | 分数 | 决定 |
 | --- | --- | --- | --- | --- | ---: | --- |
 | `connected-fragment-story-stage` | 碎片连线叙事舞台 | 章节按钮、舞台点击、键盘、指针 | 四个语义问题节点带动证据碎片、SVG 连线、中心词与说明同步交接 | Motion 12.42.2 | 95 | 入选 |
-| `topographic-relief-expedition-globe` | 地形浮雕探险地球 | 拖拽、滚轮、键盘、高峰按钮 | 真实陆地与山系高程驱动球体位移、等高线、大气层和高峰定位 | Three.js 0.185.1 | 98 | 入选 |
+| `topographic-relief-expedition-globe` | 地形浮雕探险地球 | 分阶段数据加载、拖拽、滚轮、键盘、高峰按钮 | 4,320×2,160 ETOPO 2022 高程与海深、50m 海岸线和 700 座真实山峰驱动球体位移、等高线、大气层和高峰定位 | Three.js 0.185.1 | 98 | 入选 |
 
-`connected-fragment-story-stage` 的研究来源为 [Anthropic 首页](https://www.anthropic.com/)。`topographic-relief-expedition-globe` 参考用户已有的 [Orogen Relief Observatory](https://orogen.giraffetree.cn)，沿用“地形数据、浮雕着色、星野与高峰定位”的创作方向，但将完整站点收敛成可独立复用的 Three.js 最小机制。
+`connected-fragment-story-stage` 的研究来源为 [Anthropic 首页](https://www.anthropic.com/)。`topographic-relief-expedition-globe` 参考用户已有的 [Orogen Relief Observatory](https://orogen.giraffetree.cn)，复用用户自有项目中基于 NOAA/NCEI ETOPO 2022 生成的无损高程纹理与 700 座全球山峰目录，并将完整站点收敛成带真实加载进度、50m 海岸线和八个探险锚点的独立 Three.js 机制。
 
 与现有目录的差异审计：
 

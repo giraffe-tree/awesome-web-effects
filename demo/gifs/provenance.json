@@ -516,7 +516,7 @@
       "libraryVersion": "three@0.185.1; topojson-client@3.1.0; world-atlas@2.0.2",
       "generatedAt": "2026-07-23",
       "outputPath": "demo/gifs/captured/topographic-relief-expedition-globe.gif",
-      "usageBasis": "original local mechanism demo adapted from the user-owned Orogen relief project using bundled Three.js and atlas data; verify license https://github.com/mrdoob/three.js/blob/HEAD/LICENSE"
+      "usageBasis": "original local mechanism demo adapted from the user-owned Orogen relief project; uses its local 4,320×2,160 NOAA/NCEI ETOPO 2022-derived texture and 700-peak catalog plus bundled Natural Earth 50m atlas data; verify license https://github.com/mrdoob/three.js/blob/HEAD/LICENSE"
     },
     {
       "effectId": "interactive-vector-state-machine",

@@ -16,10 +16,6 @@
 
 </div>
 
-<p align="center"><strong>微信扫码加入 AwesomeWebEffects 用户交流群</strong></p>
-
-<p align="center"><img src="docs/assets/awesome-web-effects-wechat-group.jpg" width="420" alt="AwesomeWebEffects 微信用户交流群二维码"></p>
-
 ---
 
 <h3 align="center">14 个推荐效果 · 每个预览都是真实录制</h3>
@@ -441,3 +437,7 @@ Demo 完全静态且只使用相对路径。仓库内工作流会在推送到 `m
 ---
 
 <p align="center"><sub>GIF 与项目名称仅用于研究、索引和比较，权利归各自作者所有。</sub></p>
+
+<p align="center"><strong>微信扫码加入 AwesomeWebEffects 用户交流群</strong></p>
+
+<p align="center"><img src="docs/assets/awesome-web-effects-wechat-group.png" width="420" alt="AwesomeWebEffects 微信用户交流群二维码"></p>

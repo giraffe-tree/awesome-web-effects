@@ -148,7 +148,7 @@ ${links}
 function communityGroupInvite({ label, alt }) {
   return `<p align="center"><strong>${escapeHtml(label)}</strong></p>
 
-<p align="center"><img src="docs/assets/awesome-web-effects-wechat-group.jpg" width="420" alt="${escapeHtml(alt)}"></p>`;
+<p align="center"><img src="docs/assets/awesome-web-effects-wechat-group.png" width="420" alt="${escapeHtml(alt)}"></p>`;
 }
 
 function featureStrip(steps, centered = false) {
@@ -277,11 +277,6 @@ const english = `${heroBlock({
   links: `[**Open the live visual catalog**](${siteUrlFor(supportedLocales[0])}) · [Language metadata](docs/LANGUAGES.md)`,
 })}
 
-${communityGroupInvite({
-  label: 'Join the AwesomeWebEffects WeChat user group',
-  alt: 'QR code for the AwesomeWebEffects WeChat user group',
-})}
-
 ---
 
 <h3 align="center">${featuredEffectIds.length} recommended effects — every preview a real capture</h3>
@@ -381,17 +376,17 @@ Expected project URL: [${liveDemo}](${liveDemo})
 - Run \`node scripts/validate.mjs\` before committing.
 
 ${centeredFooter('GIFs and project names are used for research, indexing, and comparison. Rights remain with their respective authors.')}
+
+${communityGroupInvite({
+  label: 'Join the AwesomeWebEffects WeChat user group',
+  alt: 'QR code for the AwesomeWebEffects WeChat user group',
+})}
 `;
 
 const chinese = `${heroBlock({
   kicker: '先看见效果，再知道它叫什么，最后复制代码或 Agent 提示词。',
   tagline: '当你脑中已经有想要的感觉，却不知道如何描述特效时，这里就是一张可直接观看的 Web 交互图鉴。',
   links: `[**打开在线视觉目录**](${siteUrlFor(supportedLocales[1])}) · [语言资料](docs/LANGUAGES.md)`,
-})}
-
-${communityGroupInvite({
-  label: '微信扫码加入 AwesomeWebEffects 用户交流群',
-  alt: 'AwesomeWebEffects 微信用户交流群二维码',
 })}
 
 ---
@@ -493,6 +488,11 @@ Demo 完全静态且只使用相对路径。仓库内工作流会在推送到 \`
 - 提交前运行 \`node scripts/validate.mjs\`。
 
 ${centeredFooter('GIF 与项目名称仅用于研究、索引和比较，权利归各自作者所有。')}
+
+${communityGroupInvite({
+  label: '微信扫码加入 AwesomeWebEffects 用户交流群',
+  alt: 'AwesomeWebEffects 微信用户交流群二维码',
+})}
 `;
 
 const readmeWrites = supportedLocales.map(locale => {

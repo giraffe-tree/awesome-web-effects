@@ -16,10 +16,6 @@ A visual atlas for the moment when you know the feeling you want, but not the wo
 
 </div>
 
-<p align="center"><strong>Join the AwesomeWebEffects WeChat user group</strong></p>
-
-<p align="center"><img src="docs/assets/awesome-web-effects-wechat-group.jpg" width="420" alt="QR code for the AwesomeWebEffects WeChat user group"></p>
-
 ---
 
 <h3 align="center">14 recommended effects — every preview a real capture</h3>
@@ -441,3 +437,7 @@ Expected project URL: [https://giraffe-tree.github.io/awesome-web-effects/](http
 ---
 
 <p align="center"><sub>GIFs and project names are used for research, indexing, and comparison. Rights remain with their respective authors.</sub></p>
+
+<p align="center"><strong>Join the AwesomeWebEffects WeChat user group</strong></p>
+
+<p align="center"><img src="docs/assets/awesome-web-effects-wechat-group.png" width="420" alt="QR code for the AwesomeWebEffects WeChat user group"></p>

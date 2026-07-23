@@ -279,33 +279,38 @@ def main() -> int:
             expect(modal.locator(".modal-preview-live")).to_have_attribute("aria-busy", "false")
             expect(modal.locator(".effect-modal-dialog")).to_have_attribute("data-details-open", "false")
             expect(modal.locator("#modal-detail-panel")).to_be_hidden()
-            panel_toggle = modal.locator(".modal-panel-toggle")
+            action_rail = modal.locator(".modal-action-rail")
+            expect(action_rail).to_be_visible()
+            panel_toggle = modal.locator(".modal-rail-toggle")
             expect(panel_toggle).to_have_attribute("aria-expanded", "false")
             assert live_preview.bounding_box()["width"] > 900
             page.wait_for_timeout(250)
             desktop_screenshot = ROOT / "tmp" / "catalog-detail-desktop.png"
             desktop_screenshot.parent.mkdir(parents=True, exist_ok=True)
             page.screenshot(path=str(desktop_screenshot), full_page=False)
-            panel_toggle.focus()
+            modal_prompt_button = modal.locator(".modal-rail-prompt")
+            modal_prompt_label = modal_prompt_button.locator("[data-copy-label]")
+            modal_code_button = modal.locator(".modal-rail-code")
+            modal_code_label = modal_code_button.locator("[data-copy-label]")
+            modal_prompt_text = modal.locator("#modal-prompt-text")
+            expect(modal_prompt_text).to_be_hidden()
+            assert modal_prompt_text.evaluate("element => element.tagName") == "TEXTAREA"
+            effect_prompt = modal_prompt_text.input_value()
+            expect(modal_prompt_label).to_have_text("Copy prompt")
+            modal_prompt_button.focus()
             page.keyboard.press("Enter")
             expect(modal.locator(".effect-modal-dialog")).to_have_attribute("data-details-open", "true")
             expect(modal.locator("#modal-detail-panel")).to_be_visible()
             expect(panel_toggle).to_have_attribute("aria-expanded", "true")
+            expect(modal.locator(".modal-prompt-card")).to_have_attribute("open", "")
+            expect(modal_prompt_text).to_be_visible()
+            expect(modal_prompt_label).to_have_text("Prompt copied")
+            assert page.evaluate("navigator.clipboard.readText()") == effect_prompt
             page.wait_for_timeout(250)
             expanded_preview_width = live_preview.bounding_box()["width"]
             assert 560 < expanded_preview_width < 800
-            expect(modal.locator("[data-modal-tool][open]")).to_have_count(0)
             expect(modal.locator(".modal-score-total")).to_contain_text("85")
             expect(modal.locator(".score-dimension")).to_have_count(6)
-            modal_prompt_button = modal.locator(".modal-prompt-button")
-            modal_prompt_text = modal.locator("#modal-prompt-text")
-            expect(modal_prompt_text).to_be_hidden()
-            assert modal_prompt_text.evaluate("element => element.tagName") == "TEXTAREA"
-            expect(modal_prompt_button).to_have_text("Copy prompt")
-            modal_prompt_button.click()
-            expect(modal_prompt_button).to_have_text("Prompt copied")
-            effect_prompt = page.evaluate("navigator.clipboard.readText()")
-            assert modal_prompt_text.input_value() == effect_prompt
             assert "Scroll-scrubbed master timeline" in effect_prompt
             assert "https://giraffe-tree.github.io/awesome-web-effects/?lang=en#scroll-scrubbed-master-timeline" in effect_prompt
             assert "observable acceptance criteria" in effect_prompt
@@ -314,17 +319,13 @@ def main() -> int:
             expect(modal.locator(".modal-code-card code")).to_contain_text("gsap.registerPlugin")
             expanded_screenshot = ROOT / "tmp" / "catalog-detail-desktop-expanded.png"
             page.screenshot(path=str(expanded_screenshot), full_page=False)
-            modal.locator(".modal-prompt-card > summary").click()
-            expect(modal.locator(".modal-prompt-card")).to_have_attribute("open", "")
-            expect(modal_prompt_text).to_be_visible()
-            expect(modal_prompt_text).to_be_editable()
-            modal.locator(".modal-code-card > summary").click()
+            modal_code_button.click()
             expect(modal.locator(".modal-code-card")).to_have_attribute("open", "")
             expect(modal.locator(".modal-prompt-card")).not_to_have_attribute("open", "")
             expect(modal_prompt_text).to_be_hidden()
-            modal.locator(".modal-copy-code").click()
-            expect(modal.locator(".modal-copy-code")).to_have_text("Copied")
-            modal.locator(".modal-more > summary").click()
+            expect(modal_code_label).to_have_text("Copied")
+            assert "gsap.registerPlugin" in page.evaluate("navigator.clipboard.readText()")
+            modal.locator(".modal-rail-details").click()
             expect(modal.locator(".modal-more")).to_have_attribute("open", "")
             expect(modal.locator(".modal-code-card")).not_to_have_attribute("open", "")
 
@@ -333,11 +334,15 @@ def main() -> int:
             expect(modal.locator(".modal-more")).not_to_have_attribute("open", "")
             expect(modal.locator(".modal-code-card")).not_to_have_attribute("open", "")
             expect(modal_prompt_text).to_be_visible()
+            expect(modal_prompt_text).to_be_editable()
             modal_prompt_text.fill(edited_effect_prompt)
             page.wait_for_timeout(1500)
             modal_prompt_button.click()
-            expect(modal_prompt_button).to_have_text("Prompt copied")
+            expect(modal_prompt_label).to_have_text("Prompt copied")
             assert page.evaluate("navigator.clipboard.readText()") == edited_effect_prompt
+            panel_toggle.click()
+            expect(modal.locator(".effect-modal-dialog")).to_have_attribute("data-details-open", "false")
+            expect(modal.locator("#modal-detail-panel")).to_be_hidden()
 
             page.keyboard.press("Escape")
             expect(modal).to_be_hidden()
@@ -511,9 +516,12 @@ def main() -> int:
             mobile_preview_box = modal.locator(".modal-preview-frame").bounding_box()
             assert mobile_preview_box["width"] > 360
             expect(modal.locator("#modal-detail-panel")).to_be_hidden()
-            modal.locator(".modal-panel-toggle").click()
+            mobile_rail = modal.locator(".modal-action-rail")
+            expect(mobile_rail).to_be_visible()
+            assert mobile_rail.evaluate("element => getComputedStyle(element).flexDirection") == "row"
+            modal.locator(".modal-rail-code").click()
             expect(modal.locator("#modal-detail-panel")).to_be_visible()
-            expect(modal.locator(".modal-copy-code")).to_be_visible()
+            expect(modal.locator(".modal-code-card")).to_have_attribute("open", "")
             page.wait_for_timeout(250)
             screenshot = ROOT / "tmp" / "catalog-detail-mobile.png"
             screenshot.parent.mkdir(parents=True, exist_ok=True)
@@ -543,7 +551,7 @@ def main() -> int:
             server.kill()
             server.wait()
 
-    print(f"Catalog UI verified: 20 locales (including RTL and URL persistence), {expected_effect_count} admitted demos, 14 homepage recommendations, large default live previews with keyboard-expandable detail panels, editable page-only homepage and per-effect prompts with refresh reset, mutually exclusive prompt/code/evidence disclosure, unified light catalog styling, paused 6s hero autoplay, uncropped 16:9 cards, loading/error transitions, native-size official GIFs, copy actions, focus, reduced motion, and mobile layout.")
+    print(f"Catalog UI verified: 20 locales (including RTL and URL persistence), {expected_effect_count} admitted demos, 14 homepage recommendations, large default live previews with a persistent action rail, copy-and-expand prompt/code flows, editable page-only homepage and per-effect prompts with refresh reset, mutually exclusive prompt/code/evidence disclosure, unified light catalog styling, paused 6s hero autoplay, uncropped 16:9 cards, loading/error transitions, native-size official GIFs, focus, reduced motion, and mobile layout.")
     return 0
 
 

@@ -251,7 +251,7 @@ assert(/row\.setAttribute\(\s*['"]aria-haspopup['"]\s*,\s*['"]dialog['"]\s*\)/.t
 assert((html.match(/openEffectModal\(\s*effect\s*,\s*row\s*\)/g) || []).length >= 2, 'Effect cards must open details from both pointer and keyboard handlers.');
 assert(modalRenderer.includes('source.snippet'), 'Effect-detail modal must render the selected source snippet.');
 assert(/<pre[^>]*>\s*<code[^>]*>\$\{escapeHTML\(source\.snippet\)\}<\/code>\s*<\/pre>/.test(modalRenderer), 'Effect-detail modal must display source.snippet in a code block.');
-assert(/(?:class="[^"]*modal-copy-code|data-modal-copy-code)/.test(modalRenderer), 'Effect-detail modal must expose a dedicated copy-code button.');
+assert(/(?:class="[^"]*(?:modal-copy-code|modal-rail-code)|data-modal-copy-code)/.test(modalRenderer), 'Effect-detail modal must expose a dedicated copy-code button.');
 assert(/copyText\(\s*[^,]+\s*,\s*source\.snippet\s*,/.test(modalRenderer), 'Effect-detail copy-code button must copy source.snippet independently.');
 assert(modalRenderer.includes('modal-prompt-text') && modalRenderer.includes('escapeHTML(effectPromptText)') && modalRenderer.includes('promptEditor.value'), 'Effect-detail modal must render an editable prompt and copy its current value.');
 assert(html.includes('editedAgentPrompt') && html.includes('editedEffectPrompts = new Map()') && !html.includes("localStorage.setItem('awesome-effects-prompt"), 'Prompt edits must remain in page memory and reset on refresh.');

@@ -17,7 +17,16 @@ const assert = (condition, message) => { if (!condition) errors.push(message); }
 const duplicates = values => [...new Set(values.filter((value, index) => values.indexOf(value) !== index))];
 const execFileAsync = promisify(execFile);
 const realPreviewKinds = new Set(['official-capture', 'local-demo-capture']);
+const languagesDirectory = 'languages';
 const readmeFilename = locale => locale.code === 'en' ? 'README.md' : `README.${locale.code}.md`;
+const readmePath = locale => locale.code === 'en'
+  ? readmeFilename(locale)
+  : `${languagesDirectory}/${readmeFilename(locale)}`;
+const readmeLink = (locale, from) => {
+  if (from === 'languages') return locale.code === 'en' ? '../README.md' : readmeFilename(locale);
+  if (from === 'docs') return `../${readmePath(locale)}`;
+  return readmePath(locale);
+};
 
 function inspectAnimatedWebP(bytes) {
   const readUint24LE = offset => bytes[offset] | bytes[offset + 1] << 8 | bytes[offset + 2] << 16;
@@ -218,13 +227,12 @@ assert(duplicates(featuredEffectIds).length === 0, `Duplicate homepage recommend
 const effectIds = new Set(effects.map(effect => effect.id));
 for (const effectId of featuredEffectIds) assert(effectIds.has(effectId), `Unknown homepage recommendation: ${effectId}.`);
 
-const localizedReadmeFiles = supportedLocales.map(readmeFilename);
 const [html, admissionAudit, languageSupportDoc, legacyChineseReadme, ...localizedReadmes] = await Promise.all([
   readFile(resolve(root, 'demo', 'index.html'), 'utf8'),
   readFile(resolve(root, 'research', `demo-admission-audit-${admissionAuditSummary.auditedAt}.md`), 'utf8'),
   readFile(resolve(root, 'docs', 'LANGUAGES.md'), 'utf8'),
-  readFile(resolve(root, 'README.zh-CN.md'), 'utf8'),
-  ...localizedReadmeFiles.map(filename => readFile(resolve(root, filename), 'utf8'))
+  readFile(resolve(root, languagesDirectory, 'README.zh-CN.md'), 'utf8'),
+  ...supportedLocales.map(locale => readFile(resolve(root, readmePath(locale)), 'utf8'))
 ]);
 const readmeByLocale = new Map(supportedLocales.map((locale, index) => [locale.code, localizedReadmes[index]]));
 const readme = readmeByLocale.get('en');
@@ -277,18 +285,20 @@ for (const locale of supportedLocales) {
   assert((localizedReadme?.match(/id="agent-quick-start"/g) || []).length === 1, `${locale.code}: README must contain exactly one one-line Agent Prompt entry point.`);
   assert(localizedReadme?.includes(`\`\`\`text\n${oneLinePrompt}\n\`\`\``), `${locale.code}: README does not expose the canonical one-line Agent Prompt in a copyable text block.`);
   assert(localizedReadme?.includes(`?lang=${encodeURIComponent(locale.code)}`), `${locale.code}: localized README does not link to its site locale.`);
-  assert(localizedReadme?.includes('docs/LANGUAGES.md'), `${locale.code}: localized README does not link to the language metadata document.`);
+  const readmeDirectory = locale.code === 'en' ? 'root' : 'languages';
+  const languageMetadataLink = locale.code === 'en' ? 'docs/LANGUAGES.md' : '../docs/LANGUAGES.md';
+  assert(localizedReadme?.includes(languageMetadataLink), `${locale.code}: localized README does not link to the language metadata document.`);
   assert(!localizedReadme?.includes('## Languages') && !localizedReadme?.includes('## 支持语言'), `${locale.code}: language metadata must not be embedded in a README.`);
   for (const targetLocale of supportedLocales) {
-    assert(localizedReadme?.includes(`[${targetLocale.nativeName}](${readmeFilename(targetLocale)})`), `${locale.code}: README language navigation is missing ${targetLocale.code}.`);
+    assert(localizedReadme?.includes(`[${targetLocale.nativeName}](${readmeLink(targetLocale, readmeDirectory)})`), `${locale.code}: README language navigation is missing ${targetLocale.code}.`);
   }
   assert(languageSupportDoc.includes(locale.nativeName), `Language metadata document is missing ${locale.code}.`);
-  assert(languageSupportDoc.includes(`../${readmeFilename(locale)}`), `Language metadata document does not link to README ${locale.code}.`);
+  assert(languageSupportDoc.includes(readmeLink(locale, 'docs')), `Language metadata document does not link to README ${locale.code}.`);
   assert(languageSupportDoc.includes(`?lang=${encodeURIComponent(locale.code)}`), `Language metadata document does not link to site locale ${locale.code}.`);
 }
 assert(!readme.includes('| # | Language') && !readmeZh.includes('| # | 语言'), 'Language ranking tables must live only in docs/LANGUAGES.md.');
 assert(languageSupportDoc.includes('Ethnologue 200') && languageSupportDoc.includes('| # | Language / 语言 |'), 'Language metadata document is missing ranking methodology or the locale table.');
-assert(legacyChineseReadme.includes('README.zh-Hans.md'), 'Legacy README.zh-CN.md must point to the canonical Simplified Chinese README.');
+assert(legacyChineseReadme.includes('README.zh-Hans.md'), 'Legacy languages/README.zh-CN.md must point to the canonical Simplified Chinese README.');
 assert(readme.includes('research/ai-native-homepages-100.md'), 'English README does not link to the homepage research summary.');
 assert(readmeZh.includes('research/ai-native-homepages-100.md'), 'Chinese README does not link to the homepage research summary.');
 for (const effectId of featuredEffectIds) {

@@ -12,7 +12,7 @@ A visual atlas for the moment when you know the feeling you want, but not the wo
 
 [**Open the live visual catalog**](https://giraffe-tree.github.io/awesome-web-effects/?lang=en) · [Language metadata](docs/LANGUAGES.md)
 
-<sub>[English](README.md) · [简体中文](README.zh-Hans.md) · [हिन्दी](README.hi.md) · [Español](README.es.md) · [العربية](README.ar.md) · [Français](README.fr.md) · [বাংলা](README.bn.md) · [Português](README.pt.md) · [Bahasa Indonesia](README.id.md) · [اردو](README.ur.md) · [Русский](README.ru.md) · [Deutsch](README.de.md) · [日本語](README.ja.md) · [Naijá](README.pcm.md) · [العربي المصري](README.arz.md) · [मराठी](README.mr.md) · [Tiếng Việt](README.vi.md) · [తెలుగు](README.te.md) · [Kiswahili](README.sw.md) · [Hausa](README.ha.md)</sub>
+<sub>[English](README.md) · [简体中文](languages/README.zh-Hans.md) · [हिन्दी](languages/README.hi.md) · [Español](languages/README.es.md) · [العربية](languages/README.ar.md) · [Français](languages/README.fr.md) · [বাংলা](languages/README.bn.md) · [Português](languages/README.pt.md) · [Bahasa Indonesia](languages/README.id.md) · [اردو](languages/README.ur.md) · [Русский](languages/README.ru.md) · [Deutsch](languages/README.de.md) · [日本語](languages/README.ja.md) · [Naijá](languages/README.pcm.md) · [العربي المصري](languages/README.arz.md) · [मराठी](languages/README.mr.md) · [Tiếng Việt](languages/README.vi.md) · [తెలుగు](languages/README.te.md) · [Kiswahili](languages/README.sw.md) · [Hausa](languages/README.ha.md)</sub>
 
 </div>
 

@@ -1,6 +1,6 @@
 # Supported languages / 支持语言
 
-[English](../README.md) · [简体中文](../README.zh-Hans.md) · [हिन्दी](../README.hi.md) · [Español](../README.es.md) · [العربية](../README.ar.md) · [Français](../README.fr.md) · [বাংলা](../README.bn.md) · [Português](../README.pt.md) · [Bahasa Indonesia](../README.id.md) · [اردو](../README.ur.md) · [Русский](../README.ru.md) · [Deutsch](../README.de.md) · [日本語](../README.ja.md) · [Naijá](../README.pcm.md) · [العربي المصري](../README.arz.md) · [मराठी](../README.mr.md) · [Tiếng Việt](../README.vi.md) · [తెలుగు](../README.te.md) · [Kiswahili](../README.sw.md) · [Hausa](../README.ha.md)
+[English](../README.md) · [简体中文](../languages/README.zh-Hans.md) · [हिन्दी](../languages/README.hi.md) · [Español](../languages/README.es.md) · [العربية](../languages/README.ar.md) · [Français](../languages/README.fr.md) · [বাংলা](../languages/README.bn.md) · [Português](../languages/README.pt.md) · [Bahasa Indonesia](../languages/README.id.md) · [اردو](../languages/README.ur.md) · [Русский](../languages/README.ru.md) · [Deutsch](../languages/README.de.md) · [日本語](../languages/README.ja.md) · [Naijá](../languages/README.pcm.md) · [العربي المصري](../languages/README.arz.md) · [मराठी](../languages/README.mr.md) · [Tiếng Việt](../languages/README.vi.md) · [తెలుగు](../languages/README.te.md) · [Kiswahili](../languages/README.sw.md) · [Hausa](../languages/README.ha.md)
 
 The website UI and README entry points support the following 20 locales. The 150 effect names, behavior fields, code samples, and agent prompts remain canonical English technical content, with authored Simplified Chinese names shown where available.
 
@@ -9,25 +9,25 @@ The website UI and README entry points support the following 20 locales. The 150
 | # | Language / 语言 | Native name / 本地名称 | Total speakers (L1 + L2) | README | Site locale | Direction |
 | ---: | --- | --- | ---: | --- | --- | --- |
 | 1 | English / 英语 | English | 1,493M | [README.md](../README.md) | [`en`](https://giraffe-tree.github.io/awesome-web-effects/?lang=en) | LTR |
-| 2 | Mandarin Chinese / 普通话（简体书写） | 简体中文 | 1,183M | [README.zh-Hans.md](../README.zh-Hans.md) | [`zh-Hans`](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans) | LTR |
-| 3 | Hindi / 印地语 | हिन्दी | 611M | [README.hi.md](../README.hi.md) | [`hi`](https://giraffe-tree.github.io/awesome-web-effects/?lang=hi) | LTR |
-| 4 | Spanish / 西班牙语 | Español | 561M | [README.es.md](../README.es.md) | [`es`](https://giraffe-tree.github.io/awesome-web-effects/?lang=es) | LTR |
-| 5 | Modern Standard Arabic / 现代标准阿拉伯语 | العربية | 335M | [README.ar.md](../README.ar.md) | [`ar`](https://giraffe-tree.github.io/awesome-web-effects/?lang=ar) | RTL |
-| 6 | French / 法语 | Français | 334M | [README.fr.md](../README.fr.md) | [`fr`](https://giraffe-tree.github.io/awesome-web-effects/?lang=fr) | LTR |
-| 7 | Bengali / 孟加拉语 | বাংলা | 274M | [README.bn.md](../README.bn.md) | [`bn`](https://giraffe-tree.github.io/awesome-web-effects/?lang=bn) | LTR |
-| 8 | Portuguese / 葡萄牙语 | Português | 269M | [README.pt.md](../README.pt.md) | [`pt`](https://giraffe-tree.github.io/awesome-web-effects/?lang=pt) | LTR |
-| 9 | Indonesian / 印度尼西亚语 | Bahasa Indonesia | 255M | [README.id.md](../README.id.md) | [`id`](https://giraffe-tree.github.io/awesome-web-effects/?lang=id) | LTR |
-| 10 | Urdu / 乌尔都语 | اردو | 246M | [README.ur.md](../README.ur.md) | [`ur`](https://giraffe-tree.github.io/awesome-web-effects/?lang=ur) | RTL |
-| 11 | Russian / 俄语 | Русский | 210M | [README.ru.md](../README.ru.md) | [`ru`](https://giraffe-tree.github.io/awesome-web-effects/?lang=ru) | LTR |
-| 12 | Standard German / 标准德语 | Deutsch | 133M | [README.de.md](../README.de.md) | [`de`](https://giraffe-tree.github.io/awesome-web-effects/?lang=de) | LTR |
-| 13 | Japanese / 日语 | 日本語 | 126M | [README.ja.md](../README.ja.md) | [`ja`](https://giraffe-tree.github.io/awesome-web-effects/?lang=ja) | LTR |
-| 14 | Nigerian Pidgin / 尼日利亚皮钦语 | Naijá | 121M | [README.pcm.md](../README.pcm.md) | [`pcm`](https://giraffe-tree.github.io/awesome-web-effects/?lang=pcm) | LTR |
-| 15 | Egyptian Arabic / 埃及阿拉伯语 | العربي المصري | 118M | [README.arz.md](../README.arz.md) | [`arz`](https://giraffe-tree.github.io/awesome-web-effects/?lang=arz) | RTL |
-| 16 | Marathi / 马拉地语 | मराठी | 99M | [README.mr.md](../README.mr.md) | [`mr`](https://giraffe-tree.github.io/awesome-web-effects/?lang=mr) | LTR |
-| 17 | Vietnamese / 越南语 | Tiếng Việt | 97M | [README.vi.md](../README.vi.md) | [`vi`](https://giraffe-tree.github.io/awesome-web-effects/?lang=vi) | LTR |
-| 18 | Telugu / 泰卢固语 | తెలుగు | 96M | [README.te.md](../README.te.md) | [`te`](https://giraffe-tree.github.io/awesome-web-effects/?lang=te) | LTR |
-| 19 | Swahili / 斯瓦希里语 | Kiswahili | 95M | [README.sw.md](../README.sw.md) | [`sw`](https://giraffe-tree.github.io/awesome-web-effects/?lang=sw) | LTR |
-| 20 | Hausa / 豪萨语 | Hausa | 94M | [README.ha.md](../README.ha.md) | [`ha`](https://giraffe-tree.github.io/awesome-web-effects/?lang=ha) | LTR |
+| 2 | Mandarin Chinese / 普通话（简体书写） | 简体中文 | 1,183M | [README.zh-Hans.md](../languages/README.zh-Hans.md) | [`zh-Hans`](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans) | LTR |
+| 3 | Hindi / 印地语 | हिन्दी | 611M | [README.hi.md](../languages/README.hi.md) | [`hi`](https://giraffe-tree.github.io/awesome-web-effects/?lang=hi) | LTR |
+| 4 | Spanish / 西班牙语 | Español | 561M | [README.es.md](../languages/README.es.md) | [`es`](https://giraffe-tree.github.io/awesome-web-effects/?lang=es) | LTR |
+| 5 | Modern Standard Arabic / 现代标准阿拉伯语 | العربية | 335M | [README.ar.md](../languages/README.ar.md) | [`ar`](https://giraffe-tree.github.io/awesome-web-effects/?lang=ar) | RTL |
+| 6 | French / 法语 | Français | 334M | [README.fr.md](../languages/README.fr.md) | [`fr`](https://giraffe-tree.github.io/awesome-web-effects/?lang=fr) | LTR |
+| 7 | Bengali / 孟加拉语 | বাংলা | 274M | [README.bn.md](../languages/README.bn.md) | [`bn`](https://giraffe-tree.github.io/awesome-web-effects/?lang=bn) | LTR |
+| 8 | Portuguese / 葡萄牙语 | Português | 269M | [README.pt.md](../languages/README.pt.md) | [`pt`](https://giraffe-tree.github.io/awesome-web-effects/?lang=pt) | LTR |
+| 9 | Indonesian / 印度尼西亚语 | Bahasa Indonesia | 255M | [README.id.md](../languages/README.id.md) | [`id`](https://giraffe-tree.github.io/awesome-web-effects/?lang=id) | LTR |
+| 10 | Urdu / 乌尔都语 | اردو | 246M | [README.ur.md](../languages/README.ur.md) | [`ur`](https://giraffe-tree.github.io/awesome-web-effects/?lang=ur) | RTL |
+| 11 | Russian / 俄语 | Русский | 210M | [README.ru.md](../languages/README.ru.md) | [`ru`](https://giraffe-tree.github.io/awesome-web-effects/?lang=ru) | LTR |
+| 12 | Standard German / 标准德语 | Deutsch | 133M | [README.de.md](../languages/README.de.md) | [`de`](https://giraffe-tree.github.io/awesome-web-effects/?lang=de) | LTR |
+| 13 | Japanese / 日语 | 日本語 | 126M | [README.ja.md](../languages/README.ja.md) | [`ja`](https://giraffe-tree.github.io/awesome-web-effects/?lang=ja) | LTR |
+| 14 | Nigerian Pidgin / 尼日利亚皮钦语 | Naijá | 121M | [README.pcm.md](../languages/README.pcm.md) | [`pcm`](https://giraffe-tree.github.io/awesome-web-effects/?lang=pcm) | LTR |
+| 15 | Egyptian Arabic / 埃及阿拉伯语 | العربي المصري | 118M | [README.arz.md](../languages/README.arz.md) | [`arz`](https://giraffe-tree.github.io/awesome-web-effects/?lang=arz) | RTL |
+| 16 | Marathi / 马拉地语 | मराठी | 99M | [README.mr.md](../languages/README.mr.md) | [`mr`](https://giraffe-tree.github.io/awesome-web-effects/?lang=mr) | LTR |
+| 17 | Vietnamese / 越南语 | Tiếng Việt | 97M | [README.vi.md](../languages/README.vi.md) | [`vi`](https://giraffe-tree.github.io/awesome-web-effects/?lang=vi) | LTR |
+| 18 | Telugu / 泰卢固语 | తెలుగు | 96M | [README.te.md](../languages/README.te.md) | [`te`](https://giraffe-tree.github.io/awesome-web-effects/?lang=te) | LTR |
+| 19 | Swahili / 斯瓦希里语 | Kiswahili | 95M | [README.sw.md](../languages/README.sw.md) | [`sw`](https://giraffe-tree.github.io/awesome-web-effects/?lang=sw) | LTR |
+| 20 | Hausa / 豪萨语 | Hausa | 94M | [README.ha.md](../languages/README.ha.md) | [`ha`](https://giraffe-tree.github.io/awesome-web-effects/?lang=ha) | LTR |
 
 ## Method / 统计口径
 

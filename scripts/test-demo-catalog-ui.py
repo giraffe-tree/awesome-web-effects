@@ -328,15 +328,17 @@ def main() -> int:
             expect(modal.locator(".effect-modal-dialog")).to_have_attribute("data-details-open", "true")
             expect(modal.locator("#modal-detail-panel")).to_be_visible()
             expect(panel_toggle).to_have_attribute("aria-expanded", "true")
-            expect(modal.locator(".modal-prompt-card")).to_have_attribute("open", "")
+            expect(modal.locator(".modal-prompt-card")).to_be_visible()
+            expect(modal_prompt_button).to_have_attribute("aria-pressed", "true")
             expect(modal_prompt_text).to_be_visible()
             expect(modal_prompt_label).to_have_text("Prompt copied")
             assert page.evaluate("navigator.clipboard.readText()") == effect_prompt
             page.wait_for_timeout(250)
             expanded_preview_width = live_preview.bounding_box()["width"]
             assert 560 < expanded_preview_width < 800
-            expect(modal.locator(".modal-score-total")).to_contain_text("85")
-            expect(modal.locator(".score-dimension")).to_have_count(6)
+            fixed_panel_box = modal.locator("#modal-detail-panel").bounding_box()
+            fixed_dialog_box = modal.locator(".effect-modal-dialog").bounding_box()
+            assert fixed_panel_box and fixed_dialog_box
             assert "Scroll-scrubbed master timeline" in effect_prompt
             assert "https://giraffe-tree.github.io/awesome-web-effects/?lang=en#scroll-scrubbed-master-timeline" in effect_prompt
             assert "observable acceptance criteria" in effect_prompt
@@ -346,19 +348,45 @@ def main() -> int:
             expanded_screenshot = ROOT / "tmp" / "catalog-detail-desktop-expanded.png"
             page.screenshot(path=str(expanded_screenshot), full_page=False)
             modal_code_button.click()
-            expect(modal.locator(".modal-code-card")).to_have_attribute("open", "")
-            expect(modal.locator(".modal-prompt-card")).not_to_have_attribute("open", "")
+            expect(modal.locator(".modal-code-card")).to_be_visible()
+            expect(modal.locator(".modal-prompt-card")).to_be_hidden()
+            expect(modal_code_button).to_have_attribute("aria-pressed", "true")
+            expect(modal_prompt_button).to_have_attribute("aria-pressed", "false")
             expect(modal_prompt_text).to_be_hidden()
             expect(modal_code_label).to_have_text("Copied")
             assert "gsap.registerPlugin" in page.evaluate("navigator.clipboard.readText()")
+            assert modal.locator("#modal-detail-panel").bounding_box() == fixed_panel_box
+            assert modal.locator(".effect-modal-dialog").bounding_box() == fixed_dialog_box
+
             modal.locator(".modal-rail-details").click()
-            expect(modal.locator(".modal-more")).to_have_attribute("open", "")
-            expect(modal.locator(".modal-code-card")).not_to_have_attribute("open", "")
+            expect(modal.locator(".modal-panel-details")).to_be_visible()
+            expect(modal.locator(".modal-code-card")).to_be_hidden()
+            expect(modal.locator(".modal-fact")).to_have_count(3)
+            assert modal.locator("#modal-detail-panel").bounding_box() == fixed_panel_box
+
+            modal.locator(".modal-rail-implementation").click()
+            expect(modal.locator(".modal-panel-implementation")).to_be_visible()
+            expect(modal.locator(".modal-panel-provenance")).to_be_hidden()
+            expect(modal.locator(".modal-panel-implementation .modal-link")).to_have_count(1)
+            assert modal.locator("#modal-detail-panel").bounding_box() == fixed_panel_box
+
+            modal.locator(".modal-rail-provenance").click()
+            expect(modal.locator(".modal-panel-provenance")).to_be_visible()
+            expect(modal.locator(".modal-panel-implementation")).to_be_hidden()
+            expect(modal.locator(".modal-panel-provenance .modal-link")).to_have_count(3)
+            assert modal.locator("#modal-detail-panel").bounding_box() == fixed_panel_box
+
+            modal.locator(".modal-rail-score").click()
+            expect(modal.locator(".modal-panel-score")).to_be_visible()
+            expect(modal.locator(".modal-score-total")).to_contain_text("85")
+            expect(modal.locator(".score-dimension")).to_have_count(6)
+            assert modal.locator("#modal-detail-panel").bounding_box() == fixed_panel_box
+            assert modal.locator(".effect-modal-dialog").bounding_box() == fixed_dialog_box
 
             edited_effect_prompt = f"{effect_prompt} Keep this page-only edit."
-            modal.locator(".modal-prompt-card > summary").click()
-            expect(modal.locator(".modal-more")).not_to_have_attribute("open", "")
-            expect(modal.locator(".modal-code-card")).not_to_have_attribute("open", "")
+            modal_prompt_button.click()
+            expect(modal.locator(".modal-panel-score")).to_be_hidden()
+            expect(modal.locator(".modal-code-card")).to_be_hidden()
             expect(modal_prompt_text).to_be_visible()
             expect(modal_prompt_text).to_be_editable()
             modal_prompt_text.fill(edited_effect_prompt)
@@ -545,9 +573,14 @@ def main() -> int:
             mobile_rail = modal.locator(".modal-action-rail")
             expect(mobile_rail).to_be_visible()
             assert mobile_rail.evaluate("element => getComputedStyle(element).flexDirection") == "row"
+            assert mobile_rail.evaluate("element => element.scrollWidth > element.clientWidth")
             modal.locator(".modal-rail-code").click()
             expect(modal.locator("#modal-detail-panel")).to_be_visible()
-            expect(modal.locator(".modal-code-card")).to_have_attribute("open", "")
+            expect(modal.locator(".modal-code-card")).to_be_visible()
+            mobile_open_dialog_box = modal.locator(".effect-modal-dialog").bounding_box()
+            modal.locator(".modal-rail-details").click()
+            expect(modal.locator(".modal-panel-details")).to_be_visible()
+            assert modal.locator(".effect-modal-dialog").bounding_box() == mobile_open_dialog_box
             page.wait_for_timeout(250)
             screenshot = ROOT / "tmp" / "catalog-detail-mobile.png"
             screenshot.parent.mkdir(parents=True, exist_ok=True)

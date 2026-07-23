@@ -278,16 +278,10 @@ def main() -> int:
             page.goto(f"{origin}/?lang=en#scroll-scrubbed-master-timeline", wait_until="networkidle")
             real_row = page.locator("#scroll-scrubbed-master-timeline")
             expect(real_row).to_be_in_viewport()
-            expect(real_row.locator(".detail-panel")).to_be_visible()
-            expect(real_row.locator(".code-button")).to_have_attribute("aria-expanded", "true")
-            effect_permalink = real_row.locator(".permalink")
-            expect(effect_permalink).to_have_attribute(
-                "href",
-                "https://giraffe-tree.github.io/awesome-web-effects/?lang=en#scroll-scrubbed-master-timeline",
-            )
-            expect(effect_permalink.locator("code")).to_have_text(
-                "https://giraffe-tree.github.io/awesome-web-effects/?lang=en#scroll-scrubbed-master-timeline"
-            )
+            expect(page.locator("#effect-list .code-button")).to_have_count(0)
+            expect(page.locator("#effect-list .detail-panel")).to_have_count(0)
+            expect(page.locator("#effect-list pre")).to_have_count(0)
+            expect(page.locator("#effect-list .prompt-button")).to_have_count(expected_effect_count)
             real_row.locator(".effect-cell").click()
             modal = page.locator("#effect-modal")
             expect(modal).to_be_visible()
@@ -610,7 +604,7 @@ def main() -> int:
             server.kill()
             server.wait()
 
-    print(f"Catalog UI verified: 20 locales (including RTL and URL persistence), {expected_effect_count} admitted demos, 14 homepage recommendations, large default live previews with a persistent action rail, copy-and-expand prompt/code flows, editable page-only homepage and per-effect prompts with refresh reset, mutually exclusive prompt/code/evidence disclosure, unified light catalog styling, paused 6s hero autoplay, uncropped 16:9 cards, loading/error transitions, native-size official GIFs, focus, reduced motion, and mobile layout.")
+    print(f"Catalog UI verified: 20 locales (including RTL and URL persistence), {expected_effect_count} admitted demos, 14 homepage recommendations, prompt-only catalog cards with modal-only minimal code, large default live previews with a persistent action rail, editable page-only homepage and per-effect prompts with refresh reset, mutually exclusive prompt/code/evidence panels, unified light catalog styling, paused 6s hero autoplay, uncropped 16:9 cards, loading/error transitions, native-size official GIFs, focus, reduced motion, and mobile layout.")
     return 0
 
 

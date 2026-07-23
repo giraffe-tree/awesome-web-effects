@@ -50,7 +50,7 @@
       }
       button, input, select { font: inherit; }
       h1, h2, h3, p, button, a, label, option { overflow-wrap: anywhere; }
-      pre, code, .effect-key, .repo-link { direction: ltr; text-align: left; unicode-bidi: isolate; }
+      pre, code, .effect-key { direction: ltr; text-align: left; unicode-bidi: isolate; }
       html[dir="rtl"] h1, html[dir="rtl"] h2, html[dir="rtl"] h3, html[dir="rtl"] .hero-story-word { letter-spacing: normal; }
       html[lang="ur"] body { line-height: 1.7; }
       html[lang="de"] body { hyphens: auto; }
@@ -440,30 +440,10 @@
       .action-button { display: inline-flex; align-items: center; justify-content: center; min-height: 40px; padding: 0 13px; border: 0; border-radius: 99px; cursor: pointer; font-size: 12px; font-weight: 600; transition: transform .24s var(--ease-out), box-shadow .24s var(--ease-out), background .2s ease, color .2s ease; }
       .prompt-button { color: var(--pink-ink); background: var(--pink); box-shadow: 0 1px 2px rgba(40, 10, 25, .35); }
       .prompt-button:hover { background: var(--pink-hover); box-shadow: 0 4px 14px rgba(232, 160, 180, .3); transform: translateY(-1px); }
-      .code-button { color: var(--pink-hover); background: var(--pink-soft); }
-      .code-button:hover { background: rgba(232, 160, 180, .2); box-shadow: var(--shadow-xs); transform: translateY(-1px); }
-
-      .detail-panel { padding: 0 22px 24px 234px; background: rgba(154, 168, 216, .04); }
-      .detail-panel[hidden] { display: none; }
-      .detail-top { display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: center; padding: 24px 0; border-top: 1px solid var(--line); }
-      .detail-top p { max-width: 760px; margin: 0; color: var(--muted); font-size: 14px; line-height: 1.55; }
-      .permalink { display: grid; min-width: 0; max-width: min(42vw, 460px); gap: 3px; color: var(--pink); font-size: 12px; text-decoration: none; }
-      .permalink strong { font-size: 11px; }
-      .permalink code { overflow: hidden; color: currentColor; font: 9px/1.35 ui-monospace, SFMono-Regular, Menlo, monospace; direction: ltr; text-overflow: ellipsis; white-space: nowrap; }
-      .implementations { display: grid; gap: 12px; }
-      .implementation { display: grid; grid-template-columns: minmax(190px, .52fr) minmax(0, 1.48fr); overflow: hidden; border: 1px solid var(--line); border-radius: 18px; background: rgba(26, 32, 64, .6); box-shadow: var(--shadow-xs); }
-      .implementation-meta { padding: 20px; border-inline-end: 1px solid var(--line); }
-      .recommendation { display: inline-flex; padding: 5px 8px; border-radius: 99px; color: #f5d8e0; background: rgba(232, 160, 180, .16); font-size: 9px; font-weight: 700; text-transform: uppercase; }
-      .implementation h4 { margin: 14px 0 6px; font-size: 21px; letter-spacing: -.035em; }
-      .repo-link { color: var(--pink); font: 10px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; overflow-wrap: anywhere; }
-      .origin-link { display: inline-block; margin-top: 10px; color: var(--muted); font-size: 10px; }
-      .code-wrap { position: relative; min-width: 0; color: #ece7f2; background: #0c1126; }
       pre { min-height: 150px; margin: 0; padding: 22px 82px 22px 20px; overflow: auto; color: #cdd8f6; font: 12px/1.62 ui-monospace, SFMono-Regular, Menlo, monospace; tab-size: 2; scrollbar-width: thin; scrollbar-color: rgba(154, 168, 216, .32) transparent; }
       pre::-webkit-scrollbar { width: 8px; height: 8px; }
       pre::-webkit-scrollbar-thumb { border: 0; border-radius: 99px; background: rgba(154, 168, 216, .28); }
       pre::-webkit-scrollbar-track { background: transparent; }
-      .copy-code { position: absolute; top: 13px; inset-inline-end: 13px; min-height: 34px; padding: 0 12px; border: 1px solid rgba(244, 239, 233, .18); border-radius: 99px; color: #f2ede4; background: rgba(244, 239, 233, .08); cursor: pointer; font-size: 10px; transition: background .2s ease, border-color .2s ease; }
-      .copy-code:hover { border-color: rgba(244, 239, 233, .32); background: rgba(244, 239, 233, .16); }
       .empty { margin: 0; padding: 96px 32px; color: var(--quiet); font-size: clamp(17px, 2vw, 20px); line-height: 1.5; text-align: center; }
       .empty::before { content: ""; display: block; width: 40px; height: 40px; margin: 0 auto 16px; border: 1.5px dashed rgba(154, 168, 216, .38); border-radius: 50%; }
 
@@ -571,7 +551,6 @@
       @media (max-width: 1080px) {
         .catalog-head, .effect-main { grid-template-columns: 38px 118px minmax(230px, 1.2fr) minmax(155px, .7fr) 164px; gap: 14px; }
         .row-preview { width: 112px; border-radius: 12px; }
-        .detail-panel { padding-inline-start: 192px; }
       }
       @media (max-width: 820px) {
         .hero { padding-top: 68px; }
@@ -590,7 +569,6 @@
         .effect-cell { grid-column: 3; }
         .source-cell { grid-column: 3; }
         .row-actions { grid-column: 2 / -1; grid-template-columns: 1fr 1fr; }
-        .detail-panel { padding-inline-start: 56px; }
       }
       @media (max-width: 620px) {
         .shell { width: min(calc(100% - 28px), 560px); }
@@ -626,10 +604,6 @@
         .effect-cell, .source-cell, .row-actions { grid-column: 2; }
         .effect-cell h3 { font-size: 24px; }
         .row-actions { grid-template-columns: 1fr; }
-        .detail-panel { padding: 0 14px 18px; padding-inline-start: 44px; }
-        .detail-top { grid-template-columns: 1fr; gap: 10px; }
-        .implementation { grid-template-columns: 1fr; }
-        .implementation-meta { border-inline-end: 0; border-bottom: 1px solid var(--line); }
         pre { padding-top: 60px; padding-right: 18px; }
         .footer-inner { display: block; }
         .footer-link { display: inline-block; margin-top: 16px; }
@@ -882,21 +856,6 @@
       .action-button { min-height: 34px; padding-inline: 10px; font-size: 9px; white-space: nowrap; }
       .prompt-button { color: var(--pink-ink); background: var(--pink); box-shadow: none; }
       .prompt-button:hover { color: var(--pink-ink); background: var(--pink-hover); box-shadow: 0 0 16px rgba(232, 160, 180, .3); }
-      .code-button { color: #f0e9e0; border: 1px solid rgba(244, 239, 233, .22); background: rgba(244, 239, 233, .1); backdrop-filter: blur(10px); }
-      .code-button:hover { color: var(--pink-ink); border-color: var(--pink-hover); background: var(--pink-hover); }
-      .detail-panel { padding: 0 22px 22px; color: #18243b; background: rgba(238, 234, 238, .94); }
-      .effect-row:has(.detail-panel:not([hidden])) { grid-column: 1 / -1; contain: paint style; }
-      .effect-row:has(.detail-panel:not([hidden])) .effect-main { grid-template-columns: minmax(360px, .9fr) minmax(0, 1.1fr); min-height: 300px; aspect-ratio: auto; }
-      .effect-row:has(.detail-panel:not([hidden])) .row-preview { grid-area: 1 / 1; min-height: 300px; }
-      .effect-row:has(.detail-panel:not([hidden])) .effect-card-overlay { grid-column: 2; grid-row: 1; align-self: stretch; grid-template-columns: 1fr; align-content: end; padding: 40px 28px 28px; background: #12142c; }
-      .effect-row:has(.detail-panel:not([hidden])) .effect-cell, .effect-row:has(.detail-panel:not([hidden])) .source-cell, .effect-row:has(.detail-panel:not([hidden])) .row-actions { grid-column: 1; }
-      .effect-row:has(.detail-panel:not([hidden])) .effect-cell h3 { font-size: clamp(30px, 4vw, 54px); }
-      .effect-row:has(.detail-panel:not([hidden])) .row-actions { justify-content: flex-start; }
-      .effect-row:has(.detail-panel:not([hidden])) .detail-panel { border-top: 1px solid rgba(34, 51, 77, .14); }
-      .detail-panel .implementation { border-color: rgba(34, 51, 77, .16); background: rgba(250, 246, 246, .6); }
-      .detail-panel .implementation h4 { color: #18243b; }
-      .detail-panel .recommendation { color: #6d2940; background: rgba(232, 160, 180, .3); }
-      .detail-panel .repo-link, .detail-panel .origin-link, .detail-panel .permalink { color: #4a4268; }
 
       .agent-prompt-section { padding: 72px 0 22px; scroll-margin-top: 72px; }
       .agent-prompt-card { grid-template-columns: minmax(240px, .62fr) minmax(0, 1.38fr); gap: clamp(24px, 4vw, 52px); padding: clamp(26px, 3.6vw, 42px); border-radius: 28px; background: radial-gradient(circle at 88% 12%, rgba(232, 160, 180, .18), transparent 36%), #150f2b; }
@@ -933,7 +892,6 @@
       @media (max-width: 1080px) {
         .hero-layout { grid-template-columns: minmax(0, .8fr) minmax(420px, 1.2fr); gap: 42px; }
         #effect-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-        .effect-row:has(.detail-panel:not([hidden])) .effect-main { grid-template-columns: minmax(320px, .9fr) 1.1fr; }
       }
       @media (max-width: 820px) {
         .shell { width: min(100% - 36px, 720px); }
@@ -948,7 +906,6 @@
         .agent-prompt-card, .hero .agent-prompt-card { grid-template-columns: 1fr; }
         .hero .agent-prompt-box { grid-template-columns: 1fr auto; }
         #effect-list { grid-template-columns: 1fr; }
-        .detail-panel { padding: 0 18px 18px; }
       }
       @media (max-width: 620px) {
         .shell { width: min(calc(100% - 28px), 560px); }
@@ -977,11 +934,6 @@
         .source-cell { display: none; }
         .row-actions { justify-content: flex-start; }
         .action-button { flex: 0 1 auto; min-height: 32px; padding-inline: 9px; }
-        .effect-row:has(.detail-panel:not([hidden])) { grid-column: auto; }
-        .effect-row:has(.detail-panel:not([hidden])) .effect-main { grid-template-columns: 1fr; min-height: 0; aspect-ratio: 16 / 9; }
-        .effect-row:has(.detail-panel:not([hidden])) .row-preview, .effect-row:has(.detail-panel:not([hidden])) .effect-card-overlay { grid-area: 1 / 1; min-height: 0; }
-        .effect-row:has(.detail-panel:not([hidden])) .effect-card-overlay { align-self: end; grid-template-columns: 1fr; padding: 56px 14px 14px; background: linear-gradient(180deg, transparent 0%, rgba(8, 11, 24, .74) 38%, rgba(8, 11, 24, .97) 100%); }
-        .effect-row:has(.detail-panel:not([hidden])) .effect-cell h3 { font-size: clamp(20px, 6.2vw, 27px); }
         .agent-prompt-section { padding-top: 64px; }
         .hero .agent-prompt-section { padding-top: 10px; }
         .agent-prompt-card { border-radius: 24px; }
@@ -1003,7 +955,7 @@
         .hero-story-cursor { display: none; }
         .effect-main { transition: none; }
         .effect-modal-backdrop, .effect-modal-dialog { animation: none; }
-        .nav-link, .nav-button, .language-select, .primary-action, .secondary-action, .hero-story-toggle, .hero-story-step, .metric, .agent-prompt-action, .feature-card, .search, .sort, .filter, .effect-row, .row-preview, .row-preview img, .effect-cell h3, .source-name, .party-link, .preview-demo-link, .action-button, .copy-code, .modal-link, .modal-rail-action, .effect-modal-close { transition: none; }
+        .nav-link, .nav-button, .language-select, .primary-action, .secondary-action, .hero-story-toggle, .hero-story-step, .metric, .agent-prompt-action, .feature-card, .search, .sort, .filter, .effect-row, .row-preview, .row-preview img, .effect-cell h3, .source-name, .party-link, .preview-demo-link, .action-button, .modal-link, .modal-rail-action, .effect-modal-close { transition: none; }
         .primary-action:hover, .primary-action:active, .secondary-action:hover, .secondary-action:active, .metric:hover, .feature-card:hover, .action-button:hover, .agent-prompt-action:hover, .effect-row:hover .row-preview img, .effect-main { transform: none; }
       }
     </style>
@@ -1711,11 +1663,7 @@
         const id = decodeURIComponent(location.hash.slice(1));
         const target = id && document.getElementById(id);
         if (target?.classList?.contains('effect-row')) {
-          const panel = target.querySelector('.detail-panel');
-          const toggle = target.querySelector('.code-button');
-          panel.hidden = false;
-          toggle.setAttribute('aria-expanded', 'true');
-          toggle.textContent = copy[language].hideCode;
+          target.scrollIntoView({ block: 'center' });
         }
       }
 
@@ -1769,13 +1717,8 @@
           row.className = 'effect-row';
           row.id = effect.id;
           row.dataset.category = effect.category;
-          const implementations = effect.sources.map(source => {
-            const project = projectById.get(source.projectId);
-            return `<section class="implementation"><div class="implementation-meta">${source.recommended ? `<span class="recommendation">${t.recommended}</span>` : ''}<h4>${escapeHTML(project.name)}</h4><a class="repo-link" href="${escapeHTML(project.url)}" target="_blank" rel="noreferrer" aria-label="${escapeHTML(project.name)} ${t.repositoryLabel}"><bdi>${escapeHTML(project.repo)}</bdi> ↗</a>${source.demoPath ? `<a class="origin-link" href="./${escapeHTML(source.demoPath)}" target="_blank" rel="noreferrer">${t.openDemo}</a>` : source.originUrl ? `<a class="origin-link" href="${escapeHTML(source.originUrl)}" target="_blank" rel="noreferrer">${t.previewSource}</a>` : source.referenceUrl ? `<a class="origin-link" href="${escapeHTML(source.referenceUrl)}" target="_blank" rel="noreferrer">${t.referenceSource}</a>` : ''}<div class="source-meta"><span>★ ${formatNumber(project.stars)}</span>${project.legacy ? `<span class="legacy-tag">${t.legacy}</span>` : ''}</div></div><div class="code-wrap" dir="ltr"><pre><code>${escapeHTML(source.snippet)}</code></pre><button class="copy-code" type="button">${t.copyCode}</button></div></section>`;
-          }).join('');
           const relatedParties = effect.relatedParties.map(party => `<a class="party-link" href="${escapeHTML(party.url)}" target="_blank" rel="noreferrer" title="${escapeHTML(party.observedAs)}">${escapeHTML(party.name)} ↗</a>`).join('');
-          const effectUrl = effectReferenceUrl(effect);
-          row.innerHTML = `<div class="effect-main"><span class="row-number">${String(effect.order).padStart(3, '0')}</span><div class="row-preview"${previewShell}>${previewMedia}${demoLink}<span class="preview-kind">${previewLabel}</span></div><div class="effect-card-overlay"><div class="effect-cell"><p class="category-label">${escapeHTML(labelFor(category))}</p><div class="effect-heading"><h3>${escapeHTML(effectName(effect))}</h3></div><span class="effect-key" dir="ltr">effect:${escapeHTML(effect.id)}</span></div><div class="source-cell"><span class="source-label">${t.recommended}</span><a class="source-name" href="${escapeHTML(primaryProject.url)}" target="_blank" rel="noreferrer">${escapeHTML(primaryProject.name)} ↗</a><span class="source-meta"><span>★ ${formatNumber(primaryProject.stars)}</span><span>${formatNumber(effect.sources.length)} ${effect.sources.length === 1 ? t.implementation : t.implementations}</span>${primaryProject.legacy ? `<span class="legacy-tag">${t.legacy}</span>` : ''}</span>${relatedParties ? `<span class="source-label party-label">${t.observedOn}</span><span class="party-list">${relatedParties}</span>` : ''}</div><div class="row-actions"><button class="action-button prompt-button" type="button">${promptLabel}</button><button class="action-button code-button" type="button" aria-expanded="false" aria-controls="detail-${escapeHTML(effect.id)}">${t.showCode}</button></div></div></div><div class="detail-panel" id="detail-${escapeHTML(effect.id)}" hidden><div class="detail-top"><p><strong>${t.definition}:</strong> ${escapeHTML(effectName(effect))}. ${formatNumber(effect.sources.length)} ${effect.sources.length === 1 ? t.implementation : t.implementations}.</p><a class="permalink" href="${escapeHTML(effectUrl)}" title="${escapeHTML(effectUrl)}"><strong>${t.permalink} ↗</strong><code>${escapeHTML(effectUrl)}</code></a></div><div class="implementations">${implementations}</div></div>`;
+          row.innerHTML = `<div class="effect-main"><span class="row-number">${String(effect.order).padStart(3, '0')}</span><div class="row-preview"${previewShell}>${previewMedia}${demoLink}<span class="preview-kind">${previewLabel}</span></div><div class="effect-card-overlay"><div class="effect-cell"><p class="category-label">${escapeHTML(labelFor(category))}</p><div class="effect-heading"><h3>${escapeHTML(effectName(effect))}</h3></div><span class="effect-key" dir="ltr">effect:${escapeHTML(effect.id)}</span></div><div class="source-cell"><span class="source-label">${t.recommended}</span><a class="source-name" href="${escapeHTML(primaryProject.url)}" target="_blank" rel="noreferrer">${escapeHTML(primaryProject.name)} ↗</a><span class="source-meta"><span>★ ${formatNumber(primaryProject.stars)}</span><span>${formatNumber(effect.sources.length)} ${effect.sources.length === 1 ? t.implementation : t.implementations}</span>${primaryProject.legacy ? `<span class="legacy-tag">${t.legacy}</span>` : ''}</span>${relatedParties ? `<span class="source-label party-label">${t.observedOn}</span><span class="party-list">${relatedParties}</span>` : ''}</div><div class="row-actions"><button class="action-button prompt-button" type="button">${promptLabel}</button></div></div></div>`;
 
           row.classList.add('effect-card-trigger');
           row.tabIndex = 0;
@@ -1800,20 +1743,6 @@
             const currentPrompt = editedEffectPrompts.get(effect.id) ?? briefEffectPrompt(effect, primaryProject);
             copyText(promptButton, currentPrompt, t.promptCopied, promptLabel);
           });
-          const codeButton = row.querySelector('.code-button');
-          const panel = row.querySelector('.detail-panel');
-          codeButton.addEventListener('click', event => {
-            event.stopPropagation();
-            const previousPositions = reducedMotion.matches
-              ? new Map()
-              : new Map([...list.querySelectorAll('.effect-row')].map(card => [card.id, card.getBoundingClientRect()]));
-            const nextOpen = panel.hidden;
-            panel.hidden = !nextOpen;
-            codeButton.setAttribute('aria-expanded', String(nextOpen));
-            codeButton.textContent = nextOpen ? t.hideCode : t.showCode;
-            requestAnimationFrame(() => animateCatalogReflow(previousPositions));
-          });
-          row.querySelectorAll('.copy-code').forEach((button, index) => button.addEventListener('click', () => copyText(button, effect.sources[index].snippet, t.codeCopied, t.copyCode)));
           list.append(row);
           prepareManagedMedia(row);
         });

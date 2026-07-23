@@ -238,7 +238,7 @@ assert(html.includes("url.searchParams.set('lang', language)"), 'Demo language s
 assert(html.includes('document.documentElement.dir = locale.dir'), 'Demo must set the document direction from locale metadata.');
 assert(html.includes('prompt-button') && html.includes('copyPrompt'), 'Demo does not expose one-click agent prompts.');
 assert(html.includes('id="agent-prompt-action"') && !html.includes('id="prompt-action"') && html.includes('getOneLineAgentPrompt(language)'), 'Demo must expose one non-duplicated global Agent Prompt copy action.');
-assert(html.includes('copy-code') && html.includes('source.snippet'), 'Demo does not expose copyable minimal code.');
+assert(!/class="[^"]*\b(?:code-button|copy-code)\b/.test(html), 'Homepage cards must not expose inline minimal-code controls.');
 
 const modalRendererStart = html.indexOf('function openEffectModal');
 const modalRendererEnd = modalRendererStart < 0 ? -1 : html.indexOf('async function copyText', modalRendererStart);

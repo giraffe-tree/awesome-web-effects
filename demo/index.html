@@ -473,12 +473,14 @@
       .effect-modal-backdrop { position: absolute; inset: 0; background: rgba(6, 8, 20, .62); backdrop-filter: blur(14px); animation: modal-fade .24s ease-out; }
       .effect-modal-dialog { position: relative; width: min(1180px, 100%); max-height: calc(100dvh - 48px); overflow: auto; border: 1px solid rgba(154, 168, 216, .26); border-radius: 28px; background: #181e3a; box-shadow: 0 2px 8px rgba(4, 6, 18, .5), 0 32px 100px rgba(2, 4, 12, .7); animation: modal-rise .28s cubic-bezier(.22, 1, .36, 1); }
       #effect-modal-content { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(410px, .85fr); align-items: start; }
+      .effect-modal-dialog[data-details-open="false"] #effect-modal-content { grid-template-columns: minmax(0, 1fr); }
       .effect-modal-close { position: sticky; z-index: 4; top: 14px; float: right; display: grid; place-items: center; width: 38px; height: 38px; margin: 14px 14px -52px 0; border: 1px solid rgba(244, 239, 233, .3); border-radius: 50%; color: #f2ede4; background: rgba(8, 10, 24, .58); backdrop-filter: blur(12px); cursor: pointer; font-size: 24px; line-height: 1; transition: background .2s ease; }
       .effect-modal-close:hover { background: rgba(8, 10, 24, .8); }
       html[dir="rtl"] .effect-modal-close { float: left; margin: 14px 0 -52px 14px; }
       .modal-preview { position: sticky; top: 0; display: grid; place-items: center; min-height: min(700px, calc(100dvh - 48px)); overflow: hidden; color: #f2ede4; background: #0e1226; }
       .modal-preview-live { min-height: min(700px, calc(100dvh - 48px)); padding: 24px; background: radial-gradient(circle at 50% 28%, #232c4e, #0e1226 70%); }
       .modal-preview-frame-shell { position: relative; width: min(100%, 720px); aspect-ratio: 16 / 9; overflow: hidden; border-radius: 18px; background: #070a16; box-shadow: 0 22px 70px rgba(2, 4, 12, .6); }
+      .effect-modal-dialog[data-details-open="false"] .modal-preview-frame-shell { width: min(100%, 1040px); }
       .modal-preview-frame { position: absolute; inset: 0 auto auto 0; display: block; width: 320px; height: 180px; border: 0; background: #070a16; transform: scale(var(--preview-scale, 1)); transform-origin: top left; }
       .modal-preview-live .media-load-state { margin: 24px; border-radius: 18px; }
       .modal-preview-official { padding: 32px; }
@@ -490,7 +492,13 @@
       .modal-preview-unavailable strong { display: block; margin-top: 16px; font-size: clamp(24px, 4vw, 38px); letter-spacing: -.04em; }
       .modal-preview-unavailable p { max-width: 560px; margin: 12px auto 0; color: var(--muted); font-size: 14px; line-height: 1.55; }
       .modal-preview-status { position: absolute; z-index: 3; inset-inline-start: 18px; bottom: 18px; padding: 7px 10px; border-radius: 9px; color: #f2ede4; background: rgba(8, 10, 24, .66); backdrop-filter: blur(10px); font-size: 10px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
-      .modal-content-body { padding: 30px 30px 28px; }
+      .modal-panel-toggle { position: absolute; z-index: 4; top: 18px; inset-inline-end: 18px; display: inline-flex; align-items: center; gap: 9px; min-height: 38px; padding-block: 0; padding-inline: 15px 13px; border: 1px solid rgba(244, 239, 233, .24); border-radius: 99px; color: #f2ede4; background: rgba(8, 10, 24, .62); backdrop-filter: blur(12px); cursor: pointer; font-size: 11px; font-weight: 650; transition: border-color .2s ease, background .2s ease, transform .24s var(--ease-out); }
+      .effect-modal-dialog[data-details-open="false"] .modal-panel-toggle { inset-inline-end: 66px; }
+      .modal-panel-toggle:hover { border-color: rgba(244, 239, 233, .42); background: rgba(8, 10, 24, .82); transform: translateY(-1px); }
+      .modal-panel-toggle-icon { display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; color: #10152d; background: var(--pink); font-size: 15px; line-height: 1; }
+      .modal-panel-toggle-icon::after { content: "+"; transform: translateY(-1px); }
+      .modal-panel-toggle[aria-expanded="true"] .modal-panel-toggle-icon::after { content: "−"; transform: none; }
+      .modal-content-body { min-width: 0; padding: 30px 30px 28px; }
       .modal-category { margin: 0 0 10px; color: var(--pink); font-size: 11px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
       .modal-title { margin: 0; padding-inline-end: 48px; font-size: clamp(32px, 3.6vw, 48px); line-height: 1; letter-spacing: -.05em; text-wrap: balance; }
       .modal-title-secondary { margin: 9px 0 0; color: var(--muted); font-size: clamp(18px, 2vw, 24px); line-height: 1.15; letter-spacing: -.025em; }
@@ -639,6 +647,8 @@
         .modal-preview-official { padding: 20px; }
         .modal-preview-official .media-load-state { inset: 20px; }
         .modal-preview-status { inset-inline-start: 12px; bottom: 12px; }
+        .modal-panel-toggle { top: 10px; inset-inline-end: 58px; min-height: 38px; }
+        .effect-modal-dialog[data-details-open="false"] .modal-panel-toggle { inset-inline-end: 58px; }
         .modal-content-body { padding: 24px 18px 30px; }
         .modal-facts, .modal-detail-grid, .modal-score-card { grid-template-columns: 1fr; }
         .score-breakdown { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -994,7 +1004,7 @@
         .hero-story-cursor { display: none; }
         .effect-main { transition: none; }
         .effect-modal-backdrop, .effect-modal-dialog { animation: none; }
-        .nav-link, .nav-button, .language-select, .primary-action, .secondary-action, .hero-story-toggle, .hero-story-step, .metric, .agent-prompt-action, .feature-card, .search, .sort, .filter, .effect-row, .row-preview, .row-preview img, .effect-cell h3, .source-name, .party-link, .preview-demo-link, .action-button, .copy-code, .modal-link, .modal-copy-code, .modal-prompt-button, .effect-modal-close { transition: none; }
+        .nav-link, .nav-button, .language-select, .primary-action, .secondary-action, .hero-story-toggle, .hero-story-step, .metric, .agent-prompt-action, .feature-card, .search, .sort, .filter, .effect-row, .row-preview, .row-preview img, .effect-cell h3, .source-name, .party-link, .preview-demo-link, .action-button, .copy-code, .modal-link, .modal-copy-code, .modal-prompt-button, .modal-panel-toggle, .effect-modal-close { transition: none; }
         .primary-action:hover, .primary-action:active, .secondary-action:hover, .secondary-action:active, .metric:hover, .feature-card:hover, .action-button:hover, .agent-prompt-action:hover, .modal-prompt-button:hover, .effect-row:hover .row-preview img, .effect-main { transform: none; }
       }
     </style>
@@ -1488,11 +1498,12 @@
           : source.previewKind === 'local-demo-capture' ? t.localProvenance
             : t.unavailableProvenance;
         const previewTitle = escapeHTML(`${effect.name} / ${effect.nameZh}`);
+        const panelToggle = `<button class="modal-panel-toggle" type="button" aria-expanded="false" aria-controls="modal-detail-panel"><span data-modal-panel-label>${escapeHTML(t.detailsLabel)}</span><span class="modal-panel-toggle-icon" aria-hidden="true"></span></button>`;
         const preview = !realPreview
-          ? `<div class="modal-preview modal-preview-unavailable"><div><span aria-hidden="true">◎</span><strong>${t.unavailableDetail}</strong><p>${t.unavailableHelp}</p></div><span class="modal-preview-status">${previewStatus}</span></div>`
+          ? `<div class="modal-preview modal-preview-unavailable">${panelToggle}<div><span aria-hidden="true">◎</span><strong>${t.unavailableDetail}</strong><p>${t.unavailableHelp}</p></div><span class="modal-preview-status">${previewStatus}</span></div>`
           : source.demoPath
-            ? `<div class="modal-preview modal-preview-live" data-media-shell data-media-state="loading" data-media-error-key="liveLoadError" aria-busy="true"><div class="modal-preview-frame-shell" data-live-preview-shell><iframe class="modal-preview-frame" data-managed-media src="./${escapeHTML(source.demoPath)}" title="${previewTitle}" width="320" height="180" loading="eager"></iframe></div>${mediaStateMarkup(t.loadingLive, true)}<span class="modal-preview-status">${t.livePreview}</span></div>`
-            : `<div class="modal-preview modal-preview-official" data-media-shell data-media-state="loading" data-media-error-key="officialLoadError" aria-busy="true"><img src="${escapeHTML(officialPreviewUrl(source))}" data-managed-media data-official-preview data-upstream-src="${escapeHTML(officialPreviewUrl(source))}" data-fallback-src="./gifs/${escapeHTML(source.preview)}.gif" alt="${previewTitle}" decoding="async" referrerpolicy="no-referrer" />${mediaStateMarkup(t.loadingOfficial, true)}<span class="modal-preview-status">${t.officialNativePreview}</span></div>`;
+            ? `<div class="modal-preview modal-preview-live" data-media-shell data-media-state="loading" data-media-error-key="liveLoadError" aria-busy="true">${panelToggle}<div class="modal-preview-frame-shell" data-live-preview-shell><iframe class="modal-preview-frame" data-managed-media src="./${escapeHTML(source.demoPath)}" title="${previewTitle}" width="320" height="180" loading="eager"></iframe></div>${mediaStateMarkup(t.loadingLive, true)}<span class="modal-preview-status">${t.livePreview}</span></div>`
+            : `<div class="modal-preview modal-preview-official" data-media-shell data-media-state="loading" data-media-error-key="officialLoadError" aria-busy="true">${panelToggle}<img src="${escapeHTML(officialPreviewUrl(source))}" data-managed-media data-official-preview data-upstream-src="${escapeHTML(officialPreviewUrl(source))}" data-fallback-src="./gifs/${escapeHTML(source.preview)}.gif" alt="${previewTitle}" decoding="async" referrerpolicy="no-referrer" />${mediaStateMarkup(t.loadingOfficial, true)}<span class="modal-preview-status">${t.officialNativePreview}</span></div>`;
         const links = [modalLink(project.url, t.viewProject)];
         if (source.demoPath) links.push(modalLink(`./${source.demoPath}`, t.openDemo));
         if (source.originUrl && source.originUrl !== project.url) links.push(modalLink(source.originUrl, t.viewPreviewSource));
@@ -1517,7 +1528,21 @@
 
         modalTrigger = trigger || document.activeElement;
         modalClose.setAttribute('aria-label', t.closeDetails);
-        modalContent.innerHTML = `${preview}<div class="modal-content-body"><p class="modal-category">${escapeHTML(labelFor(category))}</p><h2 class="modal-title" id="modal-title">${escapeHTML(primaryName)}</h2><p class="modal-title-secondary" id="modal-subtitle" lang="${isChinese() ? 'en' : 'zh-Hans'}">${escapeHTML(secondaryName)}</p><div class="modal-quick-actions"><button class="modal-prompt-button" type="button">${promptLabel}</button><button class="modal-copy-code" data-modal-copy-code type="button">${t.copyMinimalCode}</button></div>${promptSection}${codeSection}<details class="modal-more modal-tool" data-modal-tool><summary><span class="modal-tool-summary-copy"><span class="modal-tool-title">${escapeHTML(t.detailsLabel)}</span><span class="modal-tool-note">${escapeHTML(`${t.triggerLabel} · ${t.timingLabel} · ${t.layerLabel}`)}</span></span><span class="modal-tool-chevron" aria-hidden="true"></span></summary><div class="modal-more-body">${factsSection}${sourceSection}${scoreSection}</div></details></div>`;
+        modalContent.innerHTML = `${preview}<div class="modal-content-body" id="modal-detail-panel" hidden><p class="modal-category">${escapeHTML(labelFor(category))}</p><h2 class="modal-title" id="modal-title">${escapeHTML(primaryName)}</h2><p class="modal-title-secondary" id="modal-subtitle" lang="${isChinese() ? 'en' : 'zh-Hans'}">${escapeHTML(secondaryName)}</p><div class="modal-quick-actions"><button class="modal-prompt-button" type="button">${promptLabel}</button><button class="modal-copy-code" data-modal-copy-code type="button">${t.copyMinimalCode}</button></div>${promptSection}${codeSection}<details class="modal-more modal-tool" data-modal-tool><summary><span class="modal-tool-summary-copy"><span class="modal-tool-title">${escapeHTML(t.detailsLabel)}</span><span class="modal-tool-note">${escapeHTML(`${t.triggerLabel} · ${t.timingLabel} · ${t.layerLabel}`)}</span></span><span class="modal-tool-chevron" aria-hidden="true"></span></summary><div class="modal-more-body">${factsSection}${sourceSection}${scoreSection}</div></details></div>`;
+        const detailPanel = modalContent.querySelector('#modal-detail-panel');
+        const panelToggleButton = modalContent.querySelector('.modal-panel-toggle');
+        const panelToggleLabel = panelToggleButton.querySelector('[data-modal-panel-label]');
+        const setDetailsOpen = open => {
+          modalDialog.dataset.detailsOpen = String(open);
+          panelToggleButton.setAttribute('aria-expanded', String(open));
+          panelToggleLabel.textContent = open ? t.closeDetails : t.detailsLabel;
+          detailPanel.hidden = !open;
+        };
+        panelToggleButton.addEventListener('click', event => {
+          event.stopPropagation();
+          setDetailsOpen(panelToggleButton.getAttribute('aria-expanded') !== 'true');
+        });
+        setDetailsOpen(false);
         const promptEditor = modalContent.querySelector('#modal-prompt-text');
         promptEditor.addEventListener('input', () => editedEffectPrompts.set(effect.id, promptEditor.value));
         const promptButton = modalContent.querySelector('.modal-prompt-button');

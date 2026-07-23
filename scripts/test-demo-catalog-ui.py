@@ -277,7 +277,23 @@ def main() -> int:
             assert not live_frame.evaluate("window.__PREVIEW_ERROR__ || null")
             expect(modal.locator(".modal-preview-live")).to_have_attribute("data-media-state", "ready")
             expect(modal.locator(".modal-preview-live")).to_have_attribute("aria-busy", "false")
-            assert live_preview.bounding_box()["width"] > 560
+            expect(modal.locator(".effect-modal-dialog")).to_have_attribute("data-details-open", "false")
+            expect(modal.locator("#modal-detail-panel")).to_be_hidden()
+            panel_toggle = modal.locator(".modal-panel-toggle")
+            expect(panel_toggle).to_have_attribute("aria-expanded", "false")
+            assert live_preview.bounding_box()["width"] > 900
+            page.wait_for_timeout(250)
+            desktop_screenshot = ROOT / "tmp" / "catalog-detail-desktop.png"
+            desktop_screenshot.parent.mkdir(parents=True, exist_ok=True)
+            page.screenshot(path=str(desktop_screenshot), full_page=False)
+            panel_toggle.focus()
+            page.keyboard.press("Enter")
+            expect(modal.locator(".effect-modal-dialog")).to_have_attribute("data-details-open", "true")
+            expect(modal.locator("#modal-detail-panel")).to_be_visible()
+            expect(panel_toggle).to_have_attribute("aria-expanded", "true")
+            page.wait_for_timeout(250)
+            expanded_preview_width = live_preview.bounding_box()["width"]
+            assert 560 < expanded_preview_width < 800
             expect(modal.locator("[data-modal-tool][open]")).to_have_count(0)
             expect(modal.locator(".modal-score-total")).to_contain_text("85")
             expect(modal.locator(".score-dimension")).to_have_count(6)
@@ -296,10 +312,8 @@ def main() -> int:
             assert "evidence per criterion" in effect_prompt
             assert len(effect_prompt) < 620 and "Interaction contract" not in effect_prompt
             expect(modal.locator(".modal-code-card code")).to_contain_text("gsap.registerPlugin")
-            page.wait_for_timeout(250)
-            desktop_screenshot = ROOT / "tmp" / "catalog-detail-desktop.png"
-            desktop_screenshot.parent.mkdir(parents=True, exist_ok=True)
-            page.screenshot(path=str(desktop_screenshot), full_page=False)
+            expanded_screenshot = ROOT / "tmp" / "catalog-detail-desktop-expanded.png"
+            page.screenshot(path=str(expanded_screenshot), full_page=False)
             modal.locator(".modal-prompt-card > summary").click()
             expect(modal.locator(".modal-prompt-card")).to_have_attribute("open", "")
             expect(modal_prompt_text).to_be_visible()
@@ -330,6 +344,7 @@ def main() -> int:
             assert page.evaluate("document.activeElement?.id") == "scroll-scrubbed-master-timeline"
             real_row.locator(".effect-cell").click()
             expect(modal).to_be_visible()
+            expect(modal.locator(".effect-modal-dialog")).to_have_attribute("data-details-open", "false")
             assert modal.locator("#modal-prompt-text").input_value() == edited_effect_prompt
             page.keyboard.press("Escape")
             expect(modal).to_be_hidden()
@@ -495,6 +510,9 @@ def main() -> int:
             expect(modal.locator(".modal-preview-frame")).to_have_count(1)
             mobile_preview_box = modal.locator(".modal-preview-frame").bounding_box()
             assert mobile_preview_box["width"] > 360
+            expect(modal.locator("#modal-detail-panel")).to_be_hidden()
+            modal.locator(".modal-panel-toggle").click()
+            expect(modal.locator("#modal-detail-panel")).to_be_visible()
             expect(modal.locator(".modal-copy-code")).to_be_visible()
             page.wait_for_timeout(250)
             screenshot = ROOT / "tmp" / "catalog-detail-mobile.png"
@@ -525,7 +543,7 @@ def main() -> int:
             server.kill()
             server.wait()
 
-    print(f"Catalog UI verified: 20 locales (including RTL and URL persistence), {expected_effect_count} admitted demos, 14 homepage recommendations, editable page-only homepage and per-effect prompts with refresh reset, mutually exclusive prompt/code/evidence disclosure, unified light catalog styling, paused 6s hero autoplay, uncropped 16:9 cards, loading/error transitions, live detail previews, native-size official GIFs, copy actions, focus, reduced motion, and mobile layout.")
+    print(f"Catalog UI verified: 20 locales (including RTL and URL persistence), {expected_effect_count} admitted demos, 14 homepage recommendations, large default live previews with keyboard-expandable detail panels, editable page-only homepage and per-effect prompts with refresh reset, mutually exclusive prompt/code/evidence disclosure, unified light catalog styling, paused 6s hero autoplay, uncropped 16:9 cards, loading/error transitions, native-size official GIFs, copy actions, focus, reduced motion, and mobile layout.")
     return 0
 
 

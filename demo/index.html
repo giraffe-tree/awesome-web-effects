@@ -80,8 +80,109 @@
         backdrop-filter: saturate(180%) blur(20px);
       }
       .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 100%; }
-      .brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-size: 13px; font-weight: 650; letter-spacing: -.01em; }
-      .brand-mark { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 9px; color: var(--pink-ink); background: linear-gradient(145deg, #f2bfc9, #d98ba4); box-shadow: inset 0 1px rgba(255, 255, 255, .3), 0 0 18px rgba(232, 160, 180, .28); font-size: 10px; font-weight: 800; letter-spacing: -.06em; }
+      .brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-size: 13px; font-weight: 650; letter-spacing: -.01em; perspective: 150px; }
+      .brand-mark {
+        --brand-rx: 0deg;
+        --brand-ry: 0deg;
+        --brand-glow-x: 50%;
+        --brand-glow-y: 38%;
+        position: relative;
+        display: grid;
+        place-items: center;
+        width: 26px;
+        height: 26px;
+        color: var(--pink-ink);
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: -.06em;
+        transform: rotateX(var(--brand-rx)) rotateY(var(--brand-ry));
+        transform-style: preserve-3d;
+        transition: transform .45s var(--ease-out);
+        will-change: transform;
+      }
+      .brand-face {
+        position: relative;
+        z-index: 2;
+        display: grid;
+        place-items: center;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        border-radius: 9px;
+        background:
+          radial-gradient(circle at var(--brand-glow-x) var(--brand-glow-y), rgba(255, 244, 246, .96), transparent 42%),
+          linear-gradient(145deg, #f2bfc9, #d98ba4);
+        box-shadow: inset 0 1px rgba(255, 255, 255, .3), 0 0 18px rgba(232, 160, 180, .28);
+        transform: translateZ(4px);
+        transition: box-shadow .35s ease, background .18s linear;
+      }
+      .brand-face::after {
+        content: "";
+        position: absolute;
+        inset: -40% -70%;
+        z-index: 0;
+        background: linear-gradient(105deg, transparent 39%, rgba(255, 255, 255, .68) 48%, transparent 57%);
+        transform: translateX(-48%) skewX(-10deg);
+        opacity: 0;
+      }
+      .brand-letters { position: relative; z-index: 1; display: inline-flex; align-items: baseline; }
+      .brand-letter { display: inline-block; transform-origin: 50% 78%; will-change: transform; }
+      .brand-letter + .brand-letter { margin-inline-start: -.05em; }
+      .brand-orbit {
+        position: absolute;
+        z-index: 1;
+        inset: -4px;
+        border: 1px solid rgba(242, 191, 201, .64);
+        border-radius: 50%;
+        opacity: 0;
+        pointer-events: none;
+      }
+      .brand-orbit::before,
+      .brand-orbit::after {
+        content: "";
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background: #f7d7dd;
+        box-shadow: 0 0 9px rgba(242, 191, 201, .9);
+      }
+      .brand-orbit::before { top: -2px; left: 50%; }
+      .brand-orbit::after { right: -2px; bottom: 5px; width: 3px; height: 3px; }
+      .brand[data-motion="active"] .brand-mark { animation: brand-mark-spring .72s var(--ease-out); }
+      .brand[data-motion="active"] .brand-face { box-shadow: inset 0 1px rgba(255, 255, 255, .45), 0 0 0 3px rgba(232, 160, 180, .1), 0 0 24px rgba(232, 160, 180, .58); }
+      .brand[data-motion="active"] .brand-face::after { animation: brand-shine-sweep .64s .04s ease-out; }
+      .brand[data-motion="active"] .brand-letter:first-child { animation: brand-letter-a .68s cubic-bezier(.2, .9, .24, 1.35); }
+      .brand[data-motion="active"] .brand-letter:last-child { animation: brand-letter-w .68s .065s cubic-bezier(.2, .9, .24, 1.35); }
+      .brand[data-motion="active"] .brand-orbit { animation: brand-orbit-burst .76s cubic-bezier(.2, .8, .2, 1); }
+      @keyframes brand-mark-spring {
+        0%, 100% { transform: rotateX(var(--brand-rx)) rotateY(var(--brand-ry)) scale(1); }
+        34% { transform: rotateX(var(--brand-rx)) rotateY(var(--brand-ry)) scale(1.12, .92); }
+        60% { transform: rotateX(var(--brand-rx)) rotateY(var(--brand-ry)) scale(.96, 1.06); }
+        82% { transform: rotateX(var(--brand-rx)) rotateY(var(--brand-ry)) scale(1.025, .985); }
+      }
+      @keyframes brand-letter-a {
+        0%, 100% { transform: translateY(0) rotate(0) scale(1); }
+        32% { transform: translateY(-5px) rotate(-12deg) scale(1.08, 1.16); }
+        58% { transform: translateY(1px) rotate(4deg) scale(.98, .9); }
+        80% { transform: translateY(-1px) rotate(-2deg) scale(1.01); }
+      }
+      @keyframes brand-letter-w {
+        0%, 100% { transform: translateY(0) rotate(0) scale(1); }
+        30% { transform: translateY(-4px) rotate(11deg) scale(1.08, 1.14); }
+        58% { transform: translateY(1px) rotate(-4deg) scale(.98, .92); }
+        80% { transform: translateY(-1px) rotate(2deg) scale(1.01); }
+      }
+      @keyframes brand-orbit-burst {
+        0% { opacity: 0; transform: rotate(-32deg) scale(.58); }
+        24% { opacity: .9; }
+        100% { opacity: 0; transform: rotate(300deg) scale(1.18); }
+      }
+      @keyframes brand-shine-sweep {
+        0% { opacity: 0; transform: translateX(-48%) skewX(-10deg); }
+        22% { opacity: .9; }
+        100% { opacity: 0; transform: translateX(48%) skewX(-10deg); }
+      }
       .nav-actions { display: flex; align-items: center; gap: 18px; }
       .nav-link, .nav-button { border: 0; color: #c6cce4; background: transparent; font-size: 12px; text-decoration: none; cursor: pointer; transition: color .2s ease; }
       .nav-link:hover, .nav-button:hover { color: var(--pink-hover); }
@@ -538,7 +639,7 @@
         box-shadow: none;
       }
       .brand { font-size: 12px; letter-spacing: .01em; }
-      .brand-mark { color: var(--pink-ink); background: linear-gradient(145deg, #f2bfc9, #d98ba4); box-shadow: 0 0 28px rgba(232, 160, 180, .22); }
+      .brand-face { color: var(--pink-ink); box-shadow: 0 0 28px rgba(232, 160, 180, .22); }
       .nav-link, .nav-button, .language-select { color: rgba(244, 239, 233, .72); }
       .nav-link:hover, .nav-button:hover, .language-select:hover { color: var(--signal-hover); }
       .language-picker::after { color: rgba(244, 239, 233, .5); }
@@ -849,6 +950,11 @@
       @media (prefers-reduced-motion: reduce) {
         html { scroll-behavior: auto; }
         .entry-reveal { display: none; }
+        .brand-mark, .brand-face { transition: none; }
+        .brand[data-motion="active"] .brand-mark,
+        .brand[data-motion="active"] .brand-face::after,
+        .brand[data-motion="active"] .brand-letter,
+        .brand[data-motion="active"] .brand-orbit { animation: none; }
         .visual-gif::before, .visual-gif::after, .media-load-icon, .row-preview .media-load-state { animation: none; }
         .hero-experience, .hero-experience::before, .hero-story-word, .hero-shape, .hero-story-cursor, [data-managed-media], .media-load-state, .effect-main, .row-preview::after { transition: none; }
         .hero-story-cursor { display: none; }
@@ -863,7 +969,13 @@
     <div class="entry-reveal" id="entry-reveal" aria-hidden="true"><span class="entry-reveal-mark">AW</span></div>
     <nav class="site-nav" aria-label="Primary navigation">
       <div class="nav-inner shell">
-        <a class="brand" href="#top"><span class="brand-mark">AW</span><span class="brand-text">Awesome Web Effects</span></a>
+        <a class="brand" href="#top" aria-label="Awesome Web Effects">
+          <span class="brand-mark" aria-hidden="true">
+            <span class="brand-orbit"></span>
+            <span class="brand-face"><span class="brand-letters"><span class="brand-letter">A</span><span class="brand-letter">W</span></span></span>
+          </span>
+          <span class="brand-text">Awesome Web Effects</span>
+        </a>
         <div class="nav-actions">
           <a class="nav-link" href="#catalog" id="nav-catalog">Catalog</a>
           <label class="language-picker"><span class="sr-only" id="language-label">Choose language</span><select class="language-select" id="language" aria-labelledby="language-label"></select></label>
@@ -1000,6 +1112,8 @@
       const modalDialog = modal.querySelector('.effect-modal-dialog');
       const modalContent = document.querySelector('#effect-modal-content');
       const modalClose = modal.querySelector('.effect-modal-close');
+      const brand = document.querySelector('.brand');
+      const brandMark = brand.querySelector('.brand-mark');
       const heroExperience = document.querySelector('#hero-experience');
       const heroStoryWord = document.querySelector('#hero-story-word');
       const heroStepIndex = document.querySelector('#hero-step-index');
@@ -1030,6 +1144,7 @@
       let heroWordTimer = 0;
       let heroHoverPaused = false;
       let heroFocusPaused = false;
+      let brandMotionTimer = 0;
       const HERO_STORY_INTERVAL_MS = 6000;
 
       supportedLocales.forEach(locale => {
@@ -1602,11 +1717,58 @@
       });
       agentPromptAction.addEventListener('click', () => copyOneLinePrompt(agentPromptAction));
       agentPromptText.addEventListener('input', () => { editedAgentPrompt = agentPromptText.value; });
+      function playBrandMotion() {
+        if (reducedMotion.matches) return;
+        clearTimeout(brandMotionTimer);
+        brand.removeAttribute('data-motion');
+        void brand.offsetWidth;
+        brand.dataset.motion = 'active';
+        brandMotionTimer = setTimeout(() => brand.removeAttribute('data-motion'), 780);
+      }
+      function pointBrandAt(clientX, clientY) {
+        if (reducedMotion.matches) return;
+        const bounds = brandMark.getBoundingClientRect();
+        const x = Math.max(0, Math.min(1, (clientX - bounds.left) / bounds.width));
+        const y = Math.max(0, Math.min(1, (clientY - bounds.top) / bounds.height));
+        brandMark.style.setProperty('--brand-rx', `${(0.5 - y) * 15}deg`);
+        brandMark.style.setProperty('--brand-ry', `${(x - 0.5) * 18}deg`);
+        brandMark.style.setProperty('--brand-glow-x', `${24 + x * 52}%`);
+        brandMark.style.setProperty('--brand-glow-y', `${22 + y * 46}%`);
+      }
+      function resetBrandDirection() {
+        brandMark.style.setProperty('--brand-rx', '0deg');
+        brandMark.style.setProperty('--brand-ry', '0deg');
+        brandMark.style.setProperty('--brand-glow-x', '50%');
+        brandMark.style.setProperty('--brand-glow-y', '38%');
+      }
+      brand.addEventListener('pointerenter', event => {
+        if (event.pointerType === 'touch') return;
+        pointBrandAt(event.clientX, event.clientY);
+        playBrandMotion();
+      });
+      brand.addEventListener('pointermove', event => {
+        if (event.pointerType !== 'touch') pointBrandAt(event.clientX, event.clientY);
+      });
+      brand.addEventListener('pointerleave', resetBrandDirection);
+      brand.addEventListener('focus', () => {
+        brandMark.style.setProperty('--brand-rx', '-5deg');
+        brandMark.style.setProperty('--brand-ry', '7deg');
+        playBrandMotion();
+      });
+      brand.addEventListener('blur', resetBrandDirection);
+      brand.addEventListener('pointerdown', playBrandMotion);
       const entryReveal = document.querySelector('#entry-reveal');
       entryReveal?.addEventListener('animationend', event => {
-        if (event.target === entryReveal) entryReveal.remove();
+        if (event.target === entryReveal) {
+          entryReveal.remove();
+          playBrandMotion();
+        }
       });
-      if (reducedMotion.matches) entryReveal?.remove();
+      if (reducedMotion.matches) {
+        entryReveal?.remove();
+      } else if (!entryReveal) {
+        playBrandMotion();
+      }
       heroExperience.addEventListener('pointerenter', event => {
         if (event.pointerType === 'touch') return;
         heroHoverPaused = true;

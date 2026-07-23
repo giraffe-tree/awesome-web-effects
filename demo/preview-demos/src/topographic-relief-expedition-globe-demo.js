@@ -1,7 +1,6 @@
 import * as THREE from 'three';
 import { feature } from 'topojson-client';
 import atlasSource from 'world-atlas/land-50m.json';
-import peakCatalogSource from '../assets/topographic-relief-expedition-globe/peaks-global-ui.json';
 import elevationTextureUrl from '../assets/topographic-relief-expedition-globe/etopo-2022-relief-rg.webp?url';
 import { installPreviewController, markPreviewFailure } from '../shared.js';
 
@@ -17,25 +16,10 @@ const STAR_COUNT = 1800;
 const INITIAL_CAMERA_DISTANCE = 3.55;
 const MINIMUM_CAMERA_DISTANCE = 2.72;
 const MAXIMUM_CAMERA_DISTANCE = 4.65;
-const FOCUS_DURATION_MS = 720;
-
-const focusPeakIds = [
-  'asia-everest',
-  'asia-k2',
-  'south-america-aconcagua',
-  'north-america-denali',
-  'africa-kilimanjaro',
-  'europe-elbrus',
-  'antarctica-mount-vinson',
-  'oceania-puncak-jaya',
-];
+const RESET_DURATION_MS = 520;
 
 const clamp = (value, minimum, maximum) => Math.max(minimum, Math.min(maximum, value));
 const radians = degrees => degrees * Math.PI / 180;
-const formatCoordinate = (value, positive, negative) => (
-  `${Math.abs(value).toFixed(2)}° ${value >= 0 ? positive : negative}`
-);
-const formatElevation = value => `${Math.round(value).toLocaleString('en-US')} m`;
 
 const latLonToVector3 = (latitude, longitude, radius = 1) => {
   const lat = radians(latitude);
@@ -85,50 +69,19 @@ const loadImageWithProgress = async (url, onProgress) => {
 const main = async () => {
   const stage = document.querySelector('.relief-stage');
   const host = document.querySelector('#earth-host');
-  const nextButton = document.querySelector('#next-summit');
   const resetButton = document.querySelector('#reset-earth');
-  const summitName = document.querySelector('#summit-name');
-  const summitHeight = document.querySelector('#summit-height');
-  const summitPosition = document.querySelector('#summit-position');
-  const summitContinent = document.querySelector('#summit-continent');
-  const summitIndex = document.querySelector('#summit-index');
-  const summitMarker = document.querySelector('#summit-marker');
-  const summitMarkerLabel = document.querySelector('#summit-marker-label');
   const cameraRange = document.querySelector('#camera-range');
-  const visiblePeakCount = document.querySelector('#visible-peak-count');
   const loadingPercent = document.querySelector('#loading-percent');
   const loadingStage = document.querySelector('#loading-stage');
   const loadingDetail = document.querySelector('#loading-detail');
   const loadingTrack = document.querySelector('#loading-track');
   const loadingBar = document.querySelector('#loading-bar');
   const reducedMotionQuery = matchMedia('(prefers-reduced-motion: reduce)');
-  const peakCatalog = peakCatalogSource.peaks;
-  const peakById = new Map(peakCatalog.map(peak => [peak.id, peak]));
-  const focusPeaks = focusPeakIds.map(id => peakById.get(id)).filter(Boolean);
-  if (peakCatalog.length !== 700 || focusPeaks.length !== focusPeakIds.length) {
-    throw new Error('The complete 700-peak expedition catalog is unavailable');
-  }
-
-  const continentCounts = Object.fromEntries(
-    [...new Set(peakCatalog.map(peak => peak.continent))]
-      .map(continent => [continent, peakCatalog.filter(peak => peak.continent === continent).length]),
-  );
-  let peakChecksum = 2166136261;
-  peakCatalog.forEach((peak, index) => {
-    peakChecksum = Math.imul(
-      peakChecksum
-        ^ Math.round((peak.lat + 90) * 1000)
-        ^ Math.round((peak.lon + 180) * 1000)
-        ^ Math.round(peak.elevationM)
-        ^ index,
-      16777619,
-    ) >>> 0;
-  });
 
   const state = {
     claimedLibrary: 'three@0.185.1',
     renderer: 'webgl',
-    mechanism: 'etopo-2022-displaced-earth-with-50m-coastline-and-700-real-peaks',
+    mechanism: 'etopo-2022-displaced-earth-with-50m-coastline',
     inputAdapters: ['pointer', 'touch', 'wheel', 'click', 'keyboard'],
     automaticPlayback: false,
     automaticRotation: false,
@@ -146,10 +99,9 @@ const main = async () => {
     reliefResolution: [ELEVATION_WIDTH, ELEVATION_HEIGHT],
     reliefAssetBytes: 0,
     reliefLoaded: false,
-    peakCount: peakCatalog.length,
-    focusPeakCount: focusPeaks.length,
-    continentCounts,
-    peakChecksum,
+    mountainInformation: false,
+    namedFeatureDataLoaded: false,
+    annotationLayerCount: 0,
     starCount: STAR_COUNT,
     geometrySegments: GLOBE_SEGMENTS,
     terrainExaggeration: TERRAIN_EXAGGERATION,
@@ -158,16 +110,12 @@ const main = async () => {
     loaderStageCount: 0,
     loaderDismissed: false,
     gpuMaxTextureSize: 0,
-    selectedPeakIndex: 0,
-    selectedPeakId: focusPeaks[0].id,
-    visiblePeakCount: 0,
     inputCount: 0,
     pointerInputCount: 0,
     pointerMoveCount: 0,
     keyboardInputCount: 0,
     wheelInputCount: 0,
     buttonInputCount: 0,
-    focusCount: 0,
     resetCount: 0,
     zoomCount: 0,
     dragging: false,
@@ -359,8 +307,6 @@ const main = async () => {
     uniform sampler2D uElevationMap;
     uniform vec2 uElevationTexel;
     uniform float uTerrain;
-    uniform vec3 uSignal;
-
     varying vec2 vMapUv;
     varying float vElevationMeters;
     varying float vLand;
@@ -395,7 +341,7 @@ const main = async () => {
 
     void main() {
       vec4 topology = texture2D(uTopology, vMapUv);
-      vec3 radial = normalize(vWorldPosition - vec3(0.34, 0.0, 0.0));
+      vec3 radial = normalize(vWorldPosition - vec3(0.27, 0.0, 0.0));
       vec3 east = normalize(vec3(radial.z, 0.0, -radial.x));
       vec3 north = normalize(cross(radial, east));
       float westHeight = reliefRadius(decodeHeight(texture2D(
@@ -453,7 +399,6 @@ const main = async () => {
       color += (paperNoise(vMapUv * vec2(4096.0, 2048.0)) - 0.5) * 0.017;
       float facing = abs(dot(normalize(cameraPosition - vWorldPosition), radial));
       color = mix(color, vec3(0.34, 0.82, 0.80), pow(1.0 - facing, 3.1) * 0.17);
-      color = mix(color, uSignal, smoothstep(6900.0, 8500.0, elevationMeters) * 0.12);
       gl_FragColor = vec4(color, 1.0);
     }
   `;
@@ -465,7 +410,7 @@ const main = async () => {
   camera.lookAt(0, 0, 0);
 
   const earthGroup = new THREE.Group();
-  earthGroup.position.x = 0.34;
+  earthGroup.position.x = 0.27;
   scene.add(earthGroup);
 
   const globeGeometry = new THREE.SphereGeometry(1, ...GLOBE_SEGMENTS);
@@ -475,70 +420,12 @@ const main = async () => {
       uElevationMap: { value: elevationTexture },
       uElevationTexel: { value: new THREE.Vector2(1 / ELEVATION_WIDTH, 1 / ELEVATION_HEIGHT) },
       uTerrain: { value: TERRAIN_EXAGGERATION },
-      uSignal: { value: new THREE.Color('#ef6b4d') },
     },
     vertexShader,
     fragmentShader,
   });
   const globe = new THREE.Mesh(globeGeometry, globeMaterial);
   earthGroup.add(globe);
-
-  const peakPositions = new Float32Array(peakCatalog.length * 3);
-  const peakSizes = new Float32Array(peakCatalog.length);
-  const peakImportance = new Float32Array(peakCatalog.length);
-  peakCatalog.forEach((peak, index) => {
-    const radius = 1.009 + Math.max(peak.elevationM, 0) * TERRAIN_EXAGGERATION / EARTH_RADIUS_METERS;
-    const point = latLonToVector3(peak.lat, peak.lon, radius);
-    point.toArray(peakPositions, index * 3);
-    peakSizes[index] = peak.highestRank === 1 || peak.famousRank === 1
-      ? 0.060
-      : peak.elevationM >= 7000
-        ? 0.047
-        : 0.034;
-    peakImportance[index] = peak.highestRank === 1 || peak.famousRank === 1 ? 1 : 0;
-  });
-  const peakGeometry = new THREE.BufferGeometry();
-  peakGeometry.setAttribute('position', new THREE.BufferAttribute(peakPositions, 3));
-  peakGeometry.setAttribute('aSize', new THREE.BufferAttribute(peakSizes, 1));
-  peakGeometry.setAttribute('aImportance', new THREE.BufferAttribute(peakImportance, 1));
-  const peakMaterial = new THREE.ShaderMaterial({
-    uniforms: {
-      uAccent: { value: new THREE.Color('#ff7657') },
-      uMinor: { value: new THREE.Color('#f3d7a7') },
-    },
-    vertexShader: /* glsl */`
-      attribute float aSize;
-      attribute float aImportance;
-      varying float vImportance;
-      void main() {
-        vImportance = aImportance;
-        vec4 viewPosition = modelViewMatrix * vec4(position, 1.0);
-        gl_Position = projectionMatrix * viewPosition;
-        gl_PointSize = clamp(aSize * (230.0 / max(-viewPosition.z, 0.1)), 1.15, 5.2);
-      }
-    `,
-    fragmentShader: /* glsl */`
-      precision highp float;
-      uniform vec3 uAccent;
-      uniform vec3 uMinor;
-      varying float vImportance;
-      void main() {
-        float distanceToCenter = length(gl_PointCoord - 0.5);
-        float disc = 1.0 - smoothstep(0.30, 0.49, distanceToCenter);
-        float ring = smoothstep(0.34, 0.40, distanceToCenter)
-          * (1.0 - smoothstep(0.43, 0.50, distanceToCenter));
-        float alpha = disc * (0.52 + vImportance * 0.40) + ring * vImportance * 0.65;
-        if (alpha < 0.02) discard;
-        gl_FragColor = vec4(mix(uMinor, uAccent, 0.42 + vImportance * 0.58), alpha);
-      }
-    `,
-    transparent: true,
-    depthWrite: false,
-    depthTest: true,
-    blending: THREE.AdditiveBlending,
-  });
-  const peakPoints = new THREE.Points(peakGeometry, peakMaterial);
-  earthGroup.add(peakPoints);
 
   const atmosphereMaterial = new THREE.ShaderMaterial({
     uniforms: {
@@ -608,79 +495,39 @@ const main = async () => {
   const stars = new THREE.Points(starGeometry, starMaterial);
   scene.add(stars);
 
-  setLoading(91, 'INDEXING GLOBAL SUMMITS', '700 peaks · 100 per continent · eight expedition anchors');
+  setLoading(91, 'COMPOSING ORBITAL VIEW', 'Relief surface · atmosphere · deterministic star field');
 
-  const focusTarget = new THREE.Vector3(0.24, 0.08, 0.968).normalize();
-  const quaternionForPeak = peak => new THREE.Quaternion().setFromUnitVectors(
-    latLonToVector3(peak.lat, peak.lon).normalize(),
-    focusTarget,
+  const viewTarget = new THREE.Vector3(0.18, 0.08, 0.98).normalize();
+  const initialQuaternion = new THREE.Quaternion().setFromUnitVectors(
+    latLonToVector3(24, 78).normalize(),
+    viewTarget,
   );
-  const initialQuaternion = quaternionForPeak(focusPeaks[0]);
   earthGroup.quaternion.copy(initialQuaternion);
-  const focusStartQuaternion = new THREE.Quaternion();
-  const focusTargetQuaternion = new THREE.Quaternion();
-  let focusStartTime = 0;
-
-  const updateSummitCopy = () => {
-    const peak = focusPeaks[state.selectedPeakIndex];
-    summitName.textContent = peak.en.replace('Mount ', '');
-    summitHeight.textContent = formatElevation(peak.elevationM);
-    summitPosition.textContent = `${formatCoordinate(peak.lat, 'N', 'S')} · ${formatCoordinate(peak.lon, 'E', 'W')}`;
-    summitContinent.textContent = peak.continent.toUpperCase();
-    summitIndex.textContent = `${String(state.selectedPeakIndex + 1).padStart(2, '0')} / ${String(focusPeaks.length).padStart(2, '0')}`;
-    summitMarkerLabel.textContent = peak.en
-      .replace(/^Mount /, '')
-      .replace(/\s*\(.+\)$/, '')
-      .toUpperCase();
-    state.selectedPeakId = peak.id;
-  };
+  const orientationStartQuaternion = new THREE.Quaternion();
+  const orientationTargetQuaternion = new THREE.Quaternion();
+  let orientationStartTime = 0;
 
   const updateCameraReadout = () => {
     const altitude = Math.round((camera.position.z - 1) * 6371);
     cameraRange.textContent = `${altitude.toLocaleString('en-US')} km`;
   };
 
-  const countVisiblePeaks = () => {
-    let count = 0;
-    const normal = new THREE.Vector3();
-    for (let index = 0; index < peakCatalog.length; index += 1) {
-      normal.fromArray(peakPositions, index * 3).normalize().applyQuaternion(earthGroup.quaternion);
-      if (normal.z > 0.09) count += 1;
-    }
-    state.visiblePeakCount = count;
-    visiblePeakCount.textContent = String(count).padStart(3, '0');
-  };
-
-  const updateMarker = () => {
-    const peak = focusPeaks[state.selectedPeakIndex];
-    const radius = 1.024 + Math.max(peak.elevationM, 0) * TERRAIN_EXAGGERATION / EARTH_RADIUS_METERS;
-    const surfaceNormal = latLonToVector3(peak.lat, peak.lon).normalize().applyQuaternion(earthGroup.quaternion);
-    const worldPosition = latLonToVector3(peak.lat, peak.lon, radius)
-      .applyQuaternion(earthGroup.quaternion)
-      .add(earthGroup.position);
-    const projected = worldPosition.clone().project(camera);
-    const visible = surfaceNormal.z > 0.08 && projected.z > -1 && projected.z < 1;
-    summitMarker.dataset.visible = String(visible);
-    summitMarker.style.setProperty('--marker-x', `${(projected.x * 0.5 + 0.5) * 100}%`);
-    summitMarker.style.setProperty('--marker-y', `${(-projected.y * 0.5 + 0.5) * 100}%`);
-  };
-
-  let visibleCountFrame = 0;
   const render = () => {
     if (state.motionActive) {
-      const progress = clamp((performance.now() - focusStartTime) / FOCUS_DURATION_MS, 0, 1);
+      const progress = clamp((performance.now() - orientationStartTime) / RESET_DURATION_MS, 0, 1);
       const eased = 1 - (1 - progress) ** 3;
-      earthGroup.quaternion.slerpQuaternions(focusStartQuaternion, focusTargetQuaternion, eased);
+      earthGroup.quaternion.slerpQuaternions(
+        orientationStartQuaternion,
+        orientationTargetQuaternion,
+        eased,
+      );
       if (progress >= 1) {
-        earthGroup.quaternion.copy(focusTargetQuaternion);
+        earthGroup.quaternion.copy(orientationTargetQuaternion);
         state.motionActive = false;
         state.motionCompletionCount += 1;
       }
     }
     renderer.render(scene, camera);
-    updateMarker();
-    if (visibleCountFrame % 8 === 0) countVisiblePeaks();
-    visibleCountFrame += 1;
     state.renderCount += 1;
     state.cameraDistance = camera.position.z;
     if (state.inputCount === 0 && earthGroup.quaternion.angleTo(initialQuaternion) < 0.000001) {
@@ -705,17 +552,10 @@ const main = async () => {
       render();
       return;
     }
-    focusStartQuaternion.copy(earthGroup.quaternion);
-    focusTargetQuaternion.copy(quaternion);
-    focusStartTime = performance.now();
+    orientationStartQuaternion.copy(earthGroup.quaternion);
+    orientationTargetQuaternion.copy(quaternion);
+    orientationStartTime = performance.now();
     state.motionActive = true;
-  };
-
-  const focusPeak = index => {
-    state.selectedPeakIndex = (index + focusPeaks.length) % focusPeaks.length;
-    state.focusCount += 1;
-    updateSummitCopy();
-    startOrientation(quaternionForPeak(focusPeaks[state.selectedPeakIndex]));
   };
 
   const setCameraDistance = distance => {
@@ -727,12 +567,10 @@ const main = async () => {
   };
 
   const resetEarth = inputLabel => {
-    state.selectedPeakIndex = 0;
     state.resetCount += 1;
     state.lastInput = inputLabel;
     camera.position.z = INITIAL_CAMERA_DISTANCE;
     camera.lookAt(0, 0, 0);
-    updateSummitCopy();
     updateCameraReadout();
     startOrientation(initialQuaternion);
   };
@@ -782,13 +620,6 @@ const main = async () => {
     setCameraDistance(camera.position.z + Math.sign(event.deltaY) * 0.18);
   }, { passive: false });
 
-  nextButton.addEventListener('click', event => {
-    if (!event.isTrusted) return;
-    state.inputCount += 1;
-    state.buttonInputCount += 1;
-    state.lastInput = 'button:next';
-    focusPeak(state.selectedPeakIndex + 1);
-  });
   resetButton.addEventListener('click', event => {
     if (!event.isTrusted) return;
     state.inputCount += 1;
@@ -799,16 +630,12 @@ const main = async () => {
   host.addEventListener('keydown', event => {
     if (!event.isTrusted) return;
     const key = event.key.toLowerCase();
-    const recognized = ['arrowleft', 'arrowright', 'arrowup', 'arrowdown', '+', '=', '-', '_', 'n', 'home', 'escape'];
+    const recognized = ['arrowleft', 'arrowright', 'arrowup', 'arrowdown', '+', '=', '-', '_', 'home', 'escape'];
     if (!recognized.includes(key)) return;
     event.preventDefault();
     state.inputCount += 1;
     state.keyboardInputCount += 1;
     state.lastInput = `keyboard:${event.key}`;
-    if (key === 'n') {
-      focusPeak(state.selectedPeakIndex + 1);
-      return;
-    }
     if (key === 'home' || key === 'escape') {
       resetEarth(`keyboard:${event.key}`);
       return;
@@ -836,7 +663,7 @@ const main = async () => {
   const handleReducedMotionChange = event => {
     state.reducedMotion = event.matches;
     if (event.matches && state.motionActive) {
-      earthGroup.quaternion.copy(focusTargetQuaternion);
+      earthGroup.quaternion.copy(orientationTargetQuaternion);
       state.motionActive = false;
       state.motionCompletionCount += 1;
       render();
@@ -848,7 +675,6 @@ const main = async () => {
     reducedMotionQuery.addListener(handleReducedMotionChange);
   }
 
-  updateSummitCopy();
   updateCameraReadout();
   resize();
   setLoading(96, 'CALIBRATING TOPOGRAPHY', 'Uploading ETOPO mipmaps and validating draw calls');
@@ -860,7 +686,7 @@ const main = async () => {
   if (renderer.info.render.calls < 1 || context.getError() !== context.NO_ERROR) {
     throw new Error('The GPU did not complete the ETOPO terrain calibration');
   }
-  setLoading(100, 'ORBITAL VIEW READY', 'ETOPO relief · 50m coastline · 700 peaks indexed');
+  setLoading(100, 'ORBITAL VIEW READY', 'ETOPO relief · 50m coastline · no annotation layer');
   stage.dataset.ready = 'true';
   document.documentElement.dataset.earthReady = 'true';
   const readyDelay = state.reducedMotion ? 0 : 620;
@@ -876,9 +702,7 @@ const main = async () => {
     const canvas = renderer.domElement;
     const canvasRect = canvas.getBoundingClientRect();
     const stageRect = stage.getBoundingClientRect();
-    const nextRect = nextButton.getBoundingClientRect();
     const resetRect = resetButton.getBoundingClientRect();
-    const currentPeak = focusPeaks[state.selectedPeakIndex];
     const elevationImageWidth = elevationTexture.image.naturalWidth || elevationTexture.image.width;
     const elevationImageHeight = elevationTexture.image.naturalHeight || elevationTexture.image.height;
 
@@ -892,19 +716,16 @@ const main = async () => {
     invariant(elevationImageWidth === ELEVATION_WIDTH && elevationImageHeight === ELEVATION_HEIGHT, 'ETOPO texture dimensions changed');
     invariant(topologyTexture instanceof THREE.DataTexture, '50m topology texture is missing');
     invariant(state.landPixelCount > 110000 && state.landPixelCount < 190000, '50m atlas land coverage is implausible');
-    invariant(state.topologyChecksum !== 0 && state.peakChecksum !== 0, 'data checksums are missing');
+    invariant(state.topologyChecksum !== 0, 'topology checksum is missing');
     invariant(state.reliefLoaded && state.reliefAssetBytes === ELEVATION_EXPECTED_BYTES, 'ETOPO asset did not finish loading');
-    invariant(state.peakCount === 700 && Object.values(state.continentCounts).every(count => count === 100), 'global peak coverage changed');
-    invariant(peakGeometry.attributes.position.count === 700, 'peak markers are incomplete');
+    invariant(!state.mountainInformation && !state.namedFeatureDataLoaded && state.annotationLayerCount === 0, 'named feature information must remain absent');
     invariant(state.starCount === STAR_COUNT && starGeometry.attributes.position.count === STAR_COUNT, 'star field is incomplete');
     invariant(state.terrainExaggeration === 45 && globeMaterial.uniforms.uTerrain.value === 45, 'terrain displacement is not active');
-    invariant(earthGroup.children.includes(globe) && earthGroup.children.includes(peakPoints) && earthGroup.children.includes(atmosphere), 'Earth layers are incomplete');
+    invariant(earthGroup.children.length === 2 && earthGroup.children.includes(globe) && earthGroup.children.includes(atmosphere), 'Earth must contain only relief and atmosphere layers');
     invariant(state.loaderProgress === 100 && state.loaderStageCount >= 7 && state.loaderDismissed, 'loading experience did not complete');
     invariant(state.initialStaticConfirmed, 'initial view was not static after loading');
     invariant(!state.automaticPlayback && !state.automaticRotation && !state.previewClockDrivesMotion, 'scene motion must remain human-owned');
-    invariant(nextRect.width > 24 && resetRect.width > 20, 'controls are not usable');
-    invariant(summitName.textContent.includes(currentPeak.en.replace('Mount ', '')), 'summit copy is out of sync');
-    invariant(summitHeight.textContent.includes(Math.round(currentPeak.elevationM).toLocaleString('en-US')), 'summit height is out of sync');
+    invariant(resetRect.width > 24, 'reset control is not usable');
     invariant(Number.isFinite(earthGroup.quaternion.length()) && Math.abs(earthGroup.quaternion.length() - 1) < 0.0001, 'Earth quaternion is invalid');
     return true;
   };
@@ -927,8 +748,6 @@ const main = async () => {
     }
     globeGeometry.dispose();
     globeMaterial.dispose();
-    peakGeometry.dispose();
-    peakMaterial.dispose();
     atmosphere.geometry.dispose();
     atmosphereMaterial.dispose();
     starGeometry.dispose();

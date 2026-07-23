@@ -65,7 +65,6 @@
       .earth-host canvas { width: 100% !important; height: 100% !important; }
 
       .mission-copy,
-      .summit-marker,
       .topline,
       .control-rail,
       .camera-readout,
@@ -105,8 +104,6 @@
       }
 
       .kicker,
-      .summit-label,
-      .stat span,
       .camera-readout,
       .control-hint,
       .legend-label {
@@ -143,102 +140,6 @@
         margin: 8px 0 0;
         color: #82929a;
         font: 500 6.6px/1.4 Inter, ui-sans-serif, system-ui, sans-serif;
-      }
-
-      .summit-card {
-        width: 120px;
-        min-height: 48px;
-        margin-top: 10px;
-        padding: 8px 9px 7px;
-        border: 1px solid var(--line);
-        border-left-color: rgba(239, 107, 77, .82);
-        background:
-          linear-gradient(110deg, rgba(11, 24, 29, .92), rgba(4, 12, 17, .72));
-        box-shadow: 0 15px 34px rgba(0, 0, 0, .24);
-        backdrop-filter: blur(12px);
-      }
-
-      .summit-card__top {
-        display: flex;
-        justify-content: space-between;
-        gap: 5px;
-      }
-
-      .summit-card strong {
-        display: block;
-        max-width: 90px;
-        margin-top: 4px;
-        overflow: hidden;
-        color: var(--paper);
-        font: 760 9.5px/1 Inter, ui-sans-serif, system-ui, sans-serif;
-        letter-spacing: -.03em;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-
-      .summit-label { color: #7f9097; }
-      #summit-index { color: var(--signal); }
-
-      .stats {
-        display: grid;
-        grid-template-columns: 1fr 1.25fr;
-        gap: 6px;
-        margin-top: 7px;
-      }
-
-      .stat { display: grid; gap: 2px; min-width: 0; }
-      .stat span { color: #61747d; font-size: 4.25px; }
-      .stat b {
-        overflow: hidden;
-        color: #c6d1ce;
-        font: 730 5.8px/1.1 ui-monospace, SFMono-Regular, Menlo, monospace;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-
-      .summit-marker {
-        --marker-x: 70%;
-        --marker-y: 45%;
-        left: var(--marker-x);
-        top: var(--marker-y);
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        opacity: 0;
-        transform: translate(-4px, -50%);
-        transition: opacity 150ms ease;
-        pointer-events: none;
-      }
-
-      .summit-marker[data-visible="true"] { opacity: 1; }
-
-      .summit-marker i {
-        position: relative;
-        display: block;
-        width: 7px;
-        height: 7px;
-        border: 1px solid #fff4df;
-        border-radius: 50%;
-        background: var(--signal);
-        box-shadow: 0 0 0 3px rgba(239, 107, 77, .17), 0 0 15px rgba(239, 107, 77, .82);
-      }
-
-      .summit-marker i::after {
-        position: absolute;
-        top: 50%;
-        left: 7px;
-        width: 15px;
-        height: 1px;
-        background: rgba(244, 239, 226, .62);
-        content: "";
-      }
-
-      .summit-marker span {
-        margin-left: 12px;
-        color: #fff5e7;
-        text-shadow: 0 1px 8px #010508;
-        font: 820 5.25px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
-        letter-spacing: .1em;
       }
 
       .control-rail {
@@ -468,8 +369,6 @@
         .mission-copy { top: 14px; left: 12px; width: 109px; }
         .mission-copy h1 { max-width: 105px; font-size: 21px; }
         .mission-copy > p:not(.kicker) { max-width: 104px; font-size: 6px; }
-        .summit-card { width: 105px; min-height: 44px; padding: 7px 8px 6px; }
-        .summit-card strong { font-size: 8.4px; }
         .topline { top: 9px; right: 10px; }
         .data-legend { top: 24px; right: 10px; }
         .control-rail { left: 12px; bottom: 9px; }
@@ -478,19 +377,17 @@
 
       @media (max-width: 420px) and (max-height: 220px) {
         .mission-copy > p:not(.kicker) { display: none; }
-        .summit-card { margin-top: 8px; }
         .data-legend { display: none; }
       }
 
       @media (prefers-reduced-motion: reduce) {
-        .summit-marker,
         .earth-loading,
         .loading-track span { transition: none; }
         .loading-panel::before,
         .loading-orbit { animation: none; }
       }
     </style>
-    <script type="module" crossorigin src="./assets/topographic-relief-expedition-globe-C9rwBhD_.js"></script>
+    <script type="module" crossorigin src="./assets/topographic-relief-expedition-globe-B4j8vlHk.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/shared-DRJThx9H.js">
     <link rel="modulepreload" crossorigin href="./assets/shared-CArD_xX8.js">
     <link rel="stylesheet" crossorigin href="./assets/shared-CLxYJCuH.css">
@@ -501,7 +398,7 @@
         id="earth-host"
         class="earth-host"
         role="application"
-        aria-label="3D relief Earth. Drag to orbit, use the wheel to zoom, arrow keys to rotate, N for the next summit, and Home to reset."
+        aria-label="3D relief Earth. Drag to orbit, use the wheel to zoom, arrow keys to rotate, and Home to reset."
         tabindex="0"
       ></div>
 
@@ -513,43 +410,20 @@
       </div>
 
       <aside class="mission-copy" aria-live="polite">
-        <p class="kicker">Relief expedition / 01</p>
+        <p class="kicker">ETOPO relief / Earth</p>
         <h1>Read the planet in relief.</h1>
-        <p>Real elevation, bathymetry and 700 named summits—drawn as one navigable terrain instrument.</p>
-        <section class="summit-card" aria-label="Focused summit">
-          <div class="summit-card__top">
-            <span id="summit-continent" class="summit-label">ASIA</span>
-            <span id="summit-index" class="summit-label">01 / 08</span>
-          </div>
-          <strong id="summit-name">Everest</strong>
-          <div class="stats">
-            <div class="stat">
-              <span>Elevation</span>
-              <b id="summit-height">8,849 m</b>
-            </div>
-            <div class="stat">
-              <span>Position</span>
-              <b id="summit-position">27.99° N · 86.93° E</b>
-            </div>
-          </div>
-        </section>
+        <p>Elevation and bathymetry become one quiet, navigable portrait of Earth.</p>
       </aside>
 
-      <div id="summit-marker" class="summit-marker" data-visible="false" aria-hidden="true">
-        <i></i>
-        <span id="summit-marker-label">EVEREST</span>
-      </div>
-
       <aside class="data-legend" aria-hidden="true">
-        <span class="legend-label">Peak index</span><b>700</b>
-        <span class="legend-label">In view</span><b id="visible-peak-count">000</b>
+        <span class="legend-label">Relief grid</span><b>60 ARC-SEC</b>
+        <span class="legend-label">Coastline</span><b>50M</b>
         <span class="legend-label">Terrain</span><b>×45</b>
       </aside>
 
-      <div class="control-rail" aria-label="Expedition controls">
-        <button id="next-summit" class="control-button primary" type="button">Next summit</button>
-        <button id="reset-earth" class="control-button" type="button">Reset</button>
-        <span class="control-hint" aria-hidden="true">Drag · Wheel · N</span>
+      <div class="control-rail" aria-label="Earth controls">
+        <button id="reset-earth" class="control-button primary" type="button">Reset view</button>
+        <span class="control-hint" aria-hidden="true">Drag · Wheel · Arrows</span>
       </div>
 
       <div class="camera-readout" aria-hidden="true">
@@ -585,7 +459,7 @@
       </section>
 
       <span class="library-badge">Three.js</span>
-      <span class="scene-caption">ETOPO relief expedition globe</span>
+      <span class="scene-caption">ETOPO topographic relief Earth</span>
     </main>
   </body>
 </html>

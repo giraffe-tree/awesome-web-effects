@@ -353,7 +353,7 @@ Scene graphs, creative coding, physics, drawing tools, and 2D renderers.
 
 | Effect | Recommended implementation | Curatorial score | AI homepage references (max 3) | Stars | Implementations | Status | Implementation |
 | --- | --- | ---: | --- | ---: | ---: | --- | --- |
-| [Topographic relief expedition globe](https://giraffe-tree.github.io/awesome-web-effects/?lang=en#topographic-relief-expedition-globe) | [Three.js](https://github.com/mrdoob/three.js) | **98/100** | — | 114,000 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/?lang=en#topographic-relief-expedition-globe) |
+| [ETOPO topographic relief globe](https://giraffe-tree.github.io/awesome-web-effects/?lang=en#topographic-relief-expedition-globe) | [Three.js](https://github.com/mrdoob/three.js) | **98/100** | — | 114,000 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/?lang=en#topographic-relief-expedition-globe) |
 | [Functional WebGL draw commands](https://giraffe-tree.github.io/awesome-web-effects/?lang=en#functional-webgl-draw-commands) | [regl](https://github.com/regl-project/regl) | **96/100** | — | 5,557 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/?lang=en#functional-webgl-draw-commands) |
 | [Human-calibrated DOM / GPU media registration](https://giraffe-tree.github.io/awesome-web-effects/?lang=en#dom-synced-shader-planes) | [Curtains.js](https://github.com/martinlaxenaire/curtainsjs) | **100/100** | — | 1,823 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/?lang=en#dom-synced-shader-planes) |
 | [Nearest-edge dot-matrix globe](https://giraffe-tree.github.io/awesome-web-effects/?lang=en#pointer-rotated-dot-matrix-globe) | [p5.js](https://github.com/processing/p5.js) | **93/100** | — | 23,797 | 1 | Recommended | [Score + code + prompt](https://giraffe-tree.github.io/awesome-web-effects/?lang=en#pointer-rotated-dot-matrix-globe) |
@@ -387,7 +387,7 @@ Scene graphs, creative coding, physics, drawing tools, and 2D renderers.
 - 152 verified previews: 2 official captures and 150 captures from runnable local demos; 0 missing.
 - Human review scores creativity, art direction, motion craft, legibility, creative transfer and evidence quality.
 - Admission requires 80/100 plus core-dimension minimums. Popularity never overrides the gate.
-- The verified GIF set is 24.36 MiB; every preview is 320×180, at most three seconds and below 1 MiB.
+- The verified GIF set is 24.29 MiB; every preview is 320×180, at most three seconds and below 1 MiB.
 - Stars are a 2026-07-23 snapshot. Recommendation sources and observed AI homepages remain separate relationships.
 
 Read the [current 398-candidate admission audit](research/demo-admission-audit-2026-07-23.md), the [100-company homepage research](research/ai-native-homepages-100.md), and the [preview provenance manifest](demo/gifs/provenance.json).

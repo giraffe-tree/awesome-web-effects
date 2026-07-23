@@ -1012,51 +1012,43 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, web_frame_root: P
                 page.keyboard.press("Home")
         elif demo["id"] == "topographic-relief-expedition-globe":
             if index == 2:
-                page.locator('#next-summit').click()
-            elif index == 3:
-                settle(760)
-            elif index == 6:
                 page.locator('#earth-host').focus()
                 page.keyboard.press("ArrowLeft")
-            elif index == 8:
+            elif index == 4:
                 page.keyboard.press("ArrowUp")
+            elif index == 6:
+                page.keyboard.press("ArrowRight")
+            elif index == 8:
+                page.keyboard.press("ArrowDown")
             elif index == 10:
-                page.keyboard.press("n")
-            elif index == 11:
-                settle(760)
-            elif index == 14:
                 box = page.locator('#earth-host').bounding_box()
                 page.mouse.move(box["x"] + box["width"] * .72, box["y"] + box["height"] * .48)
                 page.mouse.wheel(0, -120)
-            elif index == 16:
+            elif index == 12:
                 page.keyboard.press("+")
-            elif index == 18:
+            elif index == 14:
+                page.keyboard.press("-")
+            elif index == 16:
                 box = page.locator('#earth-host').bounding_box()
                 page.mouse.move(box["x"] + box["width"] * .69, box["y"] + box["height"] * .50)
                 page.mouse.down()
-            elif index == 20:
+            elif index == 18:
                 box = page.locator('#earth-host').bounding_box()
                 page.mouse.move(box["x"] + box["width"] * .53, box["y"] + box["height"] * .61, steps=6)
                 page.mouse.up()
-            elif index == 22:
-                page.locator('#next-summit').click()
-            elif index == 23:
-                settle(760)
-            elif index == 25:
+            elif index == 20:
                 page.locator('#reset-earth').click()
-            elif index == 26:
-                settle(760)
-            elif index == 28:
+            elif index == 21:
+                settle(580)
+            elif index == 24:
                 page.locator('#earth-host').focus()
-                page.keyboard.press("ArrowRight")
-            elif index == 29:
-                page.keyboard.press("n")
-            elif index == 30:
-                settle(760)
-            elif index == 32:
+                page.keyboard.press("ArrowLeft")
+            elif index == 26:
+                page.keyboard.press("+")
+            elif index == 28:
                 page.keyboard.press("Home")
-            elif index == 33:
-                settle(760)
+            elif index == 29:
+                settle(580)
         elif demo["id"] == "scene-wipe-progressive-page-swap":
             if index == 2:
                 page.locator('#scene-toggle').click()
@@ -5772,7 +5764,7 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, web_frame_root: P
             not assertion
             or interaction["claimedLibrary"] != "three@0.185.1"
             or interaction["renderer"] != "webgl"
-            or interaction["mechanism"] != "etopo-2022-displaced-earth-with-50m-coastline-and-700-real-peaks"
+            or interaction["mechanism"] != "etopo-2022-displaced-earth-with-50m-coastline"
             or interaction["inputAdapters"] != ["pointer", "touch", "wheel", "click", "keyboard"]
             or interaction["automaticPlayback"]
             or interaction["automaticRotation"]
@@ -5791,10 +5783,9 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, web_frame_root: P
             or interaction["reliefResolution"] != [4320, 2160]
             or interaction["reliefAssetBytes"] != 3429836
             or not interaction["reliefLoaded"]
-            or interaction["peakCount"] != 700
-            or interaction["focusPeakCount"] != 8
-            or sorted(interaction["continentCounts"].values()) != [100, 100, 100, 100, 100, 100, 100]
-            or interaction["peakChecksum"] == 0
+            or interaction["mountainInformation"]
+            or interaction["namedFeatureDataLoaded"]
+            or interaction["annotationLayerCount"] != 0
             or interaction["starCount"] != 1800
             or interaction["geometrySegments"] != [320, 192]
             or interaction["terrainExaggeration"] != 45
@@ -5806,21 +5797,18 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, web_frame_root: P
             or interaction["pointerMoveCount"] < 5
             or interaction["keyboardInputCount"] < 7
             or interaction["wheelInputCount"] < 1
-            or interaction["buttonInputCount"] < 3
-            or interaction["focusCount"] < 4
+            or interaction["buttonInputCount"] < 1
             or interaction["resetCount"] < 2
             or interaction["zoomCount"] < 2
             or interaction["dragDistance"] <= 0
             or interaction["dragging"]
             or interaction["motionActive"]
-            or interaction["motionCompletionCount"] < 5
-            or interaction["selectedPeakIndex"] != 0
-            or interaction["selectedPeakId"] != "asia-everest"
+            or interaction["motionCompletionCount"] < 2
             or abs(interaction["cameraDistance"] - 3.55) > .001
             or interaction["lastInput"] != "keyboard:Home"
             or interaction["renderCount"] < 20
         ):
-            raise RuntimeError(f"{demo['id']} did not capture the streamed ETOPO Earth with 50m land, 700 real peaks, loading progress, relief contours, orbit, zoom, summit focus, and reset: {interaction!r}")
+            raise RuntimeError(f"{demo['id']} did not capture the unannotated streamed ETOPO Earth with 50m land, loading progress, relief contours, orbit, zoom, and reset: {interaction!r}")
     elif demo["id"] == "scene-wipe-progressive-page-swap":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         if (

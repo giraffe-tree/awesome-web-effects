@@ -353,7 +353,7 @@
 
 | 效果 | 推荐实现 | 策展评分 | AI 官网参考（最多 3 家） | Stars | 实现数 | 状态 | 实现 |
 | --- | --- | ---: | --- | ---: | ---: | --- | --- |
-| [地形浮雕探险地球](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#topographic-relief-expedition-globe) | [Three.js](https://github.com/mrdoob/three.js) | **98/100** | — | 114,000 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#topographic-relief-expedition-globe) |
+| [ETOPO 地形浮雕地球](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#topographic-relief-expedition-globe) | [Three.js](https://github.com/mrdoob/three.js) | **98/100** | — | 114,000 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#topographic-relief-expedition-globe) |
 | [函数式 WebGL 绘制命令](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#functional-webgl-draw-commands) | [regl](https://github.com/regl-project/regl) | **96/100** | — | 5,557 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#functional-webgl-draw-commands) |
 | [人工校准的 DOM / GPU 媒体配准](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#dom-synced-shader-planes) | [Curtains.js](https://github.com/martinlaxenaire/curtainsjs) | **100/100** | — | 1,823 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#dom-synced-shader-planes) |
 | [最近边缘节点点阵地球](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#pointer-rotated-dot-matrix-globe) | [p5.js](https://github.com/processing/p5.js) | **93/100** | — | 23,797 | 1 | 当前推荐 | [评分 + 代码 + 提示词](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#pointer-rotated-dot-matrix-globe) |
@@ -387,7 +387,7 @@
 - 152 个已核验预览：2 个官方素材、150 个可运行本地 Demo 录制；缺失数为 0。
 - 人工评审覆盖创意、艺术完成度、动效编排、效果辨识、创作迁移和证据质量。
 - 准入要求 80/100，并同时通过核心维度最低分；流行度不能覆盖质量门槛。
-- 已核验 GIF 总计 24.36 MiB；每个预览为 320×180、最长三秒且小于 1 MiB。
+- 已核验 GIF 总计 24.29 MiB；每个预览为 320×180、最长三秒且小于 1 MiB。
 - Stars 是 2026-07-23 快照；“推荐实现”与“在哪家 AI 官网观察到”始终是两种关系。
 
 继续阅读 [398 个候选的准入审计](../research/demo-admission-audit-2026-07-23.md)、[100 家 AI 公司主页特效调研](../research/ai-native-homepages-100.md)与[预览来源清单](../demo/gifs/provenance.json)。

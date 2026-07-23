@@ -1190,7 +1190,6 @@ export const effects = [...existingEffects, ...expansionEffects, ...expansion100
 // source.recommended, which identifies the preferred implementation *within*
 // an effect rather than whether the effect itself is featured.
 export const featuredEffectIds = Object.freeze([
-  'connected-fragment-story-stage',
   'pinned-horizontal-scroll-scene',
   'prompt-select-replace-loop',
   'staggered-transform-choreography',

@@ -4,17 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="Find a web interaction effect, copy the minimal code, or hand its implementation prompt to Codex or Claude Code." />
-    <meta name="theme-color" content="#111210" />
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="Awesome Web Effects — Every effect starts as a question" />
-    <meta property="og:description" content="A living atlas of verified web effects, minimal code, and implementation prompts." />
-    <meta property="og:image" content="https://giraffe-tree.github.io/awesome-web-effects/og.png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Awesome Web Effects — Every effect starts as a question" />
-    <meta name="twitter:description" content="A living atlas of verified web effects, minimal code, and implementation prompts." />
-    <meta name="twitter:image" content="https://giraffe-tree.github.io/awesome-web-effects/og.png" />
+    <meta name="theme-color" content="#0a0e20" />
     <link rel="icon" href="data:," />
     <title>Awesome Web Effects — Effect-first interaction atlas</title>
     <style>
@@ -985,271 +975,6 @@
         .hero .agent-prompt-box { grid-template-columns: 1fr; }
         .agent-prompt-box .agent-prompt-action { width: 100%; }
       }
-
-      /* Connected fragment story: the opening viewport demonstrates the new catalog effect. */
-      .hero {
-        min-height: 0;
-        padding: 18px 0 72px;
-        color: #171814;
-        background:
-          radial-gradient(40% 18% at 78% 84%, rgba(218, 165, 173, .18), transparent 72%),
-          radial-gradient(36% 16% at 18% 72%, rgba(141, 169, 199, .16), transparent 74%),
-          #ebe8df;
-      }
-      .hero::before, .hero::after { display: none; }
-      .hero-layout { display: block; width: min(1480px, calc(100% - 32px)); }
-
-      .hero-experience {
-        --stage-accent: #f0b6a9;
-        position: relative;
-        isolation: isolate;
-        width: 100%;
-        min-height: clamp(690px, calc(100svh - 84px), 860px);
-        margin: 0;
-        overflow: hidden;
-        padding: 0;
-        border: 1px solid rgba(23, 24, 20, .9);
-        border-radius: 26px;
-        color: #f4f1e9;
-        background:
-          radial-gradient(circle at var(--pointer-focus-x) var(--pointer-focus-y), rgba(240, 182, 169, .075), transparent 22%),
-          #111210;
-        box-shadow: 0 34px 90px rgba(48, 42, 35, .22);
-      }
-      .hero-experience::before { display: none; }
-      .hero-experience:focus-visible { outline: 3px solid rgba(182, 109, 128, .55); outline-offset: 4px; }
-      .hero-experience[data-step="0"],
-      .hero-experience[data-step="1"],
-      .hero-experience[data-step="2"],
-      .hero-experience[data-step="3"] { background-color: #111210; }
-
-      .hero-story-bar {
-        position: absolute;
-        z-index: 12;
-        top: 0;
-        left: 0;
-        right: 0;
-        min-height: 54px;
-        padding: 0 24px;
-        border-bottom: 1px solid rgba(244, 241, 233, .1);
-        background: rgba(17, 18, 16, .64);
-        backdrop-filter: blur(14px);
-      }
-      .hero-story-eyebrow { color: rgba(244, 241, 233, .76); font-size: 10px; letter-spacing: .16em; }
-      .hero-story-eyebrow::before { width: 6px; height: 6px; background: var(--stage-accent); box-shadow: 0 0 14px var(--stage-accent); }
-      .hero-story-toggle { min-height: 30px; border-color: rgba(244, 241, 233, .18); color: rgba(244, 241, 233, .78); background: rgba(244, 241, 233, .06); }
-
-      .hero-story-canvas {
-        position: absolute;
-        z-index: 1;
-        inset: 54px 0 0;
-        height: auto;
-        margin: 0;
-        overflow: hidden;
-        border-radius: 0;
-        background: transparent;
-        perspective: none;
-      }
-      .hero-story-canvas::before, .hero-story-canvas::after { display: none; }
-      .hero-story-network { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
-      .hero-story-network g { opacity: .18; transition: opacity .45s ease; }
-      .hero-story-network line { stroke: rgba(244, 241, 233, .5); stroke-width: 1; stroke-dasharray: 5 7; vector-effect: non-scaling-stroke; }
-      .hero-experience[data-step="0"] [data-story-network="0"],
-      .hero-experience[data-step="1"] [data-story-network="1"],
-      .hero-experience[data-step="2"] [data-story-network="2"],
-      .hero-experience[data-step="3"] [data-story-network="3"] { opacity: .82; }
-      .hero-experience[data-step="0"] [data-story-network="0"] line,
-      .hero-experience[data-step="1"] [data-story-network="1"] line,
-      .hero-experience[data-step="2"] [data-story-network="2"] line,
-      .hero-experience[data-step="3"] [data-story-network="3"] line {
-        stroke: var(--stage-accent);
-        animation: story-line-draw .8s cubic-bezier(.22, 1, .36, 1) both;
-      }
-      @keyframes story-line-draw {
-        from { stroke-dasharray: 1 900; stroke-dashoffset: 180; opacity: 0; }
-        to { stroke-dasharray: 5 7; stroke-dashoffset: 0; opacity: 1; }
-      }
-
-      .story-fragment {
-        --rotate: 0deg;
-        position: absolute;
-        z-index: 2;
-        width: clamp(54px, 5.2vw, 82px);
-        aspect-ratio: 1;
-        margin: 0;
-        overflow: hidden;
-        border: 1px solid rgba(244, 241, 233, .17);
-        border-radius: 2px;
-        background: #1a1b18;
-        box-shadow: 0 14px 34px rgba(0, 0, 0, .32);
-        opacity: .28;
-        filter: grayscale(.34) brightness(.74);
-        transform: translate(var(--pointer-x), var(--pointer-y)) rotate(var(--rotate)) scale(.84);
-        transition: opacity .48s ease, filter .48s ease, transform .68s cubic-bezier(.22, 1, .36, 1);
-        animation: story-fragment-in .9s cubic-bezier(.22, 1, .36, 1) both;
-      }
-      .story-fragment img { width: 100%; height: 100%; object-fit: cover; }
-      .story-fragment::after { content: ""; position: absolute; inset: 0; border: 1px solid rgba(255, 255, 255, .08); box-shadow: inset 0 0 28px rgba(0, 0, 0, .12); pointer-events: none; }
-      .story-fragment-1 { --rotate: -4deg; left: 3.4%; top: 16%; animation-delay: .08s; }
-      .story-fragment-2 { --rotate: 2deg; left: 10.2%; top: 34%; animation-delay: .16s; }
-      .story-fragment-3 { --rotate: -2deg; left: 17%; top: 7%; animation-delay: .24s; }
-      .story-fragment-4 { --rotate: 3deg; left: 17.8%; top: 49%; animation-delay: .32s; }
-      .story-fragment-5 { --rotate: -2deg; right: 20%; top: 3.5%; animation-delay: .12s; }
-      .story-fragment-6 { --rotate: 3deg; right: 7.5%; top: 9%; animation-delay: .2s; }
-      .story-fragment-7 { --rotate: -4deg; right: 2.8%; top: 32%; animation-delay: .28s; }
-      .story-fragment-8 { --rotate: 2deg; left: 6%; bottom: 7%; animation-delay: .36s; }
-      .story-fragment-9 { --rotate: -3deg; left: 27%; bottom: 3%; animation-delay: .44s; }
-      .story-fragment-10 { --rotate: 3deg; right: 28%; bottom: 2.5%; animation-delay: .18s; }
-      .story-fragment-11 { --rotate: -2deg; right: 10.5%; bottom: 7%; animation-delay: .3s; }
-      .story-fragment-12 { --rotate: 4deg; right: 3%; bottom: 21%; animation-delay: .42s; }
-      @keyframes story-fragment-in {
-        from { opacity: 0; translate: 0 18px; }
-        to { translate: 0 0; }
-      }
-      .hero-experience[data-step="0"] [data-story-chapter="0"],
-      .hero-experience[data-step="1"] [data-story-chapter="1"],
-      .hero-experience[data-step="2"] [data-story-chapter="2"],
-      .hero-experience[data-step="3"] [data-story-chapter="3"] {
-        z-index: 3;
-        opacity: .96;
-        filter: grayscale(0) brightness(1.06) saturate(1.08);
-        transform: translate(var(--pointer-x), var(--pointer-y)) rotate(var(--rotate)) scale(1);
-      }
-
-      .story-hub {
-        position: absolute;
-        z-index: 4;
-        max-width: 220px;
-        color: rgba(209, 207, 198, .44);
-        font: 400 clamp(18px, 1.8vw, 27px)/1.02 Georgia, "Times New Roman", serif;
-        letter-spacing: -.025em;
-        text-wrap: balance;
-        transition: color .4s ease, transform .55s cubic-bezier(.22, 1, .36, 1);
-      }
-      .story-hub-0 { left: 3.5%; top: 38%; max-width: 180px; }
-      .story-hub-1 { right: 4%; top: 15%; text-align: right; }
-      .story-hub-2 { left: 12%; bottom: 12%; }
-      .story-hub-3 { right: 7%; bottom: 10%; text-align: right; }
-      .hero-experience[data-step="0"] [data-hero-hub="0"],
-      .hero-experience[data-step="1"] [data-hero-hub="1"],
-      .hero-experience[data-step="2"] [data-hero-hub="2"],
-      .hero-experience[data-step="3"] [data-hero-hub="3"] { color: rgba(244, 241, 233, .86); transform: translateY(-3px); }
-
-      .hero-message {
-        position: absolute;
-        z-index: 8;
-        left: 50%;
-        top: 47%;
-        width: min(720px, 58%);
-        min-width: 0;
-        color: #f4f1e9;
-        text-align: center;
-        text-shadow: none;
-        transform: translate(-50%, -50%);
-      }
-      .hero-kicker { display: inline-flex; justify-content: center; margin: 0 0 20px; color: rgba(244, 241, 233, .56); font-size: 10px; font-weight: 760; letter-spacing: .18em; }
-      .hero-kicker::before { display: none; }
-      .hero .hero-message h1 {
-        max-width: 720px;
-        margin: 0 auto;
-        color: #f7f3eb;
-        font: 400 clamp(58px, 5.8vw, 92px)/.91 Georgia, "Times New Roman", serif;
-        letter-spacing: -.055em;
-        text-wrap: balance;
-      }
-      html[lang="zh-Hans"] .hero .hero-message h1 { font-family: "Songti SC", "Noto Serif CJK SC", Georgia, serif; font-size: clamp(48px, 5vw, 76px); line-height: 1.02; }
-      .hero-copy { max-width: 660px; margin: 24px auto 0; color: rgba(244, 241, 233, .7); font-size: clamp(15px, 1.35vw, 20px); line-height: 1.48; letter-spacing: -.016em; }
-      .hero-story-caption {
-        display: grid;
-        grid-template-columns: auto minmax(0, 1fr);
-        align-items: start;
-        gap: 16px;
-        width: min(530px, 92%);
-        min-height: 0;
-        margin: 28px auto 0;
-        padding: 17px 0 0;
-        border-top: 1px solid rgba(244, 241, 233, .16);
-        text-align: left;
-      }
-      .hero-step-index { color: var(--stage-accent); font-size: 10px; line-height: 1.6; }
-      .hero-story-word { position: static; display: inline; margin-right: 8px; color: var(--stage-accent); font: 800 11px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .13em; text-transform: uppercase; text-shadow: none; transform: none; }
-      .hero-story-word.is-changing { opacity: 0; filter: blur(6px); transform: translateY(4px); }
-      .hero-step-title { display: inline; color: rgba(244, 241, 233, .94); font-size: 15px; font-weight: 650; letter-spacing: -.012em; }
-      .hero-step-copy { max-width: 460px; margin: 5px 0 0; color: rgba(244, 241, 233, .5); font-size: 11px; line-height: 1.45; }
-      .hero-actions { justify-content: center; gap: 10px; margin-top: 24px; }
-      .hero .primary-action, .hero .secondary-action { min-height: 44px; padding-inline: 18px; border-radius: 10px; font-size: 13px; }
-      .hero .primary-action { color: #171814; background: #f4f1e9; box-shadow: none; }
-      .hero .primary-action:hover { color: #171814; background: #f0b6a9; box-shadow: 0 10px 26px rgba(0, 0, 0, .22); }
-      .hero .secondary-action { color: rgba(244, 241, 233, .76); border-color: rgba(244, 241, 233, .22); background: rgba(244, 241, 233, .06); }
-      .hero .secondary-action:hover { color: #171814; border-color: #f0b6a9; background: #f0b6a9; }
-
-      .hero-story-steps {
-        position: absolute;
-        z-index: 12;
-        left: 50%;
-        bottom: 24px;
-        grid-template-columns: repeat(4, minmax(82px, 1fr));
-        width: min(420px, calc(100% - 48px));
-        transform: translateX(-50%);
-      }
-      .hero-story-step { min-height: 34px; padding: 0 10px; border-color: rgba(244, 241, 233, .14); border-radius: 8px; color: rgba(244, 241, 233, .48); background: rgba(244, 241, 233, .045); font-size: 9px; }
-      .hero-story-step[aria-pressed="true"] { color: #171814; border-color: transparent; background: var(--stage-accent); }
-      .hero-interaction-hint { z-index: 12; inset: auto auto 31px 25px; color: rgba(244, 241, 233, .36); font-size: 9px; }
-
-      .hero .agent-prompt-section { padding-top: 24px; }
-      .hero .agent-prompt-card { border-color: rgba(48, 42, 35, .1); color: #171814; background: rgba(255, 255, 255, .32); box-shadow: 0 18px 48px rgba(48, 42, 35, .08), inset 0 1px rgba(255, 255, 255, .5); }
-      .hero-metrics { margin-top: 24px; border-top-color: rgba(48, 42, 35, .14); }
-      .hero .metric { color: #171814; border-inline-end-color: rgba(48, 42, 35, .12); }
-      .hero .metric span { color: rgba(48, 42, 35, .58); }
-
-      @media (max-width: 980px) {
-        .hero-layout { width: min(100% - 24px, 920px); }
-        .hero-experience { min-height: 740px; }
-        .story-fragment { width: clamp(48px, 7vw, 68px); }
-        .story-hub { max-width: 150px; font-size: clamp(15px, 2.4vw, 21px); }
-        .story-hub-0 { top: 32%; }
-        .story-hub-2 { left: 8%; bottom: 13%; }
-        .story-hub-3 { right: 5%; bottom: 12%; }
-        .hero-message { top: 46%; width: min(620px, 66%); }
-        .hero .hero-message h1 { font-size: clamp(50px, 7vw, 72px); }
-        .hero .agent-prompt-card { grid-template-columns: 1fr; }
-      }
-
-      @media (max-width: 680px) {
-        .hero { padding: 10px 0 56px; }
-        .hero-layout { width: calc(100% - 20px); }
-        .hero-experience { min-height: 760px; border-radius: 19px; }
-        .hero-story-bar { min-height: 48px; padding-inline: 16px; }
-        .hero-story-canvas { top: 48px; }
-        .story-fragment { width: 47px; }
-        .story-fragment-3, .story-fragment-6, .story-fragment-9, .story-fragment-12 { display: none; }
-        .story-fragment-1 { left: 4%; top: 12%; }
-        .story-fragment-2 { left: 7%; top: 42%; }
-        .story-fragment-4 { left: 13%; top: 59%; }
-        .story-fragment-5 { right: 18%; top: 9%; }
-        .story-fragment-7 { right: 5%; top: 36%; }
-        .story-fragment-8 { left: 5%; bottom: 8%; }
-        .story-fragment-10 { right: 22%; bottom: 7%; }
-        .story-fragment-11 { right: 5%; bottom: 17%; }
-        .story-hub { max-width: 118px; font-size: 15px; }
-        .story-hub-0 { left: 4%; top: 29%; }
-        .story-hub-1 { right: 5%; top: 19%; }
-        .story-hub-2 { left: 5%; bottom: 20%; }
-        .story-hub-3 { right: 5%; bottom: 25%; }
-        .hero-message { top: 45%; width: calc(100% - 72px); }
-        .hero-kicker { margin-bottom: 14px; font-size: 8px; }
-        .hero .hero-message h1 { font-size: clamp(42px, 13vw, 58px); }
-        html[lang="zh-Hans"] .hero .hero-message h1 { font-size: clamp(38px, 11vw, 50px); }
-        .hero-copy { margin-top: 18px; font-size: 13px; }
-        .hero-story-caption { margin-top: 20px; padding-top: 13px; }
-        .hero-step-title { font-size: 13px; }
-        .hero-step-copy { font-size: 10px; }
-        .hero .secondary-action { display: none; }
-        .hero-story-steps { bottom: 18px; grid-template-columns: repeat(4, 1fr); width: calc(100% - 28px); }
-        .hero-story-step { min-height: 32px; padding-inline: 4px; font-size: 8px; }
-        .hero-interaction-hint { display: none; }
-      }
-
       @media (prefers-reduced-motion: reduce) {
         html { scroll-behavior: auto; }
         .entry-reveal { display: none; }
@@ -1260,8 +985,6 @@
         .brand[data-motion="active"] .brand-copy-letter,
         .brand[data-motion="active"] .brand-orbit { animation: none; }
         .visual-gif::before, .visual-gif::after, .media-load-icon, .row-preview .media-load-state { animation: none; }
-        .story-fragment, .hero-story-network line { animation: none; }
-        .story-fragment, .story-hub, .hero-story-network g { transition: none; }
         .hero-experience, .hero-experience::before, .hero-story-word, .hero-shape, .hero-story-cursor, [data-managed-media], .media-load-state, .effect-main, .row-preview::after { transition: none; }
         .hero-story-cursor { display: none; }
         .effect-main { transition: none; }
@@ -1272,6 +995,7 @@
     </style>
   </head>
   <body id="top">
+    <div class="entry-reveal" id="entry-reveal" aria-hidden="true"><span class="entry-reveal-mark">AW</span></div>
     <nav class="site-nav" aria-label="Primary navigation">
       <div class="nav-inner shell">
         <a class="brand" href="#top" aria-label="Awesome Web Effects">
@@ -1315,78 +1039,33 @@
 
     <header class="hero">
       <div class="hero-layout shell">
+        <div class="hero-message">
+          <p class="hero-kicker" id="hero-kicker">The effect-first interaction atlas</p>
+          <h1 id="hero-title">Find the effect.<br />Ship the feeling.</h1>
+          <p class="hero-copy" id="hero-copy">Explore visually reviewed effects with a real preview, minimal code, and a concise implementation prompt.</p>
+          <div class="hero-actions">
+            <a class="primary-action" href="#catalog" id="browse-action">Browse effects</a>
+          </div>
+        </div>
+
         <section class="hero-experience" id="hero-experience" data-step="0" tabindex="0" aria-label="Interactive effect story">
           <div class="hero-story-bar">
-            <span class="hero-story-eyebrow" id="hero-story-eyebrow">A living effect atlas</span>
+            <span class="hero-story-eyebrow" id="hero-story-eyebrow">Live interaction story</span>
             <button class="hero-story-toggle" id="hero-story-toggle" type="button" aria-pressed="false">Pause</button>
           </div>
-
-          <div class="hero-story-canvas" aria-hidden="true">
-            <svg class="hero-story-network" viewBox="0 0 1400 760" preserveAspectRatio="xMidYMid slice" focusable="false">
-              <g data-story-network="0">
-                <line x1="184" y1="286" x2="52" y2="236"></line>
-                <line x1="184" y1="286" x2="154" y2="132"></line>
-                <line x1="184" y1="286" x2="286" y2="196"></line>
-                <line x1="184" y1="286" x2="246" y2="422"></line>
-              </g>
-              <g data-story-network="1">
-                <line x1="1160" y1="202" x2="1268" y2="86"></line>
-                <line x1="1160" y1="202" x2="1112" y2="78"></line>
-                <line x1="1160" y1="202" x2="1292" y2="276"></line>
-                <line x1="1160" y1="202" x2="1036" y2="160"></line>
-              </g>
-              <g data-story-network="2">
-                <line x1="292" y1="596" x2="100" y2="658"></line>
-                <line x1="292" y1="596" x2="188" y2="518"></line>
-                <line x1="292" y1="596" x2="394" y2="676"></line>
-                <line x1="292" y1="596" x2="522" y2="602"></line>
-              </g>
-              <g data-story-network="3">
-                <line x1="1126" y1="588" x2="1288" y2="660"></line>
-                <line x1="1126" y1="588" x2="1204" y2="482"></line>
-                <line x1="1126" y1="588" x2="978" y2="666"></line>
-                <line x1="1126" y1="588" x2="894" y2="604"></line>
-              </g>
-            </svg>
-
-            <figure class="story-fragment story-fragment-1" data-story-chapter="0"><img src="./gifs/webp/metaball-blob-cursor.webp" alt="" width="640" height="360" decoding="async" /></figure>
-            <figure class="story-fragment story-fragment-2" data-story-chapter="0"><img src="./gifs/webp/pointer-reactive-cell-grid.webp" alt="" width="640" height="360" decoding="async" /></figure>
-            <figure class="story-fragment story-fragment-3" data-story-chapter="0"><img src="./gifs/webp/voronoi-nearest-point-hover-focus.webp" alt="" width="640" height="360" decoding="async" /></figure>
-            <figure class="story-fragment story-fragment-4" data-story-chapter="1"><img src="./gifs/webp/autonomous-agent-cursor-constellation.webp" alt="" width="640" height="360" decoding="async" /></figure>
-            <figure class="story-fragment story-fragment-5" data-story-chapter="1"><img src="./gifs/webp/poisson-constellation-bloom.webp" alt="" width="640" height="360" decoding="async" /></figure>
-            <figure class="story-fragment story-fragment-6" data-story-chapter="1"><img src="./gifs/webp/scene-wipe-progressive-page-swap.webp" alt="" width="640" height="360" decoding="async" /></figure>
-            <figure class="story-fragment story-fragment-7" data-story-chapter="2"><img src="./gifs/webp/animated-bezier-route-cartography.webp" alt="" width="640" height="360" decoding="async" /></figure>
-            <figure class="story-fragment story-fragment-8" data-story-chapter="2"><img src="./gifs/webp/kinetic-variable-font-axis.webp" alt="" width="640" height="360" decoding="async" /></figure>
-            <figure class="story-fragment story-fragment-9" data-story-chapter="2"><img src="./gifs/webp/cursor-drawn-constellation-thread.webp" alt="" width="640" height="360" decoding="async" /></figure>
-            <figure class="story-fragment story-fragment-10" data-story-chapter="3"><img src="./gifs/webp/caustic-light-card-surface.webp" alt="" width="640" height="360" decoding="async" /></figure>
-            <figure class="story-fragment story-fragment-11" data-story-chapter="3"><img src="./gifs/webp/elastic-voronoi-focus-mosaic.webp" alt="" width="640" height="360" decoding="async" /></figure>
-            <figure class="story-fragment story-fragment-12" data-story-chapter="3"><img src="./gifs/webp/polar-waveform-sundial.webp" alt="" width="640" height="360" decoding="async" /></figure>
-
-            <div class="story-hub story-hub-0" data-hero-hub="0">A feeling needs a name.</div>
-            <div class="story-hub story-hub-1" data-hero-hub="1">A real demo makes it legible.</div>
-            <div class="story-hub story-hub-2" data-hero-hub="2">The mechanism becomes reusable.</div>
-            <div class="story-hub story-hub-3" data-hero-hub="3">The feeling survives the handoff.</div>
-          </div>
-
-          <div class="hero-message">
-            <p class="hero-kicker" id="hero-kicker">A living atlas of web interaction</p>
-            <h1 id="hero-title">Every effect starts<br />as a question.</h1>
-            <p class="hero-copy" id="hero-copy">We collect the answer in motion—verified in a real demo, reduced to useful code, and ready to hand to your coding agent.</p>
-            <div class="hero-story-caption" aria-live="polite">
-              <span class="hero-step-index" id="hero-step-index">01 / 04</span>
-              <div>
-                <strong class="hero-story-word" id="hero-story-word" aria-hidden="true">FIND</strong>
-                <strong class="hero-step-title" id="hero-step-title">A feeling needs a name</strong>
-                <p class="hero-step-copy" id="hero-step-copy">Start with the visual behavior you can picture but cannot yet describe.</p>
-              </div>
-            </div>
-            <div class="hero-actions">
-              <a class="primary-action" href="#catalog" id="browse-action">Browse effects <span aria-hidden="true">→</span></a>
-              <a class="secondary-action" id="hero-effect-action" href="#connected-fragment-story-stage">Open this effect</a>
-            </div>
-          </div>
-
           <p class="hero-interaction-hint" id="hero-interaction-hint">Move your pointer · click to advance</p>
+          <div class="hero-story-canvas" aria-hidden="true">
+            <div class="hero-story-grid"></div>
+            <span class="hero-shape hero-shape-a"></span>
+            <span class="hero-shape hero-shape-b"></span>
+            <span class="hero-shape hero-shape-c"></span>
+            <strong class="hero-story-word" id="hero-story-word">IDEA</strong>
+            <span class="hero-story-cursor"></span>
+          </div>
+          <div class="hero-story-caption" aria-live="polite">
+            <span class="hero-step-index" id="hero-step-index">01 / 04</span>
+            <div><strong class="hero-step-title" id="hero-step-title">Begin with a feeling</strong><p class="hero-step-copy" id="hero-step-copy">A visual instinct appears before the implementation words do.</p></div>
+          </div>
           <div class="hero-story-steps" id="hero-story-steps" aria-label="Interaction story steps">
             <button class="hero-story-step" type="button" data-hero-step="0" aria-pressed="true">Imagine</button>
             <button class="hero-story-step" type="button" data-hero-step="1" aria-pressed="false">Describe</button>
@@ -1464,10 +1143,10 @@
     </div>
 
     <script type="module">
-      import { categories, effects, featuredEffectIds, projects } from './data/effects.js?v=20260723-connected-fragment-story';
+      import { categories, effects, featuredEffectIds, projects } from './data/effects.js?v=20260722-home-recommendations';
       import { admissionPolicy } from './data/demo-admission.js?v=20260720-catalog-150';
       import { getOneLineAgentPrompt } from './data/agent-prompts.js?v=20260722-verifiable-prompt';
-      import { defaultLocale, getMessages, resolveLocale, supportedLocales } from './data/locales.js?v=20260723-connected-fragment-story';
+      import { defaultLocale, getMessages, resolveLocale, supportedLocales } from './data/locales.js?v=20260722-blue-hour';
 
 
       const copy = Object.fromEntries(supportedLocales.map(locale => [locale.code, getMessages(locale.code)]));
@@ -1495,7 +1174,6 @@
       const heroStepCopy = document.querySelector('#hero-step-copy');
       const heroStoryToggle = document.querySelector('#hero-story-toggle');
       const heroStepButtons = [...document.querySelectorAll('[data-hero-step]')];
-      const heroStoryHubs = [...document.querySelectorAll('[data-hero-hub]')];
       const agentPromptText = document.querySelector('#one-line-agent-prompt');
       const agentPromptAction = document.querySelector('#agent-prompt-action');
       const languageSelect = document.querySelector('#language');
@@ -1744,9 +1422,6 @@
           button.textContent = copy[language].heroSteps[index].label;
           button.setAttribute('aria-pressed', String(index === heroStep));
         });
-        heroStoryHubs.forEach((hub, index) => {
-          hub.textContent = copy[language].heroSteps[index].title;
-        });
         if (animate && !reducedMotion.matches) {
           heroStoryWord.classList.add('is-changing');
           heroWordTimer = setTimeout(() => {
@@ -1909,7 +1584,6 @@
         renderHeroStep(false);
         updateHeroToggle();
         document.querySelector('#browse-action').textContent = t.browse;
-        document.querySelector('#hero-effect-action').textContent = t.openDemo.replace(/\s*↗\s*$/, '');
         const oneLineAction = promptActionLabel(t);
         agentPromptAction.textContent = oneLineAction;
         agentPromptAction.dataset.defaultLabel = oneLineAction;
@@ -2181,7 +1855,7 @@
         scheduleHeroStory();
       });
       heroExperience.addEventListener('click', event => {
-        if (event.target.closest('button, a')) return;
+        if (event.target.closest('button')) return;
         setHeroStep(heroStep + 1);
       });
       heroExperience.addEventListener('keydown', event => {

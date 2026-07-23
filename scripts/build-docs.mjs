@@ -145,6 +145,12 @@ ${links}
 </div>`;
 }
 
+function communityGroupInvite({ label, alt }) {
+  return `<p align="center"><strong>${escapeHtml(label)}</strong></p>
+
+<p align="center"><img src="docs/assets/awesome-web-effects-wechat-group.jpg" width="420" alt="${escapeHtml(alt)}"></p>`;
+}
+
 function featureStrip(steps, centered = false) {
   const align = centered ? ' align="center"' : '';
   return metricTable(steps.map(([title, copy]) => `<td width="33%"${align}><strong>${escapeHtml(title)}</strong><br><sub>${escapeHtml(copy)}</sub></td>`));
@@ -271,6 +277,11 @@ const english = `${heroBlock({
   links: `[**Open the live visual catalog**](${siteUrlFor(supportedLocales[0])}) · [Language metadata](docs/LANGUAGES.md)`,
 })}
 
+${communityGroupInvite({
+  label: 'Join the AwesomeWebEffects WeChat user group',
+  alt: 'QR code for the AwesomeWebEffects WeChat user group',
+})}
+
 ---
 
 <h3 align="center">${featuredEffectIds.length} recommended effects — every preview a real capture</h3>
@@ -376,6 +387,11 @@ const chinese = `${heroBlock({
   kicker: '先看见效果，再知道它叫什么，最后复制代码或 Agent 提示词。',
   tagline: '当你脑中已经有想要的感觉，却不知道如何描述特效时，这里就是一张可直接观看的 Web 交互图鉴。',
   links: `[**打开在线视觉目录**](${siteUrlFor(supportedLocales[1])}) · [语言资料](docs/LANGUAGES.md)`,
+})}
+
+${communityGroupInvite({
+  label: '微信扫码加入 AwesomeWebEffects 用户交流群',
+  alt: 'AwesomeWebEffects 微信用户交流群二维码',
 })}
 
 ---

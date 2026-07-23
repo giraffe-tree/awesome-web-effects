@@ -16,6 +16,10 @@
 
 </div>
 
+<p align="center"><strong>微信扫码加入 AwesomeWebEffects 用户交流群</strong></p>
+
+<p align="center"><img src="docs/assets/awesome-web-effects-wechat-group.jpg" width="420" alt="AwesomeWebEffects 微信用户交流群二维码"></p>
+
 ---
 
 <h3 align="center">14 个推荐效果 · 每个预览都是真实录制</h3>

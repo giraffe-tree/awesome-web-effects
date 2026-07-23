@@ -26,8 +26,8 @@ export const defaultLocale = 'en';
 const messages = {
   en: {
     language: 'English', languageLabel: 'Choose language', navCatalog: 'Catalog',
-    kicker: 'The effect-first interaction atlas', title: 'Find the effect.<br />Ship the feeling.',
-    hero: 'Explore visually reviewed effects with a real preview, minimal code, and a concise implementation prompt.', browse: 'Browse effects', repo: 'View repository',
+    kicker: 'A reviewed library of web interaction effects', title: 'Find web effects.<br />Preview them. Build them.',
+    hero: 'Browse real, visually reviewed web-effect demos. Every effect includes a working preview, minimal code, and an implementation prompt you can hand to AI.', browse: 'Browse effects', repo: 'View repository',
     heroStoryLabel: 'Live interaction story', heroHint: 'Move your pointer · click to advance', heroPause: 'Pause', heroPlay: 'Play', heroStoryAria: 'Interactive effect story', heroStepsAria: 'Interaction story steps',
     heroSteps: [
       { label: 'Imagine', word: 'IDEA', title: 'Begin with a feeling', copy: 'A visual instinct appears before the implementation words do.' },
@@ -56,8 +56,8 @@ const messages = {
   },
   'zh-Hans': {
     language: '简体中文', languageLabel: '选择语言', navCatalog: '效果目录',
-    kicker: '以效果为先的交互图鉴', title: '先找到效果。<br />再实现体验。',
-    hero: '浏览经过视觉评审的真实 Demo；每项均提供清晰预览、最小代码和简明的实现 Prompt。', browse: '浏览效果', repo: '查看仓库',
+    kicker: '网页交互动效图鉴', title: '找网页动效。<br />看 Demo，拿代码。',
+    hero: '浏览经过视觉评审的真实网页动效案例；每个效果都提供可运行预览、最小代码和可直接交给 AI 的实现 Prompt。', browse: '浏览效果', repo: '查看仓库',
     heroStoryLabel: '实时交互叙事', heroHint: '移动指针 · 点击推进', heroPause: '暂停', heroPlay: '播放', heroStoryAria: '交互效果叙事体验', heroStepsAria: '交互叙事步骤',
     heroSteps: [
       { label: '想象', word: '想法', title: '从一种感觉开始', copy: '在实现语言出现之前，视觉直觉已经先发生。' },

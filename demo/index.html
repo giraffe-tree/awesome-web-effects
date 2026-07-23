@@ -726,7 +726,7 @@
       .hero-kicker { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 28px; color: #4a4268; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
       .hero-kicker::before { content: ""; width: 24px; height: 1px; background: currentColor; }
       h1 { max-width: 820px; color: #17243d; font-size: clamp(62px, 7.6vw, 118px); font-weight: 760; line-height: .86; letter-spacing: -.068em; }
-      html[lang="zh-Hans"] h1 { font-size: clamp(58px, 5.9vw, 84px); }
+      html[lang="zh-Hans"] h1 { font-size: clamp(58px, 5.9vw, 84px); line-height: calc(.86em + 4px); }
       .hero-copy { max-width: 590px; margin-top: 30px; color: rgba(31, 44, 70, .76); font-size: clamp(17px, 1.45vw, 21px); line-height: 1.52; }
       .hero-actions { margin-top: 34px; }
       .primary-action, .secondary-action { min-height: 50px; padding-inline: 22px; font-size: 14px; }
@@ -1054,9 +1054,9 @@
     <header class="hero">
       <div class="hero-layout shell">
         <div class="hero-message">
-          <p class="hero-kicker" id="hero-kicker">The effect-first interaction atlas</p>
-          <h1 id="hero-title">Find the effect.<br />Ship the feeling.</h1>
-          <p class="hero-copy" id="hero-copy">Explore visually reviewed effects with a real preview, minimal code, and a concise implementation prompt.</p>
+          <p class="hero-kicker" id="hero-kicker">A reviewed library of web interaction effects</p>
+          <h1 id="hero-title">Find web effects.<br />Preview them. Build them.</h1>
+          <p class="hero-copy" id="hero-copy">Browse real, visually reviewed web-effect demos. Every effect includes a working preview, minimal code, and an implementation prompt you can hand to AI.</p>
           <div class="hero-actions">
             <a class="primary-action" href="#catalog" id="browse-action">Browse effects</a>
           </div>

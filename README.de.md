@@ -18,15 +18,10 @@ Veröffentlicht werden nur visuell geprüfte Demos mit mindestens 80 Punkten; je
 
 ---
 
-<h3 align="center">15 Verifizierte GIFs / 151 Effekte</h3>
+<h3 align="center">14 Verifizierte GIFs / 151 Effekte</h3>
 
 <table>
 <tr>
-<td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=de#connected-fragment-story-stage"><img src="demo/gifs/captured/connected-fragment-story-stage.gif" width="270" alt="Connected fragment story stage"></a>
-<br>
-<sub><strong>Connected fragment story stage</strong><br>Motion &amp; choreography · 95/100</sub>
-</td>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=de#pinned-horizontal-scroll-scene"><img src="demo/gifs/captured/pinned-horizontal-scroll-scene.gif" width="270" alt="Pinned horizontal scroll scene"></a>
 <br>
@@ -37,13 +32,13 @@ Veröffentlicht werden nur visuell geprüfte Demos mit mindestens 80 Punkten; je
 <br>
 <sub><strong>Semantic prompt revision workspace</strong><br>Text &amp; SVG · 100/100</sub>
 </td>
-</tr>
-<tr>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=de#staggered-transform-choreography"><img src="demo/gifs/captured/staggered-transform-choreography.gif" width="270" alt="Staggered transform choreography"></a>
 <br>
 <sub><strong>Staggered transform choreography</strong><br>Motion &amp; choreography · 92/100</sub>
 </td>
+</tr>
+<tr>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=de#motion-graphics-burst"><img src="demo/gifs/captured/motion-graphics-burst.gif" width="270" alt="Motion-graphics burst"></a>
 <br>
@@ -54,13 +49,13 @@ Veröffentlicht werden nur visuell geprüfte Demos mit mindestens 80 Punkten; je
 <br>
 <sub><strong>Visually authored keyframe sequence</strong><br>Motion &amp; choreography · 84/100</sub>
 </td>
-</tr>
-<tr>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=de#compact-svg-shape-tween"><img src="demo/gifs/captured/compact-svg-shape-tween.gif" width="270" alt="Compact SVG shape tween"></a>
 <br>
 <sub><strong>Compact SVG shape tween</strong><br>Motion &amp; choreography · 89/100</sub>
 </td>
+</tr>
+<tr>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=de#filterable-grid-reflow"><img src="demo/gifs/captured/filterable-grid-reflow.gif" width="270" alt="Filterable grid reflow"></a>
 <br>
@@ -71,13 +66,13 @@ Veröffentlicht werden nur visuell geprüfte Demos mit mindestens 80 Punkten; je
 <br>
 <sub><strong>Perspective tilt and glare</strong><br>Pointer &amp; hover · 90/100</sub>
 </td>
-</tr>
-<tr>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=de#context-aware-custom-cursor"><img src="demo/gifs/mouse-follower.gif" width="270" alt="Context-aware custom cursor"></a>
 <br>
 <sub><strong>Context-aware custom cursor</strong><br>Pointer &amp; hover · 86/100</sub>
 </td>
+</tr>
+<tr>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=de#displacement-map-image-hover"><img src="demo/gifs/hover-effect.gif" width="270" alt="Displacement-map image hover"></a>
 <br>
@@ -88,13 +83,13 @@ Veröffentlicht werden nur visuell geprüfte Demos mit mindestens 80 Punkten; je
 <br>
 <sub><strong>SVG stroke drawing</strong><br>Text &amp; SVG · 86/100</sub>
 </td>
-</tr>
-<tr>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=de#dom-aware-drag-spawned-fish-flock"><img src="demo/gifs/captured/dom-aware-drag-spawned-fish-flock.gif" width="270" alt="Human-released DOM-avoiding fish school"></a>
 <br>
 <sub><strong>Human-released DOM-avoiding fish school</strong><br>Canvas &amp; 2D · 100/100</sub>
 </td>
+</tr>
+<tr>
 <td width="33%" align="center">
 <a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=de#pointer-injected-gpu-fluid"><img src="demo/gifs/captured/pointer-injected-gpu-fluid.gif" width="270" alt="Stage haze colour lab"></a>
 <br>

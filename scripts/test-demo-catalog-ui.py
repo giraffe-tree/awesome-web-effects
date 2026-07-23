@@ -278,13 +278,12 @@ def main() -> int:
             expect(modal.locator(".modal-preview-live")).to_have_attribute("data-media-state", "ready")
             expect(modal.locator(".modal-preview-live")).to_have_attribute("aria-busy", "false")
             assert live_preview.bounding_box()["width"] > 560
-            expect(modal.locator(".modal-more")).not_to_have_attribute("open", "")
+            expect(modal.locator("[data-modal-tool][open]")).to_have_count(0)
             expect(modal.locator(".modal-score-total")).to_contain_text("85")
             expect(modal.locator(".score-dimension")).to_have_count(6)
             modal_prompt_button = modal.locator(".modal-prompt-button")
             modal_prompt_text = modal.locator("#modal-prompt-text")
-            expect(modal_prompt_text).to_be_visible()
-            expect(modal_prompt_text).to_be_editable()
+            expect(modal_prompt_text).to_be_hidden()
             assert modal_prompt_text.evaluate("element => element.tagName") == "TEXTAREA"
             expect(modal_prompt_button).to_have_text("Copy prompt")
             modal_prompt_button.click()
@@ -301,10 +300,25 @@ def main() -> int:
             desktop_screenshot = ROOT / "tmp" / "catalog-detail-desktop.png"
             desktop_screenshot.parent.mkdir(parents=True, exist_ok=True)
             page.screenshot(path=str(desktop_screenshot), full_page=False)
+            modal.locator(".modal-prompt-card > summary").click()
+            expect(modal.locator(".modal-prompt-card")).to_have_attribute("open", "")
+            expect(modal_prompt_text).to_be_visible()
+            expect(modal_prompt_text).to_be_editable()
+            modal.locator(".modal-code-card > summary").click()
+            expect(modal.locator(".modal-code-card")).to_have_attribute("open", "")
+            expect(modal.locator(".modal-prompt-card")).not_to_have_attribute("open", "")
+            expect(modal_prompt_text).to_be_hidden()
             modal.locator(".modal-copy-code").click()
             expect(modal.locator(".modal-copy-code")).to_have_text("Copied")
+            modal.locator(".modal-more > summary").click()
+            expect(modal.locator(".modal-more")).to_have_attribute("open", "")
+            expect(modal.locator(".modal-code-card")).not_to_have_attribute("open", "")
 
             edited_effect_prompt = f"{effect_prompt} Keep this page-only edit."
+            modal.locator(".modal-prompt-card > summary").click()
+            expect(modal.locator(".modal-more")).not_to_have_attribute("open", "")
+            expect(modal.locator(".modal-code-card")).not_to_have_attribute("open", "")
+            expect(modal_prompt_text).to_be_visible()
             modal_prompt_text.fill(edited_effect_prompt)
             page.wait_for_timeout(1500)
             modal_prompt_button.click()
@@ -511,7 +525,7 @@ def main() -> int:
             server.kill()
             server.wait()
 
-    print(f"Catalog UI verified: 20 locales (including RTL and URL persistence), {expected_effect_count} admitted demos, 14 homepage recommendations, editable page-only homepage and per-effect prompts with refresh reset, unified light catalog styling, collapsed implementation evidence, paused 6s hero autoplay, uncropped 16:9 cards, loading/error transitions, live detail previews, native-size official GIFs, copy actions, focus, reduced motion, and mobile layout.")
+    print(f"Catalog UI verified: 20 locales (including RTL and URL persistence), {expected_effect_count} admitted demos, 14 homepage recommendations, editable page-only homepage and per-effect prompts with refresh reset, mutually exclusive prompt/code/evidence disclosure, unified light catalog styling, paused 6s hero autoplay, uncropped 16:9 cards, loading/error transitions, live detail previews, native-size official GIFs, copy actions, focus, reduced motion, and mobile layout.")
     return 0
 
 

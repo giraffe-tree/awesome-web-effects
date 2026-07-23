@@ -408,6 +408,10 @@
       [data-media-state="error"] .media-load-icon::before { content: "!"; font-size: 15px; font-weight: 800; }
       .media-load-state strong { font-size: 12px; line-height: 1.3; }
       .media-load-state small { max-width: 320px; color: rgba(244, 239, 233, .58); font-size: 10px; line-height: 1.4; }
+      .media-load-progress { display: grid; grid-template-columns: minmax(160px, 280px) auto; gap: 9px; align-items: center; width: min(100%, 340px); margin-top: 5px; }
+      .media-load-progress-track { height: 5px; overflow: hidden; border-radius: 999px; background: rgba(244, 239, 233, .13); box-shadow: inset 0 0 0 1px rgba(244, 239, 233, .05); }
+      .media-load-progress-track span { display: block; width: 0; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--stage-accent, #e8a0b4), #f0c2a9 52%, #94d8d4); box-shadow: 0 0 14px rgba(232, 160, 180, .34); transition: width .12s linear; }
+      .media-load-progress output { min-width: 34px; color: rgba(244, 239, 233, .82); font: 700 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace; text-align: end; }
       @keyframes media-spin { to { transform: rotate(360deg); } }
       .row-preview .media-load-state { gap: 4px; padding: 8px; color: #8b93b8; background: linear-gradient(110deg, #141a36 28%, #1e2547 42%, #141a36 58%); background-size: 230% 100%; animation: media-shimmer 1.3s ease-in-out infinite; }
       .row-preview .media-load-icon { width: 20px; height: 20px; border-color: rgba(154, 168, 216, .22); border-top-color: var(--pink); }
@@ -951,7 +955,7 @@
         .brand[data-motion="active"] .brand-copy-letter,
         .brand[data-motion="active"] .brand-orbit { animation: none; }
         .visual-gif::before, .visual-gif::after, .media-load-icon, .row-preview .media-load-state { animation: none; }
-        .hero-experience, .hero-experience::before, .hero-story-word, .hero-shape, .hero-story-cursor, [data-managed-media], .media-load-state, .effect-main, .row-preview::after { transition: none; }
+        .hero-experience, .hero-experience::before, .hero-story-word, .hero-shape, .hero-story-cursor, [data-managed-media], .media-load-state, .media-load-progress-track span, .effect-main, .row-preview::after { transition: none; }
         .hero-story-cursor { display: none; }
         .effect-main { transition: none; }
         .effect-modal-backdrop, .effect-modal-dialog { animation: none; }
@@ -1248,9 +1252,30 @@
         return `<a class="modal-link" href="${escapeHTML(href)}" target="_blank" rel="noreferrer">${label}</a>`;
       }
 
-      function mediaStateMarkup(message, announce = false) {
+      function mediaStateMarkup(message, announce = false, resourceProgress = false) {
         const accessibility = announce ? ' role="status" data-media-announce="true"' : ' aria-hidden="true"';
-        return `<div class="media-load-state"${accessibility}><span class="media-load-icon" aria-hidden="true"></span><strong data-media-message>${escapeHTML(message)}</strong><small data-media-help>${escapeHTML(copy[language].loadErrorHelp)}</small></div>`;
+        const progress = resourceProgress
+          ? `<div class="media-load-progress"><div class="media-load-progress-track" role="progressbar" aria-label="3D Earth resource loading progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span data-media-progress-bar></span></div><output data-media-progress-value>0%</output></div>`
+          : '';
+        const help = resourceProgress ? 'Waiting for the ETOPO resource stream…' : copy[language].loadErrorHelp;
+        return `<div class="media-load-state"${accessibility}><span class="media-load-icon" aria-hidden="true"></span><strong data-media-message>${escapeHTML(message)}</strong><small data-media-help>${escapeHTML(help)}</small>${progress}</div>`;
+      }
+
+      function setMediaProgress(shell, progress, label, detail) {
+        const value = Math.max(0, Math.min(100, Math.round(Number(progress) || 0)));
+        const bar = shell.querySelector('[data-media-progress-bar]');
+        const output = shell.querySelector('[data-media-progress-value]');
+        const track = shell.querySelector('.media-load-progress-track');
+        const message = shell.querySelector('[data-media-message]');
+        const help = shell.querySelector('[data-media-help]');
+        if (bar) bar.style.width = `${value}%`;
+        if (output) output.textContent = `${value}%`;
+        if (track) {
+          track.setAttribute('aria-valuenow', String(value));
+          track.setAttribute('aria-valuetext', `${label || 'Loading resources'}, ${value}%`);
+        }
+        if (message && label) message.textContent = label;
+        if (help && detail) help.textContent = detail;
       }
 
       function setMediaState(shell, state, message) {
@@ -1262,7 +1287,12 @@
         shell.setAttribute('aria-busy', String(state === 'loading'));
         const stateNode = shell.querySelector('.media-load-state');
         const messageNode = shell.querySelector('[data-media-message]');
+        const helpNode = shell.querySelector('[data-media-help]');
         if (messageNode && message) messageNode.textContent = message;
+        if (helpNode && state === 'error') helpNode.textContent = copy[language].loadErrorHelp;
+        if (state === 'ready' && shell.dataset.resourceProgress === 'true') {
+          setMediaProgress(shell, 100, messageNode?.textContent, helpNode?.textContent);
+        }
         if (stateNode) {
           if (stateNode.dataset.mediaAnnounce === 'true') {
             stateNode.setAttribute('role', state === 'error' ? 'alert' : 'status');
@@ -1304,7 +1334,8 @@
               shell._previewResizeHandler = fitLivePreview;
               window.addEventListener('resize', fitLivePreview);
             }
-            armTimeout(12000);
+            const livePreviewTimeout = shell.dataset.resourceProgress === 'true' ? 45000 : 12000;
+            armTimeout(livePreviewTimeout);
             media.addEventListener('load', () => {
               let sameOrigin = false;
               try {
@@ -1315,7 +1346,7 @@
               }
               if (!sameOrigin) return;
 
-              const readyDeadline = performance.now() + 11000;
+              const readyDeadline = performance.now() + livePreviewTimeout - 1000;
               const pollPreviewState = () => {
                 if (!media.isConnected || shell.dataset.mediaState !== 'loading') return;
                 try {
@@ -1323,6 +1354,17 @@
                   const frameRoot = media.contentDocument?.documentElement;
                   const embeddedError = frameWindow?.__PREVIEW_ERROR__ || frameRoot?.dataset?.previewError;
                   if (embeddedError) { markError(); return; }
+                  if (shell.dataset.resourceProgress === 'true') {
+                    const resourceState = frameWindow?.__PREVIEW_INTERACTION_STATE__;
+                    if (Number.isFinite(resourceState?.loaderProgress)) {
+                      setMediaProgress(
+                        shell,
+                        resourceState.loaderProgress,
+                        resourceState.loaderStage,
+                        resourceState.loaderDetail,
+                      );
+                    }
+                  }
                   if (frameWindow?.__PREVIEW_READY__ === true || frameRoot?.dataset?.previewReady === 'true') {
                     markReady();
                     return;
@@ -1449,10 +1491,12 @@
           : source.previewKind === 'local-demo-capture' ? t.localProvenance
             : t.unavailableProvenance;
         const previewTitle = escapeHTML(`${effect.name} / ${effect.nameZh}`);
+        const hasResourceProgress = effect.id === 'topographic-relief-expedition-globe';
+        const resourceProgressAttribute = hasResourceProgress ? ' data-resource-progress="true"' : '';
         const preview = !realPreview
           ? `<div class="modal-preview modal-preview-unavailable"><div><span aria-hidden="true">◎</span><strong>${t.unavailableDetail}</strong><p>${t.unavailableHelp}</p></div><span class="modal-preview-status">${previewStatus}</span></div>`
           : source.demoPath
-            ? `<div class="modal-preview modal-preview-live" data-media-shell data-media-state="loading" data-media-error-key="liveLoadError" aria-busy="true"><div class="modal-preview-frame-shell" data-live-preview-shell><iframe class="modal-preview-frame" data-managed-media src="./${escapeHTML(source.demoPath)}" title="${previewTitle}" width="320" height="180" loading="eager"></iframe></div>${mediaStateMarkup(t.loadingLive, true)}<span class="modal-preview-status">${t.livePreview}</span></div>`
+            ? `<div class="modal-preview modal-preview-live" data-media-shell data-media-state="loading" data-media-error-key="liveLoadError"${resourceProgressAttribute} aria-busy="true"><div class="modal-preview-frame-shell" data-live-preview-shell><iframe class="modal-preview-frame" data-managed-media src="./${escapeHTML(source.demoPath)}" title="${previewTitle}" width="320" height="180" loading="eager"></iframe></div>${mediaStateMarkup(t.loadingLive, true, hasResourceProgress)}<span class="modal-preview-status">${t.livePreview}</span></div>`
             : `<div class="modal-preview modal-preview-official" data-media-shell data-media-state="loading" data-media-error-key="officialLoadError" aria-busy="true"><img src="${escapeHTML(officialPreviewUrl(source))}" data-managed-media data-official-preview data-upstream-src="${escapeHTML(officialPreviewUrl(source))}" data-fallback-src="./gifs/${escapeHTML(source.preview)}.gif" alt="${previewTitle}" decoding="async" referrerpolicy="no-referrer" />${mediaStateMarkup(t.loadingOfficial, true)}<span class="modal-preview-status">${t.officialNativePreview}</span></div>`;
         const projectLinks = [modalLink(project.url, t.viewProject)];
         const provenanceLinks = [];

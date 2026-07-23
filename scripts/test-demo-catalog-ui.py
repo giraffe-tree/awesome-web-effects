@@ -487,6 +487,34 @@ def main() -> int:
             modal.locator(".effect-modal-close").click()
             expect(modal).to_be_hidden()
 
+            earth_row = page.locator("#topographic-relief-expedition-globe")
+            earth_row.locator(".effect-cell").click()
+            expect(modal).to_be_visible()
+            earth_shell = modal.locator(".modal-preview-live")
+            expect(earth_shell).to_have_attribute("data-resource-progress", "true")
+            expect(earth_shell.locator(".media-load-progress-track")).to_have_count(1)
+            expect(earth_shell.locator("[data-media-progress-value]")).to_have_count(1)
+            earth_frame = page.frame(
+                url=lambda url: url.endswith("/preview-demos/dist/topographic-relief-expedition-globe.html")
+            )
+            assert earth_frame is not None, "ETOPO Earth runnable detail preview iframe did not load."
+            earth_frame.wait_for_function(
+                "window.__PREVIEW_READY__ === true || Boolean(window.__PREVIEW_ERROR__)",
+                timeout=30_000,
+            )
+            assert not earth_frame.evaluate("window.__PREVIEW_ERROR__ || null")
+            assert earth_frame.evaluate("window.__PREVIEW_RUNTIME_ASSERT__()")
+            earth_state = earth_frame.evaluate("window.__PREVIEW_INTERACTION_STATE__")
+            assert earth_state["automaticRotation"]
+            assert earth_state["outerGlowLayerCount"] == 0
+            expect(earth_shell).to_have_attribute("data-media-state", "ready")
+            expect(earth_shell.locator(".media-load-progress-track")).to_have_attribute(
+                "aria-valuenow", "100"
+            )
+            expect(earth_shell.locator("[data-media-progress-value]")).to_have_text("100%")
+            modal.locator(".effect-modal-close").click()
+            expect(modal).to_be_hidden()
+
             official_preview_expectations = {
                 "context-aware-custom-cursor": (
                     "https://user-images.githubusercontent.com/11841379/162477170-5dd33ecd-0e72-4fe4-9053-53d7b5557637.gif",

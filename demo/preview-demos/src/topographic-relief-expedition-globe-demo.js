@@ -17,6 +17,7 @@ const INITIAL_CAMERA_DISTANCE = 3.55;
 const MINIMUM_CAMERA_DISTANCE = 2.72;
 const MAXIMUM_CAMERA_DISTANCE = 4.65;
 const RESET_DURATION_MS = 520;
+const AUTO_ROTATION_RADIANS_PER_SECOND = Math.PI / 36;
 
 const clamp = (value, minimum, maximum) => Math.max(minimum, Math.min(maximum, value));
 const radians = degrees => degrees * Math.PI / 180;
@@ -83,12 +84,16 @@ const main = async () => {
     renderer: 'webgl',
     mechanism: 'etopo-2022-displaced-earth-with-50m-coastline',
     inputAdapters: ['pointer', 'touch', 'wheel', 'click', 'keyboard'],
-    automaticPlayback: false,
-    automaticRotation: false,
+    automaticPlayback: true,
+    automaticRotation: true,
     automaticFallback: false,
     syntheticInputDispatch: false,
-    previewClockDrivesMotion: false,
-    initialStaticConfirmed: false,
+    previewClockDrivesMotion: true,
+    autoRotationRadiansPerSecond: AUTO_ROTATION_RADIANS_PER_SECOND,
+    autoRotationRadians: 0,
+    autoRotationFrameCount: 0,
+    autoRotationActive: false,
+    outerGlowLayerCount: 0,
     realAtlasLand: true,
     atlasDataset: 'Natural Earth 50m via world-atlas',
     topologyResolution: [TOPOLOGY_WIDTH, TOPOLOGY_HEIGHT],
@@ -107,6 +112,7 @@ const main = async () => {
     terrainExaggeration: TERRAIN_EXAGGERATION,
     loaderProgress: 0,
     loaderStage: 'BOOTING RELIEF ENGINE',
+    loaderDetail: 'Preparing deterministic WebGL scene',
     loaderStageCount: 0,
     loaderDismissed: false,
     gpuMaxTextureSize: 0,
@@ -134,6 +140,7 @@ const main = async () => {
     const nextProgress = Math.max(state.loaderProgress, Math.round(progress));
     state.loaderProgress = nextProgress;
     state.loaderStage = label;
+    state.loaderDetail = detail;
     if (previousLoadingStage !== label) {
       state.loaderStageCount += 1;
       previousLoadingStage = label;
@@ -427,38 +434,6 @@ const main = async () => {
   const globe = new THREE.Mesh(globeGeometry, globeMaterial);
   earthGroup.add(globe);
 
-  const atmosphereMaterial = new THREE.ShaderMaterial({
-    uniforms: {
-      uGlow: { value: new THREE.Color('#77d4cf') },
-    },
-    vertexShader: /* glsl */`
-      varying vec3 vNormal;
-      varying vec3 vWorldPosition;
-      void main() {
-        vNormal = normalize(normalMatrix * normal);
-        vec4 world = modelMatrix * vec4(position, 1.0);
-        vWorldPosition = world.xyz;
-        gl_Position = projectionMatrix * viewMatrix * world;
-      }
-    `,
-    fragmentShader: /* glsl */`
-      uniform vec3 uGlow;
-      varying vec3 vNormal;
-      varying vec3 vWorldPosition;
-      void main() {
-        vec3 viewDirection = normalize(cameraPosition - vWorldPosition);
-        float rim = pow(1.0 - abs(dot(vNormal, viewDirection)), 2.8);
-        gl_FragColor = vec4(uGlow, rim * 0.30);
-      }
-    `,
-    transparent: true,
-    depthWrite: false,
-    side: THREE.BackSide,
-    blending: THREE.AdditiveBlending,
-  });
-  const atmosphere = new THREE.Mesh(new THREE.SphereGeometry(1.085, 96, 64), atmosphereMaterial);
-  earthGroup.add(atmosphere);
-
   const createRandom = seed => {
     let value = seed >>> 0;
     return () => {
@@ -495,7 +470,7 @@ const main = async () => {
   const stars = new THREE.Points(starGeometry, starMaterial);
   scene.add(stars);
 
-  setLoading(91, 'COMPOSING ORBITAL VIEW', 'Relief surface · atmosphere · deterministic star field');
+  setLoading(91, 'COMPOSING ORBITAL VIEW', 'Relief surface · deterministic star field · no outer glow');
 
   const viewTarget = new THREE.Vector3(0.18, 0.08, 0.98).normalize();
   const initialQuaternion = new THREE.Quaternion().setFromUnitVectors(
@@ -505,14 +480,24 @@ const main = async () => {
   earthGroup.quaternion.copy(initialQuaternion);
   const orientationStartQuaternion = new THREE.Quaternion();
   const orientationTargetQuaternion = new THREE.Quaternion();
+  const autoRotationQuaternion = new THREE.Quaternion();
+  const autoRotationAxis = new THREE.Vector3(0, 1, 0);
   let orientationStartTime = 0;
+  let lastRenderTimeSeconds = null;
 
   const updateCameraReadout = () => {
     const altitude = Math.round((camera.position.z - 1) * 6371);
     cameraRange.textContent = `${altitude.toLocaleString('en-US')} km`;
   };
 
-  const render = () => {
+  const render = timeSeconds => {
+    let frameDeltaSeconds = 0;
+    if (Number.isFinite(timeSeconds)) {
+      if (lastRenderTimeSeconds !== null) {
+        frameDeltaSeconds = clamp(timeSeconds - lastRenderTimeSeconds, 0, 0.25);
+      }
+      lastRenderTimeSeconds = timeSeconds;
+    }
     if (state.motionActive) {
       const progress = clamp((performance.now() - orientationStartTime) / RESET_DURATION_MS, 0, 1);
       const eased = 1 - (1 - progress) ** 3;
@@ -527,12 +512,23 @@ const main = async () => {
         state.motionCompletionCount += 1;
       }
     }
+    state.autoRotationActive = (
+      state.automaticRotation
+      && !state.reducedMotion
+      && !state.dragging
+      && !state.motionActive
+      && frameDeltaSeconds > 0
+    );
+    if (state.autoRotationActive) {
+      const rotationStep = AUTO_ROTATION_RADIANS_PER_SECOND * frameDeltaSeconds;
+      autoRotationQuaternion.setFromAxisAngle(autoRotationAxis, rotationStep);
+      earthGroup.quaternion.premultiply(autoRotationQuaternion).normalize();
+      state.autoRotationRadians += rotationStep;
+      state.autoRotationFrameCount += 1;
+    }
     renderer.render(scene, camera);
     state.renderCount += 1;
     state.cameraDistance = camera.position.z;
-    if (state.inputCount === 0 && earthGroup.quaternion.angleTo(initialQuaternion) < 0.000001) {
-      state.initialStaticConfirmed = true;
-    }
   };
 
   const resize = () => {
@@ -662,6 +658,7 @@ const main = async () => {
 
   const handleReducedMotionChange = event => {
     state.reducedMotion = event.matches;
+    state.autoRotationActive = false;
     if (event.matches && state.motionActive) {
       earthGroup.quaternion.copy(orientationTargetQuaternion);
       state.motionActive = false;
@@ -686,7 +683,7 @@ const main = async () => {
   if (renderer.info.render.calls < 1 || context.getError() !== context.NO_ERROR) {
     throw new Error('The GPU did not complete the ETOPO terrain calibration');
   }
-  setLoading(100, 'ORBITAL VIEW READY', 'ETOPO relief · 50m coastline · no annotation layer');
+  setLoading(100, 'ORBITAL VIEW READY', 'ETOPO relief · 50m coastline · automatic rotation · no outer glow');
   stage.dataset.ready = 'true';
   document.documentElement.dataset.earthReady = 'true';
   const readyDelay = state.reducedMotion ? 0 : 620;
@@ -721,10 +718,11 @@ const main = async () => {
     invariant(!state.mountainInformation && !state.namedFeatureDataLoaded && state.annotationLayerCount === 0, 'named feature information must remain absent');
     invariant(state.starCount === STAR_COUNT && starGeometry.attributes.position.count === STAR_COUNT, 'star field is incomplete');
     invariant(state.terrainExaggeration === 45 && globeMaterial.uniforms.uTerrain.value === 45, 'terrain displacement is not active');
-    invariant(earthGroup.children.length === 2 && earthGroup.children.includes(globe) && earthGroup.children.includes(atmosphere), 'Earth must contain only relief and atmosphere layers');
+    invariant(earthGroup.children.length === 1 && earthGroup.children[0] === globe, 'Earth must contain only the relief globe');
+    invariant(state.outerGlowLayerCount === 0, 'outer atmosphere glow must remain absent');
     invariant(state.loaderProgress === 100 && state.loaderStageCount >= 7 && state.loaderDismissed, 'loading experience did not complete');
-    invariant(state.initialStaticConfirmed, 'initial view was not static after loading');
-    invariant(!state.automaticPlayback && !state.automaticRotation && !state.previewClockDrivesMotion, 'scene motion must remain human-owned');
+    invariant(state.automaticPlayback && state.automaticRotation && state.previewClockDrivesMotion, 'automatic Earth rotation is not configured');
+    invariant(state.autoRotationRadiansPerSecond === AUTO_ROTATION_RADIANS_PER_SECOND, 'automatic Earth rotation speed changed');
     invariant(resetRect.width > 24, 'reset control is not usable');
     invariant(Number.isFinite(earthGroup.quaternion.length()) && Math.abs(earthGroup.quaternion.length() - 1) < 0.0001, 'Earth quaternion is invalid');
     return true;
@@ -748,8 +746,6 @@ const main = async () => {
     }
     globeGeometry.dispose();
     globeMaterial.dispose();
-    atmosphere.geometry.dispose();
-    atmosphereMaterial.dispose();
     starGeometry.dispose();
     starMaterial.dispose();
     topologyTexture.dispose();

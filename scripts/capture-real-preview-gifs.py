@@ -5766,12 +5766,16 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, web_frame_root: P
             or interaction["renderer"] != "webgl"
             or interaction["mechanism"] != "etopo-2022-displaced-earth-with-50m-coastline"
             or interaction["inputAdapters"] != ["pointer", "touch", "wheel", "click", "keyboard"]
-            or interaction["automaticPlayback"]
-            or interaction["automaticRotation"]
+            or not interaction["automaticPlayback"]
+            or not interaction["automaticRotation"]
             or interaction["automaticFallback"]
             or interaction["syntheticInputDispatch"]
-            or interaction["previewClockDrivesMotion"]
-            or not interaction["initialStaticConfirmed"]
+            or not interaction["previewClockDrivesMotion"]
+            or abs(interaction["autoRotationRadiansPerSecond"] - 0.08726646259971647) > .0000001
+            or interaction["autoRotationRadians"] <= .01
+            or interaction["autoRotationFrameCount"] < 5
+            or not interaction["autoRotationActive"]
+            or interaction["outerGlowLayerCount"] != 0
             or not interaction["realAtlasLand"]
             or interaction["atlasDataset"] != "Natural Earth 50m via world-atlas"
             or interaction["topologyResolution"] != [1024, 512]
@@ -5808,7 +5812,7 @@ def capture_demo(page, url: str, demo: dict, frame_root: Path, web_frame_root: P
             or interaction["lastInput"] != "keyboard:Home"
             or interaction["renderCount"] < 20
         ):
-            raise RuntimeError(f"{demo['id']} did not capture the unannotated streamed ETOPO Earth with 50m land, loading progress, relief contours, orbit, zoom, and reset: {interaction!r}")
+            raise RuntimeError(f"{demo['id']} did not capture the streamed, automatically rotating ETOPO Earth with 50m land, real loading progress, no outer glow, human orbit, zoom, and reset: {interaction!r}")
     elif demo["id"] == "scene-wipe-progressive-page-swap":
         interaction = page.evaluate("window.__PREVIEW_INTERACTION_STATE__")
         if (

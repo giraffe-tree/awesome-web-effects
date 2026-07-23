@@ -39,7 +39,7 @@ export const admissionAuditSummary = {
 export const reviewedDemoScores = {
   'topographic-relief-expedition-globe': {
     creativity: 19, artDirection: 20, motion: 19, clarity: 15, inspiration: 15, evidence: 10,
-    rationaleZh: '4,320×2,160 ETOPO 2022 真实高程与海深、Natural Earth 50m 海岸线、61,953 顶点球体、分阶段进度加载、顶点位移、等高线与大气层共同构成完整的纯地球观测体验；不加载任何山峰目录或标注层，真人拖拽与缩放直接作用于地球本身，且与既有点阵网络地球明显不同。'
+    rationaleZh: '4,320×2,160 ETOPO 2022 真实高程与海深、Natural Earth 50m 海岸线、61,953 顶点球体、同步到详情弹窗的真实资源进度、顶点位移、等高线与持续自转共同构成完整的纯地球观测体验；不加载山峰目录、标注层或外部大气光圈，真人拖拽与缩放仍直接作用于地球本身，且与既有点阵网络地球明显不同。'
   },
   'connected-fragment-story-stage': {
     creativity: 18, artDirection: 19, motion: 18, clarity: 15, inspiration: 15, evidence: 10,

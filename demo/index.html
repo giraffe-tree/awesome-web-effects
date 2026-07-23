@@ -183,6 +183,34 @@
         22% { opacity: .9; }
         100% { opacity: 0; transform: translateX(48%) skewX(-10deg); }
       }
+      .brand-text { display: inline-flex; align-items: baseline; white-space: nowrap; }
+      .brand-copy-word { display: inline-flex; align-items: baseline; }
+      .brand-copy-word + .brand-copy-word { margin-inline-start: .28em; }
+      .brand-copy-letter {
+        display: inline-block;
+        color: rgba(244, 239, 233, .86);
+        text-shadow: 0 0 0 rgba(242, 191, 201, 0);
+        transform-origin: 50% 82%;
+        will-change: transform;
+      }
+      .brand[data-motion="active"] .brand-copy-letter {
+        animation: brand-copy-baseline-wave .68s cubic-bezier(.2, .82, .24, 1.28) both;
+        animation-delay: calc(var(--wave-step) * 24ms);
+      }
+      @keyframes brand-copy-baseline-wave {
+        0%, 100% {
+          color: rgba(244, 239, 233, .86);
+          text-shadow: 0 0 0 rgba(242, 191, 201, 0);
+          transform: translateY(0) rotate(0) scale(1);
+        }
+        26% {
+          color: #fff9f7;
+          text-shadow: 0 0 12px rgba(242, 191, 201, .46);
+          transform: translateY(-4px) rotate(-2deg) scale(1.035, 1.13);
+        }
+        50% { transform: translateY(1.4px) rotate(1deg) scale(.985, .9); }
+        72% { transform: translateY(-1px) rotate(-.4deg) scale(1.008, 1.035); }
+      }
       .nav-actions { display: flex; align-items: center; gap: 18px; }
       .nav-link, .nav-button { border: 0; color: #c6cce4; background: transparent; font-size: 12px; text-decoration: none; cursor: pointer; transition: color .2s ease; }
       .nav-link:hover, .nav-button:hover { color: var(--pink-hover); }
@@ -954,6 +982,7 @@
         .brand[data-motion="active"] .brand-mark,
         .brand[data-motion="active"] .brand-face::after,
         .brand[data-motion="active"] .brand-letter,
+        .brand[data-motion="active"] .brand-copy-letter,
         .brand[data-motion="active"] .brand-orbit { animation: none; }
         .visual-gif::before, .visual-gif::after, .media-load-icon, .row-preview .media-load-state { animation: none; }
         .hero-experience, .hero-experience::before, .hero-story-word, .hero-shape, .hero-story-cursor, [data-managed-media], .media-load-state, .effect-main, .row-preview::after { transition: none; }
@@ -974,7 +1003,31 @@
             <span class="brand-orbit"></span>
             <span class="brand-face"><span class="brand-letters"><span class="brand-letter">A</span><span class="brand-letter">W</span></span></span>
           </span>
-          <span class="brand-text">Awesome Web Effects</span>
+          <span class="brand-text" aria-hidden="true">
+            <span class="brand-copy-word">
+              <span class="brand-copy-letter" style="--wave-step: 0">A</span>
+              <span class="brand-copy-letter" style="--wave-step: 1">w</span>
+              <span class="brand-copy-letter" style="--wave-step: 2">e</span>
+              <span class="brand-copy-letter" style="--wave-step: 3">s</span>
+              <span class="brand-copy-letter" style="--wave-step: 4">o</span>
+              <span class="brand-copy-letter" style="--wave-step: 5">m</span>
+              <span class="brand-copy-letter" style="--wave-step: 6">e</span>
+            </span>
+            <span class="brand-copy-word">
+              <span class="brand-copy-letter" style="--wave-step: 7">W</span>
+              <span class="brand-copy-letter" style="--wave-step: 8">e</span>
+              <span class="brand-copy-letter" style="--wave-step: 9">b</span>
+            </span>
+            <span class="brand-copy-word">
+              <span class="brand-copy-letter" style="--wave-step: 10">E</span>
+              <span class="brand-copy-letter" style="--wave-step: 11">f</span>
+              <span class="brand-copy-letter" style="--wave-step: 12">f</span>
+              <span class="brand-copy-letter" style="--wave-step: 13">e</span>
+              <span class="brand-copy-letter" style="--wave-step: 14">c</span>
+              <span class="brand-copy-letter" style="--wave-step: 15">t</span>
+              <span class="brand-copy-letter" style="--wave-step: 16">s</span>
+            </span>
+          </span>
         </a>
         <div class="nav-actions">
           <a class="nav-link" href="#catalog" id="nav-catalog">Catalog</a>
@@ -1723,7 +1776,7 @@
         brand.removeAttribute('data-motion');
         void brand.offsetWidth;
         brand.dataset.motion = 'active';
-        brandMotionTimer = setTimeout(() => brand.removeAttribute('data-motion'), 780);
+        brandMotionTimer = setTimeout(() => brand.removeAttribute('data-motion'), 1160);
       }
       function pointBrandAt(clientX, clientY) {
         if (reducedMotion.matches) return;

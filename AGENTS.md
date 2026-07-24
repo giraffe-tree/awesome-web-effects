@@ -61,6 +61,7 @@
 - 对 MP4 与 WebP 海报做内容哈希，并对视频做多帧感知重复检查。完全重复或高度相似的结果默认阻断；只有同一官方素材确有充分理由服务多个条目时，才可在 provenance 中解释并接受人工复核。
 - 不得用“先占位后补充”的方式发布。缺少合格真实预览时，应明确显示“暂无真实预览”，而不是生成貌似完整的假视频。
 - 修改生成器、capture 流程或大量视频后，必须先运行审计与验证，再逐项抽查变更预览；脚本通过不能替代人工视觉验收。
+- `demo/readme-gifs/` 只保存根 README 与多语言 README 首页实际展示的精选 GIF；它们是 GitHub Markdown 无法直接内嵌仓库 MP4 时的展示兼容层，不得作为站点发布预览或 provenance 的替代品。
 - `demo/preview-demos/assets/aesthetic-wave-01/frame-by-frame-gif-scrubber/occlusion-check.gif` 是逐帧 GIF 解码 Demo 的输入样本，不是发布预览；迁移或清理发布 GIF 时必须保留。
 
 提交前运行：

@@ -287,6 +287,16 @@ assert(readmeZh.includes('research/ai-native-homepages-100.md'), 'Chinese README
 for (const effectId of featuredEffectIds) {
   assert(readme.includes(`https://giraffe-tree.github.io/awesome-web-effects/?lang=en#${effectId}`), `English README is missing recommended effect link: ${effectId}.`);
   assert(readmeZh.includes(`https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#${effectId}`), `Chinese README is missing recommended effect link: ${effectId}.`);
+  const effect = effects.find(item => item.id === effectId);
+  const source = effect?.sources.find(item => item.recommended) || effect?.sources[0];
+  const readmeGif = source?.preview ? `demo/readme-gifs/${source.preview}.gif` : '';
+  assert(readmeGif && readme.includes(`src="${readmeGif}"`), `English README is missing GIF preview: ${effectId}.`);
+  assert(readmeGif && readmeZh.includes(`src="../${readmeGif}"`), `Chinese README is missing GIF preview: ${effectId}.`);
+  try {
+    await access(resolve(root, readmeGif));
+  } catch {
+    errors.push(`${effectId}: missing README GIF ${readmeGif}.`);
+  }
 }
 assert(html.includes('?lang=${encodeURIComponent(language)}#${encodeURIComponent(effect.id)}'), 'Effect detail and prompt links must preserve the active locale.');
 assert(!`${html}\n${localizedReadmes.join('\n')}\n${languageSupportDoc}`.includes('giraffe-tree/awesome-interaction'), 'Stale awesome-interaction repository or Pages link detected.');

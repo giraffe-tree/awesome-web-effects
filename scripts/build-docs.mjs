@@ -90,7 +90,7 @@ function visualShowcase(language) {
     const label = isZh ? category.labelZh : category.label;
     return [
       `<td width="33%" align="center">`,
-      `<a href="${siteUrlFor(locale)}#${effect.id}"><img src="${assetPrefix}demo/videos/posters/${source.preview.split('/').at(-1)}.webp" width="270" alt="${escapeHtml(name)}"></a>`,
+      `<a href="${siteUrlFor(locale)}#${effect.id}"><img src="${assetPrefix}demo/readme-gifs/${source.preview}.gif" width="270" alt="${escapeHtml(name)}"></a>`,
       `<br>`,
       `<sub><strong>${escapeHtml(name)}</strong><br>${escapeHtml(label)} · ${effect.admission.total}/100</sub>`,
       `</td>`,
@@ -225,7 +225,7 @@ function localizedReadme(locale) {
 
 ---
 
-<h3 align="center">${featuredEffectIds.length} ${locale.code === 'zh-Hans' ? '个视频预览' : 'video previews'} / ${effects.length} ${escapeHtml(t.effects)}</h3>
+<h3 align="center">${featuredEffectIds.length} ${locale.code === 'zh-Hans' ? '个 GIF 预览' : 'GIF previews'} / ${effects.length} ${escapeHtml(t.effects)}</h3>
 
 ${visualShowcase(locale.code)}
 

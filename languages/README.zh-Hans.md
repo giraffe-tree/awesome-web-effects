@@ -23,80 +23,80 @@
 <table>
 <tr>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#pinned-horizontal-scroll-scene"><img src="../demo/videos/posters/pinned-horizontal-scroll-scene.webp" width="270" alt="固定式横向滚动场景"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#pinned-horizontal-scroll-scene"><img src="../demo/readme-gifs/captured/pinned-horizontal-scroll-scene.gif" width="270" alt="固定式横向滚动场景"></a>
 <br>
 <sub><strong>固定式横向滚动场景</strong><br>滚动与揭示 · 96/100</sub>
 </td>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#prompt-select-replace-loop"><img src="../demo/videos/posters/prompt-select-replace-loop.webp" width="270" alt="语义提示词修订工作台"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#prompt-select-replace-loop"><img src="../demo/readme-gifs/captured/prompt-select-replace-loop.gif" width="270" alt="语义提示词修订工作台"></a>
 <br>
 <sub><strong>语义提示词修订工作台</strong><br>文本与 SVG · 100/100</sub>
 </td>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#staggered-transform-choreography"><img src="../demo/videos/posters/staggered-transform-choreography.webp" width="270" alt="交错变换编排"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#staggered-transform-choreography"><img src="../demo/readme-gifs/captured/staggered-transform-choreography.gif" width="270" alt="交错变换编排"></a>
 <br>
 <sub><strong>交错变换编排</strong><br>动画与编排 · 92/100</sub>
 </td>
 </tr>
 <tr>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#motion-graphics-burst"><img src="../demo/videos/posters/motion-graphics-burst.webp" width="270" alt="动态图形爆发"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#motion-graphics-burst"><img src="../demo/readme-gifs/captured/motion-graphics-burst.gif" width="270" alt="动态图形爆发"></a>
 <br>
 <sub><strong>动态图形爆发</strong><br>动画与编排 · 92/100</sub>
 </td>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#visually-authored-keyframe-sequence"><img src="../demo/videos/posters/visually-authored-keyframe-sequence.webp" width="270" alt="可视化编排关键帧序列"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#visually-authored-keyframe-sequence"><img src="../demo/readme-gifs/captured/visually-authored-keyframe-sequence.gif" width="270" alt="可视化编排关键帧序列"></a>
 <br>
 <sub><strong>可视化编排关键帧序列</strong><br>动画与编排 · 84/100</sub>
 </td>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#compact-svg-shape-tween"><img src="../demo/videos/posters/compact-svg-shape-tween.webp" width="270" alt="轻量 SVG 形状补间"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#compact-svg-shape-tween"><img src="../demo/readme-gifs/captured/compact-svg-shape-tween.gif" width="270" alt="轻量 SVG 形状补间"></a>
 <br>
 <sub><strong>轻量 SVG 形状补间</strong><br>动画与编排 · 89/100</sub>
 </td>
 </tr>
 <tr>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#filterable-grid-reflow"><img src="../demo/videos/posters/filterable-grid-reflow.webp" width="270" alt="可筛选网格重排"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#filterable-grid-reflow"><img src="../demo/readme-gifs/captured/filterable-grid-reflow.gif" width="270" alt="可筛选网格重排"></a>
 <br>
 <sub><strong>可筛选网格重排</strong><br>页面与布局 · 85/100</sub>
 </td>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#perspective-tilt-and-glare"><img src="../demo/videos/posters/perspective-tilt-and-glare.webp" width="270" alt="透视倾斜与高光"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#perspective-tilt-and-glare"><img src="../demo/readme-gifs/captured/perspective-tilt-and-glare.gif" width="270" alt="透视倾斜与高光"></a>
 <br>
 <sub><strong>透视倾斜与高光</strong><br>指针与悬停 · 90/100</sub>
 </td>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#context-aware-custom-cursor"><img src="../demo/videos/posters/mouse-follower.webp" width="270" alt="情境感知自定义光标"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#context-aware-custom-cursor"><img src="../demo/readme-gifs/mouse-follower.gif" width="270" alt="情境感知自定义光标"></a>
 <br>
 <sub><strong>情境感知自定义光标</strong><br>指针与悬停 · 86/100</sub>
 </td>
 </tr>
 <tr>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#displacement-map-image-hover"><img src="../demo/videos/posters/hover-effect.webp" width="270" alt="位移贴图图像悬停"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#displacement-map-image-hover"><img src="../demo/readme-gifs/hover-effect.gif" width="270" alt="位移贴图图像悬停"></a>
 <br>
 <sub><strong>位移贴图图像悬停</strong><br>指针与悬停 · 90/100</sub>
 </td>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#svg-stroke-drawing"><img src="../demo/videos/posters/svg-stroke-drawing.webp" width="270" alt="SVG 描边绘制"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#svg-stroke-drawing"><img src="../demo/readme-gifs/captured/svg-stroke-drawing.gif" width="270" alt="SVG 描边绘制"></a>
 <br>
 <sub><strong>SVG 描边绘制</strong><br>文本与 SVG · 86/100</sub>
 </td>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#dom-aware-drag-spawned-fish-flock"><img src="../demo/videos/posters/dom-aware-drag-spawned-fish-flock.webp" width="270" alt="真人释放并避让 DOM 的鱼群"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#dom-aware-drag-spawned-fish-flock"><img src="../demo/readme-gifs/captured/dom-aware-drag-spawned-fish-flock.gif" width="270" alt="真人释放并避让 DOM 的鱼群"></a>
 <br>
 <sub><strong>真人释放并避让 DOM 的鱼群</strong><br>Canvas 与 2D · 100/100</sub>
 </td>
 </tr>
 <tr>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#pointer-injected-gpu-fluid"><img src="../demo/videos/posters/pointer-injected-gpu-fluid.webp" width="270" alt="舞台烟雾配色实验室"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#pointer-injected-gpu-fluid"><img src="../demo/readme-gifs/captured/pointer-injected-gpu-fluid.gif" width="270" alt="舞台烟雾配色实验室"></a>
 <br>
 <sub><strong>舞台烟雾配色实验室</strong><br>3D 与 WebGL · 99/100</sub>
 </td>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#dom-synced-shader-planes"><img src="../demo/videos/posters/dom-synced-shader-planes.webp" width="270" alt="人工校准的 DOM / GPU 媒体配准"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#dom-synced-shader-planes"><img src="../demo/readme-gifs/captured/dom-synced-shader-planes.gif" width="270" alt="人工校准的 DOM / GPU 媒体配准"></a>
 <br>
 <sub><strong>人工校准的 DOM / GPU 媒体配准</strong><br>3D 与 WebGL · 100/100</sub>
 </td>

@@ -17,11 +17,16 @@ const localDemoPreviewCount = sources.filter(source => source.previewKind === 'l
 const verifiedPreviewCount = officialPreviewCount + localDemoPreviewCount;
 const unavailablePreviewCount = sources.filter(source => source.previewKind === 'unavailable').length;
 const multiEffectProjectCount = projects.filter(project => effects.filter(effect => effect.sources.some(source => source.projectId === project.id)).length > 1).length;
-const previewPaths = [...new Set(sources
+const previewVideoPaths = [...new Set(sources
   .filter(source => ['official-capture', 'local-demo-capture'].includes(source.previewKind) && source.preview)
-  .map(source => resolve(root, 'demo', 'gifs', `${source.preview}.gif`)))];
-const previewBytes = (await Promise.all(previewPaths.map(path => stat(path)))).reduce((sum, item) => sum + item.size, 0);
-const previewMiB = (previewBytes / 1024 / 1024).toFixed(2);
+  .map(source => resolve(root, 'demo', 'videos', `${source.preview}.mp4`)))];
+const previewPosterPaths = [...new Set(sources
+  .filter(source => ['official-capture', 'local-demo-capture'].includes(source.previewKind) && source.preview)
+  .map(source => resolve(root, 'demo', 'videos', 'posters', `${source.preview.split('/').at(-1)}.webp`)))];
+const previewVideoBytes = (await Promise.all(previewVideoPaths.map(path => stat(path)))).reduce((sum, item) => sum + item.size, 0);
+const previewPosterBytes = (await Promise.all(previewPosterPaths.map(path => stat(path)))).reduce((sum, item) => sum + item.size, 0);
+const previewVideoMiB = (previewVideoBytes / 1024 / 1024).toFixed(2);
+const previewPosterMiB = (previewPosterBytes / 1024 / 1024).toFixed(2);
 const formatStars = value => value.toLocaleString('en-US');
 const recommendedSource = effect => effect.sources.find(source => source.recommended) || effect.sources[0];
 const relatedPartyLinks = effect => effect.relatedParties.length
@@ -85,7 +90,7 @@ function visualShowcase(language) {
     const label = isZh ? category.labelZh : category.label;
     return [
       `<td width="33%" align="center">`,
-      `<a href="${siteUrlFor(locale)}#${effect.id}"><img src="${assetPrefix}demo/gifs/${source.preview}.gif" width="270" alt="${escapeHtml(name)}"></a>`,
+      `<a href="${siteUrlFor(locale)}#${effect.id}"><img src="${assetPrefix}demo/videos/posters/${source.preview.split('/').at(-1)}.webp" width="270" alt="${escapeHtml(name)}"></a>`,
       `<br>`,
       `<sub><strong>${escapeHtml(name)}</strong><br>${escapeHtml(label)} · ${effect.admission.total}/100</sub>`,
       `</td>`,
@@ -105,8 +110,8 @@ function metricTable(cells) {
 function metricStrip(language) {
   const isZh = language === 'zh';
   const labels = isZh
-    ? ['入选效果', '真实 GIF', '可运行 Demo', '最低准入分']
-    : ['admitted effects', 'real GIFs', 'runnable demos', 'minimum score'];
+    ? ['入选效果', '真实视频', '可运行 Demo', '最低准入分']
+    : ['admitted effects', 'real videos', 'runnable demos', 'minimum score'];
   const values = [effects.length, verifiedPreviewCount, localDemoPreviewCount, `${admissionPolicy.threshold}/100`];
   return metricTable(values.map((value, index) => `<td width="25%" align="center"><strong>${value}</strong><br><sub>${labels[index]}</sub></td>`));
 }
@@ -132,7 +137,7 @@ function badgeStrip() {
   const repoUrl = 'https://github.com/giraffe-tree/awesome-web-effects';
   return [
     `[![${effects.length} curated effects](https://img.shields.io/badge/curated_effects-${effects.length}-0969da?style=flat-square)](${liveDemo})`,
-    `[![${verifiedPreviewCount} real GIF previews](https://img.shields.io/badge/real_GIF_previews-${verifiedPreviewCount}-0969da?style=flat-square)](${liveDemo})`,
+    `[![${verifiedPreviewCount} real video previews](https://img.shields.io/badge/real_video_previews-${verifiedPreviewCount}-0969da?style=flat-square)](${liveDemo})`,
     `[![GitHub stars](https://img.shields.io/github/stars/giraffe-tree/awesome-web-effects?style=flat-square&color=0969da)](${repoUrl}/stargazers)`,
   ].join('\n');
 }
@@ -170,7 +175,7 @@ const centeredFooter = text => `---\n\n<p align="center"><sub>${escapeHtml(text)
 
 function localizedMetricStrip(locale) {
   const t = getMessages(locale.code);
-  const labels = [t.effects, t.gifs, t.previewLocal, t.curatorialScore];
+  const labels = [t.effects, locale.code === 'zh-Hans' ? '视频预览' : 'video previews', t.previewLocal, t.curatorialScore];
   const values = [effects.length, verifiedPreviewCount, localDemoPreviewCount, `${admissionPolicy.threshold}/100`];
   return metricTable(values.map((value, index) => `<td width="25%" align="center"><strong>${value}</strong><br><sub>${escapeHtml(labels[index])}</sub></td>`));
 }
@@ -220,7 +225,7 @@ function localizedReadme(locale) {
 
 ---
 
-<h3 align="center">${featuredEffectIds.length} ${escapeHtml(t.gifs)} / ${effects.length} ${escapeHtml(t.effects)}</h3>
+<h3 align="center">${featuredEffectIds.length} ${locale.code === 'zh-Hans' ? '个视频预览' : 'video previews'} / ${effects.length} ${escapeHtml(t.effects)}</h3>
 
 ${visualShowcase(locale.code)}
 
@@ -338,16 +343,16 @@ ${effectTables('en')}
 - ${verifiedPreviewCount} verified previews: ${officialPreviewCount} official captures and ${localDemoPreviewCount} captures from runnable local demos; ${unavailablePreviewCount} missing.
 - Human review scores creativity, art direction, motion craft, legibility, creative transfer and evidence quality.
 - Admission requires ${admissionPolicy.threshold}/100 plus core-dimension minimums. Popularity never overrides the gate.
-- The verified GIF set is ${previewMiB} MiB; every preview is 320×180, at most three seconds and below 1 MiB.
+- The verified H.264 MP4 set is ${previewVideoMiB} MiB, plus ${previewPosterMiB} MiB of static WebP posters; every preview is 640×360, silent, yuv420p, 5.8–7.3 seconds and below 2 MiB.
 - Stars are a ${snapshotDate} snapshot. Recommendation sources and observed AI homepages remain separate relationships.
 
-Read the [current ${admissionAuditSummary.candidateCount}-candidate admission audit](research/demo-admission-audit-${admissionAuditSummary.auditedAt}.md), the [100-company homepage research](research/ai-native-homepages-100.md), and the [preview provenance manifest](demo/gifs/provenance.json).
+Read the [current ${admissionAuditSummary.candidateCount}-candidate admission audit](research/demo-admission-audit-${admissionAuditSummary.auditedAt}.md), the [100-company homepage research](research/ai-native-homepages-100.md), and the [preview provenance manifest](demo/videos/provenance.json).
 
 </details>
 
 ## Run the visual catalog locally
 
-The demo is dependency-free static HTML, CSS, JavaScript modules, and verified GIF assets. It supports 20 localized UI locales, effect search, category filtering, score sorting, stable effect anchors, visible score breakdowns, real mobile previews, expandable source details, copyable minimal code, and one-click prompts for coding agents.
+The demo is dependency-free static HTML, CSS, JavaScript modules, verified H.264 MP4 previews, and static WebP posters. It supports 20 localized UI locales, effect search, category filtering, score sorting, stable effect anchors, visible score breakdowns, real mobile previews, expandable source details, copyable minimal code, and one-click prompts for coding agents.
 
 \`\`\`bash
 python3 -m http.server 4173 --directory demo
@@ -355,20 +360,20 @@ python3 -m http.server 4173 --directory demo
 
 Open [http://localhost:4173](http://localhost:4173). A local HTTP server is required because the catalog is loaded as an ES module.
 
-## Real GIF capture and optimization
+## Real preview capture and encoding
 
-First build a runnable, reusable HTML demo in \`demo/preview-demos/\` and verify that it uses the named implementation. Capture the running browser output, then normalize verified official GIFs:
+First build a runnable, reusable HTML demo in \`demo/preview-demos/\` and verify that it uses the named implementation. Capture the running browser output, then encode the verified frames as silent H.264 MP4 plus a static WebP poster:
 
 \`\`\`bash
 npm ci --prefix demo/preview-demos
 npm run build --prefix demo/preview-demos
-python3 scripts/capture-real-preview-gifs.py --built --skip-install
-node scripts/normalize-gif-previews.mjs
+python3 scripts/capture-real-preview-videos.py --built --skip-install
+python3 scripts/transcode-official-preview-videos.py
 \`\`\`
 
-The capture step records the real local demo; normalization only processes source-verified official media. The validator checks provenance state, demo and GIF existence, unique content hashes, dimensions, duration, frame count, decodability, and the per-file size budget. If a source has neither a verified official asset nor a runnable captured demo, leave it unavailable.
+The capture step records the real local demo; the official-media transcode step only processes source-verified assets. The validator uses ffprobe to check provenance, demo and media existence, H.264, 640×360 dimensions, yuv420p, no audio, 5.8–7.3 second duration, static WebP posters, exact hashes, perceptual similarity, and file-size budgets. If a source has neither a verified official asset nor a runnable captured demo, leave it unavailable.
 
-See the [preview authenticity migration report](research/preview-authenticity-migration-2026-07-17.md) and the machine-readable [preview provenance manifest](demo/gifs/provenance.json).
+See the [preview authenticity migration report](research/preview-authenticity-migration-2026-07-17.md) and the machine-readable [preview provenance manifest](demo/videos/provenance.json).
 
 ## GitHub Pages
 
@@ -386,7 +391,7 @@ Expected project URL: [${liveDemo}](${liveDemo})
 - Run \`node scripts/build-docs.mjs\` to regenerate all localized README files and the language metadata document.
 - Run \`node scripts/validate.mjs\` before committing.
 
-${centeredFooter('GIFs and project names are used for research, indexing, and comparison. Rights remain with their respective authors.')}
+${centeredFooter('Preview media and project names are used for research, indexing, and comparison. Rights remain with their respective authors.')}
 
 ${communityGroupInvite({
   label: 'Join the AwesomeWebEffects WeChat user group',
@@ -451,16 +456,16 @@ ${effectTables('zh')}
 - ${verifiedPreviewCount} 个已核验预览：${officialPreviewCount} 个官方素材、${localDemoPreviewCount} 个可运行本地 Demo 录制；缺失数为 ${unavailablePreviewCount}。
 - 人工评审覆盖创意、艺术完成度、动效编排、效果辨识、创作迁移和证据质量。
 - 准入要求 ${admissionPolicy.threshold}/100，并同时通过核心维度最低分；流行度不能覆盖质量门槛。
-- 已核验 GIF 总计 ${previewMiB} MiB；每个预览为 320×180、最长三秒且小于 1 MiB。
+- 已核验 H.264 MP4 总计 ${previewVideoMiB} MiB，静态 WebP 海报总计 ${previewPosterMiB} MiB；每个视频为 640×360、无音轨、yuv420p、时长 5.8–7.3 秒且小于 2 MiB。
 - Stars 是 ${snapshotDate} 快照；“推荐实现”与“在哪家 AI 官网观察到”始终是两种关系。
 
-继续阅读 [${admissionAuditSummary.candidateCount} 个候选的准入审计](../research/demo-admission-audit-${admissionAuditSummary.auditedAt}.md)、[100 家 AI 公司主页特效调研](../research/ai-native-homepages-100.md)与[预览来源清单](../demo/gifs/provenance.json)。
+继续阅读 [${admissionAuditSummary.candidateCount} 个候选的准入审计](../research/demo-admission-audit-${admissionAuditSummary.auditedAt}.md)、[100 家 AI 公司主页特效调研](../research/ai-native-homepages-100.md)与[预览来源清单](../demo/videos/provenance.json)。
 
 </details>
 
 ## 在本地运行视觉目录
 
-Demo 只使用静态 HTML、CSS、JavaScript 模块和已核验 GIF，无第三方运行依赖。它支持 20 种本地化界面、效果搜索、分类筛选、按评分排序、稳定效果锚点、评分维度明细、移动端真实预览、展开来源详情、代码复制和 Agent 提示词一键复制。
+Demo 只使用静态 HTML、CSS、JavaScript 模块、已核验 H.264 MP4 与静态 WebP 海报，无第三方运行依赖。它支持 20 种本地化界面、效果搜索、分类筛选、按评分排序、稳定效果锚点、评分维度明细、移动端真实预览、展开来源详情、代码复制和 Agent 提示词一键复制。
 
 \`\`\`bash
 python3 -m http.server 4173 --directory demo
@@ -468,20 +473,20 @@ python3 -m http.server 4173 --directory demo
 
 打开 [http://localhost:4173](http://localhost:4173)。目录使用 ES Module，因此需要本地 HTTP 服务，不能直接双击文件运行。
 
-## 真实 GIF 录制与压缩
+## 真实预览录制与编码
 
-先在 \`demo/preview-demos/\` 编写可运行、可复用且确实使用对应实现的 HTML Demo，核验后录制真实浏览器输出，再规范化来源已核验的官方 GIF：
+先在 \`demo/preview-demos/\` 编写可运行、可复用且确实使用对应实现的 HTML Demo，核验后录制真实浏览器输出，再编码为无声 H.264 MP4 与静态 WebP 海报：
 
 \`\`\`bash
 npm ci --prefix demo/preview-demos
 npm run build --prefix demo/preview-demos
-python3 scripts/capture-real-preview-gifs.py --built --skip-install
-node scripts/normalize-gif-previews.mjs
+python3 scripts/capture-real-preview-videos.py --built --skip-install
+python3 scripts/transcode-official-preview-videos.py
 \`\`\`
 
-录制步骤捕获真实本地 Demo，规范化步骤只处理来源已经核验的官方素材。验证器会检查来源状态、Demo 与 GIF 是否存在、内容哈希唯一性、尺寸、时长、帧数、可解码性和单文件大小预算。既没有可靠官方素材、也没有可运行录制 Demo 时，应保持“暂无真实预览”。
+录制步骤捕获真实本地 Demo；官方媒体转码步骤只处理来源已经核验的素材。验证器通过 ffprobe 检查来源状态、Demo 与媒体是否存在、H.264、640×360、yuv420p、无音轨、5.8–7.3 秒时长、静态 WebP 海报、内容哈希、感知重复与体积预算。既没有可靠官方素材、也没有可运行录制 Demo 时，应保持“暂无真实预览”。
 
-参见[预览真实性迁移报告](../research/preview-authenticity-migration-2026-07-17.md)与机器可读的[预览来源清单](../demo/gifs/provenance.json)。
+参见[预览真实性迁移报告](../research/preview-authenticity-migration-2026-07-17.md)与机器可读的[预览来源清单](../demo/videos/provenance.json)。
 
 ## GitHub Pages
 
@@ -499,7 +504,7 @@ Demo 完全静态且只使用相对路径。仓库内工作流会在推送到 \`
 - 运行 \`node scripts/build-docs.mjs\` 同步生成全部本地化 README 与语言资料文件。
 - 提交前运行 \`node scripts/validate.mjs\`。
 
-${centeredFooter('GIF 与项目名称仅用于研究、索引和比较，权利归各自作者所有。')}
+${centeredFooter('预览媒体与项目名称仅用于研究、索引和比较，权利归各自作者所有。')}
 
 ${communityGroupInvite({
   label: '微信扫码加入 AwesomeWebEffects 用户交流群',

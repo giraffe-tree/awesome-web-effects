@@ -4,7 +4,7 @@
 
 ## Compatibility
 
-The demo is compatible with GitHub Pages. GitHub Pages publishes static HTML, CSS, and JavaScript, and this repository's `demo/` has no server-side runtime or build step. Its JavaScript data files and GIFs use relative URLs, so they continue to work at the project-site URL.
+The demo is compatible with GitHub Pages. GitHub Pages publishes static HTML, CSS, and JavaScript, and this repository's `demo/` has no server-side runtime or build step. Its JavaScript data files and MP4s use relative URLs, so they continue to work at the project-site URL.
 
 Expected production URL: <https://giraffe-tree.github.io/awesome-web-effects/>
 
@@ -31,14 +31,14 @@ Before pushing, serve the same directory locally instead of opening the HTML thr
 python3 -m http.server 8000 --directory demo
 ```
 
-Then open <http://localhost:8000/> and check that the effect rows, source details, filters, scripts, and GIF previews load. Also try `?lang=ar` and `?lang=ur` for RTL layout and confirm that switching languages updates the URL without losing the current hash. After deployment, confirm the same behavior at the production URL and check the browser console and network panel for missing files.
+Then open <http://localhost:8000/> and check that the effect rows, source details, filters, scripts, and MP4 previews load. Also try `?lang=ar` and `?lang=ur` for RTL layout and confirm that switching languages updates the URL without losing the current hash. After deployment, confirm the same behavior at the production URL and check the browser console and network panel for missing files.
 
 ## Operational limits
 
 - GitHub Pages is static hosting: server-side code, private API keys, and runtime environment variables are unavailable. External APIs would need a separate backend, and no secret should be embedded in browser code.
 - Project sites live under `/<repository>/`. Keep internal assets relative (as they are now), or include the repository base path when adding root-relative URLs.
 - Pages sites are public on the internet, including sites published from private repositories where the account plan permits Pages.
-- GitHub documents a maximum published-site size of 1 GB, a soft bandwidth limit of 100 GB per month, and a 10-minute deployment timeout. Keeping GIFs small reduces repository size, deployment time, and bandwidth.
+- GitHub documents a maximum published-site size of 1 GB, a soft bandwidth limit of 100 GB per month, and a 10-minute deployment timeout. Keeping MP4s small reduces repository size, deployment time, and bandwidth.
 
 ## Official references
 

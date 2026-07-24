@@ -395,8 +395,7 @@
       .row-number { align-self: start; padding-top: 5px; color: #6f78a0; font: 600 12px/1 ui-monospace, SFMono-Regular, Menlo, monospace; }
       .row-preview { position: relative; width: 144px; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 15px; background: #0e1330; box-shadow: var(--shadow-xs); transition: box-shadow .4s var(--ease-out); }
       .effect-row:hover .row-preview { box-shadow: 0 10px 28px rgba(4, 6, 18, .5); }
-      .row-preview picture { display: block; width: 100%; height: 100%; }
-      .row-preview img { display: block; width: 100%; height: 100%; object-fit: contain; transition: opacity .38s ease; }
+      .row-preview img, .row-preview video { display: block; width: 100%; height: 100%; object-fit: contain; transition: opacity .38s ease; }
       [data-media-shell] { position: relative; isolation: isolate; }
       [data-managed-media] { opacity: 0; transition: opacity .38s ease; }
       [data-media-state="ready"] [data-managed-media] { opacity: 1; }
@@ -468,9 +467,8 @@
       .modal-preview-frame { position: absolute; inset: 0 auto auto 0; display: block; width: 320px; height: 180px; border: 0; background: #070a16; transform: scale(var(--preview-scale, 1)); transform-origin: top left; }
       .modal-preview-live .media-load-state { margin: 24px; border-radius: 18px; }
       .modal-preview-official { padding: 32px; }
-      .modal-preview-official img { display: block; width: auto; height: auto; max-width: 100%; max-height: min(58vh, 540px); object-fit: contain; image-rendering: auto; }
+      .modal-preview-official img, .modal-preview-official video { display: block; width: min(100%, 960px); height: auto; max-height: min(58vh, 540px); aspect-ratio: 16 / 9; object-fit: contain; }
       .modal-preview-official .media-load-state { inset: 32px; border-radius: 18px; }
-      .modal-preview-official img.is-local-fallback { width: 320px; height: 180px; }
       .modal-preview-unavailable { display: grid; place-items: center; width: 100%; min-height: 360px; padding: 70px 30px; text-align: center; background: radial-gradient(circle at 50% 30%, #262e50, #12162c 68%); }
       .modal-preview-unavailable > div > span { display: block; font-size: 48px; }
       .modal-preview-unavailable strong { display: block; margin-top: 16px; font-size: clamp(24px, 4vw, 38px); letter-spacing: -.04em; }
@@ -839,7 +837,7 @@
       .effect-main:hover { background: #10142e; }
       .row-number { position: absolute; z-index: 5; top: 14px; inset-inline-start: 14px; padding: 7px 8px 6px; border: 1px solid rgba(154, 168, 216, .24); border-radius: 9px; color: #eae4dc; background: rgba(10, 13, 30, .6); backdrop-filter: blur(10px); font-size: 9px; }
       .row-preview { grid-area: 1 / 1; width: 100%; height: 100%; aspect-ratio: auto; border-radius: 0; background: #141830; box-shadow: none; }
-      .row-preview img { width: 100%; height: 100%; object-fit: contain; }
+      .row-preview img, .row-preview video { width: 100%; height: 100%; object-fit: contain; }
       .row-preview::after { content: ""; position: absolute; z-index: 2; inset: 0; background: radial-gradient(circle at var(--card-x) var(--card-y), rgba(245, 203, 184, .4), transparent 29%); opacity: 0; mix-blend-mode: soft-light; transition: opacity .28s ease; pointer-events: none; }
       .effect-row:hover .row-preview::after { opacity: .48; }
       .effect-row:hover .row-preview { box-shadow: none; }
@@ -959,8 +957,8 @@
         .hero-story-cursor { display: none; }
         .effect-main { transition: none; }
         .effect-modal-backdrop, .effect-modal-dialog { animation: none; }
-        .nav-link, .nav-button, .language-select, .primary-action, .secondary-action, .hero-story-toggle, .hero-story-step, .metric, .agent-prompt-action, .feature-card, .search, .sort, .filter, .effect-row, .row-preview, .row-preview img, .effect-cell h3, .source-name, .party-link, .preview-demo-link, .action-button, .modal-link, .modal-rail-action, .effect-modal-close { transition: none; }
-        .primary-action:hover, .primary-action:active, .secondary-action:hover, .secondary-action:active, .metric:hover, .feature-card:hover, .action-button:hover, .agent-prompt-action:hover, .effect-row:hover .row-preview img, .effect-main { transform: none; }
+        .nav-link, .nav-button, .language-select, .primary-action, .secondary-action, .hero-story-toggle, .hero-story-step, .metric, .agent-prompt-action, .feature-card, .search, .sort, .filter, .effect-row, .row-preview, .row-preview img, .row-preview video, .effect-cell h3, .source-name, .party-link, .preview-demo-link, .action-button, .modal-link, .modal-rail-action, .effect-modal-close { transition: none; }
+        .primary-action:hover, .primary-action:active, .secondary-action:hover, .secondary-action:active, .metric:hover, .feature-card:hover, .action-button:hover, .agent-prompt-action:hover, .effect-row:hover .row-preview img, .effect-row:hover .row-preview video, .effect-main { transform: none; }
       }
     </style>
   </head>
@@ -1061,7 +1059,7 @@
         <div class="hero-metrics">
           <div class="metric"><strong id="effect-count">0</strong><span id="effect-label">Effects</span></div>
           <div class="metric"><strong id="source-count">0</strong><span id="source-label">Source projects</span></div>
-          <div class="metric"><strong id="gif-count">0</strong><span id="gif-label">Verified GIFs</span></div>
+          <div class="metric"><strong id="gif-count">0</strong><span id="gif-label">Verified MP4s</span></div>
           <div class="metric"><strong id="prompt-count">0</strong><span id="prompt-label">Agent prompts</span></div>
         </div>
       </div>
@@ -1187,25 +1185,17 @@
       const normalizeForSearch = value => String(value).normalize('NFC').toLocaleLowerCase(localeByCode.get(language)?.intlLocale || language);
       const recommendedSource = effect => effect.sources.find(source => source.recommended) || effect.sources[0];
       const hasRealPreview = source => ['official-capture', 'local-demo-capture'].includes(source.previewKind) && Boolean(source.preview);
-      const catalogPreviewImage = (source, alt) => {
-        const gifPath = `./gifs/${escapeHTML(source.preview)}.gif`;
-        const image = `<img data-managed-media src="${gifPath}" alt="${escapeHTML(alt)}" loading="lazy" decoding="async" />`;
-        return source.previewKind === 'local-demo-capture'
-          ? `<picture><source type="image/webp" srcset="./gifs/webp/${escapeHTML(source.preview.split('/').at(-1))}.webp" />${image}</picture>`
-          : image;
-      };
+      const previewBasename = source => source.preview.split('/').at(-1);
+      const previewVideoPath = source => `./videos/${escapeHTML(source.preview)}.mp4`;
+      const previewPosterPath = source => `./videos/posters/${escapeHTML(previewBasename(source))}.webp`;
+      const catalogPreviewVideo = (source, label) => `<video data-managed-media data-preview-video width="640" height="360" muted loop playsinline preload="none" poster="${previewPosterPath(source)}" aria-label="${escapeHTML(label)}"><source data-src="${previewVideoPath(source)}" type="video/mp4" /></video>`;
+      const catalogPreviewPoster = (source, alt) => `<img class="preview-poster" src="${previewPosterPath(source)}" width="640" height="360" alt="${escapeHTML(alt)}" loading="lazy" decoding="async" />`;
       const promptActionLabel = t => language === 'zh-Hans' ? '复制 Prompt' : language === 'en' ? 'Copy prompt' : t.copyPrompt;
       const promptEditNote = () => isChinese() ? '可编辑 · 刷新后重置' : 'Editable · resets on refresh';
       const effectReferenceUrl = effect => `https://giraffe-tree.github.io/awesome-web-effects/?lang=${encodeURIComponent(language)}#${encodeURIComponent(effect.id)}`;
       const briefEffectPrompt = (effect, project) => isChinese()
         ? `在当前项目中实现「${effect.nameZh}」（${effect.name}）。把 ${effectReferenceUrl(effect)} 作为准绳：查看其已验证 Demo、最小代码、触发、时序和层级，并定义 2–3 条可观察验收标准。优先使用 ${project.name} 和现有依赖，用原创素材适配。保留响应式、键盘、指针、触控、prefers-reduced-motion、性能与资源清理。运行测试及桌面/移动浏览器检查，报告改动文件、逐条证据和遗留风险。`
         : `Implement “${effect.name}” (${effect.nameZh}) in the current project. Use ${effectReferenceUrl(effect)} as the source of truth: inspect its verified demo, minimal code, trigger, timing, and layering, then define 2–3 observable acceptance criteria. Prefer ${project.name} and existing dependencies; use original assets. Preserve responsive, keyboard, pointer, touch, prefers-reduced-motion, performance, and cleanup. Run tests and desktop/mobile browser checks; report changed files, evidence per criterion, and remaining risks.`;
-      const officialPreviewUrl = source => {
-        const githubBlob = source.originUrl?.match(/^https:\/\/github\.com\/([^/]+)\/([^/]+)\/blob\/([^/]+)\/(.+)$/);
-        return githubBlob
-          ? `https://raw.githubusercontent.com/${githubBlob[1]}/${githubBlob[2]}/${githubBlob[3]}/${githubBlob[4]}`
-          : source.originUrl;
-      };
       const interactiveSelector = 'a, button, input, select, textarea, pre, code';
 
       function setPointerSurface(element, event) {
@@ -1304,6 +1294,35 @@
         }
       }
 
+      function syncManagedVideoPlayback(media) {
+        const shell = media.closest('[data-media-shell]');
+        if (!shell) return;
+        if (!shell._mediaVisible || document.hidden || reducedMotion.matches || media.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) {
+          media.pause();
+          shell.dataset.mediaPlayback = 'paused';
+          return;
+        }
+        media.muted = true;
+        const playback = media.play();
+        shell.dataset.mediaPlayback = 'playing';
+        if (playback?.catch) playback.catch(error => {
+          if (error?.name === 'AbortError' || !shell._mediaVisible || document.hidden) return;
+          shell.dataset.mediaPlayback = 'blocked';
+        });
+      }
+
+      function cleanupManagedMedia(root) {
+        root.querySelectorAll('[data-media-shell]').forEach(shell => {
+          clearTimeout(shell._mediaTimeout);
+          shell._mediaObserver?.disconnect();
+          shell._mediaLoadObserver?.disconnect();
+          shell._mediaPlaybackObserver?.disconnect();
+          shell._previewResizeObserver?.disconnect();
+          if (shell._previewResizeHandler) window.removeEventListener('resize', shell._previewResizeHandler);
+          shell.querySelector('video[data-managed-media]')?.pause();
+        });
+      }
+
       function prepareManagedMedia(root) {
         root.querySelectorAll('[data-media-shell]').forEach(shell => {
           if (shell.dataset.mediaInitialized === 'true') return;
@@ -1379,6 +1398,53 @@
               pollPreviewState();
             }, { once: true });
             media.addEventListener('error', markError, { once: true });
+            return;
+          }
+
+          if (media.tagName === 'VIDEO') {
+            const source = media.querySelector('source[data-src]');
+            const loadVideo = () => {
+              if (media.dataset.mediaLoaded === 'true') return;
+              media.dataset.mediaLoaded = 'true';
+              if (source?.dataset.src) source.src = source.dataset.src;
+              armTimeout(12000);
+              media.load();
+            };
+            media.defaultMuted = true;
+            media.muted = true;
+            media.addEventListener('loadeddata', () => {
+              markReady();
+              syncManagedVideoPlayback(media);
+            });
+            media.addEventListener('error', markError, { once: true });
+
+            if ('IntersectionObserver' in window) {
+              shell._mediaPlaybackObserver = new IntersectionObserver(entries => {
+                const entry = entries.at(-1);
+                shell._mediaVisible = Boolean(entry?.isIntersecting && entry.intersectionRatio >= .2);
+                syncManagedVideoPlayback(media);
+              }, { threshold: [0, .2, .6] });
+              shell._mediaPlaybackObserver.observe(media);
+
+              if (media.hasAttribute('data-video-eager')) {
+                loadVideo();
+              } else {
+                shell._mediaLoadObserver = new IntersectionObserver(entries => {
+                  if (!entries.some(entry => entry.isIntersecting)) return;
+                  shell._mediaLoadObserver?.disconnect();
+                  shell._mediaLoadObserver = null;
+                  loadVideo();
+                }, { rootMargin: '240px 0px' });
+                shell._mediaLoadObserver.observe(media);
+              }
+            } else {
+              shell._mediaVisible = true;
+              loadVideo();
+            }
+            if (media.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) queueMicrotask(() => {
+              markReady();
+              syncManagedVideoPlayback(media);
+            });
             return;
           }
 
@@ -1466,12 +1532,7 @@
         if (modal.hidden) return;
         modal.hidden = true;
         document.body.classList.remove('modal-open');
-        modalContent.querySelectorAll('[data-media-shell]').forEach(shell => {
-          clearTimeout(shell._mediaTimeout);
-          shell._mediaObserver?.disconnect();
-          shell._previewResizeObserver?.disconnect();
-          if (shell._previewResizeHandler) window.removeEventListener('resize', shell._previewResizeHandler);
-        });
+        cleanupManagedMedia(modalContent);
         modalContent.replaceChildren();
         const trigger = modalTrigger;
         modalTrigger = null;
@@ -1497,7 +1558,9 @@
           ? `<div class="modal-preview modal-preview-unavailable"><div><span aria-hidden="true">◎</span><strong>${t.unavailableDetail}</strong><p>${t.unavailableHelp}</p></div><span class="modal-preview-status">${previewStatus}</span></div>`
           : source.demoPath
             ? `<div class="modal-preview modal-preview-live" data-media-shell data-media-state="loading" data-media-error-key="liveLoadError"${resourceProgressAttribute} aria-busy="true"><div class="modal-preview-frame-shell" data-live-preview-shell><iframe class="modal-preview-frame" data-managed-media src="./${escapeHTML(source.demoPath)}" title="${previewTitle}" width="320" height="180" loading="eager"></iframe></div>${mediaStateMarkup(t.loadingLive, true, hasResourceProgress)}<span class="modal-preview-status">${t.livePreview}</span></div>`
-            : `<div class="modal-preview modal-preview-official" data-media-shell data-media-state="loading" data-media-error-key="officialLoadError" aria-busy="true"><img src="${escapeHTML(officialPreviewUrl(source))}" data-managed-media data-official-preview data-upstream-src="${escapeHTML(officialPreviewUrl(source))}" data-fallback-src="./gifs/${escapeHTML(source.preview)}.gif" alt="${previewTitle}" decoding="async" referrerpolicy="no-referrer" />${mediaStateMarkup(t.loadingOfficial, true)}<span class="modal-preview-status">${t.officialNativePreview}</span></div>`;
+            : reducedMotion.matches
+              ? `<div class="modal-preview modal-preview-official"><img class="preview-poster" src="${previewPosterPath(source)}" width="640" height="360" alt="${previewTitle}" decoding="async" /><span class="modal-preview-status">${t.officialNativePreview}</span></div>`
+              : `<div class="modal-preview modal-preview-official" data-media-shell data-media-state="loading" data-media-error-key="officialLoadError" aria-busy="true"><video data-managed-media data-official-preview data-video-eager width="640" height="360" muted loop playsinline preload="none" poster="${previewPosterPath(source)}" aria-label="${previewTitle}"><source data-src="${previewVideoPath(source)}" type="video/mp4" /></video>${mediaStateMarkup(t.loadingOfficial, true)}<span class="modal-preview-status">${t.officialNativePreview}</span></div>`;
         const projectLinks = [modalLink(project.url, t.viewProject)];
         const provenanceLinks = [];
         if (source.demoPath) provenanceLinks.push(modalLink(`./${source.demoPath}`, t.openDemo));
@@ -1506,7 +1569,7 @@
         if (source.demoSourcePath) provenanceLinks.push(modalLink(`./${source.demoSourcePath}`, t.viewDemoSource));
         const provenancePaths = source.previewKind === 'local-demo-capture'
           ? `<br><code>demo/${escapeHTML(source.demoPath)}</code><br><code>demo/${escapeHTML(source.demoSourcePath)}</code>`
-          : source.previewKind === 'official-capture' ? `<br><code>demo/gifs/${escapeHTML(source.preview)}.gif</code>` : '';
+          : source.previewKind === 'official-capture' ? `<br><code>demo/videos/${escapeHTML(source.preview)}.mp4</code>` : '';
         const primaryName = isChinese() ? effect.nameZh : effect.name;
         const secondaryName = isChinese() ? effect.name : effect.nameZh;
         const minimalCodeNote = source.demoPath ? t.minimalCodeHelp : t.minimalCodeUnavailableHelp;
@@ -1736,6 +1799,7 @@
 
         const visibleProjectIds = new Set(visible.flatMap(effect => effect.sources.map(source => source.projectId)));
         resultCount.textContent = `${formatNumber(visible.length)} / ${formatNumber(effects.length)} ${t.resultEffects} · ${formatNumber(visibleProjectIds.size)} ${t.resultSources}`;
+        cleanupManagedMedia(list);
         list.replaceChildren();
         if (!visible.length) { const empty = document.createElement('p'); empty.className = 'empty'; empty.textContent = t.empty; list.append(empty); return; }
 
@@ -1748,8 +1812,8 @@
           const previewMedia = !realPreview
             ? `<span class="paused-preview">${t.previewUnavailable}</span>`
             : reducedMotion.matches
-              ? `<span class="paused-preview">${t.previewPaused}</span>`
-              : `${catalogPreviewImage(primary, effectName(effect))}${mediaStateMarkup(t.loadingPreview)}`;
+              ? catalogPreviewPoster(primary, effectName(effect))
+              : `${catalogPreviewVideo(primary, effectName(effect))}${mediaStateMarkup(t.loadingPreview)}`;
           const previewShell = realPreview && !reducedMotion.matches
             ? ' data-media-shell data-media-state="loading" data-media-error-key="previewLoadError" aria-busy="true"'
             : '';
@@ -1907,7 +1971,10 @@
         scheduleHeroStory();
         render();
       });
-      document.addEventListener('visibilitychange', scheduleHeroStory);
+      document.addEventListener('visibilitychange', () => {
+        scheduleHeroStory();
+        document.querySelectorAll('video[data-managed-media]').forEach(syncManagedVideoPlayback);
+      });
       search.addEventListener('input', render);
       sort.addEventListener('change', render);
       window.addEventListener('hashchange', openHashTarget);

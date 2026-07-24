@@ -16,7 +16,7 @@ from types import SimpleNamespace
 
 
 ROOT = Path(__file__).resolve().parents[1]
-CAPTURE_SCRIPT = ROOT / "scripts" / "capture-real-preview-gifs.py"
+CAPTURE_SCRIPT = ROOT / "scripts" / "capture-real-preview-videos.py"
 SWIFT_TOOL = ROOT / "scripts" / "live-photo-tool.swift"
 PREVIEW_ROOT = ROOT / "demo" / "preview-demos"
 MANIFEST_PATH = PREVIEW_ROOT / "preview-manifest.json"
@@ -288,8 +288,8 @@ def main() -> int:
                 duration=DURATION_SECONDS,
                 fps=CAPTURE_FPS,
                 height=VIEWPORT_HEIGHT,
-                webp_fps=CAPTURE_FPS,
-                webp_scale=CAPTURE_SCALE,
+                playback_fps=CAPTURE_FPS,
+                capture_scale=CAPTURE_SCALE,
                 width=VIEWPORT_WIDTH,
             )
             with sync_playwright() as playwright:
@@ -313,17 +313,13 @@ def main() -> int:
                 for effect_id in requested:
                     demo = demos_by_id[effect_id]
                     effect_root = temporary_root / effect_id
-                    evidence_frames = effect_root / "evidence"
                     high_resolution_frames = effect_root / "high-resolution"
-                    evidence_frames.mkdir(parents=True)
-                    high_resolution_frames.mkdir()
                     page = context.new_page()
                     try:
                         frame_count, unique_count, _ = capture.capture_demo(
                             page,
                             f"{base_url}/{effect_id}.html",
                             demo,
-                            evidence_frames,
                             high_resolution_frames,
                             capture_args,
                         )
@@ -418,7 +414,7 @@ def main() -> int:
             "viewport": f"{VIEWPORT_WIDTH}x{VIEWPORT_HEIGHT}",
             "captureScale": CAPTURE_SCALE,
             "sourceFrameFps": CAPTURE_FPS,
-            "interactionDriver": "scripts/capture-real-preview-gifs.py",
+            "interactionDriver": "scripts/capture-real-preview-videos.py",
         },
         "records": records,
     }

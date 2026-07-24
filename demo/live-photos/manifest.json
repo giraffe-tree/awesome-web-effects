@@ -15,7 +15,7 @@
     "viewport": "320x180",
     "captureScale": 4,
     "sourceFrameFps": 12,
-    "interactionDriver": "scripts/capture-real-preview-gifs.py"
+    "interactionDriver": "scripts/capture-real-preview-videos.py"
   },
   "records": [
     {

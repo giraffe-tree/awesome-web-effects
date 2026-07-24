@@ -7,7 +7,7 @@
 A visual atlas for the moment when you know the feeling you want, but not the words to describe the effect.
 
 [![152 curated effects](https://img.shields.io/badge/curated_effects-152-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
-[![152 real GIF previews](https://img.shields.io/badge/real_GIF_previews-152-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
+[![152 real video previews](https://img.shields.io/badge/real_video_previews-152-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
 [![GitHub stars](https://img.shields.io/github/stars/giraffe-tree/awesome-web-effects?style=flat-square&color=0969da)](https://github.com/giraffe-tree/awesome-web-effects/stargazers)
 
 [**Open the live visual catalog**](https://giraffe-tree.github.io/awesome-web-effects/?lang=en) · [Language metadata](docs/LANGUAGES.md)
@@ -23,80 +23,80 @@ A visual atlas for the moment when you know the feeling you want, but not the wo
 <table>
 <tr>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#pinned-horizontal-scroll-scene"><img src="demo/gifs/captured/pinned-horizontal-scroll-scene.gif" width="270" alt="Pinned horizontal scroll scene"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#pinned-horizontal-scroll-scene"><img src="demo/videos/posters/pinned-horizontal-scroll-scene.webp" width="270" alt="Pinned horizontal scroll scene"></a>
 <br>
 <sub><strong>Pinned horizontal scroll scene</strong><br>Scroll &amp; reveal · 96/100</sub>
 </td>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#prompt-select-replace-loop"><img src="demo/gifs/captured/prompt-select-replace-loop.gif" width="270" alt="Semantic prompt revision workspace"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#prompt-select-replace-loop"><img src="demo/videos/posters/prompt-select-replace-loop.webp" width="270" alt="Semantic prompt revision workspace"></a>
 <br>
 <sub><strong>Semantic prompt revision workspace</strong><br>Text &amp; SVG · 100/100</sub>
 </td>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#staggered-transform-choreography"><img src="demo/gifs/captured/staggered-transform-choreography.gif" width="270" alt="Staggered transform choreography"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#staggered-transform-choreography"><img src="demo/videos/posters/staggered-transform-choreography.webp" width="270" alt="Staggered transform choreography"></a>
 <br>
 <sub><strong>Staggered transform choreography</strong><br>Motion &amp; choreography · 92/100</sub>
 </td>
 </tr>
 <tr>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#motion-graphics-burst"><img src="demo/gifs/captured/motion-graphics-burst.gif" width="270" alt="Motion-graphics burst"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#motion-graphics-burst"><img src="demo/videos/posters/motion-graphics-burst.webp" width="270" alt="Motion-graphics burst"></a>
 <br>
 <sub><strong>Motion-graphics burst</strong><br>Motion &amp; choreography · 92/100</sub>
 </td>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#visually-authored-keyframe-sequence"><img src="demo/gifs/captured/visually-authored-keyframe-sequence.gif" width="270" alt="Visually authored keyframe sequence"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#visually-authored-keyframe-sequence"><img src="demo/videos/posters/visually-authored-keyframe-sequence.webp" width="270" alt="Visually authored keyframe sequence"></a>
 <br>
 <sub><strong>Visually authored keyframe sequence</strong><br>Motion &amp; choreography · 84/100</sub>
 </td>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#compact-svg-shape-tween"><img src="demo/gifs/captured/compact-svg-shape-tween.gif" width="270" alt="Compact SVG shape tween"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#compact-svg-shape-tween"><img src="demo/videos/posters/compact-svg-shape-tween.webp" width="270" alt="Compact SVG shape tween"></a>
 <br>
 <sub><strong>Compact SVG shape tween</strong><br>Motion &amp; choreography · 89/100</sub>
 </td>
 </tr>
 <tr>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#filterable-grid-reflow"><img src="demo/gifs/captured/filterable-grid-reflow.gif" width="270" alt="Filterable grid reflow"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#filterable-grid-reflow"><img src="demo/videos/posters/filterable-grid-reflow.webp" width="270" alt="Filterable grid reflow"></a>
 <br>
 <sub><strong>Filterable grid reflow</strong><br>Page &amp; layout · 85/100</sub>
 </td>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#perspective-tilt-and-glare"><img src="demo/gifs/captured/perspective-tilt-and-glare.gif" width="270" alt="Perspective tilt and glare"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#perspective-tilt-and-glare"><img src="demo/videos/posters/perspective-tilt-and-glare.webp" width="270" alt="Perspective tilt and glare"></a>
 <br>
 <sub><strong>Perspective tilt and glare</strong><br>Pointer &amp; hover · 90/100</sub>
 </td>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#context-aware-custom-cursor"><img src="demo/gifs/mouse-follower.gif" width="270" alt="Context-aware custom cursor"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#context-aware-custom-cursor"><img src="demo/videos/posters/mouse-follower.webp" width="270" alt="Context-aware custom cursor"></a>
 <br>
 <sub><strong>Context-aware custom cursor</strong><br>Pointer &amp; hover · 86/100</sub>
 </td>
 </tr>
 <tr>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#displacement-map-image-hover"><img src="demo/gifs/hover-effect.gif" width="270" alt="Displacement-map image hover"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#displacement-map-image-hover"><img src="demo/videos/posters/hover-effect.webp" width="270" alt="Displacement-map image hover"></a>
 <br>
 <sub><strong>Displacement-map image hover</strong><br>Pointer &amp; hover · 90/100</sub>
 </td>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#svg-stroke-drawing"><img src="demo/gifs/captured/svg-stroke-drawing.gif" width="270" alt="SVG stroke drawing"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#svg-stroke-drawing"><img src="demo/videos/posters/svg-stroke-drawing.webp" width="270" alt="SVG stroke drawing"></a>
 <br>
 <sub><strong>SVG stroke drawing</strong><br>Text &amp; SVG · 86/100</sub>
 </td>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#dom-aware-drag-spawned-fish-flock"><img src="demo/gifs/captured/dom-aware-drag-spawned-fish-flock.gif" width="270" alt="Human-released DOM-avoiding fish school"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#dom-aware-drag-spawned-fish-flock"><img src="demo/videos/posters/dom-aware-drag-spawned-fish-flock.webp" width="270" alt="Human-released DOM-avoiding fish school"></a>
 <br>
 <sub><strong>Human-released DOM-avoiding fish school</strong><br>Canvas &amp; 2D · 100/100</sub>
 </td>
 </tr>
 <tr>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#pointer-injected-gpu-fluid"><img src="demo/gifs/captured/pointer-injected-gpu-fluid.gif" width="270" alt="Stage haze colour lab"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#pointer-injected-gpu-fluid"><img src="demo/videos/posters/pointer-injected-gpu-fluid.webp" width="270" alt="Stage haze colour lab"></a>
 <br>
 <sub><strong>Stage haze colour lab</strong><br>3D &amp; WebGL · 99/100</sub>
 </td>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#dom-synced-shader-planes"><img src="demo/gifs/captured/dom-synced-shader-planes.gif" width="270" alt="Human-calibrated DOM / GPU media registration"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=en#dom-synced-shader-planes"><img src="demo/videos/posters/dom-synced-shader-planes.webp" width="270" alt="Human-calibrated DOM / GPU media registration"></a>
 <br>
 <sub><strong>Human-calibrated DOM / GPU media registration</strong><br>3D &amp; WebGL · 100/100</sub>
 </td>
@@ -122,7 +122,7 @@ Review the current project using https://giraffe-tree.github.io/awesome-web-effe
 <table>
 <tr>
 <td width="25%" align="center"><strong>152</strong><br><sub>admitted effects</sub></td>
-<td width="25%" align="center"><strong>152</strong><br><sub>real GIFs</sub></td>
+<td width="25%" align="center"><strong>152</strong><br><sub>real videos</sub></td>
 <td width="25%" align="center"><strong>150</strong><br><sub>runnable demos</sub></td>
 <td width="25%" align="center"><strong>80/100</strong><br><sub>minimum score</sub></td>
 </tr>
@@ -387,16 +387,16 @@ Scene graphs, creative coding, physics, drawing tools, and 2D renderers.
 - 152 verified previews: 2 official captures and 150 captures from runnable local demos; 0 missing.
 - Human review scores creativity, art direction, motion craft, legibility, creative transfer and evidence quality.
 - Admission requires 80/100 plus core-dimension minimums. Popularity never overrides the gate.
-- The verified GIF set is 24.56 MiB; every preview is 320×180, at most three seconds and below 1 MiB.
+- The verified H.264 MP4 set is 15.90 MiB, plus 2.69 MiB of static WebP posters; every preview is 640×360, silent, yuv420p, 5.8–7.3 seconds and below 2 MiB.
 - Stars are a 2026-07-23 snapshot. Recommendation sources and observed AI homepages remain separate relationships.
 
-Read the [current 398-candidate admission audit](research/demo-admission-audit-2026-07-23.md), the [100-company homepage research](research/ai-native-homepages-100.md), and the [preview provenance manifest](demo/gifs/provenance.json).
+Read the [current 398-candidate admission audit](research/demo-admission-audit-2026-07-23.md), the [100-company homepage research](research/ai-native-homepages-100.md), and the [preview provenance manifest](demo/videos/provenance.json).
 
 </details>
 
 ## Run the visual catalog locally
 
-The demo is dependency-free static HTML, CSS, JavaScript modules, and verified GIF assets. It supports 20 localized UI locales, effect search, category filtering, score sorting, stable effect anchors, visible score breakdowns, real mobile previews, expandable source details, copyable minimal code, and one-click prompts for coding agents.
+The demo is dependency-free static HTML, CSS, JavaScript modules, verified H.264 MP4 previews, and static WebP posters. It supports 20 localized UI locales, effect search, category filtering, score sorting, stable effect anchors, visible score breakdowns, real mobile previews, expandable source details, copyable minimal code, and one-click prompts for coding agents.
 
 ```bash
 python3 -m http.server 4173 --directory demo
@@ -404,20 +404,20 @@ python3 -m http.server 4173 --directory demo
 
 Open [http://localhost:4173](http://localhost:4173). A local HTTP server is required because the catalog is loaded as an ES module.
 
-## Real GIF capture and optimization
+## Real preview capture and encoding
 
-First build a runnable, reusable HTML demo in `demo/preview-demos/` and verify that it uses the named implementation. Capture the running browser output, then normalize verified official GIFs:
+First build a runnable, reusable HTML demo in `demo/preview-demos/` and verify that it uses the named implementation. Capture the running browser output, then encode the verified frames as silent H.264 MP4 plus a static WebP poster:
 
 ```bash
 npm ci --prefix demo/preview-demos
 npm run build --prefix demo/preview-demos
-python3 scripts/capture-real-preview-gifs.py --built --skip-install
-node scripts/normalize-gif-previews.mjs
+python3 scripts/capture-real-preview-videos.py --built --skip-install
+python3 scripts/transcode-official-preview-videos.py
 ```
 
-The capture step records the real local demo; normalization only processes source-verified official media. The validator checks provenance state, demo and GIF existence, unique content hashes, dimensions, duration, frame count, decodability, and the per-file size budget. If a source has neither a verified official asset nor a runnable captured demo, leave it unavailable.
+The capture step records the real local demo; the official-media transcode step only processes source-verified assets. The validator uses ffprobe to check provenance, demo and media existence, H.264, 640×360 dimensions, yuv420p, no audio, 5.8–7.3 second duration, static WebP posters, exact hashes, perceptual similarity, and file-size budgets. If a source has neither a verified official asset nor a runnable captured demo, leave it unavailable.
 
-See the [preview authenticity migration report](research/preview-authenticity-migration-2026-07-17.md) and the machine-readable [preview provenance manifest](demo/gifs/provenance.json).
+See the [preview authenticity migration report](research/preview-authenticity-migration-2026-07-17.md) and the machine-readable [preview provenance manifest](demo/videos/provenance.json).
 
 ## GitHub Pages
 
@@ -437,7 +437,7 @@ Expected project URL: [https://giraffe-tree.github.io/awesome-web-effects/](http
 
 ---
 
-<p align="center"><sub>GIFs and project names are used for research, indexing, and comparison. Rights remain with their respective authors.</sub></p>
+<p align="center"><sub>Preview media and project names are used for research, indexing, and comparison. Rights remain with their respective authors.</sub></p>
 
 <p align="center"><strong>Join the AwesomeWebEffects WeChat user group</strong></p>
 

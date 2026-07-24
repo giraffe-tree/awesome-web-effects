@@ -1,6 +1,6 @@
 # Real preview demos
 
-These 13 pages are the capture sources for the curator-approved local catalog previews across WebGL, DOM, SVG, and Canvas. Each page imports and runs the library named by the catalog entry; none is a hand-drawn approximation or a shared placeholder scene.
+These 150 pages are the capture sources for the curator-approved local catalog previews across WebGL, DOM, SVG, and Canvas. Each page imports and runs the library named by the catalog entry; none is a hand-drawn approximation or a shared placeholder scene. The table below documents the original representative set; the complete machine-readable inventory is in `preview-manifest.json`.
 
 | Effect id | Runtime used by the page | What the demo proves |
 | --- | --- | --- |
@@ -25,12 +25,29 @@ npm --prefix demo/preview-demos ci
 npm --prefix demo/preview-demos run dev
 ```
 
-From the repository root, build the static pages and capture all deterministic GIFs:
+The capture tool requires Chrome or Chromium, Python Playwright, Pillow with WebP support, FFmpeg with `libx264`, and FFprobe.
+
+From the repository root, build the static pages and capture all deterministic H.264 videos and static WebP posters:
 
 ```bash
 npm ci --prefix demo/preview-demos
 npm run build --prefix demo/preview-demos
-python3 scripts/capture-real-preview-gifs.py --built --skip-install
+python3 scripts/capture-real-preview-videos.py --built --skip-install
 ```
 
-Use `--only=effect-id` to capture one page. Add `--built` to capture and verify the committed static `dist` pages exactly as GitHub Pages will serve them. The script checks page-reported library metadata, the declared live WebGL/Canvas/SVG/DOM surface, readiness, and frame variation before it writes `demo/gifs/captured/<effect-id>.gif`.
+Use `--only=effect-id` to capture one page. Add `--built` to capture and verify the committed static `dist` pages exactly as GitHub Pages will serve them. Use `--continue-on-error` to finish a batch and report all failures. The script checks page-reported library metadata, the declared live WebGL/Canvas/SVG/DOM surface, readiness, and frame variation before it writes:
+
+- `demo/videos/captured/<effect-id>.mp4`: 640×360 H.264, `yuv420p`, no audio, fast-start optimized.
+- `demo/videos/posters/<effect-id>.webp`: a static 640×360 poster taken from the first verified frame.
+
+The MP4 is encoded from the same deterministic 2× PNG frames used for validation. Its variable source-frame holds come from `frame_delays` and are normalized to a 30 fps constant-frame-rate stream for reliable browser looping.
+
+For parallel capture, build once and run non-overlapping shards. Each process uses its own Vite port, log file, and optional retained-frame directory:
+
+```bash
+python3 scripts/capture-real-preview-videos.py --built --skip-install --shard 1/3 --continue-on-error
+python3 scripts/capture-real-preview-videos.py --built --skip-install --shard 2/3 --continue-on-error
+python3 scripts/capture-real-preview-videos.py --built --skip-install --shard 3/3 --continue-on-error
+```
+
+Start with two or three concurrent shards; additional GPU-heavy Chrome processes can reduce reliability. Use `--keep-frames` only when debugging an encoder or visual failure.

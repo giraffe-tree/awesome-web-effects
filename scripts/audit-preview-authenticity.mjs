@@ -5,6 +5,7 @@ import { dirname, extname, isAbsolute, relative, resolve, sep } from 'node:path'
 import { fileURLToPath } from 'node:url';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
+import { createHash } from 'node:crypto';
 import { effects } from '../demo/data/effects.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -36,7 +37,13 @@ const execFileAsync = promisify(execFile);
 const perceptualDuplicateThreshold = 0.02;
 const signatureWidth = 24;
 const signatureHeight = 14;
-const signatureFrameCount = 8;
+const signatureFrameCount = 12;
+const videoMinDurationSeconds = 5.8;
+const videoMaxDurationSeconds = 7.3;
+const videoMaxBytes = 2 * 1024 * 1024;
+const posterMaxBytes = 512 * 1024;
+const totalVideoMaxBytes = 256 * 1024 * 1024;
+const totalPosterMaxBytes = 48 * 1024 * 1024;
 
 function isPublicUrl(value) {
   if (typeof value !== 'string') return false;
@@ -56,24 +63,70 @@ function resolveInside(base, value) {
   return path;
 }
 
-async function inspectGif(preview) {
+async function probeMedia(path) {
+  const { stdout } = await execFileAsync('ffprobe', [
+    '-v', 'error', '-show_streams', '-show_format', '-of', 'json', path
+  ], { maxBuffer: 2 * 1024 * 1024 });
+  return JSON.parse(stdout);
+}
+
+async function inspectPreviewMedia(preview) {
   if (typeof preview !== 'string' || !preview.trim()) {
-    return { path: null, problem: 'missing preview path' };
+    return { videoPath: null, posterPath: null, problems: ['missing preview asset key'] };
   }
-  const relativePath = `gifs/${preview}.gif`;
-  const path = resolveInside(demoRoot, relativePath);
-  if (!path) return { path: null, problem: `preview escapes demo/: ${relativePath}` };
+  const basename = preview.split('/').at(-1);
+  const relativeVideoPath = `videos/${preview}.mp4`;
+  const relativePosterPath = `videos/posters/${basename}.webp`;
+  const videoPath = resolveInside(demoRoot, relativeVideoPath);
+  const posterPath = resolveInside(demoRoot, relativePosterPath);
+  const problems = [];
+  if (!videoPath || !posterPath) {
+    return { videoPath, posterPath, problems: [`preview escapes demo/: ${relativeVideoPath} or ${relativePosterPath}`] };
+  }
+
   try {
-    const [metadata, bytes] = await Promise.all([stat(path), readFile(path)]);
-    if (!metadata.isFile()) return { path, problem: `GIF is not a file: demo/${relativePath}` };
-    if (bytes.length < 6 || !['GIF87a', 'GIF89a'].includes(bytes.subarray(0, 6).toString('ascii'))) {
-      return { path, problem: `not a decodable GIF container: demo/${relativePath}` };
+    const [metadata, bytes, probe] = await Promise.all([stat(videoPath), readFile(videoPath), probeMedia(videoPath)]);
+    if (!metadata.isFile()) problems.push(`MP4 is not a file: demo/${relativeVideoPath}`);
+    const videoStreams = probe.streams?.filter(stream => stream.codec_type === 'video') || [];
+    const audioStreams = probe.streams?.filter(stream => stream.codec_type === 'audio') || [];
+    const stream = videoStreams[0];
+    const duration = Number(stream?.duration || probe.format?.duration);
+    if (videoStreams.length !== 1) problems.push(`MP4 must contain exactly one video stream: demo/${relativeVideoPath}`);
+    if (audioStreams.length) problems.push(`MP4 must not contain audio: demo/${relativeVideoPath}`);
+    if (stream?.codec_name !== 'h264') problems.push(`MP4 codec must be H.264: demo/${relativeVideoPath}`);
+    if (stream?.width !== 640 || stream?.height !== 360) problems.push(`MP4 must be 640x360: demo/${relativeVideoPath}`);
+    if (stream?.pix_fmt !== 'yuv420p') problems.push(`MP4 pixel format must be yuv420p: demo/${relativeVideoPath}`);
+    if (!(duration >= videoMinDurationSeconds && duration <= videoMaxDurationSeconds)) {
+      problems.push(`MP4 duration must be ${videoMinDurationSeconds}-${videoMaxDurationSeconds}s: demo/${relativeVideoPath} (${duration || 'unknown'}s)`);
     }
-    return { path, problem: null };
+    if (bytes.length > videoMaxBytes) problems.push(`MP4 exceeds ${videoMaxBytes} bytes: demo/${relativeVideoPath} (${bytes.length})`);
+    const moovOffset = bytes.indexOf(Buffer.from('moov'));
+    const mdatOffset = bytes.indexOf(Buffer.from('mdat'));
+    if (moovOffset < 0 || mdatOffset < 0 || moovOffset > mdatOffset) {
+      problems.push(`MP4 must place the moov atom before mdat for fast start: demo/${relativeVideoPath}`);
+    }
   } catch (error) {
-    if (error?.code === 'ENOENT') return { path, problem: `missing GIF: demo/${relativePath}` };
-    return { path, problem: `cannot read GIF demo/${relativePath}: ${error.message}` };
+    problems.push(error?.code === 'ENOENT'
+      ? `missing MP4: demo/${relativeVideoPath}`
+      : `cannot validate MP4 demo/${relativeVideoPath}: ${error.message}`);
   }
+
+  try {
+    const [metadata, bytes, probe] = await Promise.all([stat(posterPath), readFile(posterPath), probeMedia(posterPath)]);
+    if (!metadata.isFile()) problems.push(`poster is not a file: demo/${relativePosterPath}`);
+    const videoStreams = probe.streams?.filter(stream => stream.codec_type === 'video') || [];
+    const stream = videoStreams[0];
+    if (videoStreams.length !== 1 || stream?.codec_name !== 'webp') problems.push(`poster must be a decodable WebP: demo/${relativePosterPath}`);
+    if (stream?.width !== 640 || stream?.height !== 360) problems.push(`poster must be 640x360: demo/${relativePosterPath}`);
+    if (stream?.nb_frames && Number(stream.nb_frames) !== 1) problems.push(`poster must contain one static frame: demo/${relativePosterPath}`);
+    if (bytes.length > posterMaxBytes) problems.push(`poster exceeds ${posterMaxBytes} bytes: demo/${relativePosterPath} (${bytes.length})`);
+  } catch (error) {
+    problems.push(error?.code === 'ENOENT'
+      ? `missing poster: demo/${relativePosterPath}`
+      : `cannot validate poster demo/${relativePosterPath}: ${error.message}`);
+  }
+
+  return { videoPath, posterPath, problems };
 }
 
 async function inspectDemo(demoPath, fieldName = 'demoPath') {
@@ -113,15 +166,15 @@ async function loadJson(path, label, problems) {
   }
 }
 
-const provenancePath = resolve(demoRoot, 'gifs', 'provenance.json');
+const provenancePath = resolve(demoRoot, 'videos', 'provenance.json');
 const provenanceManifestProblems = [];
-const provenanceManifest = await loadJson(provenancePath, 'demo/gifs/provenance.json', provenanceManifestProblems);
+const provenanceManifest = await loadJson(provenancePath, 'demo/videos/provenance.json', provenanceManifestProblems);
 const provenanceRecords = Array.isArray(provenanceManifest?.records) ? provenanceManifest.records : [];
 if (provenanceManifest && provenanceManifest.schemaVersion !== 1) {
-  provenanceManifestProblems.push('demo/gifs/provenance.json must use schemaVersion 1');
+  provenanceManifestProblems.push('demo/videos/provenance.json must use schemaVersion 1');
 }
 if (provenanceManifest && !Array.isArray(provenanceManifest.records)) {
-  provenanceManifestProblems.push('demo/gifs/provenance.json must contain a records array');
+  provenanceManifestProblems.push('demo/videos/provenance.json must contain a records array');
 }
 
 const previewPackagePath = resolve(demoRoot, 'preview-demos', 'package.json');
@@ -182,7 +235,7 @@ function provenanceProblemsFor(catalogRecord, provenance) {
   const problems = [];
   const requiredFields = [
     'effectId', 'projectId', 'sourceType', 'originUrl', 'demoSourcePath', 'libraryVersion',
-    'generatedAt', 'outputPath', 'usageBasis'
+    'generatedAt', 'outputPath', 'posterPath', 'usageBasis'
   ];
   for (const field of requiredFields) {
     if (!Object.hasOwn(provenance, field)) problems.push(`provenance is missing ${field}`);
@@ -190,13 +243,15 @@ function provenanceProblemsFor(catalogRecord, provenance) {
 
   const expectedSourceType = catalogRecord.official ? 'official' : 'demo';
   const expectedDemoPath = catalogRecord.localDemo ? `demo/${catalogRecord.demoSourcePath}` : null;
-  const expectedOutputPath = `demo/gifs/${catalogRecord.preview}.gif`;
+  const expectedOutputPath = `demo/videos/${catalogRecord.preview}.mp4`;
+  const expectedPosterPath = `demo/videos/posters/${catalogRecord.preview.split('/').at(-1)}.webp`;
   if (provenance.effectId !== catalogRecord.effectId) problems.push('provenance effectId does not match catalog effectId');
   if (provenance.projectId !== catalogRecord.projectId) problems.push('provenance projectId does not match catalog projectId');
   if (provenance.sourceType !== expectedSourceType) problems.push(`provenance sourceType must be ${expectedSourceType}`);
   if (provenance.originUrl !== catalogRecord.originUrl) problems.push('provenance originUrl does not match catalog originUrl');
   if (provenance.demoSourcePath !== expectedDemoPath) problems.push(`provenance demoSourcePath must be ${expectedDemoPath ?? 'null'}`);
   if (provenance.outputPath !== expectedOutputPath) problems.push(`provenance outputPath must be ${expectedOutputPath}`);
+  if (provenance.posterPath !== expectedPosterPath) problems.push(`provenance posterPath must be ${expectedPosterPath}`);
   if (typeof provenance.libraryVersion !== 'string' || !provenance.libraryVersion.trim()) {
     problems.push('provenance libraryVersion must be explicit');
   }
@@ -228,8 +283,10 @@ async function inspectSource(effect, source, sourceIndex) {
   );
   const otherEditorial = editorial && !legacyGenerated;
   const problems = [];
-  const gif = unavailable ? { path: null, problem: null } : await inspectGif(source.preview);
-  if (!unavailable && gif.problem) problems.push(gif.problem);
+  const media = unavailable
+    ? { videoPath: null, posterPath: null, problems: [] }
+    : await inspectPreviewMedia(source.preview);
+  problems.push(...media.problems);
 
   if (!allowedPreviewKinds.has(kind)) {
     problems.push(`unsupported published previewKind: ${kind}`);
@@ -281,7 +338,9 @@ async function inspectSource(effect, source, sourceIndex) {
     provenancePresent: isPublicUrl(source.originUrl),
     runnableDemoPresent: localDemo && !demo.problem,
     demoSourcePresent: localDemo && !demoSource.problem,
-    gifPresent: unavailable ? false : !gif.problem,
+    videoPresent: unavailable ? false : !media.problems.some(problem => /MP4/i.test(problem)),
+    posterPresent: unavailable ? false : !media.problems.some(problem => /poster/i.test(problem)),
+    mediaPresent: unavailable ? false : media.problems.length === 0,
     compliant: problems.length === 0,
     authentic: (official || localDemo) && problems.length === 0,
     problems
@@ -335,23 +394,82 @@ for (const record of records) {
   record.authentic = (record.official || record.localDemo) && record.compliant;
 }
 
-const gifFiles = (await listFiles(resolve(demoRoot, 'gifs')))
-  .filter(path => extname(path).toLowerCase() === '.gif')
-  .map(path => relative(demoRoot, path).split(sep).join('/'))
-  .sort();
-const referencedGifFiles = new Set(records
+let videoFiles = [];
+let posterFiles = [];
+try {
+  const files = await listFiles(resolve(demoRoot, 'videos'));
+  videoFiles = files
+    .filter(path => extname(path).toLowerCase() === '.mp4')
+    .map(path => relative(demoRoot, path).split(sep).join('/'))
+    .sort();
+  posterFiles = files
+    .filter(path => extname(path).toLowerCase() === '.webp' && relative(resolve(demoRoot, 'videos'), path).split(sep)[0] === 'posters')
+    .map(path => relative(demoRoot, path).split(sep).join('/'))
+    .sort();
+} catch (error) {
+  if (error?.code !== 'ENOENT') provenanceManifestProblems.push(`cannot inspect demo/videos: ${error.message}`);
+}
+const referencedVideoFiles = new Set(records
   .filter(record => record.preview)
-  .map(record => `gifs/${record.preview}.gif`));
-const orphanedGifFiles = gifFiles.filter(path => !referencedGifFiles.has(path));
-const legacyGeneratedGifFiles = gifFiles.filter(path => path.startsWith('gifs/generated/'));
-const orphanedLegacyGeneratedGifFiles = orphanedGifFiles.filter(path => path.startsWith('gifs/generated/'));
+  .map(record => `videos/${record.preview}.mp4`));
+const referencedPosterFiles = new Set(records
+  .filter(record => record.preview)
+  .map(record => `videos/posters/${record.preview.split('/').at(-1)}.webp`));
+const orphanedVideoFiles = videoFiles.filter(path => !referencedVideoFiles.has(path));
+const orphanedPosterFiles = posterFiles.filter(path => !referencedPosterFiles.has(path));
+
+let legacyPublishedGifFiles = [];
+try {
+  legacyPublishedGifFiles = (await listFiles(resolve(demoRoot, 'gifs')))
+    .filter(path => extname(path).toLowerCase() === '.gif')
+    .map(path => relative(demoRoot, path).split(sep).join('/'))
+    .sort();
+} catch (error) {
+  if (error?.code !== 'ENOENT') provenanceManifestProblems.push(`cannot inspect legacy demo/gifs: ${error.message}`);
+}
+
+const exactContentProblems = [];
+const exactContentRecords = [];
+await Promise.all(records.filter(record => (record.official || record.localDemo) && record.mediaPresent).map(async record => {
+  try {
+    const videoPath = resolve(demoRoot, `videos/${record.preview}.mp4`);
+    const posterPath = resolve(demoRoot, `videos/posters/${record.preview.split('/').at(-1)}.webp`);
+    const [videoBytes, posterBytes] = await Promise.all([readFile(videoPath), readFile(posterPath)]);
+    exactContentRecords.push({
+      record,
+      videoHash: createHash('sha256').update(videoBytes).digest('hex'),
+      posterHash: createHash('sha256').update(posterBytes).digest('hex'),
+      videoBytes: videoBytes.length,
+      posterBytes: posterBytes.length
+    });
+  } catch (error) {
+    exactContentProblems.push(`${record.key}: cannot hash preview media (${error.message})`);
+  }
+}));
+const duplicateHashes = (recordsToCheck, field, label) => {
+  const byHash = new Map();
+  for (const item of recordsToCheck) {
+    const matches = byHash.get(item[field]) || [];
+    matches.push(item.record.effectId);
+    byHash.set(item[field], matches);
+  }
+  return [...byHash.entries()]
+    .filter(([, effectIds]) => effectIds.length > 1)
+    .map(([hash, effectIds]) => `${label} ${hash}: ${effectIds.join(', ')}`);
+};
+const exactDuplicateVideos = duplicateHashes(exactContentRecords, 'videoHash', 'duplicate MP4');
+const exactDuplicatePosters = duplicateHashes(exactContentRecords, 'posterHash', 'duplicate poster');
+const totalVideoBytes = exactContentRecords.reduce((sum, record) => sum + record.videoBytes, 0);
+const totalPosterBytes = exactContentRecords.reduce((sum, record) => sum + record.posterBytes, 0);
+if (totalVideoBytes > totalVideoMaxBytes) exactContentProblems.push(`total MP4 size exceeds ${totalVideoMaxBytes} bytes (${totalVideoBytes})`);
+if (totalPosterBytes > totalPosterMaxBytes) exactContentProblems.push(`total poster size exceeds ${totalPosterMaxBytes} bytes (${totalPosterBytes})`);
 
 async function extractPerceptualSignature(record) {
-  const path = resolve(demoRoot, 'gifs', `${record.preview}.gif`);
+  const path = resolve(demoRoot, 'videos', `${record.preview}.mp4`);
   const { stdout } = await execFileAsync('ffmpeg', [
     '-hide_banner', '-loglevel', 'error', '-i', path,
-    '-vf', `fps=6,scale=${signatureWidth}:${signatureHeight}:flags=area,format=gray`,
-    '-t', '3', '-an', '-f', 'rawvideo', '-pix_fmt', 'gray', 'pipe:1'
+    '-vf', `fps=4,scale=${signatureWidth}:${signatureHeight}:flags=area,format=gray`,
+    '-an', '-f', 'rawvideo', '-pix_fmt', 'gray', 'pipe:1'
   ], { encoding: 'buffer', maxBuffer: 4 * 1024 * 1024 });
   const frameSize = signatureWidth * signatureHeight;
   const availableFrames = Math.floor(stdout.length / frameSize);
@@ -386,7 +504,7 @@ function normalizedSignatureDistance(left, right) {
 
 const signatureProblems = [];
 const signatureRecords = [];
-await Promise.all(records.filter(record => (record.official || record.localDemo) && record.gifPresent).map(async record => {
+await Promise.all(records.filter(record => (record.official || record.localDemo) && record.mediaPresent).map(async record => {
   try {
     signatureRecords.push({ record, signature: await extractPerceptualSignature(record) });
   } catch (error) {
@@ -424,7 +542,7 @@ const groups = {
   missingProvenance: records.filter(record => (record.official || record.localDemo) && !record.provenancePresent),
   missingProvenanceRecord: records.filter(record => (record.official || record.localDemo) && !record.provenance),
   invalidProvenance: records.filter(record => record.provenanceProblems.length),
-  missingGif: records.filter(record => !record.unavailable && !record.gifPresent),
+  missingMedia: records.filter(record => !record.unavailable && !record.mediaPresent),
   failures: records.filter(record => !record.compliant)
 };
 
@@ -445,16 +563,34 @@ const summary = {
   missingProvenanceRecords: groups.missingProvenanceRecord.length,
   invalidProvenanceRecords: groups.invalidProvenance.length,
   provenanceManifestProblems: provenanceManifestProblems.length + previewPackageProblems.length + previewCaptureManifestProblems.length,
-  missingOrInvalidGif: groups.missingGif.length,
-  gifFiles: gifFiles.length,
-  legacyGeneratedGifFiles: legacyGeneratedGifFiles.length,
-  orphanedGifFiles: orphanedGifFiles.length,
-  orphanedLegacyGeneratedGifFiles: orphanedLegacyGeneratedGifFiles.length,
+  missingOrInvalidMedia: groups.missingMedia.length,
+  videoFiles: videoFiles.length,
+  posterFiles: posterFiles.length,
+  orphanedVideoFiles: orphanedVideoFiles.length,
+  orphanedPosterFiles: orphanedPosterFiles.length,
+  legacyPublishedGifFiles: legacyPublishedGifFiles.length,
+  totalVideoBytes,
+  totalPosterBytes,
+  videoBudgetBytes: totalVideoMaxBytes,
+  posterBudgetBytes: totalPosterMaxBytes,
+  exactDuplicateVideos: exactDuplicateVideos.length,
+  exactDuplicatePosters: exactDuplicatePosters.length,
   perceptualDuplicateThreshold,
   perceptualDuplicatePairs: perceptualDuplicatePairs.length,
   perceptualSignatureProblems: signatureProblems.length,
   sourceFailures: groups.failures.length,
-  blockingIssues: groups.failures.length + orphanedGifFiles.length + provenanceManifestProblems.length + previewPackageProblems.length + previewCaptureManifestProblems.length + perceptualDuplicatePairs.length + signatureProblems.length
+  blockingIssues: groups.failures.length
+    + orphanedVideoFiles.length
+    + orphanedPosterFiles.length
+    + legacyPublishedGifFiles.length
+    + provenanceManifestProblems.length
+    + previewPackageProblems.length
+    + previewCaptureManifestProblems.length
+    + exactDuplicateVideos.length
+    + exactDuplicatePosters.length
+    + exactContentProblems.length
+    + perceptualDuplicatePairs.length
+    + signatureProblems.length
 };
 
 function printGroup(title, items, details) {
@@ -475,18 +611,22 @@ if (json) {
     reportOnly,
     summary,
     artifacts: {
-      gifFiles,
-      legacyGeneratedGifFiles,
-      orphanedGifFiles,
-      orphanedLegacyGeneratedGifFiles
+      videoFiles,
+      posterFiles,
+      orphanedVideoFiles,
+      orphanedPosterFiles,
+      legacyPublishedGifFiles,
+      exactDuplicateVideos,
+      exactDuplicatePosters,
+      exactContentProblems
     },
     provenance: {
-      path: 'demo/gifs/provenance.json',
+      path: 'demo/videos/provenance.json',
       records: provenanceRecords,
       problems: [...provenanceManifestProblems, ...previewPackageProblems, ...previewCaptureManifestProblems]
     },
     perceptualDuplicates: {
-      method: `${signatureFrameCount} evenly sampled frames from 6 fps, ${signatureWidth}x${signatureHeight} grayscale normalized mean absolute distance`,
+      method: `${signatureFrameCount} evenly sampled frames from 4 fps, ${signatureWidth}x${signatureHeight} grayscale normalized mean absolute distance`,
       threshold: perceptualDuplicateThreshold,
       pairs: perceptualDuplicatePairs,
       problems: signatureProblems
@@ -508,9 +648,14 @@ if (json) {
   printGroup('Missing or invalid provenance records', groups.invalidProvenance, item => item.provenanceProblems.join('; '));
   printGroup('Missing runnable demo', groups.missingRunnableDemo, item => `${item.previewKind}; ${item.preview}`);
   printGroup('Other authenticity failures', groups.failures.filter(item => !item.legacyGenerated && !item.otherEditorial), item => item.problems.join('; '));
-  printGroup('Orphaned GIF files', orphanedGifFiles, () => 'not referenced by the catalog');
+  printGroup('Orphaned MP4 files', orphanedVideoFiles, () => 'not referenced by the catalog');
+  printGroup('Orphaned poster files', orphanedPosterFiles, () => 'not referenced by the catalog');
+  printGroup('Legacy published GIF files', legacyPublishedGifFiles, () => 'release previews must use MP4 + static WebP; the GIF decoder fixture under preview-demos/assets is intentionally out of scope');
+  printGroup('Exact duplicate MP4 files', exactDuplicateVideos, item => item);
+  printGroup('Exact duplicate poster files', exactDuplicatePosters, item => item);
+  printGroup('Media size/hash problems', exactContentProblems, item => item);
   printGroup('Provenance manifest problems', [...provenanceManifestProblems, ...previewPackageProblems, ...previewCaptureManifestProblems], problem => problem);
-  printGroup('Perceptually duplicate GIF pairs', perceptualDuplicatePairs, pair => `normalized distance ${pair.normalizedDistance}`);
+  printGroup('Perceptually duplicate MP4 pairs', perceptualDuplicatePairs, pair => `normalized distance ${pair.normalizedDistance}`);
   printGroup('Perceptual signature problems', signatureProblems, problem => problem);
 
   console.log(`\nResult: ${summary.blockingIssues ? 'FAIL' : 'PASS'}${reportOnly ? ' (report-only mode)' : ''}`);

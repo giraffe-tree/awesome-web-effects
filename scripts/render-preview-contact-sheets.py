@@ -1,15 +1,18 @@
 #!/usr/bin/env python3
-"""Render paginated, labeled contact sheets from captured preview GIFs.
+"""Render paginated, labeled contact sheets from captured preview videos.
 
-The script is intentionally read-only with respect to source GIFs. It uses the
+The script is intentionally read-only with respect to source videos. It uses the
 expansion plan for batch membership and writes generated PNG pages under tmp/.
 """
 
 from __future__ import annotations
 
 import argparse
+from io import BytesIO
 import json
 import math
+import shutil
+import subprocess
 import sys
 from dataclasses import dataclass
 from pathlib import Path
@@ -25,7 +28,7 @@ except ImportError as error:  # pragma: no cover - environment-specific guidance
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_PLAN = REPO_ROOT / "research" / "effect-expansion-100-plan-2026-07-20.json"
-DEFAULT_GIF_DIR = REPO_ROOT / "demo" / "gifs" / "captured"
+DEFAULT_VIDEO_DIR = REPO_ROOT / "demo" / "videos" / "captured"
 DEFAULT_OUTPUT_DIR = REPO_ROOT / "tmp" / "preview-contact-sheets"
 
 BATCHES = ("A", "B", "C")
@@ -169,16 +172,16 @@ def select_effects(
     return selected
 
 
-def validate_gifs(effects: Sequence[PlannedEffect], gif_dir: Path) -> dict[str, Path]:
-    gif_paths = {effect.id: gif_dir / f"{effect.id}.gif" for effect in effects}
-    missing = [path for path in gif_paths.values() if not path.is_file()]
+def validate_videos(effects: Sequence[PlannedEffect], video_dir: Path) -> dict[str, Path]:
+    video_paths = {effect.id: video_dir / f"{effect.id}.mp4" for effect in effects}
+    missing = [path for path in video_paths.values() if not path.is_file()]
     if missing:
         rendered = "\n".join(f"  - {path.relative_to(REPO_ROOT)}" for path in missing)
         fail(
-            f"{len(missing)} required GIF(s) are missing; no contact sheets were written:\n"
+            f"{len(missing)} required video(s) are missing; no contact sheets were written:\n"
             f"{rendered}"
         )
-    return gif_paths
+    return video_paths
 
 
 def load_font(size: int, *, bold: bool = False) -> ImageFont.ImageFont:
@@ -204,13 +207,6 @@ def fit_label_font(draw: ImageDraw.ImageDraw, label: str, max_width: int) -> Ima
     return load_font(12, bold=True)
 
 
-def sample_indices(frame_count: int) -> tuple[int, int, int, int]:
-    if frame_count < 1:
-        raise ValueError("GIF has no frames")
-    last = frame_count - 1
-    return (0, round(last * 0.33), round(last * 0.66), last)
-
-
 def normalize_frame(frame: Image.Image) -> Image.Image:
     rgba = frame.convert("RGBA")
     fitted = ImageOps.contain(
@@ -224,18 +220,31 @@ def normalize_frame(frame: Image.Image) -> Image.Image:
     return canvas.convert("RGB")
 
 
-def extract_samples(gif_path: Path) -> list[tuple[str, Image.Image]]:
+def extract_samples(video_path: Path) -> list[tuple[str, Image.Image]]:
+    ffmpeg = shutil.which("ffmpeg")
+    ffprobe = shutil.which("ffprobe")
+    if not ffmpeg or not ffprobe:
+        raise RuntimeError("ffmpeg and ffprobe are required to sample preview videos")
     try:
-        with Image.open(gif_path) as source:
-            frame_count = int(getattr(source, "n_frames", 1))
-            indices = sample_indices(frame_count)
-            samples: list[tuple[str, Image.Image]] = []
-            for label, frame_index in zip(("0%", "33%", "66%", "100%"), indices):
-                source.seek(frame_index)
+        duration = float(subprocess.check_output(
+            [
+                ffprobe, "-v", "error", "-show_entries", "format=duration",
+                "-of", "default=noprint_wrappers=1:nokey=1", str(video_path),
+            ],
+            text=True,
+        ).strip())
+        samples: list[tuple[str, Image.Image]] = []
+        for label, fraction in zip(("0%", "33%", "66%", "100%"), (0, .33, .66, .99)):
+            frame_bytes = subprocess.check_output([
+                ffmpeg, "-hide_banner", "-loglevel", "error",
+                "-ss", f"{duration * fraction:.6f}", "-i", str(video_path),
+                "-frames:v", "1", "-f", "image2pipe", "-vcodec", "png", "pipe:1",
+            ])
+            with Image.open(BytesIO(frame_bytes)) as source:
                 samples.append((label, normalize_frame(source.copy())))
-            return samples
-    except (OSError, UnidentifiedImageError, ValueError) as error:
-        raise RuntimeError(f"cannot read GIF `{gif_path}`: {error}") from error
+        return samples
+    except (OSError, subprocess.CalledProcessError, UnidentifiedImageError, ValueError) as error:
+        raise RuntimeError(f"cannot sample video `{video_path}`: {error}") from error
 
 
 def draw_sample_badge(
@@ -254,7 +263,7 @@ def draw_sample_badge(
     draw.text((x + 14, y + 10), label, fill=LABEL_COLOR, font=font)
 
 
-def render_effect_cell(effect: PlannedEffect, gif_path: Path) -> Image.Image:
+def render_effect_cell(effect: PlannedEffect, video_path: Path) -> Image.Image:
     cell = Image.new("RGB", (CELL_WIDTH, CELL_HEIGHT), CELL_BACKGROUND)
     draw = ImageDraw.Draw(cell)
     draw.rectangle((0, 0, CELL_WIDTH - 1, CELL_HEIGHT - 1), outline=CELL_BORDER, width=1)
@@ -267,7 +276,7 @@ def render_effect_cell(effect: PlannedEffect, gif_path: Path) -> Image.Image:
         font=label_font,
     )
 
-    samples = extract_samples(gif_path)
+    samples = extract_samples(video_path)
     frame_y = CELL_PADDING + LABEL_HEIGHT
     for index, (sample_label, frame) in enumerate(samples):
         column = index % 2
@@ -296,7 +305,7 @@ def render_page(
     page_number: int,
     page_count: int,
     effects: Sequence[PlannedEffect],
-    gif_paths: dict[str, Path],
+    video_paths: dict[str, Path],
 ) -> Image.Image:
     rows = math.ceil(len(effects) / PAGE_COLUMNS)
     page_width = PAGE_MARGIN * 2 + CELL_WIDTH * PAGE_COLUMNS + PAGE_GAP * (PAGE_COLUMNS - 1)
@@ -312,7 +321,7 @@ def render_page(
         fill=LABEL_COLOR,
         font=title_font,
     )
-    page_meta = f"page {page_number}/{page_count} · {len(effects)} effect(s) · 4 GIF samples each"
+    page_meta = f"page {page_number}/{page_count} · {len(effects)} effect(s) · 4 video samples each"
     meta_bounds = draw.textbbox((0, 0), page_meta, font=meta_font)
     draw.text(
         (page_width - PAGE_MARGIN - (meta_bounds[2] - meta_bounds[0]), PAGE_MARGIN + 9),
@@ -327,12 +336,12 @@ def render_page(
         row = index // PAGE_COLUMNS
         x = PAGE_MARGIN + column * (CELL_WIDTH + PAGE_GAP)
         y = grid_top + row * (CELL_HEIGHT + PAGE_GAP)
-        page.paste(render_effect_cell(effect, gif_paths[effect.id]), (x, y))
+        page.paste(render_effect_cell(effect, video_paths[effect.id]), (x, y))
     return page
 
 
 def render_contact_sheets(
-    effects: Sequence[PlannedEffect], gif_paths: dict[str, Path], output_dir: Path
+    effects: Sequence[PlannedEffect], video_paths: dict[str, Path], output_dir: Path
 ) -> list[Path]:
     output_dir.mkdir(parents=True, exist_ok=True)
     written: list[Path] = []
@@ -347,7 +356,7 @@ def render_contact_sheets(
                 page_index,
                 len(pages),
                 page_effects,
-                gif_paths,
+                video_paths,
             )
             output_path = output_dir / f"batch-{batch.lower()}-page-{page_index:02d}.png"
             image.save(output_path, format="PNG", optimize=True)
@@ -363,9 +372,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = parse_args(argv)
     effects = load_plan(args.plan)
     selected = select_effects(effects, args.batch, parse_only(args.only))
-    gif_paths = validate_gifs(selected, DEFAULT_GIF_DIR)
+    video_paths = validate_videos(selected, DEFAULT_VIDEO_DIR)
     try:
-        written = render_contact_sheets(selected, gif_paths, args.output_dir.resolve())
+        written = render_contact_sheets(selected, video_paths, args.output_dir.resolve())
     except RuntimeError as error:
         fail(str(error))
     print(f"rendered {len(written)} page(s) for {len(selected)} effect(s)")

@@ -8,7 +8,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const planPath = resolve(root, 'research/effect-expansion-100-plan-2026-07-20.json');
 const generatedModulePath = resolve(root, 'demo/data/effect-expansion-2026-07-20.js');
 const manifestPath = resolve(root, 'demo/preview-demos/preview-manifest.json');
-const provenancePath = resolve(root, 'demo/gifs/provenance.json');
+const provenancePath = resolve(root, 'demo/videos/provenance.json');
 const expectedBatches = { A: 20, B: 27, C: 27 };
 
 const projectMetadata = {
@@ -104,7 +104,8 @@ for (const spec of specs) {
     runtimeAssertion: true,
     demoPath: `preview-demos/dist/${spec.id}.html`,
     demoSourcePath: `preview-demos/${spec.id}.html`,
-    gifPath: `gifs/captured/${spec.id}.gif`
+    videoPath: `videos/captured/${spec.id}.mp4`,
+    posterPath: `videos/posters/${spec.id}.webp`
   });
 }
 await writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
@@ -121,7 +122,8 @@ for (const spec of specs) {
     demoSourcePath: `demo/preview-demos/${spec.id}.html`,
     libraryVersion: spec.implementation.library,
     generatedAt: '2026-07-20',
-    outputPath: `demo/gifs/captured/${spec.id}.gif`,
+    outputPath: `demo/videos/captured/${spec.id}.mp4`,
+    posterPath: `demo/videos/posters/${spec.id}.webp`,
     usageBasis: `original local mechanism demo using ${spec.implementation.library}; verify license ${projectMetadata[projectId].license}`
   });
 }

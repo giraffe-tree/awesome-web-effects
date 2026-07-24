@@ -17,6 +17,10 @@ const assert = (condition, message) => { if (!condition) errors.push(message); }
 const duplicates = values => [...new Set(values.filter((value, index) => values.indexOf(value) !== index))];
 const execFileAsync = promisify(execFile);
 const realPreviewKinds = new Set(['official-capture', 'local-demo-capture']);
+const videoMaxBytes = 2 * 1024 * 1024;
+const posterMaxBytes = 512 * 1024;
+const videoMinDurationSeconds = 5.8;
+const videoMaxDurationSeconds = 7.3;
 const languagesDirectory = 'languages';
 const readmeFilename = locale => locale.code === 'en' ? 'README.md' : `README.${locale.code}.md`;
 const readmePath = locale => locale.code === 'en'
@@ -27,32 +31,6 @@ const readmeLink = (locale, from) => {
   if (from === 'docs') return `../${readmePath(locale)}`;
   return readmePath(locale);
 };
-
-function inspectAnimatedWebP(bytes) {
-  const readUint24LE = offset => bytes[offset] | bytes[offset + 1] << 8 | bytes[offset + 2] << 16;
-  if (bytes.subarray(0, 4).toString('ascii') !== 'RIFF' || bytes.subarray(8, 12).toString('ascii') !== 'WEBP') {
-    throw new Error('not a WebP RIFF container');
-  }
-  let width = 0;
-  let height = 0;
-  let frames = 0;
-  let durationMs = 0;
-  for (let offset = 12; offset + 8 <= bytes.length;) {
-    const kind = bytes.subarray(offset, offset + 4).toString('ascii');
-    const size = bytes.readUInt32LE(offset + 4);
-    const payload = offset + 8;
-    if (kind === 'VP8X' && size >= 10) {
-      width = readUint24LE(payload + 4) + 1;
-      height = readUint24LE(payload + 7) + 1;
-    }
-    if (kind === 'ANMF' && size >= 16) {
-      frames += 1;
-      durationMs += readUint24LE(payload + 12);
-    }
-    offset = payload + size + (size % 2);
-  }
-  return { width, height, frames, durationMs };
-}
 
 assert(supportedLocales.length === 20, 'The website must expose exactly the top 20 total-speaker locales.');
 assert(defaultLocale === 'en', 'English must remain the default locale.');
@@ -170,14 +148,14 @@ for (const effect of effects) {
     assert(['official-capture', 'local-demo-capture', 'unavailable'].includes(source.previewKind), `${effect.id}/${source.projectId}: invalid preview kind.`);
     assert(source.referenceUrl === null || /^https?:\/\//.test(source.referenceUrl), `${effect.id}/${source.projectId}: invalid implementation reference URL.`);
     if (source.previewKind === 'official-capture') {
-      assert(Boolean(source.preview), `${effect.id}/${source.projectId}: official preview requires a GIF reference.`);
+      assert(Boolean(source.preview), `${effect.id}/${source.projectId}: official preview requires a media asset key.`);
       assert(/^https?:\/\//.test(source.originUrl), `${effect.id}/${source.projectId}: official preview requires an origin URL.`);
       assert(source.demoPath === null, `${effect.id}/${source.projectId}: official preview must not claim a local demo.`);
       assert(source.demoSourcePath === null, `${effect.id}/${source.projectId}: official preview must not claim local demo source code.`);
       assert(source.previewRecipe === null, `${effect.id}/${source.projectId}: official preview must not use an editorial recipe.`);
     }
     if (source.previewKind === 'local-demo-capture') {
-      assert(Boolean(source.preview), `${effect.id}/${source.projectId}: local demo requires a GIF reference.`);
+      assert(Boolean(source.preview), `${effect.id}/${source.projectId}: local demo requires a media asset key.`);
       assert(source.preview === `captured/${effect.id}`, `${effect.id}/${source.projectId}: local demo preview must be captured/${effect.id}.`);
       assert(/^preview-demos\/dist\/[a-z0-9-]+\.html$/.test(source.demoPath || ''), `${effect.id}/${source.projectId}: local demo requires a safe preview-demos/dist/*.html publish path.`);
       assert(source.demoPath === `preview-demos/dist/${effect.id}.html`, `${effect.id}/${source.projectId}: published local demo filename must match the effect id.`);
@@ -195,24 +173,25 @@ for (const effect of effects) {
       } catch {
         errors.push(`${effect.id}/${source.projectId}: missing reusable demo source demo/${source.demoSourcePath || '(unset)'}.`);
       }
-      try {
-        await access(resolve(root, 'demo', 'gifs', 'webp', `${effect.id}.webp`));
-      } catch {
-        errors.push(`${effect.id}/${source.projectId}: missing enhanced preview demo/gifs/webp/${effect.id}.webp.`);
-      }
     }
     if (source.previewKind === 'unavailable') {
-      assert(source.preview === null, `${effect.id}/${source.projectId}: unavailable preview must not reference a GIF.`);
+      assert(source.preview === null, `${effect.id}/${source.projectId}: unavailable preview must not reference preview media.`);
       assert(source.demoPath === null, `${effect.id}/${source.projectId}: unavailable preview must not claim a local demo.`);
       assert(source.demoSourcePath === null, `${effect.id}/${source.projectId}: unavailable preview must not claim local demo source code.`);
       assert(source.previewRecipe === null, `${effect.id}/${source.projectId}: unavailable preview must not retain an editorial recipe.`);
       assert(source.originUrl === null, `${effect.id}/${source.projectId}: unavailable preview must not claim a preview origin.`);
     }
     if (realPreviewKinds.has(source.previewKind)) {
+      const basename = source.preview.split('/').at(-1);
       try {
-        await access(resolve(root, 'demo', 'gifs', `${source.preview}.gif`));
+        await access(resolve(root, 'demo', 'videos', `${source.preview}.mp4`));
       } catch {
-        errors.push(`${effect.id}/${source.projectId}: missing GIF demo/gifs/${source.preview}.gif.`);
+        errors.push(`${effect.id}/${source.projectId}: missing video demo/videos/${source.preview}.mp4.`);
+      }
+      try {
+        await access(resolve(root, 'demo', 'videos', 'posters', `${basename}.webp`));
+      } catch {
+        errors.push(`${effect.id}/${source.projectId}: missing poster demo/videos/posters/${basename}.webp.`);
       }
     }
   }
@@ -264,7 +243,11 @@ assert(/copyText\(\s*[^,]+\s*,\s*source\.snippet\s*,/.test(modalRenderer), 'Effe
 assert(modalRenderer.includes('modal-prompt-text') && modalRenderer.includes('escapeHTML(effectPromptText)') && modalRenderer.includes('promptEditor.value'), 'Effect-detail modal must render an editable prompt and copy its current value.');
 assert(html.includes('editedAgentPrompt') && html.includes('editedEffectPrompts = new Map()') && !html.includes("localStorage.setItem('awesome-effects-prompt"), 'Prompt edits must remain in page memory and reset on refresh.');
 assert(modalRenderer.includes('hasRealPreview(source)') && /realPreview\s*\?/.test(modalRenderer), 'Effect-detail modal must branch on verified preview availability.');
-assert(/<img[^>]*source\.preview[^>]*\.gif/.test(modalRenderer), 'Effect-detail modal must render the selected real GIF when available.');
+assert(modalRenderer.includes('previewPosterPath(source)')
+  && modalRenderer.includes('previewVideoPath(source)')
+  && /<video[^>]*poster="\$\{previewPosterPath\(source\)\}/.test(modalRenderer)
+  && /<source[^>]*data-src="\$\{previewVideoPath\(source\)\}"[^>]*type="video\/mp4"/.test(modalRenderer),
+  'Effect-detail modal must render the selected MP4 with a WebP poster when available.');
 assert(modalRenderer.includes('modal-preview-unavailable'), 'Effect-detail modal must render an explicit unavailable-preview state.');
 assert(html.includes('effect.admission.total') && html.includes('score-breakdown'), 'Demo must display each admitted effect score and its dimension breakdown.');
 
@@ -324,48 +307,67 @@ const previewRecords = [];
 for (const effect of effects) {
   for (const source of effect.sources) {
     if (!realPreviewKinds.has(source.previewKind)) continue;
-    const path = resolve(root, 'demo', 'gifs', `${source.preview}.gif`);
+    const basename = source.preview.split('/').at(-1);
+    const path = resolve(root, 'demo', 'videos', `${source.preview}.mp4`);
+    const posterPath = resolve(root, 'demo', 'videos', 'posters', `${basename}.webp`);
     try {
-      const bytes = await readFile(path);
-      previewRecords.push({ effectId: effect.id, path, hash: createHash('sha256').update(bytes).digest('hex'), size: bytes.length });
-      assert(bytes.length <= 1024 * 1024, `${effect.id}: GIF exceeds the 1 MiB budget (${bytes.length} bytes).`);
+      const [bytes, posterBytes] = await Promise.all([readFile(path), readFile(posterPath)]);
+      previewRecords.push({
+        effectId: effect.id,
+        path,
+        posterPath,
+        hash: createHash('sha256').update(bytes).digest('hex'),
+        posterHash: createHash('sha256').update(posterBytes).digest('hex'),
+        size: bytes.length,
+        posterSize: posterBytes.length
+      });
+      assert(bytes.length <= videoMaxBytes, `${effect.id}: MP4 exceeds the ${videoMaxBytes} byte budget (${bytes.length} bytes).`);
+      assert(posterBytes.length <= posterMaxBytes, `${effect.id}: poster exceeds the ${posterMaxBytes} byte budget (${posterBytes.length} bytes).`);
     } catch {}
   }
 }
 
 for (const duplicateHash of duplicates(previewRecords.map(record => record.hash))) {
   const ids = previewRecords.filter(record => record.hash === duplicateHash).map(record => record.effectId);
-  errors.push(`Duplicate GIF content across effects: ${ids.join(', ')}.`);
+  errors.push(`Duplicate MP4 content across effects: ${ids.join(', ')}.`);
+}
+for (const duplicateHash of duplicates(previewRecords.map(record => record.posterHash))) {
+  const ids = previewRecords.filter(record => record.posterHash === duplicateHash).map(record => record.effectId);
+  errors.push(`Duplicate poster content across effects: ${ids.join(', ')}.`);
 }
 
 for (let index = 0; index < previewRecords.length; index += 8) {
   await Promise.all(previewRecords.slice(index, index + 8).map(async record => {
     try {
-      const { stdout } = await execFileAsync('ffprobe', ['-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=width,height,nb_frames,duration', '-of', 'json', record.path]);
-      const stream = JSON.parse(stdout).streams?.[0];
-      assert(stream?.width === 320 && stream?.height === 180, `${record.effectId}: GIF must be 320×180.`);
-      assert(Number(stream?.nb_frames) >= 12, `${record.effectId}: GIF has too few frames.`);
-      assert(Number(stream?.duration) > 0 && Number(stream?.duration) <= 3.1, `${record.effectId}: GIF duration must be at most 3 seconds.`);
+      const { stdout } = await execFileAsync('ffprobe', [
+        '-v', 'error', '-show_streams', '-show_format', '-of', 'json', record.path
+      ]);
+      const probe = JSON.parse(stdout);
+      const videoStreams = probe.streams?.filter(stream => stream.codec_type === 'video') || [];
+      const audioStreams = probe.streams?.filter(stream => stream.codec_type === 'audio') || [];
+      const stream = videoStreams[0];
+      const duration = Number(stream?.duration || probe.format?.duration);
+      assert(videoStreams.length === 1, `${record.effectId}: MP4 must contain exactly one video stream.`);
+      assert(audioStreams.length === 0, `${record.effectId}: MP4 must not contain an audio stream.`);
+      assert(stream?.codec_name === 'h264', `${record.effectId}: MP4 video codec must be H.264.`);
+      assert(stream?.width === 640 && stream?.height === 360, `${record.effectId}: MP4 must be 640×360.`);
+      assert(stream?.pix_fmt === 'yuv420p', `${record.effectId}: MP4 pixel format must be yuv420p.`);
+      assert(duration >= videoMinDurationSeconds && duration <= videoMaxDurationSeconds, `${record.effectId}: MP4 duration must be between ${videoMinDurationSeconds} and ${videoMaxDurationSeconds} seconds.`);
     } catch (error) {
-      errors.push(`${record.effectId}: ffprobe could not decode GIF (${error.message}).`);
+      errors.push(`${record.effectId}: ffprobe could not validate MP4 (${error.message}).`);
+    }
+    try {
+      const { stdout } = await execFileAsync('ffprobe', [
+        '-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=codec_name,width,height,nb_frames', '-of', 'json', record.posterPath
+      ]);
+      const stream = JSON.parse(stdout).streams?.[0];
+      assert(stream?.codec_name === 'webp', `${record.effectId}: poster must be WebP.`);
+      assert(stream?.width === 640 && stream?.height === 360, `${record.effectId}: poster must be 640×360.`);
+      assert(!stream?.nb_frames || Number(stream.nb_frames) === 1, `${record.effectId}: poster must be a static one-frame WebP.`);
+    } catch (error) {
+      errors.push(`${record.effectId}: ffprobe could not validate poster (${error.message}).`);
     }
   }));
-}
-
-const enhancedPreviewRecords = effects.flatMap(effect => effect.sources
-  .filter(source => source.previewKind === 'local-demo-capture')
-  .map(source => ({ effectId: effect.id, path: resolve(root, 'demo', 'gifs', 'webp', `${source.preview.split('/').at(-1)}.webp`) })));
-for (const record of enhancedPreviewRecords) {
-  try {
-    const bytes = await readFile(record.path);
-    const metadata = inspectAnimatedWebP(bytes);
-    assert(bytes.length <= 1024 * 1024, `${record.effectId}: enhanced WebP exceeds the 1 MiB budget (${bytes.length} bytes).`);
-    assert(metadata.width === 640 && metadata.height === 360, `${record.effectId}: enhanced WebP must be 640×360.`);
-    assert(metadata.frames >= 6, `${record.effectId}: enhanced WebP has too few distinct frames.`);
-    assert(metadata.durationMs >= 5800 && metadata.durationMs <= 7300, `${record.effectId}: enhanced WebP duration must be between 5.8 and 7.3 seconds.`);
-  } catch (error) {
-    errors.push(`${record.effectId}: enhanced WebP could not be validated (${error.message}).`);
-  }
 }
 
 if (errors.length) {
@@ -376,5 +378,5 @@ if (errors.length) {
   const previewCount = sources.filter(source => source.preview).length;
   const promptCount = effects.filter(effect => effect.prompt).length;
   const repeatedProjectCount = projects.filter(project => effects.filter(effect => effect.sources.some(source => source.projectId === project.id)).length > 1).length;
-  console.log(`Validated ${effects.length} unique effects, ${projects.length} source projects, ${categories.length} categories, ${previewCount} GIF previews, ${enhancedPreviewRecords.length} enhanced WebP previews, ${promptCount} prompts, and ${repeatedProjectCount} multi-effect projects.`);
+  console.log(`Validated ${effects.length} unique effects, ${projects.length} source projects, ${categories.length} categories, ${previewCount} H.264 MP4 previews with static WebP posters, ${promptCount} prompts, and ${repeatedProjectCount} multi-effect projects.`);
 }

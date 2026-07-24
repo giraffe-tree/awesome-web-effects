@@ -1,6 +1,6 @@
 {
   "kind": "local-demo-capture",
-  "captureScript": "scripts/capture-real-preview-gifs.py",
+  "captureScript": "scripts/capture-real-preview-videos.py",
   "demos": [
     {
       "id": "visually-authored-keyframe-sequence",
@@ -9,7 +9,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/visually-authored-keyframe-sequence.html",
       "demoSourcePath": "preview-demos/visually-authored-keyframe-sequence.html",
-      "gifPath": "gifs/captured/visually-authored-keyframe-sequence.gif"
+      "videoPath": "videos/captured/visually-authored-keyframe-sequence.mp4",
+      "posterPath": "videos/posters/visually-authored-keyframe-sequence.webp"
     },
     {
       "id": "staggered-transform-choreography",
@@ -18,7 +19,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/staggered-transform-choreography.html",
       "demoSourcePath": "preview-demos/staggered-transform-choreography.html",
-      "gifPath": "gifs/captured/staggered-transform-choreography.gif"
+      "videoPath": "videos/captured/staggered-transform-choreography.mp4",
+      "posterPath": "videos/posters/staggered-transform-choreography.webp"
     },
     {
       "id": "motion-graphics-burst",
@@ -27,7 +29,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/motion-graphics-burst.html",
       "demoSourcePath": "preview-demos/motion-graphics-burst.html",
-      "gifPath": "gifs/captured/motion-graphics-burst.gif"
+      "videoPath": "videos/captured/motion-graphics-burst.mp4",
+      "posterPath": "videos/posters/motion-graphics-burst.webp"
     },
     {
       "id": "compact-svg-shape-tween",
@@ -36,21 +39,24 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/compact-svg-shape-tween.html",
       "demoSourcePath": "preview-demos/compact-svg-shape-tween.html",
-      "gifPath": "gifs/captured/compact-svg-shape-tween.gif"
+      "videoPath": "videos/captured/compact-svg-shape-tween.mp4",
+      "posterPath": "videos/posters/compact-svg-shape-tween.webp"
     },
     {
       "id": "functional-webgl-draw-commands",
       "library": "regl@2.1.1",
       "demoPath": "preview-demos/dist/functional-webgl-draw-commands.html",
       "demoSourcePath": "preview-demos/functional-webgl-draw-commands.html",
-      "gifPath": "gifs/captured/functional-webgl-draw-commands.gif"
+      "videoPath": "videos/captured/functional-webgl-draw-commands.mp4",
+      "posterPath": "videos/posters/functional-webgl-draw-commands.webp"
     },
     {
       "id": "dom-synced-shader-planes",
       "library": "curtainsjs@8.1.6",
       "demoPath": "preview-demos/dist/dom-synced-shader-planes.html",
       "demoSourcePath": "preview-demos/dom-synced-shader-planes.html",
-      "gifPath": "gifs/captured/dom-synced-shader-planes.gif"
+      "videoPath": "videos/captured/dom-synced-shader-planes.mp4",
+      "posterPath": "videos/posters/dom-synced-shader-planes.webp"
     },
     {
       "id": "scroll-scrubbed-master-timeline",
@@ -59,7 +65,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/scroll-scrubbed-master-timeline.html",
       "demoSourcePath": "preview-demos/scroll-scrubbed-master-timeline.html",
-      "gifPath": "gifs/captured/scroll-scrubbed-master-timeline.gif"
+      "videoPath": "videos/captured/scroll-scrubbed-master-timeline.mp4",
+      "posterPath": "videos/posters/scroll-scrubbed-master-timeline.webp"
     },
     {
       "id": "pinned-horizontal-scroll-scene",
@@ -68,7 +75,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/pinned-horizontal-scroll-scene.html",
       "demoSourcePath": "preview-demos/pinned-horizontal-scroll-scene.html",
-      "gifPath": "gifs/captured/pinned-horizontal-scroll-scene.gif"
+      "videoPath": "videos/captured/pinned-horizontal-scroll-scene.mp4",
+      "posterPath": "videos/posters/pinned-horizontal-scroll-scene.webp"
     },
     {
       "id": "shared-layout-spring-morph",
@@ -77,7 +85,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/shared-layout-spring-morph.html",
       "demoSourcePath": "preview-demos/shared-layout-spring-morph.html",
-      "gifPath": "gifs/captured/shared-layout-spring-morph.gif"
+      "videoPath": "videos/captured/shared-layout-spring-morph.mp4",
+      "posterPath": "videos/posters/shared-layout-spring-morph.webp"
     },
     {
       "id": "filterable-grid-reflow",
@@ -86,16 +95,17 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/filterable-grid-reflow.html",
       "demoSourcePath": "preview-demos/filterable-grid-reflow.html",
-      "gifPath": "gifs/captured/filterable-grid-reflow.gif"
+      "videoPath": "videos/captured/filterable-grid-reflow.mp4",
+      "posterPath": "videos/posters/filterable-grid-reflow.webp"
     },
     {
       "id": "perspective-tilt-and-glare",
       "library": "vanilla-tilt@1.8.1",
       "renderer": "dom",
-      "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/perspective-tilt-and-glare.html",
       "demoSourcePath": "preview-demos/perspective-tilt-and-glare.html",
-      "gifPath": "gifs/captured/perspective-tilt-and-glare.gif"
+      "videoPath": "videos/captured/perspective-tilt-and-glare.mp4",
+      "posterPath": "videos/posters/perspective-tilt-and-glare.webp"
     },
     {
       "id": "svg-stroke-drawing",
@@ -104,7 +114,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/svg-stroke-drawing.html",
       "demoSourcePath": "preview-demos/svg-stroke-drawing.html",
-      "gifPath": "gifs/captured/svg-stroke-drawing.gif"
+      "videoPath": "videos/captured/svg-stroke-drawing.mp4",
+      "posterPath": "videos/posters/svg-stroke-drawing.webp"
     },
     {
       "id": "sketch-style-creative-coding-loop",
@@ -113,7 +124,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/sketch-style-creative-coding-loop.html",
       "demoSourcePath": "preview-demos/sketch-style-creative-coding-loop.html",
-      "gifPath": "gifs/captured/sketch-style-creative-coding-loop.gif"
+      "videoPath": "videos/captured/sketch-style-creative-coding-loop.mp4",
+      "posterPath": "videos/posters/sketch-style-creative-coding-loop.webp"
     },
     {
       "id": "depth-layer-blur-dissolve",
@@ -122,7 +134,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/depth-layer-blur-dissolve.html",
       "demoSourcePath": "preview-demos/depth-layer-blur-dissolve.html",
-      "gifPath": "gifs/captured/depth-layer-blur-dissolve.gif"
+      "videoPath": "videos/captured/depth-layer-blur-dissolve.mp4",
+      "posterPath": "videos/posters/depth-layer-blur-dissolve.webp"
     },
     {
       "id": "dom-aware-drag-spawned-fish-flock",
@@ -131,7 +144,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/dom-aware-drag-spawned-fish-flock.html",
       "demoSourcePath": "preview-demos/dom-aware-drag-spawned-fish-flock.html",
-      "gifPath": "gifs/captured/dom-aware-drag-spawned-fish-flock.gif"
+      "videoPath": "videos/captured/dom-aware-drag-spawned-fish-flock.mp4",
+      "posterPath": "videos/posters/dom-aware-drag-spawned-fish-flock.webp"
     },
     {
       "id": "synchronized-scenario-scene-handoff",
@@ -140,7 +154,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/synchronized-scenario-scene-handoff.html",
       "demoSourcePath": "preview-demos/synchronized-scenario-scene-handoff.html",
-      "gifPath": "gifs/captured/synchronized-scenario-scene-handoff.gif"
+      "videoPath": "videos/captured/synchronized-scenario-scene-handoff.mp4",
+      "posterPath": "videos/posters/synchronized-scenario-scene-handoff.webp"
     },
     {
       "id": "prompt-select-replace-loop",
@@ -149,7 +164,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/prompt-select-replace-loop.html",
       "demoSourcePath": "preview-demos/prompt-select-replace-loop.html",
-      "gifPath": "gifs/captured/prompt-select-replace-loop.gif"
+      "videoPath": "videos/captured/prompt-select-replace-loop.mp4",
+      "posterPath": "videos/posters/prompt-select-replace-loop.webp"
     },
     {
       "id": "traveling-dot-headline-rewriter",
@@ -158,7 +174,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/traveling-dot-headline-rewriter.html",
       "demoSourcePath": "preview-demos/traveling-dot-headline-rewriter.html",
-      "gifPath": "gifs/captured/traveling-dot-headline-rewriter.gif"
+      "videoPath": "videos/captured/traveling-dot-headline-rewriter.mp4",
+      "posterPath": "videos/posters/traveling-dot-headline-rewriter.webp"
     },
     {
       "id": "infinite-curved-text-conveyor",
@@ -167,7 +184,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/infinite-curved-text-conveyor.html",
       "demoSourcePath": "preview-demos/infinite-curved-text-conveyor.html",
-      "gifPath": "gifs/captured/infinite-curved-text-conveyor.gif"
+      "videoPath": "videos/captured/infinite-curved-text-conveyor.mp4",
+      "posterPath": "videos/posters/infinite-curved-text-conveyor.webp"
     },
     {
       "id": "autonomous-agent-cursor-constellation",
@@ -176,7 +194,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/autonomous-agent-cursor-constellation.html",
       "demoSourcePath": "preview-demos/autonomous-agent-cursor-constellation.html",
-      "gifPath": "gifs/captured/autonomous-agent-cursor-constellation.gif"
+      "videoPath": "videos/captured/autonomous-agent-cursor-constellation.mp4",
+      "posterPath": "videos/posters/autonomous-agent-cursor-constellation.webp"
     },
     {
       "id": "scroll-linked-multilayer-starfield",
@@ -185,7 +204,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/scroll-linked-multilayer-starfield.html",
       "demoSourcePath": "preview-demos/scroll-linked-multilayer-starfield.html",
-      "gifPath": "gifs/captured/scroll-linked-multilayer-starfield.gif"
+      "videoPath": "videos/captured/scroll-linked-multilayer-starfield.mp4",
+      "posterPath": "videos/posters/scroll-linked-multilayer-starfield.webp"
     },
     {
       "id": "staggered-multichart-telemetry-boot",
@@ -194,16 +214,17 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/staggered-multichart-telemetry-boot.html",
       "demoSourcePath": "preview-demos/staggered-multichart-telemetry-boot.html",
-      "gifPath": "gifs/captured/staggered-multichart-telemetry-boot.gif"
+      "videoPath": "videos/captured/staggered-multichart-telemetry-boot.mp4",
+      "posterPath": "videos/posters/staggered-multichart-telemetry-boot.webp"
     },
     {
       "id": "delayed-dropdown-promo-sweep",
       "library": "motion@12.42.2",
       "renderer": "dom",
-      "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/delayed-dropdown-promo-sweep.html",
       "demoSourcePath": "preview-demos/delayed-dropdown-promo-sweep.html",
-      "gifPath": "gifs/captured/delayed-dropdown-promo-sweep.gif"
+      "videoPath": "videos/captured/delayed-dropdown-promo-sweep.mp4",
+      "posterPath": "videos/posters/delayed-dropdown-promo-sweep.webp"
     },
     {
       "id": "self-inverting-fixed-navigation",
@@ -212,7 +233,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/self-inverting-fixed-navigation.html",
       "demoSourcePath": "preview-demos/self-inverting-fixed-navigation.html",
-      "gifPath": "gifs/captured/self-inverting-fixed-navigation.gif"
+      "videoPath": "videos/captured/self-inverting-fixed-navigation.mp4",
+      "posterPath": "videos/posters/self-inverting-fixed-navigation.webp"
     },
     {
       "id": "scroll-scrubbed-document-generation-playback",
@@ -221,16 +243,17 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/scroll-scrubbed-document-generation-playback.html",
       "demoSourcePath": "preview-demos/scroll-scrubbed-document-generation-playback.html",
-      "gifPath": "gifs/captured/scroll-scrubbed-document-generation-playback.gif"
+      "videoPath": "videos/captured/scroll-scrubbed-document-generation-playback.mp4",
+      "posterPath": "videos/posters/scroll-scrubbed-document-generation-playback.webp"
     },
     {
       "id": "duration-aware-hero-film-handoff",
       "library": "motion@12.42.2",
       "renderer": "dom",
-      "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/duration-aware-hero-film-handoff.html",
       "demoSourcePath": "preview-demos/duration-aware-hero-film-handoff.html",
-      "gifPath": "gifs/captured/duration-aware-hero-film-handoff.gif"
+      "videoPath": "videos/captured/duration-aware-hero-film-handoff.mp4",
+      "posterPath": "videos/posters/duration-aware-hero-film-handoff.webp"
     },
     {
       "id": "hover-rehearsed-video-style-rail",
@@ -239,16 +262,17 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/hover-rehearsed-video-style-rail.html",
       "demoSourcePath": "preview-demos/hover-rehearsed-video-style-rail.html",
-      "gifPath": "gifs/captured/hover-rehearsed-video-style-rail.gif"
+      "videoPath": "videos/captured/hover-rehearsed-video-style-rail.mp4",
+      "posterPath": "videos/posters/hover-rehearsed-video-style-rail.webp"
     },
     {
       "id": "device-silhouette-masked-video",
       "library": "motion@12.42.2",
       "renderer": "canvas2d",
-      "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/device-silhouette-masked-video.html",
       "demoSourcePath": "preview-demos/device-silhouette-masked-video.html",
-      "gifPath": "gifs/captured/device-silhouette-masked-video.gif"
+      "videoPath": "videos/captured/device-silhouette-masked-video.mp4",
+      "posterPath": "videos/posters/device-silhouette-masked-video.webp"
     },
     {
       "id": "four-corner-hover-crop-marks",
@@ -257,7 +281,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/four-corner-hover-crop-marks.html",
       "demoSourcePath": "preview-demos/four-corner-hover-crop-marks.html",
-      "gifPath": "gifs/captured/four-corner-hover-crop-marks.gif"
+      "videoPath": "videos/captured/four-corner-hover-crop-marks.mp4",
+      "posterPath": "videos/posters/four-corner-hover-crop-marks.webp"
     },
     {
       "id": "interaction-history-hiring-badge",
@@ -266,7 +291,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/interaction-history-hiring-badge.html",
       "demoSourcePath": "preview-demos/interaction-history-hiring-badge.html",
-      "gifPath": "gifs/captured/interaction-history-hiring-badge.gif"
+      "videoPath": "videos/captured/interaction-history-hiring-badge.mp4",
+      "posterPath": "videos/posters/interaction-history-hiring-badge.webp"
     },
     {
       "id": "card-metadata-to-cta-role-swap",
@@ -275,7 +301,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/card-metadata-to-cta-role-swap.html",
       "demoSourcePath": "preview-demos/card-metadata-to-cta-role-swap.html",
-      "gifPath": "gifs/captured/card-metadata-to-cta-role-swap.gif"
+      "videoPath": "videos/captured/card-metadata-to-cta-role-swap.mp4",
+      "posterPath": "videos/posters/card-metadata-to-cta-role-swap.webp"
     },
     {
       "id": "opposed-diagonal-offset-cta",
@@ -284,16 +311,17 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/opposed-diagonal-offset-cta.html",
       "demoSourcePath": "preview-demos/opposed-diagonal-offset-cta.html",
-      "gifPath": "gifs/captured/opposed-diagonal-offset-cta.gif"
+      "videoPath": "videos/captured/opposed-diagonal-offset-cta.mp4",
+      "posterPath": "videos/posters/opposed-diagonal-offset-cta.webp"
     },
     {
       "id": "blurred-autoplay-video-ambience",
       "library": "motion@12.42.2",
       "renderer": "canvas2d",
-      "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/blurred-autoplay-video-ambience.html",
       "demoSourcePath": "preview-demos/blurred-autoplay-video-ambience.html",
-      "gifPath": "gifs/captured/blurred-autoplay-video-ambience.gif"
+      "videoPath": "videos/captured/blurred-autoplay-video-ambience.mp4",
+      "posterPath": "videos/posters/blurred-autoplay-video-ambience.webp"
     },
     {
       "id": "ascii-orchestration-signal-sweep",
@@ -302,7 +330,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/ascii-orchestration-signal-sweep.html",
       "demoSourcePath": "preview-demos/ascii-orchestration-signal-sweep.html",
-      "gifPath": "gifs/captured/ascii-orchestration-signal-sweep.gif"
+      "videoPath": "videos/captured/ascii-orchestration-signal-sweep.mp4",
+      "posterPath": "videos/posters/ascii-orchestration-signal-sweep.webp"
     },
     {
       "id": "inertial-vertical-capability-rail",
@@ -311,7 +340,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/inertial-vertical-capability-rail.html",
       "demoSourcePath": "preview-demos/inertial-vertical-capability-rail.html",
-      "gifPath": "gifs/captured/inertial-vertical-capability-rail.gif"
+      "videoPath": "videos/captured/inertial-vertical-capability-rail.mp4",
+      "posterPath": "videos/posters/inertial-vertical-capability-rail.webp"
     },
     {
       "id": "visibility-gated-agent-terminal-replay",
@@ -320,7 +350,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/visibility-gated-agent-terminal-replay.html",
       "demoSourcePath": "preview-demos/visibility-gated-agent-terminal-replay.html",
-      "gifPath": "gifs/captured/visibility-gated-agent-terminal-replay.gif"
+      "videoPath": "videos/captured/visibility-gated-agent-terminal-replay.mp4",
+      "posterPath": "videos/posters/visibility-gated-agent-terminal-replay.webp"
     },
     {
       "id": "clip-path-menu-curtain",
@@ -329,7 +360,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/clip-path-menu-curtain.html",
       "demoSourcePath": "preview-demos/clip-path-menu-curtain.html",
-      "gifPath": "gifs/captured/clip-path-menu-curtain.gif"
+      "videoPath": "videos/captured/clip-path-menu-curtain.mp4",
+      "posterPath": "videos/posters/clip-path-menu-curtain.webp"
     },
     {
       "id": "playable-brand-minesweeper-footer",
@@ -338,7 +370,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/playable-brand-minesweeper-footer.html",
       "demoSourcePath": "preview-demos/playable-brand-minesweeper-footer.html",
-      "gifPath": "gifs/captured/playable-brand-minesweeper-footer.gif"
+      "videoPath": "videos/captured/playable-brand-minesweeper-footer.mp4",
+      "posterPath": "videos/posters/playable-brand-minesweeper-footer.webp"
     },
     {
       "id": "noise-cancellation-audio-comparison",
@@ -347,7 +380,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/noise-cancellation-audio-comparison.html",
       "demoSourcePath": "preview-demos/noise-cancellation-audio-comparison.html",
-      "gifPath": "gifs/captured/noise-cancellation-audio-comparison.gif"
+      "videoPath": "videos/captured/noise-cancellation-audio-comparison.mp4",
+      "posterPath": "videos/posters/noise-cancellation-audio-comparison.webp"
     },
     {
       "id": "track-card-play-state-handoff",
@@ -356,7 +390,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/track-card-play-state-handoff.html",
       "demoSourcePath": "preview-demos/track-card-play-state-handoff.html",
-      "gifPath": "gifs/captured/track-card-play-state-handoff.gif"
+      "videoPath": "videos/captured/track-card-play-state-handoff.mp4",
+      "posterPath": "videos/posters/track-card-play-state-handoff.webp"
     },
     {
       "id": "audio-equalizer-typography",
@@ -365,7 +400,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/audio-equalizer-typography.html",
       "demoSourcePath": "preview-demos/audio-equalizer-typography.html",
-      "gifPath": "gifs/captured/audio-equalizer-typography.gif"
+      "videoPath": "videos/captured/audio-equalizer-typography.mp4",
+      "posterPath": "videos/posters/audio-equalizer-typography.webp"
     },
     {
       "id": "animated-hand-drawn-semantic-annotation",
@@ -374,7 +410,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/animated-hand-drawn-semantic-annotation.html",
       "demoSourcePath": "preview-demos/animated-hand-drawn-semantic-annotation.html",
-      "gifPath": "gifs/captured/animated-hand-drawn-semantic-annotation.gif"
+      "videoPath": "videos/captured/animated-hand-drawn-semantic-annotation.mp4",
+      "posterPath": "videos/posters/animated-hand-drawn-semantic-annotation.webp"
     },
     {
       "id": "mechanical-split-flap-character-change",
@@ -383,7 +420,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/mechanical-split-flap-character-change.html",
       "demoSourcePath": "preview-demos/mechanical-split-flap-character-change.html",
-      "gifPath": "gifs/captured/mechanical-split-flap-character-change.gif"
+      "videoPath": "videos/captured/mechanical-split-flap-character-change.mp4",
+      "posterPath": "videos/posters/mechanical-split-flap-character-change.webp"
     },
     {
       "id": "pointer-rotated-dot-matrix-globe",
@@ -392,7 +430,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/pointer-rotated-dot-matrix-globe.html",
       "demoSourcePath": "preview-demos/pointer-rotated-dot-matrix-globe.html",
-      "gifPath": "gifs/captured/pointer-rotated-dot-matrix-globe.gif"
+      "videoPath": "videos/captured/pointer-rotated-dot-matrix-globe.mp4",
+      "posterPath": "videos/posters/pointer-rotated-dot-matrix-globe.webp"
     },
     {
       "id": "topographic-relief-expedition-globe",
@@ -401,7 +440,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/topographic-relief-expedition-globe.html",
       "demoSourcePath": "preview-demos/topographic-relief-expedition-globe.html",
-      "gifPath": "gifs/captured/topographic-relief-expedition-globe.gif"
+      "videoPath": "videos/captured/topographic-relief-expedition-globe.mp4",
+      "posterPath": "videos/posters/topographic-relief-expedition-globe.webp"
     },
     {
       "id": "interactive-vector-state-machine",
@@ -410,7 +450,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/interactive-vector-state-machine.html",
       "demoSourcePath": "preview-demos/interactive-vector-state-machine.html",
-      "gifPath": "gifs/captured/interactive-vector-state-machine.gif"
+      "videoPath": "videos/captured/interactive-vector-state-machine.mp4",
+      "posterPath": "videos/posters/interactive-vector-state-machine.webp"
     },
     {
       "id": "dom-to-3d-scroll-synchronization",
@@ -419,7 +460,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/dom-to-3d-scroll-synchronization.html",
       "demoSourcePath": "preview-demos/dom-to-3d-scroll-synchronization.html",
-      "gifPath": "gifs/captured/dom-to-3d-scroll-synchronization.gif"
+      "videoPath": "videos/captured/dom-to-3d-scroll-synchronization.mp4",
+      "posterPath": "videos/posters/dom-to-3d-scroll-synchronization.webp"
     },
     {
       "id": "scene-wipe-progressive-page-swap",
@@ -428,7 +470,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/scene-wipe-progressive-page-swap.html",
       "demoSourcePath": "preview-demos/scene-wipe-progressive-page-swap.html",
-      "gifPath": "gifs/captured/scene-wipe-progressive-page-swap.gif"
+      "videoPath": "videos/captured/scene-wipe-progressive-page-swap.mp4",
+      "posterPath": "videos/posters/scene-wipe-progressive-page-swap.webp"
     },
     {
       "id": "draggable-packed-editorial-wall",
@@ -437,7 +480,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/draggable-packed-editorial-wall.html",
       "demoSourcePath": "preview-demos/draggable-packed-editorial-wall.html",
-      "gifPath": "gifs/captured/draggable-packed-editorial-wall.gif"
+      "videoPath": "videos/captured/draggable-packed-editorial-wall.mp4",
+      "posterPath": "videos/posters/draggable-packed-editorial-wall.webp"
     },
     {
       "id": "velocity-aware-swipe-drawer",
@@ -446,7 +490,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/velocity-aware-swipe-drawer.html",
       "demoSourcePath": "preview-demos/velocity-aware-swipe-drawer.html",
-      "gifPath": "gifs/captured/velocity-aware-swipe-drawer.gif"
+      "videoPath": "videos/captured/velocity-aware-swipe-drawer.mp4",
+      "posterPath": "videos/posters/velocity-aware-swipe-drawer.webp"
     },
     {
       "id": "spatial-slide-deck-navigation",
@@ -455,7 +500,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/spatial-slide-deck-navigation.html",
       "demoSourcePath": "preview-demos/spatial-slide-deck-navigation.html",
-      "gifPath": "gifs/captured/spatial-slide-deck-navigation.gif"
+      "videoPath": "videos/captured/spatial-slide-deck-navigation.mp4",
+      "posterPath": "videos/posters/spatial-slide-deck-navigation.webp"
     },
     {
       "id": "pointer-driven-multilayer-depth-stage",
@@ -464,7 +510,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/pointer-driven-multilayer-depth-stage.html",
       "demoSourcePath": "preview-demos/pointer-driven-multilayer-depth-stage.html",
-      "gifPath": "gifs/captured/pointer-driven-multilayer-depth-stage.gif"
+      "videoPath": "videos/captured/pointer-driven-multilayer-depth-stage.mp4",
+      "posterPath": "videos/posters/pointer-driven-multilayer-depth-stage.webp"
     },
     {
       "id": "svg-filter-gooey-text-hover",
@@ -473,7 +520,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/svg-filter-gooey-text-hover.html",
       "demoSourcePath": "preview-demos/svg-filter-gooey-text-hover.html",
-      "gifPath": "gifs/captured/svg-filter-gooey-text-hover.gif"
+      "videoPath": "videos/captured/svg-filter-gooey-text-hover.mp4",
+      "posterPath": "videos/posters/svg-filter-gooey-text-hover.webp"
     },
     {
       "id": "pointer-following-displacement-ripple",
@@ -482,7 +530,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/pointer-following-displacement-ripple.html",
       "demoSourcePath": "preview-demos/pointer-following-displacement-ripple.html",
-      "gifPath": "gifs/captured/pointer-following-displacement-ripple.gif"
+      "videoPath": "videos/captured/pointer-following-displacement-ripple.mp4",
+      "posterPath": "videos/posters/pointer-following-displacement-ripple.webp"
     },
     {
       "id": "draggable-rigid-body-poster-pile",
@@ -491,7 +540,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/draggable-rigid-body-poster-pile.html",
       "demoSourcePath": "preview-demos/draggable-rigid-body-poster-pile.html",
-      "gifPath": "gifs/captured/draggable-rigid-body-poster-pile.gif"
+      "videoPath": "videos/captured/draggable-rigid-body-poster-pile.mp4",
+      "posterPath": "videos/posters/draggable-rigid-body-poster-pile.webp"
     },
     {
       "id": "point-constructed-generative-corolla",
@@ -500,7 +550,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/point-constructed-generative-corolla.html",
       "demoSourcePath": "preview-demos/point-constructed-generative-corolla.html",
-      "gifPath": "gifs/captured/point-constructed-generative-corolla.gif"
+      "videoPath": "videos/captured/point-constructed-generative-corolla.mp4",
+      "posterPath": "videos/posters/point-constructed-generative-corolla.webp"
     },
     {
       "id": "pointer-injected-gpu-fluid",
@@ -509,7 +560,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/pointer-injected-gpu-fluid.html",
       "demoSourcePath": "preview-demos/pointer-injected-gpu-fluid.html",
-      "gifPath": "gifs/captured/pointer-injected-gpu-fluid.gif"
+      "videoPath": "videos/captured/pointer-injected-gpu-fluid.mp4",
+      "posterPath": "videos/posters/pointer-injected-gpu-fluid.webp"
     },
     {
       "id": "emergent-particle-life-colonies",
@@ -518,7 +570,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/emergent-particle-life-colonies.html",
       "demoSourcePath": "preview-demos/emergent-particle-life-colonies.html",
-      "gifPath": "gifs/captured/emergent-particle-life-colonies.gif"
+      "videoPath": "videos/captured/emergent-particle-life-colonies.mp4",
+      "posterPath": "videos/posters/emergent-particle-life-colonies.webp"
     },
     {
       "id": "sticky-card-stack-accumulation",
@@ -527,7 +580,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/sticky-card-stack-accumulation.html",
       "demoSourcePath": "preview-demos/sticky-card-stack-accumulation.html",
-      "gifPath": "gifs/captured/sticky-card-stack-accumulation.gif"
+      "videoPath": "videos/captured/sticky-card-stack-accumulation.mp4",
+      "posterPath": "videos/posters/sticky-card-stack-accumulation.webp"
     },
     {
       "id": "velocity-reactive-marquee",
@@ -536,7 +590,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/velocity-reactive-marquee.html",
       "demoSourcePath": "preview-demos/velocity-reactive-marquee.html",
-      "gifPath": "gifs/captured/velocity-reactive-marquee.gif"
+      "videoPath": "videos/captured/velocity-reactive-marquee.mp4",
+      "posterPath": "videos/posters/velocity-reactive-marquee.webp"
     },
     {
       "id": "scrubbed-word-blur-rotate-reveal",
@@ -545,7 +600,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/scrubbed-word-blur-rotate-reveal.html",
       "demoSourcePath": "preview-demos/scrubbed-word-blur-rotate-reveal.html",
-      "gifPath": "gifs/captured/scrubbed-word-blur-rotate-reveal.gif"
+      "videoPath": "videos/captured/scrubbed-word-blur-rotate-reveal.mp4",
+      "posterPath": "videos/posters/scrubbed-word-blur-rotate-reveal.webp"
     },
     {
       "id": "pixel-grid-content-dissolve",
@@ -554,7 +610,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/pixel-grid-content-dissolve.html",
       "demoSourcePath": "preview-demos/pixel-grid-content-dissolve.html",
-      "gifPath": "gifs/captured/pixel-grid-content-dissolve.gif"
+      "videoPath": "videos/captured/pixel-grid-content-dissolve.mp4",
+      "posterPath": "videos/posters/pixel-grid-content-dissolve.webp"
     },
     {
       "id": "bubble-to-navigation-morph",
@@ -563,7 +620,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/bubble-to-navigation-morph.html",
       "demoSourcePath": "preview-demos/bubble-to-navigation-morph.html",
-      "gifPath": "gifs/captured/bubble-to-navigation-morph.gif"
+      "videoPath": "videos/captured/bubble-to-navigation-morph.mp4",
+      "posterPath": "videos/posters/bubble-to-navigation-morph.webp"
     },
     {
       "id": "neighbor-magnifying-navigation-dock",
@@ -572,7 +630,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/neighbor-magnifying-navigation-dock.html",
       "demoSourcePath": "preview-demos/neighbor-magnifying-navigation-dock.html",
-      "gifPath": "gifs/captured/neighbor-magnifying-navigation-dock.gif"
+      "videoPath": "videos/captured/neighbor-magnifying-navigation-dock.mp4",
+      "posterPath": "videos/posters/neighbor-magnifying-navigation-dock.webp"
     },
     {
       "id": "layered-staggered-full-screen-menu",
@@ -581,7 +640,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/layered-staggered-full-screen-menu.html",
       "demoSourcePath": "preview-demos/layered-staggered-full-screen-menu.html",
-      "gifPath": "gifs/captured/layered-staggered-full-screen-menu.gif"
+      "videoPath": "videos/captured/layered-staggered-full-screen-menu.mp4",
+      "posterPath": "videos/posters/layered-staggered-full-screen-menu.webp"
     },
     {
       "id": "hover-activated-image-marquee-menu",
@@ -590,7 +650,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/hover-activated-image-marquee-menu.html",
       "demoSourcePath": "preview-demos/hover-activated-image-marquee-menu.html",
-      "gifPath": "gifs/captured/hover-activated-image-marquee-menu.gif"
+      "videoPath": "videos/captured/hover-activated-image-marquee-menu.mp4",
+      "posterPath": "videos/posters/hover-activated-image-marquee-menu.webp"
     },
     {
       "id": "drag-thrown-card-stack",
@@ -599,7 +660,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/drag-thrown-card-stack.html",
       "demoSourcePath": "preview-demos/drag-thrown-card-stack.html",
-      "gifPath": "gifs/captured/drag-thrown-card-stack.gif"
+      "videoPath": "videos/captured/drag-thrown-card-stack.mp4",
+      "posterPath": "videos/posters/drag-thrown-card-stack.webp"
     },
     {
       "id": "metaball-blob-cursor",
@@ -608,7 +670,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/metaball-blob-cursor.html",
       "demoSourcePath": "preview-demos/metaball-blob-cursor.html",
-      "gifPath": "gifs/captured/metaball-blob-cursor.gif"
+      "videoPath": "videos/captured/metaball-blob-cursor.mp4",
+      "posterPath": "videos/posters/metaball-blob-cursor.webp"
     },
     {
       "id": "velocity-spaced-image-trail",
@@ -617,7 +680,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/velocity-spaced-image-trail.html",
       "demoSourcePath": "preview-demos/velocity-spaced-image-trail.html",
-      "gifPath": "gifs/captured/velocity-spaced-image-trail.gif"
+      "videoPath": "videos/captured/velocity-spaced-image-trail.mp4",
+      "posterPath": "videos/posters/velocity-spaced-image-trail.webp"
     },
     {
       "id": "gooey-pixel-cursor-wake",
@@ -626,7 +690,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/gooey-pixel-cursor-wake.html",
       "demoSourcePath": "preview-demos/gooey-pixel-cursor-wake.html",
-      "gifPath": "gifs/captured/gooey-pixel-cursor-wake.gif"
+      "videoPath": "videos/captured/gooey-pixel-cursor-wake.mp4",
+      "posterPath": "videos/posters/gooey-pixel-cursor-wake.webp"
     },
     {
       "id": "snapping-target-reticle-cursor",
@@ -635,7 +700,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/snapping-target-reticle-cursor.html",
       "demoSourcePath": "preview-demos/snapping-target-reticle-cursor.html",
-      "gifPath": "gifs/captured/snapping-target-reticle-cursor.gif"
+      "videoPath": "videos/captured/snapping-target-reticle-cursor.mp4",
+      "posterPath": "videos/posters/snapping-target-reticle-cursor.webp"
     },
     {
       "id": "pointer-reactive-cell-grid",
@@ -644,7 +710,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/pointer-reactive-cell-grid.html",
       "demoSourcePath": "preview-demos/pointer-reactive-cell-grid.html",
-      "gifPath": "gifs/captured/pointer-reactive-cell-grid.gif"
+      "videoPath": "videos/captured/pointer-reactive-cell-grid.mp4",
+      "posterPath": "videos/posters/pointer-reactive-cell-grid.webp"
     },
     {
       "id": "slider-controlled-exploded-3d-assembly",
@@ -653,7 +720,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/slider-controlled-exploded-3d-assembly.html",
       "demoSourcePath": "preview-demos/slider-controlled-exploded-3d-assembly.html",
-      "gifPath": "gifs/captured/slider-controlled-exploded-3d-assembly.gif"
+      "videoPath": "videos/captured/slider-controlled-exploded-3d-assembly.mp4",
+      "posterPath": "videos/posters/slider-controlled-exploded-3d-assembly.webp"
     },
     {
       "id": "collision-reactive-3d-physics-stack",
@@ -662,7 +730,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/collision-reactive-3d-physics-stack.html",
       "demoSourcePath": "preview-demos/collision-reactive-3d-physics-stack.html",
-      "gifPath": "gifs/captured/collision-reactive-3d-physics-stack.gif"
+      "videoPath": "videos/captured/collision-reactive-3d-physics-stack.mp4",
+      "posterPath": "videos/posters/collision-reactive-3d-physics-stack.webp"
     },
     {
       "id": "refractive-glass-transmission-sculpture",
@@ -671,7 +740,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/refractive-glass-transmission-sculpture.html",
       "demoSourcePath": "preview-demos/refractive-glass-transmission-sculpture.html",
-      "gifPath": "gifs/captured/refractive-glass-transmission-sculpture.gif"
+      "videoPath": "videos/captured/refractive-glass-transmission-sculpture.mp4",
+      "posterPath": "videos/posters/refractive-glass-transmission-sculpture.webp"
     },
     {
       "id": "cinematic-map-camera-fly-to",
@@ -680,7 +750,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/cinematic-map-camera-fly-to.html",
       "demoSourcePath": "preview-demos/cinematic-map-camera-fly-to.html",
-      "gifPath": "gifs/captured/cinematic-map-camera-fly-to.gif"
+      "videoPath": "videos/captured/cinematic-map-camera-fly-to.mp4",
+      "posterPath": "videos/posters/cinematic-map-camera-fly-to.webp"
     },
     {
       "id": "pickable-extruded-data-columns",
@@ -689,7 +760,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/pickable-extruded-data-columns.html",
       "demoSourcePath": "preview-demos/pickable-extruded-data-columns.html",
-      "gifPath": "gifs/captured/pickable-extruded-data-columns.gif"
+      "videoPath": "videos/captured/pickable-extruded-data-columns.mp4",
+      "posterPath": "videos/posters/pickable-extruded-data-columns.webp"
     },
     {
       "id": "curved-3d-text-orbit",
@@ -698,7 +770,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/curved-3d-text-orbit.html",
       "demoSourcePath": "preview-demos/curved-3d-text-orbit.html",
-      "gifPath": "gifs/captured/curved-3d-text-orbit.gif"
+      "videoPath": "videos/captured/curved-3d-text-orbit.mp4",
+      "posterPath": "videos/posters/curved-3d-text-orbit.webp"
     },
     {
       "id": "cursor-projected-3d-surface-marker",
@@ -707,7 +780,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/cursor-projected-3d-surface-marker.html",
       "demoSourcePath": "preview-demos/cursor-projected-3d-surface-marker.html",
-      "gifPath": "gifs/captured/cursor-projected-3d-surface-marker.gif"
+      "videoPath": "videos/captured/cursor-projected-3d-surface-marker.mp4",
+      "posterPath": "videos/posters/cursor-projected-3d-surface-marker.webp"
     },
     {
       "id": "drag-resizable-audio-loop-region",
@@ -716,7 +790,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/drag-resizable-audio-loop-region.html",
       "demoSourcePath": "preview-demos/drag-resizable-audio-loop-region.html",
-      "gifPath": "gifs/captured/drag-resizable-audio-loop-region.gif"
+      "videoPath": "videos/captured/drag-resizable-audio-loop-region.mp4",
+      "posterPath": "videos/posters/drag-resizable-audio-loop-region.webp"
     },
     {
       "id": "streaming-line-chart-window",
@@ -725,7 +800,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/streaming-line-chart-window.html",
       "demoSourcePath": "preview-demos/streaming-line-chart-window.html",
-      "gifPath": "gifs/captured/streaming-line-chart-window.gif"
+      "videoPath": "videos/captured/streaming-line-chart-window.mp4",
+      "posterPath": "videos/posters/streaming-line-chart-window.webp"
     },
     {
       "id": "handle-connected-animated-node-editor",
@@ -734,7 +810,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/handle-connected-animated-node-editor.html",
       "demoSourcePath": "preview-demos/handle-connected-animated-node-editor.html",
-      "gifPath": "gifs/captured/handle-connected-animated-node-editor.gif"
+      "videoPath": "videos/captured/handle-connected-animated-node-editor.mp4",
+      "posterPath": "videos/posters/handle-connected-animated-node-editor.webp"
     },
     {
       "id": "bending-webgl-gallery-ribbon",
@@ -743,7 +820,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/bending-webgl-gallery-ribbon.html",
       "demoSourcePath": "preview-demos/bending-webgl-gallery-ribbon.html",
-      "gifPath": "gifs/captured/bending-webgl-gallery-ribbon.gif"
+      "videoPath": "videos/captured/bending-webgl-gallery-ribbon.mp4",
+      "posterPath": "videos/posters/bending-webgl-gallery-ribbon.webp"
     },
     {
       "id": "draggable-dome-gallery",
@@ -752,7 +830,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/draggable-dome-gallery.html",
       "demoSourcePath": "preview-demos/draggable-dome-gallery.html",
-      "gifPath": "gifs/captured/draggable-dome-gallery.gif"
+      "videoPath": "videos/captured/draggable-dome-gallery.mp4",
+      "posterPath": "videos/posters/draggable-dome-gallery.webp"
     },
     {
       "id": "animated-dom-node-connection-beam",
@@ -761,7 +840,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/animated-dom-node-connection-beam.html",
       "demoSourcePath": "preview-demos/animated-dom-node-connection-beam.html",
-      "gifPath": "gifs/captured/animated-dom-node-connection-beam.gif"
+      "videoPath": "videos/captured/animated-dom-node-connection-beam.mp4",
+      "posterPath": "videos/posters/animated-dom-node-connection-beam.webp"
     },
     {
       "id": "clip-shape-theme-reveal",
@@ -770,7 +850,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/clip-shape-theme-reveal.html",
       "demoSourcePath": "preview-demos/clip-shape-theme-reveal.html",
-      "gifPath": "gifs/captured/clip-shape-theme-reveal.gif"
+      "videoPath": "videos/captured/clip-shape-theme-reveal.mp4",
+      "posterPath": "videos/posters/clip-shape-theme-reveal.webp"
     },
     {
       "id": "sticky-paragraph-ink-reveal",
@@ -779,7 +860,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/sticky-paragraph-ink-reveal.html",
       "demoSourcePath": "preview-demos/sticky-paragraph-ink-reveal.html",
-      "gifPath": "gifs/captured/sticky-paragraph-ink-reveal.gif"
+      "videoPath": "videos/captured/sticky-paragraph-ink-reveal.mp4",
+      "posterPath": "videos/posters/sticky-paragraph-ink-reveal.webp"
     },
     {
       "id": "draggable-force-directed-svg-network",
@@ -788,7 +870,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/draggable-force-directed-svg-network.html",
       "demoSourcePath": "preview-demos/draggable-force-directed-svg-network.html",
-      "gifPath": "gifs/captured/draggable-force-directed-svg-network.gif"
+      "videoPath": "videos/captured/draggable-force-directed-svg-network.mp4",
+      "posterPath": "videos/posters/draggable-force-directed-svg-network.webp"
     },
     {
       "id": "voronoi-nearest-point-hover-focus",
@@ -797,7 +880,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/voronoi-nearest-point-hover-focus.html",
       "demoSourcePath": "preview-demos/voronoi-nearest-point-hover-focus.html",
-      "gifPath": "gifs/captured/voronoi-nearest-point-hover-focus.gif"
+      "videoPath": "videos/captured/voronoi-nearest-point-hover-focus.mp4",
+      "posterPath": "videos/posters/voronoi-nearest-point-hover-focus.webp"
     },
     {
       "id": "linked-brush-to-zoom-chart",
@@ -806,7 +890,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/linked-brush-to-zoom-chart.html",
       "demoSourcePath": "preview-demos/linked-brush-to-zoom-chart.html",
-      "gifPath": "gifs/captured/linked-brush-to-zoom-chart.gif"
+      "videoPath": "videos/captured/linked-brush-to-zoom-chart.mp4",
+      "posterPath": "videos/posters/linked-brush-to-zoom-chart.webp"
     },
     {
       "id": "click-to-collapse-hierarchy-branches",
@@ -815,7 +900,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/click-to-collapse-hierarchy-branches.html",
       "demoSourcePath": "preview-demos/click-to-collapse-hierarchy-branches.html",
-      "gifPath": "gifs/captured/click-to-collapse-hierarchy-branches.gif"
+      "videoPath": "videos/captured/click-to-collapse-hierarchy-branches.mp4",
+      "posterPath": "videos/posters/click-to-collapse-hierarchy-branches.webp"
     },
     {
       "id": "velocity-sensitive-signature-ink",
@@ -824,7 +910,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/velocity-sensitive-signature-ink.html",
       "demoSourcePath": "preview-demos/velocity-sensitive-signature-ink.html",
-      "gifPath": "gifs/captured/velocity-sensitive-signature-ink.gif"
+      "videoPath": "videos/captured/velocity-sensitive-signature-ink.mp4",
+      "posterPath": "videos/posters/velocity-sensitive-signature-ink.webp"
     },
     {
       "id": "pressure-shaped-freehand-stroke",
@@ -833,7 +920,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/pressure-shaped-freehand-stroke.html",
       "demoSourcePath": "preview-demos/pressure-shaped-freehand-stroke.html",
-      "gifPath": "gifs/captured/pressure-shaped-freehand-stroke.gif"
+      "videoPath": "videos/captured/pressure-shaped-freehand-stroke.mp4",
+      "posterPath": "videos/posters/pressure-shaped-freehand-stroke.webp"
     },
     {
       "id": "drag-editable-bezier-curve-handles",
@@ -842,7 +930,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/drag-editable-bezier-curve-handles.html",
       "demoSourcePath": "preview-demos/drag-editable-bezier-curve-handles.html",
-      "gifPath": "gifs/captured/drag-editable-bezier-curve-handles.gif"
+      "videoPath": "videos/captured/drag-editable-bezier-curve-handles.mp4",
+      "posterPath": "videos/posters/drag-editable-bezier-curve-handles.webp"
     },
     {
       "id": "image-palette-ambient-color-transition",
@@ -851,7 +940,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/image-palette-ambient-color-transition.html",
       "demoSourcePath": "preview-demos/image-palette-ambient-color-transition.html",
-      "gifPath": "gifs/captured/image-palette-ambient-color-transition.gif"
+      "videoPath": "videos/captured/image-palette-ambient-color-transition.mp4",
+      "posterPath": "videos/posters/image-palette-ambient-color-transition.webp"
     },
     {
       "id": "blurhash-to-photo-progressive-reveal",
@@ -860,7 +950,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/blurhash-to-photo-progressive-reveal.html",
       "demoSourcePath": "preview-demos/blurhash-to-photo-progressive-reveal.html",
-      "gifPath": "gifs/captured/blurhash-to-photo-progressive-reveal.gif"
+      "videoPath": "videos/captured/blurhash-to-photo-progressive-reveal.mp4",
+      "posterPath": "videos/posters/blurhash-to-photo-progressive-reveal.webp"
     },
     {
       "id": "live-hand-landmark-video-overlay",
@@ -869,7 +960,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/live-hand-landmark-video-overlay.html",
       "demoSourcePath": "preview-demos/live-hand-landmark-video-overlay.html",
-      "gifPath": "gifs/captured/live-hand-landmark-video-overlay.gif"
+      "videoPath": "videos/captured/live-hand-landmark-video-overlay.mp4",
+      "posterPath": "videos/posters/live-hand-landmark-video-overlay.webp"
     },
     {
       "id": "frame-by-frame-gif-scrubber",
@@ -878,7 +970,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/frame-by-frame-gif-scrubber.html",
       "demoSourcePath": "preview-demos/frame-by-frame-gif-scrubber.html",
-      "gifPath": "gifs/captured/frame-by-frame-gif-scrubber.gif"
+      "videoPath": "videos/captured/frame-by-frame-gif-scrubber.mp4",
+      "posterPath": "videos/posters/frame-by-frame-gif-scrubber.webp"
     },
     {
       "id": "scroll-controlled-video-scrubbing",
@@ -887,7 +980,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/scroll-controlled-video-scrubbing.html",
       "demoSourcePath": "preview-demos/scroll-controlled-video-scrubbing.html",
-      "gifPath": "gifs/captured/scroll-controlled-video-scrubbing.gif"
+      "videoPath": "videos/captured/scroll-controlled-video-scrubbing.mp4",
+      "posterPath": "videos/posters/scroll-controlled-video-scrubbing.webp"
     },
     {
       "id": "iris-aperture-navigation",
@@ -896,7 +990,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/iris-aperture-navigation.html",
       "demoSourcePath": "preview-demos/iris-aperture-navigation.html",
-      "gifPath": "gifs/captured/iris-aperture-navigation.gif"
+      "videoPath": "videos/captured/iris-aperture-navigation.mp4",
+      "posterPath": "videos/posters/iris-aperture-navigation.webp"
     },
     {
       "id": "elastic-baseline-letter-wave",
@@ -905,7 +1000,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/elastic-baseline-letter-wave.html",
       "demoSourcePath": "preview-demos/elastic-baseline-letter-wave.html",
-      "gifPath": "gifs/captured/elastic-baseline-letter-wave.gif"
+      "videoPath": "videos/captured/elastic-baseline-letter-wave.mp4",
+      "posterPath": "videos/posters/elastic-baseline-letter-wave.webp"
     },
     {
       "id": "orbital-card-constellation",
@@ -914,7 +1010,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/orbital-card-constellation.html",
       "demoSourcePath": "preview-demos/orbital-card-constellation.html",
-      "gifPath": "gifs/captured/orbital-card-constellation.gif"
+      "videoPath": "videos/captured/orbital-card-constellation.mp4",
+      "posterPath": "videos/posters/orbital-card-constellation.webp"
     },
     {
       "id": "magnetic-pixel-sort-field",
@@ -923,7 +1020,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/magnetic-pixel-sort-field.html",
       "demoSourcePath": "preview-demos/magnetic-pixel-sort-field.html",
-      "gifPath": "gifs/captured/magnetic-pixel-sort-field.gif"
+      "videoPath": "videos/captured/magnetic-pixel-sort-field.mp4",
+      "posterPath": "videos/posters/magnetic-pixel-sort-field.webp"
     },
     {
       "id": "kinetic-paper-fold-map",
@@ -932,7 +1030,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/kinetic-paper-fold-map.html",
       "demoSourcePath": "preview-demos/kinetic-paper-fold-map.html",
-      "gifPath": "gifs/captured/kinetic-paper-fold-map.gif"
+      "videoPath": "videos/captured/kinetic-paper-fold-map.mp4",
+      "posterPath": "videos/posters/kinetic-paper-fold-map.webp"
     },
     {
       "id": "radar-sweep-annotation-reveal",
@@ -941,7 +1040,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/radar-sweep-annotation-reveal.html",
       "demoSourcePath": "preview-demos/radar-sweep-annotation-reveal.html",
-      "gifPath": "gifs/captured/radar-sweep-annotation-reveal.gif"
+      "videoPath": "videos/captured/radar-sweep-annotation-reveal.mp4",
+      "posterPath": "videos/posters/radar-sweep-annotation-reveal.webp"
     },
     {
       "id": "moire-tunnel-zoom",
@@ -950,7 +1050,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/moire-tunnel-zoom.html",
       "demoSourcePath": "preview-demos/moire-tunnel-zoom.html",
-      "gifPath": "gifs/captured/moire-tunnel-zoom.gif"
+      "videoPath": "videos/captured/moire-tunnel-zoom.mp4",
+      "posterPath": "videos/posters/moire-tunnel-zoom.webp"
     },
     {
       "id": "liquid-chrome-letterform",
@@ -959,7 +1060,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/liquid-chrome-letterform.html",
       "demoSourcePath": "preview-demos/liquid-chrome-letterform.html",
-      "gifPath": "gifs/captured/liquid-chrome-letterform.gif"
+      "videoPath": "videos/captured/liquid-chrome-letterform.mp4",
+      "posterPath": "videos/posters/liquid-chrome-letterform.webp"
     },
     {
       "id": "accordion-image-slices",
@@ -968,7 +1070,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/accordion-image-slices.html",
       "demoSourcePath": "preview-demos/accordion-image-slices.html",
-      "gifPath": "gifs/captured/accordion-image-slices.gif"
+      "videoPath": "videos/captured/accordion-image-slices.mp4",
+      "posterPath": "videos/posters/accordion-image-slices.webp"
     },
     {
       "id": "typographic-time-slit",
@@ -977,7 +1080,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/typographic-time-slit.html",
       "demoSourcePath": "preview-demos/typographic-time-slit.html",
-      "gifPath": "gifs/captured/typographic-time-slit.gif"
+      "videoPath": "videos/captured/typographic-time-slit.mp4",
+      "posterPath": "videos/posters/typographic-time-slit.webp"
     },
     {
       "id": "kinetic-rain-letterpress",
@@ -986,7 +1090,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/kinetic-rain-letterpress.html",
       "demoSourcePath": "preview-demos/kinetic-rain-letterpress.html",
-      "gifPath": "gifs/captured/kinetic-rain-letterpress.gif"
+      "videoPath": "videos/captured/kinetic-rain-letterpress.mp4",
+      "posterPath": "videos/posters/kinetic-rain-letterpress.webp"
     },
     {
       "id": "recursive-arc-forest-growth",
@@ -995,7 +1100,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/recursive-arc-forest-growth.html",
       "demoSourcePath": "preview-demos/recursive-arc-forest-growth.html",
-      "gifPath": "gifs/captured/recursive-arc-forest-growth.gif"
+      "videoPath": "videos/captured/recursive-arc-forest-growth.mp4",
+      "posterPath": "videos/posters/recursive-arc-forest-growth.webp"
     },
     {
       "id": "pointer-woven-ribbon-loom",
@@ -1004,7 +1110,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/pointer-woven-ribbon-loom.html",
       "demoSourcePath": "preview-demos/pointer-woven-ribbon-loom.html",
-      "gifPath": "gifs/captured/pointer-woven-ribbon-loom.gif"
+      "videoPath": "videos/captured/pointer-woven-ribbon-loom.mp4",
+      "posterPath": "videos/posters/pointer-woven-ribbon-loom.webp"
     },
     {
       "id": "boids-flock-pointer-avoidance",
@@ -1013,7 +1120,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/boids-flock-pointer-avoidance.html",
       "demoSourcePath": "preview-demos/boids-flock-pointer-avoidance.html",
-      "gifPath": "gifs/captured/boids-flock-pointer-avoidance.gif"
+      "videoPath": "videos/captured/boids-flock-pointer-avoidance.mp4",
+      "posterPath": "videos/posters/boids-flock-pointer-avoidance.webp"
     },
     {
       "id": "reaction-diffusion-growth-field",
@@ -1022,7 +1130,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/reaction-diffusion-growth-field.html",
       "demoSourcePath": "preview-demos/reaction-diffusion-growth-field.html",
-      "gifPath": "gifs/captured/reaction-diffusion-growth-field.gif"
+      "videoPath": "videos/captured/reaction-diffusion-growth-field.mp4",
+      "posterPath": "videos/posters/reaction-diffusion-growth-field.webp"
     },
     {
       "id": "poisson-constellation-bloom",
@@ -1031,7 +1140,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/poisson-constellation-bloom.html",
       "demoSourcePath": "preview-demos/poisson-constellation-bloom.html",
-      "gifPath": "gifs/captured/poisson-constellation-bloom.gif"
+      "videoPath": "videos/captured/poisson-constellation-bloom.mp4",
+      "posterPath": "videos/posters/poisson-constellation-bloom.webp"
     },
     {
       "id": "signed-distance-neon-metaballs",
@@ -1040,7 +1150,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/signed-distance-neon-metaballs.html",
       "demoSourcePath": "preview-demos/signed-distance-neon-metaballs.html",
-      "gifPath": "gifs/captured/signed-distance-neon-metaballs.gif"
+      "videoPath": "videos/captured/signed-distance-neon-metaballs.mp4",
+      "posterPath": "videos/posters/signed-distance-neon-metaballs.webp"
     },
     {
       "id": "kinetic-typography-letter-springs",
@@ -1049,7 +1160,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/kinetic-typography-letter-springs.html",
       "demoSourcePath": "preview-demos/kinetic-typography-letter-springs.html",
-      "gifPath": "gifs/captured/kinetic-typography-letter-springs.gif"
+      "videoPath": "videos/captured/kinetic-typography-letter-springs.mp4",
+      "posterPath": "videos/posters/kinetic-typography-letter-springs.webp"
     },
     {
       "id": "recursive-quadtree-pulse-mosaic",
@@ -1058,7 +1170,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/recursive-quadtree-pulse-mosaic.html",
       "demoSourcePath": "preview-demos/recursive-quadtree-pulse-mosaic.html",
-      "gifPath": "gifs/captured/recursive-quadtree-pulse-mosaic.gif"
+      "videoPath": "videos/captured/recursive-quadtree-pulse-mosaic.mp4",
+      "posterPath": "videos/posters/recursive-quadtree-pulse-mosaic.webp"
     },
     {
       "id": "flow-field-ribbon-advection",
@@ -1067,7 +1180,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/flow-field-ribbon-advection.html",
       "demoSourcePath": "preview-demos/flow-field-ribbon-advection.html",
-      "gifPath": "gifs/captured/flow-field-ribbon-advection.gif"
+      "videoPath": "videos/captured/flow-field-ribbon-advection.mp4",
+      "posterPath": "videos/posters/flow-field-ribbon-advection.webp"
     },
     {
       "id": "delaunay-triangulated-light-sweep",
@@ -1076,7 +1190,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/delaunay-triangulated-light-sweep.html",
       "demoSourcePath": "preview-demos/delaunay-triangulated-light-sweep.html",
-      "gifPath": "gifs/captured/delaunay-triangulated-light-sweep.gif"
+      "videoPath": "videos/captured/delaunay-triangulated-light-sweep.mp4",
+      "posterPath": "videos/posters/delaunay-triangulated-light-sweep.webp"
     },
     {
       "id": "polar-waveform-sundial",
@@ -1085,7 +1200,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/polar-waveform-sundial.html",
       "demoSourcePath": "preview-demos/polar-waveform-sundial.html",
-      "gifPath": "gifs/captured/polar-waveform-sundial.gif"
+      "videoPath": "videos/captured/polar-waveform-sundial.mp4",
+      "posterPath": "videos/posters/polar-waveform-sundial.webp"
     },
     {
       "id": "seeded-sandpile-avalanche",
@@ -1094,7 +1210,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/seeded-sandpile-avalanche.html",
       "demoSourcePath": "preview-demos/seeded-sandpile-avalanche.html",
-      "gifPath": "gifs/captured/seeded-sandpile-avalanche.gif"
+      "videoPath": "videos/captured/seeded-sandpile-avalanche.mp4",
+      "posterPath": "videos/posters/seeded-sandpile-avalanche.webp"
     },
     {
       "id": "signed-distance-neon-metropolis",
@@ -1103,7 +1220,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/signed-distance-neon-metropolis.html",
       "demoSourcePath": "preview-demos/signed-distance-neon-metropolis.html",
-      "gifPath": "gifs/captured/signed-distance-neon-metropolis.gif"
+      "videoPath": "videos/captured/signed-distance-neon-metropolis.mp4",
+      "posterPath": "videos/posters/signed-distance-neon-metropolis.webp"
     },
     {
       "id": "flowfield-paper-marbling",
@@ -1112,7 +1230,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/flowfield-paper-marbling.html",
       "demoSourcePath": "preview-demos/flowfield-paper-marbling.html",
-      "gifPath": "gifs/captured/flowfield-paper-marbling.gif"
+      "videoPath": "videos/captured/flowfield-paper-marbling.mp4",
+      "posterPath": "videos/posters/flowfield-paper-marbling.webp"
     },
     {
       "id": "topographic-wave-contour-reveal",
@@ -1121,7 +1240,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/topographic-wave-contour-reveal.html",
       "demoSourcePath": "preview-demos/topographic-wave-contour-reveal.html",
-      "gifPath": "gifs/captured/topographic-wave-contour-reveal.gif"
+      "videoPath": "videos/captured/topographic-wave-contour-reveal.mp4",
+      "posterPath": "videos/posters/topographic-wave-contour-reveal.webp"
     },
     {
       "id": "magnetic-orbit-command-dock",
@@ -1130,7 +1250,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/magnetic-orbit-command-dock.html",
       "demoSourcePath": "preview-demos/magnetic-orbit-command-dock.html",
-      "gifPath": "gifs/captured/magnetic-orbit-command-dock.gif"
+      "videoPath": "videos/captured/magnetic-orbit-command-dock.mp4",
+      "posterPath": "videos/posters/magnetic-orbit-command-dock.webp"
     },
     {
       "id": "stencil-text-scanline-window",
@@ -1139,7 +1260,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/stencil-text-scanline-window.html",
       "demoSourcePath": "preview-demos/stencil-text-scanline-window.html",
-      "gifPath": "gifs/captured/stencil-text-scanline-window.gif"
+      "videoPath": "videos/captured/stencil-text-scanline-window.mp4",
+      "posterPath": "videos/posters/stencil-text-scanline-window.webp"
     },
     {
       "id": "elastic-svg-rope-lettering",
@@ -1148,7 +1270,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/elastic-svg-rope-lettering.html",
       "demoSourcePath": "preview-demos/elastic-svg-rope-lettering.html",
-      "gifPath": "gifs/captured/elastic-svg-rope-lettering.gif"
+      "videoPath": "videos/captured/elastic-svg-rope-lettering.mp4",
+      "posterPath": "videos/posters/elastic-svg-rope-lettering.webp"
     },
     {
       "id": "cursor-heatmap-crystallization",
@@ -1157,7 +1280,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/cursor-heatmap-crystallization.html",
       "demoSourcePath": "preview-demos/cursor-heatmap-crystallization.html",
-      "gifPath": "gifs/captured/cursor-heatmap-crystallization.gif"
+      "videoPath": "videos/captured/cursor-heatmap-crystallization.mp4",
+      "posterPath": "videos/posters/cursor-heatmap-crystallization.webp"
     },
     {
       "id": "peelable-paper-corner-reveal",
@@ -1166,7 +1290,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/peelable-paper-corner-reveal.html",
       "demoSourcePath": "preview-demos/peelable-paper-corner-reveal.html",
-      "gifPath": "gifs/captured/peelable-paper-corner-reveal.gif"
+      "videoPath": "videos/captured/peelable-paper-corner-reveal.mp4",
+      "posterPath": "videos/posters/peelable-paper-corner-reveal.webp"
     },
     {
       "id": "radial-calendar-time-zoom",
@@ -1175,7 +1300,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/radial-calendar-time-zoom.html",
       "demoSourcePath": "preview-demos/radial-calendar-time-zoom.html",
-      "gifPath": "gifs/captured/radial-calendar-time-zoom.gif"
+      "videoPath": "videos/captured/radial-calendar-time-zoom.mp4",
+      "posterPath": "videos/posters/radial-calendar-time-zoom.webp"
     },
     {
       "id": "typography-particle-disassembly-field",
@@ -1184,7 +1310,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/typography-particle-disassembly-field.html",
       "demoSourcePath": "preview-demos/typography-particle-disassembly-field.html",
-      "gifPath": "gifs/captured/typography-particle-disassembly-field.gif"
+      "videoPath": "videos/captured/typography-particle-disassembly-field.mp4",
+      "posterPath": "videos/posters/typography-particle-disassembly-field.webp"
     },
     {
       "id": "liquid-lens-card-refraction",
@@ -1193,7 +1320,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/liquid-lens-card-refraction.html",
       "demoSourcePath": "preview-demos/liquid-lens-card-refraction.html",
-      "gifPath": "gifs/captured/liquid-lens-card-refraction.gif"
+      "videoPath": "videos/captured/liquid-lens-card-refraction.mp4",
+      "posterPath": "videos/posters/liquid-lens-card-refraction.webp"
     },
     {
       "id": "accordion-depth-tunnel-navigation",
@@ -1202,7 +1330,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/accordion-depth-tunnel-navigation.html",
       "demoSourcePath": "preview-demos/accordion-depth-tunnel-navigation.html",
-      "gifPath": "gifs/captured/accordion-depth-tunnel-navigation.gif"
+      "videoPath": "videos/captured/accordion-depth-tunnel-navigation.mp4",
+      "posterPath": "videos/posters/accordion-depth-tunnel-navigation.webp"
     },
     {
       "id": "svg-metaball-cursor-separation",
@@ -1211,7 +1340,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/svg-metaball-cursor-separation.html",
       "demoSourcePath": "preview-demos/svg-metaball-cursor-separation.html",
-      "gifPath": "gifs/captured/svg-metaball-cursor-separation.gif"
+      "videoPath": "videos/captured/svg-metaball-cursor-separation.mp4",
+      "posterPath": "videos/posters/svg-metaball-cursor-separation.webp"
     },
     {
       "id": "gesture-sliced-image-shutters",
@@ -1220,7 +1350,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/gesture-sliced-image-shutters.html",
       "demoSourcePath": "preview-demos/gesture-sliced-image-shutters.html",
-      "gifPath": "gifs/captured/gesture-sliced-image-shutters.gif"
+      "videoPath": "videos/captured/gesture-sliced-image-shutters.mp4",
+      "posterPath": "videos/posters/gesture-sliced-image-shutters.webp"
     },
     {
       "id": "offline-audio-spectral-ribbon",
@@ -1229,7 +1360,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/offline-audio-spectral-ribbon.html",
       "demoSourcePath": "preview-demos/offline-audio-spectral-ribbon.html",
-      "gifPath": "gifs/captured/offline-audio-spectral-ribbon.gif"
+      "videoPath": "videos/captured/offline-audio-spectral-ribbon.mp4",
+      "posterPath": "videos/posters/offline-audio-spectral-ribbon.webp"
     },
     {
       "id": "gravity-well-icon-field",
@@ -1238,7 +1370,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/gravity-well-icon-field.html",
       "demoSourcePath": "preview-demos/gravity-well-icon-field.html",
-      "gifPath": "gifs/captured/gravity-well-icon-field.gif"
+      "videoPath": "videos/captured/gravity-well-icon-field.mp4",
+      "posterPath": "videos/posters/gravity-well-icon-field.webp"
     },
     {
       "id": "scroll-stitched-isometric-blueprint",
@@ -1247,7 +1380,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/scroll-stitched-isometric-blueprint.html",
       "demoSourcePath": "preview-demos/scroll-stitched-isometric-blueprint.html",
-      "gifPath": "gifs/captured/scroll-stitched-isometric-blueprint.gif"
+      "videoPath": "videos/captured/scroll-stitched-isometric-blueprint.mp4",
+      "posterPath": "videos/posters/scroll-stitched-isometric-blueprint.webp"
     },
     {
       "id": "pixel-sort-hover-wipe",
@@ -1256,7 +1390,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/pixel-sort-hover-wipe.html",
       "demoSourcePath": "preview-demos/pixel-sort-hover-wipe.html",
-      "gifPath": "gifs/captured/pixel-sort-hover-wipe.gif"
+      "videoPath": "videos/captured/pixel-sort-hover-wipe.mp4",
+      "posterPath": "videos/posters/pixel-sort-hover-wipe.webp"
     },
     {
       "id": "kinetic-variable-font-axis",
@@ -1265,7 +1400,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/kinetic-variable-font-axis.html",
       "demoSourcePath": "preview-demos/kinetic-variable-font-axis.html",
-      "gifPath": "gifs/captured/kinetic-variable-font-axis.gif"
+      "videoPath": "videos/captured/kinetic-variable-font-axis.mp4",
+      "posterPath": "videos/posters/kinetic-variable-font-axis.webp"
     },
     {
       "id": "animated-bezier-route-cartography",
@@ -1274,7 +1410,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/animated-bezier-route-cartography.html",
       "demoSourcePath": "preview-demos/animated-bezier-route-cartography.html",
-      "gifPath": "gifs/captured/animated-bezier-route-cartography.gif"
+      "videoPath": "videos/captured/animated-bezier-route-cartography.mp4",
+      "posterPath": "videos/posters/animated-bezier-route-cartography.webp"
     },
     {
       "id": "cellular-automata-hover-bloom",
@@ -1283,7 +1420,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/cellular-automata-hover-bloom.html",
       "demoSourcePath": "preview-demos/cellular-automata-hover-bloom.html",
-      "gifPath": "gifs/captured/cellular-automata-hover-bloom.gif"
+      "videoPath": "videos/captured/cellular-automata-hover-bloom.mp4",
+      "posterPath": "videos/posters/cellular-automata-hover-bloom.webp"
     },
     {
       "id": "spring-loaded-split-flap-counter",
@@ -1292,7 +1430,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/spring-loaded-split-flap-counter.html",
       "demoSourcePath": "preview-demos/spring-loaded-split-flap-counter.html",
-      "gifPath": "gifs/captured/spring-loaded-split-flap-counter.gif"
+      "videoPath": "videos/captured/spring-loaded-split-flap-counter.mp4",
+      "posterPath": "videos/posters/spring-loaded-split-flap-counter.webp"
     },
     {
       "id": "caustic-light-card-surface",
@@ -1301,7 +1440,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/caustic-light-card-surface.html",
       "demoSourcePath": "preview-demos/caustic-light-card-surface.html",
-      "gifPath": "gifs/captured/caustic-light-card-surface.gif"
+      "videoPath": "videos/captured/caustic-light-card-surface.mp4",
+      "posterPath": "videos/posters/caustic-light-card-surface.webp"
     },
     {
       "id": "cursor-drawn-constellation-thread",
@@ -1310,7 +1450,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/cursor-drawn-constellation-thread.html",
       "demoSourcePath": "preview-demos/cursor-drawn-constellation-thread.html",
-      "gifPath": "gifs/captured/cursor-drawn-constellation-thread.gif"
+      "videoPath": "videos/captured/cursor-drawn-constellation-thread.mp4",
+      "posterPath": "videos/posters/cursor-drawn-constellation-thread.webp"
     },
     {
       "id": "elastic-voronoi-focus-mosaic",
@@ -1319,7 +1460,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/elastic-voronoi-focus-mosaic.html",
       "demoSourcePath": "preview-demos/elastic-voronoi-focus-mosaic.html",
-      "gifPath": "gifs/captured/elastic-voronoi-focus-mosaic.gif"
+      "videoPath": "videos/captured/elastic-voronoi-focus-mosaic.mp4",
+      "posterPath": "videos/posters/elastic-voronoi-focus-mosaic.webp"
     },
     {
       "id": "chromatic-channel-drag-portrait",
@@ -1328,7 +1470,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/chromatic-channel-drag-portrait.html",
       "demoSourcePath": "preview-demos/chromatic-channel-drag-portrait.html",
-      "gifPath": "gifs/captured/chromatic-channel-drag-portrait.gif"
+      "videoPath": "videos/captured/chromatic-channel-drag-portrait.mp4",
+      "posterPath": "videos/posters/chromatic-channel-drag-portrait.webp"
     },
     {
       "id": "procedural-folding-kaleidoscope",
@@ -1337,7 +1480,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/procedural-folding-kaleidoscope.html",
       "demoSourcePath": "preview-demos/procedural-folding-kaleidoscope.html",
-      "gifPath": "gifs/captured/procedural-folding-kaleidoscope.gif"
+      "videoPath": "videos/captured/procedural-folding-kaleidoscope.mp4",
+      "posterPath": "videos/posters/procedural-folding-kaleidoscope.webp"
     },
     {
       "id": "connected-fragment-story-stage",
@@ -1346,7 +1490,8 @@
       "runtimeAssertion": true,
       "demoPath": "preview-demos/dist/connected-fragment-story-stage.html",
       "demoSourcePath": "preview-demos/connected-fragment-story-stage.html",
-      "gifPath": "gifs/captured/connected-fragment-story-stage.gif"
+      "videoPath": "videos/captured/connected-fragment-story-stage.mp4",
+      "posterPath": "videos/posters/connected-fragment-story-stage.webp"
     }
   ]
 }

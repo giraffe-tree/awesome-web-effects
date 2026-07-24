@@ -270,7 +270,7 @@ def slide_4() -> Image.Image:
     pill(d, (80, 477), "只发布 80 分以上", size=24, fg=PINK_DARK, bg=(237, 165, 185, 240), outline=(255, 255, 255, 90))
 
     metric_label(d, (210, 866), "150", "入选效果", PINK)
-    metric_label(d, (642, 925), "150", "真实 GIF", PERI)
+    metric_label(d, (642, 925), "152", "真实视频", PERI)
     metric_label(d, (504, 1252), "148", "可运行 Demo", IVORY)
     metric_label(d, (986, 1128), "≥80", "策展准入分", LIME)
     text(d, (82, 1472), "每个效果都能从预览追到 Demo、代码和出处。", 25, fill=(217, 216, 229))
@@ -278,20 +278,14 @@ def slide_4() -> Image.Image:
     return base
 
 
-def gif_frame(path: Path, fraction: float = 0.55) -> Image.Image:
-    im = Image.open(path)
-    frames = getattr(im, "n_frames", 1)
-    try:
-        im.seek(min(frames - 1, max(0, int(frames * fraction))))
-    except EOFError:
-        im.seek(0)
-    return im.convert("RGB")
+def preview_poster(path: Path) -> Image.Image:
+    return Image.open(path).convert("RGB")
 
 
 def preview_tile(base: Image.Image, item: tuple[str, str], box: tuple[int, int, int, int]) -> None:
-    gif_name, label = item
+    preview_name, label = item
     x1, y1, x2, y2 = box
-    frame = gif_frame(REPO / "demo/gifs/captured" / gif_name)
+    frame = preview_poster(REPO / "demo/videos/posters" / f"{preview_name}.webp")
     tile = rounded_crop(frame, (x2 - x1, y2 - y1), 28)
     base.alpha_composite(tile, (x1, y1))
     shade = Image.new("RGBA", (x2 - x1, 78), (5, 8, 25, 178))
@@ -308,13 +302,13 @@ def slide_5() -> Image.Image:
     text(d, (80, 305), "从微交互到 WebGL，把“好看”拆成能落地的效果。", 29, fill=(217, 216, 229))
 
     items = [
-        ("spring-loaded-split-flap-counter.gif", "动画与编排"),
-        ("pinned-horizontal-scroll-scene.gif", "滚动与揭示"),
-        ("filterable-grid-reflow.gif", "页面与布局"),
-        ("perspective-tilt-and-glare.gif", "指针与悬停"),
-        ("liquid-chrome-letterform.gif", "文本与 SVG"),
-        ("magnetic-pixel-sort-field.gif", "Canvas 与 2D"),
-        ("pointer-injected-gpu-fluid.gif", "3D 与 WebGL"),
+        ("spring-loaded-split-flap-counter", "动画与编排"),
+        ("pinned-horizontal-scroll-scene", "滚动与揭示"),
+        ("filterable-grid-reflow", "页面与布局"),
+        ("perspective-tilt-and-glare", "指针与悬停"),
+        ("liquid-chrome-letterform", "文本与 SVG"),
+        ("magnetic-pixel-sort-field", "Canvas 与 2D"),
+        ("pointer-injected-gpu-fluid", "3D 与 WebGL"),
     ]
     gap = 22
     y1, h1 = 430, 360

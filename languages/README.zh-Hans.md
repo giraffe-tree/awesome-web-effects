@@ -7,7 +7,7 @@
 当你脑中已经有想要的感觉，却不知道如何描述特效时，这里就是一张可直接观看的 Web 交互图鉴。
 
 [![152 curated effects](https://img.shields.io/badge/curated_effects-152-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
-[![152 real GIF previews](https://img.shields.io/badge/real_GIF_previews-152-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
+[![152 real video previews](https://img.shields.io/badge/real_video_previews-152-0969da?style=flat-square)](https://giraffe-tree.github.io/awesome-web-effects/)
 [![GitHub stars](https://img.shields.io/github/stars/giraffe-tree/awesome-web-effects?style=flat-square&color=0969da)](https://github.com/giraffe-tree/awesome-web-effects/stargazers)
 
 [**打开在线视觉目录**](https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans) · [语言资料](../docs/LANGUAGES.md)
@@ -23,80 +23,80 @@
 <table>
 <tr>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#pinned-horizontal-scroll-scene"><img src="../demo/gifs/captured/pinned-horizontal-scroll-scene.gif" width="270" alt="固定式横向滚动场景"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#pinned-horizontal-scroll-scene"><img src="../demo/videos/posters/pinned-horizontal-scroll-scene.webp" width="270" alt="固定式横向滚动场景"></a>
 <br>
 <sub><strong>固定式横向滚动场景</strong><br>滚动与揭示 · 96/100</sub>
 </td>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#prompt-select-replace-loop"><img src="../demo/gifs/captured/prompt-select-replace-loop.gif" width="270" alt="语义提示词修订工作台"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#prompt-select-replace-loop"><img src="../demo/videos/posters/prompt-select-replace-loop.webp" width="270" alt="语义提示词修订工作台"></a>
 <br>
 <sub><strong>语义提示词修订工作台</strong><br>文本与 SVG · 100/100</sub>
 </td>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#staggered-transform-choreography"><img src="../demo/gifs/captured/staggered-transform-choreography.gif" width="270" alt="交错变换编排"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#staggered-transform-choreography"><img src="../demo/videos/posters/staggered-transform-choreography.webp" width="270" alt="交错变换编排"></a>
 <br>
 <sub><strong>交错变换编排</strong><br>动画与编排 · 92/100</sub>
 </td>
 </tr>
 <tr>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#motion-graphics-burst"><img src="../demo/gifs/captured/motion-graphics-burst.gif" width="270" alt="动态图形爆发"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#motion-graphics-burst"><img src="../demo/videos/posters/motion-graphics-burst.webp" width="270" alt="动态图形爆发"></a>
 <br>
 <sub><strong>动态图形爆发</strong><br>动画与编排 · 92/100</sub>
 </td>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#visually-authored-keyframe-sequence"><img src="../demo/gifs/captured/visually-authored-keyframe-sequence.gif" width="270" alt="可视化编排关键帧序列"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#visually-authored-keyframe-sequence"><img src="../demo/videos/posters/visually-authored-keyframe-sequence.webp" width="270" alt="可视化编排关键帧序列"></a>
 <br>
 <sub><strong>可视化编排关键帧序列</strong><br>动画与编排 · 84/100</sub>
 </td>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#compact-svg-shape-tween"><img src="../demo/gifs/captured/compact-svg-shape-tween.gif" width="270" alt="轻量 SVG 形状补间"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#compact-svg-shape-tween"><img src="../demo/videos/posters/compact-svg-shape-tween.webp" width="270" alt="轻量 SVG 形状补间"></a>
 <br>
 <sub><strong>轻量 SVG 形状补间</strong><br>动画与编排 · 89/100</sub>
 </td>
 </tr>
 <tr>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#filterable-grid-reflow"><img src="../demo/gifs/captured/filterable-grid-reflow.gif" width="270" alt="可筛选网格重排"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#filterable-grid-reflow"><img src="../demo/videos/posters/filterable-grid-reflow.webp" width="270" alt="可筛选网格重排"></a>
 <br>
 <sub><strong>可筛选网格重排</strong><br>页面与布局 · 85/100</sub>
 </td>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#perspective-tilt-and-glare"><img src="../demo/gifs/captured/perspective-tilt-and-glare.gif" width="270" alt="透视倾斜与高光"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#perspective-tilt-and-glare"><img src="../demo/videos/posters/perspective-tilt-and-glare.webp" width="270" alt="透视倾斜与高光"></a>
 <br>
 <sub><strong>透视倾斜与高光</strong><br>指针与悬停 · 90/100</sub>
 </td>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#context-aware-custom-cursor"><img src="../demo/gifs/mouse-follower.gif" width="270" alt="情境感知自定义光标"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#context-aware-custom-cursor"><img src="../demo/videos/posters/mouse-follower.webp" width="270" alt="情境感知自定义光标"></a>
 <br>
 <sub><strong>情境感知自定义光标</strong><br>指针与悬停 · 86/100</sub>
 </td>
 </tr>
 <tr>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#displacement-map-image-hover"><img src="../demo/gifs/hover-effect.gif" width="270" alt="位移贴图图像悬停"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#displacement-map-image-hover"><img src="../demo/videos/posters/hover-effect.webp" width="270" alt="位移贴图图像悬停"></a>
 <br>
 <sub><strong>位移贴图图像悬停</strong><br>指针与悬停 · 90/100</sub>
 </td>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#svg-stroke-drawing"><img src="../demo/gifs/captured/svg-stroke-drawing.gif" width="270" alt="SVG 描边绘制"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#svg-stroke-drawing"><img src="../demo/videos/posters/svg-stroke-drawing.webp" width="270" alt="SVG 描边绘制"></a>
 <br>
 <sub><strong>SVG 描边绘制</strong><br>文本与 SVG · 86/100</sub>
 </td>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#dom-aware-drag-spawned-fish-flock"><img src="../demo/gifs/captured/dom-aware-drag-spawned-fish-flock.gif" width="270" alt="真人释放并避让 DOM 的鱼群"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#dom-aware-drag-spawned-fish-flock"><img src="../demo/videos/posters/dom-aware-drag-spawned-fish-flock.webp" width="270" alt="真人释放并避让 DOM 的鱼群"></a>
 <br>
 <sub><strong>真人释放并避让 DOM 的鱼群</strong><br>Canvas 与 2D · 100/100</sub>
 </td>
 </tr>
 <tr>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#pointer-injected-gpu-fluid"><img src="../demo/gifs/captured/pointer-injected-gpu-fluid.gif" width="270" alt="舞台烟雾配色实验室"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#pointer-injected-gpu-fluid"><img src="../demo/videos/posters/pointer-injected-gpu-fluid.webp" width="270" alt="舞台烟雾配色实验室"></a>
 <br>
 <sub><strong>舞台烟雾配色实验室</strong><br>3D 与 WebGL · 99/100</sub>
 </td>
 <td width="33%" align="center">
-<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#dom-synced-shader-planes"><img src="../demo/gifs/captured/dom-synced-shader-planes.gif" width="270" alt="人工校准的 DOM / GPU 媒体配准"></a>
+<a href="https://giraffe-tree.github.io/awesome-web-effects/?lang=zh-Hans#dom-synced-shader-planes"><img src="../demo/videos/posters/dom-synced-shader-planes.webp" width="270" alt="人工校准的 DOM / GPU 媒体配准"></a>
 <br>
 <sub><strong>人工校准的 DOM / GPU 媒体配准</strong><br>3D 与 WebGL · 100/100</sub>
 </td>
@@ -122,7 +122,7 @@
 <table>
 <tr>
 <td width="25%" align="center"><strong>152</strong><br><sub>入选效果</sub></td>
-<td width="25%" align="center"><strong>152</strong><br><sub>真实 GIF</sub></td>
+<td width="25%" align="center"><strong>152</strong><br><sub>真实视频</sub></td>
 <td width="25%" align="center"><strong>150</strong><br><sub>可运行 Demo</sub></td>
 <td width="25%" align="center"><strong>80/100</strong><br><sub>最低准入分</sub></td>
 </tr>
@@ -387,16 +387,16 @@
 - 152 个已核验预览：2 个官方素材、150 个可运行本地 Demo 录制；缺失数为 0。
 - 人工评审覆盖创意、艺术完成度、动效编排、效果辨识、创作迁移和证据质量。
 - 准入要求 80/100，并同时通过核心维度最低分；流行度不能覆盖质量门槛。
-- 已核验 GIF 总计 24.56 MiB；每个预览为 320×180、最长三秒且小于 1 MiB。
+- 已核验 H.264 MP4 总计 15.90 MiB，静态 WebP 海报总计 2.69 MiB；每个视频为 640×360、无音轨、yuv420p、时长 5.8–7.3 秒且小于 2 MiB。
 - Stars 是 2026-07-23 快照；“推荐实现”与“在哪家 AI 官网观察到”始终是两种关系。
 
-继续阅读 [398 个候选的准入审计](../research/demo-admission-audit-2026-07-23.md)、[100 家 AI 公司主页特效调研](../research/ai-native-homepages-100.md)与[预览来源清单](../demo/gifs/provenance.json)。
+继续阅读 [398 个候选的准入审计](../research/demo-admission-audit-2026-07-23.md)、[100 家 AI 公司主页特效调研](../research/ai-native-homepages-100.md)与[预览来源清单](../demo/videos/provenance.json)。
 
 </details>
 
 ## 在本地运行视觉目录
 
-Demo 只使用静态 HTML、CSS、JavaScript 模块和已核验 GIF，无第三方运行依赖。它支持 20 种本地化界面、效果搜索、分类筛选、按评分排序、稳定效果锚点、评分维度明细、移动端真实预览、展开来源详情、代码复制和 Agent 提示词一键复制。
+Demo 只使用静态 HTML、CSS、JavaScript 模块、已核验 H.264 MP4 与静态 WebP 海报，无第三方运行依赖。它支持 20 种本地化界面、效果搜索、分类筛选、按评分排序、稳定效果锚点、评分维度明细、移动端真实预览、展开来源详情、代码复制和 Agent 提示词一键复制。
 
 ```bash
 python3 -m http.server 4173 --directory demo
@@ -404,20 +404,20 @@ python3 -m http.server 4173 --directory demo
 
 打开 [http://localhost:4173](http://localhost:4173)。目录使用 ES Module，因此需要本地 HTTP 服务，不能直接双击文件运行。
 
-## 真实 GIF 录制与压缩
+## 真实预览录制与编码
 
-先在 `demo/preview-demos/` 编写可运行、可复用且确实使用对应实现的 HTML Demo，核验后录制真实浏览器输出，再规范化来源已核验的官方 GIF：
+先在 `demo/preview-demos/` 编写可运行、可复用且确实使用对应实现的 HTML Demo，核验后录制真实浏览器输出，再编码为无声 H.264 MP4 与静态 WebP 海报：
 
 ```bash
 npm ci --prefix demo/preview-demos
 npm run build --prefix demo/preview-demos
-python3 scripts/capture-real-preview-gifs.py --built --skip-install
-node scripts/normalize-gif-previews.mjs
+python3 scripts/capture-real-preview-videos.py --built --skip-install
+python3 scripts/transcode-official-preview-videos.py
 ```
 
-录制步骤捕获真实本地 Demo，规范化步骤只处理来源已经核验的官方素材。验证器会检查来源状态、Demo 与 GIF 是否存在、内容哈希唯一性、尺寸、时长、帧数、可解码性和单文件大小预算。既没有可靠官方素材、也没有可运行录制 Demo 时，应保持“暂无真实预览”。
+录制步骤捕获真实本地 Demo；官方媒体转码步骤只处理来源已经核验的素材。验证器通过 ffprobe 检查来源状态、Demo 与媒体是否存在、H.264、640×360、yuv420p、无音轨、5.8–7.3 秒时长、静态 WebP 海报、内容哈希、感知重复与体积预算。既没有可靠官方素材、也没有可运行录制 Demo 时，应保持“暂无真实预览”。
 
-参见[预览真实性迁移报告](../research/preview-authenticity-migration-2026-07-17.md)与机器可读的[预览来源清单](../demo/gifs/provenance.json)。
+参见[预览真实性迁移报告](../research/preview-authenticity-migration-2026-07-17.md)与机器可读的[预览来源清单](../demo/videos/provenance.json)。
 
 ## GitHub Pages
 
@@ -437,7 +437,7 @@ Demo 完全静态且只使用相对路径。仓库内工作流会在推送到 `m
 
 ---
 
-<p align="center"><sub>GIF 与项目名称仅用于研究、索引和比较，权利归各自作者所有。</sub></p>
+<p align="center"><sub>预览媒体与项目名称仅用于研究、索引和比较，权利归各自作者所有。</sub></p>
 
 <p align="center"><strong>微信扫码加入 AwesomeWebEffects 用户交流群</strong></p>
 

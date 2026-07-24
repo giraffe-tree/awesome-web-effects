@@ -55,7 +55,7 @@ def wait_for_server(url: str, server: subprocess.Popen) -> None:
 
 
 def main() -> int:
-    provenance = json.loads((DEMO_ROOT / "gifs" / "provenance.json").read_text())
+    provenance = json.loads((DEMO_ROOT / "videos" / "provenance.json").read_text())
     expected_effect_count = len(provenance["records"])
     admitted_local_preview_ids = [
         record["effectId"] for record in provenance["records"] if record["sourceType"] == "demo"
@@ -221,8 +221,8 @@ def main() -> int:
             expect(rows).to_have_count(expected_effect_count)
             expect(page.locator("#effect-list .effect-score")).to_have_count(0)
             expect(page.locator("#effect-list .media-load-state[role]")).to_have_count(0)
-            expect(page.locator('#effect-list picture source[type="image/webp"]')).to_have_count(
-                len(admitted_local_preview_ids)
+            expect(page.locator('#effect-list video[data-preview-video]')).to_have_count(
+                expected_effect_count
             )
             desktop_grid_columns = page.locator("#effect-list").evaluate(
                 "element => getComputedStyle(element).gridTemplateColumns.split(' ').length"
@@ -233,15 +233,21 @@ def main() -> int:
                     const main = card.querySelector('.effect-main').getBoundingClientRect();
                     const preview = card.querySelector('.row-preview').getBoundingClientRect();
                     const overlay = card.querySelector('.effect-card-overlay').getBoundingClientRect();
-                    const image = card.querySelector('.row-preview img');
-                    const imageFit = getComputedStyle(image).objectFit;
+                    const video = card.querySelector('.row-preview video');
+                    const source = video.querySelector('source');
+                    const videoFit = getComputedStyle(video).objectFit;
                     return {
                         main: [main.width, main.height, main.bottom],
                         preview: [preview.width, preview.height],
                         overlayBottom: overlay.bottom,
-                        imageFit,
-                        naturalSize: [image.naturalWidth, image.naturalHeight],
-                        currentSource: image.currentSrc,
+                        videoFit,
+                        dimensions: [video.width, video.height],
+                        muted: video.muted,
+                        loop: video.loop,
+                        playsInline: video.playsInline,
+                        preload: video.preload,
+                        poster: video.getAttribute('poster'),
+                        source: source.dataset.src,
                     };
                 }"""
             )
@@ -249,9 +255,14 @@ def main() -> int:
             assert abs(full_bleed_geometry["main"][1] - full_bleed_geometry["preview"][1]) < 1
             assert abs(full_bleed_geometry["main"][2] - full_bleed_geometry["overlayBottom"]) < 1
             assert abs(full_bleed_geometry["main"][0] / full_bleed_geometry["main"][1] - 16 / 9) < 0.01
-            assert full_bleed_geometry["imageFit"] == "contain"
-            assert full_bleed_geometry["naturalSize"] == [640, 360]
-            assert full_bleed_geometry["currentSource"].endswith("/gifs/webp/scroll-scrubbed-master-timeline.webp")
+            assert full_bleed_geometry["videoFit"] == "contain"
+            assert full_bleed_geometry["dimensions"] == [640, 360]
+            assert full_bleed_geometry["muted"]
+            assert full_bleed_geometry["loop"]
+            assert full_bleed_geometry["playsInline"]
+            assert full_bleed_geometry["preload"] == "none"
+            assert full_bleed_geometry["poster"] == "./videos/posters/scroll-scrubbed-master-timeline.webp"
+            assert full_bleed_geometry["source"] == "./videos/captured/scroll-scrubbed-master-timeline.mp4"
             transition_filter = page.locator('#filters [data-category="transition"]')
             expected_transition_count = page.locator(
                 '#effect-list .effect-row[data-category="transition"]'
@@ -268,12 +279,44 @@ def main() -> int:
             expect(rows).to_have_count(expected_effect_count)
             page.wait_for_timeout(650)
 
-            for effect_id in admitted_local_preview_ids:
-                migrated_row = page.locator(f"#{effect_id}")
-                expect(migrated_row.locator(".row-preview img")).to_have_attribute(
-                    "src", f"./gifs/captured/{effect_id}.gif"
-                )
-                expect(migrated_row.locator(".preview-demo-link")).to_have_count(1)
+            local_video_contracts = page.locator(
+                "#effect-list .effect-row:has(.preview-demo-link) .row-preview video"
+            ).evaluate_all(
+                """videos => videos.map(video => ({
+                    source: video.querySelector('source')?.dataset.src,
+                    poster: video.getAttribute('poster'),
+                    muted: video.muted,
+                    loop: video.loop,
+                    playsInline: video.playsInline,
+                }))"""
+            )
+            assert len(local_video_contracts) == len(admitted_local_preview_ids)
+            expected_local_sources = {
+                f"./videos/captured/{effect_id}.mp4" for effect_id in admitted_local_preview_ids
+            }
+            assert {item["source"] for item in local_video_contracts} == expected_local_sources
+            assert all(
+                item["poster"].startswith("./videos/posters/")
+                and item["muted"]
+                and item["loop"]
+                and item["playsInline"]
+                for item in local_video_contracts
+            )
+
+            lazy_row = rows.last
+            lazy_effect_id = lazy_row.get_attribute("id")
+            assert lazy_effect_id
+            lazy_video = lazy_row.locator(".row-preview video")
+            lazy_source = lazy_video.locator("source")
+            assert lazy_source.get_attribute("src") is None
+            lazy_video.scroll_into_view_if_needed()
+            expect(lazy_source).to_have_attribute("src", f"./videos/captured/{lazy_effect_id}.mp4")
+            page.wait_for_function(
+                "video => video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA && !video.paused",
+                arg=lazy_video.element_handle(),
+            )
+            page.evaluate("scrollTo(0, 0)")
+            page.wait_for_function("video => video.paused", arg=lazy_video.element_handle())
 
             page.goto(f"{origin}/?lang=en#scroll-scrubbed-master-timeline", wait_until="networkidle")
             real_row = page.locator("#scroll-scrubbed-master-timeline")
@@ -516,41 +559,34 @@ def main() -> int:
             expect(modal).to_be_hidden()
 
             official_preview_expectations = {
-                "context-aware-custom-cursor": (
-                    "https://user-images.githubusercontent.com/11841379/162477170-5dd33ecd-0e72-4fe4-9053-53d7b5557637.gif",
-                    "./gifs/mouse-follower.gif",
-                ),
-                "displacement-map-image-hover": (
-                    "https://raw.githubusercontent.com/robin-dela/hover-effect/master/gifs/alex_brown.gif",
-                    "./gifs/hover-effect.gif",
-                ),
+                "context-aware-custom-cursor": "mouse-follower",
+                "displacement-map-image-hover": "hover-effect",
             }
-            for effect_id, (upstream_url, fallback_url) in official_preview_expectations.items():
+            for effect_id, preview_name in official_preview_expectations.items():
                 official_row = page.locator(f"#{effect_id}")
                 official_row.locator(".effect-cell").click()
                 expect(modal).to_be_visible()
                 expect(modal.locator(".modal-preview-frame")).to_have_count(0)
-                official_preview = modal.locator(".modal-preview-official img")
+                official_preview = modal.locator(".modal-preview-official video")
                 expect(official_preview).to_have_count(1)
-                expect(official_preview).to_have_attribute("data-upstream-src", upstream_url)
-                expect(official_preview).to_have_attribute("data-fallback-src", fallback_url)
-                official_dimensions = official_preview.evaluate(
-                    "image => ({ naturalWidth: image.naturalWidth, naturalHeight: image.naturalHeight, width: image.getBoundingClientRect().width, height: image.getBoundingClientRect().height })"
+                expect(official_preview).to_have_attribute(
+                    "poster", f"./videos/posters/{preview_name}.webp"
                 )
-                if not official_preview.evaluate("image => image.classList.contains('is-local-fallback')"):
-                    assert official_dimensions["naturalWidth"] >= official_dimensions["width"]
-                    assert official_dimensions["naturalHeight"] >= official_dimensions["height"]
-                official_preview.evaluate("image => image.dispatchEvent(new Event('error'))")
-                expect(official_preview).to_have_attribute("src", fallback_url)
-                expect(official_preview).to_have_class("is-local-fallback")
-                page.wait_for_function(
-                    "image => image.complete && image.naturalWidth === 320 && image.naturalHeight === 180",
-                    arg=official_preview.element_handle(),
+                expect(official_preview.locator("source")).to_have_attribute(
+                    "data-src", f"./videos/{preview_name}.mp4"
+                )
+                expect(official_preview.locator("source")).to_have_attribute(
+                    "src", f"./videos/{preview_name}.mp4"
+                )
+                assert official_preview.evaluate(
+                    "video => video.muted && video.loop && video.playsInline && video.preload === 'none'"
                 )
                 expect(modal.locator(".modal-preview-official")).to_have_attribute("data-media-state", "ready")
-                official_fallback_box = official_preview.bounding_box()
-                assert official_fallback_box["width"] <= 320 and official_fallback_box["height"] <= 180
-                official_preview.evaluate("image => image.dispatchEvent(new Event('error'))")
+                page.wait_for_function(
+                    "video => video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA && !video.paused",
+                    arg=official_preview.element_handle(),
+                )
+                official_preview.evaluate("video => video.dispatchEvent(new Event('error'))")
                 expect(modal.locator(".modal-preview-official")).to_have_attribute("data-media-state", "error")
                 expect(modal.locator(".modal-preview-official .media-load-state")).to_have_attribute("role", "alert")
                 page.keyboard.press("Escape")
@@ -615,6 +651,22 @@ def main() -> int:
             reduced_page.goto(f"{origin}/?lang=en", wait_until="networkidle")
             expect(reduced_page.locator("#entry-reveal")).to_have_count(0)
             expect(reduced_page.locator("#hero-story-toggle")).to_be_hidden()
+            expect(reduced_page.locator("#effect-list .row-preview video")).to_have_count(0)
+            expect(reduced_page.locator("#effect-list .row-preview .preview-poster")).to_have_count(14)
+            assert not reduced_page.evaluate(
+                "() => performance.getEntriesByType('resource').some(entry => entry.name.endsWith('.mp4'))"
+            )
+            reduced_page.locator("#context-aware-custom-cursor .effect-cell").click()
+            reduced_modal = reduced_page.locator("#effect-modal")
+            expect(reduced_modal).to_be_visible()
+            expect(reduced_modal.locator(".modal-preview-official video")).to_have_count(0)
+            expect(reduced_modal.locator(".modal-preview-official .preview-poster")).to_have_attribute(
+                "src", "./videos/posters/mouse-follower.webp"
+            )
+            assert not reduced_page.evaluate(
+                "() => performance.getEntriesByType('resource').some(entry => entry.name.endsWith('.mp4'))"
+            )
+            reduced_modal.locator(".effect-modal-close").click()
             reduced_hero = reduced_page.locator("#hero-experience")
             reduced_hero.press("ArrowRight")
             expect(reduced_hero).to_have_attribute("data-step", "1")
@@ -632,7 +684,7 @@ def main() -> int:
             server.kill()
             server.wait()
 
-    print(f"Catalog UI verified: 20 locales (including RTL and URL persistence), {expected_effect_count} admitted demos, 14 homepage recommendations, prompt-only catalog cards with modal-only minimal code, large default live previews with a persistent action rail, editable page-only homepage and per-effect prompts with refresh reset, mutually exclusive prompt/code/evidence panels, unified light catalog styling, paused 6s hero autoplay, uncropped 16:9 cards, loading/error transitions, native-size official GIFs, focus, reduced motion, and mobile layout.")
+    print(f"Catalog UI verified: 20 locales (including RTL and URL persistence), {expected_effect_count} admitted demos, 14 homepage recommendations, lazy muted inline MP4 cards with poster-only reduced motion, local official videos, modal-only live demos and minimal code, a persistent action rail, editable page-only prompts, mutually exclusive prompt/code/evidence panels, unified light catalog styling, paused 6s hero autoplay, uncropped 16:9 cards, loading/error transitions, focus, and mobile layout.")
     return 0
 
 

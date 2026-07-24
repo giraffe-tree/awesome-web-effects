@@ -4,7 +4,7 @@
 
 ## 兼容性
 
-当前 demo 兼容 GitHub Pages。GitHub Pages 可发布静态 HTML、CSS 和 JavaScript；本仓库的 `demo/` 不依赖服务端运行时，也不需要构建步骤。JavaScript 数据文件与 GIF 都使用相对 URL，因此部署到项目站点路径后仍可正常加载。
+当前 demo 兼容 GitHub Pages。GitHub Pages 可发布静态 HTML、CSS 和 JavaScript；本仓库的 `demo/` 不依赖服务端运行时，也不需要构建步骤。JavaScript 数据文件与 MP4 都使用相对 URL，因此部署到项目站点路径后仍可正常加载。
 
 预期线上地址：<https://giraffe-tree.github.io/awesome-web-effects/>
 
@@ -31,14 +31,14 @@
 python3 -m http.server 8000 --directory demo
 ```
 
-然后打开 <http://localhost:8000/>，检查效果行、来源详情、筛选功能、脚本和 GIF 预览是否正常。还应分别使用 `?lang=ar` 与 `?lang=ur` 检查 RTL 布局，并确认切换语言时 URL 会更新且不会丢失当前 hash。部署完成后，在生产地址重复检查，并通过浏览器控制台和网络面板确认没有文件加载失败。
+然后打开 <http://localhost:8000/>，检查效果行、来源详情、筛选功能、脚本和 MP4 预览是否正常。还应分别使用 `?lang=ar` 与 `?lang=ur` 检查 RTL 布局，并确认切换语言时 URL 会更新且不会丢失当前 hash。部署完成后，在生产地址重复检查，并通过浏览器控制台和网络面板确认没有文件加载失败。
 
 ## 使用限制
 
 - GitHub Pages 只提供静态托管：不能运行服务端代码，也不能提供私密 API Key 或运行时环境变量。如需调用外部 API，应另设后端，且不得把密钥写入浏览器代码。
 - 项目站点位于 `/<仓库名>/` 下。新增内部资源时应继续使用相对路径（当前即如此），或者为根相对 URL 补上仓库基础路径。
 - Pages 站点会公开在互联网上；如果账户套餐允许从私有仓库发布，生成的站点仍然是公开的。
-- GitHub 官方限制包括：发布站点最大 1 GB、每月 100 GB 软带宽上限，以及 10 分钟部署超时。持续压缩 GIF 可减少仓库体积、部署时间和流量。
+- GitHub 官方限制包括：发布站点最大 1 GB、每月 100 GB 软带宽上限，以及 10 分钟部署超时。持续压缩 MP4 可减少仓库体积、部署时间和流量。
 
 ## 官方参考
 
